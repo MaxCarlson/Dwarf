@@ -18,6 +18,11 @@ public:
 
 	void update();
 	void render();
+
+	int fovRadius; // 0 for infinite
+
+private:
+	bool computeFov;
 };
 
 extern Engine engine;

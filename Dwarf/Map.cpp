@@ -1,5 +1,4 @@
 #include "Map.h"
-#include "include/libtcod.hpp"
 #include "Engine.h"
 #include "Actor.h"
 
@@ -43,6 +42,8 @@ private:
 Map::Map(int width, int height) : width(width), height(height)
 {
 	tiles = new Tile[width * height];
+	map = new TCODMap(width, height);
+
 	TCODBsp bsp(0, 0, width, height);
 	bsp.splitRecursive(NULL, 8, ROOM_MAX_SIZE, ROOM_MAX_SIZE, 1.5f, 1.5f);
 
@@ -54,23 +55,48 @@ Map::Map(int width, int height) : width(width), height(height)
 Map::~Map()
 {
 	delete[] tiles;
+	delete map;
 }
 
 bool Map::isWall(int x, int y) const
 {
-	return !tiles[x + y * width].canWalk;
+	return !map->isWalkable(x, y);
+}
+
+bool Map::isInFov(int x, int y) const
+{
+	if (map->isInFov(x, y)) {
+		tiles[x + y * width].explored = true;
+		return true;
+	}
+	return false;
+}
+
+bool Map::isExplored(int x, int y) const
+{
+	return tiles[x + y * width].explored;
+}
+
+void Map::computeFov()
+{
+	map->computeFov(engine.player->x, engine.player->y, engine.fovRadius);
 }
 
 void Map::render() const
 {
 	static const TCODColor darkWall(0, 0, 100);
 	static const TCODColor darkGround(50, 50, 150);
+	static const TCODColor lightWall(130, 110, 50);
+	static const TCODColor lightGround(200, 180, 50);
 
 	// Iterates through map squares
 	for(int x = 0; x < width; ++x)
 		for (int y = 0; y < height; ++y)
 		{
-			TCODConsole::root->setCharBackground(x, y, isWall(x, y) ? darkWall : darkGround);
+			if (isInFov(x, y))
+				TCODConsole::root->setCharBackground(x, y, isWall(x, y) ? lightWall : lightGround);
+			else 
+				TCODConsole::root->setCharBackground(x, y, isWall(x, y) ? darkWall : darkGround);
 		}
 }
 
@@ -88,7 +114,7 @@ void Map::dig(int x1, int y1, int x2, int y2)
 	}
 	for (int tilex = x1; tilex <= x2; ++tilex)
 		for (int tiley = y1; tiley <= y2; ++tiley)
-			tiles[tilex + tiley * width].canWalk = true;
+			map->setProperties(tilex, tiley, true, true); // digging out walkable, transparent tiles
 }
 
 void Map::createRoom(bool first, int x1, int y1, int x2, int y2)

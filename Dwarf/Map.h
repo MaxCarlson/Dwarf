@@ -1,9 +1,10 @@
 #pragma once
+#include "include/libtcod.hpp"
 
 struct Tile {
-	bool canWalk;
+	bool explored;
 	// Render map of walls
-	Tile() : canWalk(false) {}
+	Tile() : explored(false) {}
 };
 
 class Map
@@ -15,10 +16,15 @@ public:
 	~Map();
 
 	bool isWall(int x, int y) const;
+	bool isInFov(int x, int y) const;
+	bool isExplored(int x, int y) const;
+
+	void computeFov();
 	void render() const;
 
 protected:
 	Tile * tiles;
+	TCODMap * map;
 	friend class BspListener;
 
 	void dig(int x1, int y1, int x2, int y2);
