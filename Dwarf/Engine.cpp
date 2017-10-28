@@ -8,7 +8,6 @@ Engine::Engine()
 	TCODConsole::initRoot(80, 50, "C++ libtcod tutorial", false);
 	player = new Actor(40, 25, '@', TCODColor::white);
 	actors.push(player);
-	actors.push(new Actor(60, 13, '@', TCODColor::yellow));
 	map = new Map(80, 45);
 }
 
@@ -57,6 +56,7 @@ void Engine::render()
 
 	map->render();
 
+	// Iteratre through actors, setting chars location and colors
 	for (Actor **iterators = actors.begin(); iterators != actors.end(); ++iterators)
 		(*iterators)->render();
 }

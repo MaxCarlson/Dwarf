@@ -2,6 +2,7 @@
 
 #include "include\libtcod.hpp"
 
+
 class Actor;
 class Map;
 
