@@ -1,6 +1,8 @@
 #include "Destructible.h"
 #include "Actor.h"
 #include "Engine.h"
+#include "Gui.h"
+
 #include <iostream>
 
 
@@ -37,7 +39,7 @@ MonsterDestructible::MonsterDestructible(int maxHp, int defense, const char * co
 
 void MonsterDestructible::die(Actor * owner)
 {
-	printf("%s is dead\n", owner->name);
+	engine.gui->message(TCODColor::lightGrey, "%s is dead\n", owner->name);
 	Destructible::die(owner);
 }
 
@@ -47,7 +49,7 @@ PlayerDestructible::PlayerDestructible(int maxHp, int defense, const char * corp
 
 void PlayerDestructible::die(Actor * owner)
 {
-	printf("You Died!\n");
+	engine.gui->message(TCODColor::red, "You Died!\n");
 	Destructible::die(owner);
 	engine.gameStatus = Engine::DEFEAT;
 }

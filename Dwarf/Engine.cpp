@@ -17,6 +17,8 @@ Engine::Engine(int screenWidth, int screenHeight) : gameStatus(STARTUP), fovRadi
 	actors.push(player);
 	map = new Map(80, 45);
 	gui = new Gui();
+
+	gui->message(TCODColor::azure, "Welcome!");
 }
 
 
@@ -34,7 +36,9 @@ void Engine::update()
 
 	gameStatus = IDLE;
 
-	TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS, &lastKey, NULL);
+	// Check for keyboard or mouse input
+	TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS | TCOD_EVENT_MOUSE, &lastKey, NULL);
+
 	player->update();
 
 	if (gameStatus == NEW_TURN)
@@ -43,7 +47,6 @@ void Engine::update()
 				actor->update();
 
 	player->render();
-	gui->render();
 }
 
 void Engine::render()
@@ -58,6 +61,8 @@ void Engine::render()
 		if(map->isInFov(actor->x, actor->y))
 			actor->render();
 	}
+
+	gui->render();
 }
 
 // Render dead actors first so we see living ones if they're on top
