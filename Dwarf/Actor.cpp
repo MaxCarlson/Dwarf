@@ -1,12 +1,14 @@
 #include "Actor.h"
 #include "Engine.h"
 #include "Map.h"
+#include "Ai.h"
 #include <iostream>
 
 
-Actor::Actor(int x, int y, int ch, const char * name, const TCODColor & col) : x(x), y(y), ch(ch), col(col)
+Actor::Actor(int x, int y, int ch, const char * name, const TCODColor & col) 
+	: x(x), y(y), ch(ch), col(col), blocks(true), attacker(NULL), destructible(NULL), ai(NULL)
 {
-	strcpy_s(this->name, name);
+	strcpy_s(this->name, name);	
 }
 
 
@@ -17,23 +19,6 @@ void Actor::render() const {
 
 void Actor::update()
 {
-	std::cout << "The " << name << " growls..!" << std::endl;
-}
-
-bool Actor::moveOrAttack(int x, int y)
-{
-	if (engine.map->isWall(x, y))
-		return false;
-
-	for(Actor * actor : engine.actors)
-		if (actor->x == x && actor->y == y) {
-			printf("The %s laughs at your puny efforts to attack him!\n",
-				actor->name);
-			return false;
-		}
-
-	// Move character if not attacking/ wall
-	this->x = x;
-	this->y = y;
-	return true;
+	if (ai)
+		ai->update(this);
 }

@@ -3,6 +3,11 @@
 
 static const int MAX_NAME_LENGTH = 20;
 
+class Actor;
+class Attacker;
+class Destructible;
+class Ai;
+
 class Actor
 {
 public:
@@ -10,11 +15,14 @@ public:
 
 	void render() const;
 	void update();
-	bool moveOrAttack(int x, int y);
 
 	int x, y; 
 	int ch;
 	char name[MAX_NAME_LENGTH];
 	TCODColor col;
+	bool blocks; // Does block movement?
+	Attacker *attacker; // Can actor attack?
+	Destructible * destructible; // Can actor be destroyed?
+	Ai *ai;						// actor has ai
 };
 
