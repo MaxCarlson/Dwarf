@@ -58,10 +58,8 @@ void Engine::render()
 	map->render();
 
 	// Iteratre through actors, setting chars location and colors
-	for (Actor **iterator = actors.begin(); iterator != actors.end(); ++iterator) 
+	for (Actor * actor : actors) 
 	{
-		Actor * actor = *iterator;
-
 		if(map->isInFov(actor->x, actor->y))
 			actor->render();
 	}
