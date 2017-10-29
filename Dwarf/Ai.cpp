@@ -4,6 +4,7 @@
 #include "Engine.h"
 #include "Map.h"
 #include "Attacker.h"
+#include "Gui.h"
 
 #include <iostream>
 
@@ -51,7 +52,7 @@ bool PlayerAi::moveOrAttack(Actor * owner, int targetX, int targetY)
 
 	for (Actor * actor : engine.actors)
 		if(actor->destructible->isDead() && actor->x == targetX && actor->y == targetY)
-			printf("There's a %s here\n", actor->name);
+			engine.gui->message(TCODColor::lightGrey, "There's a %s here\n", actor->name);
 
 	// Move the player
 	owner->x = targetX;

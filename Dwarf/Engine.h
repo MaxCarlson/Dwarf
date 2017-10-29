@@ -2,7 +2,7 @@
 
 #include "include\libtcod.hpp"
 
-
+class Gui;
 class Actor;
 class Map;
 
@@ -20,10 +20,11 @@ public:
 	TCODList<Actor *> actors;
 	Actor * player;
 	Map * map;
+	TCOD_key_t lastKey;
 
 	int screenWidth;
 	int screenHeight;
-	TCOD_key_t lastKey;
+	Gui *gui;
 
 	Engine(int screenWidth, int screenHeight);
 	~Engine();

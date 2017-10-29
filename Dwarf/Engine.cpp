@@ -4,6 +4,7 @@
 #include "Destructible.h"
 #include "Attacker.h"
 #include "Ai.h"
+#include "Gui.h"
 
 Engine::Engine(int screenWidth, int screenHeight) : gameStatus(STARTUP), fovRadius(10), screenWidth(screenWidth), screenHeight(screenHeight)
 {
@@ -15,6 +16,7 @@ Engine::Engine(int screenWidth, int screenHeight) : gameStatus(STARTUP), fovRadi
 
 	actors.push(player);
 	map = new Map(80, 45);
+	gui = new Gui();
 }
 
 
@@ -22,6 +24,7 @@ Engine::~Engine()
 {
 	actors.clearAndDelete();
 	delete map;
+	delete gui;
 }
 
 void Engine::update()
@@ -40,7 +43,7 @@ void Engine::update()
 				actor->update();
 
 	player->render();
-	TCODConsole::root->print(1, screenHeight - 2, "HP : %i/%i", player->destructible->hp, player->destructible->maxHp); // Display health and max health on screen ///// Does not work?
+	gui->render();
 }
 
 void Engine::render()
