@@ -37,7 +37,7 @@ void Engine::update()
 	gameStatus = IDLE;
 
 	// Check for keyboard or mouse input
-	TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS | TCOD_EVENT_MOUSE, &lastKey, NULL);
+	TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS | TCOD_EVENT_MOUSE, &lastKey, &mouse);
 
 	player->update();
 

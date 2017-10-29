@@ -70,10 +70,10 @@ void Gui::renderBar(int x, int y, int width, const char * name, int val, int max
 	con->printEx(x + width / 2, y, TCOD_BKGND_NONE, TCOD_CENTER, "%s : %i/%i", name, val, maxVal);
 }
 
-void Gui::renderMouseLook()
+void Gui::renderMouseLook() 
 {
 	// If mouse is out of FOV nothing to render
-	if (!engine.map->isInFov(engine.mouse.cx, engine.mouse.cy))
+	if ( ! engine.map->isInFov(engine.mouse.cx, engine.mouse.cy))
 		return;
 
 	char buf[128] = "";
@@ -86,6 +86,7 @@ void Gui::renderMouseLook()
 				strcat_s(buf, ", ");
 
 			strcat_s(buf, actor->name);
+			++first;
 		}
 
 	con->setDefaultForeground(TCODColor::lightGrey);
