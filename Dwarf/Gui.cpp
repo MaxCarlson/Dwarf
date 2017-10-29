@@ -58,7 +58,7 @@ void Gui::renderBar(int x, int y, int width, const char * name, int val, int max
 	con->setDefaultBackground(backColor);
 	con->rect(x, y, width, 1, false, TCOD_BKGND_SET);
 
-	int barWidth = val / maxVal * width;
+	int barWidth = (int) (float(val) / float(maxVal) * width);
 
 	// Compute how much of health bar should be full and draw.
 	if (barWidth > 0) {
