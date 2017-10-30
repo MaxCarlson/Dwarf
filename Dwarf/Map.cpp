@@ -12,6 +12,7 @@ static const int MAX_ROOM_MONSTERS = 3;
 static const float MAX_MAP_FILL = 0.85;
 static const float MIN_MAP_FILL = 0.18;
 
+/*
 // Traverses the bsp tree creating rooms/corridors for map
 class BspListener : public ITCODBspCallback {
 public:
@@ -45,14 +46,17 @@ private:
 	int roomNum;
 	int lastx, lasty; // Center of last room, used for corridor digging
 };
+*/
 
-Map::Map(int width, int height) : width(width), height(height)
+Map::Map(int width, int height, int depth) : width(width), height(height), depth(depth)
 {
-	tiles = new Tile[width * height];
-	map = new TCODMap(width, height);
+	tiles = new Tile[width * height * depth];
 
-	//TCODBsp bsp(0, 0, width, height);
-	//bsp.splitRecursive(NULL, 8, ROOM_MAX_SIZE, ROOM_MAX_SIZE, 1.5f, 1.5f);
+	//map = new TCODMap(width, height);
+
+	for (int i = 0; i < MAX_ZLVL; ++i) {
+		mapZLvls[i] = new TCODMap(width, height);
+	}
 
 	do {
 		TCODRandom * rng = TCODRandom::getInstance();
@@ -60,17 +64,25 @@ Map::Map(int width, int height) : width(width), height(height)
 		TCODHeightMap * heightMap = new TCODHeightMap(129, 129);
 		heightMap->midPointDisplacement();
 
+		float heightRatio = -0.6;
 		// If height is below a threshold, mark that area walkable/visible. else not. 
-		for (int i = 0; i < width; ++i)
-			for (int j = 0; j < height; ++j)
-			{
-				if (heightMap->getValue(i, j) < 0.1) {
-					map->setProperties(i, j, true, true);
-				}
-				else
-					map->setProperties(i, j, false, false);
-			}
+		for (int h = 0; h < depth; ++h) {
 
+			map = mapZLvls[h]; // Set map to map reprsenting current depth
+			currentZLevel = h; // Change these functions around when placing player
+
+			for (int i = 0; i < width; ++i)
+				for (int j = 0; j < height; ++j)
+
+				{
+					if (heightMap->getValue(i, j) < heightRatio) {
+						map->setProperties(i, j, true, true);
+					}
+					else
+						map->setProperties(i, j, false, false);
+				}
+			heightRatio += 0.2;
+		}
 
 		// Make sure the player can walk on map load!
 		while (!map->isWalkable(engine.player->x, engine.player->y))
@@ -79,10 +91,14 @@ Map::Map(int width, int height) : width(width), height(height)
 			engine.player->y = rng->getInt(0, height);
 		}
 
+
 	} while (!mapIsOkay()
 		|| !map->isWalkable(engine.player->x, engine.player->y));
 
 
+
+	//TCODBsp bsp(0, 0, width, height);
+	//bsp.splitRecursive(NULL, 8, ROOM_MAX_SIZE, ROOM_MAX_SIZE, 1.5f, 1.5f);
 	//BspListener listener(*this);
 	//bsp.traverseInvertedLevelOrder(&listener, NULL);
 }
@@ -112,6 +128,7 @@ bool Map::mapIsOkay() const
 	return true;
 }
 
+/*
 void Map::addMonster(int x, int y)
 {
 	TCODRandom *rng = TCODRandom::getInstance();
@@ -134,6 +151,7 @@ void Map::addMonster(int x, int y)
 		engine.actors.push(troll);
 	}
 }
+*/
 
 
 bool Map::isWall(int x, int y) const
@@ -195,6 +213,16 @@ void Map::render() const
 		}
 }
 
+// Change the map being rendered (simulating z levels with map array)
+void Map::changeZLevel(int level)
+{
+	if (currentZLevel + level >= 0 && currentZLevel + level < MAX_ZLVL) {
+		map = mapZLvls[currentZLevel + level];
+		currentZLevel += level;
+	}
+}
+
+/*
 void Map::dig(int x1, int y1, int x2, int y2)
 {
 	if (x2 < x1) {
@@ -233,3 +261,4 @@ void Map::createRoom(bool first, int x1, int y1, int x2, int y2)
 		}
 	}
 }
+*/

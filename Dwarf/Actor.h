@@ -13,13 +13,13 @@ class Container;
 class Actor
 {
 public:
-	Actor(int x, int y, int ch, const char * name, const TCODColor & col);
+	Actor(int x, int y, int z, int ch, const char * name, const TCODColor & col);
 	~Actor();
 
 	void render() const;
 	void update();
 
-	int x, y; 
+	int x, y, z; 
 	int ch;
 	char name[MAX_NAME_LENGTH];  // Change to std::string eventually and and inline std::string to const char * method for using libtcod funcitons
 	TCODColor col;

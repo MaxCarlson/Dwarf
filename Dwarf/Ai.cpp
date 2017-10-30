@@ -24,6 +24,12 @@ void PlayerAi::update(Actor * owner)
 	case TCODK_DOWN:  dy =  1; break;
 	case TCODK_RIGHT: dx =  1; break;
 	case TCODK_LEFT:  dx = -1; break;
+	case TCODK_TEXT:
+		switch (engine.lastKey.text[0]) { // For single entry non coded keys
+		case '<': engine.map->changeZLevel(-1); break;
+		case '>': engine.map->changeZLevel(1); break;
+		}
+		break;
 
 	default: break;
 	}

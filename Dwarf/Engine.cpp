@@ -10,14 +10,14 @@
 Engine::Engine(int screenWidth, int screenHeight) : gameStatus(STARTUP), fovRadius(10), screenWidth(screenWidth), screenHeight(screenHeight)
 {
 	TCODConsole::initRoot(screenWidth, screenHeight, "C++ libtcod tutorial", false);
-	player = new Actor(40, 25, '@', "player", TCODColor::white);
+	player = new Actor(40, 25, 1, '@', "player", TCODColor::white);					 // Final x, y are determined in map!
 	player->destructible = new PlayerDestructible(30, 2, "Your cadaver!");
 	player->attacker = new Attacker(5);
 	player->ai = new PlayerAi();
 	player->container = new Container(26);
 
 	actors.push(player);
-	map = new Map(screenWidth, screenHeight);
+	map = new Map(screenWidth, screenHeight, MAX_ZLVL);
 	gui = new Gui();
 
 	gui->message(TCODColor::azure, "Welcome!");

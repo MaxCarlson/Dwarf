@@ -4,18 +4,20 @@
 struct Tile {
 	bool explored;
 	// Render map of walls
-	Tile() : explored(true) {}
+	Tile() : explored(true) {} // MAKE VALUE FALSE TO OCCLUDE unexplored regions
 };
+
+static const int MAX_ZLVL = 5;
 
 class Map
 {
 public:
-	int width, height;
+	int width, height, depth;
 
-	Map(int width, int height);
+	Map(int width, int height, int depth);
 	~Map();
 
-	void addMonster(int x, int y);
+	//void addMonster(int x, int y);
 
 	bool mapIsOkay() const;
 	bool isWall(int x, int y) const;
@@ -26,13 +28,16 @@ public:
 	void computeFov();
 	void render() const;
 
+	int currentZLevel;
+	void changeZLevel(int level);
+
 protected:
 	Tile * tiles;
 	TCODMap * map;
-	friend class BspListener;
+	TCODMap * mapZLvls[MAX_ZLVL];
 
-
-	void dig(int x1, int y1, int x2, int y2);
-	void createRoom(bool first, int x1, int y1, int x2, int y2);
+	//friend class BspListener;
+	//void dig(int x1, int y1, int x2, int y2);
+	//void createRoom(bool first, int x1, int y1, int x2, int y2);
 };
 
