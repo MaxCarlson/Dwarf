@@ -5,6 +5,7 @@
 #include "Attacker.h"
 #include "Ai.h"
 #include "Gui.h"
+#include "Container.h"
 
 Engine::Engine(int screenWidth, int screenHeight) : gameStatus(STARTUP), fovRadius(10), screenWidth(screenWidth), screenHeight(screenHeight)
 {
@@ -13,9 +14,10 @@ Engine::Engine(int screenWidth, int screenHeight) : gameStatus(STARTUP), fovRadi
 	player->destructible = new PlayerDestructible(30, 2, "Your cadaver!");
 	player->attacker = new Attacker(5);
 	player->ai = new PlayerAi();
+	player->container = new Container(26);
 
 	actors.push(player);
-	map = new Map(80, 45);
+	map = new Map(screenWidth, screenHeight);
 	gui = new Gui();
 
 	gui->message(TCODColor::azure, "Welcome!");

@@ -2,13 +2,27 @@
 #include "Engine.h"
 #include "Map.h"
 #include "Ai.h"
+#include "Attacker.h"
+#include "Destructible.h"
+#include "Pickable.h"
+#include "Container.h"
+
 #include <iostream>
 
 
 Actor::Actor(int x, int y, int ch, const char * name, const TCODColor & col) 
-	: x(x), y(y), ch(ch), col(col), blocks(true), attacker(NULL), destructible(NULL), ai(NULL)
+	: x(x), y(y), ch(ch), col(col), blocks(true), attacker(NULL), destructible(NULL), ai(NULL), pickable(NULL), container(NULL)
 {
 	strcpy_s(this->name, name);	
+}
+
+Actor::~Actor()
+{
+	if (attacker)     delete attacker;
+	if (destructible) delete destructible;
+	if (ai)           delete ai;
+	if (pickable)     delete pickable;
+	if (container)    delete container;
 }
 
 

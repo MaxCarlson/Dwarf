@@ -48,13 +48,32 @@ Map::Map(int width, int height) : width(width), height(height)
 	tiles = new Tile[width * height];
 	map = new TCODMap(width, height);
 
-	TCODBsp bsp(0, 0, width, height);
-	bsp.splitRecursive(NULL, 8, ROOM_MAX_SIZE, ROOM_MAX_SIZE, 1.5f, 1.5f);
+	//TCODBsp bsp(0, 0, width, height);
+	//bsp.splitRecursive(NULL, 8, ROOM_MAX_SIZE, ROOM_MAX_SIZE, 1.5f, 1.5f);
 
-	BspListener listener(*this);
-	bsp.traverseInvertedLevelOrder(&listener, NULL);
+
+	TCODHeightMap * heightMap = new TCODHeightMap(129, 129);
+
+	heightMap->midPointDisplacement();
+
+
+	for (int i = 0; i < width; ++i)				 // Set all map to visible/walkable to beign with.
+		for (int j = 0; j < height; ++j) 
+		{
+			if (heightMap->getValue(i, j) < 0.1) {
+				map->setProperties(i, j, true, true);
+				engine.player->x = i;
+				engine.player->y = i;
+			}
+			else
+				map->setProperties(i, j, false, false);
+		}
+			
+
+
+	//BspListener listener(*this);
+	//bsp.traverseInvertedLevelOrder(&listener, NULL);
 }
-
 
 Map::~Map()
 {

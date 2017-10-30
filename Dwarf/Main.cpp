@@ -4,7 +4,7 @@
 #include "Map.h"
 #include "Engine.h"
 
-Engine engine(80, 50);
+Engine engine(129, 129);
 
 int main()
 {

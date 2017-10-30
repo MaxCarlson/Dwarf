@@ -4,7 +4,7 @@
 struct Tile {
 	bool explored;
 	// Render map of walls
-	Tile() : explored(false) {}
+	Tile() : explored(true) {}
 };
 
 class Map
@@ -29,6 +29,7 @@ protected:
 	Tile * tiles;
 	TCODMap * map;
 	friend class BspListener;
+
 
 	void dig(int x1, int y1, int x2, int y2);
 	void createRoom(bool first, int x1, int y1, int x2, int y2);

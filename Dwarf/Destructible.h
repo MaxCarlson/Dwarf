@@ -5,6 +5,7 @@ class Actor;
 class Destructible
 {
 public:
+	virtual ~Destructible() {};
 	int maxHp;
 	int hp;
 	int defense;
@@ -15,6 +16,7 @@ public:
 
 	int takeDamage(Actor * owner, int damage);
 	virtual void die(Actor * owner);
+	int heal(int amount);
 };
 
 class MonsterDestructible : public Destructible 

@@ -33,6 +33,17 @@ void Destructible::die(Actor * owner)
 	engine.sendToBack(owner); // Draw corpses before living actors
 }
 
+int Destructible::heal(int amount)
+{
+	hp += amount;
+
+	if (hp > maxHp) {
+		amount -= hp - maxHp;
+		hp = maxHp;
+	}
+	return amount;
+}
+
 MonsterDestructible::MonsterDestructible(int maxHp, int defense, const char * corpseName) : Destructible(maxHp, defense, corpseName)
 {	
 }
