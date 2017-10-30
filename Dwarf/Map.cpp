@@ -9,6 +9,9 @@ static const int ROOM_MAX_SIZE = 12;
 static const int ROOM_MIN_SIZE = 6;
 static const int MAX_ROOM_MONSTERS = 3;
 
+static const float MAX_MAP_FILL = 0.85;
+static const float MIN_MAP_FILL = 0.18;
+
 // Traverses the bsp tree creating rooms/corridors for map
 class BspListener : public ITCODBspCallback {
 public:
@@ -51,24 +54,33 @@ Map::Map(int width, int height) : width(width), height(height)
 	//TCODBsp bsp(0, 0, width, height);
 	//bsp.splitRecursive(NULL, 8, ROOM_MAX_SIZE, ROOM_MAX_SIZE, 1.5f, 1.5f);
 
+	do {
+		TCODRandom * rng = TCODRandom::getInstance();
+		// Create height map of area
+		TCODHeightMap * heightMap = new TCODHeightMap(129, 129);
+		heightMap->midPointDisplacement();
 
-	TCODHeightMap * heightMap = new TCODHeightMap(129, 129);
-
-	heightMap->midPointDisplacement();
-
-
-	for (int i = 0; i < width; ++i)				 // Set all map to visible/walkable to beign with.
-		for (int j = 0; j < height; ++j) 
-		{
-			if (heightMap->getValue(i, j) < 0.1) {
-				map->setProperties(i, j, true, true);
-				engine.player->x = i;
-				engine.player->y = i;
+		// If height is below a threshold, mark that area walkable/visible. else not. 
+		for (int i = 0; i < width; ++i)
+			for (int j = 0; j < height; ++j)
+			{
+				if (heightMap->getValue(i, j) < 0.1) {
+					map->setProperties(i, j, true, true);
+				}
+				else
+					map->setProperties(i, j, false, false);
 			}
-			else
-				map->setProperties(i, j, false, false);
+
+
+		// Make sure the player can walk on map load!
+		while (!map->isWalkable(engine.player->x, engine.player->y))
+		{
+			engine.player->x = rng->getInt(0, width);
+			engine.player->y = rng->getInt(0, height);
 		}
-			
+
+	} while (!mapIsOkay()
+		|| !map->isWalkable(engine.player->x, engine.player->y));
 
 
 	//BspListener listener(*this);
@@ -81,10 +93,29 @@ Map::~Map()
 	delete map;
 }
 
+// Ensure map has between MAX_MAP_FILL and MIN_MAP_FILL % squares full 
+bool Map::mapIsOkay() const
+{
+	int walkAbleCount = 0;
+	const int max = width * height;
+
+	for (int i = 0; i < width; ++i)
+		for (int j = 0; j < height; ++j) {
+			if (map->isWalkable(i, j))
+				++walkAbleCount;
+		}
+	
+	float fillRatio = float(max - walkAbleCount) / float(max);
+	if ( fillRatio > MAX_MAP_FILL || fillRatio < MIN_MAP_FILL )
+		return false;
+
+	return true;
+}
+
 void Map::addMonster(int x, int y)
 {
 	TCODRandom *rng = TCODRandom::getInstance();
-	if (rng->getInt(0, 100) < 80) 
+	if (rng->getInt(0, 100) < 80)
 	{
 		Actor *orc = new Actor(x, y, 'o', "orc", TCODColor::desaturatedGreen);
 		orc->destructible = new MonsterDestructible(10, 0, "Dead Orc");
@@ -92,8 +123,8 @@ void Map::addMonster(int x, int y)
 		orc->ai = new MonsterAi();
 
 		engine.actors.push(orc);
-	}		
-	else 
+	}
+	else
 	{
 		Actor * troll = new Actor(x, y, 'T', "troll", TCODColor::darkerGreen);
 		troll->destructible = new MonsterDestructible(16, 1, "Troll carcas");
@@ -101,8 +132,9 @@ void Map::addMonster(int x, int y)
 		troll->ai = new MonsterAi();
 
 		engine.actors.push(troll);
-	}	
+	}
 }
+
 
 bool Map::isWall(int x, int y) const
 {
