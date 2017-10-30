@@ -4,6 +4,7 @@
 #include "Destructible.h"
 #include "Attacker.h"
 #include "Ai.h"
+#include "Tile.h"
 
 static const int ROOM_MAX_SIZE = 12;
 static const int ROOM_MIN_SIZE = 6;
@@ -12,47 +13,9 @@ static const int MAX_ROOM_MONSTERS = 3;
 static const float MAX_MAP_FILL = 0.85;
 static const float MIN_MAP_FILL = 0.18;
 
-/*
-// Traverses the bsp tree creating rooms/corridors for map
-class BspListener : public ITCODBspCallback {
-public:
-	BspListener(Map & map) : map(map), roomNum(0) {}
-
-	bool visitNode(TCODBsp * node, void *userData) {
-		if (node->isLeaf()) { // Only creeate rooms in bsp leaf
-			int x, y, w, h;
-			// Dig the room
-			TCODRandom * rng = TCODRandom::getInstance();
-			w = rng->getInt(ROOM_MIN_SIZE, node->w - 2);
-			h = rng->getInt(ROOM_MIN_SIZE, node->h - 2);
-			x = rng->getInt(node->x + 1, node->x + node->w - w - 1);
-			y = rng->getInt(node->y + 1, node->y + node->h - h - 1);
-			map.createRoom(roomNum == 0, x, y, x + w - 1, y + h - 1);
-
-			// Dig corridor from first room
-			if (roomNum != 0) {
-				map.dig(lastx, lasty, x+w / 2, lasty);
-				map.dig(x+w / 2, lasty, x+w / 2, y+h / 2);
-			}
-			// Dig corridor from center to last room
-			lastx = x + w / 2;
-			lasty = y + h / 2;
-			roomNum++;
-		}
-		return true;
-	}
-private:
-	Map & map;
-	int roomNum;
-	int lastx, lasty; // Center of last room, used for corridor digging
-};
-*/
-
 Map::Map(int width, int height, int depth) : width(width), height(height), depth(depth)
 {
 	tiles = new Tile[width * height * depth];
-
-	//map = new TCODMap(width, height);
 
 	for (int i = 0; i < MAX_ZLVL; ++i) {
 		mapZLvls[i] = new TCODMap(width, height);
@@ -68,7 +31,7 @@ Map::Map(int width, int height, int depth) : width(width), height(height), depth
 		// If height is below a threshold, mark that area walkable/visible. else not. 
 		for (int h = 0; h < depth; ++h) {
 
-			map = mapZLvls[h]; // Set map to map reprsenting current depth
+			map = mapZLvls[h]; // Set map to map representing current depth
 			currentZLevel = h; // Change these functions around when placing player
 
 			for (int i = 0; i < width; ++i)
@@ -81,6 +44,7 @@ Map::Map(int width, int height, int depth) : width(width), height(height), depth
 					else
 						map->setProperties(i, j, false, false);
 				}
+
 			heightRatio += 0.2;
 		}
 
@@ -91,7 +55,8 @@ Map::Map(int width, int height, int depth) : width(width), height(height), depth
 			engine.player->y = rng->getInt(0, height);
 		}
 
-
+		delete heightMap;
+		
 	} while (!mapIsOkay()
 		|| !map->isWalkable(engine.player->x, engine.player->y));
 
@@ -107,6 +72,10 @@ Map::~Map()
 {
 	delete[] tiles;
 	delete map;
+	for (int i = 0; i < MAX_ZLVL; ++i)
+		delete mapZLvls[i];
+
+	delete mapZLvls;
 }
 
 // Ensure map has between MAX_MAP_FILL and MIN_MAP_FILL % squares full 
@@ -127,32 +96,6 @@ bool Map::mapIsOkay() const
 
 	return true;
 }
-
-/*
-void Map::addMonster(int x, int y)
-{
-	TCODRandom *rng = TCODRandom::getInstance();
-	if (rng->getInt(0, 100) < 80)
-	{
-		Actor *orc = new Actor(x, y, 'o', "orc", TCODColor::desaturatedGreen);
-		orc->destructible = new MonsterDestructible(10, 0, "Dead Orc");
-		orc->attacker = new Attacker(3);
-		orc->ai = new MonsterAi();
-
-		engine.actors.push(orc);
-	}
-	else
-	{
-		Actor * troll = new Actor(x, y, 'T', "troll", TCODColor::darkerGreen);
-		troll->destructible = new MonsterDestructible(16, 1, "Troll carcas");
-		troll->attacker = new Attacker(4);
-		troll->ai = new MonsterAi();
-
-		engine.actors.push(troll);
-	}
-}
-*/
-
 
 bool Map::isWall(int x, int y) const
 {
@@ -209,17 +152,26 @@ void Map::render() const
 			if (isInFov(x, y))
 				TCODConsole::root->setCharBackground(x, y, isWall(x, y) ? lightWall : lightGround);
 			else if(isExplored(x, y))
-				TCODConsole::root->setCharBackground(x, y, isWall(x, y) ? darkWall : darkGround);
+				TCODConsole::root->setCharBackground(x, y, isWall(x, y) ? darkWall  : darkGround);
 		}
 }
 
 // Change the map being rendered (simulating z levels with map array)
-void Map::changeZLevel(int level)
+void Map::incrementZLevel(int inc)
 {
-	if (currentZLevel + level >= 0 && currentZLevel + level < MAX_ZLVL) {
-		map = mapZLvls[currentZLevel + level];
-		currentZLevel += level;
+	if (currentZLevel + inc >= 0 && currentZLevel + inc < MAX_ZLVL) {
+		map = mapZLvls[currentZLevel + inc];
+		currentZLevel += inc;
 	}
+}
+
+void Map::jumpToZLevel(int level)
+{
+	if (level >= 0 && level < MAX_ZLVL) {
+		map = mapZLvls[level];
+		currentZLevel = level;
+	}
+
 }
 
 /*
@@ -260,5 +212,64 @@ void Map::createRoom(bool first, int x1, int y1, int x2, int y2)
 			--nbMonsters;
 		}
 	}
+}
+
+// Traverses the bsp tree creating rooms/corridors for map
+class BspListener : public ITCODBspCallback {
+public:
+BspListener(Map & map) : map(map), roomNum(0) {}
+
+bool visitNode(TCODBsp * node, void *userData) {
+if (node->isLeaf()) { // Only creeate rooms in bsp leaf
+int x, y, w, h;
+// Dig the room
+TCODRandom * rng = TCODRandom::getInstance();
+w = rng->getInt(ROOM_MIN_SIZE, node->w - 2);
+h = rng->getInt(ROOM_MIN_SIZE, node->h - 2);
+x = rng->getInt(node->x + 1, node->x + node->w - w - 1);
+y = rng->getInt(node->y + 1, node->y + node->h - h - 1);
+map.createRoom(roomNum == 0, x, y, x + w - 1, y + h - 1);
+
+// Dig corridor from first room
+if (roomNum != 0) {
+map.dig(lastx, lasty, x+w / 2, lasty);
+map.dig(x+w / 2, lasty, x+w / 2, y+h / 2);
+}
+// Dig corridor from center to last room
+lastx = x + w / 2;
+lasty = y + h / 2;
+roomNum++;
+}
+return true;
+}
+private:
+Map & map;
+int roomNum;
+int lastx, lasty; // Center of last room, used for corridor digging
+};
+
+
+
+void Map::addMonster(int x, int y)
+{
+TCODRandom *rng = TCODRandom::getInstance();
+if (rng->getInt(0, 100) < 80)
+{
+Actor *orc = new Actor(x, y, 'o', "orc", TCODColor::desaturatedGreen);
+orc->destructible = new MonsterDestructible(10, 0, "Dead Orc");
+orc->attacker = new Attacker(3);
+orc->ai = new MonsterAi();
+
+engine.actors.push(orc);
+}
+else
+{
+Actor * troll = new Actor(x, y, 'T', "troll", TCODColor::darkerGreen);
+troll->destructible = new MonsterDestructible(16, 1, "Troll carcas");
+troll->attacker = new Attacker(4);
+troll->ai = new MonsterAi();
+
+engine.actors.push(troll);
+}
 }
 */
