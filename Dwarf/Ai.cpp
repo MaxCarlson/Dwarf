@@ -65,7 +65,7 @@ bool PlayerAi::moveOrAttack(Actor * owner, int targetX, int targetY)
 	owner->y = targetY;
 	return true;
 }
-
+/*
 void MonsterAi::update(Actor * owner)
 {
 	if (owner->destructible && owner->destructible->isDead()) // Make sure our monster is living
@@ -105,3 +105,4 @@ void MonsterAi::moveOrAttack(Actor * owner, int targetX, int targetY)
 	else if (owner->attacker)							// Within melee range!
 		owner->attacker->attack(owner, engine.player);
 }
+*/

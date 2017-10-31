@@ -20,10 +20,10 @@ protected:
 class MonsterAi : public Ai
 {
 public: 
-	void update(Actor * owner);
+	//void update(Actor * owner);
 
 protected:
 	int oppMoveCount;
-	void moveOrAttack(Actor * owner, int targetX, int targetY);
+	//void moveOrAttack(Actor * owner, int targetX, int targetY);
 };
 

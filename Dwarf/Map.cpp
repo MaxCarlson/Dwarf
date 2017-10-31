@@ -6,20 +6,18 @@
 #include "Ai.h"
 #include "Tile.h"
 
-static const int ROOM_MAX_SIZE = 12;
-static const int ROOM_MIN_SIZE = 6;
-static const int MAX_ROOM_MONSTERS = 3;
 
 static const float MAX_MAP_FILL = 0.85;
 static const float MIN_MAP_FILL = 0.18;
 
 Map::Map(int width, int height, int depth) : width(width), height(height), depth(depth)
 {
-	tiles = new Tile[width * height * depth];
 
 	for (int i = 0; i < MAX_ZLVL; ++i) {
 		mapZLvls[i] = new TCODMap(width, height);
+		tiles[i] = new Tile[width * height];
 	}
+
 
 	do {
 		TCODRandom * rng = TCODRandom::getInstance();
@@ -33,32 +31,44 @@ Map::Map(int width, int height, int depth) : width(width), height(height), depth
 
 			map = mapZLvls[h]; // Set map to map representing current depth
 			currentZLevel = h; // Change these functions around when placing player
+			
 
 			for (int i = 0; i < width; ++i)
 				for (int j = 0; j < height; ++j)
 
 				{
-					if (heightMap->getValue(i, j) < heightRatio) {
-						map->setProperties(i, j, true, true);
+					if (h <= 3) {																// Below level four set map to always be filled
+						createWall({ i, j, h });
 					}
-					else
-						map->setProperties(i, j, false, false);
+
+					else  if (heightMap->getValue(i, j) < heightRatio && isFloor(i, j, h)) {  // If height is high enough, create more mountain
+						createWall({ i, j, h });
+					}
+					else if (canWalk(i, j, h)){               // If floor below but height ratio is too low, create walkable space
+						createWalkableSpace({ i, j, h });
+					}
+					else {														              // else create open space
+						createOpenSpace({ i, j, h });
+					}
+
 				}
 
 			heightRatio += 0.2;
 		}
 
 		// Make sure the player can walk on map load!
-		while (!map->isWalkable(engine.player->x, engine.player->y))
+		while (!canWalk(engine.player->x, engine.player->y, engine.player->z))
 		{
 			engine.player->x = rng->getInt(0, width);
 			engine.player->y = rng->getInt(0, height);
+			engine.player->z = rng->getInt(0, depth);
+			map = mapZLvls[engine.player->z];
 		}
+
 
 		delete heightMap;
 		
-	} while (!mapIsOkay()
-		|| !map->isWalkable(engine.player->x, engine.player->y));
+	} while (!mapIsOkay());
 
 
 
@@ -70,7 +80,7 @@ Map::Map(int width, int height, int depth) : width(width), height(height), depth
 
 Map::~Map()
 {
-	delete[] tiles;
+	//delete[] tiles;
 	delete map;
 	for (int i = 0; i < MAX_ZLVL; ++i)
 		delete mapZLvls[i];
@@ -93,6 +103,7 @@ bool Map::mapIsOkay() const
 	float fillRatio = float(max - walkAbleCount) / float(max);
 	if ( fillRatio > MAX_MAP_FILL || fillRatio < MIN_MAP_FILL )
 		return false;
+	
 
 	return true;
 }
@@ -102,16 +113,26 @@ bool Map::isWall(int x, int y) const
 	return !map->isWalkable(x, y);
 }
 
-bool Map::canWalk(int x, int y) const
+bool Map::canWalk(int x, int y, int z) const
 {
-	if (isWall(x, y))
+	if (!isFloor(x, y, z))
 		return false;
-	
+	/*
 	for (Actor * actor : engine.actors)
 	{
 		if ( actor->blocks && actor->x == x && actor->y == y) // Cannot walk through blocking actors. Optimization, add a value to tile occupied. test this instead with direct lookup
 			return false;
 	}
+	*/
+	return true;
+}
+
+// Test if the tile underneath input coordinates provides a floor
+bool Map::isFloor(int x, int y, int z) const
+{
+	if (!(tiles[z - 1] + (x + y * height))->providesFloor)
+		return false;
+
 	return true;
 }
 
@@ -122,7 +143,7 @@ bool Map::isInFov(int x, int y) const
 		return false;
 
 	if (map->isInFov(x, y)) {
-		tiles[x + y * width].explored = true;
+		(tiles[currentZLevel] + (x + y * width))->explored = true;
 		return true;
 	}
 	return false;
@@ -130,7 +151,31 @@ bool Map::isInFov(int x, int y) const
 
 bool Map::isExplored(int x, int y) const
 {
-	return tiles[x + y * width].explored;
+	return (tiles[currentZLevel] + (x + y * width))->explored;
+}
+
+// Create impassable wall that provides a floor
+inline void Map::createWall(Coordinates co)
+{
+	map->setProperties(co.x, co.y, false, false); // These maps need be removed or revamped!
+	tileAt(co.x, co.y, co.z)->providesFloor = true;
+	tileAt(co.x, co.y, co.z)->obstructed = true;
+}
+
+// Create a space that is transparant and can be walked through, does not provide floor
+inline void Map::createWalkableSpace(Coordinates co)
+{
+	map->setProperties(co.x, co.y, true, true);  // These maps need be removed or revamped!
+	tileAt(co.x, co.y, co.z)->providesFloor = false;
+	tileAt(co.x, co.y, co.z)->obstructed = false;
+}
+
+// Create a space that is transparant and is not walkable
+inline void Map::createOpenSpace(Coordinates co)
+{
+	map->setProperties(co.x, co.y, true, false);  // These maps need be removed or revamped!
+	tileAt(co.x, co.y, co.z)->providesFloor = false;
+	tileAt(co.x, co.y, co.z)->obstructed = false;
 }
 
 void Map::computeFov()
@@ -164,7 +209,7 @@ void Map::incrementZLevel(int inc)
 		currentZLevel += inc;
 	}
 }
-
+// Jumps to z level entered if within bounds of map array
 void Map::jumpToZLevel(int level)
 {
 	if (level >= 0 && level < MAX_ZLVL) {
