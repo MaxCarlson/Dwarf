@@ -27,7 +27,7 @@ void PlayerAi::update(Actor * owner)
 	case TCODK_TEXT:
 		switch (engine.lastKey.text[0]) { // For single entry non coded keys
 		case '<': engine.map->incrementZLevel(-1); break;
-		case '>': engine.map->incrementZLevel(1); break;
+		case '>': engine.map->incrementZLevel( 1); break;
 		}
 		break;
 
@@ -43,7 +43,10 @@ void PlayerAi::update(Actor * owner)
 
 bool PlayerAi::moveOrAttack(Actor * owner, int targetX, int targetY)
 {
-	if (engine.map->isWall(targetX, targetY))
+	if (engine.map->isWall({ targetX, targetY, engine.player->z })) // This is bad, replace this. add z coordinate to function
+		return false;
+
+	if (!engine.map->canWalk({ targetX, targetY, engine.player->z }))
 		return false;
 
 	for (Actor * actor : engine.actors) // Loop through actors and if any match our target x / y attack them if they're qualified to be attacked

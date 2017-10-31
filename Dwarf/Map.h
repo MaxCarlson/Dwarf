@@ -21,9 +21,9 @@ public:
 	inline Tile * tileAt(int x, int y, int z) const;
 
 	bool mapIsOkay() const;
-	bool isWall(int x, int y) const;
-	bool canWalk(int x, int y, int z) const;
-	bool isFloor(int x, int y, int z) const;
+	bool isWall(Coordinates co) const;
+	bool canWalk(Coordinates co) const;
+	bool isFloor(Coordinates co) const;
 	bool isInFov(int x, int y) const;
 	bool isExplored(int x, int y) const;
 

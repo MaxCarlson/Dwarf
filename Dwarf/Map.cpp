@@ -41,11 +41,11 @@ Map::Map(int width, int height, int depth) : width(width), height(height), depth
 						createWall({ i, j, h });
 					}
 
-					else  if (heightMap->getValue(i, j) < heightRatio && isFloor(i, j, h)) {  // If height is high enough, create more mountain
-						createWall({ i, j, h });
-					}
-					else if (canWalk(i, j, h)){               // If floor below but height ratio is too low, create walkable space
+					else  if (heightMap->getValue(i, j) < heightRatio && isFloor({ i, j, h })) {  // If floor below but height ratio is too low, create walkable space
 						createWalkableSpace({ i, j, h });
+					}
+					else if (canWalk({ i, j, h })) {                                               // If there is a wall below, and height is high enough create more mountain
+						createWall({ i, j, h });
 					}
 					else {														              // else create open space
 						createOpenSpace({ i, j, h });
@@ -55,20 +55,48 @@ Map::Map(int width, int height, int depth) : width(width), height(height), depth
 
 			heightRatio += 0.2;
 		}
-
-		// Make sure the player can walk on map load!
-		while (!canWalk(engine.player->x, engine.player->y, engine.player->z))
+	/*
+		// Make sure the player can walk on map load! // Neeed a better method of placing player
+		while (!canWalk({ engine.player->x, engine.player->y, engine.player->z }))
 		{
-			engine.player->x = rng->getInt(0, width);
-			engine.player->y = rng->getInt(0, height);
-			engine.player->z = rng->getInt(0, depth);
+			engine.player->x = rng->getInt(0, width  - 1);
+			engine.player->y = rng->getInt(0, height - 1);
+			engine.player->z = rng->getInt(1, depth  - 1);
 			map = mapZLvls[engine.player->z];
 		}
+		*/
+		
+		//while (!canWalk({ engine.player->x, engine.player->y, engine.player->z }))
+		//{
 
+		// If player can't walk, search within the middle third of the map, from the top down for a place where they can
+		bool found = false;
+		for (int h = depth - 1; h > 0; --h) {
+			if (found) break;
+			map = mapZLvls[h];
+			for (int i = width / 3; i < width * 0.66; ++i) {
+				if (found) break;
+				for (int j = height / 3; j < height * 0.66; ++j) 
+				{
+					if (canWalk({ i, j, h })) {
+						engine.player->x = i;
+						engine.player->y = j;
+						engine.player->z = h;
+						map = mapZLvls[h];
+						found = true;
+					}
+					if (found) break;
+				}
+			}
+		}
+			
+			
+		//}
 
 		delete heightMap;
 		
-	} while (!mapIsOkay());
+	} while (!mapIsOkay() 
+		|| !canWalk({ engine.player->x, engine.player->y, engine.player->z }));
 
 
 
@@ -96,7 +124,7 @@ bool Map::mapIsOkay() const
 
 	for (int i = 0; i < width; ++i)
 		for (int j = 0; j < height; ++j) {
-			if (map->isWalkable(i, j))
+			if (canWalk({ i, j, currentZLevel }))
 				++walkAbleCount;
 		}
 	
@@ -108,14 +136,14 @@ bool Map::mapIsOkay() const
 	return true;
 }
 
-bool Map::isWall(int x, int y) const
+bool Map::isWall(Coordinates co) const
 {
-	return !map->isWalkable(x, y);
+	return tileAt(co.x, co.y, co.z)->isWall;
 }
 
-bool Map::canWalk(int x, int y, int z) const
+bool Map::canWalk(Coordinates co) const
 {
-	if (!isFloor(x, y, z))
+	if (!isFloor(co) || isWall(co))
 		return false;
 	/*
 	for (Actor * actor : engine.actors)
@@ -128,12 +156,12 @@ bool Map::canWalk(int x, int y, int z) const
 }
 
 // Test if the tile underneath input coordinates provides a floor
-bool Map::isFloor(int x, int y, int z) const
+bool Map::isFloor(Coordinates co) const
 {
-	if (!(tiles[z - 1] + (x + y * height))->providesFloor)
-		return false;
+	if (co.z == 0 || tileAt(co.x, co.y, co.z - 1)->providesFloor)
+		return true;
 
-	return true;
+	return false;
 }
 
 bool Map::isInFov(int x, int y) const
@@ -157,25 +185,28 @@ bool Map::isExplored(int x, int y) const
 // Create impassable wall that provides a floor
 inline void Map::createWall(Coordinates co)
 {
-	map->setProperties(co.x, co.y, false, false); // These maps need be removed or revamped!
+	map->setProperties(co.x, co.y, false, false);
 	tileAt(co.x, co.y, co.z)->providesFloor = true;
 	tileAt(co.x, co.y, co.z)->obstructed = true;
+	tileAt(co.x, co.y, co.z)->isWall = true;
 }
 
 // Create a space that is transparant and can be walked through, does not provide floor
 inline void Map::createWalkableSpace(Coordinates co)
 {
-	map->setProperties(co.x, co.y, true, true);  // These maps need be removed or revamped!
+	map->setProperties(co.x, co.y, true, true);  
 	tileAt(co.x, co.y, co.z)->providesFloor = false;
 	tileAt(co.x, co.y, co.z)->obstructed = false;
+	tileAt(co.x, co.y, co.z)->isWall = false;
 }
 
 // Create a space that is transparant and is not walkable
 inline void Map::createOpenSpace(Coordinates co)
 {
-	map->setProperties(co.x, co.y, true, false);  // These maps need be removed or revamped!
+	map->setProperties(co.x, co.y, true, false);  
 	tileAt(co.x, co.y, co.z)->providesFloor = false;
 	tileAt(co.x, co.y, co.z)->obstructed = false;
+	tileAt(co.x, co.y, co.z)->isWall = false;
 }
 
 void Map::computeFov()
@@ -195,9 +226,11 @@ void Map::render() const
 		for (int y = 0; y < height; ++y)
 		{
 			if (isInFov(x, y))
-				TCODConsole::root->setCharBackground(x, y, isWall(x, y) ? lightWall : lightGround);
+				TCODConsole::root->setCharBackground(x, y, isWall({ x, y, currentZLevel }) ? lightWall : lightGround);
+			else if (!isFloor({x, y, currentZLevel}))
+				TCODConsole::root->setCharBackground(x, y, TCODColor::darkestGrey);
 			else if(isExplored(x, y))
-				TCODConsole::root->setCharBackground(x, y, isWall(x, y) ? darkWall  : darkGround);
+				TCODConsole::root->setCharBackground(x, y, isWall({ x, y, currentZLevel }) ? darkWall  : darkGround);
 		}
 }
 
