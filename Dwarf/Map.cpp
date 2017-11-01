@@ -18,7 +18,7 @@ Map::Map(int width, int height, int depth) : width(width), height(height), depth
 		tiles[i] = new Tile[width * height];
 	}
 
-
+	// Create map general shape
 	do {
 		TCODRandom * rng = TCODRandom::getInstance();
 		// Create height map of area
@@ -55,19 +55,6 @@ Map::Map(int width, int height, int depth) : width(width), height(height), depth
 
 			heightRatio += 0.2;
 		}
-	/*
-		// Make sure the player can walk on map load! // Neeed a better method of placing player
-		while (!canWalk({ engine.player->x, engine.player->y, engine.player->z }))
-		{
-			engine.player->x = rng->getInt(0, width  - 1);
-			engine.player->y = rng->getInt(0, height - 1);
-			engine.player->z = rng->getInt(1, depth  - 1);
-			map = mapZLvls[engine.player->z];
-		}
-		*/
-		
-		//while (!canWalk({ engine.player->x, engine.player->y, engine.player->z }))
-		//{
 
 		// If player can't walk, search within the middle third of the map, from the top down for a place where they can
 		bool found = false;
@@ -96,12 +83,8 @@ Map::Map(int width, int height, int depth) : width(width), height(height), depth
 	} while (!mapIsOkay() 
 		|| !canWalk(engine.player->co));
 
+	populateRock();
 
-
-	//TCODBsp bsp(0, 0, width, height);
-	//bsp.splitRecursive(NULL, 8, ROOM_MAX_SIZE, ROOM_MAX_SIZE, 1.5f, 1.5f);
-	//BspListener listener(*this);
-	//bsp.traverseInvertedLevelOrder(&listener, NULL);
 }
 
 Map::~Map()
@@ -112,6 +95,19 @@ Map::~Map()
 		delete mapZLvls[i];
 
 	delete mapZLvls;
+}
+
+void Map::populateRock()
+{
+	for (int h = 0; h < depth; ++h) 
+		for (int i = 0; i < width; ++i)
+			for (int j = 0; j < height; ++j)
+			{
+				tileAt({ i, j, h })->actors.resize(1);
+				if (isWall({ i, j, h })) {
+					tileAt({ i, j, h })->actors.push_back(new Stone({ i, j, h }, '%', STONE_ID, "granite", TCODColor::lightSepia, Stone::GRANITE));
+				}
+			}
 }
 
 // Ensure map has between MAX_MAP_FILL and MIN_MAP_FILL % squares full 
@@ -136,7 +132,7 @@ bool Map::mapIsOkay() const
 
 bool Map::isWall(Coordinates co) const
 {
-	return tileAt(co.x, co.y, co.z)->isWall;
+	return tileAt(co)->isWall;
 }
 
 bool Map::canWalk(Coordinates co) const
@@ -156,7 +152,7 @@ bool Map::canWalk(Coordinates co) const
 // Test if the tile underneath input coordinates provides a floor
 bool Map::isFloor(Coordinates co) const
 {
-	if (co.z == 0 || tileAt(co.x, co.y, co.z - 1)->providesFloor)
+	if (tileBelow(co)->providesFloor)
 		return true;
 
 	return false;
@@ -184,27 +180,27 @@ bool Map::isExplored(int x, int y) const
 inline void Map::createWall(Coordinates co)
 {
 	map->setProperties(co.x, co.y, false, false);
-	tileAt(co.x, co.y, co.z)->providesFloor = true;
-	tileAt(co.x, co.y, co.z)->obstructed = true;
-	tileAt(co.x, co.y, co.z)->isWall = true;
+	tileAt(co)->providesFloor = true;
+	tileAt(co)->obstructed    = true;
+	tileAt(co)->isWall        = true;
 }
 
 // Create a space that is transparant and can be walked through, does not provide floor
 inline void Map::createWalkableSpace(Coordinates co)
 {
 	map->setProperties(co.x, co.y, true, true);  
-	tileAt(co.x, co.y, co.z)->providesFloor = false;
-	tileAt(co.x, co.y, co.z)->obstructed = false;
-	tileAt(co.x, co.y, co.z)->isWall = false;
+	tileAt(co)->providesFloor = false;
+	tileAt(co)->obstructed    = false;
+	tileAt(co)->isWall        = false;
 }
 
 // Create a space that is transparant and is not walkable
 inline void Map::createOpenSpace(Coordinates co)
 {
 	map->setProperties(co.x, co.y, true, false);  
-	tileAt(co.x, co.y, co.z)->providesFloor = false;
-	tileAt(co.x, co.y, co.z)->obstructed = false;
-	tileAt(co.x, co.y, co.z)->isWall = false;
+	tileAt(co)->providesFloor = false;
+	tileAt(co)->obstructed    = false;
+	tileAt(co)->isWall        = false;
 }
 
 void Map::computeFov()
@@ -219,16 +215,28 @@ void Map::render() const
 	static const TCODColor lightWall(130, 110, 50);
 	static const TCODColor lightGround(200, 180, 50);
 
+	// TCODRandom * rng = new TCODRandom(); if (rng->getInt(0, 8) == 8) TCODConsole::root->setChar(x, y, ','); (hard code these values once genrated)
+
 	// Iterates through map squares
 	for(int x = 0; x < width; ++x)
 		for (int y = 0; y < height; ++y)
 		{
+			//const Tile t = *tileAt({ x, y, currentZLevel });
+			//if (t.actors[0] && t.actors[0]->a_id == STONE_ID)
+			//{
+			//	TCODConsole::root->setCharBackground(x, y, t.actors[0]->col);
+			//	TCODConsole::root->setChar(x, y, t.actors[0]->ch);
+			//}
 			if (isInFov(x, y))
 				TCODConsole::root->setCharBackground(x, y, isWall({ x, y, currentZLevel }) ? lightWall : lightGround);
-			else if (!isFloor({x, y, currentZLevel}))
-				TCODConsole::root->setCharBackground(x, y, TCODColor::darkestGrey);
+			else if (!isFloor({ x, y, currentZLevel })) {
+				TCODConsole::root->setCharBackground(x, y, TCODColor::darkestGrey); 
+			}
 			else if(isExplored(x, y))
 				TCODConsole::root->setCharBackground(x, y, isWall({ x, y, currentZLevel }) ? darkWall  : darkGround);
+
+
+			//delete t;
 		}
 }
 

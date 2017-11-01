@@ -10,8 +10,8 @@
 #include <iostream>
 
 
-Actor::Actor(Coordinates co, int ch, const char * name, const TCODColor & col)
-	: co(co), ch(ch), col(col), blocks(true), attacker(NULL), destructible(NULL), ai(NULL), pickable(NULL), container(NULL)
+Actor::Actor(Coordinates co, int ch, int a_id, const char * name, const TCODColor & col)
+	: co(co), ch(ch), a_id(a_id),  col(col), blocks(true), attacker(NULL), destructible(NULL), ai(NULL), pickable(NULL), container(NULL)
 {
 	strcpy_s(this->name, name);	
 }
