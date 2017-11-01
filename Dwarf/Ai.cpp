@@ -36,20 +36,28 @@ void PlayerAi::update(Actor * owner)
 
 	if (dx != 0 || dy != 0) {
 		engine.gameStatus = Engine::NEW_TURN;
-		if (moveOrAttack(owner, owner->x + dx, owner->y + dy))
+		if (move(owner, owner->co.x + dx, owner->co.y + dy))
 			engine.map->computeFov();
 	}
 }
 
-bool PlayerAi::moveOrAttack(Actor * owner, int targetX, int targetY)
+bool PlayerAi::move(Actor * owner, int targetX, int targetY)
 {
-	if (engine.map->isWall({ targetX, targetY, engine.player->z })) // This is bad, replace this. add z coordinate to function
+	if (!engine.map->canWalk({ targetX, targetY, engine.player->co.z }))
 		return false;
 
-	if (!engine.map->canWalk({ targetX, targetY, engine.player->z }))
-		return false;
 
-	for (Actor * actor : engine.actors) // Loop through actors and if any match our target x / y attack them if they're qualified to be attacked
+	// Move the player
+	owner->co.x = targetX;
+	owner->co.y = targetY;
+	return true;
+}
+
+
+/*
+bool PayerAi::Attack(Actor * owner, int targetX, int targetY) {
+
+		for (Actor * actor : engine.actors) // Loop through actors and if any match our target x / y attack them if they're qualified to be attacked
 	{
 		if (actor->destructible && !actor->destructible->isDead()
 			&& actor->x == targetX && actor->y == targetY)
@@ -60,15 +68,11 @@ bool PlayerAi::moveOrAttack(Actor * owner, int targetX, int targetY)
 	}
 
 	for (Actor * actor : engine.actors)
-		if(actor->destructible->isDead() && actor->x == targetX && actor->y == targetY)
+		if (actor->destructible->isDead() && actor->x == targetX && actor->y == targetY)
 			engine.gui->message(TCODColor::lightGrey, "There's a %s here\n", actor->name);
-
-	// Move the player
-	owner->x = targetX;
-	owner->y = targetY;
-	return true;
 }
-/*
+
+
 void MonsterAi::update(Actor * owner)
 {
 	if (owner->destructible && owner->destructible->isDead()) // Make sure our monster is living

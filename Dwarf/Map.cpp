@@ -79,9 +79,7 @@ Map::Map(int width, int height, int depth) : width(width), height(height), depth
 				for (int j = height / 3; j < height * 0.66; ++j) 
 				{
 					if (canWalk({ i, j, h })) {
-						engine.player->x = i;
-						engine.player->y = j;
-						engine.player->z = h;
+						engine.player->co = { i, j, h };
 						map = mapZLvls[h];
 						found = true;
 					}
@@ -96,7 +94,7 @@ Map::Map(int width, int height, int depth) : width(width), height(height), depth
 		delete heightMap;
 		
 	} while (!mapIsOkay() 
-		|| !canWalk({ engine.player->x, engine.player->y, engine.player->z }));
+		|| !canWalk(engine.player->co));
 
 
 
@@ -211,7 +209,7 @@ inline void Map::createOpenSpace(Coordinates co)
 
 void Map::computeFov()
 {
-	map->computeFov(engine.player->x, engine.player->y, engine.fovRadius);
+	map->computeFov(engine.player->co.x, engine.player->co.y, engine.fovRadius);
 }
 
 void Map::render() const

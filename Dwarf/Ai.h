@@ -14,7 +14,7 @@ public:
 	void update(Actor * owner);
 
 protected:
-	bool moveOrAttack(Actor * owner, int targetX, int targetY);
+	bool move(Actor * owner, int targetX, int targetY);
 };
 
 class MonsterAi : public Ai

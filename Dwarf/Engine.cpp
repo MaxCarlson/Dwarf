@@ -10,7 +10,7 @@
 Engine::Engine(int screenWidth, int screenHeight) : gameStatus(STARTUP), fovRadius(10), screenWidth(screenWidth), screenHeight(screenHeight)
 {
 	TCODConsole::initRoot(screenWidth, screenHeight, "C++ libtcod tutorial", false);
-	player = new Actor(40, 25, 1, '@', "player", TCODColor::white);					 // Final x, y are determined in map! CHANGE THIS CONSTRUCTORS Z LEVEL LATER?
+	player = new Actor({ 40, 25, 1 }, '@', "player", TCODColor::white);					 // Final x, y are determined in map! CHANGE THIS CONSTRUCTORS Z LEVEL LATER?
 	player->destructible = new PlayerDestructible(30, 2, "Your cadaver!");
 	player->attacker = new Attacker(5);
 	player->ai = new PlayerAi();
@@ -60,7 +60,7 @@ void Engine::render()
 	// Iteratre through actors, setting chars location and colors
 	for (Actor * actor : actors) 
 	{
-		if(map->isInFov(actor->x, actor->y))
+		if(map->isInFov(actor->co.x, actor->co.y))
 			actor->render();
 	}
 

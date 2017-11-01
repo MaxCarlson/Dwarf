@@ -80,7 +80,7 @@ void Gui::renderMouseLook()
 
 	int first = 0;
 	for (Actor * actor : engine.actors)
-		if (actor->x == engine.mouse.cx && actor->y == engine.mouse.cy) 
+		if (actor->co.x == engine.mouse.cx && actor->co.y == engine.mouse.cy) 
 		{
 			if (first > 0)
 				strcat_s(buf, ", ");

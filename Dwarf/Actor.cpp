@@ -10,8 +10,8 @@
 #include <iostream>
 
 
-Actor::Actor(int x, int y, int z, int ch, const char * name, const TCODColor & col) 
-	: x(x), y(y), z(z), ch(ch), col(col), blocks(true), attacker(NULL), destructible(NULL), ai(NULL), pickable(NULL), container(NULL)
+Actor::Actor(Coordinates co, int ch, const char * name, const TCODColor & col)
+	: co(co), ch(ch), col(col), blocks(true), attacker(NULL), destructible(NULL), ai(NULL), pickable(NULL), container(NULL)
 {
 	strcpy_s(this->name, name);	
 }
@@ -27,8 +27,8 @@ Actor::~Actor()
 
 
 void Actor::render() const {
-	TCODConsole::root->setChar(x, y, ch);
-	TCODConsole::root->setCharForeground(x, y, col);
+	TCODConsole::root->setChar(co.x, co.y, ch);
+	TCODConsole::root->setCharForeground(co.x, co.y, col);
 }
 
 void Actor::update()
