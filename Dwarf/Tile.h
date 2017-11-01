@@ -21,8 +21,6 @@ public:
 
 	Tile() : explored(true), obstructed(true), isWall(true) {} // MAKE exploered FALSE TO OCCLUDE unexplored regions
 
-
-	std::vector< Actor *> actors; // Vector of all actors currently on tile
 private:
 
 };

@@ -120,9 +120,12 @@
     <ClCompile Include="Actor.cpp" />
     <ClCompile Include="Ai.cpp" />
     <ClCompile Include="Attacker.cpp" />
+    <ClCompile Include="Component.cpp" />
     <ClCompile Include="Container.cpp" />
     <ClCompile Include="Destructible.cpp" />
     <ClCompile Include="Engine.cpp" />
+    <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="EntityManager.cpp" />
     <ClCompile Include="Gui.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Map.cpp" />
@@ -133,9 +136,12 @@
     <ClInclude Include="Actor.h" />
     <ClInclude Include="Ai.h" />
     <ClInclude Include="Attacker.h" />
+    <ClInclude Include="Component.h" />
     <ClInclude Include="Container.h" />
     <ClInclude Include="Destructible.h" />
     <ClInclude Include="Engine.h" />
+    <ClInclude Include="Entity.h" />
+    <ClInclude Include="EntityManager.h" />
     <ClInclude Include="Gui.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Pickable.h" />

@@ -99,6 +99,7 @@ Map::~Map()
 
 void Map::populateRock()
 {
+	/*
 	for (int h = 0; h < depth; ++h) 
 		for (int i = 0; i < width; ++i)
 			for (int j = 0; j < height; ++j)
@@ -108,6 +109,7 @@ void Map::populateRock()
 					tileAt({ i, j, h })->actors.push_back(new Stone({ i, j, h }, '%', STONE_ID, "granite", TCODColor::lightSepia, Stone::GRANITE));
 				}
 			}
+	*/
 }
 
 // Ensure map has between MAX_MAP_FILL and MIN_MAP_FILL % squares full 
@@ -221,12 +223,7 @@ void Map::render() const
 	for(int x = 0; x < width; ++x)
 		for (int y = 0; y < height; ++y)
 		{
-			//const Tile t = *tileAt({ x, y, currentZLevel });
-			//if (t.actors[0] && t.actors[0]->a_id == STONE_ID)
-			//{
-			//	TCODConsole::root->setCharBackground(x, y, t.actors[0]->col);
-			//	TCODConsole::root->setChar(x, y, t.actors[0]->ch);
-			//}
+
 			if (isInFov(x, y))
 				TCODConsole::root->setCharBackground(x, y, isWall({ x, y, currentZLevel }) ? lightWall : lightGround);
 			else if (!isFloor({ x, y, currentZLevel })) {
@@ -234,9 +231,6 @@ void Map::render() const
 			}
 			else if(isExplored(x, y))
 				TCODConsole::root->setCharBackground(x, y, isWall({ x, y, currentZLevel }) ? darkWall  : darkGround);
-
-
-			//delete t;
 		}
 }
 
