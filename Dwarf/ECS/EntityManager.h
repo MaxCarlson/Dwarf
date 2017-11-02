@@ -1,8 +1,5 @@
 #pragma once
-#include "Entity.h"
-#include "Component.h"
 
-#include <map>
 
 #include <memory>
 #include <bitset>
@@ -52,7 +49,7 @@ private:
 	bool alive = true;
 	std::vector<std::unique_ptr<Component>> components;
 
-	ComponentArray  componentArray;
+	ComponentArray   componentArray;
 	ComponentBitSet componentBitSet;
 public:
 	void update()

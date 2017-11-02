@@ -1,5 +1,4 @@
 #pragma once
-
 #include "include\libtcod.hpp"
 
 class Gui;

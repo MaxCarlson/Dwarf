@@ -2,7 +2,6 @@
 
 #include <vector>
 
-class Actor;
 
 // Holds what it says, used for 
 // index lookups
