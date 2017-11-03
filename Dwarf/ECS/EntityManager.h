@@ -46,7 +46,7 @@ public:
 class Entity
 {
 private:
-	bool alive = true;
+	bool active = true;
 	std::vector<std::unique_ptr<Component>> components;
 
 	ComponentArray   componentArray;
@@ -61,13 +61,15 @@ public:
 		for (auto& co : components) co->draw();
 	}
 
-	void draw() {};
-	bool isAlive() const { return alive;  }
-	void destroy() { alive = false; }
+	// Does entity still exist in gameworld?
+	bool isActive() const { return active;  }
+	// Tag entity for removal
+	void destroy() { active = false; }
 
+	// Asks if entity has component type T
 	template <typename T> bool hasComponent() const
 	{
-		return ComponentBitSet[getComponentTypeID<T>()]; // CHeck here if bugs!!
+		return ComponentBitSet[getComponentTypeID<T>()]; // Check here if bugs!!
 	}
 
 	
@@ -112,6 +114,18 @@ public:
 	{
 		for (auto& ent : entities) ent->draw();
 	}
+	// Only update components of type T // Does this work or not?
+	template<typename T>
+	void updateComponentOfType()
+	{	
+		for (auto& ent : entities->hasComponent<T>())  ent->update();
+	}
+	// Only draw components of type T
+	template<typename T>
+	void drawComponentOfType()
+	{
+		for (auto& ent : entities->hasComponent<T>()) ent->draw();
+	}
 
 	// Remove all non active entities
 	void refresh()
@@ -119,7 +133,7 @@ public:
 		entities.erase(std::remove_if(std::begin(entities), std::end(entities),
 			[](const std::unique_ptr<Entity> &mEntity)
 		{
-			return !mEntity->isAlive();
+			return !mEntity->isActive();
 		}),
 			std::end(entities));
 	}
@@ -133,7 +147,7 @@ public:
 		entities.emplace_back(std::move(uPtr));
 		return *e;
 	}
-};
+}; extern EntityManager entityManager;
 
 
 

@@ -137,8 +137,10 @@
     <ClInclude Include="Attacker.h" />
     <ClInclude Include="Container.h" />
     <ClInclude Include="Destructible.h" />
+    <ClInclude Include="ECS\Camera.h" />
     <ClInclude Include="ECS\EntityManager.h" />
     <ClInclude Include="ECS\PositionComponent.h" />
+    <ClInclude Include="ECS\RenderComponent.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="Gui.h" />
     <ClInclude Include="Map.h" />
