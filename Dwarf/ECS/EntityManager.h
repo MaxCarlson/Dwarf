@@ -5,22 +5,25 @@
 #include <bitset>
 #include <algorithm>
 #include <array>
+#include <vector>
 
+#include <type_traits>
 
+class EntityManager;
 class Component;
 class Entity;
 
 using ComponentID = std::size_t;
 
 // Component ID's by order of initialization
-inline ComponentID getComponentTypeID()
+inline ComponentID getUniqueComponentID() noexcept
 {
 	static ComponentID lastID = 0;
 	return ++lastID;
 }
 template <typename T> inline ComponentID getComponentTypeID() noexcept
 {
-	static ComponentID typeID = getComponentTypeID();
+	static ComponentID typeID = getUniqueComponentID();
 	return typeID;
 }
 
@@ -31,6 +34,17 @@ constexpr std::size_t maxComponents = 32;
 using ComponentBitSet = std::bitset<maxComponents>;
 using ComponentArray  = std::array<Component*, maxComponents>;
 
+// Groups are used for fast access to entities
+// that have a particular component or other "grouping"
+using Group = std::size_t;
+constexpr std::size_t maxGroups{ 32 };
+using GroupBitset = std::bitset<maxGroups>;
+
+enum EntityGroups : size_t
+{
+	THINGS_WITH_RENDER_G,
+	CREATURES_G
+};
 
 class Component
 {
@@ -51,7 +65,13 @@ private:
 
 	ComponentArray   componentArray;
 	ComponentBitSet componentBitSet;
+	GroupBitset         groupBitset;
+
+	EntityManager & manager;
+
 public:
+	Entity(EntityManager & manager) : manager(manager) {}
+
 	void update()
 	{
 		for (auto& co : components) co->update();
@@ -69,27 +89,36 @@ public:
 	// Asks if entity has component type T
 	template <typename T> bool hasComponent() const
 	{
-		return ComponentBitSet[getComponentTypeID<T>()]; // Check here if bugs!!
+		return componentBitSet[getComponentTypeID<T>()];
 	}
-
 	
 	template <typename T, typename... TArgs>
 	T& addComponent(TArgs&&... mArgs)
 	{
 		// Add component to component vector
 		// passing any arguments to constructers we may need
-		T* c(new T(std::forward<TArgss>(mArgs)...));
+		T* c(new T(std::forward<TArgs>(mArgs)...));
 		c->entity = this;
 		std::unique_ptr<Component> uPtr{ c };
 		components.emplace_back(std::move(uPtr));
 
-		// Add component to comp 
+		// Add component to comp array and vector
 		componentArray[getComponentTypeID<T>()] = c;
 		componentBitSet[getComponentTypeID<T>()] = true;
 
 		c->init();
 		return *c;
 	}
+
+	// Is this entity in the group?
+	bool hasGroup(Group eGroup) const noexcept
+	{
+		return groupBitset[eGroup];
+	}
+
+	void addGroup(Group group) noexcept;
+	// Remove entity from group
+	void delGroup(Group group) noexcept { groupBitset[group] = false; }
 
 	// Returns a refrence to type component
 	template<typename T> T& getComponent() const
@@ -105,6 +134,9 @@ class EntityManager
 private:
 	std::vector<std::unique_ptr<Entity>> entities;
 
+	// Holds an array of pointers to all entitys in a specific group
+	std::array<std::vector<Entity*>, maxGroups> groupedEntities;
+
 public:
 	void update()
 	{
@@ -114,17 +146,35 @@ public:
 	{
 		for (auto& ent : entities) ent->draw();
 	}
+
+	// Add entity to group through manager, can also be don
+	// through the entity itself
+	void addToGroup(Entity * entity, Group group)
+	{
+		groupedEntities[group].emplace_back(entity);
+	}
+
+	// Returns a vector of pointers to all entitys in a group
+	std::vector<Entity*>& getEntitiesByGroup(Group group)
+	{
+		return groupedEntities[group];
+	}
+
 	// Only update components of type T // Does this work or not?
 	template<typename T>
 	void updateComponentOfType()
 	{	
-		for (auto& ent : entities->hasComponent<T>())  ent->update();
+		for (auto& ent : entities)
+			if (ent->hasComponent<T>())
+				ent->update();	
 	}
 	// Only draw components of type T
 	template<typename T>
 	void drawComponentOfType()
 	{
-		for (auto& ent : entities->hasComponent<T>()) ent->draw();
+		for (auto& ent : entities)
+			if (ent->hasComponent<T>())
+				ent->draw();
 	}
 
 	// Remove all non active entities
@@ -142,15 +192,12 @@ public:
 	// Add it to the entity managers vector of entities
 	Entity& addEntity()
 	{
-		Entity* e = new Entity();
+		Entity* e = new Entity(*this);
 		std::unique_ptr<Entity> uPtr{ e };
 		entities.emplace_back(std::move(uPtr));
 		return *e;
 	}
-}; extern EntityManager entityManager;
-
-
-
+}; 
 
 
 

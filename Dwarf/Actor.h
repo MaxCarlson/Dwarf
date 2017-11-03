@@ -61,8 +61,8 @@ public:
 
 	enum StoneChar 
 	{
-		GRANITE_CH = '▓',
-		MARBLE_CH = '▓',
+		GRANITE_CH = '#',
+		MARBLE_CH = '#',
 		SLATE_CH = '%'
 	};
 };

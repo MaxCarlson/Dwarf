@@ -6,11 +6,25 @@
 #include "Ai.h"
 #include "Gui.h"
 #include "Container.h"
+#include "ECS\PositionComponent.h"
+#include "ECS\Camera.h"
+#include "ECS\RenderComponent.h"
 
 
 Engine::Engine(int screenWidth, int screenHeight) : gameStatus(STARTUP), fovRadius(10), screenWidth(screenWidth), screenHeight(screenHeight)
 {
 	TCODConsole::initRoot(screenWidth, screenHeight, "C++ libtcod tutorial", false);
+
+	camera = &entityManager.addEntity();
+	camera->addComponent<PositionComponent>().set({ 40, 25, 1 });
+	camera->addComponent<CameraComponent>();
+	camera->addComponent<RenderComponent>(&camera->getComponent<CameraComponent>(), '@', true, TCODColor::white, TCODColor::white);
+
+	Player = &entityManager.addEntity();
+
+	entityManager.updateComponentOfType<PositionComponent>();
+
+
 	player = new Actor({ 40, 25, 1 }, '@', PLAYER_ID, "player", TCODColor::white);					 // Final x, y are determined in map! CHANGE THIS CONSTRUCTORS Z LEVEL LATER?
 	player->destructible = new PlayerDestructible(30, 2, "Your cadaver!");
 	player->attacker = new Attacker(5);

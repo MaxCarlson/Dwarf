@@ -11,14 +11,15 @@ private:
 	// What level is camera looking at, and by virtue of system
 	// what level do we need to render?
 	PositionComponent * position;
-
-
 public:
 	CameraComponent() = default;
-	CameraComponent() {};
+	//CameraComponent() {};
 
 	void init() override
 	{
 		position = &entity->getComponent<PositionComponent>();
 	}
+
+	Coordinates cameraCoordinates() { return position->coordinates(); }
+	int currentZLevel() { return position->z(); }
 };

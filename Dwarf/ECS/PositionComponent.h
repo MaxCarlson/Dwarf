@@ -3,7 +3,8 @@
 #include "..\Tile.h"
 
 
-
+// POsition components should most likely be set first 
+// for almost all entitys that have them.
 class PositionComponent : public Component
 {
 private:

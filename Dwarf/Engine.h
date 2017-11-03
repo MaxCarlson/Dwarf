@@ -1,5 +1,6 @@
 #pragma once
 #include "include\libtcod.hpp"
+#include "ECS\EntityManager.h"
 
 class Gui;
 class Actor;
@@ -15,6 +16,10 @@ public:
 		VICTORY,
 		DEFEAT
 	} gameStatus;
+
+	EntityManager entityManager;
+	Entity * camera;
+	Entity * Player;
 
 	TCOD_key_t lastKey;
 	TCOD_mouse_t mouse;
