@@ -5,6 +5,7 @@
 #include "Attacker.h"
 #include "Ai.h"
 #include "Tile.h"
+#include "ECS\PositionComponent.h"
 
 
 static const float MAX_MAP_FILL = 0.85;
@@ -37,17 +38,17 @@ Map::Map(int width, int height, int depth) : width(width), height(height), depth
 				for (int j = 0; j < height; ++j)
 
 				{
-					if (h <= 3) {																// Below level four set map to always be filled
+					if (h <= 3) {															       // Below level four set map to always be filled
 						createWall({ i, j, h });
 					}
 
-					else  if (heightMap->getValue(i, j) < heightRatio && isFloor({ i, j, h })) {  // If floor below but height ratio is too low, create walkable space
+					else  if (heightMap->getValue(i, j) < heightRatio && isFloor({ i, j, h })) {   // If floor below but height ratio is too low, create walkable space
 						createWalkableSpace({ i, j, h });
 					}
 					else if (canWalk({ i, j, h })) {                                               // If there is a wall below, and height is high enough create more mountain
 						createWall({ i, j, h });
 					}
-					else {														              // else create open space
+					else {														                   // else create open space
 						createOpenSpace({ i, j, h });
 					}
 
@@ -66,7 +67,7 @@ Map::Map(int width, int height, int depth) : width(width), height(height), depth
 				for (int j = height / 3; j < height * 0.66; ++j) 
 				{
 					if (canWalk({ i, j, h })) {
-						engine.player->co = { i, j, h };
+						engine.camera->getComponent<PositionComponent>().set({ i, j, h });
 						map = mapZLvls[h];
 						found = true;
 					}
@@ -81,10 +82,9 @@ Map::Map(int width, int height, int depth) : width(width), height(height), depth
 		delete heightMap;
 		
 	} while (!mapIsOkay() 
-		|| !canWalk(engine.player->co));
+		|| !canWalk(engine.camera->getComponent<PositionComponent>().coordinates()));
 
 	populateRock();
-
 }
 
 Map::~Map()
@@ -207,7 +207,7 @@ inline void Map::createOpenSpace(Coordinates co)
 
 void Map::computeFov()
 {
-	map->computeFov(engine.player->co.x, engine.player->co.y, engine.fovRadius);
+	map->computeFov(engine.camera->getComponent<PositionComponent>().x(), engine.camera->getComponent<PositionComponent>().y(), engine.fovRadius);
 }
 
 void Map::render() const

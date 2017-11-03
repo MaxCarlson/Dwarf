@@ -19,10 +19,14 @@ Engine::Engine(int screenWidth, int screenHeight) : gameStatus(STARTUP), fovRadi
 	camera->addComponent<PositionComponent>().set({ 40, 25, 1 });
 	camera->addComponent<CameraComponent>();
 	camera->addComponent<RenderComponent>(&camera->getComponent<CameraComponent>(), '@', true, TCODColor::white, TCODColor::white);
+	camera->addGroup(Groups::THINGS_WITH_RENDER_G); // Remove this once proper Camera is implemented
 
-	Player = &entityManager.addEntity();
-
-	entityManager.updateComponentOfType<PositionComponent>();
+	for (int i = 0; i < 2000000; ++i)
+	{
+		Entity *en = &entityManager.addEntity();
+		en->addComponent<PositionComponent>().set({ 40, 25, 1 });
+		en->addGroup(Groups::THINGS_WITH_RENDER_G); // Remove this once proper Camera is implemented
+	}
 
 
 	player = new Actor({ 40, 25, 1 }, '@', PLAYER_ID, "player", TCODColor::white);					 // Final x, y are determined in map! CHANGE THIS CONSTRUCTORS Z LEVEL LATER?
@@ -71,6 +75,8 @@ void Engine::render()
 	TCODConsole::root->clear();
 
 	map->render();
+	camera->update();
+	camera->draw();
 
 	// Iteratre through actors, setting chars location and colors
 	for (Actor * actor : actors) 

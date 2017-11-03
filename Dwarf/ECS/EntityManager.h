@@ -28,7 +28,7 @@ template <typename T> inline ComponentID getComponentTypeID() noexcept
 }
 
 // Max components entity can hold
-constexpr std::size_t maxComponents = 32;
+constexpr std::size_t maxComponents = 64;
 
 // Used for matching entities to component sets
 using ComponentBitSet = std::bitset<maxComponents>;
@@ -37,10 +37,10 @@ using ComponentArray  = std::array<Component*, maxComponents>;
 // Groups are used for fast access to entities
 // that have a particular component or other "grouping"
 using Group = std::size_t;
-constexpr std::size_t maxGroups{ 32 };
+constexpr std::size_t maxGroups{ 64 };
 using GroupBitset = std::bitset<maxGroups>;
 
-enum EntityGroups : size_t
+enum Groups : size_t
 {
 	THINGS_WITH_RENDER_G,
 	CREATURES_G

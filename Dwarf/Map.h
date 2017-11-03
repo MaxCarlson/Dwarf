@@ -46,10 +46,6 @@ protected:
 	Tile    * tiles[MAX_ZLVL];
 	TCODMap * map;				    // Holds the map the camera will render
 	TCODMap * mapZLvls[MAX_ZLVL];   // Holds all of the maps
-
-	//friend class BspListener;
-	//void dig(int x1, int y1, int x2, int y2);
-	//void createRoom(bool first, int x1, int y1, int x2, int y2);
 };
 
 // Returns a pointer to a tile at coordinates

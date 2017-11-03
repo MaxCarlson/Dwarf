@@ -16,5 +16,8 @@ public:
 	int z() const { return co.z; }
 
 	void set(Coordinates cor) { co = cor; }
-	void set(int xx, int yy, int zz) { co.x = xx; co.y = yy; co.z = zz; }
+	void set(int x, int y, int z) { co.x = x; co.y = y; co.z = z; }
+	void setX(int x) { co.x = x; }
+	void setY(int y) { co.y = y; }
+	void setZ(int z) { co.z = z; }
 };
