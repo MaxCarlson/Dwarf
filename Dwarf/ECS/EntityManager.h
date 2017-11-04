@@ -20,9 +20,29 @@ constexpr std::size_t MAX_COMPONENTS = 64;
 class EntityManager
 {
 public:
-	void addComponent(Entity & entity) {
-		//auto index = entity.getId();
+	explicit EntityManager(std::size_t entityAmount);
+
+	// Add componenet to entity
+	void addComponent(Entity & entity, Component* component, TypeId componentTypeId) {
+		auto index = entity.getId();
+		componentEntries[index];
 	}
+
+	// Remove componenet of entity
+	void removeComponent(Entity & entity, TypeId componentTypeId);
+
+	// Removes all components of entity
+	void removeAllComponents(Entity & entity);
+
+	// Get a refrence to a component of an entity if it exists
+	Component & getComponent(Entity & entity, TypeId componentTypeId) const;
+
+	// Does Entity entity have component type componentTypeId ?
+	bool hasComponent(Entity & entity, TypeId componentTypeId) const;
+
+	void resize(std::size_t entityAmount);
+
+	void clear();
 
 private:
 	typedef std::array<std::unique_ptr<Component>, MAX_COMPONENTS> ComponentArray;
