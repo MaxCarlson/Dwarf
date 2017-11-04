@@ -21,12 +21,6 @@ Engine::Engine(int screenWidth, int screenHeight) : gameStatus(STARTUP), fovRadi
 	camera->addComponent<RenderComponent>(&camera->getComponent<CameraComponent>(), '@', true, TCODColor::white, TCODColor::white);
 	camera->addGroup(Groups::THINGS_WITH_RENDER_G); // Remove this once proper Camera is implemented
 
-	for (int i = 0; i < 2000000; ++i)
-	{
-		Entity *en = &entityManager.addEntity();
-		en->addComponent<PositionComponent>().set({ 40, 25, 1 });
-		en->addGroup(Groups::THINGS_WITH_RENDER_G); // Remove this once proper Camera is implemented
-	}
 
 
 	player = new Actor({ 40, 25, 1 }, '@', PLAYER_ID, "player", TCODColor::white);					 // Final x, y are determined in map! CHANGE THIS CONSTRUCTORS Z LEVEL LATER?

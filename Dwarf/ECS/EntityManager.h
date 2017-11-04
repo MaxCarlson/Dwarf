@@ -21,6 +21,8 @@ inline ComponentID getUniqueComponentID() noexcept
 	static ComponentID lastID = 0;
 	return ++lastID;
 }
+
+// Returns component ID with input of component class
 template <typename T> inline ComponentID getComponentTypeID() noexcept
 {
 	static ComponentID typeID = getUniqueComponentID();
@@ -199,24 +201,7 @@ public:
 	}
 }; 
 
-
-
-
-/*
-class EntityManager : GameObject
+class EManager
 {
-public:
-	EntityManager();
-	Id generateNewId();
-	Entity * createEntity();
-	void addComponent(Component * comp, Entity * ent);
-	Component * getComponentOfClass();
-	void removeEntity(Entity *);
 
-	Id lowestVacantId = 1;
-	std::vector<Entity *> entities;
-	// Holds components mapped by their enum CompID's
-	std::map<CompID, std::map<Id, Component>*> componentsByClass; 
 };
-
-*/
