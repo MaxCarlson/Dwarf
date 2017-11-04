@@ -19,4 +19,6 @@ TypeId ComponentTypeId()
 	return ClassTypeId<Component>::getTypeId<T>();
 }
 
-using ComponentArray = std::vector<Component*>;
+using ComponentArray    = std::vector<Component*>;
+// A BitSet of which components this entity currently has
+using ComponentTypeList = std::bitset<MAX_COMPONENTS>;

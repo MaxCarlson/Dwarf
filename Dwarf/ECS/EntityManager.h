@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Component.h"
+#include "Entities.h"
 
 #include <memory>
 #include <bitset>
@@ -14,8 +15,6 @@
 
 // Max components entity can hold
 constexpr std::size_t MAX_COMPONENTS = 64;
-
-using ComponentTypeList = std::bitset<MAX_COMPONENTS>;
 
 // Make this new entity manager
 class EntityManager
