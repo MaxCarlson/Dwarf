@@ -129,6 +129,7 @@
     <ClCompile Include="Destructible.cpp" />
     <ClCompile Include="ECS\EntityManager.cpp" />
     <ClCompile Include="Engine.cpp" />
+    <ClCompile Include="ECS\Entities.cpp" />
     <ClCompile Include="Gui.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Map.cpp" />
@@ -148,6 +149,7 @@
     <ClInclude Include="ECS\Systems.h" />
     <ClInclude Include="ECS\TypeID.h" />
     <ClInclude Include="Engine.h" />
+    <ClInclude Include="ECS\Entities.h" />
     <ClInclude Include="Gui.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Pickable.h" />
