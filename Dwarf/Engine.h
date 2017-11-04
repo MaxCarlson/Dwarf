@@ -17,8 +17,8 @@ public:
 		DEFEAT
 	} gameStatus;
 
-	EntityManager entityManager;
-	Entity * camera; // Change this to non pointer?
+	//EntityManager entityManager;
+	//Entity * camera; // Change this to non pointer?
 
 	TCOD_key_t lastKey;
 	TCOD_mouse_t mouse;

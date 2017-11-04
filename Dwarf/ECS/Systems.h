@@ -10,6 +10,7 @@ public:
 	C& findComponent(ComponentID id)
 };
 
+
 class SystemBase
 {
 public:

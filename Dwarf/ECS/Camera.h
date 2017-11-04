@@ -4,6 +4,7 @@
 #include "PositionComponent.h"
 
 
+/*
 // This is just a placeholder until I add libtcod's camera utilitys
 class CameraComponent : public Component
 {
@@ -49,3 +50,4 @@ public:
 	Coordinates cameraCoordinates() { return position->coordinates(); }
 	int currentZLevel() { return position->z(); }
 };
+*/

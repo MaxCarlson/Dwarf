@@ -26,7 +26,7 @@ Map::Map(int width, int height, int depth) : width(width), height(height), depth
 		TCODHeightMap * heightMap = new TCODHeightMap(129, 129);
 		heightMap->midPointDisplacement();
 
-		float heightRatio = -0.6;
+		float heightRatio = -0.6f;
 		// If height is below a threshold, mark that area walkable/visible. else not. 
 		for (int h = 0; h < depth; ++h) {
 
@@ -67,7 +67,8 @@ Map::Map(int width, int height, int depth) : width(width), height(height), depth
 				for (int j = height / 3; j < height * 0.66; ++j) 
 				{
 					if (canWalk({ i, j, h })) {
-						engine.camera->getComponent<PositionComponent>().set({ i, j, h });
+						engine.player->co = { i, j, h };
+						//engine.camera->getComponent<PositionComponent>().set({ i, j, h });
 						map = mapZLvls[h];
 						found = true;
 					}
@@ -81,8 +82,9 @@ Map::Map(int width, int height, int depth) : width(width), height(height), depth
 
 		delete heightMap;
 		
-	} while (!mapIsOkay() 
-		|| !canWalk(engine.camera->getComponent<PositionComponent>().coordinates()));
+	} while (!mapIsOkay()
+		|| !canWalk(engine.player->co));
+		//|| !canWalk(engine.camera->getComponent<PositionComponent>().coordinates()));
 
 	populateRock();
 }
@@ -207,7 +209,8 @@ inline void Map::createOpenSpace(Coordinates co)
 
 void Map::computeFov()
 {
-	map->computeFov(engine.camera->getComponent<PositionComponent>().x(), engine.camera->getComponent<PositionComponent>().y(), engine.fovRadius);
+	//map->computeFov(engine.camera->getComponent<PositionComponent>().x(), engine.camera->getComponent<PositionComponent>().y(), engine.fovRadius);
+	map->computeFov(engine.player->co.x, engine.player->co.y, engine.fovRadius);
 }
 
 void Map::render() const

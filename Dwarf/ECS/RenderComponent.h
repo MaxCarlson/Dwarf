@@ -3,6 +3,7 @@
 #include "Camera.h"
 #include "../include/libtcod.hpp"
 
+/*
 // Must be attached to an entity with a position
 // If you ever want it to be rendered, you need to attach
 // the camera component of the master camera to it so we can grab z Level
@@ -44,3 +45,4 @@ public:
 		}
 	}
 };
+*/

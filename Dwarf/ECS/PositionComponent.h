@@ -2,7 +2,7 @@
 #include "EntityManager.h"
 #include "..\Tile.h"
 
-
+/*
 // POsition components should most likely be set first 
 // for almost all entitys that have them.
 class PositionComponent : public Component
@@ -21,3 +21,4 @@ public:
 	void setY(int y) { co.y = y; }
 	void setZ(int z) { co.z = z; }
 };
+*/
