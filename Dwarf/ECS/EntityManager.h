@@ -64,10 +64,7 @@ public:
 	explicit EntityManager(std::size_t entityAmount);
 
 	// Add componenet to entity
-	void addComponent(Entity & entity, Component* component, TypeId componentTypeId) {
-		auto index = entity.getId();
-		componentEntries[index];
-	}
+	void addComponent(Entity & entity, Component* component, TypeId componentTypeId);
 
 	// Remove componenet of entity
 	void removeComponent(Entity & entity, TypeId componentTypeId);

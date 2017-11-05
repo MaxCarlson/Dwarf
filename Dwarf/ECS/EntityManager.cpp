@@ -9,7 +9,7 @@ void Entity::addGroup(Group group) noexcept
 */
 
 EntityIdPool::EntityIdPool(std::size_t poolSize) 
-	: defaultPoolSize(poolSize), nextId(0, 0), counts(poolSize) {};
+	: defaultPoolSize(poolSize), nextId(0), counts(poolSize) {};
 
 
 Entity::Id EntityIdPool::create()

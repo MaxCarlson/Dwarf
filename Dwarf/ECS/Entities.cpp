@@ -3,7 +3,7 @@
 
 
 
-inline const Id Entity::getId() const
+const Entity::Id Entity::getId() const
 {
 	return eId;
 }

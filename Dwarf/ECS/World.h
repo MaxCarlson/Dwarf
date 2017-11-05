@@ -99,14 +99,16 @@ private:
 
 	SystemArray systems;
 
-	// Entity id pool needed
+	// Class used for accessing new and invalidated id's
+	// recycles old id's
+	EntityIdPool entityIdPool;
 
 	struct EntityAttributes
 	{
 		struct Attributes
 		{
 			// Denoting whether entity is active
-			bool acivated;
+			bool activated;
 
 			// A bitset that can be &'d against to test
 			// whether entity has a particual systsem
@@ -129,7 +131,81 @@ private:
 			entityManager.resize(amountOfEntities);
 			attributes.resize(amountOfEntities);
 		}
+
+		void clear() 
+		{
+			entityManager.clear();
+			attributes.clear();
+		}
 	};
 
+	// Holds details about whether an entity is active
+	// and which systems said Entity holds
+	EntityAttributes entityAttributes;
+
+	struct EntityCache
+	{
+		// Contains all live Entities
+		EntityArray alive;
+
+		// Holds killed Entities, 
+		// get's cleared everry refresh call
+		EntityArray killed;
+
+		// Holds just activated Entities
+		// get's cleared on refresh call
+		EntityArray activated;
+
+		// Holds just deactivated Entities
+		// get's cleared on refresh call
+		EntityArray deactivated;
+
+		// Clears temporary cache
+		void clearTemp()
+		{
+			killed.clear();
+			activated.clear();
+			deactivated.clear();
+		}
+
+		// Clears all cache
+		void clear()
+		{
+			alive.clear();
+			clearTemp();
+		}
+	};
+
+	EntityCache entityCache;
+
+	// Size helper functions
+	void checkForResize(std::size_t amountOfEntitiesToAllocate);
+	void resize(std::size_t amount);
+
+	// System helper functions
+	void addSystem(SystemBase& system, TypeId systemTypeId);
+	void removeSystem(TypeId systemTypeId);
+	bool doesSystemExist(TypeId systemTypeId) const;
+
+	friend class Entity;
 };
 
+template<typename TSystem>
+inline void World::addSystem(TSystem & system)
+{
+	addSystem(SystemTypeId<TSystem>());
+}
+
+template<typename TSystem>
+inline void World::removeSystem()
+{
+	removeSystem(SystemTypeId<TSystem>());
+}
+
+template<typename TSystem>
+inline bool World::doesSystemExist() const
+{
+	return doesSystemExist(SystemTypeId<TSystem>());
+}
+
+// Add does system exist in this world function?

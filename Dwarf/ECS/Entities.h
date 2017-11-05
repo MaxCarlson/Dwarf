@@ -25,7 +25,7 @@ public:
 
 	Entity();
 
-	inline const Id getId() const;
+	const Id getId() const;
 
 	// Add component of type T
 	// args = argument/s of constructor for components

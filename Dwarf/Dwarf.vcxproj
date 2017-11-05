@@ -145,6 +145,7 @@
     <ClInclude Include="ECS\Camera.h" />
     <ClInclude Include="ECS\Component.h" />
     <ClInclude Include="ECS\EntityManager.h" />
+    <ClInclude Include="ECS\Filter.h" />
     <ClInclude Include="ECS\PositionComponent.h" />
     <ClInclude Include="ECS\RenderComponent.h" />
     <ClInclude Include="ECS\Systems.h" />
