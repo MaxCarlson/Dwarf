@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Component.h"
+#include "World.h"
 
 #include <cstdint>
 
@@ -25,7 +26,29 @@ public:
 
 	Entity();
 
+	Entity(World & entityWorld, Id id);
+
+	// Checks whether entity is valid
+	bool isValid() const;
+
+	// Returns a refrence to the world this 
+	// Entity belongs to
+	World& getWorld() const;
+
+	// Returns Entities unique ID
 	const Id getId() const;
+
+	// Returns true if entity has been activated
+	bool isActivated() const;
+
+	// Activate Entity
+	void activate();
+
+	// deactivate Entity
+	void deactivate();
+
+	// Kill Entity
+	void kill();
 
 	// Add component of type T
 	// args = argument/s of constructor for components
@@ -64,7 +87,12 @@ private:
 	Component & getComponent(TypeId componentTypeId) const;
 	bool hasComponent(TypeId componentTypeId) const;
 
+	// Id of Entity
+	// Used for indexing almost everywhere
 	Id eId;
+
+	// Pointer to world this entity belongs to
+	World * world;
 };
 
 template<typename T, typename ...Args>

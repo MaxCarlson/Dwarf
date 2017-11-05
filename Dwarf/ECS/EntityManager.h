@@ -75,8 +75,14 @@ public:
 	// Get a refrence to a component of an entity if it exists
 	Component & getComponent(Entity & entity, TypeId componentTypeId) const;
 
+	// Returns a bitset of current components this Entity has
+	ComponentTypeList getComponentTypeList(const Entity & entity) const;
+
+	// Returns an array of all components this Entity has
+	ComponentArray getComponents(const Entity & entity) const;
+
 	// Does Entity entity have component type componentTypeId ?
-	bool hasComponent(Entity & entity, TypeId componentTypeId) const;
+	bool hasComponent(const Entity & entity, TypeId componentTypeId) const;
 
 	void resize(std::size_t entityAmount);
 

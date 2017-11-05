@@ -61,7 +61,7 @@ private:
 	// or that are attached
 	std::vector<Entity> entities;
 
-	friend World;
+	friend class World;
 };
 
 template<class RequireList, class ExcludeList = Excludes<>>

@@ -1,34 +1,52 @@
 #include "World.h"
 
 
-
+static const size_t DEFAULT_ENTITY_POOL_SIZE = 1000;
 
 
 void World::SystemDeleter::operator()(SystemBase * system) const
 {
 	system->world = nullptr;
+	system->entities.clear();
 }
 
-World::World()
+World::World() : World(DEFAULT_ENTITY_POOL_SIZE)
 {
 }
 
-World::World(std::size_t entityPoolSize)
+World::World(std::size_t entityPoolSize) : entityIdPool(entityPoolSize), entityAttributes(entityPoolSize)
 {
 }
 
 void World::removeAllSystems()
 {
+	systems.clear();
 }
 
 Entity World::createEntity()
 {
-	return Entity();
+	checkForResize(1);
+
+	entityCache.alive.emplace_back(*this, entityIdPool.create());
+
+	return entityCache.alive.back();
 }
 
-EntityArray World::createEntities(std::size_t number)
+std::vector<Entity> World::createEntities(std::size_t number)
 {
-	return EntityArray();
+	std::vector<Entity> tmp;
+	tmp.reserve(number);
+
+	checkForResize(number);
+
+	for (decltype(number) i = 0; i < number; ++i)
+	{
+		Entity e{ *this, entityIdPool.create() };
+		entityCache.alive.push_back(e);
+		tmp.push_back(e);
+	}
+
+	return tmp;
 }
 
 void World::killEntity(Entity & entity)
