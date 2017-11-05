@@ -2,8 +2,11 @@
 #include "EntityManager.h"
 #include "World.h"
 #include "Filter.h"
+#include "Entities.h"
 #include <vector>
 
+class World;
+class Entity;
 
 class SystemBase
 {
@@ -16,11 +19,11 @@ public:
 	// Returns a Filter object that holds two
 	// bool vectors that describe required and 
 	// excluded components
-	const Filter& getFilter() const { return filter; }
+	const Filter& getFilter() const { return filter; };
 
 	// Returns refrernce to world
 	// this system is associated with
-	World& getWorld() const { return *world; }
+	World& getWorld() const { return *world; };
 
 
 	// Returns all entitys of a system

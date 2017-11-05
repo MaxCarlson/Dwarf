@@ -28,6 +28,12 @@ public:
 
 	Entity(World & entityWorld, Id id);
 
+
+	Entity(const Entity &)			  = default;
+	Entity(Entity &&)			      = default;
+	Entity& operator=(const Entity &) = default;
+	Entity& operator=(Entity &&)      = default;
+
 	// Checks whether entity is valid
 	bool isValid() const;
 

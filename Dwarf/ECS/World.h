@@ -2,7 +2,9 @@
 
 #include "entities.h"
 #include "Systems.h"
+#include "EntityManager.h"
 #include <unordered_map>
+#include <memory>
 
 class World
 {
@@ -73,10 +75,10 @@ public:
 	void deactivateEntity(Entity & entity);
 
 	// Check if an entity is active
-	bool isActivated(Entity & entity) const;
+	bool isActivated(const Entity & entity) const;
 
 	// Determines if an entity is valid.
-	bool isValid(Entity & entity) const;
+	bool isValid(const Entity & entity) const;
 
 	// Refreshes world
 	void refresh();

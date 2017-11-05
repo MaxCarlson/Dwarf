@@ -58,7 +58,7 @@ Filter MakeFilter()
 {
 	static_assert(std::is_base_of<BaseRequires, RequireList>::value, "RequireList is not a requirement list");
 	static_assert(std::is_base_of<BaseExcludes, ExcludeList>::value, "ExcludeList is not an excludes list");
-	return Filter{ types(RequireList{}, types(ExcludeList{}) };
+	return Filter{ types(RequireList{}, types(ExcludeList{})) };
 }
 
 template<class... Args>
