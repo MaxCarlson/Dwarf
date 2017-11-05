@@ -4,11 +4,24 @@
 
 #include <cstdint>
 
-typedef std::uint64_t Id;
+
 
 class Entity
 {
 public:
+
+	struct Id
+	{
+		Id() : index(0), counter(0) {};
+
+		Id(std::uint64_t index, std::uint32_t counter)
+			: index(index), counter(counter) {};
+
+		void clear() { index = counter = 0; }
+
+		std::uint64_t index;
+		std::uint32_t counter;
+	};
 
 	Entity();
 
@@ -78,7 +91,7 @@ T& Entity::getComponent() const
 template<typename T>
 bool Entity::hasComponent() const
 {
-	return hasComponent(getComponent(ComponentTypeId<T>());
+	return hasComponent(getComponent(ComponentTypeId<T>()));
 }
 
 

@@ -114,7 +114,8 @@ private:
 			std::vector<bool> systems;
 		};
 
-		explicit EntityAttributes(std::size_t amountOfEntities) : entityManager(amountOfEntities), attributes(amountOfEntities);
+		explicit EntityAttributes(std::size_t amountOfEntities) 
+			: entityManager(amountOfEntities), attributes(amountOfEntities) {};
 
 		// Mainly storage container for entities
 		// and their components. Provides some helpers
@@ -122,6 +123,12 @@ private:
 
 		// Attributes of each and every entity
 		std::vector<Attributes> attributes;
+
+		void resize(std::size_t amountOfEntities)
+		{
+			entityManager.resize(amountOfEntities);
+			attributes.resize(amountOfEntities);
+		}
 	};
 
 };

@@ -3,6 +3,10 @@
 #include "TypeID.h"
 
 #include <vector>
+#include <bitset>
+
+// Max components entity can hold
+constexpr std::size_t MAX_COMPONENTS = 64;
 
 class Component
 {

@@ -1,10 +1,11 @@
 #pragma once
 
+#include <cstddef>
 #include <atomic>
 
 
 
-typedef size_t TypeId;
+typedef std::size_t TypeId;
 
 
 // Template class used for generating and finding
@@ -13,16 +14,26 @@ template<typename BaseClass>
 class ClassTypeId
 {
 public:
-	template<typename TBase>
+	template<typename BaseClass>
 	static TypeId getTypeId()
 	{
 		static const TypeId id = nextTypeId++;
 		return id;
 	}
 
+	//std::atomic<TypeId> nextTypeId();
+
 private:
 	static std::atomic<TypeId> nextTypeId;
 };
 
-template <typename TBase>
-static std::atomic<TypeId> ClassTypeId<TBase>::nextTypeId{ 0 };
+template <typename BaseClass>
+static std::atomic<TypeId> ClassTypeId<BaseClass>::nextTypeId{ 0 };
+
+/*
+template<typename BaseClass>
+inline std::atomic<TypeId> ClassTypeId<BaseClass>::nextTypeId()
+{
+	return std::atomic<TypeId>();
+}
+*/
