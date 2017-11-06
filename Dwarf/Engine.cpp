@@ -24,7 +24,8 @@ Engine::Engine(int screenWidth, int screenHeight) : gameStatus(STARTUP), fovRadi
 	camera.activate();
 
 	// Add systems at boot -> move all these things to local map once made
-	renderSystem.mCameraPos = &camera.getComponent<PositionComponent>().co;
+	renderSystem.mCameraPos = &camera.getComponent<PositionComponent>().co;											// Note to self, create a tile manager class. Replace tile variables with a U16/U32 bitmap of info for simple &'s
+																													// Another idea, use some bit's to index a data struct type in an array to get more out of bit's say lsb is data index for granite, etc!
 
 
 	world.addSystem(renderSystem);

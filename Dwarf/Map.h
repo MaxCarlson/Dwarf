@@ -41,6 +41,8 @@ public:
 	void incrementZLevel(int inc);
 	void jumpToZLevel(int level);
 
+	TileManager tileManager;
+
 protected:
 
 	Tile    * tiles[MAX_ZLVL];

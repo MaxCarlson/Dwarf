@@ -11,12 +11,12 @@
 static const float MAX_MAP_FILL = 0.85;
 static const float MIN_MAP_FILL = 0.18;
 
-Map::Map(int width, int height, int depth) : width(width), height(height), depth(depth)
+Map::Map(int width, int height, int depth) : width(width), height(height), depth(depth), tileManager(width, height, depth)
 {
 
 	for (int i = 0; i < MAX_ZLVL; ++i) {
 		mapZLvls[i] = new TCODMap(width, height);
-		tiles[i] = new Tile[width * height];
+		//tiles[i] = new Tile[width * height];
 	}
 
 	// Create map general shape
@@ -133,7 +133,7 @@ bool Map::mapIsOkay() const
 
 	return true;
 }
-
+/*
 bool Map::isWall(Coordinates co) const
 {
 	return tileAt(co)->isWall;
@@ -143,13 +143,13 @@ bool Map::canWalk(Coordinates co) const
 {
 	if (!isFloor(co) || isWall(co))
 		return false;
-	/*
-	for (Actor * actor : engine.actors)
-	{
-		if ( actor->blocks && actor->x == x && actor->y == y) // Cannot walk through blocking actors. Optimization, add a value to tile occupied. test this instead with direct lookup
-			return false;
-	}
-	*/
+	
+	//for (Actor * actor : engine.actors)
+	//{
+	//	if ( actor->blocks && actor->x == x && actor->y == y) // Cannot walk through blocking actors. Optimization, add a value to tile occupied. test this instead with direct lookup
+	//		return false;
+	//}
+	
 	return true;
 }
 
@@ -179,6 +179,7 @@ bool Map::isExplored(int x, int y) const
 {
 	return (tiles[currentZLevel] + (x + y * width))->explored;
 }
+*/
 
 // Create impassable wall that provides a floor
 inline void Map::createWall(Coordinates co)
