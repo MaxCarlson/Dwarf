@@ -2,7 +2,7 @@
 
 #include "TypeID.h"
 #include "Component.h"
-
+#include <type_traits>
 
 template<class... Args>
 struct TypeList {};
@@ -40,7 +40,7 @@ private:
 	ComponentTypeList requires;
 	ComponentTypeList excludes;
 };
-
+/*
 template<class... Args>
 static ComponentTypeList types(TypeList<Args...> typeList) { return ComponentTypeList(); }
 
@@ -50,6 +50,16 @@ static ComponentTypeList types(TypeList<T, Args...> typeList)
 	static_assert(std::is_base_of<Component, T>::value, "Not a component!");
 	return ComponentTypeList().set(ComponentTypeId<T>() | types(TypeList < Args...>)());
 }
+*/
+template <class... Args>
+static ComponentTypeList types(TypeList<Args...> typeList) { return ComponentTypeList(); }
+
+template <class T, class... Args>
+static ComponentTypeList types(TypeList<T, Args...> typeList)
+{
+	static_assert(std::is_base_of<Component, T>::value, "Invalid component");
+	return ComponentTypeList().set(ComponentTypeId<T>()) | types(TypeList<Args...>());
+}
 
 // Make a Filter for System that Requires RequireList Componenets
 // and Excludes ExcludeList Componenets
@@ -58,8 +68,9 @@ Filter MakeFilter()
 {
 	static_assert(std::is_base_of<BaseRequires, RequireList>::value, "RequireList is not a requirement list");
 	static_assert(std::is_base_of<BaseExcludes, ExcludeList>::value, "ExcludeList is not an excludes list");
-	return Filter{ types(RequireList{}, types(ExcludeList{})) };
+	return Filter{ types(RequireList{}), types(ExcludeList{}) };
 }
+
 
 template<class... Args>
 struct Requires : TypeList<Args...>, BaseRequires {};

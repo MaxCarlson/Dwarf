@@ -2,6 +2,7 @@
 #include "include\libtcod.hpp"
 #include "ECS\EntityManager.h"
 #include "ECS\World.h"
+#include "ECS\Systems\RenderSystem.h"
 
 class Gui;
 class Actor;
@@ -23,7 +24,10 @@ public:
 
 	World world;
 
+	RenderSystem renderSystem;
+
 	Entity camera;
+
 
 	TCOD_key_t lastKey;
 	TCOD_mouse_t mouse;

@@ -8,6 +8,7 @@
 #include "Container.h"
 #include "ECS\Components\PositionComponent.h"
 #include "ECS\Components\RenderComponent.h"
+#include "ECS/Systems/RenderSystem.h"
 
 
 
@@ -15,12 +16,18 @@ Engine::Engine(int screenWidth, int screenHeight) : gameStatus(STARTUP), fovRadi
 {
 	TCODConsole::initRoot(screenWidth, screenHeight, "C++ libtcod tutorial", false);
 
+	// Create camera
 	camera = world.createEntity();
-
-	Coordinates cop = {0, 0, 1};
+	Coordinates cop = {60, 60, 9};
 	camera.addComponent<PositionComponent>(cop);
 	camera.addComponent<RenderComponent>('&', TCODColor::white, TCODColor::black);
+	camera.activate();
 
+	// Add systems at boot -> move all these things to local map once made
+	renderSystem.mCameraPos = &camera.getComponent<PositionComponent>().co;
+
+
+	world.addSystem(renderSystem);
 
 	world.refresh();
 
@@ -72,6 +79,7 @@ void Engine::render()
 	map->render();
 	//camera->update();
 	//camera->draw();
+	renderSystem.update();
 
 	// Iteratre through actors, setting chars location and colors
 	for (Actor * actor : actors) 

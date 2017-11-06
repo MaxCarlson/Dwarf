@@ -13,7 +13,7 @@ public:
 
 	SystemBase(const Filter & filter) : world(nullptr), filter(filter) {};
 
-	virtual ~SystemBase() = 0;
+	virtual ~SystemBase() {};
 
 	// Returns a Filter object that holds two
 	// bool vectors that describe required and 

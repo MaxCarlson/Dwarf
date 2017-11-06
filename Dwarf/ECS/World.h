@@ -196,7 +196,7 @@ private:
 template<typename TSystem>
 inline void World::addSystem(TSystem & system)
 {
-	addSystem(SystemTypeId<TSystem>());
+	addSystem(system, SystemTypeId<TSystem>());
 }
 
 template<typename TSystem>
