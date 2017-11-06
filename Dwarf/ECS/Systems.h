@@ -1,8 +1,7 @@
 #pragma once
 #include "EntityManager.h"
-#include "World.h"
 #include "Filter.h"
-#include "Entities.h"
+
 #include <vector>
 
 class World;

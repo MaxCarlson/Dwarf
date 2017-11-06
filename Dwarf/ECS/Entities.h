@@ -1,11 +1,11 @@
 #pragma once
 
 #include "Component.h"
-#include "World.h"
+
 
 #include <cstdint>
 
-
+class World;
 
 class Entity
 {
@@ -19,6 +19,14 @@ public:
 			: index(index), counter(counter) {};
 
 		void clear() { index = counter = 0; }
+
+		// Id comparison overload
+		//bool operator==(const Id& id);
+
+		//bool operator==(const Entity e)
+		//{
+		//	return(e.eId.index == index && e.eId.counter == counter);
+		//}
 
 		std::uint64_t index;
 		std::uint32_t counter;
@@ -84,7 +92,9 @@ public:
 
 	ComponentTypeList getComponentTypeList() const;
 
-	// operators here
+	// Comparison operators
+	bool operator==(const Entity& entity) const;
+	bool operator!=(const Entity& entity) const { return !operator==(entity); }
 
 private:
 

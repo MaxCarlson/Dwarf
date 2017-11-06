@@ -10,6 +10,7 @@
 #include <vector>
 #include <type_traits>
 
+
 class EntityIdPool
 {
 public:
@@ -73,7 +74,7 @@ public:
 	void removeAllComponents(Entity & entity);
 
 	// Get a refrence to a component of an entity if it exists
-	Component & getComponent(Entity & entity, TypeId componentTypeId) const;
+	Component & getComponent(const Entity & entity, TypeId componentTypeId) const;
 
 	// Returns a bitset of current components this Entity has
 	ComponentTypeList getComponentTypeList(const Entity & entity) const;
@@ -89,7 +90,7 @@ public:
 	void clear();
 
 private:
-	typedef std::array<std::unique_ptr<Component>, MAX_COMPONENTS> ComponentArray;
+	typedef std::array<std::unique_ptr<Component>, MAX_COMPONENTS> ImplComponentArray;
 
 	struct EntityComponents
 	{
@@ -101,7 +102,7 @@ private:
 
 		// An array of every component an entity has
 		// Index is by component ID 
-		ComponentArray components;
+		ImplComponentArray components;
 
 		// A bitset denoting which components this entity has
 		// Used for fast system component checking.
@@ -112,4 +113,7 @@ private:
 
 	// All components for every entity. Indexed by entity ID
 	std::vector<EntityComponents> componentEntries;
+
+	ImplComponentArray& getComponentsArrayImpl(const Entity& en);
+	const ImplComponentArray& getComponentsArrayImpl(const Entity& en) const;
 };

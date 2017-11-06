@@ -1,12 +1,6 @@
 #include "EntityManager.h"
 
-/*
-void Entity::addGroup(Group group) noexcept
-{
-	groupBitset[group] = true;
-	manager.addToGroup(this, group);
-}
-*/
+
 
 EntityIdPool::EntityIdPool(std::size_t poolSize) 
 	: defaultPoolSize(poolSize), nextId(0), counts(poolSize) {};
@@ -30,6 +24,7 @@ Entity::Id EntityIdPool::create()
 		// as well as the id given outs counter to 1
 		counts[id.index] = id.counter = 1;
 	}
+	return id;
 }
 
 void EntityIdPool::remove(Entity::Id id)
@@ -77,4 +72,88 @@ void EntityIdPool::clear()
 	counts.clear();
 	freeIdList.clear();
 	nextId = 0;
+}
+
+// Entity Manager starts here
+
+
+EntityManager::EntityManager(std::size_t entityAmount) : componentEntries(entityAmount)
+{
+}
+
+void EntityManager::addComponent(Entity & entity, Component * component, TypeId componentTypeId)
+{
+	auto index = entity.getId().index;
+	auto& componentData = componentEntries[index];
+
+	componentData.components[componentTypeId].reset(component);
+	componentData.componentTypeList[componentTypeId] = true;
+}
+
+void EntityManager::removeComponent(Entity & entity, TypeId componentTypeId)
+{
+	auto index = entity.getId().index;
+	auto& componentData = componentEntries[index];
+
+	componentData.components[componentTypeId].reset();
+	componentData.componentTypeList[componentTypeId] = false;
+}
+
+void EntityManager::removeAllComponents(Entity & entity)
+{
+	auto index = entity.getId().index;
+	auto& componentData = componentEntries[index];
+
+	for (auto& co : componentData.components) co.reset();
+	componentData.componentTypeList.reset();
+}
+
+Component & EntityManager::getComponent(const Entity & entity, TypeId componentTypeId) const
+{
+	return *getComponentsArrayImpl(entity)[componentTypeId];
+}
+
+ComponentTypeList EntityManager::getComponentTypeList(const Entity & entity) const
+{
+	return componentEntries[entity.getId().index].componentTypeList;
+}
+
+ComponentArray EntityManager::getComponents(const Entity & entity) const
+{
+	auto& componentsToConvert = getComponentsArrayImpl(entity);
+
+	ComponentArray tmp;
+	tmp.reserve(componentsToConvert.size());
+
+	for (auto& i : componentsToConvert)
+		tmp.emplace_back(i.get());
+
+	return tmp;
+}
+
+bool EntityManager::hasComponent(const Entity & entity, TypeId componentTypeId) const
+{
+	auto& componentsTmp = getComponentsArrayImpl(entity);
+
+	return (componentsTmp.size() > componentTypeId && componentsTmp[componentTypeId] != nullptr);
+}
+
+void EntityManager::resize(std::size_t entityAmount)
+{
+	componentEntries.resize(entityAmount);
+}
+
+void EntityManager::clear()
+{
+	componentEntries.clear();
+}
+
+EntityManager::ImplComponentArray & EntityManager::getComponentsArrayImpl(const Entity & en)
+{
+	return componentEntries[en.getId().index].components;
+}
+
+const EntityManager::ImplComponentArray & EntityManager::getComponentsArrayImpl(const Entity & en) const
+{
+	return componentEntries[en.getId().index].components;
 }
