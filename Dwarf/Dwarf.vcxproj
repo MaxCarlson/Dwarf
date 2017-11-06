@@ -146,9 +146,10 @@
     <ClInclude Include="ECS\Component.h" />
     <ClInclude Include="ECS\EntityManager.h" />
     <ClInclude Include="ECS\Filter.h" />
-    <ClInclude Include="ECS\PositionComponent.h" />
-    <ClInclude Include="ECS\RenderComponent.h" />
+    <ClInclude Include="ECS\Components\PositionComponent.h" />
+    <ClInclude Include="ECS\Components\RenderComponent.h" />
     <ClInclude Include="ECS\Systems.h" />
+    <ClInclude Include="ECS\Systems\RenderSystem.h" />
     <ClInclude Include="ECS\TypeID.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="ECS\Entities.h" />

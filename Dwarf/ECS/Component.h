@@ -11,7 +11,7 @@ constexpr std::size_t MAX_COMPONENTS = 64;
 class Component
 {
 public:
-	virtual ~Component();
+	virtual ~Component() {};
 };
 
 // Returns either a new unique Id for a component

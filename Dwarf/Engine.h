@@ -1,6 +1,7 @@
 #pragma once
 #include "include\libtcod.hpp"
 #include "ECS\EntityManager.h"
+#include "ECS\World.h"
 
 class Gui;
 class Actor;
@@ -19,6 +20,10 @@ public:
 
 	//EntityManager entityManager;
 	//Entity * camera; // Change this to non pointer?
+
+	World world;
+
+	Entity camera;
 
 	TCOD_key_t lastKey;
 	TCOD_mouse_t mouse;
