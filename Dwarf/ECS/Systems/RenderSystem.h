@@ -11,7 +11,7 @@ public:
 	RenderSystem(Coordinates* mCameraPos) : mCameraPos(mCameraPos) {};
 	~RenderSystem() { delete mCameraPos; }
 
-	// Holds a refrence to the master camera coordinates
+	// Holds a pointer to the master camera coordinates
 	// so we know when a tile is out of frame/zLevel 
 	// (and don't need to render it!)
 	Coordinates * mCameraPos;      /// Add some zlevel caching (possibly entity caching too?) and turn off render component for when the camera is staying still for performace benifit???

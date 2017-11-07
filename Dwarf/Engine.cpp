@@ -8,7 +8,9 @@
 #include "Container.h"
 #include "ECS\Components\PositionComponent.h"
 #include "ECS\Components\RenderComponent.h"
-#include "ECS/Systems/RenderSystem.h"
+#include "ECS\Components\KeyBoardComponent.h"
+#include "ECS\Systems\RenderSystem.h"
+#include "ECS\Systems\CameraSystem.h"
 
 
 
@@ -21,14 +23,18 @@ Engine::Engine(int screenWidth, int screenHeight) : gameStatus(STARTUP), fovRadi
 	Coordinates cop = {60, 60, 9};
 	camera.addComponent<PositionComponent>(cop);
 	camera.addComponent<RenderComponent>('&', TCODColor::white, TCODColor::black);
+	camera.addComponent<KeyboardComponent>();
+	camera.getComponent<KeyboardComponent>().lastKeyPressed = &lastKey;
 	camera.activate();
 
+	renderSystem = new RenderSystem();
 	// Add systems at boot -> move all these things to local map once made
-	renderSystem.mCameraPos = &camera.getComponent<PositionComponent>().co;											// Note to self, create a tile manager class. Replace tile variables with a U16/U32 bitmap of info for simple &'s
-																													// Another idea, use some bit's to index a data struct type in an array to get more out of bit's say lsb is data index for granite, etc!
+	renderSystem->mCameraPos = &camera.getComponent<PositionComponent>().co;											
+																													
+	cameraSystem = new CameraSystem();
 
-
-	world.addSystem(renderSystem);
+	world.addSystem(*renderSystem);
+	world.addSystem(*cameraSystem);
 
 	world.refresh();
 
@@ -78,16 +84,9 @@ void Engine::render()
 	TCODConsole::root->clear();
 
 	map->render();
-	//camera->update();
-	//camera->draw();
-	renderSystem.update();
 
-	// Iteratre through actors, setting chars location and colors
-	for (Actor * actor : actors) 
-	{
-		//if(map->isInFov(actor->co.x, actor->co.y))
-		//	actor->render();
-	}
+	cameraSystem->update();
+	renderSystem->update();
 
 	gui->render();
 }

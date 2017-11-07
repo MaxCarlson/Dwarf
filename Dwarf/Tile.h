@@ -20,10 +20,11 @@ public:
 	// bool isWall;         
 	// bool providesFloor;  
 
+	// Character representation of thing on tile
+	// Change to image evetually
+	int  ch;			
 
-	//int  ch;			
-
-	std::uint8_t properties = 0L;
+	std::uint8_t properties = 0x1U; // Change to 0U for unexplored
 private:
 	
 };
@@ -93,11 +94,42 @@ public:
 		return (getProperty<FLOOR>(co) && !getProperty<WALL>(co) && !getProperty<OBSTRUCTED>(co));
 	}
 
+	// Should only be used for map generation, will not gurentee things are completely empty
+	// Possibly move this to the map object???????
+	inline bool isEmptySpace(Coordinates co) const
+	{
+		return !(getProperty<FLOOR>(co) | getProperty<WALL>(co) | getProperty<OBSTRUCTED>(co));
+	}
+
+	// enum for template function
+	// describing adjacent tiles not in use yet
+	enum TileAdj
+	{
+		NORTH,
+		NORTH_UP,
+		NORTH_DOWN,
+		SOUTH,
+		SOUTH_UP,
+		SOUTH_DOWN,
+		EAST,
+		EAST_UP,
+		EAST_DOWN,
+		WEST,
+		WEST_UP,
+		WEST_DOWN
+	};
+
+
 private:
 	// Dimensions of map we're creating
 	int width, height, depth;
 
 	// 1D vector of Tiles indexed by 3D formula
 	std::vector<Tile> tileMap;
+};
+
+enum ttt // Test for enums, delete
+{
+	NORTH
 };
 

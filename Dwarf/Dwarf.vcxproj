@@ -144,11 +144,13 @@
     <ClInclude Include="Destructible.h" />
     <ClInclude Include="ECS\Camera.h" />
     <ClInclude Include="ECS\Component.h" />
+    <ClInclude Include="ECS\Components\KeyBoardComponent.h" />
     <ClInclude Include="ECS\EntityManager.h" />
     <ClInclude Include="ECS\Filter.h" />
     <ClInclude Include="ECS\Components\PositionComponent.h" />
     <ClInclude Include="ECS\Components\RenderComponent.h" />
     <ClInclude Include="ECS\Systems.h" />
+    <ClInclude Include="ECS\Systems\CameraSystem.h" />
     <ClInclude Include="ECS\Systems\RenderSystem.h" />
     <ClInclude Include="ECS\TypeID.h" />
     <ClInclude Include="Engine.h" />

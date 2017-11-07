@@ -36,7 +36,6 @@ Map::Map(int width, int height, int depth) : width(width), height(height), depth
 
 			for (int i = 0; i < width; ++i)
 				for (int j = 0; j < height; ++j)
-
 				{
 					if (h <= 3) {															       // Below level four set map to always be filled
 						createWall({ i, j, h });
@@ -66,9 +65,9 @@ Map::Map(int width, int height, int depth) : width(width), height(height), depth
 				if (found) break;
 				for (int j = height / 3; j < height * 0.66; ++j) 
 				{
-					if (tileManager.canWalk({ i, j, h })) {
+					if (tileManager.canWalk({ i, j, h })) 
+					{
 						engine.player->co = { i, j, h };
-						//engine.camera->getComponent<PositionComponent>().set({ i, j, h });
 						map = mapZLvls[h];
 						found = true;
 					}
@@ -84,7 +83,7 @@ Map::Map(int width, int height, int depth) : width(width), height(height), depth
 		
 	} while (!mapIsOkay()
 		|| !tileManager.canWalk(engine.player->co));
-		//|| !canWalk(engine.camera->getComponent<PositionComponent>().coordinates()));
+
 
 	populateRock();
 }
@@ -97,6 +96,16 @@ Map::~Map()
 		delete mapZLvls[i];
 
 	delete mapZLvls;
+}
+
+void Map::seedRamps()
+{
+	//for (int h = 0; h < depth; ++h) {
+	//	for (int i = 0; i < width; ++i)
+	//		for (int j = 0; j < height; ++j) 
+	//		{
+	//			if
+	//		}
 }
 
 void Map::populateRock()
@@ -192,12 +201,14 @@ void Map::render() const
 }
 
 // Change the map being rendered (simulating z levels with map array)
-void Map::incrementZLevel(int inc)
+bool Map::incrementZLevel(int inc)
 {
 	if (currentZLevel + inc >= 0 && currentZLevel + inc < MAX_ZLVL) {
 		map = mapZLvls[currentZLevel + inc];
 		currentZLevel += inc;
+		return true;
 	}
+	return false;
 }
 // Jumps to z level entered if within bounds of map array
 void Map::jumpToZLevel(int level)

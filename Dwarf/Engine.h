@@ -2,11 +2,13 @@
 #include "include\libtcod.hpp"
 #include "ECS\EntityManager.h"
 #include "ECS\World.h"
-#include "ECS\Systems\RenderSystem.h"
+
 
 class Gui;
 class Actor;
 class Map;
+class CameraSystem;
+class RenderSystem;
 
 class Engine
 {
@@ -24,7 +26,8 @@ public:
 
 	World world;
 
-	RenderSystem renderSystem;
+	RenderSystem * renderSystem;
+	CameraSystem * cameraSystem;
 
 	Entity camera;
 

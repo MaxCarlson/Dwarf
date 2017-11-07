@@ -16,6 +16,7 @@ public:
 	Map(int width, int height, int depth);
 	~Map();
 
+	void seedRamps();
 	void populateRock();
 
 	bool mapIsOkay() const;
@@ -27,8 +28,11 @@ public:
 	void computeFov();
 	void render() const;
 
+	// Current Z level of camera
 	int currentZLevel;
-	void incrementZLevel(int inc);
+
+
+	bool incrementZLevel(int inc);
 	void jumpToZLevel(int level);
 
 	TileManager tileManager;
