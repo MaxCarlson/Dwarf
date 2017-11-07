@@ -170,18 +170,10 @@ void Map::render() const
 
 	// TCODRandom * rng = new TCODRandom(); if (rng->getInt(0, 8) == 8) TCODConsole::root->setChar(x, y, ','); (hard code these values once genrated)
 
-	// Iterates through map squares
+	// Iterates through visible map squares
 	for(int x = 0; x < width; ++x)
 		for (int y = 0; y < height; ++y)
 		{
-
-			//if (isInFov(x, y))
-			//	TCODConsole::root->setCharBackground(x, y, isWall({ x, y, currentZLevel }) ? lightWall : lightGround);
-			//if (!tileManager.isFloor({ x, y, currentZLevel })) {
-			//	TCODConsole::root->setCharBackground(x, y, TCODColor::darkestGrey); 
-			//}
-			//else if(isExplored(x, y))
-			//	TCODConsole::root->setCharBackground(x, y, isWall({ x, y, currentZLevel }) ? darkWall  : darkGround);
 			if (!tileManager.getProperty<TileManager::FLOOR>({ x, y, currentZLevel })) {
 				TCODConsole::root->setCharBackground(x, y, TCODColor::darkestGrey);
 			}
@@ -190,11 +182,12 @@ void Map::render() const
 		}
 	//TCOD_image_t  pix = TCOD_image_load("Obsidian_16x16.png");
 
-	static TCODImage  pix("../Obsidian_16x16.png");
+	//static TCODImage  pix("../Obsidian_16x16.png");
 	
 
 	// Note to self: sx = top left px, sy = y px location
-	pix.blit2x(TCODConsole::root, 10, 10, 32, 0, 16, 16);
+	//pix.blit2x(TCODConsole::root, 10, 10, 32, 0, 16, 16);
+	//pix.blit(TCODConsole::root, 0.3, 0.3, TCOD_BKGND_SET, .1, .1, 0);
 	//pix.
 	//TCOD_image_blit_rect(pix, TCODConsole::root, 3,5, 4, 4, TCOD_BKGND_NONE);
 }

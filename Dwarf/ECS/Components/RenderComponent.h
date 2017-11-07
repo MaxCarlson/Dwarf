@@ -9,11 +9,13 @@
 class RenderComponent : public Component
 {
 public:
-	// Character representation
+	// Character code representation
 	int ch;
 	//bool activeDraw; // This shouldn't be required, as we can just de-activate the render component for render system
 
 	// Colors for rendering
+	// Find a way to make using one optional? 
+	// is there a way not to set fore color for example?
 	TCODColor backColor;
 	TCODColor foreColor;
 

@@ -11,13 +11,14 @@
 
 Engine::Engine(int screenWidth, int screenHeight) : gameStatus(STARTUP), fovRadius(10), screenWidth(screenWidth), screenHeight(screenHeight)
 {
+	TCODConsole::setCustomFont("../Obsidian_16x16.png");
 	TCODConsole::initRoot(screenWidth, screenHeight, "C++ libtcod tutorial", false);
 
 	// Create camera
 	camera = world.createEntity();
 	Coordinates cop = {60, 60, 9};
 	camera.addComponent<PositionComponent>(cop);
-	camera.addComponent<RenderComponent>('&', TCODColor::white, TCODColor::black);
+	camera.addComponent<RenderComponent>(16, TCODColor::white, TCODColor::azure);
 	camera.addComponent<KeyboardComponent>();
 	camera.getComponent<KeyboardComponent>().lastKeyPressed = &lastKey;
 	camera.activate();
@@ -39,9 +40,9 @@ Engine::Engine(int screenWidth, int screenHeight) : gameStatus(STARTUP), fovRadi
 
 Engine::~Engine()
 {
-	actors.clearAndDelete();
 	delete map;
-	delete gui;
+	delete renderSystem;
+	delete cameraSystem;
 }
 
 void Engine::update()
@@ -63,11 +64,4 @@ void Engine::render()
 	// Update systems
 	cameraSystem->update();
 	renderSystem->update();
-}
-
-// Render dead actors first so we see living ones if they're on top
-void Engine::sendToBack(Actor * actor)
-{
-	actors.remove(actor);
-	actors.insertBefore(actor, 0);
 }

@@ -4,9 +4,8 @@
 
 #include <vector>
 
+// Make this dynamic !!
 static const int MAX_ZLVL = 10;
-
-class Tile;
 
 class Map
 {
