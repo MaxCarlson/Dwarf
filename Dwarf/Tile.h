@@ -9,22 +9,27 @@ struct Coordinates {
 	int x, y, z;
 };
 
+
 class Tile {
 
 public:
-	//bool explored;		 // Tile has either started this way, or been exposed and viewed
-	//bool obstructed;	 // Tile can't be walked through, applies to character inside tile
-	//bool isWall;         
-	//bool providesFloor;  // Tile can be walked on, if the Tile on the current map is not obstructed, and the tile directly below providesFloor the tile can be walked on
-	//int  ch;			 // In game character repesetation, 0 = invisible
+	// These properties are set by set bit's in Tile's properties unsigned int
+	// And accessed through the tile manager
+	// bool explored;		 
+	// bool obstructed;	 
+	// bool isWall;         
+	// bool providesFloor;  
 
-	//Tile() : explored(true), obstructed(true), isWall(true) {} // MAKE exploered FALSE TO OCCLUDE unexplored regions
 
-	std::uint8_t properties;
+	//int  ch;			
+
+	std::uint8_t properties = 0L;
 private:
 	
 };
 
+// Creates a 1D Vector of Tile objects used to
+// simulate a 3D area of tiles. Access Tiles through here
 class TileManager
 {
 public:
@@ -41,61 +46,58 @@ public:
 		FLOOR = 0x8
 	};
 
-	// Alters the TileProp T property of a tile
+	// Alters the TileProperty P property of a tile
 	// only if that tile did not have TileType T property
 	template<TileProp P>
-	inline void setProperty(Coordinates co)
+	inline void setProperty(Coordinates co)                  // Test all these functions for perf with const Coordinates ?
 	{
-		tileAt(co).properties | P;
+		tileAt(co).properties |= P;
 	}
 
-	// Reverses property TileProp T of tile
+	// Reverses property TileProperty P of tile
 	template<TileProp P>
 	inline void reverseProperty(Coordinates co)
 	{
-		tileAt(co).properties ^ P;
+		tileAt(co).properties ^= P;
 	}
 
-	// Returns true if tile has property of TileProp T
+	// Returns true if tile has property of TileProperty P
 	template<TileProp P>
 	const inline bool getProperty(Coordinates co) const
 	{
 		return tileAt(co).properties & P;
 	}
 
-
+	// Returns a refrence to tile at coordinates
 	inline Tile& tileAt(const Coordinates co)
 	{
-		return tileMap[co.x + width * (co.y + height * co.z)];
+		return tileMap[co.z * width * height + co.y * width + co.x];
 	}
 
-	inline Tile tileAt(const Coordinates co) const
+	// Returns a copy of tile at coordinates
+	inline Tile tileAt(Coordinates co) const
 	{
-		return tileMap[co.x + width * (co.y + height * co.z)];
+		return tileMap[co.z * width * height + co.y * width + co.x];
 	}
 
 	// Returns a copy of data at tile below input tile coordinates
 	// Worse performance due to use of .at() for safety
-	inline Tile tileBelow(const Coordinates co) const
+	inline Tile tileBelow(Coordinates co) const
 	{
-		return tileMap.at(co.x + width * (co.y + height * (co.z - 1)));
+		return tileMap.at(co.z * width * height + co.y * width + co.x);
 	}
 
-	inline bool canWalk(const Coordinates co) const
+	// Checks if it's possible to walk through tile
+	inline bool canWalk(Coordinates co) const
 	{
 		return (getProperty<FLOOR>(co) && !getProperty<WALL>(co) && !getProperty<OBSTRUCTED>(co));
 	}
 
 private:
+	// Dimensions of map we're creating
 	int width, height, depth;
-	std::vector<Tile> tileMap;
 
-	// Used for &'ing against a tiles
-	// compressed int properties to attain
-	// a value / set a value
-	static const int explored = 0x1;
-	static const int obstructed = 0x2;
-	static const int wall = 0x4;
-	static const int floor = 0x8;
+	// 1D vector of Tiles indexed by 3D formula
+	std::vector<Tile> tileMap;
 };
 

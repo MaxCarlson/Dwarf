@@ -73,8 +73,8 @@ void Gui::renderBar(int x, int y, int width, const char * name, int val, int max
 void Gui::renderMouseLook() 
 {
 	// If mouse is out of FOV nothing to render
-	if ( ! engine.map->isInFov(engine.mouse.cx, engine.mouse.cy))
-		return;
+	//if ( ! engine.map->isInFov(engine.mouse.cx, engine.mouse.cy))
+	//	return;
 
 	char buf[128] = "";
 

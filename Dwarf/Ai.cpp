@@ -43,7 +43,7 @@ void PlayerAi::update(Actor * owner)
 
 bool PlayerAi::move(Actor * owner, int targetX, int targetY)
 {
-	if (!engine.map->canWalk({ targetX, targetY, engine.player->co.z }))
+	if (!engine.map->tileManager.canWalk({ targetX, targetY, engine.player->co.z }))
 		return false;
 
 

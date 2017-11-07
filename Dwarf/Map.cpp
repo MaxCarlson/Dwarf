@@ -42,10 +42,10 @@ Map::Map(int width, int height, int depth) : width(width), height(height), depth
 						createWall({ i, j, h });
 					}
 
-					else  if (heightMap->getValue(i, j) < heightRatio && isFloor({ i, j, h })) {   // If floor below but height ratio is too low, create walkable space
+					else  if (heightMap->getValue(i, j) < heightRatio && tileManager.getProperty<TileManager::WALL>({ i, j, h - 1 }) ) {   // If floor below but height ratio is too low, create walkable space
 						createWalkableSpace({ i, j, h });
 					}
-					else if (canWalk({ i, j, h })) {                                               // If there is a wall below, and height is high enough create more mountain
+					else if (tileManager.canWalk({ i, j, h })) {                                               // If there is a wall below, and height is high enough create more mountain
 						createWall({ i, j, h });
 					}
 					else {														                   // else create open space
@@ -66,7 +66,7 @@ Map::Map(int width, int height, int depth) : width(width), height(height), depth
 				if (found) break;
 				for (int j = height / 3; j < height * 0.66; ++j) 
 				{
-					if (canWalk({ i, j, h })) {
+					if (tileManager.canWalk({ i, j, h })) {
 						engine.player->co = { i, j, h };
 						//engine.camera->getComponent<PositionComponent>().set({ i, j, h });
 						map = mapZLvls[h];
@@ -83,7 +83,7 @@ Map::Map(int width, int height, int depth) : width(width), height(height), depth
 		delete heightMap;
 		
 	} while (!mapIsOkay()
-		|| !canWalk(engine.player->co));
+		|| !tileManager.canWalk(engine.player->co));
 		//|| !canWalk(engine.camera->getComponent<PositionComponent>().coordinates()));
 
 	populateRock();
@@ -122,7 +122,7 @@ bool Map::mapIsOkay() const
 
 	for (int i = 0; i < width; ++i)
 		for (int j = 0; j < height; ++j) {
-			if (canWalk({ i, j, currentZLevel }))
+			if (tileManager.canWalk({ i, j, currentZLevel }))
 				++walkAbleCount;
 		}
 	
@@ -130,82 +130,30 @@ bool Map::mapIsOkay() const
 	if ( fillRatio > MAX_MAP_FILL || fillRatio < MIN_MAP_FILL )
 		return false;
 	
-
 	return true;
 }
-/*
-bool Map::isWall(Coordinates co) const
-{
-	return tileAt(co)->isWall;
-}
-
-bool Map::canWalk(Coordinates co) const
-{
-	if (!isFloor(co) || isWall(co))
-		return false;
-	
-	//for (Actor * actor : engine.actors)
-	//{
-	//	if ( actor->blocks && actor->x == x && actor->y == y) // Cannot walk through blocking actors. Optimization, add a value to tile occupied. test this instead with direct lookup
-	//		return false;
-	//}
-	
-	return true;
-}
-
-// Test if the tile underneath input coordinates provides a floor
-bool Map::isFloor(Coordinates co) const
-{
-	if (tileBelow(co)->providesFloor)
-		return true;
-
-	return false;
-}
-
-bool Map::isInFov(int x, int y) const
-{
-	// Handle out of fov values
-	if (x < 0 || x >= width || y < 0 || y >= height)
-		return false;
-
-	if (map->isInFov(x, y)) {
-		(tiles[currentZLevel] + (x + y * width))->explored = true;
-		return true;
-	}
-	return false;
-}
-
-bool Map::isExplored(int x, int y) const
-{
-	return (tiles[currentZLevel] + (x + y * width))->explored;
-}
-*/
 
 // Create impassable wall that provides a floor
 inline void Map::createWall(Coordinates co)
 {
 	map->setProperties(co.x, co.y, false, false);
-	tileAt(co)->providesFloor = true;
-	tileAt(co)->obstructed    = true;
-	tileAt(co)->isWall        = true;
+
+	tileManager.setProperty<TileManager::OBSTRUCTED>(co);
+	tileManager.setProperty<TileManager::WALL>(co);
 }
 
 // Create a space that is transparant and can be walked through, does not provide floor
 inline void Map::createWalkableSpace(Coordinates co)
 {
 	map->setProperties(co.x, co.y, true, true);  
-	tileAt(co)->providesFloor = false;
-	tileAt(co)->obstructed    = false;
-	tileAt(co)->isWall        = false;
+
+	tileManager.setProperty<TileManager::FLOOR>(co);
 }
 
 // Create a space that is transparant and is not walkable
 inline void Map::createOpenSpace(Coordinates co)
 {
 	map->setProperties(co.x, co.y, true, false);  
-	tileAt(co)->providesFloor = false;
-	tileAt(co)->obstructed    = false;
-	tileAt(co)->isWall        = false;
 }
 
 void Map::computeFov()
@@ -228,13 +176,18 @@ void Map::render() const
 		for (int y = 0; y < height; ++y)
 		{
 
-			if (isInFov(x, y))
-				TCODConsole::root->setCharBackground(x, y, isWall({ x, y, currentZLevel }) ? lightWall : lightGround);
-			else if (!isFloor({ x, y, currentZLevel })) {
-				TCODConsole::root->setCharBackground(x, y, TCODColor::darkestGrey); 
+			//if (isInFov(x, y))
+			//	TCODConsole::root->setCharBackground(x, y, isWall({ x, y, currentZLevel }) ? lightWall : lightGround);
+			//if (!tileManager.isFloor({ x, y, currentZLevel })) {
+			//	TCODConsole::root->setCharBackground(x, y, TCODColor::darkestGrey); 
+			//}
+			//else if(isExplored(x, y))
+			//	TCODConsole::root->setCharBackground(x, y, isWall({ x, y, currentZLevel }) ? darkWall  : darkGround);
+			if (!tileManager.getProperty<TileManager::FLOOR>({ x, y, currentZLevel })) {
+				TCODConsole::root->setCharBackground(x, y, TCODColor::darkestGrey);
 			}
-			else if(isExplored(x, y))
-				TCODConsole::root->setCharBackground(x, y, isWall({ x, y, currentZLevel }) ? darkWall  : darkGround);
+			else if (tileManager.getProperty<TileManager::EXPLORED>({ x, y, currentZLevel }))
+				TCODConsole::root->setCharBackground(x, y, (tileManager.getProperty<TileManager::WALL>({ x, y, currentZLevel }) ? darkWall : darkGround));
 		}
 }
 
