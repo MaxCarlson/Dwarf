@@ -1,9 +1,6 @@
 #include "Map.h"
+
 #include "Engine.h"
-#include "Actor.h"
-#include "Destructible.h"
-#include "Attacker.h"
-#include "Ai.h"
 #include "Tile.h"
 
 
@@ -16,7 +13,6 @@ Map::Map(int width, int height, int depth) : width(width), height(height), depth
 
 	for (int i = 0; i < MAX_ZLVL; ++i) {
 		mapZLvls[i] = new TCODMap(width, height);
-		//tiles[i] = new Tile[width * height];
 	}
 
 	// Create map general shape
@@ -55,7 +51,7 @@ Map::Map(int width, int height, int depth) : width(width), height(height), depth
 
 			heightRatio += 0.2;
 		}
-
+		/*
 		// If player can't walk, search within the middle third of the map, from the top down for a place where they can
 		bool found = false;
 		for (int h = depth - 1; h > 0; --h) {
@@ -75,14 +71,14 @@ Map::Map(int width, int height, int depth) : width(width), height(height), depth
 				}
 			}
 		}
-			
+	*/		
 			
 		//}
 
 		delete heightMap;
 		
-	} while (!mapIsOkay()
-		|| !tileManager.canWalk(engine.player->co));
+	} while (!mapIsOkay());
+		//|| !tileManager.canWalk(engine.player->co));
 
 
 	populateRock();
@@ -165,12 +161,6 @@ inline void Map::createOpenSpace(Coordinates co)
 	map->setProperties(co.x, co.y, true, false);  
 }
 
-void Map::computeFov()
-{
-	//map->computeFov(engine.camera->getComponent<PositionComponent>().x(), engine.camera->getComponent<PositionComponent>().y(), engine.fovRadius);
-	map->computeFov(engine.player->co.x, engine.player->co.y, engine.fovRadius);
-}
-
 void Map::render() const
 {
 	static const TCODColor darkWall(0, 0, 100);
@@ -198,6 +188,15 @@ void Map::render() const
 			else if (tileManager.getProperty<TileManager::EXPLORED>({ x, y, currentZLevel }))
 				TCODConsole::root->setCharBackground(x, y, (tileManager.getProperty<TileManager::WALL>({ x, y, currentZLevel }) ? darkWall : darkGround));
 		}
+	//TCOD_image_t  pix = TCOD_image_load("Obsidian_16x16.png");
+
+	static TCODImage  pix("../Obsidian_16x16.png");
+	
+
+	// Note to self: sx = top left px, sy = y px location
+	pix.blit2x(TCODConsole::root, 10, 10, 32, 0, 16, 16);
+	//pix.
+	//TCOD_image_blit_rect(pix, TCODConsole::root, 3,5, 4, 4, TCOD_BKGND_NONE);
 }
 
 // Change the map being rendered (simulating z levels with map array)

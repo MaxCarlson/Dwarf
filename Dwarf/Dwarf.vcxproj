@@ -122,26 +122,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Actor.cpp" />
-    <ClCompile Include="Ai.cpp" />
-    <ClCompile Include="Attacker.cpp" />
-    <ClCompile Include="Container.cpp" />
-    <ClCompile Include="Destructible.cpp" />
     <ClCompile Include="ECS\EntityManager.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="ECS\Entities.cpp" />
-    <ClCompile Include="Gui.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Map.cpp" />
-    <ClCompile Include="Pickable.cpp" />
     <ClCompile Include="ECS\World.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Actor.h" />
-    <ClInclude Include="Ai.h" />
-    <ClInclude Include="Attacker.h" />
-    <ClInclude Include="Container.h" />
-    <ClInclude Include="Destructible.h" />
     <ClInclude Include="ECS\Camera.h" />
     <ClInclude Include="ECS\Component.h" />
     <ClInclude Include="ECS\Components\KeyBoardComponent.h" />
@@ -155,9 +143,7 @@
     <ClInclude Include="ECS\TypeID.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="ECS\Entities.h" />
-    <ClInclude Include="Gui.h" />
     <ClInclude Include="Map.h" />
-    <ClInclude Include="Pickable.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="ECS\World.h" />
   </ItemGroup>

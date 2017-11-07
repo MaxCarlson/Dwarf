@@ -25,7 +25,6 @@ public:
 	inline void createWalkableSpace(Coordinates co);
 	inline void createOpenSpace(Coordinates co);
 
-	void computeFov();
 	void render() const;
 
 	// Current Z level of camera

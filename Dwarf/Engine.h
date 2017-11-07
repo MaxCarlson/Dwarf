@@ -26,6 +26,7 @@ public:
 
 	World world;
 
+	// Systems
 	RenderSystem * renderSystem;
 	CameraSystem * cameraSystem;
 

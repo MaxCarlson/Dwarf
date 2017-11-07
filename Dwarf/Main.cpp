@@ -1,15 +1,15 @@
 #include "include/libtcod.hpp"
 
-#include "Actor.h"
+
 #include "Map.h"
 #include "Engine.h"
 
+// Numbers a screen width and height, make more 
+// dynamic eventually
 Engine engine(129, 129);
 
 int main()
 {
-	int playerX = 40, playerY = 25;
-	
 
 	while (!TCODConsole::isWindowClosed())
 	{
