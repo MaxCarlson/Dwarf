@@ -19,8 +19,8 @@ public:
 	void seedRamps();
 	void populateRock();
 
-	// Takes a number, 0 - 100
-	// representing approx % of land covered by trees
+	// Takes a number, 0 - 1000
+	// representing approx % / 10 of land covered by trees
 	void addTrees(int treeDensity);
 
 	bool mapIsOkay() const;

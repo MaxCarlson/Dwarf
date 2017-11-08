@@ -62,6 +62,13 @@ public:
 		tileAt(co).properties ^= P;
 	}
 
+	// Remove property P from Tile
+	template<TileProp P>
+	inline void removeProperty(Coordinates co)
+	{
+		tileAt(co).properties &= ~P;
+	}
+
 	// Returns true if tile has property of TileProperty P
 	template<TileProp P>
 	const inline bool getProperty(Coordinates co) const

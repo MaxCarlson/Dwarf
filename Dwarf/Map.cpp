@@ -36,75 +36,61 @@ Map::~Map()
 void Map::createHeightMap(int howMountainous, float rainAmount)
 {
 	// Create map general shape
-	//do {
-		TCODRandom * rng = TCODRandom::getInstance();
-		// Create height map of area
-		TCODHeightMap * heightMap = new TCODHeightMap(129, 129);
-		heightMap->midPointDisplacement();
-		heightMap->rainErosion(width*height * rainAmount, 0.1, 0.1, rng);
 
-		//float heightRatio = -0.6f;
-		// If height is below a threshold, mark that area walkable/visible. else not. 
-		for (int h = 0; h < depth; ++h) {
+	TCODRandom * rng = TCODRandom::getInstance();
+	// Create height map of area
+	TCODHeightMap * heightMap = new TCODHeightMap(129, 129);
+	heightMap->midPointDisplacement();
+	heightMap->rainErosion(width*height * rainAmount, 0.1, 0.1, rng);
 
-			map = mapZLvls[h]; // Set map to map representing current depth
-			currentZLevel = h; // Change these functions around when placing player
+	//float heightRatio = -0.6f;
+	// If height is below a threshold, mark that area walkable/visible. else not. 
+	for (int h = 0; h < depth; ++h) {
 
-			for (int i = 0; i < width; ++i)
-				for (int j = 0; j < height; ++j)
-				{
-					// Values between -100 and 100
-					int heightMapPoint = int(heightMap->getValue(i, j) * 100);
+		map = mapZLvls[h]; // Set map to map representing current depth
+		currentZLevel = h; // Change these functions around when placing player
 
-					if (h <= MIN_LVLS_OF_ROCK) {															       // Below level four set map to always be filled
-						createWall({ i, j, h });
-					}
+		for (int i = 0; i < width; ++i)
+			for (int j = 0; j < height; ++j)
+			{
+				// Values between -100 and 100
+				int heightMapPoint = int(heightMap->getValue(i, j) * 100);
 
-					//else  if (heightMap->getValue(i, j) < heightRatio && tileManager.getProperty<TileManager::WALL>({ i, j, h - 1 })) {   // If floor below but height ratio is too low, create walkable space
-					//	createWalkableSpace({ i, j, h });
-					//}
-					else  if (heightMapPoint < howMountainous && tileManager.getProperty<TileManager::WALL>({ i, j, h - 1 })) {   // If floor below but height ratio is too low, create walkable space
-						createWalkableSpace({ i, j, h });
-					}
-					else if (tileManager.canWalk({ i, j, h })) {                                               // If there is a wall below, and height is high enough create more mountain
-						createWall({ i, j, h });
-					}
-					else {														                   // else create open space
-						createOpenSpace({ i, j, h });
-					}
-
+				if (h <= MIN_LVLS_OF_ROCK) {															       // Below level four set map to always be filled
+					createWall({ i, j, h });
 				}
-			howMountainous += howMountainous / 10;
-			//heightRatio += 0.2;
-		}
-		/*
-		// If player can't walk, search within the middle third of the map, from the top down for a place where they can
-		bool found = false;
-		for (int h = depth - 1; h > 0; --h) {
-		if (found) break;
-		map = mapZLvls[h];
-		for (int i = width / 3; i < width * 0.66; ++i) {
-		if (found) break;
-		for (int j = height / 3; j < height * 0.66; ++j)
+
+				//else  if (heightMap->getValue(i, j) < heightRatio && tileManager.getProperty<TileManager::WALL>({ i, j, h - 1 })) {   // If floor below but height ratio is too low, create walkable space
+				//	createWalkableSpace({ i, j, h });
+				//}
+				else  if (heightMapPoint < howMountainous && tileManager.getProperty<TileManager::WALL>({ i, j, h - 1 })) {   // If floor below but height ratio is too low, create walkable space
+					createWalkableSpace({ i, j, h });
+				}
+				else if (tileManager.canWalk({ i, j, h })) {                                               // If there is a wall below, and height is high enough create more mountain
+					createWall({ i, j, h });
+				}
+				else {														                   // else create open space
+					createOpenSpace({ i, j, h });
+				}
+
+			}
+		howMountainous += howMountainous / 10;
+		//heightRatio += 0.2;
+	}
+	delete heightMap;
+
+	// Level out max height and make walkable if
+	// there are walls at peak 
+	// Map is already set to max z level so no need to change it
+	for (int i = 0; i < width; ++i)
+		for (int j = 0; j < height; ++j)
 		{
-		if (tileManager.canWalk({ i, j, h }))
-		{
-		engine.player->co = { i, j, h };
-		map = mapZLvls[h];
-		found = true;
+			if (tileManager.getProperty<TileManager::WALL>({ i, j, depth - 1 }))
+			{
+				createWalkableSpace({ i, j, depth - 1 });
+			}
 		}
-		if (found) break;
-		}
-		}
-		}
-		*/
 
-		//}
-
-		delete heightMap;
-
-	//} while (!mapIsOkay());
-	//|| !tileManager.canWalk(engine.player->co));
 }
 
 void Map::seedRamps()
@@ -134,7 +120,7 @@ void Map::populateRock()
 
 void Map::addTrees(int treeDensity)
 {
-	int treeNum = ((width * height) / 100) * treeDensity;
+	int treeNum = ((width * height) / 1000) * treeDensity;
 
 	// 70 = char num for trees
 
@@ -156,7 +142,7 @@ void Map::addTrees(int treeDensity)
 			co.y = rng->getInt(0, height-1);
 			co.z = rng->getInt(MIN_LVLS_OF_ROCK, depth-1);
 
-			Tile t = tileManager.tileAt(co);
+			const Tile t = tileManager.tileAt(co);
 
 
 			if (t.properties & TileManager::FLOOR && !(t.properties & TileManager::OBSTRUCTED))
@@ -165,6 +151,8 @@ void Map::addTrees(int treeDensity)
 				trees[counter].addComponent<RenderComponent>(80, TCODColor::green, TCODColor::darkGreen);
 				trees[counter].addComponent<HealthComponent>(300, 300, 0);
 				trees[counter].activate();
+
+				tileManager.setProperty<TileManager::OBSTRUCTED>(co);
 				break;
 			}
 
@@ -210,12 +198,17 @@ inline void Map::createWalkableSpace(Coordinates co)
 	map->setProperties(co.x, co.y, true, true);  
 
 	tileManager.setProperty<TileManager::FLOOR>(co);
+	tileManager.removeProperty<TileManager::OBSTRUCTED>(co);
+	tileManager.removeProperty<TileManager::WALL>(co);
 }
 
 // Create a space that is transparant and is not walkable
 inline void Map::createOpenSpace(Coordinates co)
 {
 	map->setProperties(co.x, co.y, true, false);  
+	tileManager.removeProperty<TileManager::OBSTRUCTED>(co);
+	tileManager.removeProperty<TileManager::WALL>(co);
+	tileManager.removeProperty<TileManager::FLOOR>(co);
 }
 
 void Map::render() const
