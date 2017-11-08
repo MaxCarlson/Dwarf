@@ -35,15 +35,13 @@ Map::~Map()
 
 void Map::createHeightMap(int howMountainous, float rainAmount)
 {
-	// Create map general shape
-
-	TCODRandom * rng = TCODRandom::getInstance();
 	// Create height map of area
+	// Want to normalize map eventually?
+	TCODRandom * rng = TCODRandom::getInstance();
 	TCODHeightMap * heightMap = new TCODHeightMap(129, 129);
 	heightMap->midPointDisplacement();
 	heightMap->rainErosion(width*height * rainAmount, 0.1, 0.1, rng);
 
-	//float heightRatio = -0.6f;
 	// If height is below a threshold, mark that area walkable/visible. else not. 
 	for (int h = 0; h < depth; ++h) {
 
@@ -56,26 +54,27 @@ void Map::createHeightMap(int howMountainous, float rainAmount)
 				// Values between -100 and 100
 				int heightMapPoint = int(heightMap->getValue(i, j) * 100);
 
-				if (h <= MIN_LVLS_OF_ROCK) {															       // Below level four set map to always be filled
+				if (h <= MIN_LVLS_OF_ROCK) {															      
 					createWall({ i, j, h });
 				}
-
-				//else  if (heightMap->getValue(i, j) < heightRatio && tileManager.getProperty<TileManager::WALL>({ i, j, h - 1 })) {   // If floor below but height ratio is too low, create walkable space
-				//	createWalkableSpace({ i, j, h });
-				//}
-				else  if (heightMapPoint < howMountainous && tileManager.getProperty<TileManager::WALL>({ i, j, h - 1 })) {   // If floor below but height ratio is too low, create walkable space
+				// If floor below but height ratio is too low, create walkable space
+				else  if (heightMapPoint < howMountainous && tileManager.getProperty<TileManager::WALL>({ i, j, h - 1 }))
+				{   
 					createWalkableSpace({ i, j, h });
 				}
-				else if (tileManager.canWalk({ i, j, h })) {                                               // If there is a wall below, and height is high enough create more mountain
+				// If there is a wall below, and height is high enough create more mountain
+				else if (tileManager.canWalk({ i, j, h }))
+				{                                               
 					createWall({ i, j, h });
 				}
-				else {														                   // else create open space
+				// else create open space
+				else 
+				{														                  
 					createOpenSpace({ i, j, h });
 				}
 
 			}
 		howMountainous += howMountainous / 10;
-		//heightRatio += 0.2;
 	}
 	delete heightMap;
 
@@ -120,19 +119,15 @@ void Map::populateRock()
 
 void Map::addTrees(int treeDensity)
 {
+	// 80, 96, 111, 127 = char num for trees + some others
+	// Use these eventually
 	int treeNum = ((width * height) / 1000) * treeDensity;
 
-	// 70 = char num for trees
-
+	// Store these these trees in map eventually??
 	std::vector<Entity> trees = engine.world.createEntities(treeNum);
-
-	// Don't try to place trees below MIN rock level
-	int startLevel = MIN_LVLS_OF_ROCK * width * height + 0 * width + 0;
-	int maxLevel = depth * width * height - 1;
 
 	TCODRandom * rng = TCODRandom::getInstance();
 
-	
 	int counter = 0;
 	for (Entity &t : trees)
 	{
@@ -144,7 +139,7 @@ void Map::addTrees(int treeDensity)
 
 			const Tile t = tileManager.tileAt(co);
 
-
+			// If the space is clear/hasfloor plant a tree and obstruct the space
 			if (t.properties & TileManager::FLOOR && !(t.properties & TileManager::OBSTRUCTED))
 			{
 				trees[counter].addComponent<PositionComponent>(co);
