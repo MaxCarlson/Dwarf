@@ -4,7 +4,7 @@
 
 #include <vector>
 
-// Make this dynamic !!
+// Make this feature dynamic !!
 static const int MAX_ZLVL = 10;
 
 class Map
@@ -15,8 +15,10 @@ public:
 	Map(int width, int height, int depth);
 	~Map();
 
+	void createHeightMap(int howMountainous, float rainAmount);
 	void seedRamps();
 	void populateRock();
+	void addTrees(int treeDensity);
 
 	bool mapIsOkay() const;
 

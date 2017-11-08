@@ -11,8 +11,8 @@
 
 Engine::Engine(int screenWidth, int screenHeight) : gameStatus(STARTUP), fovRadius(10), screenWidth(screenWidth), screenHeight(screenHeight)
 {
-	TCODConsole::setCustomFont("../Obsidian_16x16.png");
-	TCODConsole::initRoot(screenWidth, screenHeight, "C++ libtcod tutorial", false);
+	//TCODConsole::setCustomFont("../Obsidian_16x16.png");
+	TCODConsole::initRoot(screenWidth, screenHeight, "Dwarf", false); // Why so big with custom font?
 
 	// Create camera
 	camera = world.createEntity();
