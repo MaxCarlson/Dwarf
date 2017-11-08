@@ -81,6 +81,12 @@ public:
 		return tileMap[co.z * width * height + co.y * width + co.x];
 	}
 
+	// Direct lookup by tile index instead of coordinates
+	inline Tile tileAt(int exactPos) const
+	{
+		return tileMap[exactPos];
+	}
+
 	// Returns a copy of data at tile below input tile coordinates
 	// Worse performance due to use of .at() for safety
 	inline Tile tileBelow(Coordinates co) const

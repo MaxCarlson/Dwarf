@@ -2,11 +2,14 @@
 
 #include "Engine.h"
 #include "Tile.h"
-
+#include "ECS\Components\PositionComponent.h"
+#include "ECS\Components\RenderComponent.h"
+#include "ECS\Components\HealthComponent.h"
 
 
 static const float MAX_MAP_FILL = 0.85;
 static const float MIN_MAP_FILL = 0.18;
+static const int MIN_LVLS_OF_ROCK = 3;
 
 Map::Map(int width, int height, int depth) : width(width), height(height), depth(depth), tileManager(width, height, depth)
 {
@@ -18,7 +21,7 @@ Map::Map(int width, int height, int depth) : width(width), height(height), depth
 	createHeightMap(16, 0.3f);
 	seedRamps();
 	populateRock();
-	addTrees(50);
+	addTrees(10);
 }
 
 Map::~Map()
@@ -47,14 +50,13 @@ void Map::createHeightMap(int howMountainous, float rainAmount)
 			map = mapZLvls[h]; // Set map to map representing current depth
 			currentZLevel = h; // Change these functions around when placing player
 
-
 			for (int i = 0; i < width; ++i)
 				for (int j = 0; j < height; ++j)
 				{
 					// Values between -100 and 100
 					int heightMapPoint = int(heightMap->getValue(i, j) * 100);
 
-					if (h <= 3) {															       // Below level four set map to always be filled
+					if (h <= MIN_LVLS_OF_ROCK) {															       // Below level four set map to always be filled
 						createWall({ i, j, h });
 					}
 
@@ -132,6 +134,43 @@ void Map::populateRock()
 
 void Map::addTrees(int treeDensity)
 {
+	int treeNum = ((width * height) / 100) * treeDensity;
+
+	// 70 = char num for trees
+
+	std::vector<Entity> trees = engine.world.createEntities(treeNum);
+
+	// Don't try to place trees below MIN rock level
+	int startLevel = MIN_LVLS_OF_ROCK * width * height + 0 * width + 0;
+	int maxLevel = depth * width * height - 1;
+
+	TCODRandom * rng = TCODRandom::getInstance();
+
+	
+	int counter = 0;
+	for (Entity &t : trees)
+	{
+		while (true) {
+			Coordinates co;
+			co.x = rng->getInt(0, width-1);
+			co.y = rng->getInt(0, height-1);
+			co.z = rng->getInt(MIN_LVLS_OF_ROCK, depth-1);
+
+			Tile t = tileManager.tileAt(co);
+
+
+			if (t.properties & TileManager::FLOOR && !(t.properties & TileManager::OBSTRUCTED))
+			{
+				trees[counter].addComponent<PositionComponent>(co);
+				trees[counter].addComponent<RenderComponent>(80, TCODColor::green, TCODColor::darkGreen);
+				trees[counter].addComponent<HealthComponent>(300, 300, 0);
+				trees[counter].activate();
+				break;
+			}
+
+		}
+		++counter;
+	}
 
 }
 

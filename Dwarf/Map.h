@@ -18,6 +18,9 @@ public:
 	void createHeightMap(int howMountainous, float rainAmount);
 	void seedRamps();
 	void populateRock();
+
+	// Takes a number, 0 - 100
+	// representing approx % of land covered by trees
 	void addTrees(int treeDensity);
 
 	bool mapIsOkay() const;

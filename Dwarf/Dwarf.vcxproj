@@ -132,6 +132,7 @@
   <ItemGroup>
     <ClInclude Include="ECS\Camera.h" />
     <ClInclude Include="ECS\Component.h" />
+    <ClInclude Include="ECS\Components\HealthComponent.h" />
     <ClInclude Include="ECS\Components\KeyBoardComponent.h" />
     <ClInclude Include="ECS\EntityManager.h" />
     <ClInclude Include="ECS\Filter.h" />
