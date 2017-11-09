@@ -31,7 +31,7 @@ int main()
 		TCODConsole::flush();
 
 		terminal_refresh();
-		
+
 	}
 
 

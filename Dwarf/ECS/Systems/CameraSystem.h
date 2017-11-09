@@ -19,7 +19,7 @@ public:
 
 		for (auto e : entities)
 		{
-			const auto& key = e.getComponent<KeyboardComponent>();
+			//const auto& key = e.getComponent<KeyboardComponent>();
 			auto& co = e.getComponent<PositionComponent>().co;
 			/*
 			int dx = 0, dy = 0;
@@ -46,34 +46,34 @@ public:
 			}
 			*/
 			//
-			int kk = terminal_read();
-
-			if (kk == TK_PERIOD) {
-				if (engine.map->incrementZLevel(-1))
-					co.z -= 1;
-			}
-			else if (kk == TK_COMMA) {
-				if (engine.map->incrementZLevel(1))
-					co.z += 1;
-			}
-			/*
-			switch (kk)
+			int keyPress = terminal_read();
+		
+			switch (keyPress)
 			{
-			case (TK_A):
+			case TK_COMMA:
 				if (engine.map->incrementZLevel(-1))
 					co.z -= 1;
 				break;
 
-			case TK_B:
+			case TK_PERIOD:
 				if (engine.map->incrementZLevel(1))
 					co.z += 1;
 				break;
+
+			case TK_MOUSE_SCROLL:
+				handleMouseWheel(keyPress);
 
 			default: break;
 			}
-			//*/
+			
 		}
 	}
 
 private:
+
+	void handleMouseWheel(int key)
+	{
+		// Amount of steps mouse wheel has scrolled
+		int amount = terminal_state(TK_MOUSE_WHEEL);
+	}
 };

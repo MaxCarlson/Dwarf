@@ -56,6 +56,9 @@ void Engine::update()
 
 	// Update systems
 	cameraSystem->update();
+
+	// Should this be in Engine::render()?
+	// Should definitely be the last thing we do
 	renderSystem->update();
 
 	// Should this be called before or after? Probably before?
