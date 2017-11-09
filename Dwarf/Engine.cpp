@@ -6,6 +6,7 @@
 #include "ECS\Components\KeyBoardComponent.h"
 #include "ECS\Systems\RenderSystem.h"
 #include "ECS\Systems\CameraSystem.h"
+#include "BearLibTerminal.h"
 
 
 
@@ -34,7 +35,7 @@ Engine::Engine(int screenWidth, int screenHeight) : gameStatus(STARTUP), fovRadi
 
 	world.refresh();
 
-	map = new Map(129, 129, MAX_ZLVL);
+	map = new Map(screenWidth, screenHeight, MAX_ZLVL);
 }
 
 
@@ -58,6 +59,11 @@ void Engine::update()
 void Engine::render()
 {
 	TCODConsole::root->clear();
+
+	//terminal_put(50, 10, 0xE200 + 2);
+	//terminal_printf(60, 10, "[font=tile]%i", 0xE100 + 80);
+	//terminal_put_ext(50, 20, 16, 16, 'U'+20+ 'AC');
+	
 
 	map->render();
 

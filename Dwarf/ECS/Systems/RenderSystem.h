@@ -3,6 +3,7 @@
 #include "../Systems.h"
 #include "../Components/PositionComponent.h"
 #include "../Components/RenderComponent.h"
+#include "../BearLibTerminal.h"
 
 class RenderSystem : public System<Requires<PositionComponent, RenderComponent>>
 {
@@ -29,9 +30,14 @@ public:
 			// (Eventually add opacity to non obscured Entities below camera z Level)
 			if (co.z == mCameraPos->z) {
 				const auto& rend = e.getComponent<RenderComponent>();
+
+				// Libtcod
 				TCODConsole::root->setCharBackground(co.x, co.y, rend.backColor);
 				TCODConsole::root->setCharForeground(co.x, co.y, rend.foreColor);
 				TCODConsole::root->setChar(co.x, co.y, rend.ch);				  // Look at other functions like root->putChar, etc!!!!
+
+				// BearslibTerminal
+				terminal_put(co.x, co.y, 0xE200 + rend.ch);
 			}
 		}
 	}
