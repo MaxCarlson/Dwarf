@@ -11,7 +11,7 @@ class RenderComponent : public Component
 public:
 	// Character code representation
 	int ch;
-	//bool activeDraw; // This shouldn't be required, as we can just de-activate the render component for render system
+	//bool activeDraw; // Should this be used for whether rock has been exposed/explored as a flag??
 
 	// Colors for rendering
 	// Find a way to make using one optional? 

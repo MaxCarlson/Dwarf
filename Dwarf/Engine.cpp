@@ -4,6 +4,7 @@
 #include "ECS\Components\PositionComponent.h"
 #include "ECS\Components\RenderComponent.h"
 #include "ECS\Components\KeyBoardComponent.h"
+#include "ECS\Components\CameraComponent.h"
 #include "ECS\Systems\RenderSystem.h"
 #include "ECS\Systems\CameraSystem.h"
 #include "BearLibTerminal.h"
@@ -22,11 +23,11 @@ Engine::Engine(int screenWidth, int screenHeight) : gameStatus(STARTUP), fovRadi
 	camera.addComponent<RenderComponent>(16, TCODColor::white, TCODColor::azure);
 	camera.addComponent<KeyboardComponent>();
 	camera.getComponent<KeyboardComponent>().lastKeyPressed = &lastKey;
+	camera.addComponent<CameraComponent>(screenWidth, screenHeight);
 	camera.activate();
 
-	renderSystem = new RenderSystem();
 	// Add systems at boot -> move all these things to local map once made
-	renderSystem->mCameraPos = &camera.getComponent<PositionComponent>().co;											
+	renderSystem = new RenderSystem(&camera.getComponent<PositionComponent>().co, &camera.getComponent<CameraComponent>());
 																													
 	cameraSystem = new CameraSystem();
 

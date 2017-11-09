@@ -17,6 +17,7 @@ public:
 
 	void createHeightMap(int howMountainous, float rainAmount);
 	void seedRamps();
+	void populateGrass();
 	void populateRock();
 
 	// Takes a number, 0 - 1000

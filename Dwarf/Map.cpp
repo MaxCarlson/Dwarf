@@ -6,6 +6,8 @@
 #include "ECS\Components\RenderComponent.h"
 #include "ECS\Components\HealthComponent.h"
 
+#include "BearLibTerminal.h"
+
 
 static const float MAX_MAP_FILL = 0.85;
 static const float MIN_MAP_FILL = 0.18;
@@ -21,6 +23,7 @@ Map::Map(int width, int height, int depth) : width(width), height(height), depth
 	createHeightMap(16, 0.3f);
 	seedRamps();
 	populateRock();
+
 	addTrees(10);
 }
 
@@ -38,7 +41,7 @@ void Map::createHeightMap(int howMountainous, float rainAmount)
 	// Create height map of area
 	// Want to normalize map eventually?
 	TCODRandom * rng = TCODRandom::getInstance();
-	TCODHeightMap * heightMap = new TCODHeightMap(129, 129);
+	TCODHeightMap * heightMap = new TCODHeightMap(width+60, height + 60);
 	heightMap->midPointDisplacement();
 	heightMap->rainErosion(width*height * rainAmount, 0.1, 0.1, rng);
 
@@ -102,19 +105,36 @@ void Map::seedRamps()
 	//		}
 }
 
-void Map::populateRock()
+void Map::populateGrass()
 {
-	/*
-	for (int h = 0; h < depth; ++h) 
+	for (int h = MIN_LVLS_OF_ROCK; h < depth; ++h)
 		for (int i = 0; i < width; ++i)
 			for (int j = 0; j < height; ++j)
 			{
-				tileAt({ i, j, h })->actors.resize(1);
-				if (isWall({ i, j, h })) {
-					tileAt({ i, j, h })->actors.push_back(new Stone({ i, j, h }, '%', STONE_ID, "granite", TCODColor::lightSepia, Stone::GRANITE));
+
+			}
+}
+
+void Map::populateRock()
+{
+	
+	for (int h = 0; h < depth; ++h) 
+		for (int i = 0; i < width; ++i)
+			for (int j = 0; j < height; ++j)
+			{		
+				if (tileManager.getProperty<TileManager::WALL>({ i, j, h })) 
+				{
+					/* // Not currently using Entities for rock, seems like it'll be too slow
+					const Coordinates co = { i, j, h };
+					Entity &e = engine.world.createEntity();
+					e.addComponent<PositionComponent>(co);
+					e.addComponent<RenderComponent>(133, TCODColor::grey, TCODColor::lightGrey);
+					e.activate();
+					*/
+					tileManager.tileAt({ i, j, h }).ch = 133;
 				}
 			}
-	*/
+	
 }
 
 void Map::addTrees(int treeDensity)
@@ -123,7 +143,7 @@ void Map::addTrees(int treeDensity)
 	// Use these eventually
 	int treeNum = ((width * height) / 1000) * treeDensity;
 
-	// Store these these trees in map eventually??
+	// Store these these trees in map eventually??!!!!!!!!!!!!!!!!!!
 	std::vector<Entity> trees = engine.world.createEntities(treeNum);
 
 	TCODRandom * rng = TCODRandom::getInstance();
@@ -219,11 +239,25 @@ void Map::render() const
 	for(int x = 0; x < width; ++x)
 		for (int y = 0; y < height; ++y)
 		{
-			if (!tileManager.getProperty<TileManager::FLOOR>({ x, y, currentZLevel })) {
-				TCODConsole::root->setCharBackground(x, y, TCODColor::darkestGrey);
+			const auto & t = tileManager.tileAt({ x, y, currentZLevel });
+
+			if (!tileManager.getProperty<TileManager::EXPLORED>({ x, y, currentZLevel }))
+			{
+
 			}
-			else if (tileManager.getProperty<TileManager::EXPLORED>({ x, y, currentZLevel }))
-				TCODConsole::root->setCharBackground(x, y, (tileManager.getProperty<TileManager::WALL>({ x, y, currentZLevel }) ? darkWall : darkGround));
+			else
+			{
+				// Libtcod
+				TCODConsole::root->setChar(x, y, t.ch);
+
+				// BearslibTerminal
+				terminal_put(x, y, 0xE200 + t.ch);
+			}
+			//if (!tileManager.getProperty<TileManager::FLOOR>({ x, y, currentZLevel })) {
+			//	TCODConsole::root->setCharBackground(x, y, TCODColor::darkestGrey);
+			//}
+			//else if (tileManager.getProperty<TileManager::EXPLORED>({ x, y, currentZLevel }))
+			//	TCODConsole::root->setCharBackground(x, y, (tileManager.getProperty<TileManager::WALL>({ x, y, currentZLevel }) ? darkWall : darkGround));
 		}
 	//TCOD_image_t  pix = TCOD_image_load("Obsidian_16x16.png");
 

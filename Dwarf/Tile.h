@@ -20,8 +20,7 @@ public:
 	// bool isWall;         
 	// bool providesFloor;  
 
-	// Character representation of thing on tile
-	// Change to image evetually
+	// Integer representation of tileset index
 	int  ch;			
 
 	std::uint8_t properties = 0x1U; // Change to 0U for unexplored

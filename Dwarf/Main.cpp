@@ -12,7 +12,7 @@
 
 // Numbers a screen width and height, make more 
 // dynamic eventually
-Engine engine(129, 129);
+Engine engine(200, 200);
 
 int main()
 {
