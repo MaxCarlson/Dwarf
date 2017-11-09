@@ -15,6 +15,7 @@ static const int MIN_LVLS_OF_ROCK = 3;
 
 Map::Map(int width, int height, int depth) : width(width), height(height), depth(depth), tileManager(width, height, depth)
 {
+	rng = TCODRandom::getInstance();
 
 	for (int i = 0; i < MAX_ZLVL; ++i) {
 		mapZLvls[i] = new TCODMap(width, height);
@@ -23,8 +24,8 @@ Map::Map(int width, int height, int depth) : width(width), height(height), depth
 	createHeightMap(16, 0.3f);
 	seedRamps();
 	populateRock();
-
 	addTrees(10);
+	populateGrass();
 }
 
 Map::~Map()
@@ -40,10 +41,9 @@ void Map::createHeightMap(int howMountainous, float rainAmount)
 {
 	// Create height map of area
 	// Want to normalize map eventually?
-	TCODRandom * rng = TCODRandom::getInstance();
-	TCODHeightMap * heightMap = new TCODHeightMap(width+60, height + 60);
+	TCODHeightMap * heightMap = new TCODHeightMap(width, height);
 	heightMap->midPointDisplacement();
-	heightMap->rainErosion(width*height * rainAmount, 0.1, 0.1, rng);
+	heightMap->rainErosion(width * height * rainAmount, 0.1, 0.1, rng);
 
 	// If height is below a threshold, mark that area walkable/visible. else not. 
 	for (int h = 0; h < depth; ++h) {
@@ -105,13 +105,21 @@ void Map::seedRamps()
 	//		}
 }
 
+// Possibly move all these loops into one or two to minimize looping??
 void Map::populateGrass()
 {
+	int grassCharList[] = { 130, 147, 244, 244 };
+	int grassChar = 244;
+
 	for (int h = MIN_LVLS_OF_ROCK; h < depth; ++h)
 		for (int i = 0; i < width; ++i)
 			for (int j = 0; j < height; ++j)
 			{
-
+				if (    tileManager.getProperty<TileManager::FLOOR>({ i, j, h })
+					&& !tileManager.getProperty<TileManager::OBSTRUCTED>({ i, j, h }))
+				{
+					tileManager.tileAt({ i, j, h }).ch = grassCharList[rng->getInt(0, 3, 3)];
+				}
 			}
 }
 
@@ -131,7 +139,7 @@ void Map::populateRock()
 					e.addComponent<RenderComponent>(133, TCODColor::grey, TCODColor::lightGrey);
 					e.activate();
 					*/
-					tileManager.tileAt({ i, j, h }).ch = 133;
+					tileManager.tileAt({ i, j, h }).ch = 133; // Obviously this needs to be more complex
 				}
 			}
 	
@@ -140,7 +148,10 @@ void Map::populateRock()
 void Map::addTrees(int treeDensity)
 {
 	// 80, 96, 111, 127 = char num for trees + some others
+	// for Bearslib - 5, 6, 7 = bush, 23, 24
 	// Use these eventually
+	int treeChar = 24;
+
 	int treeNum = ((width * height) / 1000) * treeDensity;
 
 	// Store these these trees in map eventually??!!!!!!!!!!!!!!!!!!
@@ -163,7 +174,7 @@ void Map::addTrees(int treeDensity)
 			if (t.properties & TileManager::FLOOR && !(t.properties & TileManager::OBSTRUCTED))
 			{
 				trees[counter].addComponent<PositionComponent>(co);
-				trees[counter].addComponent<RenderComponent>(80, TCODColor::green, TCODColor::darkGreen);
+				trees[counter].addComponent<RenderComponent>(treeChar, TCODColor::green, TCODColor::darkGreen);
 				trees[counter].addComponent<HealthComponent>(300, 300, 0);
 				trees[counter].activate();
 
@@ -249,6 +260,9 @@ void Map::render() const
 			{
 				// Libtcod
 				TCODConsole::root->setChar(x, y, t.ch);
+
+				if (t.ch == 130 || t.ch == 147 || t.ch == 244)
+					terminal_color("dark green");
 
 				// BearslibTerminal
 				terminal_put(x, y, 0xE200 + t.ch);

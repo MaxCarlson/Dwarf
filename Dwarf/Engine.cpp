@@ -53,6 +53,11 @@ void Engine::update()
 	// Check for keyboard or mouse input
 	TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS | TCOD_EVENT_MOUSE, &lastKey, &mouse);
 
+
+	// Update systems
+	cameraSystem->update();
+	renderSystem->update();
+
 	// Should this be called before or after? Probably before?
 	world.refresh();
 }
@@ -67,8 +72,4 @@ void Engine::render()
 	
 
 	map->render();
-
-	// Update systems
-	cameraSystem->update();
-	renderSystem->update();
 }

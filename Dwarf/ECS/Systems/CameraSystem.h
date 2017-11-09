@@ -5,6 +5,7 @@
 #include "../Components/PositionComponent.h"
 #include "../../Engine.h"
 #include "../../Map.h"
+#include "../BearLibTerminal.h"
 
 // Currently provides just the vertical movement 
 // for camera
@@ -20,7 +21,7 @@ public:
 		{
 			const auto& key = e.getComponent<KeyboardComponent>();
 			auto& co = e.getComponent<PositionComponent>().co;
-
+			/*
 			int dx = 0, dy = 0;
 			switch (key.lastKeyPressed->vk)
 			{
@@ -43,6 +44,34 @@ public:
 
 			default: break;
 			}
+			*/
+			//
+			int kk = terminal_read();
+
+			if (kk == TK_PERIOD) {
+				if (engine.map->incrementZLevel(-1))
+					co.z -= 1;
+			}
+			else if (kk == TK_COMMA) {
+				if (engine.map->incrementZLevel(1))
+					co.z += 1;
+			}
+			/*
+			switch (kk)
+			{
+			case (TK_A):
+				if (engine.map->incrementZLevel(-1))
+					co.z -= 1;
+				break;
+
+			case TK_B:
+				if (engine.map->incrementZLevel(1))
+					co.z += 1;
+				break;
+
+			default: break;
+			}
+			//*/
 		}
 	}
 

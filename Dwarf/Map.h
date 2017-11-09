@@ -41,10 +41,11 @@ public:
 
 	TileManager tileManager;
 
-protected:
+private:
+	TCODRandom * rng;
 
 	TCODMap * map;				    // Holds the map the camera will render
-	TCODMap * mapZLvls[MAX_ZLVL];   // Holds all of the maps
+	TCODMap * mapZLvls[MAX_ZLVL];   // Holds all of the maps (each a sepperate z level)
 };
 
 
