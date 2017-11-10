@@ -252,6 +252,7 @@ void Map::render() const
 		{
 			const auto & t = tileManager.tileAt({ x, y, currentZLevel });
 
+			// Use this for darkening/blacking-out unexplored in mountain/underground tiles
 			if (!tileManager.getProperty<TileManager::EXPLORED>({ x, y, currentZLevel }))
 			{
 
@@ -261,10 +262,11 @@ void Map::render() const
 				// Libtcod
 				TCODConsole::root->setChar(x, y, t.ch);
 
+				// BearslibTerminal
 				if (t.ch == 130 || t.ch == 147 || t.ch == 244)
 					terminal_color("dark green");
 
-				// BearslibTerminal
+				
 				terminal_put(x, y, 0xE200 + t.ch);
 			}
 			//if (!tileManager.getProperty<TileManager::FLOOR>({ x, y, currentZLevel })) {

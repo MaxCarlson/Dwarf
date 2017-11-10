@@ -23,7 +23,7 @@ Engine::Engine(int screenWidth, int screenHeight) : gameStatus(STARTUP), fovRadi
 	camera.addComponent<RenderComponent>(16, TCODColor::white, TCODColor::azure);
 	camera.addComponent<KeyboardComponent>();
 	camera.getComponent<KeyboardComponent>().lastKeyPressed = &lastKey;
-	camera.addComponent<CameraComponent>(screenWidth, screenHeight);
+	camera.addComponent<CameraComponent>(screenWidth, screenHeight, 16); // 16 is pixel cell size
 	camera.activate();
 
 	// Add systems at boot -> move all these things to local map once made
@@ -58,7 +58,7 @@ void Engine::update()
 	cameraSystem->update();
 
 	// Should this be in Engine::render()?
-	// Should definitely be the last thing we do
+	// Should definitely be the clost to the last thing we do
 	renderSystem->update();
 
 	// Should this be called before or after? Probably before?
