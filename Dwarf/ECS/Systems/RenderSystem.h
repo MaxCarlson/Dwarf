@@ -6,6 +6,9 @@
 #include "../BearLibTerminal.h"
 #include "../Components/CameraComponent.h"
 
+
+// Render all entities that are within camera fov/zlevel
+// and are visible
 class RenderSystem : public System<Requires<PositionComponent, RenderComponent>>
 {
 public:
@@ -19,12 +22,14 @@ public:
 
 	void update()
 	{
-		auto entities = getEntities();
+		const auto& entities = getEntities();
 
 		int offsetX = map->mapRenderer->offsetX;
-		int offsetY = map->mapRenderer->offsetY;
+		int offsetY = map->mapRenderer->offsetY;									
+		
+		terminal_color("default"); // Need to add a color component to Entities and do color stuff here so we avoid flickering
 
-		for (auto e : entities)
+		for (const auto& e : entities)
 		{
 			auto co = e.getComponent<PositionComponent>().co;
 
@@ -42,7 +47,7 @@ public:
 				// Libtcod
 				TCODConsole::root->setCharBackground(co.x, co.y, rend.backColor);
 				TCODConsole::root->setCharForeground(co.x, co.y, rend.foreColor);
-				TCODConsole::root->setChar(co.x, co.y, rend.ch);				  // Look at other functions like root->putChar, etc!!!!
+				TCODConsole::root->setChar(co.x, co.y, rend.ch);				  
 
 				// BearslibTerminal
 				terminal_put(co.x, co.y, 0xE200 + rend.ch);
@@ -51,7 +56,7 @@ public:
 	}
 
 	// Is the object we're trying to render 
-	// within view of the camera ?
+	// within view of the camera ? // Performance wise, is it worth adding more checks such as co.x < 0 at the risk of branching?? Revisit
 	inline bool isInCameraRange(Coordinates co)
 	{
 		if(map->mapRenderer->currentZLevel != co.z

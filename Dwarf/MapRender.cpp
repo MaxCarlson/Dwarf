@@ -10,11 +10,7 @@
 
 MapRender::MapRender(Map & map) : map(map)
 {
-	// Init here doesn't work???
-	//panelWidth = terminal_state(TK_WIDTH);
-	//panelHeight = terminal_state(TK_HEIGHT);
 }
-
 
 MapRender::~MapRender()
 {
@@ -51,6 +47,8 @@ void MapRender::render()
 				// BearslibTerminal
 				if (t.ch == 130 || t.ch == 147 || t.ch == 244)
 					terminal_color("dark green");
+				else
+					terminal_color("default");
 
 
 				terminal_put(adjX, adjY, 0xE200 + t.ch);
@@ -62,7 +60,6 @@ void MapRender::render()
 bool MapRender::incrementZLevel(int inc)
 {
 	if (currentZLevel + inc >= 0 && currentZLevel + inc < MAX_ZLVL) {
-		renderMap = map.mapZLvls[currentZLevel + inc];
 		currentZLevel += inc;
 		return true;
 	}
@@ -72,7 +69,6 @@ bool MapRender::incrementZLevel(int inc)
 void MapRender::jumpToZLevel(int level)
 {
 	if (level >= 0 && level < MAX_ZLVL) {
-		renderMap = map.mapZLvls[level];
 		currentZLevel = level;
 	}
 }

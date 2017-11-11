@@ -10,8 +10,7 @@
 #include "BearLibTerminal.h"
 
 
-static const float MAX_MAP_FILL = 0.85;
-static const float MIN_MAP_FILL = 0.18;
+
 static const int MIN_LVLS_OF_ROCK = 3;
 
 Map::Map(int width, int height, int depth) : width(width), height(height), depth(depth), tileManager(width, height, depth)
@@ -50,7 +49,6 @@ void Map::createHeightMap(int howMountainous, float rainAmount)
 	// If height is below a threshold, mark that area walkable/visible. else not. 
 	for (int h = 0; h < depth; ++h) {
 
-		mapRenderer->renderMap = mapZLvls[h]; // Set map to map representing current depth
 		mapRenderer->currentZLevel = h; // Change these functions around when placing player
 
 		for (int i = 0; i < width; ++i)
@@ -164,7 +162,7 @@ void Map::addTrees(int treeDensity)
 	int counter = 0;
 	for (Entity &t : trees)
 	{
-		while (true) {
+		while (true) {      // Probably a better way to do this than randomly picking points in space!
 			Coordinates co;
 			co.x = rng->getInt(0, width-1);
 			co.y = rng->getInt(0, height-1);
