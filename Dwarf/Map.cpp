@@ -2,6 +2,7 @@
 
 #include "Engine.h"
 #include "Tile.h"
+#include "MapRender.h"
 #include "ECS\Components\PositionComponent.h"
 #include "ECS\Components\RenderComponent.h"
 #include "ECS\Components\HealthComponent.h"
@@ -17,6 +18,8 @@ Map::Map(int width, int height, int depth) : width(width), height(height), depth
 {
 	rng = TCODRandom::getInstance();
 
+	mapRenderer = new MapRender(*this);
+
 	for (int i = 0; i < MAX_ZLVL; ++i) {
 		mapZLvls[i] = new TCODMap(width, height);
 	}
@@ -30,7 +33,6 @@ Map::Map(int width, int height, int depth) : width(width), height(height), depth
 
 Map::~Map()
 {
-	delete map;
 	for (int i = 0; i < MAX_ZLVL; ++i)
 		delete mapZLvls[i];
 
@@ -43,13 +45,13 @@ void Map::createHeightMap(int howMountainous, float rainAmount)
 	// Want to normalize map eventually?
 	TCODHeightMap * heightMap = new TCODHeightMap(width, height);
 	heightMap->midPointDisplacement();
-	heightMap->rainErosion(width * height * rainAmount, 0.1, 0.1, rng);
+	//heightMap->rainErosion(width * height * rainAmount, 0.1, 0.1, rng);
 
 	// If height is below a threshold, mark that area walkable/visible. else not. 
 	for (int h = 0; h < depth; ++h) {
 
-		map = mapZLvls[h]; // Set map to map representing current depth
-		currentZLevel = h; // Change these functions around when placing player
+		mapRenderer->renderMap = mapZLvls[h]; // Set map to map representing current depth
+		mapRenderer->currentZLevel = h; // Change these functions around when placing player
 
 		for (int i = 0; i < width; ++i)
 			for (int j = 0; j < height; ++j)
@@ -188,29 +190,11 @@ void Map::addTrees(int treeDensity)
 
 }
 
-// Ensure map has between MAX_MAP_FILL and MIN_MAP_FILL % squares full 
-bool Map::mapIsOkay() const
-{
-	int walkAbleCount = 0;
-	const int max = width * height;
-
-	for (int i = 0; i < width; ++i)
-		for (int j = 0; j < height; ++j) {
-			if (tileManager.canWalk({ i, j, currentZLevel }))
-				++walkAbleCount;
-		}
-	
-	float fillRatio = float(max - walkAbleCount) / float(max);
-	if ( fillRatio > MAX_MAP_FILL || fillRatio < MIN_MAP_FILL )
-		return false;
-	
-	return true;
-}
 
 // Create impassable wall that provides a floor
 inline void Map::createWall(Coordinates co)
 {
-	map->setProperties(co.x, co.y, false, false);
+	mapZLvls[co.z]->setProperties(co.x, co.y, false, false);
 
 	tileManager.setProperty<TileManager::OBSTRUCTED>(co);
 	tileManager.setProperty<TileManager::WALL>(co);
@@ -221,7 +205,7 @@ inline void Map::createWall(Coordinates co)
 // Create a space that is transparant and can be walked through, does not provide floor
 inline void Map::createWalkableSpace(Coordinates co)
 {
-	map->setProperties(co.x, co.y, true, true);  
+	mapZLvls[co.z]->setProperties(co.x, co.y, true, true);
 
 	tileManager.setProperty<TileManager::FLOOR>(co);
 	tileManager.removeProperty<TileManager::OBSTRUCTED>(co);
@@ -231,81 +215,12 @@ inline void Map::createWalkableSpace(Coordinates co)
 // Create a space that is transparant and is not walkable
 inline void Map::createOpenSpace(Coordinates co)
 {
-	map->setProperties(co.x, co.y, true, false);  
+	mapZLvls[co.z]->setProperties(co.x, co.y, true, false);
 	tileManager.removeProperty<TileManager::OBSTRUCTED>(co);
 	tileManager.removeProperty<TileManager::WALL>(co);
 	tileManager.removeProperty<TileManager::FLOOR>(co);
 }
 
-void Map::render() const
-{
-	static const TCODColor darkWall(0, 0, 100);
-	static const TCODColor darkGround(50, 50, 150);
-	static const TCODColor lightWall(130, 110, 50);
-	static const TCODColor lightGround(200, 180, 50);
-
-	// TCODRandom * rng = new TCODRandom(); if (rng->getInt(0, 8) == 8) TCODConsole::root->setChar(x, y, ','); (hard code these values once genrated)
-
-	// Iterates through visible map squares
-	for(int x = 0; x < width; ++x)
-		for (int y = 0; y < height; ++y)
-		{
-			const auto & t = tileManager.tileAt({ x, y, currentZLevel });
-
-			// Use this for darkening/blacking-out unexplored in mountain/underground tiles
-			if (!tileManager.getProperty<TileManager::EXPLORED>({ x, y, currentZLevel }))
-			{
-
-			}
-			else
-			{
-				// Libtcod
-				TCODConsole::root->setChar(x, y, t.ch);
-
-				// BearslibTerminal
-				if (t.ch == 130 || t.ch == 147 || t.ch == 244)
-					terminal_color("dark green");
-
-				
-				terminal_put(x, y, 0xE200 + t.ch);
-			}
-			//if (!tileManager.getProperty<TileManager::FLOOR>({ x, y, currentZLevel })) {
-			//	TCODConsole::root->setCharBackground(x, y, TCODColor::darkestGrey);
-			//}
-			//else if (tileManager.getProperty<TileManager::EXPLORED>({ x, y, currentZLevel }))
-			//	TCODConsole::root->setCharBackground(x, y, (tileManager.getProperty<TileManager::WALL>({ x, y, currentZLevel }) ? darkWall : darkGround));
-		}
-	//TCOD_image_t  pix = TCOD_image_load("Obsidian_16x16.png");
-
-	//static TCODImage  pix("../Obsidian_16x16.png");
-	
-
-	// Note to self: sx = top left px, sy = y px location
-	//pix.blit2x(TCODConsole::root, 10, 10, 32, 0, 16, 16);
-	//pix.blit(TCODConsole::root, 0.3, 0.3, TCOD_BKGND_SET, .1, .1, 0);
-	//pix.
-	//TCOD_image_blit_rect(pix, TCODConsole::root, 3,5, 4, 4, TCOD_BKGND_NONE);
-}
-
-// Change the map being rendered (simulating z levels with map array)
-bool Map::incrementZLevel(int inc)
-{
-	if (currentZLevel + inc >= 0 && currentZLevel + inc < MAX_ZLVL) {
-		map = mapZLvls[currentZLevel + inc];
-		currentZLevel += inc;
-		return true;
-	}
-	return false;
-}
-// Jumps to z level entered if within bounds of map array
-void Map::jumpToZLevel(int level)
-{
-	if (level >= 0 && level < MAX_ZLVL) {
-		map = mapZLvls[level];
-		currentZLevel = level;
-	}
-
-}
 
 /*
 void Map::dig(int x1, int y1, int x2, int y2)

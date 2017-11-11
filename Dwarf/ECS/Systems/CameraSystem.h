@@ -7,11 +7,11 @@
 #include "../../Engine.h"
 #include "../../Map.h"
 #include "../BearLibTerminal.h"
-//#include <string>
+#include <string>
 
 // Currently provides just the vertical movement 
 // for camera
-class CameraSystem : public System<Requires<KeyboardComponent, PositionComponent, CameraComponent>> // Possibly require different components in future?
+class CameraSystem : public System<Requires<KeyboardComponent, PositionComponent, CameraComponent>> // Possibly require different components in future? // Must add flag for in menu option once there are menu's
 {
 public:
 
@@ -31,14 +31,34 @@ public:
 			
 			switch (keyPress)
 			{
+
+			// Move camera up or down z Levels
 			case TK_COMMA:
-				if (engine.map->incrementZLevel(-1))
+				if (engine.map->mapRenderer->incrementZLevel(-1))
 					co.z -= 1;
 				break;
 
 			case TK_PERIOD:
-				if (engine.map->incrementZLevel(1))
+				if (engine.map->mapRenderer->incrementZLevel(1))
 					co.z += 1;
+				break;
+
+			// Directional movement for camera
+			case TK_UP:
+				engine.map->mapRenderer->offsetY -= 1;
+				break;
+
+			case TK_DOWN:
+				engine.map->mapRenderer->offsetY += 1;
+				break;
+
+			case TK_RIGHT:
+				engine.map->mapRenderer->offsetX += 1;
+				break;
+
+
+			case TK_LEFT:
+				engine.map->mapRenderer->offsetX -= 1;
 				break;
 				
 
@@ -54,24 +74,24 @@ public:
 
 private:
 
-	void handleMouseWheel(int key, Entity & entity)
+	void handleMouseWheel(int key, Entity & entity) // Not working!!
 	{
 		// Amount of steps mouse wheel has scrolled
 		int amount = terminal_state(TK_MOUSE_WHEEL);
 
 		auto& cam = entity.getComponent<CameraComponent>();
 
-		int newCellSize = cam.currentCellSize + amount;
+		int newCellSize = cam.currentCellSize += amount;
 
-		char* tmp = "window.cellsize=";
+		std::string cellStr = "window.cellsize=";
 
-		tmp += static_cast<char>(newCellSize);
-		tmp += 'x';
-		tmp += static_cast<char>(newCellSize);
+		cellStr += std::to_string(newCellSize);
+		cellStr += 'x';
+		cellStr += std::to_string(newCellSize);
 
-		terminal_set(tmp);
+		const char * cstr = cellStr.c_str();
 
-		delete tmp;
+		terminal_set(cstr);
 	}
 };
 

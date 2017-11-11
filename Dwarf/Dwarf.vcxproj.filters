@@ -33,6 +33,9 @@
     <ClCompile Include="ECS\World.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MapRender.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Map.h">
@@ -90,6 +93,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ECS\Components\CameraComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MapRender.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

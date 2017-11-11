@@ -1,6 +1,7 @@
 #include "Engine.h"
 
 #include "Map.h"
+#include "MapRender.h"
 #include "ECS\Components\PositionComponent.h"
 #include "ECS\Components\RenderComponent.h"
 #include "ECS\Components\KeyBoardComponent.h"
@@ -14,7 +15,7 @@
 Engine::Engine(int screenWidth, int screenHeight) : gameStatus(STARTUP), fovRadius(10), screenWidth(screenWidth), screenHeight(screenHeight)
 {
 	//TCODConsole::setCustomFont("../Obsidian_16x16.png");
-	TCODConsole::initRoot(screenWidth, screenHeight, "Dwarf", false); // Why so big with custom font?
+	TCODConsole::initRoot(screenWidth, screenHeight, "Dwarf", false); 
 
 	// Create camera
 	camera = world.createEntity();
@@ -26,8 +27,10 @@ Engine::Engine(int screenWidth, int screenHeight) : gameStatus(STARTUP), fovRadi
 	camera.addComponent<CameraComponent>(screenWidth, screenHeight, 16); // 16 is pixel cell size
 	camera.activate();
 
+	map = new Map(screenWidth, screenHeight, MAX_ZLVL);
+
 	// Add systems at boot -> move all these things to local map once made
-	renderSystem = new RenderSystem(&camera.getComponent<PositionComponent>().co, &camera.getComponent<CameraComponent>());
+	renderSystem = new RenderSystem(map);
 																													
 	cameraSystem = new CameraSystem();
 
@@ -35,8 +38,6 @@ Engine::Engine(int screenWidth, int screenHeight) : gameStatus(STARTUP), fovRadi
 	world.addSystem(*cameraSystem);
 
 	world.refresh();
-
-	map = new Map(screenWidth, screenHeight, MAX_ZLVL);
 }
 
 
@@ -57,10 +58,6 @@ void Engine::update()
 	// Update systems
 	cameraSystem->update();
 
-	// Should this be in Engine::render()?
-	// Should definitely be the clost to the last thing we do
-	renderSystem->update();
-
 	// Should this be called before or after? Probably before?
 	world.refresh();
 }
@@ -74,5 +71,9 @@ void Engine::render()
 	//terminal_put_ext(50, 20, 16, 16, 'U'+20+ 'AC');
 	
 
-	map->render();
+	map->mapRenderer->render();
+
+	// Should this be in Engine::render()?
+	// Should definitely be the clost to the last thing we do
+	renderSystem->update();
 }

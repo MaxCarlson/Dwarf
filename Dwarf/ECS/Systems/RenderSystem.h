@@ -10,26 +10,28 @@ class RenderSystem : public System<Requires<PositionComponent, RenderComponent>>
 {
 public:
 	RenderSystem() = default;
-	RenderSystem(Coordinates* mCameraPos, CameraComponent * mCameraComp) : mCameraPos(mCameraPos), mCameraComp(mCameraComp) {};
-	~RenderSystem() { delete mCameraPos; }
+	RenderSystem(Map * map) : map(map) {};
+	~RenderSystem() { delete map; }
 
-	// Holds a pointer to the master camera coordinates
-	// so we know when a tile is out of frame/zLevel 
-	// (and don't need to render it!)
-	Coordinates * mCameraPos;      /// Add some zlevel caching (possibly entity caching too?) and turn off render component for when the camera is staying still for performace benifit???
-
-	// Holds a pointer to the camera componenet 
-	// of main camera. Holds info such as width
-	// and height we need to render
-	CameraComponent * mCameraComp;
+	// Render system holds a pointer to the map we're 
+	// rendering. Map also holds the MapRender object which holds camera info
+	Map * map;
 
 	void update()
 	{
 		auto entities = getEntities();
 
+		int offsetX = map->mapRenderer->offsetX;
+		int offsetY = map->mapRenderer->offsetY;
+
 		for (auto e : entities)
 		{
-			const auto& co = e.getComponent<PositionComponent>().co;
+			auto co = e.getComponent<PositionComponent>().co;
+
+			// Adjust copy of position coordinates to be aligned with camera
+			// coordinates
+			co.x -= offsetX;
+			co.y -= offsetY;
 
 			// If the camera z level matches our entities
 			// zLevel, render it! 
@@ -52,11 +54,10 @@ public:
 	// within view of the camera ?
 	inline bool isInCameraRange(Coordinates co)
 	{
-		if (co.z != mCameraPos->z
-			|| co.x < mCameraPos->x - mCameraComp->width / 2 - 1		/// Revisit these - and + 's to be sure that's the way it should work once camera zoom is working
-			|| co.x > mCameraPos->x + mCameraComp->width / 2 + 1
-			|| co.y < mCameraPos->y - mCameraComp->height / 2 - 1
-			|| co.y > mCameraPos->y + mCameraComp->height / 2 + 1)
+		if(map->mapRenderer->currentZLevel != co.z
+			|| co.x < 0
+			|| co.y < 0
+			)
 			return false;
 
 		return true;
