@@ -77,11 +77,19 @@ void MapRender::jumpToZLevel(int level)
 	}
 }
 
-template<MapRender::CamDirections D>
-void MapRender::moveCamera()
+
+void MapRender::moveCamera(const CamDirections D)
 {
 	if (D == NORTH && offsetY > 0)
-	{
+		offsetY -= 1;
 
-	}
+	else if (D == SOUTH && offsetY + panelHeight < map.height)
+		offsetY += 1;
+
+	else if (D == EAST && offsetX + panelWidth < map.width)
+		offsetX += 1;
+
+	else if (D == WEST && offsetX > 0)
+		offsetX -= 1;
 }
+

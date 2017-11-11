@@ -45,23 +45,24 @@ public:
 
 			// Directional movement for camera
 			case TK_UP:
-				engine.map->mapRenderer->offsetY -= 1;
+				engine.map->mapRenderer->moveCamera(MapRender::NORTH);
 				break;
 
 			case TK_DOWN:
-				engine.map->mapRenderer->offsetY += 1;
+				engine.map->mapRenderer->moveCamera(MapRender::SOUTH);
 				break;
 
 			case TK_RIGHT:
-				engine.map->mapRenderer->offsetX += 1;
+				engine.map->mapRenderer->moveCamera(MapRender::EAST);
 				break;
 
 
 			case TK_LEFT:
-				engine.map->mapRenderer->offsetX -= 1;
+				engine.map->mapRenderer->moveCamera(MapRender::WEST);
 				break;
 				
 
+			// Mouse scrolling
 			case TK_MOUSE_SCROLL:
 				handleMouseWheel(keyPress, e);
 				break;

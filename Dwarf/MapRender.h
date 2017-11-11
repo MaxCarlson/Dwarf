@@ -34,8 +34,7 @@ public:
 		WEST
 	};
 
-	template<CamDirections D>
-	void moveCamera();
+	void moveCamera(const CamDirections D);
 
 private:
 	// Width and height of current window
