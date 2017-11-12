@@ -118,28 +118,40 @@ void Map::populateGrass()
 				if (    tileManager.getProperty<TileManager::FLOOR>({ i, j, h })
 					&& !tileManager.getProperty<TileManager::OBSTRUCTED>({ i, j, h }))
 				{
+					// Move this to EntityFactory???
 					tileManager.tileAt({ i, j, h }).ch = grassCharList[rng->getInt(0, 3, 3)];
 				}
 			}
 }
 
+// Set all "wall" tiles to rock
+// Need to add methods for creating ore veins
+
+// Create and use threshold for ore depending on depth
+// modify threashold as depth increases to increase/decrease rarity of certain ores
 void Map::populateRock()
 {
+	TCODNoise noise(3, TCOD_NOISE_SIMPLEX);
 	
 	for (int h = 0; h < depth; ++h) 
 		for (int i = 0; i < width; ++i)
 			for (int j = 0; j < height; ++j)
 			{		
+				float cor[] = { i / 3, j / 3, h / 3 };
+
+				float n = noise.get(cor);
+
 				if (tileManager.getProperty<TileManager::WALL>({ i, j, h })) 
 				{
-					/* // Not currently using Entities for rock, seems like it'll be too slow
-					const Coordinates co = { i, j, h };
-					Entity &e = engine.world.createEntity();
-					e.addComponent<PositionComponent>(co);
-					e.addComponent<RenderComponent>(133, TCODColor::grey, TCODColor::lightGrey);
-					e.activate();
-					*/
-					tileManager.tileAt({ i, j, h }).ch = 133; // Obviously this needs to be more complex
+					// Create normal rock
+					if (n < 0.6f)
+						tileManager.tileAt({ i, j, h }).ch = 133; // Obviously this needs to be more complex
+
+					else if (n < 0.7f)
+						tileManager.tileAt({ i, j, h }).ch = 136;
+
+					else
+						tileManager.tileAt({ i, j, h }).ch = 137;
 				}
 			}
 	
@@ -171,7 +183,7 @@ void Map::addTrees(int treeDensity)
 			const Tile t = tileManager.tileAt(co);
 
 			// If the space is clear/hasfloor plant a tree and obstruct the space
-			if (t.properties & TileManager::FLOOR && !(t.properties & TileManager::OBSTRUCTED))
+			if (t.properties & TileManager::FLOOR && !(t.properties & TileManager::OBSTRUCTED)) // Move this to EntityFactory???
 			{
 				trees[counter].addComponent<PositionComponent>(co);
 				trees[counter].addComponent<RenderComponent>(treeChar, 0xE200, "brown");
