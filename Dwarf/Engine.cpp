@@ -15,18 +15,11 @@
 Engine::Engine(int screenWidth, int screenHeight) : gameStatus(STARTUP), fovRadius(10), screenWidth(screenWidth), screenHeight(screenHeight)
 {
 	//TCODConsole::setCustomFont("../Obsidian_16x16.png");
-	TCODConsole::initRoot(screenWidth, screenHeight, "Dwarf", false); 
+	//TCODConsole::initRoot(screenWidth, screenHeight, "Dwarf", false); 
 
-	// Create camera
-	camera = world.createEntity();
-	Coordinates cop = {60, 60, 9};
-	camera.addComponent<PositionComponent>(cop);
-	camera.addComponent<RenderComponent>(16, TCODColor::white, TCODColor::azure);
-	camera.addComponent<KeyboardComponent>();
-	camera.getComponent<KeyboardComponent>().lastKeyPressed = &lastKey;
-	camera.addComponent<CameraComponent>(screenWidth, screenHeight, 16); // 16 is pixel cell size
-	camera.activate();
+	camera = factory.createCamera(screenWidth, screenHeight);
 
+	// Create local map
 	map = new Map(screenWidth, screenHeight, MAX_ZLVL);
 
 	// Add systems at boot -> move all these things to local map once made
@@ -50,11 +43,6 @@ Engine::~Engine()
 
 void Engine::update()
 {
-
-	// Check for keyboard or mouse input
-	TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS | TCOD_EVENT_MOUSE, &lastKey, &mouse);
-
-
 	// Update systems
 	cameraSystem->update();
 
@@ -64,7 +52,7 @@ void Engine::update()
 
 void Engine::render()
 {
-	TCODConsole::root->clear();
+	//TCODConsole::root->clear();
 
 	//terminal_put(50, 10, 0xE200 + 2);
 	//terminal_printf(60, 10, "[font=tile]%i", 0xE100 + 80);

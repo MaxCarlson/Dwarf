@@ -35,9 +35,9 @@ Map::~Map()
 	for (int i = 0; i < MAX_ZLVL; ++i)
 		delete mapZLvls[i];
 
-	delete mapZLvls;
+	delete[] mapZLvls;
 }
-
+// Needs serious work!!!!
 void Map::createHeightMap(int howMountainous, float rainAmount)
 {
 	// Create height map of area
@@ -118,7 +118,10 @@ void Map::populateGrass()
 				if (    tileManager.getProperty<TileManager::FLOOR>({ i, j, h })
 					&& !tileManager.getProperty<TileManager::OBSTRUCTED>({ i, j, h }))
 				{
-					tileManager.tileAt({ i, j, h }).ch = grassCharList[rng->getInt(0, 3, 3)];
+					if (j % 2)
+						tileManager.tileAt({ i, j, h }).ch = grassCharList[rng->getInt(0, 3, 3)];
+					else
+						engine.factory.createDwarf({ i, j, h });
 				}
 			}
 }
@@ -174,7 +177,7 @@ void Map::addTrees(int treeDensity)
 			if (t.properties & TileManager::FLOOR && !(t.properties & TileManager::OBSTRUCTED))
 			{
 				trees[counter].addComponent<PositionComponent>(co);
-				trees[counter].addComponent<RenderComponent>(treeChar, TCODColor::green, TCODColor::darkGreen);
+				trees[counter].addComponent<RenderComponent>(treeChar, 0xE200, "brown");
 				trees[counter].addComponent<HealthComponent>(300, 300, 0);
 				trees[counter].activate();
 

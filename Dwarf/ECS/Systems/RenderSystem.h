@@ -25,9 +25,9 @@ public:
 		const auto& entities = getEntities();
 
 		int offsetX = map->mapRenderer->offsetX;
-		int offsetY = map->mapRenderer->offsetY;									
+		int offsetY = map->mapRenderer->offsetY;		
 		
-		terminal_color("default"); // Need to add a color component to Entities and do color stuff here so we avoid flickering
+		terminal_color("default");
 
 		for (const auto& e : entities)
 		{
@@ -41,16 +41,18 @@ public:
 			// If the camera z level matches our entities
 			// zLevel, render it! 
 			// (Eventually add opacity to non obscured Entities below camera z Level)
-			if (isInCameraRange(co)) {
-				const auto& rend = e.getComponent<RenderComponent>();
+			if (isInCameraRange(co))
+			{
+				const auto& rend = e.getComponent<RenderComponent>();				  
 
-				// Libtcod
-				TCODConsole::root->setCharBackground(co.x, co.y, rend.backColor);
-				TCODConsole::root->setCharForeground(co.x, co.y, rend.foreColor);
-				TCODConsole::root->setChar(co.x, co.y, rend.ch);				  
+				const char* cstr = rend.colorStr.c_str();
 
-				// BearslibTerminal
-				terminal_put(co.x, co.y, 0xE200 + rend.ch);
+				// Switch terminal color to item color
+				terminal_color(cstr);
+
+				// Draw tile image, from tile set associated with rend.terminalcode
+				// with location in tileset being rend.ch
+				terminal_put(co.x, co.y, rend.terminalCode + rend.ch);
 			}
 		}
 	}

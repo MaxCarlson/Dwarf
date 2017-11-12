@@ -16,6 +16,8 @@ MapRender::~MapRender()
 {
 }
 
+// Move all this stuff to render system?
+// force render system to read from a vector of entities stored at z level?
 void MapRender::render()
 {
 	panelWidth  = terminal_state( TK_WIDTH);
@@ -41,9 +43,6 @@ void MapRender::render()
 			}
 			else
 			{
-				// Libtcod
-				TCODConsole::root->setChar(adjX, adjY, t.ch);
-
 				// BearslibTerminal
 				if (t.ch == 130 || t.ch == 147 || t.ch == 244)
 					terminal_color("dark green");

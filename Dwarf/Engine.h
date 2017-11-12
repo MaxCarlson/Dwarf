@@ -2,6 +2,7 @@
 #include "include\libtcod.hpp"
 #include "ECS\EntityManager.h"
 #include "ECS\World.h"
+#include "EntityFactory.h"
 
 
 
@@ -20,15 +21,19 @@ public:
 		DEFEAT
 	} gameStatus;
 
-	//EntityManager entityManager;
-	//Entity * camera; // Change this to non pointer?
-
+	// Holds all the entities active
+	// as well as all the components and systems
 	World world;
+
+	// Used for producing all Entities simply
+	EntityFactory factory;
 
 	// Systems
 	RenderSystem * renderSystem;
 	CameraSystem * cameraSystem;
 
+	// Holds entity ID of camera
+	// so we can do a lookup if need be
 	Entity camera;
 
 

@@ -21,16 +21,18 @@ int main()
 	terminal_set("window.title='Dwarf'; window.size=80x80; window.cellsize=16x16");
 	terminal_set("U+E100: ../Obsidian_16x16.png, size=16x16");
 	terminal_set("U+E200: ../Spacefox_16x16Dibujor01.png, size=16x16");
+	terminal_set("U+E300: ../dwarves.png, size=16x16");
 	terminal_set("input.filter = [keyboard, mouse+]");
 	terminal_composition(true);
 
+	// Add time delay for framerate
 	while (!TCODConsole::isWindowClosed())
 	{
 		terminal_clear();
+
 		engine.update();
 		engine.render();
 
-		TCODConsole::flush();
 
 		terminal_refresh();
 

@@ -1,25 +1,26 @@
 #pragma once
-#include "PositionComponent.h"
 
-#include "../../include/libtcod.hpp"
+#include "../Component.h"
 
+#include <string>
 
 // Holds info about character to use in render
 // as well as colors. 
 class RenderComponent : public Component
 {
 public:
+	RenderComponent() = default;
+	RenderComponent(int ch, int terminalCode, std::string colorStr)
+		: ch(ch), terminalCode(terminalCode), colorStr(colorStr) {};
+
 	// Character code representation
 	int ch;
-	//bool activeDraw; // Should this be used for whether rock has been exposed/explored as a flag??
 
-	// Colors for rendering
-	// Find a way to make using one optional? 
-	// is there a way not to set fore color for example?
-	TCODColor backColor;
-	TCODColor foreColor;
+	// Code to use to index which layer we want to draw from
+	int terminalCode;
 
-	RenderComponent() = default;
-	RenderComponent(int ch, TCODColor backColor, TCODColor foreColor) 
-		         : ch(ch), backColor(backColor), foreColor(foreColor) {};
+	// Possibly create a color object to house some simple color opperations?
+	// Color string for BLT renderer
+	// Will convert to const char* when actually rendering
+	std::string colorStr;
 };

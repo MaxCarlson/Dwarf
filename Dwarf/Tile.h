@@ -28,6 +28,8 @@ private:
 	
 };
 
+#define TILE_ARRAY_LOOKUP co.z * width * height + co.y * width + co.x
+
 // Creates a 1D Vector of Tile objects used to
 // simulate a 3D area of tiles. Access Tiles through here
 class TileManager
@@ -78,13 +80,13 @@ public:
 	// Returns a refrence to tile at coordinates
 	inline Tile& tileAt(const Coordinates co)
 	{
-		return tileMap[co.z * width * height + co.y * width + co.x];
+		return tileMap[TILE_ARRAY_LOOKUP];
 	}
 
 	// Returns a copy of tile at coordinates
 	inline Tile tileAt(Coordinates co) const
 	{
-		return tileMap[co.z * width * height + co.y * width + co.x];
+		return tileMap[TILE_ARRAY_LOOKUP];
 	}
 
 	// Direct lookup by tile index instead of coordinates
@@ -97,10 +99,10 @@ public:
 	// Worse performance due to use of .at() for safety
 	inline Tile tileBelow(Coordinates co) const
 	{
-		return tileMap.at(co.z * width * height + co.y * width + co.x);
+		return tileMap.at(TILE_ARRAY_LOOKUP);
 	}
 
-	// Checks if it's possible to walk through tile
+	// Checks if it's possible to walk through tile ~~ wall check probably isn't neccasary so long as obstructed is updated correctly!!
 	inline bool canWalk(Coordinates co) const
 	{
 		return (getProperty<FLOOR>(co) && !getProperty<WALL>(co) && !getProperty<OBSTRUCTED>(co));
@@ -114,7 +116,7 @@ public:
 	}
 
 	// enum for template function
-	// describing adjacent tiles not in use yet
+	// describing adjacent tiles ~ partially in use
 	enum TileAdj
 	{
 		NORTH,
@@ -139,9 +141,3 @@ private:
 	// 1D vector of Tiles indexed by 3D formula
 	std::vector<Tile> tileMap;
 };
-
-enum ttt // Test for enums, delete
-{
-	NORTH
-};
-
