@@ -10,6 +10,7 @@
 #include "ECS\Components\KeyBoardComponent.h"
 #include "ECS\Components\CameraComponent.h"
 #include "ECS\Components\HealthComponent.h"
+#include "ECS\Components\CreatureStatsComponent.h"
 
 
 EntityFactory::EntityFactory()
@@ -37,6 +38,7 @@ Entity EntityFactory::createDwarf(Coordinates co)
 	dwarf.addComponent<HealthComponent>(1000, 1000, 1);
 	dwarf.addComponent<RenderComponent>(1, 0xE300, "default");
 	dwarf.addComponent<PositionComponent>(co);
+	dwarf.addComponent<CreatureStatsComponent>();
 
 	dwarf.activate();
 

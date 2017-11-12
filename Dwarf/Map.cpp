@@ -118,10 +118,7 @@ void Map::populateGrass()
 				if (    tileManager.getProperty<TileManager::FLOOR>({ i, j, h })
 					&& !tileManager.getProperty<TileManager::OBSTRUCTED>({ i, j, h }))
 				{
-					if (j % 2)
-						tileManager.tileAt({ i, j, h }).ch = grassCharList[rng->getInt(0, 3, 3)];
-					else
-						engine.factory.createDwarf({ i, j, h });
+					tileManager.tileAt({ i, j, h }).ch = grassCharList[rng->getInt(0, 3, 3)];
 				}
 			}
 }
