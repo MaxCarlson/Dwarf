@@ -24,11 +24,12 @@ Map::Map(int width, int height, int depth) : width(width), height(height), depth
 		mapZLvls[i] = new TCODMap(width, height);
 	}
 
-	createHeightMap(16, 0.3f);
+	createHeightMap(3, 0.3f);
 	seedRamps();
 	populateRock();
 	addTrees(10);
 	populateGrass();
+	placeDwarves(7);
 }
 
 Map::~Map()
@@ -45,6 +46,8 @@ void Map::createHeightMap(int howMountainous, float rainAmount)
 	// Want to normalize map eventually?
 	TCODHeightMap * heightMap = new TCODHeightMap(width, height);
 	heightMap->midPointDisplacement();
+
+	//heightMap->normalize(-0.9, 0.9);
 	//heightMap->rainErosion(width * height * rainAmount, 0.1, 0.1, rng);
 
 	// If height is below a threshold, mark that area walkable/visible. else not. 
@@ -148,72 +151,10 @@ void Map::populateRock()
 				}
 			}
 
+	// Add ore veins to map
 	VeinCreator veins(width, height, depth);
 	veins.calcualteOreDepths();
 	veins.addOre(tileManager);
-
-/*
-	static const int numIronInVein = 175;
-	static const int numIronSpots = 15;
-
-	for (int h = 1; h < depth; ++h)
-	{
-		if (h < 2)
-		{
-			for (int i = 0; i < numIronSpots; ++i)
-			{
-				Coordinates co;
-				co.z = h;
-				co.x = rng->getInt(0, width);
-				co.y = rng->getInt(0, width);
-
-				if (tileManager.getProperty<TileManager::WALL>({ co.x, co.y, co.z }))
-				{
-					for (int j = 1; j < numIronInVein; ++j)
-					{
-						if (tileManager.getProperty<TileManager::WALL>({ co.x, co.y, co.z }))
-							tileManager.tileAt({ co.x, co.y, co.z }).ch = 139;
-
-						int r = rng->getInt(1, 2);
-
-						if (r == 1)
-							co.y += rng->getInt(-1, 1);
-						else 
-							co.x += rng->getInt(-1, 1);
-					}
-				}
-				else
-					i--;
-
-			}
-		}
-	}
-
-	
-	/*
-	for (int h = 0; h < depth; ++h) 
-		for (int i = 0; i < width; ++i)
-			for (int j = 0; j < height; ++j)
-			{		
-				float cor[] = { i / 3, j / 3, h / 3 };
-
-				//float n = noise.get(cor);
-				float n = noise.getTurbulence(cor,0.5);
-
-				if (tileManager.getProperty<TileManager::WALL>({ i, j, h })) 
-				{
-					// Create normal rock
-					if (n < 0.6f)
-						tileManager.tileAt({ i, j, h }).ch = 133; // Obviously this needs to be more complex
-
-					else if (n < 0.7f)
-						tileManager.tileAt({ i, j, h }).ch = 136;
-
-					else
-						tileManager.tileAt({ i, j, h }).ch = 137;
-				}
-			}
-	*/
 }
 
 void Map::addTrees(int treeDensity)
@@ -256,6 +197,72 @@ void Map::addTrees(int treeDensity)
 		++counter;
 	}
 
+}
+// This is way to complex for something so simple
+void Map::placeDwarves(int number)
+{
+	int landPercent = (width * height) * 0.65;
+
+	// Loop through z levels, starting from the top
+	// looking for the z level where 65% or greater is land. // This has an issue with very mountinous regions.
+	// 
+	for (int h = MAX_ZLVL - 1; h > 0; --h) 
+	{
+		int landCounter = 0;
+		for (int i = 0; i < width; ++i)
+			for (int j = 0; j < height; ++j)
+			{
+				if (tileManager.getProperty<TileManager::FLOOR>({ i, j, h }))
+				{
+					++landCounter;
+				}
+
+				// If we've hit land percent threshold for level
+				if (landCounter >= landPercent)
+				{
+					std::vector<Coordinates> corVec;
+					Coordinates tmp = { i, j, h };
+
+					// Loop through positions, trying them at random
+					// placing dwarves next to eachother
+					for (int n = 0; n < number; ++n) 
+					{
+						if (tmp.x >= 0 && tmp.y >= 0
+							&& tmp.x < width && tmp.y < height
+							&& tileManager.getProperty<TileManager::FLOOR>(tmp))
+						{
+							engine.factory.createDwarf(tmp);
+							corVec.push_back(tmp);
+						}
+						else
+							--n;
+
+						bool foundEmptySpot = false;
+						while (!foundEmptySpot) 
+						{
+							int rn = rng->getInt(1, 2);
+
+							if (rn == 1)
+								tmp.x += rng->getInt(-1, 1);
+							else
+								tmp.y += rng->getInt(-1, 1);
+
+							for (int x = 0; x < corVec.size(); ++x)
+							{
+								if (corVec.at(x) == tmp)
+									break;
+
+								else if (x == corVec.size() - 1)
+									foundEmptySpot = true;
+							}
+						}
+
+					}
+
+					return;
+				}
+			}
+	}
 }
 
 

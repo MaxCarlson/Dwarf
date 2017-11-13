@@ -26,6 +26,8 @@ public:
 	// representing approx % / 10 of land covered by trees
 	void addTrees(int treeDensity);
 
+	void placeDwarves(int number);
+
 	inline void createWall(Coordinates co);
 	inline void createWalkableSpace(Coordinates co);
 	inline void createOpenSpace(Coordinates co);

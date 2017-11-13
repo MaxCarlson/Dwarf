@@ -43,6 +43,7 @@ void MapRender::render()
 			}
 			else
 			{
+				// Change colors to hex ints!!!!
 				const char* col = t.color.c_str();
 				terminal_color(col);
 				terminal_put(adjX, adjY, 0xE200 + t.ch);
@@ -67,7 +68,7 @@ void MapRender::jumpToZLevel(int level)
 	}
 }
 
-
+// Woth making a template?
 void MapRender::moveCamera(const CamDirections D)
 {
 	if (D == NORTH && offsetY > 0)

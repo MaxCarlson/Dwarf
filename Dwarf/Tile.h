@@ -7,6 +7,12 @@
 // index lookups
 struct Coordinates {
 	int x, y, z;
+
+	// Equality testing for coordinates
+	bool operator==(const Coordinates & cor)
+	{
+		return (cor.x == x && cor.y == y && cor.z == z);
+	}
 };
 
 
@@ -25,6 +31,7 @@ public:
 	// Will probably use this for matching if tile is mined etc
 	int  ch;	
 
+	// Use int hex values for colors!!!!
 	std::string color;
 
 	std::uint8_t properties = 0x1U; // Change to 0U for unexplored
@@ -61,6 +68,8 @@ public:
 	}
 
 	// Reverses property TileProperty P of tile
+	// Faster than remove if we know what tile prop
+	// is ahead of time
 	template<TileProp P>
 	inline void reverseProperty(Coordinates co)
 	{
