@@ -27,10 +27,10 @@ enum OreIndex
 
 static const int numOreTypes = 4;
 
-#define iron   OreType(138,  "black")
-#define copper OreType(138, "copper")
-#define tin    OreType(138, "silver")
-#define coal   OreType(136,  "black")
+#define iron   OreType(139,  "#434b4d")
+#define copper OreType(139, "#B87333")
+#define tin    OreType(139, "#C0C0C0")
+#define coal   OreType(136,  "#5C5B5D")
 
 OreType oreArray[numOreTypes] = { iron, copper, tin, coal };
 int oreDepths[numOreTypes]                 = {    0,      0,   0,    0 };
@@ -61,6 +61,9 @@ void VeinCreator::calcualteOreDepths()
 
 	oreUpperBound[TIN] = rng->getInt(oreUpperBound[COPPER] - 5, mapDepth, medianOreDepths[TIN] * mapDepth) + 5;
 	oreLowerBound[TIN] = rng->getInt(10, 20);
+
+	oreUpperBound[COAL] = rng->getInt(oreUpperBound[TIN] - 5, mapDepth, medianOreDepths[COAL] * mapDepth) + 5;
+	oreLowerBound[COAL] = rng->getInt(15, 30);
 }
 
 static const int oreFrequencyPlvl[] = {10, 15, 15, 9};
