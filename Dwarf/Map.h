@@ -5,7 +5,7 @@
 #include <vector>
 
 // Make this feature dynamic !!
-static const int MAX_ZLVL = 10;
+static const int MAX_ZLVL = 50;
 
 class MapRender;
 
@@ -35,6 +35,8 @@ public:
 	// Should these be moved to Entities, and an array setup for which to render depending on z level?
 	MapRender * mapRenderer;
 
+	// Access and alter terrain tiles
+	// through this object
 	TileManager tileManager;
 
 private:

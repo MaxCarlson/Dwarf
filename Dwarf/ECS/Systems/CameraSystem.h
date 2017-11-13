@@ -93,8 +93,6 @@ private:
 		const char * cstr = cellStr.c_str();
 
 		terminal_set(cstr);
-
-		delete[] cstr;
 	}
 };
 

@@ -43,13 +43,8 @@ void MapRender::render()
 			}
 			else
 			{
-				// BearslibTerminal
-				if (t.ch == 130 || t.ch == 147 || t.ch == 244)
-					terminal_color("dark green");
-				else
-					terminal_color("default");
-
-
+				const char* col = t.color.c_str();
+				terminal_color(col);
 				terminal_put(adjX, adjY, 0xE200 + t.ch);
 			}
 		}

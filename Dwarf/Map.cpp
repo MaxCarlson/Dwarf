@@ -3,6 +3,7 @@
 #include "Engine.h"
 #include "Tile.h"
 #include "MapRender.h"
+#include "VeinCreator.h"
 #include "ECS\Components\PositionComponent.h"
 #include "ECS\Components\RenderComponent.h"
 #include "ECS\Components\HealthComponent.h"
@@ -11,7 +12,7 @@
 
 
 
-static const int MIN_LVLS_OF_ROCK = 3;
+static const int MIN_LVLS_OF_ROCK = 40;
 
 Map::Map(int width, int height, int depth) : width(width), height(height), depth(depth), tileManager(width, height, depth)
 {
@@ -120,9 +121,11 @@ void Map::populateGrass()
 				{
 					// Move this to EntityFactory???
 					tileManager.tileAt({ i, j, h }).ch = grassCharList[rng->getInt(0, 3, 3)];
+					tileManager.tileAt({ i, j, h }).color = "dark green";
 				}
 			}
 }
+
 
 // Set all "wall" tiles to rock
 // Need to add methods for creating ore veins
@@ -132,14 +135,70 @@ void Map::populateGrass()
 void Map::populateRock()
 {
 	TCODNoise noise(3, TCOD_NOISE_SIMPLEX);
+
+	// Create filler rock
+	for (int h = 0; h < depth; ++h)
+		for (int i = 0; i < width; ++i)
+			for (int j = 0; j < height; ++j)
+			{
+				if (tileManager.getProperty<TileManager::WALL>({ i, j, h }))
+				{
+					tileManager.tileAt({ i, j, h }).ch = 133; 
+					tileManager.tileAt({ i, j, h }).color = "grey";
+				}
+			}
+
+	VeinCreator veins(width, height, depth);
+	veins.calcualteOreDepths();
+	veins.addOre(tileManager);
+
+/*
+	static const int numIronInVein = 175;
+	static const int numIronSpots = 15;
+
+	for (int h = 1; h < depth; ++h)
+	{
+		if (h < 2)
+		{
+			for (int i = 0; i < numIronSpots; ++i)
+			{
+				Coordinates co;
+				co.z = h;
+				co.x = rng->getInt(0, width);
+				co.y = rng->getInt(0, width);
+
+				if (tileManager.getProperty<TileManager::WALL>({ co.x, co.y, co.z }))
+				{
+					for (int j = 1; j < numIronInVein; ++j)
+					{
+						if (tileManager.getProperty<TileManager::WALL>({ co.x, co.y, co.z }))
+							tileManager.tileAt({ co.x, co.y, co.z }).ch = 139;
+
+						int r = rng->getInt(1, 2);
+
+						if (r == 1)
+							co.y += rng->getInt(-1, 1);
+						else 
+							co.x += rng->getInt(-1, 1);
+					}
+				}
+				else
+					i--;
+
+			}
+		}
+	}
+
 	
+	/*
 	for (int h = 0; h < depth; ++h) 
 		for (int i = 0; i < width; ++i)
 			for (int j = 0; j < height; ++j)
 			{		
 				float cor[] = { i / 3, j / 3, h / 3 };
 
-				float n = noise.get(cor);
+				//float n = noise.get(cor);
+				float n = noise.getTurbulence(cor,0.5);
 
 				if (tileManager.getProperty<TileManager::WALL>({ i, j, h })) 
 				{
@@ -154,12 +213,11 @@ void Map::populateRock()
 						tileManager.tileAt({ i, j, h }).ch = 137;
 				}
 			}
-	
+	*/
 }
 
 void Map::addTrees(int treeDensity)
 {
-	// 80, 96, 111, 127 = char num for trees + some others
 	// for Bearslib - 5, 6, 7 = bush, 23, 24
 	// Use these eventually
 	int treeChar = 24;

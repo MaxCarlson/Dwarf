@@ -21,7 +21,11 @@ public:
 	// bool providesFloor;  
 
 	// Integer representation of tileset index
-	int  ch;			
+	// as well as tag used to identify material
+	// Will probably use this for matching if tile is mined etc
+	int  ch;	
+
+	std::string color;
 
 	std::uint8_t properties = 0x1U; // Change to 0U for unexplored
 private:
@@ -135,7 +139,8 @@ public:
 
 
 private:
-	// Dimensions of map we're creating
+	// Dimensions of map we're 
+	// going to render
 	int width, height, depth;
 
 	// 1D vector of Tiles indexed by 3D formula
