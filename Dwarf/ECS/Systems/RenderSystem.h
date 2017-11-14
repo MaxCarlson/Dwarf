@@ -24,7 +24,7 @@ public:
 	{
 		const auto& entities = getEntities();
 
-		int offsetX = map->mapRenderer->offsetX;
+		int offsetX = map->mapRenderer->offsetX; // Use gui offset if rendering becomes a resource drain!!
 		int offsetY = map->mapRenderer->offsetY;		
 		
 		terminal_color("default");

@@ -26,7 +26,7 @@ void MapRender::render()
 
 	// Calculate offsets so we're not rendering
 	// out of screen tiles or into the gui
-	int renderWidth  = panelWidth  + offsetX; // Use gui offset here once implemented!
+	int renderWidth  = panelWidth  + offsetX; // Use gui offset if rendering becomes a resource drain!!
 	int renderHeight = panelHeight + offsetY;
 
 	for (int x = offsetX; x < renderWidth; ++x)

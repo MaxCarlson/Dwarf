@@ -25,10 +25,9 @@ public:
 			auto& co = e.getComponent<PositionComponent>().co;
 
 			int keyPress = terminal_read();
-
-			if (keyPress == TK_MOUSE_MOVE)
-				break;
 			
+			// Organize this table in terms of TK_KEY value
+			// if performance issues
 			switch (keyPress)
 			{
 

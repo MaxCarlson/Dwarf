@@ -2,6 +2,12 @@
 
 #include "BearLibTerminal.h"
 
+#include "Engine.h"
+#include "Map.h"
+#include "MapRender.h"
+
+static const int NumberOfGuiStates = 2;
+
 Gui::Gui()
 {
 }
@@ -16,15 +22,39 @@ void Gui::render()
 	// Grab window size data
 	panelWidth = terminal_state(TK_WIDTH);
 	panelHeight = terminal_state(TK_HEIGHT);
+///*
+	const int key = terminal_read();
 
+	if (key == TK_TAB)
+	{
+		switch (guiState)
+		{
+		case OFF:
+			guiState = SMALL;
+			break;
+
+		case SMALL:
+			guiState = LARGE;
+			break;
+
+		case LARGE:
+			guiState = OFF;
+			break;
+		}
+	} 
+
+//*/
 	// Calculate panel size
-	// Also used in MapRender to calc offsets
+	// Also used in MapRender to calc offsets ?? Not yet
 	horizontalOffset = guiState;
 
 	terminal_clear_area(panelWidth - horizontalOffset, 0, horizontalOffset, panelHeight);
 
 	switch (guiState)
 	{
+	case OFF:
+		break;
+
 	case SMALL:
 		drawSmallGui();
 		break;
@@ -33,14 +63,6 @@ void Gui::render()
 
 		break;
 	}
-
-
-	// Loop through panels dedicated to Gui
-	for(int w = panelWidth - guiState; w < panelWidth; ++w)
-		for (int h = 0; h < panelHeight; ++h)
-		{
-			terminal_put(w, h, 0x2500);
-		}
 }
 
 void Gui::drawSmallGui()

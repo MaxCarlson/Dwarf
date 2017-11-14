@@ -16,6 +16,7 @@ public:
 		OFF = 0,
 		SMALL = 20,
 		LARGE = 27
+
 	} guiState = SMALL;
 
 private:
