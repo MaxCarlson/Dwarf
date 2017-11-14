@@ -24,7 +24,10 @@ Engine::Engine(int screenWidth, int screenHeight) : gameStatus(STARTUP), fovRadi
 
 	// Add systems at boot -> move all these things to local map once made
 	renderSystem = new RenderSystem(map);
-																													
+		
+	// Camera system is used for camera controls atm
+	// all rendering tricks with camera are done in MapRender
+	// and RenderSystem
 	cameraSystem = new CameraSystem();
 
 	world.addSystem(*renderSystem);
@@ -51,17 +54,15 @@ void Engine::update()
 }
 
 void Engine::render()
-{
-	//TCODConsole::root->clear();
-
-	//terminal_put(50, 10, 0xE200 + 2);
-	//terminal_printf(60, 10, "[font=tile]%i", 0xE100 + 80);
-	//terminal_put_ext(50, 20, 16, 16, 'U'+20+ 'AC');
-	
-
+{	
+	// Render the local map
 	map->mapRenderer->render();
 
 	// Should this be in Engine::render()?
-	// Should definitely be the clost to the last thing we do
 	renderSystem->update();
+
+	// Render the gui elements last,
+	// just in case something is showing through
+	// that shouldn't
+	gui.render();
 }

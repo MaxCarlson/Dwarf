@@ -34,6 +34,8 @@ public:
 	// Use int hex values for colors!!!!
 	std::string color;
 
+
+	// Add a property here denoting if tile is ore/gem vein for quick lookup!!
 	std::uint8_t properties = 0x1U; // Change to 0U for unexplored
 private:
 	

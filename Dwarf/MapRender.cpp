@@ -20,10 +20,13 @@ MapRender::~MapRender()
 // force render system to read from a vector of entities stored at z level?
 void MapRender::render()
 {
+	// Grab window size data
 	panelWidth  = terminal_state( TK_WIDTH);
 	panelHeight = terminal_state(TK_HEIGHT);
 
-	int renderWidth  = panelWidth  + offsetX;
+	// Calculate offsets so we're not rendering
+	// out of screen tiles or into the gui
+	int renderWidth  = panelWidth  + offsetX; // Use gui offset here once implemented!
 	int renderHeight = panelHeight + offsetY;
 
 	for (int x = offsetX; x < renderWidth; ++x)

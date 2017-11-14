@@ -3,7 +3,7 @@
 #include "ECS\EntityManager.h"
 #include "ECS\World.h"
 #include "EntityFactory.h"
-
+#include "Gui.h"
 
 
 class Map;
@@ -36,11 +36,11 @@ public:
 	// so we can do a lookup if need be
 	Entity camera;
 
-
-	TCOD_key_t lastKey;
-	TCOD_mouse_t mouse;
-
+	// Holds local map, 
+	// Local map also holds the map renderer
 	Map * map;
+
+	Gui gui;
 
 	int screenWidth;
 	int screenHeight;
