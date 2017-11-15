@@ -1,7 +1,7 @@
 #pragma once
 
 class Entity;
-class Coordinates;
+struct Coordinates;
 
 // Used for creating a variety of Entities
 // Also probably going to be the place for 

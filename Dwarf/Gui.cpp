@@ -6,7 +6,8 @@
 #include "Map.h"
 #include "MapRender.h"
 
-static const int NumberOfGuiStates = 2;
+static const int GUI_PANEL_VERT_PIX = 4;
+
 
 Gui::Gui()
 {
@@ -25,49 +26,70 @@ void Gui::render()
 
 
 	// Calculate panel size
-	// Also used in MapRender to calc offsets ?? Not yet
-	horizontalOffset = guiState;
+	verticalOffset = panelHeight - GUI_PANEL_VERT_PIX;
 
-	terminal_clear_area(panelWidth - horizontalOffset, 0, horizontalOffset, panelHeight);
+	// Bottom gui
+	terminal_clear_area(0, verticalOffset, panelWidth, panelHeight);
 
-	switch (guiState)
-	{
-	case OFF:
-		break;
-
-	case SMALL:
-		drawGui();
-		break;
-
-	case LARGE:
-		drawGui();
-		break;
-	}
+	drawGui();
 }
 
 void Gui::drawGui()
 {
-	// Draw gui outline
-	int y = 0;
+	// Gui outline
 	terminal_color("light grey");
 
-	int horizCode = 0x2580;
+	int y = verticalOffset;
+
 	// Draw horizontal border
+	int horizCode = 0x2580;
 	for (int i = 0; i < 2; ++i) {
-		for (int w = panelWidth - guiState; w < panelWidth; ++w)
+		for (int w = 0; w < panelWidth; ++w)
 			terminal_put(w, y, horizCode);
 
 		y = panelHeight - 1;
 		horizCode = 0x2583;
 	}
-
-	int x = panelWidth - horizontalOffset;
-
-	for (int i = 0; i < 2; ++i) {
-		for (int h = 0; h < panelHeight; ++h)
-			terminal_put(x, h, 0x2588);
-
-		x = panelWidth - 1;
-	}
 	
+	drawButtons();
 }
+
+void Gui::drawButtons()
+{
+
+	int buttonSize = panelWidth / numberOfButtons;
+
+	int xButtonOffset = 0;
+
+	static const char* guiMainColor = "light blue";
+	static const char* guiButtonSepColor = "grey";
+	static const char* buttonNames[numberOfButtons] = { "Orders", "Build", "Jobs", "Military", "Stockpile", "Stuff" };
+
+	// Place button outlines
+	for (int i = 0; i < numberOfButtons + 1; ++i)
+	{
+		// Store top left coordinate of buttons
+		// so we can use them for finding clicks / hovers
+		if(i < numberOfButtons)
+			buttonCoordiantes[i] = { xButtonOffset, verticalOffset, 0 };
+
+		for (int w = xButtonOffset; w < xButtonOffset + buttonSize; ++w)
+		{
+			for (int h = verticalOffset; h < panelHeight; ++h)
+			{
+				terminal_color(guiMainColor);
+				terminal_put(w, h, 0x2588);
+
+				if (w == xButtonOffset + buttonSize - 1 && i < numberOfButtons - 1) {
+					terminal_color(guiButtonSepColor);
+					terminal_put(w, h, 0x2502);
+				}
+			}
+		}
+		if (i < numberOfButtons)
+			terminal_print(xButtonOffset + 1, verticalOffset + 2, buttonNames[i]);
+
+		xButtonOffset += buttonSize;
+	}
+}
+

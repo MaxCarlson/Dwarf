@@ -50,30 +50,6 @@ void Input::read()
 		break;
 
 // Gui
-	case TK_TAB:
-		// Increment gui size,
-		// wrapping back to gui being off
-		switch (engine.gui.guiState)
-		{
-		case Gui::OFF:
-			engine.gui.guiState = Gui::SMALL;
-			break;
-
-		case Gui::SMALL:
-			engine.gui.guiState = Gui::LARGE;
-			break;
-
-		case Gui::LARGE:
-			engine.gui.guiState = Gui::OFF;
-
-			// Make sure when resetting the Gui width to zero we don't
-			// show anything off the edge of the map
-			int panelWidth = terminal_state(TK_WIDTH);
-			if(engine.map->mapRenderer->offsetX + engine.gui.horizontalOffset > panelWidth)
-				engine.map->mapRenderer->offsetX -= engine.gui.horizontalOffset;
-
-			break;
-		}
 
 
 // Mouse scrolling

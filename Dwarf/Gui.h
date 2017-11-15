@@ -1,4 +1,9 @@
 #pragma once
+#include "Tile.h"
+
+static const int numberOfButtons = 6;
+
+
 class Gui
 {
 public:
@@ -10,18 +15,13 @@ public:
 	int horizontalOffset;
 	int verticalOffset;
 
-	enum GuiState
-	{
-		// Size in tiles of gui
-		OFF = 0,
-		SMALL = 20,
-		LARGE = 27
-
-	} guiState = SMALL;
+	// Array of button top left locations
+	Coordinates buttonCoordiantes[numberOfButtons];
 
 private:
 	int panelWidth, panelHeight;
 
 	void drawGui();
+	void drawButtons();
 };
 
