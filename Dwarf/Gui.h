@@ -22,6 +22,6 @@ public:
 private:
 	int panelWidth, panelHeight;
 
-	void drawSmallGui();
+	void drawGui();
 };
 

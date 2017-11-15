@@ -38,6 +38,8 @@ Map::~Map()
 		delete mapZLvls[i];
 
 	delete[] mapZLvls;
+	delete mapRenderer;
+	delete rng;
 }
 // Needs serious work!!!!
 void Map::createHeightMap(int howMountainous, float rainAmount)
@@ -128,10 +130,6 @@ void Map::populateGrass()
 				}
 			}
 }
-
-
-// Set all "wall" tiles to rock
-// Need to add methods for creating ore veins
 
 // Create and use threshold for ore depending on depth
 // modify threashold as depth increases to increase/decrease rarity of certain ores

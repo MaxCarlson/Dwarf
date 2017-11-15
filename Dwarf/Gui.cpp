@@ -22,28 +22,8 @@ void Gui::render()
 	// Grab window size data
 	panelWidth = terminal_state(TK_WIDTH);
 	panelHeight = terminal_state(TK_HEIGHT);
-///*
-	const int key = terminal_read();
 
-	if (key == TK_TAB)
-	{
-		switch (guiState)
-		{
-		case OFF:
-			guiState = SMALL;
-			break;
 
-		case SMALL:
-			guiState = LARGE;
-			break;
-
-		case LARGE:
-			guiState = OFF;
-			break;
-		}
-	} 
-
-//*/
 	// Calculate panel size
 	// Also used in MapRender to calc offsets ?? Not yet
 	horizontalOffset = guiState;
@@ -56,16 +36,16 @@ void Gui::render()
 		break;
 
 	case SMALL:
-		drawSmallGui();
+		drawGui();
 		break;
 
 	case LARGE:
-
+		drawGui();
 		break;
 	}
 }
 
-void Gui::drawSmallGui()
+void Gui::drawGui()
 {
 	// Draw gui outline
 	int y = 0;

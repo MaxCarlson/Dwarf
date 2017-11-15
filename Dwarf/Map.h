@@ -44,7 +44,8 @@ public:
 private:
 	TCODRandom * rng;
 
-	TCODMap * mapZLvls[MAX_ZLVL];   // Holds all of the maps (each a sepperate z level)
+	// Will be used for pathfinding?
+	TCODMap * mapZLvls[MAX_ZLVL];   
 
 	friend class MapRender;
 };

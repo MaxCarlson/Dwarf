@@ -4,6 +4,7 @@
 #include "ECS\World.h"
 #include "EntityFactory.h"
 #include "Gui.h"
+#include "Input.h"
 
 
 class Map;
@@ -30,17 +31,18 @@ public:
 
 	// Systems
 	RenderSystem * renderSystem;
-	CameraSystem * cameraSystem;
 
 	// Holds entity ID of camera
 	// so we can do a lookup if need be
-	Entity camera;
+	//Entity camera;
 
 	// Holds local map, 
 	// Local map also holds the map renderer
 	Map * map;
 
 	Gui gui;
+
+	Input input;
 
 	int screenWidth;
 	int screenHeight;

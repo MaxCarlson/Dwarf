@@ -26,8 +26,7 @@ public:
 	// Jump camera to z level
 	void jumpToZLevel(int level);
 
-	// Top left coordinates of camera
-	// In other words, camera offset from topLeft
+	// Camera offset from topLeft
 	int offsetX = 0, offsetY = 0;
 
 	enum CamDirections
