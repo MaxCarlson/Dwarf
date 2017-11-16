@@ -11,12 +11,15 @@
 #include "ECS\Components\CameraComponent.h"
 #include "ECS\Components\HealthComponent.h"
 #include "ECS\Components\CreatureStatsComponent.h"
+#include "ECS\Components\MovementComponent.h"
+#include "ECS\Components\JobComponent.h"
 
 
 EntityFactory::EntityFactory()
 {
 }
 
+// No longer needed? Delete?
 Entity EntityFactory::createCamera(int screenWidth, int screenHeight)
 {
 	Entity camera = engine.world.createEntity();
@@ -32,6 +35,7 @@ Entity EntityFactory::createCamera(int screenWidth, int screenHeight)
 }
 
 // Need to create ui interface for starting dwarves
+// Also should probably store a vector of dwarves for qucik access
 Entity EntityFactory::createDwarf(Coordinates co)
 {
 	Entity dwarf = engine.world.createEntity();
@@ -39,9 +43,12 @@ Entity EntityFactory::createDwarf(Coordinates co)
 	dwarf.addComponent<HealthComponent>(1000, 1000, 1);
 	dwarf.addComponent<RenderComponent>(1, 0xE300, "default");
 	dwarf.addComponent<PositionComponent>(co);
+	dwarf.addComponent<JobComponent>();
 
 	// Needs tons of work
 	dwarf.addComponent<CreatureStatsComponent>();
+	dwarf.addComponent<MovementComponent>();
+
 
 	dwarf.activate();
 
