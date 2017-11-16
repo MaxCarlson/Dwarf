@@ -18,7 +18,13 @@ Input::~Input()
 
 void Input::read()
 {
-	int keyPress = terminal_read();
+	int keyPress;
+
+	// Don't block engine waiting for input
+	if (terminal_peek())
+		keyPress = terminal_read();
+	else
+		return;
 
 	switch (keyPress)
 	{
@@ -50,7 +56,7 @@ void Input::read()
 		break;
 
 // Gui
-
+	
 
 // Mouse scrolling
 	case TK_MOUSE_SCROLL:

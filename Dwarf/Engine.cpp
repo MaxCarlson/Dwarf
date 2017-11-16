@@ -10,9 +10,15 @@
 #include "ECS\Systems\CameraSystem.h"
 #include "BearLibTerminal.h"
 
+#include <chrono>
+typedef std::chrono::milliseconds::rep TimePoint;
+inline TimePoint now() {
+	return std::chrono::duration_cast<std::chrono::milliseconds>
+		(std::chrono::steady_clock::now().time_since_epoch()).count();
+}
 
 
-Engine::Engine(int screenWidth, int screenHeight) : gameStatus(STARTUP), fovRadius(10), screenWidth(screenWidth), screenHeight(screenHeight)
+Engine::Engine(int screenWidth, int screenHeight) : screenWidth(screenWidth), screenHeight(screenHeight)
 {
 	// Create local map
 	map = new Map(screenWidth, screenHeight, MAX_ZLVL);
@@ -32,6 +38,36 @@ Engine::~Engine()
 	delete renderSystem;
 }
 
+// Game loop
+void Engine::run()
+{
+	
+	double t = 0.0;
+	static const double dt = 1.0 / 60.0;
+
+	double currentTime = now();
+
+	while (true)
+	{
+
+		double newTime = now();
+		double frameTime = newTime - currentTime;
+		currentTime = newTime;
+
+		while (frameTime > 0.0)
+		{
+			float deltaTime = std::min(frameTime, dt);
+			update();
+
+			frameTime -= deltaTime;
+			t += deltaTime;
+		}
+
+		
+		render();
+	}
+}
+
 void Engine::update()
 {
 	// Read user input
@@ -45,6 +81,9 @@ void Engine::update()
 
 void Engine::render()
 {	
+	// Clear terminal before render
+	terminal_clear();
+
 	// Render the local map
 	map->mapRenderer->render();
 
@@ -55,4 +94,8 @@ void Engine::render()
 	// just in case something is showing through
 	// that shouldn't
 	gui.render();
+
+	// Refresh terminal window to display
+	// render changes
+	terminal_refresh();
 }

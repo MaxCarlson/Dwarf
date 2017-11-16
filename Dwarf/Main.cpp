@@ -25,18 +25,10 @@ int main()
 	terminal_set("input.filter = [keyboard, mouse+]");
 	terminal_composition(true);
 
-	// Add time delay for framerate
-	while (!TCODConsole::isWindowClosed())
-	{
-		terminal_clear();
-
-		engine.update();
-		engine.render();
-
-
-		terminal_refresh();
-
-	}
+	// Start the game loop.
+	// Need to add controls before game loop
+	// for loading and start screens
+	engine.run();
 
 
 	return 0;

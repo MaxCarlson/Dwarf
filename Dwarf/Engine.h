@@ -14,13 +14,6 @@ class RenderSystem;
 class Engine
 {
 public:
-	enum GameStatus {
-		STARTUP,
-		IDLE,
-		NEW_TURN,
-		VICTORY,
-		DEFEAT
-	} gameStatus;
 
 	// Holds all the entities active
 	// as well as all the components and systems
@@ -51,10 +44,16 @@ public:
 	Engine(int screenWidth, int screenHeight);
 	~Engine();
 
-	void update();
-	void render();
+	// Game loop
+	void run();
 
-	int fovRadius; // 0 for infinite
+	// Update systems
+	// take inputs
+	void update();
+
+	// Render local map 
+	// as well as Entities on it
+	void render();
 
 private:
 };

@@ -31,6 +31,7 @@ Entity EntityFactory::createCamera(int screenWidth, int screenHeight)
 	return camera;
 }
 
+// Need to create ui interface for starting dwarves
 Entity EntityFactory::createDwarf(Coordinates co)
 {
 	Entity dwarf = engine.world.createEntity();
@@ -38,6 +39,8 @@ Entity EntityFactory::createDwarf(Coordinates co)
 	dwarf.addComponent<HealthComponent>(1000, 1000, 1);
 	dwarf.addComponent<RenderComponent>(1, 0xE300, "default");
 	dwarf.addComponent<PositionComponent>(co);
+
+	// Needs tons of work
 	dwarf.addComponent<CreatureStatsComponent>();
 
 	dwarf.activate();
