@@ -114,6 +114,13 @@ public:
 		return (getProperty<FLOOR>(co) && !getProperty<WALL>(co) && !getProperty<OBSTRUCTED>(co));
 	}
 
+	// Slightly different from canWalk in that it doesn't 
+	// check for floor
+	inline bool canPass(Coordinates co) const
+	{
+		return (!getProperty<WALL>(co) && !getProperty<OBSTRUCTED>(co));
+	}
+
 	// Should only be used for map generation, will not gurentee things are completely empty
 	// Possibly move this to the map object???????
 	inline bool isEmptySpace(Coordinates co) const

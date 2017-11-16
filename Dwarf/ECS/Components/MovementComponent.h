@@ -7,7 +7,7 @@
 class MovementComponent : public Component
 {
 public:
-	MovementComponent() = default;
+	MovementComponent() : speed(0), progress(0), direction({ 0, 0, 0 }), controlledMovement(true) {};
 
 	// How fast is the Entity currently moving?
 	int speed;
@@ -16,8 +16,16 @@ public:
 	// a given tile. Once it reaches > 1 it'll pass to the 
 	// next tile or farther
 	// Possibly make an int if float is perf hog?
-	float percentOfTileMovement;
+	float progress;
 
-	// Direction
+	// Direction the entity is moving in
+	// Using coordinates for easy offsets 
+	// for x, y, and z axies
+	// Values should never be below -1 or above 1
 	Coordinates direction;
+
+	// Does the entity have control of their movement?
+	// Used so Entitys can be pushed out over areas with no floor
+	// etc
+	bool controlledMovement;
 };
