@@ -8,6 +8,7 @@
 #include "ECS\Components\CameraComponent.h"
 #include "ECS\Systems\RenderSystem.h"
 #include "ECS\Systems\CameraSystem.h"
+#include "ECS\Systems\MovementSystem.h"
 #include "BearLibTerminal.h"
 
 #include <chrono>
@@ -23,10 +24,12 @@ Engine::Engine(int screenWidth, int screenHeight) : screenWidth(screenWidth), sc
 	// Create local map
 	map = new Map(screenWidth, screenHeight, MAX_ZLVL);
 
-	// Add systems at boot -> move all these things to local map once made
+	// Add systems at boot -> move all these things to local map once made ?
 	renderSystem = new RenderSystem(map);
+	movementSystem = new MovementSystem();
 
 	world.addSystem(*renderSystem);
+	world.addSystem(*movementSystem);
 
 	world.refresh();
 }
@@ -58,7 +61,7 @@ void Engine::run()
 		while (frameTime > 0.0)
 		{
 			float deltaTime = std::min(frameTime, dt);
-			update();
+			update(deltaTime);
 
 			frameTime -= deltaTime;
 			t += deltaTime;
@@ -69,12 +72,13 @@ void Engine::run()
 	}
 }
 
-void Engine::update()
+void Engine::update(float deltaTime)
 {
 	// Read user input
 	input.read();
 
 	// Update systems
+	movementSystem->update(deltaTime);
 
 	// Should this be called before or after? Probably before?
 	world.refresh();

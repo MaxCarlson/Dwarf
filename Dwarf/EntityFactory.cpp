@@ -48,9 +48,11 @@ Entity EntityFactory::createDwarf(Coordinates co)
 	// Needs tons of work
 	dwarf.addComponent<CreatureStatsComponent>();
 	dwarf.addComponent<MovementComponent>();
-
+	dwarf.getComponent<MovementComponent>().direction.y = 1;
 
 	dwarf.activate();
+
+//	engine.world.refresh();
 
 	return dwarf;
 }

@@ -10,28 +10,43 @@ class MovementSystem : public System<Requires<MovementComponent, PositionCompone
 public:
 	MovementSystem() = default;
 
-	void update(double tStep)
+	void update(float tStep)
 	{
-		auto& entities = getEntities();
+		const auto& entities = getEntities();
 
-		for (auto& e : entities)
+		for (const auto& e : entities)
 		{
 			auto& moveComp = e.getComponent<MovementComponent>();
 			auto& co = e.getComponent<PositionComponent>().co;
 
 			if (moveComp.progress == 0 && moveComp.controlledMovement && canMoveDir(co))
-				updatePos(e);
+				updatePos(tStep, e);
 
+			// If movement has already progressed, no need to 
+			// check for safety of next square
 			else if (moveComp.progress != 0)
-				updatePos(e);
+				updatePos(tStep, e);
 		}
 	}
 
 private:
 
-	void updatePos(Entity & e)
+	void updatePos(float tStep, const Entity & e)
 	{
+		auto& mov = e.getComponent<MovementComponent>();
 
+		mov.progress += tStep / 1000;
+
+		if (mov.progress >= 1.0)
+		{
+			mov.progress -= 1.0;
+
+			auto& co = e.getComponent<PositionComponent>().co;
+
+			co += mov.direction;
+
+			//mov.direction = { 0, 0, 0 };
+		}
 	}
 
 	// Check that Entity can move into the square
@@ -40,4 +55,10 @@ private:
 	{
 		return engine.map->tileManager.canPass(co);
 	}
+
+	void initialize() {};
+
+	void onEntityAdd(Entity & entity) {};
+
+	void onEntityRemoval(Entity & entity) {};
 };

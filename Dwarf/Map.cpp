@@ -261,6 +261,7 @@ void Map::placeDwarves(int number)
 				}
 			}
 	}
+	engine.world.refresh();
 }
 
 

@@ -4,10 +4,13 @@
 
 // Used for filtering Entities that can move
 // vs those that can't
+// Also holds data about movment type
 class MovementComponent : public Component
 {
 public:
 	MovementComponent() : speed(0), progress(0), direction({ 0, 0, 0 }), controlledMovement(true) {};
+	MovementComponent(int speed, float progress, Coordinates direction, bool controlledMovement) 
+		          : speed(speed), progress(progress), direction(direction), controlledMovement(controlledMovement) {};
 
 	// How fast is the Entity currently moving?
 	int speed;

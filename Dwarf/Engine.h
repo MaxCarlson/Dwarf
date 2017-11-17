@@ -10,6 +10,7 @@
 class Map;
 class CameraSystem;
 class RenderSystem;
+class MovementSystem;
 
 class Engine
 {
@@ -24,6 +25,7 @@ public:
 
 	// Systems
 	RenderSystem * renderSystem;
+	MovementSystem * movementSystem;
 
 	// Holds entity ID of camera
 	// so we can do a lookup if need be
@@ -49,7 +51,7 @@ public:
 
 	// Update systems
 	// take inputs
-	void update();
+	void update(float deltaTime);
 
 	// Render local map 
 	// as well as Entities on it
