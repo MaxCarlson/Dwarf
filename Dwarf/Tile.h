@@ -42,6 +42,7 @@ public:
 	TileManager(int width, int height, int depth) : width(width), height(height), depth(depth)
 	{
 		tileMap.resize(width * height * depth);
+		tileMapSize = tileMap.size();
 	}
 
 	enum TileProp
@@ -111,14 +112,21 @@ public:
 	// Checks if it's possible to walk through tile ~~ wall check probably isn't neccasary so long as obstructed is updated correctly!!
 	inline bool canWalk(Coordinates co) const
 	{
-		return (getProperty<FLOOR>(co) && !getProperty<WALL>(co) && !getProperty<OBSTRUCTED>(co));
+		return isSafe(co) && (getProperty<FLOOR>(co) && !(getProperty<WALL>(co) | getProperty<OBSTRUCTED>(co)));
+	}
+
+	// Used for fast bounds checking on coordinates
+	inline bool isSafe(Coordinates co) const
+	{
+		const int cor = TILE_ARRAY_LOOKUP;
+		return (cor > 0 && cor < tileMapSize);
 	}
 
 	// Slightly different from canWalk in that it doesn't 
 	// check for floor
 	inline bool canPass(Coordinates co) const
 	{
-		return (!getProperty<WALL>(co) && !getProperty<OBSTRUCTED>(co));
+		return isSafe(co) && !(getProperty<WALL>(co) | getProperty<OBSTRUCTED>(co));
 	}
 
 	// Should only be used for map generation, will not gurentee things are completely empty
@@ -154,4 +162,9 @@ private:
 
 	// 1D vector of Tiles indexed by 3D formula
 	std::vector<Tile> tileMap;
+
+	// Holds the size of the tileMap 
+	// so we can quickly check if a position
+	// is in bounds with > -1 < tileMapSize
+	int tileMapSize;
 };

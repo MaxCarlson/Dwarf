@@ -18,4 +18,9 @@ struct Coordinates {
 		y += co.y;
 		z += co.z;
 	}
+
+	Coordinates operator+(const Coordinates & co)
+	{
+		return { x + co.x, y + co.y, z + co.z };
+	}
 };

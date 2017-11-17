@@ -26,6 +26,10 @@ public:
 	// representing approx % / 10 of land covered by trees
 	void addTrees(int treeDensity);
 
+	// Place dwarves close together 
+	// and not on top of eachother.
+	// will need to modify to place existing dwaves
+	// once creator is up
 	void placeDwarves(int number);
 
 	inline void createWall(Coordinates co);

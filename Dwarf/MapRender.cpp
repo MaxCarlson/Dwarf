@@ -30,7 +30,7 @@ void MapRender::render()
 	int renderHeight = panelHeight + offsetY;
 
 	for (int x = offsetX; x < renderWidth; ++x)
-		for (int y = offsetY; y <  renderHeight; ++y)
+		for (int y = offsetY; y < renderHeight; ++y)
 		{
 			const auto & t = map.tileManager.tileAt({ x, y, currentZLevel });
 
@@ -77,6 +77,7 @@ void MapRender::moveCamera(const CamDirections D)
 	if (D == NORTH && offsetY > 0)
 		offsetY -= 1;
 
+	// Adjust for Gui size  + engine.gui.verticalSize ???
 	else if (D == SOUTH && offsetY + panelHeight < map.height)
 		offsetY += 1;
 

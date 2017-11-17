@@ -7,9 +7,12 @@
 #include "MapRender.h"
 
 static const int GUI_PANEL_VERT_PIX = 4;
+static const char* guiMainColor = "#386687";
+static const char* guiHighlightColor = "#4a87b2";
+static const char* guiButtonSepColor = "grey";
+static const char* buttonNames[numberOfButtons] = { "Orders", "Build", "Jobs", "Military", "Stockpile", "Stuff" };
 
-
-Gui::Gui()
+Gui::Gui() : horizontalOffset(0), verticalOffset(0), horizontalSize(0), verticalSize(GUI_PANEL_VERT_PIX)
 {
 }
 
@@ -61,10 +64,6 @@ void Gui::drawButtons()
 
 	int xButtonOffset = 0;
 
-	static const char* guiMainColor = "light blue";
-	static const char* guiButtonSepColor = "grey";
-	static const char* buttonNames[numberOfButtons] = { "Orders", "Build", "Jobs", "Military", "Stockpile", "Stuff" };
-
 	// Place button outlines
 	for (int i = 0; i < numberOfButtons + 1; ++i)
 	{
@@ -73,12 +72,13 @@ void Gui::drawButtons()
 		if(i < numberOfButtons)
 			buttonCoordiantes[i] = { xButtonOffset, verticalOffset, 0 };
 
+
 		for (int w = xButtonOffset; w < xButtonOffset + buttonSize; ++w)
 		{
 			for (int h = verticalOffset; h < panelHeight; ++h)
 			{
 				terminal_color(guiMainColor);
-				terminal_put(w, h, 0x2588);
+				terminal_put(w, h, 0x2588);		
 
 				if (w == xButtonOffset + buttonSize - 1 && i < numberOfButtons - 1) {
 					terminal_color(guiButtonSepColor);
@@ -91,5 +91,49 @@ void Gui::drawButtons()
 
 		xButtonOffset += buttonSize;
 	}
+
+	int mouseX = terminal_state(TK_MOUSE_X);
+	int mouseY = terminal_state(TK_MOUSE_Y);
+
+}
+
+bool Gui::isMouseOverButton(Coordinates co)
+{
+	return co.y >= buttonCoordiantes[0].y;
+}
+
+int Gui::whichButton(Coordinates co)
+{
+	for (int i = 0; i < numberOfButtons - 1; ++i)
+	{
+		if (co.x < buttonCoordiantes[i].x)
+			return i;
+	}
+	return numberOfButtons - 1;
+}
+
+void Gui::highlightButton(Coordinates co)
+{
+	int bttnIdx = whichButton(co);
+
+	int x = buttonCoordiantes[bttnIdx].x;
+	int xStop;
+
+	if (bttnIdx == numberOfButtons - 1)
+		xStop = panelWidth;
+	else
+		xStop = buttonCoordiantes[bttnIdx + 1].x;
+
+	int y = buttonCoordiantes[bttnIdx].y;
+	int yStop = panelHeight;
+
+
+
+	for(x; x < xStop; ++x)
+		for (y; y < yStop; ++y)
+		{
+			terminal_color("black");
+			terminal_put(x, y, 0x2588);
+		}
 }
 

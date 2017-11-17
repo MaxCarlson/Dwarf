@@ -19,7 +19,9 @@ public:
 			auto& moveComp = e.getComponent<MovementComponent>();
 			auto& co = e.getComponent<PositionComponent>().co;
 
-			if (moveComp.progress == 0 && moveComp.controlledMovement && canMoveDir(co))
+			Coordinates newCords = co + moveComp.direction;
+
+			if (moveComp.progress == 0 && moveComp.controlledMovement && canMoveDir(newCords))
 				updatePos(tStep, e);
 
 			// If movement has already progressed, no need to 
@@ -37,14 +39,19 @@ private:
 
 		mov.progress += tStep / 1000;
 
+		// If progress has passed 1.0
+		// it's time to move to next tile
 		if (mov.progress >= 1.0)
 		{
-			mov.progress -= 1.0;
+			// Will this need to be changed eventually?
+			mov.progress = 0.0;
 
 			auto& co = e.getComponent<PositionComponent>().co;
 
 			co += mov.direction;
 
+			// Zero out movement direction
+			// after moving one tile ? Or not?
 			//mov.direction = { 0, 0, 0 };
 		}
 	}
@@ -55,10 +62,4 @@ private:
 	{
 		return engine.map->tileManager.canPass(co);
 	}
-
-	void initialize() {};
-
-	void onEntityAdd(Entity & entity) {};
-
-	void onEntityRemoval(Entity & entity) {};
 };

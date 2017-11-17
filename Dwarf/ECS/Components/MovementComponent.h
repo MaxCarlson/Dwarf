@@ -13,6 +13,9 @@ public:
 		          : speed(speed), progress(progress), direction(direction), controlledMovement(controlledMovement) {};
 
 	// How fast is the Entity currently moving?
+	// For very simple use we could make this into 1000 default
+	// representing 1 square per second move speed
+	// with 100 being 10 squares per second
 	int speed;
 
 	// How far this Entity has progressed through
