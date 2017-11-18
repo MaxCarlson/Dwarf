@@ -32,6 +32,7 @@ private:
 	
 };
 
+// Formula for tile indexing with coordinates
 #define TILE_ARRAY_LOOKUP co.z * width * height + co.y * width + co.x
 
 // Creates a 1D Vector of Tile objects used to
@@ -116,17 +117,26 @@ public:
 	}
 
 	// Used for fast bounds checking on coordinates
+	// Doesn't work for checking map edge boundries,
+	// only validity of index
 	inline bool isSafe(Coordinates co) const
 	{
 		const int cor = TILE_ARRAY_LOOKUP;
 		return (cor > 0 && cor < tileMapSize);
 	}
 
+	// Checks to make sure things don't go off the map
+	// with bounds checking
+	inline bool isOnPlane(Coordinates co) const
+	{
+		return (co.x < width && co.x >= 0 && co.y < height && co.y >= 0);
+	}
+
 	// Slightly different from canWalk in that it doesn't 
 	// check for floor
 	inline bool canPass(Coordinates co) const
 	{
-		return isSafe(co) && !(getProperty<WALL>(co) | getProperty<OBSTRUCTED>(co));
+		return isOnPlane(co) && !(getProperty<WALL>(co) | getProperty<OBSTRUCTED>(co)); //isSafe(co)
 	}
 
 	// Should only be used for map generation, will not gurentee things are completely empty
