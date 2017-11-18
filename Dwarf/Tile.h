@@ -136,7 +136,7 @@ public:
 	// check for floor
 	inline bool canPass(Coordinates co) const
 	{
-		return isOnPlane(co) && !(getProperty<WALL>(co) | getProperty<OBSTRUCTED>(co)); //isSafe(co)
+		return isOnPlane(co) && !(getProperty<WALL>(co) | getProperty<OBSTRUCTED>(co)); //isSafe(co) is this needed as well? Will have to see
 	}
 
 	// Should only be used for map generation, will not gurentee things are completely empty

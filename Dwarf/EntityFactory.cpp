@@ -48,11 +48,12 @@ Entity EntityFactory::createDwarf(Coordinates co)
 	// Needs tons of work
 	dwarf.addComponent<CreatureStatsComponent>();
 	dwarf.addComponent<MovementComponent>();
-	dwarf.getComponent<MovementComponent>().direction.y = -1;
+
+	//dwarf.getComponent<MovementComponent>().direction.y = -1; // Only for testing movement
 
 	dwarf.activate();
 
-//	engine.world.refresh();
+//	engine.world.refresh(); // Why does this cause a whole host of errors?
 
 	return dwarf;
 }

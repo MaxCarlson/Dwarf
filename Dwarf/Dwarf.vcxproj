@@ -148,6 +148,7 @@
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="ECS\World.cpp" />
     <ClCompile Include="MapRender.cpp" />
+    <ClCompile Include="ECS\Systems\MovementAiSystem.cpp" />
     <ClCompile Include="VeinCreator.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -178,6 +179,7 @@
     <ClInclude Include="Input.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="MapRender.h" />
+    <ClInclude Include="ECS\Systems\MovementAiSystem.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="ECS\World.h" />
     <ClInclude Include="VeinCreator.h" />
