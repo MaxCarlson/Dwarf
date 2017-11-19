@@ -23,7 +23,7 @@ public:
 			// Should we do safety checks here or only if map is updated?
 			//Coordinates newCords = co + moveComp.direction;
 		
-			if (moveComp.path.size() > 0)
+			if (!moveComp.path.empty())
 				updatePos(tStep, e);
 		}
 	}
@@ -50,8 +50,8 @@ private:
 
 			auto& co = e.getComponent<PositionComponent>().co;
 
-			// Add further Coordinate operators to prevent
-			// having to do two opps here
+			// Add coordinate movement to Entity
+			// coordiantes and pop it from the path queue
 			co += mov.path.front();
 			mov.path.pop();
 

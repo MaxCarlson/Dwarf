@@ -42,13 +42,28 @@ struct PathGraph
 
 	PathGraph() = default;
 	PathGraph(TileManager * tileManager) : tileManager(tileManager) {};
-	~PathGraph() { delete tileManager; }
+	~PathGraph();
 
 
 	// Bounds checking. This can probably be optomized
 	inline bool inBounds(Coordinates co) const
 	{
 		return 0 <= co.x && co.x < width && 0 <= co.y && co.y < height && co.y < height && 0 <= co.z && co.z < depth;
+	}
+
+	// Weight of moving through different tiles
+	// Add a cost attribute to tile.properties?
+	inline double cost(Coordinates co, Coordinates dest) const
+	{
+		
+		static int baseCost = 1;
+		int cost = baseCost;
+
+		// Diagonal movement
+		if (co.x != dest.x && co.y != dest.y)
+			cost *= 1.44;
+
+		return cost;
 	}
 
 	// This will need to add obstructed, etc at some point
@@ -83,11 +98,9 @@ struct PathGraph
 			*/
 		}
 	}
-private:
 };
-// Order of Coordinates in DIRS array below
-// enum Directions N, NW, NE, S, SW, SE, E, W, UP, DOWN
-std::array<Coordinates, 10> PathGraph::DIRS{ Coordinates{0, -1, 0}, {-1, -1, 0}, {1, -1, 0},  {0, 1, 0}, {-1, 1, 0}, {1, 1, 0}, {1, 0, 0}, {-1, 0, 0}, {0, 0, 1}, {0, 0, -1} };
+
+
 
 // Handles standard movement for
 // Entities
@@ -101,6 +114,9 @@ public:
 	void initMap(TileManager * tileMan);
 
 	void update();
+
+	void aStar(Coordinates start, Coordinates end);
+	void pathToEntity(std::unordered_map<Coordinates, Coordinates> path);
 
 private:
 	TileManager * tileManager;
