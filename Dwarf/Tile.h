@@ -178,5 +178,5 @@ private:
 	// Holds the size of the tileMap 
 	// so we can quickly check if a position
 	// is in bounds with > -1 < tileMapSize
-	int tileMapSize;
+	size_t tileMapSize;
 };

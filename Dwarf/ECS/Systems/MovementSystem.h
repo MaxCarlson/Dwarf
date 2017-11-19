@@ -51,9 +51,15 @@ private:
 			auto& co = e.getComponent<PositionComponent>().co;
 
 			// Add coordinate movement to Entity
-			// coordiantes and pop it from the path queue
-			co += mov.path.front();
-			mov.path.pop();
+			// coordiantes and pop it from the path vector
+			// which is stored in reverse order
+			co += mov.path.back();
+			mov.path.pop_back();
+
+			// If this Entity has finished following it's path
+			// reset it's destination coordinates to none
+			if (mov.path.empty())
+				mov.destination = EMPTY_COORDINATES;
 
 			return true;
 		}

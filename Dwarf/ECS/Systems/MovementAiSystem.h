@@ -2,7 +2,6 @@
 
 #include "../Systems.h"
 #include "../Components/MovementComponent.h"
-#include <unordered_set>
 #include <unordered_map>
 
 class TileManager;
@@ -35,11 +34,6 @@ struct PathGraph
 
 	TileManager * tileManager;
 
-	//std::unordered_set<Coordinates> walls;
-
-	// Use this 
-	//std::unordered_set<Coordinates> obstructed;
-
 	PathGraph() = default;
 	PathGraph(TileManager * tileManager) : tileManager(tileManager) {};
 	~PathGraph();
@@ -55,9 +49,8 @@ struct PathGraph
 	// Add a cost attribute to tile.properties?
 	inline double cost(Coordinates co, Coordinates dest) const
 	{
-		
-		static int baseCost = 1;
-		int cost = baseCost;
+		static double baseCost = 1;
+		double cost = baseCost;
 
 		// Diagonal movement
 		if (co.x != dest.x && co.y != dest.y)
@@ -115,8 +108,11 @@ public:
 
 	void update();
 
-	void aStar(Coordinates start, Coordinates end);
-	void pathToEntity(std::unordered_map<Coordinates, Coordinates> path);
+	void aStar(Coordinates start, Coordinates end, std::unordered_map<Coordinates, Coordinates, CoordinateHash, CoordinateHashEqual> &path);
+
+	// Returns a vector of the path in reverse
+	// order which will be stored in an entitys movementComponent
+	std::vector<Coordinates> reconstructPath(Coordinates start, Coordinates end, std::unordered_map<Coordinates, Coordinates, CoordinateHash, CoordinateHashEqual>& cameFrom);
 
 private:
 	TileManager * tileManager;

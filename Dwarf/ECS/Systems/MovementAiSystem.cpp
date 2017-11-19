@@ -1,5 +1,6 @@
 #include "MovementAiSystem.h"
 #include "../Tile.h"
+#include "../Components/PositionComponent.h"
 #include <queue>
 #include <functional>
 
@@ -47,6 +48,8 @@ inline bool PathGraph::passable(Coordinates co) const
 	return !(tileManager->getProperty<TileManager::WALL>(co) | tileManager->getProperty<TileManager::OBSTRUCTED>(co)) && tileManager->getProperty<TileManager::FLOOR>(co);
 }
 
+/////////////////////
+
 MovementAiSystem::MovementAiSystem(TileManager * tileManager) : tileManager(tileManager)
 {
 	pathGraph.tileManager = tileManager;
@@ -76,19 +79,29 @@ void MovementAiSystem::update()
 
 	for (auto& e : entities)
 	{
+		auto& pos = e.getComponent<PositionComponent>();
+		auto& mov = e.getComponent<MovementComponent>();
 
+		// If Entity has a destination and doesn't have a
+		// path to follow
+		if (mov.destination != EMPTY_COORDINATES && mov.path.empty())
+		{
+			std::unordered_map<Coordinates, Coordinates, CoordinateHash, CoordinateHashEqual> pathMap;
+			aStar(pos.co, mov.destination, pathMap);
 
+			// Add the path to our Entities MovementComponent
+			mov.path = reconstructPath(pos.co, mov.destination, pathMap);
+		}
 	}
 }
 
 // Test doubles vs doubles in this and helper structs!!
-void MovementAiSystem::aStar(Coordinates start, Coordinates end)
+void MovementAiSystem::aStar(Coordinates start, Coordinates end, std::unordered_map<Coordinates, Coordinates, CoordinateHash, CoordinateHashEqual> &path)
 {
 	PriorityQueue<Coordinates, double> frontier;
 	frontier.put(start, 0);
 
-	std::unordered_map<Coordinates, double>  costSoFar;
-	std::unordered_map<Coordinates, Coordinates> path;
+	std::unordered_map<Coordinates, double, CoordinateHash, CoordinateHashEqual> costSoFar;
 
 	path[start]  = start;
 	costSoFar[start] = 0;
@@ -119,8 +132,25 @@ void MovementAiSystem::aStar(Coordinates start, Coordinates end)
 
 }
 
-void MovementAiSystem::pathToEntity(std::unordered_map<Coordinates, Coordinates> path)
+std::vector<Coordinates> MovementAiSystem::reconstructPath(Coordinates start, Coordinates end, std::unordered_map<Coordinates, Coordinates, CoordinateHash, CoordinateHashEqual>& cameFrom)
 {
+	std::vector<Coordinates> path;
+
+	Coordinates current = end;
+	Coordinates cox;
+
+	// Loop through map path, 
+	// starting from the end of the
+	// path and ending one tile away from start
+	while (current != start)
+	{
+		path.push_back(current);
+		cox = cameFrom[current];
+	}
+
+	return path;
 }
+
+
 
 

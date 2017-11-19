@@ -63,7 +63,7 @@ void Engine::run()
 		// This will have issues when the game becomes simulation bound!@!@!@!@!@!
 		while (frameTime > 0.0)
 		{
-			float deltaTime = std::min(frameTime, dt);
+			double deltaTime = std::min(frameTime, dt);
 			update(deltaTime);
 
 			frameTime -= deltaTime;
