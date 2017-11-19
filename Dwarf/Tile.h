@@ -40,6 +40,10 @@ private:
 class TileManager
 {
 public:
+	// Dimensions of map we're 
+	// going to render
+	int width, height, depth;
+
 	TileManager(int width, int height, int depth) : width(width), height(height), depth(depth)
 	{
 		tileMap.resize(width * height * depth);
@@ -148,6 +152,7 @@ public:
 
 	// enum for template function
 	// describing adjacent tiles ~ partially in use
+	/*
 	enum TileAdj
 	{
 		NORTH,
@@ -163,12 +168,9 @@ public:
 		WEST_UP,
 		WEST_DOWN
 	};
-
+	*/
 
 private:
-	// Dimensions of map we're 
-	// going to render
-	int width, height, depth;
 
 	// 1D vector of Tiles indexed by 3D formula
 	std::vector<Tile> tileMap;

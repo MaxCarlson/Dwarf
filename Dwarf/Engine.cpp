@@ -9,6 +9,7 @@
 #include "ECS\Systems\RenderSystem.h"
 #include "ECS\Systems\CameraSystem.h"
 #include "ECS\Systems\MovementSystem.h"
+#include "ECS\Systems\MovementAiSystem.h"
 #include "BearLibTerminal.h"
 
 #include <chrono>
@@ -27,9 +28,11 @@ Engine::Engine(int screenWidth, int screenHeight) : screenWidth(screenWidth), sc
 	// Add systems at boot -> move all these things to local map once made ?
 	renderSystem = new RenderSystem(map);
 	movementSystem = new MovementSystem();
+	movementAiSystem = new MovementAiSystem(&map->tileManager);
 
 	world.addSystem(*renderSystem);
 	world.addSystem(*movementSystem);
+	world.addSystem(*movementAiSystem);
 
 	world.refresh();
 }

@@ -11,6 +11,7 @@ class Map;
 class CameraSystem;
 class RenderSystem;
 class MovementSystem;
+class MovementAiSystem;
 
 class Engine
 {
@@ -26,6 +27,7 @@ public:
 	// Systems
 	RenderSystem * renderSystem;
 	MovementSystem * movementSystem;
+	MovementAiSystem * movementAiSystem;
 
 	// Holds entity ID of camera
 	// so we can do a lookup if need be

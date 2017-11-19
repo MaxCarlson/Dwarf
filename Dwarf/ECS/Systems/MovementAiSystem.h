@@ -2,6 +2,8 @@
 
 #include "../Systems.h"
 #include "../Components/MovementComponent.h"
+#include <unordered_set>
+#include <unordered_map>
 
 class TileManager;
 
@@ -25,76 +27,83 @@ struct TileConnections
 	uint8_t neighbors[9];
 };
 
-template<typename L>
-struct SimpleGraph {
-	typedef L Location;
-	typedef typename vector<Location>::iterator iterator;
-	unordered_map<Location, vector<Location> > edges;
+struct PathGraph
+{
+	static std::array<Coordinates, 10> DIRS;
 
-	inline const vector<Location>  neighbors(Location id) {
-		return edges[id];
-	}
-};
+	int width, height, depth;
 
-using namespace std;
-#include <unordered_set>
+	TileManager * tileManager;
 
-struct SquareGrid {
-	typedef tuple<int, int> Location;
-	static array<Location, 4> DIRS;
+	//std::unordered_set<Coordinates> walls;
 
-	int width, height;
-	unordered_set<Location> walls;
+	// Use this 
+	//std::unordered_set<Coordinates> obstructed;
 
-	SquareGrid(int width_, int height_)
-		: width(width_), height(height_) {}
+	PathGraph() = default;
+	PathGraph(TileManager * tileManager) : tileManager(tileManager) {};
+	~PathGraph() { delete tileManager; }
 
-	inline bool in_bounds(Location id) const {
-		int x, y;
-		tie(x, y) = id;
-		return 0 <= x && x < width && 0 <= y && y < height;
+
+	// Bounds checking. This can probably be optomized
+	inline bool inBounds(Coordinates co) const
+	{
+		return 0 <= co.x && co.x < width && 0 <= co.y && co.y < height && co.y < height && 0 <= co.z && co.z < depth;
 	}
 
-	inline bool passable(Location id) const {
-		return !walls.count(id);
-	}
+	// This will need to add obstructed, etc at some point
+	// Returns whether or not a Coordinate can be passed through
+	// This will need to be customized depending on creature type
+	// as well as movement type!!!
+	inline bool passable(Coordinates co) const;
 
-	vector<Location> neighbors(Location id) const {
-		int x, y, dx, dy;
-		tie(x, y) = id;
-		vector<Location> results;
 
-		for (auto dir : DIRS) {
-			tie(dx, dy) = dir;
-			Location next(x + dx, y + dy);
-			if (in_bounds(next) && passable(next)) {
-				results.push_back(next);
+	// Find the neighboring cells and map out 
+	// if we have a connecting to them or not
+	std::vector<Coordinates> neighbors(Coordinates co) const
+	{
+		std::vector<Coordinates> result;
+
+		for (auto dir : DIRS)
+		{
+			Coordinates dest = co;
+
+			dest += dir;
+
+			if (inBounds(dest) && passable(dest))
+			{
+				result.push_back(dest);
 			}
-		}
 
-		if ((x + y) % 2 == 0) {
-			// aesthetic improvement on square grids
-			std::reverse(results.begin(), results.end());
+			/*
+			if ((x + y) % 2 == 0) {
+				// aesthetic improvement on square grids
+				std::reverse(results.begin(), results.end());
+			}
+			*/
 		}
-
-		return results;
 	}
+private:
 };
-array<SquareGrid::Location, 4> SquareGrid::DIRS{ Location{ 1, 0 }, Location{ 0, -1 }, Location{ -1, 0 }, Location{ 0, 1 } };
+// Order of Coordinates in DIRS array below
+// enum Directions N, NW, NE, S, SW, SE, E, W, UP, DOWN
+std::array<Coordinates, 10> PathGraph::DIRS{ Coordinates{0, -1, 0}, {-1, -1, 0}, {1, -1, 0},  {0, 1, 0}, {-1, 1, 0}, {1, 1, 0}, {1, 0, 0}, {-1, 0, 0}, {0, 0, 1}, {0, 0, -1} };
 
 // Handles standard movement for
 // Entities
 class MovementAiSystem : public System<Requires<MovementComponent>>
 {
 public:
-	MovementAiSystem();
+	MovementAiSystem() = default;
+	MovementAiSystem(TileManager * tileManager);
 	~MovementAiSystem();
 
-	void initMap(const TileManager & tileManager);
+	void initMap(TileManager * tileMan);
 
 	void update();
 
 private:
-
+	TileManager * tileManager;
+	PathGraph pathGraph;
 };
 
