@@ -25,11 +25,12 @@ Map::Map(int width, int height, int depth) : width(width), height(height), depth
 	}
 
 	createHeightMap(3, 0.3f);
-	seedRamps();
+	
 	populateRock();
 	addTrees(10);
 	populateGrass();
 	placeDwarves(7);
+	seedRamps();
 }
 
 Map::~Map()
@@ -53,7 +54,7 @@ void Map::createHeightMap(int howMountainous, float rainAmount)
 
 	// Add in howMountainous here so we can increase or decrease howMountainous
 	double mountinStep = double(depth - MIN_LVLS_OF_ROCK);
-	double heightThreshold = 0;
+	double heightThreshold = 100;
 
 
 	// If height is below a threshold, mark that area walkable/visible. else not. 
@@ -90,7 +91,7 @@ void Map::createHeightMap(int howMountainous, float rainAmount)
 			}
 		if (h > MIN_LVLS_OF_ROCK)
 		{
-			heightThreshold += mountinStep;
+			heightThreshold -= mountinStep;
 		}
 	}
 	delete heightMap;
@@ -117,39 +118,48 @@ void Map::seedRamps()
 			{
 				if (tileManager.getProperty<TileManager::WALL>({ i, j, h }))
 				{
-					// Coordinates of tiles x and up one
-					// for determining if we can place a ramp
-					const Coordinates north = { i, j - 1, h + 1 };
-					const Coordinates south = { i, j + 1, h + 1 };
-					const Coordinates east  = { i - 1, j, h + 1 };
-					const Coordinates west  = { i + 1, j, h + 1 };
+					const Coordinates walkableTop = { i, j, h + 1 };
 
-					if (tileManager.boundsCheck(north) && tileManager.canWalk(north))
+					const Coordinates northWalk = { i, j + 1, h };
+					const Coordinates southWalk = { i, j - 1, h };
+					const Coordinates eastWalk  = { i + 1, j, h };
+					const Coordinates westWalk  = { i - 1, j, h };
+
+					if (rampSanityCheck(walkableTop, northWalk))
 					{
-						addRamp({ i, j, h });
+						addRamp(northWalk);
 					}
-					else if (tileManager.boundsCheck(south) && tileManager.canWalk(south))
+					else if (rampSanityCheck(walkableTop, southWalk))
 					{
-						addRamp({ i, j, h });
+						addRamp(southWalk);
 					}
-					else if (tileManager.boundsCheck(east) && tileManager.canWalk(east))
+					else if (rampSanityCheck(walkableTop, eastWalk))
 					{
-						addRamp({ i, j, h });
+						addRamp(eastWalk);
 					}
-					else if (tileManager.boundsCheck(west) && tileManager.canWalk(west))
+					else if (rampSanityCheck(walkableTop, westWalk))
 					{
-						addRamp({ i, j, h });
+						addRamp(westWalk);
 					}
 				}
 			}
 	
 }
 
+bool Map::rampSanityCheck(Coordinates rampLoc, Coordinates rampLand) const
+{
+	if (tileManager.boundsCheck(rampLoc) && tileManager.canWalk(rampLoc) && tileManager.boundsCheck(rampLand) && tileManager.canWalk(rampLand))
+		return true;
+
+	return false;
+}
+
 void Map::addRamp(Coordinates co)
 {
 	tileManager.tileAt(co).ch = 238;
-	tileManager.tileAt(co).color = "red";
+	tileManager.tileAt(co).color = "grey";
 	tileManager.setProperty<TileManager::RAMP>(co);
+	tileManager.setProperty<TileManager::OBSTRUCTED>(co);
 }
 
 // Possibly move all these loops into one or two to minimize looping??

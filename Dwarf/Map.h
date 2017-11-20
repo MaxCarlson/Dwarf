@@ -19,6 +19,7 @@ public:
 
 	void createHeightMap(int howMountainous, float rainAmount);
 	void seedRamps();
+	bool rampSanityCheck(Coordinates rampLoc, Coordinates rampLand) const;
 	void addRamp(Coordinates co);
 	void populateGrass();
 	void populateRock();
