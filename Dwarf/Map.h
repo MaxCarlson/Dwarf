@@ -19,6 +19,7 @@ public:
 
 	void createHeightMap(int howMountainous, float rainAmount);
 	void seedRamps();
+	void addRamp(Coordinates co);
 	void populateGrass();
 	void populateRock();
 
@@ -49,7 +50,7 @@ private:
 	TCODRandom * rng;
 
 	// Will be used for pathfinding?
-	TCODMap * mapZLvls[MAX_ZLVL];   
+	TCODMap * mapZLvls[MAX_ZLVL]; // Not used for pathfinding, DELTE?  
 
 	friend class MapRender;
 };

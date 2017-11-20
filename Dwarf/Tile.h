@@ -16,6 +16,7 @@ public:
 	// bool obstructed;	 
 	// bool isWall;         
 	// bool providesFloor;  
+	// bool stairs/ramp ~ Provides z level access changes
 
 	// Integer representation of tileset index
 	// as well as tag used to identify material
@@ -28,8 +29,6 @@ public:
 
 	// Add a property here denoting if tile is ore/gem vein for quick lookup!!
 	std::uint8_t properties = 0x1U; // Change to 0U for unexplored
-private:
-	
 };
 
 // Formula for tile indexing with coordinates
@@ -50,12 +49,15 @@ public:
 		tileMapSize = tileMap.size();
 	}
 
+	// Index of Tile properties 
+	// set bits
 	enum TileProp
 	{
 		EXPLORED = 0x1,
 		OBSTRUCTED = 0x2,
 		WALL = 0x4,
-		FLOOR = 0x8
+		FLOOR = 0x8,
+		RAMP = 0x10
 	};
 
 	// Alters the TileProperty P property of a tile
@@ -130,10 +132,17 @@ public:
 	}
 
 	// Checks to make sure things don't go off the map
-	// with bounds checking
+	// with bounds checking DOES NOT do z bound checking
 	inline bool isOnPlane(Coordinates co) const
 	{
 		return (co.x < width && co.x >= 0 && co.y < height && co.y >= 0);
+	}
+
+	// Checks all bounds in a coordinate to make sure
+	// it's entirely valid
+	inline bool boundsCheck(Coordinates co) const
+	{
+		return(co.x < width && co.x >= 0 && co.y < height && co.y >= 0 && co.z < depth && co.z >= 0);
 	}
 
 	// Slightly different from canWalk in that it doesn't 
@@ -149,26 +158,6 @@ public:
 	{
 		return !(getProperty<FLOOR>(co) | getProperty<WALL>(co) | getProperty<OBSTRUCTED>(co));
 	}
-
-	// enum for template function
-	// describing adjacent tiles ~ partially in use
-	/*
-	enum TileAdj
-	{
-		NORTH,
-		NORTH_UP,
-		NORTH_DOWN,
-		SOUTH,
-		SOUTH_UP,
-		SOUTH_DOWN,
-		EAST,
-		EAST_UP,
-		EAST_DOWN,
-		WEST,
-		WEST_UP,
-		WEST_DOWN
-	};
-	*/
 
 private:
 

@@ -5,10 +5,7 @@
 #include <functional>
 #include <utility>
 
-bool Coordinates::operator<(const Coordinates & co) const
-{
-	return true;
-}
+
 
 
 // Wrapper for the priority queue
@@ -21,7 +18,7 @@ struct PriorityQueue
 	// Greater than comparator for the priority queue of pairs
 	struct CompareElements
 	{
-		bool operator()(const Element& e, const Element& e1)
+		bool operator()(const Element& e, const Element& e1) const
 		{
 			return e.first > e1.first;
 		}

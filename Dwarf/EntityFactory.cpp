@@ -47,7 +47,7 @@ Entity EntityFactory::createDwarf(Coordinates co)
 
 	// Needs tons of work
 	dwarf.addComponent<CreatureStatsComponent>();
-	dwarf.addComponent<MovementComponent>();
+	dwarf.addComponent<MovementComponent>(2.0);
 
 	//dwarf.getComponent<MovementComponent>().direction.y = -1; // Only for testing movement
 	dwarf.getComponent<MovementComponent>().destination = { 0, 0, 49 };

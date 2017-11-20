@@ -8,14 +8,16 @@
 class MovementComponent : public Component
 {
 public:
-	MovementComponent() : speed(0), progress(0), destination(EMPTY_COORDINATES), controlledMovement(true) {};
+	MovementComponent() : speed(1), progress(0), destination(EMPTY_COORDINATES) {};
+	MovementComponent(double speed) : speed(speed) {};
 
 
 	// How fast is the Entity currently moving?
 	// For very simple use we could make this into 1000 default
 	// representing 1 square per second move speed
-	// with 100 being 10 squares per second
-	int speed;
+	// with 100 being 100 squares per second
+	// Should this be moved to CreatureStatsComponent? Probably
+	double speed;
 
 	// How far this Entity has progressed through
 	// a given tile. Once it reaches > 1 it'll pass to the 
@@ -25,12 +27,6 @@ public:
 
 	// Destination square coordinates
 	Coordinates destination;
-
-	// Does the entity have control of their movement?
-	// Used so Entitys can be pushed out over areas with no floor
-	// etc
-	bool controlledMovement;
-
 
 
 	// Holds the entire path calcualted by MovementAiSystem

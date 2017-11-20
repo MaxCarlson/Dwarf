@@ -2,14 +2,14 @@
 
 #include "../Component.h"
 
-// Stats for labours
+// Stats for Labors
 // Probably only going to be useful
 // for player controled chars
-struct LabourStats
+struct LaborStats
 {
-	int mining = 0;
+	int miner = 0;
 	int mason = 0;
-	int woodcutting = 0;
+	int woodcutter = 0;
 	int carpenter = 0;
 };
 
@@ -32,9 +32,9 @@ class CreatureStatsComponent : public Component
 {
 public:
 	CreatureStatsComponent() = default;
-	CreatureStatsComponent(LabourStats  laborStats,  CombatStats combatStats) 
+	CreatureStatsComponent(LaborStats  laborStats,  CombatStats combatStats) 
 		                   : laborStats(laborStats), combatStats(combatStats) {};
 
-	LabourStats  laborStats;
+	LaborStats   laborStats;
 	CombatStats combatStats;
 };

@@ -11,7 +11,7 @@ class MovementSystem : public System<Requires<MovementComponent, PositionCompone
 public:
 	MovementSystem() = default;
 
-	void update(float tStep)
+	void update(double tStep)
 	{
 		const auto& entities = getEntities();
 
@@ -21,8 +21,7 @@ public:
 			auto& co = e.getComponent<PositionComponent>().co;
 
 			// Should we do safety checks here or only if map is updated?
-			//Coordinates newCords = co + moveComp.direction;
-		
+			// Possibly re calculate path if Entities bump into eachother??
 			if (!moveComp.path.empty())
 				updatePos(tStep, e);
 		}
@@ -35,23 +34,23 @@ private:
 	// zero their movement direction, then let MovementAI
 	// know to do more pathfinding. Could be better to hold a vector of movement squares in 
 	// movement component, and only change it if the map changes!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	bool updatePos(float tStep, const Entity & e)
+	bool updatePos(double tStep, const Entity & e)
 	{
 		auto& mov = e.getComponent<MovementComponent>();
 
-		mov.progress += tStep / 1000;
+		mov.progress += (tStep * mov.speed / 1000);
 
 		// If progress has passed 1.0
 		// it's time to move to next tile
 		if (mov.progress >= 1.0)
 		{
 			// Will this need to be changed eventually?
-			mov.progress = 0.0;
+			mov.progress -= 1.0;
 
 			auto& co = e.getComponent<PositionComponent>().co;
 
-			// Add coordinate movement to Entity
-			// coordiantes and pop it from the path vector
+			// Move Entity to next path coordiantes
+			// and pop it from the path vector
 			// which is stored in reverse order
 			co = mov.path.back();
 			mov.path.pop_back();

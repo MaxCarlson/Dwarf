@@ -12,12 +12,13 @@ struct Coordinates
 		return (co.x == x && co.y == y && co.z == z);
 	}
 
+	// Inequality testing
 	bool operator!=(const Coordinates & co) const
 	{
 		return (co.x != x || co.y != y || co.z != z);
 	}
 
-	// Adding a Coordiante to another
+	// Adding a Coordiantes to another
 	void operator+=(const Coordinates & co)
 	{
 		x += co.x;
@@ -34,10 +35,12 @@ struct Coordinates
 	{
 		return {x - co.x, y - co.y, z - co.z};
 	}
-
-	bool operator<(const Coordinates & co) const;
 };
 
+// Hashing algorithm for Coordinates
+// in unordered_map or other data structures
+// Possibly revisit this if performance is an issue,
+// this probably isn't a very good hash?
 struct CoordinateHash
 {
 	size_t operator()(const Coordinates & co) const
@@ -46,6 +49,8 @@ struct CoordinateHash
 	}
 };
 
+// Equality testing for unordered_map
+// or other data structures
 struct CoordinateHashEqual
 {
 	bool operator()(const Coordinates & co, const Coordinates & co1) const
@@ -56,27 +61,3 @@ struct CoordinateHashEqual
 
 // Probably won't ever have maps this large!!
 const static Coordinates EMPTY_COORDINATES = { 10000, 10000, 10000 };
-
-/*
-namespace std
-{
-	template <>
-	struct hash<Key>
-	{
-		std::size_t operator()(const Key& k) const
-		{
-			using std::size_t;
-			using std::hash;
-			using std::string;
-
-			// Compute individual hash values for first,
-			// second and third and combine them using XOR
-			// and bit shifting:
-			
-			return ((hash<string>()(k.first)
-				^ (hash<string>()(k.second) << 1)) >> 1)
-				^ (hash<int>()(k.third) << 1);
-		}
-	};
-}
-*/

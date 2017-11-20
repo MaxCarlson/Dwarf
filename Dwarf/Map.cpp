@@ -50,7 +50,11 @@ void Map::createHeightMap(int howMountainous, float rainAmount)
 	heightMap->midPointDisplacement();
 
 	//heightMap->normalize(-0.9, 0.9);
-	//heightMap->rainErosion(width * height * rainAmount, 0.1, 0.1, rng);
+
+	// Add in howMountainous here so we can increase or decrease howMountainous
+	double mountinStep = double(depth - MIN_LVLS_OF_ROCK);
+	double heightThreshold = 0;
+
 
 	// If height is below a threshold, mark that area walkable/visible. else not. 
 	for (int h = 0; h < depth; ++h) {
@@ -61,17 +65,18 @@ void Map::createHeightMap(int howMountainous, float rainAmount)
 			for (int j = 0; j < height; ++j)
 			{
 				// Values between -100 and 100
-				int heightMapPoint = int(heightMap->getValue(i, j) * 100);
+				//int heightMapPoint = int(heightMap->getValue(i, j) * 100);
+				double heightMapPoint = heightMap->getValue(i, j) * 100;
 
 				if (h <= MIN_LVLS_OF_ROCK) {															      
 					createWall({ i, j, h });
 				}
-				// If floor below but height ratio is too low, create walkable space
-				else  if (heightMapPoint < howMountainous && tileManager.getProperty<TileManager::WALL>({ i, j, h - 1 }))
+				// If there's a floor but height ratio is too low, create walkable space
+				else  if (heightThreshold < heightMapPoint && tileManager.getProperty<TileManager::FLOOR>({ i, j, h }))
 				{   
 					createWalkableSpace({ i, j, h });
 				}
-				// If there is a wall below, and height is high enough create more mountain
+				// If there is a wall below, and height is high enough create more land
 				else if (tileManager.canWalk({ i, j, h }))
 				{                                               
 					createWall({ i, j, h });
@@ -83,7 +88,10 @@ void Map::createHeightMap(int howMountainous, float rainAmount)
 				}
 
 			}
-		howMountainous += howMountainous / 10;
+		if (h > MIN_LVLS_OF_ROCK)
+		{
+			heightThreshold += mountinStep;
+		}
 	}
 	delete heightMap;
 
@@ -103,12 +111,45 @@ void Map::createHeightMap(int howMountainous, float rainAmount)
 
 void Map::seedRamps()
 {
-	//for (int h = 0; h < depth; ++h) {
-	//	for (int i = 0; i < width; ++i)
-	//		for (int j = 0; j < height; ++j) 
-	//		{
-	//			if
-	//		}
+	for (int h = MIN_LVLS_OF_ROCK; h < depth - 1; ++h) 
+		for (int i = 0; i < width; ++i)
+			for (int j = 0; j < height; ++j)
+			{
+				if (tileManager.getProperty<TileManager::WALL>({ i, j, h }))
+				{
+					// Coordinates of tiles x and up one
+					// for determining if we can place a ramp
+					const Coordinates north = { i, j - 1, h + 1 };
+					const Coordinates south = { i, j + 1, h + 1 };
+					const Coordinates east  = { i - 1, j, h + 1 };
+					const Coordinates west  = { i + 1, j, h + 1 };
+
+					if (tileManager.boundsCheck(north) && tileManager.canWalk(north))
+					{
+						addRamp({ i, j, h });
+					}
+					else if (tileManager.boundsCheck(south) && tileManager.canWalk(south))
+					{
+						addRamp({ i, j, h });
+					}
+					else if (tileManager.boundsCheck(east) && tileManager.canWalk(east))
+					{
+						addRamp({ i, j, h });
+					}
+					else if (tileManager.boundsCheck(west) && tileManager.canWalk(west))
+					{
+						addRamp({ i, j, h });
+					}
+				}
+			}
+	
+}
+
+void Map::addRamp(Coordinates co)
+{
+	tileManager.tileAt(co).ch = 238;
+	tileManager.tileAt(co).color = "red";
+	tileManager.setProperty<TileManager::RAMP>(co);
 }
 
 // Possibly move all these loops into one or two to minimize looping??
@@ -272,6 +313,9 @@ inline void Map::createWall(Coordinates co)
 
 	tileManager.setProperty<TileManager::OBSTRUCTED>(co);
 	tileManager.setProperty<TileManager::WALL>(co);
+
+	// Add a floor property
+	// to any Tile above a wall Tile
 	if(co.z < MAX_ZLVL - 1)
 		tileManager.setProperty<TileManager::FLOOR>({co.x, co.y, co.z + 1});
 }
