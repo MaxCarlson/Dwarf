@@ -90,6 +90,7 @@ struct PathGraph
 			}
 			*/
 		}
+		return result;
 	}
 };
 

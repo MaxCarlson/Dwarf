@@ -3,6 +3,12 @@
 #include "../Components/PositionComponent.h"
 #include <queue>
 #include <functional>
+#include <utility>
+
+bool Coordinates::operator<(const Coordinates & co) const
+{
+	return true;
+}
 
 // Wrapper for the priority queue
 // class so we can use pair's easily
@@ -10,6 +16,8 @@ template<typename T, typename priorityT>
 struct PriorityQueue
 {
 	typedef std::pair<priorityT, T> Element;
+
+
 	std::priority_queue<Element, std::vector<Element>, std::greater<Element>> elements;
 
 	bool empty() const { return elements.empty(); }

@@ -7,12 +7,12 @@ struct Coordinates
 	int x, y, z;
 
 	// Equality testing for coordinates
-	bool operator==(const Coordinates & co)
+	bool operator==(const Coordinates & co) const
 	{
 		return (co.x == x && co.y == y && co.z == z);
 	}
 
-	bool operator!=(const Coordinates & co)
+	bool operator!=(const Coordinates & co) const
 	{
 		return (co.x != x || co.y != y || co.z != z);
 	}
@@ -30,6 +30,7 @@ struct Coordinates
 		return { x + co.x, y + co.y, z + co.z };
 	}
 
+	bool operator<(const Coordinates & co) const;
 };
 
 struct CoordinateHash
