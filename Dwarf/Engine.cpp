@@ -81,6 +81,7 @@ void Engine::update(float deltaTime)
 	input.read();
 
 	// Update systems
+	movementAiSystem->update();
 	movementSystem->update(deltaTime);
 
 	// Should this be called before or after? Probably before?

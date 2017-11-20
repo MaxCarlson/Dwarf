@@ -10,6 +10,7 @@ bool Coordinates::operator<(const Coordinates & co) const
 	return true;
 }
 
+
 // Wrapper for the priority queue
 // class so we can use pair's easily
 template<typename T, typename priorityT>
@@ -17,8 +18,16 @@ struct PriorityQueue
 {
 	typedef std::pair<priorityT, T> Element;
 
+	// Greater than comparator for the priority queue of pairs
+	struct CompareElements
+	{
+		bool operator()(const Element& e, const Element& e1)
+		{
+			return e.first > e1.first;
+		}
+	};
 
-	std::priority_queue<Element, std::vector<Element>, std::greater<Element>> elements;
+	std::priority_queue<Element, std::vector<Element>, CompareElements> elements;
 
 	bool empty() const { return elements.empty(); }
 
@@ -35,14 +44,14 @@ struct PriorityQueue
 	}
 };
 
-// Order of Coordinates in DIRS array below
+// Order of Coordinates in DIRS array 
 // enum Directions N, NW, NE, S, SW, SE, E, W, UP, DOWN
 std::array<Coordinates, 10> PathGraph::DIRS{ Coordinates{ 0, -1, 0 },{ -1, -1, 0 },{ 1, -1, 0 },{ 0, 1, 0 },{ -1, 1, 0 },{ 1, 1, 0 },{ 1, 0, 0 },{ -1, 0, 0 },{ 0, 0, 1 },{ 0, 0, -1 } };
 
 // Introduce verticality eventually!!
 inline double heuristic(Coordinates co, Coordinates co1)
 {
-	return std::abs(co.x - co1.x) + std::abs(co.y - co1.y);
+	return std::abs(co.x - co1.x) + std::abs(co.y - co1.y) + std::abs(co.z - co1.z);
 }
 
 PathGraph::~PathGraph()
@@ -56,7 +65,6 @@ inline bool PathGraph::passable(Coordinates co) const
 	return !(tileManager->getProperty<TileManager::WALL>(co) | tileManager->getProperty<TileManager::OBSTRUCTED>(co)) && tileManager->getProperty<TileManager::FLOOR>(co);
 }
 
-/////////////////////
 
 MovementAiSystem::MovementAiSystem(TileManager * tileManager) : tileManager(tileManager)
 {
@@ -95,10 +103,10 @@ void MovementAiSystem::update()
 		if (mov.destination != EMPTY_COORDINATES && mov.path.empty())
 		{
 			std::unordered_map<Coordinates, Coordinates, CoordinateHash, CoordinateHashEqual> pathMap;
-			aStar(pos.co, mov.destination, pathMap);
+			aStar(mov.destination, pos.co, pathMap);
 
 			// Add the path to our Entities MovementComponent
-			mov.path = reconstructPath(pos.co, mov.destination, pathMap);
+			mov.path = reconstructPath(mov.destination, pos.co, pathMap);
 		}
 	}
 }
@@ -138,6 +146,7 @@ void MovementAiSystem::aStar(Coordinates start, Coordinates end, std::unordered_
 		}
 	}
 
+
 }
 
 std::vector<Coordinates> MovementAiSystem::reconstructPath(Coordinates start, Coordinates end, std::unordered_map<Coordinates, Coordinates, CoordinateHash, CoordinateHashEqual>& cameFrom)
@@ -155,6 +164,8 @@ std::vector<Coordinates> MovementAiSystem::reconstructPath(Coordinates start, Co
 		path.push_back(current);
 		cox = cameFrom[current];
 	}
+
+	std::reverse(path.begin(), path.end());
 
 	return path;
 }
