@@ -104,16 +104,25 @@ void MovementAiSystem::update()
 		if (mov.destination != EMPTY_COORDINATES && mov.path.empty())
 		{
 			std::unordered_map<Coordinates, Coordinates, CoordinateHash, CoordinateHashEqual> pathMap;
-			aStar(pos.co, mov.destination, pathMap);
+			bool found = aStar(pos.co, mov.destination, pathMap);
 
+			// If path is found
 			// Add the path to our Entities MovementComponent
-			mov.path = reconstructPath(pos.co, mov.destination, pathMap);
+			if(found)
+				mov.path = reconstructPath(pos.co, mov.destination, pathMap);
+
+			// Else, remove desination square
+			// need to send an update to GUI at somepoint to notify no path found
+			else
+			{
+				mov.destination = EMPTY_COORDINATES;
+			}
 		}
 	}
 }
 
 // Test doubles vs doubles in this and helper structs!!
-void MovementAiSystem::aStar(Coordinates start, Coordinates end, std::unordered_map<Coordinates, Coordinates, CoordinateHash, CoordinateHashEqual> &path)
+bool MovementAiSystem::aStar(Coordinates start, Coordinates end, std::unordered_map<Coordinates, Coordinates, CoordinateHash, CoordinateHashEqual> &path)
 {
 	PriorityQueue<Coordinates, double> frontier;
 	frontier.put(start, 0);
@@ -123,13 +132,19 @@ void MovementAiSystem::aStar(Coordinates start, Coordinates end, std::unordered_
 	path[start]  = start;
 	costSoFar[start] = 0;
 
+	bool pathFound = false;
+
  	while (!frontier.empty())
 	{
 		auto current = frontier.get();
 
 		// Add path to entity queue first
 		if (current == end)
+		{
+			pathFound = true;
 			break;
+		}
+
 
 		// Loop through all neighbors of currrent tile
 		for (auto& next : pathGraph.neighbors(current))
@@ -147,7 +162,7 @@ void MovementAiSystem::aStar(Coordinates start, Coordinates end, std::unordered_
 		}
 	}
 
-
+	return pathFound;
 }
 
 std::vector<Coordinates> MovementAiSystem::reconstructPath(Coordinates start, Coordinates end, std::unordered_map<Coordinates, Coordinates, CoordinateHash, CoordinateHashEqual>& cameFrom)
