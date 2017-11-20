@@ -59,11 +59,14 @@ PathGraph::~PathGraph()
 }
 
 // Move these features to tileManager or keep here?
-inline bool PathGraph::passable(Coordinates co) const
+inline bool PathGraph::passable(Coordinates start, Coordinates dest) const
 {
-	return !(tileManager->getProperty<TileManager::WALL>(co) | tileManager->getProperty<TileManager::OBSTRUCTED>(co)) && tileManager->getProperty<TileManager::FLOOR>(co);
+	return (!(tileManager->getProperty<TileManager::WALL>(dest) | tileManager->getProperty<TileManager::OBSTRUCTED>(dest)) && tileManager->getProperty<TileManager::FLOOR>(dest)
+		|| (tileManager->getProperty<TileManager::RAMP>(start) && start.x == dest.x && start.y == dest.y)
+		|| (tileManager->getProperty<TileManager::RAMP>({start.x, start.y, start.z - 1}) && start.x == dest.x && start.y == dest.y));
 }
-
+//(tileManager->canWalk(dest)
+//|| (tileManager->getProperty<TileManager::RAMP>(start) && start.x == dest.x && start.y == dest.y));
 
 MovementAiSystem::MovementAiSystem(TileManager * tileManager) : tileManager(tileManager)
 {

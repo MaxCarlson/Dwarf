@@ -63,7 +63,7 @@ struct PathGraph
 	// Returns whether or not a Coordinate can be passed through
 	// This will need to be customized depending on creature type
 	// as well as movement type!!!
-	inline bool passable(Coordinates co) const;
+	inline bool passable(Coordinates start, Coordinates dest) const;
 
 
 	// Find the neighboring cells and map out 
@@ -78,7 +78,7 @@ struct PathGraph
 
 			dest += dir;
 
-			if (inBounds(dest) && passable(dest))
+			if (inBounds(dest) && passable(co, dest))
 			{
 				result.push_back(dest);
 			}

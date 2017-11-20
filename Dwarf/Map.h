@@ -18,21 +18,6 @@ public:
 	~Map();
 
 	void createHeightMap(int howMountainous, float rainAmount);
-	void seedRamps();
-	bool rampSanityCheck(Coordinates rampLoc, Coordinates rampLand) const;
-	void addRamp(Coordinates co);
-	void populateGrass();
-	void populateRock();
-
-	// Takes a number, 0 - 1000
-	// representing approx % / 10 of land covered by trees
-	void addTrees(int treeDensity);
-
-	// Place dwarves close together 
-	// and not on top of eachother.
-	// will need to modify to place existing dwaves
-	// once creator is up
-	void placeDwarves(int number);
 
 	inline void createWall(Coordinates co);
 	inline void createWalkableSpace(Coordinates co);
@@ -52,6 +37,33 @@ private:
 
 	// Will be used for pathfinding?
 	TCODMap * mapZLvls[MAX_ZLVL]; // Not used for pathfinding, DELTE?  
+
+	// Find places for all ramps
+	void seedRamps();
+
+	// Check possible ramp position is a place
+	// a ramp could be
+	bool rampSanityCheck(Coordinates rampLoc, Coordinates rampLand) const;
+
+	// Add ramp at co
+	void addRamp(Coordinates co);
+
+	// Add different grasses / bushes
+	void populateGrass();
+
+	// Fill entire world with base rock
+	// the create ores
+	void populateRock();
+
+	// Takes a number, 0 - 1000
+	// representing approx % / 10 of land covered by trees
+	void addTrees(int treeDensity);
+
+	// Place dwarves close together 
+	// and not on top of eachother.
+	// will need to modify to place existing dwaves
+	// once creator is up !~!~!~ POORLY DONE!!
+	void placeDwarves(int number);
 
 	friend class MapRender;
 };

@@ -156,10 +156,11 @@ bool Map::rampSanityCheck(Coordinates rampLoc, Coordinates rampLand) const
 
 void Map::addRamp(Coordinates co)
 {
-	tileManager.tileAt(co).ch = 238;
-	tileManager.tileAt(co).color = "grey";
+	tileManager.tileAt(co).ch = 30;
+	//tileManager.tileAt(co).color = "grey";
 	tileManager.setProperty<TileManager::RAMP>(co);
-	tileManager.setProperty<TileManager::OBSTRUCTED>(co);
+	tileManager.setProperty<TileManager::FLOOR>({co.x, co.y, co.z + 1});
+	//tileManager.setProperty<TileManager::OBSTRUCTED>(co);
 }
 
 // Possibly move all these loops into one or two to minimize looping??
