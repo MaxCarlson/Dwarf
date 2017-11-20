@@ -27,6 +27,7 @@ struct PriorityQueue
 		}
 	};
 
+	// Is this an effeciant way of doing things?
 	std::priority_queue<Element, std::vector<Element>, CompareElements> elements;
 
 	bool empty() const { return elements.empty(); }
@@ -48,7 +49,8 @@ struct PriorityQueue
 // enum Directions N, NW, NE, S, SW, SE, E, W, UP, DOWN
 std::array<Coordinates, 10> PathGraph::DIRS{ Coordinates{ 0, -1, 0 },{ -1, -1, 0 },{ 1, -1, 0 },{ 0, 1, 0 },{ -1, 1, 0 },{ 1, 1, 0 },{ 1, 0, 0 },{ -1, 0, 0 },{ 0, 0, 1 },{ 0, 0, -1 } };
 
-// Introduce verticality eventually!!
+// This heuristic needs many more variables eventually!!!
+// so user can prioritize pathing for one
 inline double heuristic(Coordinates co, Coordinates co1)
 {
 	return std::abs(co.x - co1.x) + std::abs(co.y - co1.y) + std::abs(co.z - co1.z);
@@ -76,7 +78,7 @@ MovementAiSystem::MovementAiSystem(TileManager * tileManager) : tileManager(tile
 
 MovementAiSystem::~MovementAiSystem()
 {
-	delete tileManager;
+	delete tileManager; // Is this needed?
 }
 
 void MovementAiSystem::initMap(TileManager * tileMan)
@@ -92,7 +94,6 @@ void MovementAiSystem::update()
 {
 	const auto& entities = getEntities();
 
-
 	for (auto& e : entities)
 	{
 		auto& pos = e.getComponent<PositionComponent>();
@@ -103,10 +104,10 @@ void MovementAiSystem::update()
 		if (mov.destination != EMPTY_COORDINATES && mov.path.empty())
 		{
 			std::unordered_map<Coordinates, Coordinates, CoordinateHash, CoordinateHashEqual> pathMap;
-			aStar(mov.destination, pos.co, pathMap);
+			aStar(pos.co, mov.destination, pathMap);
 
 			// Add the path to our Entities MovementComponent
-			mov.path = reconstructPath(mov.destination, pos.co, pathMap);
+			mov.path = reconstructPath(pos.co, mov.destination, pathMap);
 		}
 	}
 }
@@ -122,7 +123,7 @@ void MovementAiSystem::aStar(Coordinates start, Coordinates end, std::unordered_
 	path[start]  = start;
 	costSoFar[start] = 0;
 
-	while (!frontier.empty())
+ 	while (!frontier.empty())
 	{
 		auto current = frontier.get();
 
@@ -154,7 +155,6 @@ std::vector<Coordinates> MovementAiSystem::reconstructPath(Coordinates start, Co
 	std::vector<Coordinates> path;
 
 	Coordinates current = end;
-	Coordinates cox;
 
 	// Loop through map path, 
 	// starting from the end of the
@@ -162,10 +162,10 @@ std::vector<Coordinates> MovementAiSystem::reconstructPath(Coordinates start, Co
 	while (current != start)
 	{
 		path.push_back(current);
-		cox = cameFrom[current];
+		current = cameFrom[current];
 	}
 
-	std::reverse(path.begin(), path.end());
+	//std::reverse(path.begin(), path.end());
 
 	return path;
 }

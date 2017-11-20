@@ -53,7 +53,7 @@ private:
 			// Add coordinate movement to Entity
 			// coordiantes and pop it from the path vector
 			// which is stored in reverse order
-			co += mov.path.back();
+			co = mov.path.back();
 			mov.path.pop_back();
 
 			// If this Entity has finished following it's path
