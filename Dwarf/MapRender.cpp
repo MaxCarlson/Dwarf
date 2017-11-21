@@ -71,7 +71,7 @@ void MapRender::jumpToZLevel(int level)
 	}
 }
 
-// Woth making a template?
+// Worth making a template?
 void MapRender::moveCamera(const CamDirections D)
 {
 	if (D == NORTH && offsetY > 0)

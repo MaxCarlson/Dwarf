@@ -10,7 +10,7 @@
 
 #include "BearLibTerminal.h"
 
-
+#include "ECS\Systems\MovementAiSystem.h"
 
 static const int MIN_LVLS_OF_ROCK = 40;
 
@@ -251,7 +251,7 @@ void Map::addTrees(int treeDensity)
 // This is way to complex for something so simple
 void Map::placeDwarves(int number)
 {
-	int landPercent = (width * height) * 0.65;
+	int landPercent = (width * height) * 0.25;
 
 	// Loop through z levels, starting from the top
 	// looking for the z level where 65% or greater is land. // This has an issue with very mountinous regions.

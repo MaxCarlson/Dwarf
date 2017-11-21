@@ -53,19 +53,36 @@ inline double heuristic(Coordinates co, Coordinates co1)
 	return std::abs(co.x - co1.x) + std::abs(co.y - co1.y) + std::abs(co.z - co1.z);
 }
 
-PathGraph::~PathGraph()
-{
-	delete tileManager;
-}
-
 // Move these features to tileManager or keep here?
+// Right now this isn't ideal as dwarves stand on empty tiles above ramps
+// Stairs this should be possible, not ramps
 inline bool PathGraph::passable(Coordinates start, Coordinates dest) const
 {
-	return (!(tileManager->getProperty<TileManager::WALL>(dest) | tileManager->getProperty<TileManager::OBSTRUCTED>(dest)) && tileManager->getProperty<TileManager::FLOOR>(dest)
+	return (tileManager->canWalk(dest)
+		// On bottom area of ramp
 		|| (tileManager->getProperty<TileManager::RAMP>(start) && start.x == dest.x && start.y == dest.y)
+		// On top of ramp
 		|| (tileManager->getProperty<TileManager::RAMP>({start.x, start.y, start.z - 1}) && start.x == dest.x && start.y == dest.y));
 }
+std::vector<Coordinates> PathGraph::floodFill(Coordinates co) const
+{
+	std::vector<Coordinates> result;
+
+	for (auto dir : DIRS)
+	{
+		Coordinates dest = co;
+
+		dest += dir;
+
+		if (inBounds(dest) && tileManager->canPass(dest))
+		{
+			result.push_back(dest);
+		}
+	}
+	return result;
+}
 //(tileManager->canWalk(dest)
+// !(tileManager->getProperty<TileManager::WALL>(dest) | tileManager->getProperty<TileManager::OBSTRUCTED>(dest)) && tileManager->getProperty<TileManager::FLOOR>(dest)
 //|| (tileManager->getProperty<TileManager::RAMP>(start) && start.x == dest.x && start.y == dest.y));
 
 MovementAiSystem::MovementAiSystem(TileManager * tileManager) : tileManager(tileManager)
@@ -76,11 +93,6 @@ MovementAiSystem::MovementAiSystem(TileManager * tileManager) : tileManager(tile
 	pathGraph.depth = tileManager->depth;
 }
 
-MovementAiSystem::~MovementAiSystem()
-{
-	delete tileManager; // Is this needed?
-}
-
 void MovementAiSystem::initMap(TileManager * tileMan)
 {
 	tileManager = tileMan;
@@ -88,6 +100,39 @@ void MovementAiSystem::initMap(TileManager * tileMan)
 	pathGraph.width = tileManager->width;
 	pathGraph.height = tileManager->height;
 	pathGraph.depth = tileManager->depth;
+}
+
+void MovementAiSystem::floodFillMap()
+{
+	std::queue<Coordinates> frontier;
+	std::unordered_map<Coordinates, Coordinates, CoordinateHash, CoordinateHashEqual> exploredMap;
+
+	int depth = tileManager->depth;
+	Coordinates start = { 0, 0, depth - 1 };
+
+	frontier.emplace(start);
+	exploredMap[start] = start;
+
+	bool pathFound = false;
+
+	while (!frontier.empty())
+	{
+		auto current = frontier.front();
+		frontier.pop();
+
+		if (exploredMap.count(current))
+			continue;
+
+		exploredMap.emplace(current, current);
+
+		// Loop through all neighbors of currrent tile
+		for (auto& next : pathGraph.floodFill(current))
+		{
+			frontier.emplace(next);
+			exploredMap[next] = current;
+			tileManager->setProperty<TileManager::EXPLORED>(next);
+		}
+	}
 }
 
 void MovementAiSystem::update()
@@ -100,7 +145,7 @@ void MovementAiSystem::update()
 		auto& mov = e.getComponent<MovementComponent>();
 
 		// If Entity has a destination and doesn't have a
-		// path to follow
+		// path to follow compute path and store in MovementComponent
 		if (mov.destination != EMPTY_COORDINATES && mov.path.empty())
 		{
 			std::unordered_map<Coordinates, Coordinates, CoordinateHash, CoordinateHashEqual> pathMap;

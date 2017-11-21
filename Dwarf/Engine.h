@@ -5,7 +5,7 @@
 #include "EntityFactory.h"
 #include "Gui.h"
 #include "Input.h"
-
+#include <unordered_map>
 
 class Map;
 class CameraSystem;
@@ -33,6 +33,14 @@ public:
 	// so we can do a lookup if need be
 	//Entity camera;
 
+	// Vector of dwarven Entities
+	// for fast lookup anywhere in program
+	// Possibly cache all Entities by their Coordinates in an unorederd_map?????
+	std::vector<Entity> Dwarves;
+
+	// Cache of all alive Entities indexed by their coordinates
+	std::unordered_multimap<Coordinates, Entity, CoordinateHash, CoordinateHashEqual> EntityPosCache;
+
 	// Holds local map, 
 	// Local map also holds the map renderer
 	Map * map;
@@ -44,7 +52,7 @@ public:
 	int screenWidth;
 	int screenHeight;
 
-
+	
 	Engine(int screenWidth, int screenHeight);
 	~Engine();
 

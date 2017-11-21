@@ -6,26 +6,6 @@
 
 class TileManager;
 
-struct TileConnections
-{
-	enum Directions
-	{
-		NONE,
-		N,
-		NW,
-		NE,
-		S,
-		SW,
-		SE,
-		E,
-		W,
-		UP,
-		DOWN
-	};
-
-	uint8_t neighbors[9];
-};
-
 struct PathGraph
 {
 	static std::array<Coordinates, 10> DIRS;
@@ -36,7 +16,7 @@ struct PathGraph
 
 	PathGraph() = default;
 	PathGraph(TileManager * tileManager) : tileManager(tileManager) {};
-	~PathGraph();
+	//~PathGraph();
 
 
 	// Bounds checking. This can probably be optomized
@@ -92,6 +72,10 @@ struct PathGraph
 		}
 		return result;
 	}
+
+	// Helper function for floodFillMap in MovementAiSystem
+	std::vector<Coordinates> floodFill(Coordinates co) const;
+
 };
 
 
@@ -103,11 +87,16 @@ class MovementAiSystem : public System<Requires<MovementComponent>>
 public:
 	MovementAiSystem() = default;
 	MovementAiSystem(TileManager * tileManager);
-	~MovementAiSystem();
+	//~MovementAiSystem();
 
 	void initMap(TileManager * tileMan);
 
 	void update();
+
+	// Work in progress. Supposed to explore all reachable 
+	// areas of map but not discover ones hidden behind rock/etc
+	// Not currently working
+	void floodFillMap();
 
 	// Search for path with A*, if there is a path return true
 	// else return false. 

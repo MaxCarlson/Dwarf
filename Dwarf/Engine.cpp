@@ -34,6 +34,8 @@ Engine::Engine(int screenWidth, int screenHeight) : screenWidth(screenWidth), sc
 	world.addSystem(*movementSystem);
 	world.addSystem(*movementAiSystem);
 
+	movementAiSystem->floodFillMap();
+
 	world.refresh();
 }
 
@@ -47,7 +49,7 @@ Engine::~Engine()
 // Game loop
 void Engine::run()
 {
-	
+	/*
 	double t = 0.0;
 	static const double dt = 1.0 / 60.0;
 
@@ -68,17 +70,38 @@ void Engine::run()
 
 			frameTime -= deltaTime;
 			t += deltaTime;
+		}	
+		render();
+	}
+	*/
+	// This loop vs above??
+
+	const double MS_PER_UPDATE = 10.0;
+	double previous = now();
+	double lag = 0.0;
+
+	while (true)
+	{
+		double current = now();
+		double elapsed = current - previous;
+		previous = current;
+		lag += elapsed;
+
+		// Read user input
+		input.read();
+
+		while (lag >= MS_PER_UPDATE)
+		{
+			update(MS_PER_UPDATE);
+			lag -= MS_PER_UPDATE;
 		}
 
-		
 		render();
 	}
 }
 
 void Engine::update(float deltaTime)
 {
-	// Read user input
-	input.read();
 
 	// Update systems
 	movementAiSystem->update();

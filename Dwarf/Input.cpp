@@ -56,6 +56,8 @@ void Input::read()
 		break;
 
 // Gui
+	case TK_SPACE:
+		while (terminal_read() != TK_SPACE) {}
 	
 
 // Mouse scrolling

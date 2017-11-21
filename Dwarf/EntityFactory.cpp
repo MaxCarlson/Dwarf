@@ -54,6 +54,8 @@ Entity EntityFactory::createDwarf(Coordinates co)
 
 	dwarf.activate();
 
+	engine.EntityPosCache.emplace(dwarf.getComponent<MovementComponent>().destination, dwarf);
+
 //	engine.world.refresh(); // Why does this cause a whole host of errors?
 
 	return dwarf;
