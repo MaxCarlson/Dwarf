@@ -29,8 +29,8 @@ Map::Map(int width, int height, int depth) : width(width), height(height), depth
 	populateRock();
 	addTrees(10);
 	populateGrass();
-	placeDwarves(7);
 	seedRamps();
+	placeDwarves(7);
 }
 
 Map::~Map()
@@ -248,72 +248,30 @@ void Map::addTrees(int treeDensity)
 	}
 
 }
-// This is way to complex for something so simple
+// Just places dwaves close to where camera is
+//
 void Map::placeDwarves(int number)
 {
-	int landPercent = (width * height) * 0.25;
+	int dwarfNumber = 0;
 
-	// Loop through z levels, starting from the top
-	// looking for the z level where 65% or greater is land. // This has an issue with very mountinous regions.
-	// 
-	for (int h = MAX_ZLVL - 1; h > 0; --h) 
-	{
-		int landCounter = 0;
-		for (int i = 0; i < width; ++i)
-			for (int j = 0; j < height; ++j)
+	for(int h = MIN_LVLS_OF_ROCK; h < depth; ++h)
+		for (int i = 3; i < 80; ++i)
+			for (int j = 3; j < 80; ++j)
 			{
-				if (tileManager.getProperty<TileManager::FLOOR>({ i, j, h }))
+				if (tileManager.canWalk({ i, j, h }))
 				{
-					++landCounter;
+					engine.factory.createDwarf({ i, j, h });
+					mapRenderer->currentZLevel = h;
+					++dwarfNumber;
 				}
 
-				// If we've hit land percent threshold for level
-				if (landCounter >= landPercent)
+				if (dwarfNumber >= number)
 				{
-					std::vector<Coordinates> corVec;
-					Coordinates tmp = { i, j, h };
-
-					// Loop through positions, trying them at random
-					// placing dwarves next to eachother
-					for (int n = 0; n < number; ++n) 
-					{
-						if (tmp.x >= 0 && tmp.y >= 0
-							&& tmp.x < width && tmp.y < height
-							&& tileManager.getProperty<TileManager::FLOOR>(tmp))
-						{
-							engine.factory.createDwarf(tmp);
-							corVec.push_back(tmp);
-						}
-						else
-							--n;
-
-						bool foundEmptySpot = false;
-						while (!foundEmptySpot) 
-						{
-							int rn = rng->getInt(1, 2);
-
-							if (rn == 1)
-								tmp.x += rng->getInt(-1, 1);
-							else
-								tmp.y += rng->getInt(-1, 1);
-
-							for (int x = 0; x < corVec.size(); ++x)
-							{
-								if (corVec.at(x) == tmp)
-									break;
-
-								else if (x == corVec.size() - 1)
-									foundEmptySpot = true;
-							}
-						}
-
-					}
-
+					//engine.world.refresh();
 					return;
 				}
+					
 			}
-	}
-	engine.world.refresh();
 }
 
 

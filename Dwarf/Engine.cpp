@@ -34,7 +34,9 @@ Engine::Engine(int screenWidth, int screenHeight) : screenWidth(screenWidth), sc
 	world.addSystem(*movementSystem);
 	world.addSystem(*movementAiSystem);
 
-	movementAiSystem->floodFillMap();
+	// FloodFill from 0, 0, MAX_Z_LVL - 1
+	// explored areas. Not working yet.
+	//movementAiSystem->floodFillMap();
 
 	world.refresh();
 }

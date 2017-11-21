@@ -49,12 +49,12 @@ Entity EntityFactory::createDwarf(Coordinates co)
 	dwarf.addComponent<CreatureStatsComponent>();
 	dwarf.addComponent<MovementComponent>(2.0);
 
-	//dwarf.getComponent<MovementComponent>().direction.y = -1; // Only for testing movement
-	dwarf.getComponent<MovementComponent>().destination = { 0, 0, 49 };
+	//dwarf.getComponent<MovementComponent>().destination = { 0, 0, 49 };
 
 	dwarf.activate();
 
-	engine.EntityPosCache.emplace(dwarf.getComponent<MovementComponent>().destination, dwarf);
+	// Entity caching, worth it?
+	//engine.EntityPosCache.emplace(dwarf.getComponent<MovementComponent>().destination, dwarf);
 
 //	engine.world.refresh(); // Why does this cause a whole host of errors?
 
