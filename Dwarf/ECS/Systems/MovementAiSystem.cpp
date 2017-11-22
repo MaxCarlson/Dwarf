@@ -60,9 +60,9 @@ inline bool PathGraph::passable(Coordinates start, Coordinates dest) const
 {
 	return (tileManager->canWalk(dest)
 		// On bottom area of ramp
-		|| (tileManager->getProperty<TileManager::RAMP>(start) && start.x == dest.x && start.y == dest.y)
+		|| (tileManager->getProperty<Tile::RAMP>(start) && start.x == dest.x && start.y == dest.y)
 		// On top of ramp
-		|| (tileManager->getProperty<TileManager::RAMP>({start.x, start.y, start.z - 1}) && start.x == dest.x && start.y == dest.y));
+		|| (tileManager->getProperty<Tile::RAMP>({start.x, start.y, start.z - 1}) && start.x == dest.x && start.y == dest.y));
 }
 std::vector<Coordinates> PathGraph::floodFill(Coordinates co) const
 {
@@ -130,7 +130,7 @@ void MovementAiSystem::floodFillMap()
 		{
 			frontier.emplace(next);
 			exploredMap[next] = current;
-			tileManager->setProperty<TileManager::EXPLORED>(next);
+			tileManager->setProperty<Tile::EXPLORED>(next);
 		}
 	}
 }

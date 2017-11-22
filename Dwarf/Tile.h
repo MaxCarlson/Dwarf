@@ -17,6 +17,16 @@ public:
 	// bool isWall;         
 	// bool providesFloor;  
 	// bool stairs/ramp ~ Provides z level access changes
+	// bool mineable
+	enum Property
+	{
+		EXPLORED = 0x1,
+		OBSTRUCTED = 0x2,
+		WALL = 0x4,
+		FLOOR = 0x8,
+		RAMP = 0x10,
+		MINEABLE = 0x20
+	};
 
 	// Integer representation of tileset index
 	// as well as tag used to identify material
@@ -28,11 +38,12 @@ public:
 
 
 	// Add a property here denoting if tile is ore/gem vein for quick lookup!!
-	std::uint8_t properties = 0x1U; // Change to 0U for unexplored
+	std::uint8_t properties = 0x21; // Change to 0U for unexplored
 };
 
 // Formula for tile indexing with coordinates
 #define TILE_ARRAY_LOOKUP co.z * width * height + co.y * width + co.x
+
 
 // Creates a 1D Vector of Tile objects used to
 // simulate a 3D area of tiles. Access Tiles through here
@@ -49,20 +60,9 @@ public:
 		tileMapSize = tileMap.size();
 	}
 
-	// Index of Tile properties 
-	// set bits
-	enum TileProp
-	{
-		EXPLORED = 0x1,
-		OBSTRUCTED = 0x2,
-		WALL = 0x4,
-		FLOOR = 0x8,
-		RAMP = 0x10
-	};
-
 	// Alters the TileProperty P property of a tile
 	// only if that tile did not have TileType T property
-	template<TileProp P>
+	template<Tile::Property P>
 	inline void setProperty(Coordinates co)                  // Test all these functions for perf with const Coordinates ?
 	{
 		tileAt(co).properties |= P;
@@ -71,21 +71,21 @@ public:
 	// Reverses property TileProperty P of tile
 	// Faster than remove if we know what tile prop
 	// is ahead of time
-	template<TileProp P>
+	template<Tile::Property P>
 	inline void reverseProperty(Coordinates co)
 	{
 		tileAt(co).properties ^= P;
 	}
 
 	// Remove property P from Tile
-	template<TileProp P>
+	template<Tile::Property P>
 	inline void removeProperty(Coordinates co)
 	{
 		tileAt(co).properties &= ~P;
 	}
 
 	// Returns true if tile has property of TileProperty P
-	template<TileProp P>
+	template<Tile::Property P>
 	const inline bool getProperty(Coordinates co) const
 	{
 		return tileAt(co).properties & P;
@@ -119,7 +119,7 @@ public:
 	// Checks if it's possible to walk through tile ~~ wall check probably isn't neccasary so long as obstructed is updated correctly!!
 	inline bool canWalk(Coordinates co) const
 	{
-		return isSafe(co) && (getProperty<FLOOR>(co) && !(getProperty<WALL>(co) | getProperty<OBSTRUCTED>(co)));
+		return isSafe(co) && (getProperty<Tile::FLOOR>(co) && !(getProperty<Tile::WALL>(co) | getProperty<Tile::OBSTRUCTED>(co)));
 	}
 
 	// Used for fast bounds checking on coordinates
@@ -149,14 +149,14 @@ public:
 	// check for floor
 	inline bool canPass(Coordinates co) const
 	{
-		return isOnPlane(co) && !(getProperty<WALL>(co) | getProperty<OBSTRUCTED>(co)); //isSafe(co) is this needed as well? Will have to see
+		return isOnPlane(co) && !(getProperty<Tile::WALL>(co) | getProperty<Tile::OBSTRUCTED>(co)); //isSafe(co) is this needed as well? Will have to see
 	}
 
 	// Should only be used for map generation, will not gurentee things are completely empty
 	// Possibly move this to the map object???????
 	inline bool isEmptySpace(Coordinates co) const
 	{
-		return !(getProperty<FLOOR>(co) | getProperty<WALL>(co) | getProperty<OBSTRUCTED>(co));
+		return !(getProperty<Tile::FLOOR>(co) | getProperty<Tile::WALL>(co) | getProperty<Tile::OBSTRUCTED>(co));
 	}
 
 private:

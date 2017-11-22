@@ -40,7 +40,7 @@ void MapRender::render()
 			int adjY = y - offsetY;
 
 			// Use this for darkening/blacking-out unexplored in mountain/underground tiles
-			if (!map.tileManager.getProperty<TileManager::EXPLORED>({ x, y, currentZLevel }))
+			if (!map.tileManager.getProperty<Tile::EXPLORED>({ x, y, currentZLevel }))
 			{
 
 			}

@@ -88,11 +88,11 @@ void VeinCreator::addOre(TileManager & tileManager)
 				co.x = rng->getInt(0, mapWidth - 1);
 				co.y = rng->getInt(0, mapHeight - 1);
 
-				if (tileManager.getProperty<TileManager::WALL>(co))
+				if (tileManager.getProperty<Tile::WALL>(co))
 				{
 					for (int j = 0; j < orePerVein[ore]; ++j)
 					{
-						if (tileManager.getProperty<TileManager::WALL>(co))
+						if (tileManager.getProperty<Tile::WALL>(co))
 						{
 							tileManager.tileAt(co).ch = oreArray[ore].ch;
 							tileManager.tileAt(co).color = oreArray[ore].color;

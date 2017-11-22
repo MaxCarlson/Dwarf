@@ -73,7 +73,7 @@ void Map::createHeightMap(int howMountainous, float rainAmount)
 					createWall({ i, j, h });
 				}
 				// If there's a floor but height ratio is too low, create walkable space
-				else  if (heightThreshold < heightMapPoint && tileManager.getProperty<TileManager::FLOOR>({ i, j, h }))
+				else  if (heightThreshold < heightMapPoint && tileManager.getProperty<Tile::FLOOR>({ i, j, h }))
 				{   
 					createWalkableSpace({ i, j, h });
 				}
@@ -102,7 +102,7 @@ void Map::createHeightMap(int howMountainous, float rainAmount)
 	for (int i = 0; i < width; ++i)
 		for (int j = 0; j < height; ++j)
 		{
-			if (tileManager.getProperty<TileManager::WALL>({ i, j, depth - 1 }))
+			if (tileManager.getProperty<Tile::WALL>({ i, j, depth - 1 }))
 			{
 				createWalkableSpace({ i, j, depth - 1 });
 			}
@@ -116,7 +116,7 @@ void Map::seedRamps()
 		for (int i = 0; i < width; ++i)
 			for (int j = 0; j < height; ++j)
 			{
-				if (tileManager.getProperty<TileManager::WALL>({ i, j, h }))
+				if (tileManager.getProperty<Tile::WALL>({ i, j, h }))
 				{
 					const Coordinates walkableTop = { i, j, h + 1 };
 
@@ -158,9 +158,9 @@ void Map::addRamp(Coordinates co)
 {
 	tileManager.tileAt(co).ch = 30;
 	//tileManager.tileAt(co).color = "grey";
-	tileManager.setProperty<TileManager::RAMP>(co);
-	tileManager.setProperty<TileManager::FLOOR>({co.x, co.y, co.z + 1});
-	//tileManager.setProperty<TileManager::OBSTRUCTED>(co);
+	tileManager.setProperty<Tile::RAMP>(co);
+	tileManager.setProperty<Tile::FLOOR>({co.x, co.y, co.z + 1});
+	//tileManager.setProperty<Tile::OBSTRUCTED>(co);
 }
 
 // Possibly move all these loops into one or two to minimize looping??
@@ -173,8 +173,8 @@ void Map::populateGrass()
 		for (int i = 0; i < width; ++i)
 			for (int j = 0; j < height; ++j)
 			{
-				if (    tileManager.getProperty<TileManager::FLOOR>({ i, j, h })
-					&& !tileManager.getProperty<TileManager::OBSTRUCTED>({ i, j, h }))
+				if (    tileManager.getProperty<Tile::FLOOR>({ i, j, h })
+					&& !tileManager.getProperty<Tile::OBSTRUCTED>({ i, j, h }))
 				{
 					// Move this to EntityFactory???
 					tileManager.tileAt({ i, j, h }).ch = grassCharList[rng->getInt(0, 3, 3)];
@@ -194,7 +194,7 @@ void Map::populateRock()
 		for (int i = 0; i < width; ++i)
 			for (int j = 0; j < height; ++j)
 			{
-				if (tileManager.getProperty<TileManager::WALL>({ i, j, h }))
+				if (tileManager.getProperty<Tile::WALL>({ i, j, h }))
 				{
 					tileManager.tileAt({ i, j, h }).ch = 133; 
 					tileManager.tileAt({ i, j, h }).color = "grey";
@@ -232,14 +232,14 @@ void Map::addTrees(int treeDensity)
 			const Tile t = tileManager.tileAt(co);
 
 			// If the space is clear/hasfloor plant a tree and obstruct the space
-			if (t.properties & TileManager::FLOOR && !(t.properties & TileManager::OBSTRUCTED)) // Move this to EntityFactory???
+			if (t.properties & Tile::FLOOR && !(t.properties & Tile::OBSTRUCTED)) // Move this to EntityFactory???
 			{
 				trees[counter].addComponent<PositionComponent>(co);
 				trees[counter].addComponent<RenderComponent>(treeChar, 0xE200, "brown");
 				trees[counter].addComponent<HealthComponent>(300, 300, 0);
 				trees[counter].activate();
 
-				tileManager.setProperty<TileManager::OBSTRUCTED>(co);
+				tileManager.setProperty<Tile::OBSTRUCTED>(co);
 				break;
 			}
 
@@ -280,13 +280,13 @@ inline void Map::createWall(Coordinates co)
 {
 	mapZLvls[co.z]->setProperties(co.x, co.y, false, false);
 
-	tileManager.setProperty<TileManager::OBSTRUCTED>(co);
-	tileManager.setProperty<TileManager::WALL>(co);
+	tileManager.setProperty<Tile::OBSTRUCTED>(co);
+	tileManager.setProperty<Tile::WALL>(co);
 
 	// Add a floor property
 	// to any Tile above a wall Tile
 	if(co.z < MAX_ZLVL - 1)
-		tileManager.setProperty<TileManager::FLOOR>({co.x, co.y, co.z + 1});
+		tileManager.setProperty<Tile::FLOOR>({co.x, co.y, co.z + 1});
 }
 
 // Create a space that is transparant and can be walked through, does not provide floor
@@ -294,18 +294,18 @@ inline void Map::createWalkableSpace(Coordinates co)
 {
 	mapZLvls[co.z]->setProperties(co.x, co.y, true, true);
 
-	tileManager.setProperty<TileManager::FLOOR>(co);
-	tileManager.removeProperty<TileManager::OBSTRUCTED>(co);
-	tileManager.removeProperty<TileManager::WALL>(co);
+	tileManager.setProperty<Tile::FLOOR>(co);
+	tileManager.removeProperty<Tile::OBSTRUCTED>(co);
+	tileManager.removeProperty<Tile::WALL>(co);
 }
 
 // Create a space that is transparant and is not walkable
 inline void Map::createOpenSpace(Coordinates co)
 {
 	mapZLvls[co.z]->setProperties(co.x, co.y, true, false);
-	tileManager.removeProperty<TileManager::OBSTRUCTED>(co);
-	tileManager.removeProperty<TileManager::WALL>(co);
-	tileManager.removeProperty<TileManager::FLOOR>(co);
+	tileManager.removeProperty<Tile::OBSTRUCTED>(co);
+	tileManager.removeProperty<Tile::WALL>(co);
+	tileManager.removeProperty<Tile::FLOOR>(co);
 }
 
 
