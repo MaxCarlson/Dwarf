@@ -159,10 +159,11 @@
     <ClInclude Include="ECS\Component.h" />
     <ClInclude Include="ECS\Components\CameraComponent.h" />
     <ClInclude Include="Coordinates.h" />
-    <ClInclude Include="ECS\Components\CreatureStatsComponent.h" />
+    <ClInclude Include="ECS\Components\CombatStatsComponent.h" />
     <ClInclude Include="ECS\Components\HealthComponent.h" />
     <ClInclude Include="ECS\Components\JobComponent.h" />
     <ClInclude Include="ECS\Components\KeyBoardComponent.h" />
+    <ClInclude Include="ECS\Components\LaborStatsComponent.h" />
     <ClInclude Include="ECS\Components\MovementComponent.h" />
     <ClInclude Include="ECS\EntityManager.h" />
     <ClInclude Include="ECS\Filter.h" />

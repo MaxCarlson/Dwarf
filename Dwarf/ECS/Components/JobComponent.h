@@ -6,15 +6,34 @@
 // Used in jobs system for assigning jobs
 struct Job
 {
+	// Used not only for Id'ing job types
+	// but also in indexing assciated Job skill in LaborStatsComponent ~!~!~ This should be moved somewhere else? Perhaps even read in serially?
+	enum Jobs
+	{
+		NONE,
+		MINER,
+		MASON,
+		WOODCUTTER,
+		CARPENTER
+	};
+	static const int MAX_LABORS = 5;
+
+	Job(Coordinates co, int exp, int bSkill, double duration, Job::Jobs jobType) 
+		: co(co), experience(exp), baseSkillReq(bSkill),  baseDuration(duration), jobType(jobType) {}
+
 	// Job location
 	Coordinates co;
 
-	enum Jobs
-	{
-		MINE = 1,
-		CHOP_WOOD,
-		MASONRY
-	};
+	// Base experience gained
+	// when finishing job
+	int experience;
+
+	// Minimum skill required to do this job,
+	int baseSkillReq;
+
+	// How long does the job take
+	// with skill of 1? In seconds
+	double baseDuration;
 
 	// Job type
 	Jobs jobType;

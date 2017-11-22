@@ -10,7 +10,7 @@
 #include "ECS\Components\KeyBoardComponent.h"
 #include "ECS\Components\CameraComponent.h"
 #include "ECS\Components\HealthComponent.h"
-#include "ECS\Components\CreatureStatsComponent.h"
+#include "ECS\Components\LaborStatsComponent.h"
 #include "ECS\Components\MovementComponent.h"
 #include "ECS\Components\JobComponent.h"
 
@@ -45,18 +45,14 @@ Entity EntityFactory::createDwarf(Coordinates co)
 	dwarf.addComponent<PositionComponent>(co);
 	dwarf.addComponent<JobComponent>();
 
-	// Needs tons of work
-	dwarf.addComponent<CreatureStatsComponent>();
+	// Need to set stats here
+	dwarf.addComponent<LaborStatsComponent>();
+
+	// Movement speed in constructor in tiles per second
 	dwarf.addComponent<MovementComponent>(2.0);
 
-	//dwarf.getComponent<MovementComponent>().destination = { 0, 0, 49 };
 
 	dwarf.activate();
-
-	// Entity caching, worth it?
-	//engine.EntityPosCache.emplace(dwarf.getComponent<MovementComponent>().destination, dwarf);
-
-//	engine.world.refresh(); // Why does this cause a whole host of errors?
 
 	return dwarf;
 }

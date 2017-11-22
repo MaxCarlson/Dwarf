@@ -2,9 +2,10 @@
 #include "../Systems.h"
 
 #include "../Components/JobComponent.h"
+#include "../Components/LaborStatsComponent.h"
 #include <queue>
 
-class JobsSystem : public System<Requires<JobComponent>>
+class JobsSystem : public System<Requires<JobComponent, MovementComponent, PositionComponent, LaborStatsComponent>>
 {
 public:
 
