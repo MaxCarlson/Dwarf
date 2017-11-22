@@ -51,6 +51,8 @@ bool JobsSystem::assignJob(Entity e)
 	return true;
 }
 
+// Need to add quality multiplier to Jobs that can produce
+// quality goods!!
 void JobsSystem::workJob(Entity e, double tStep)
 {
 	// Base time in seconds to progress job progress by
@@ -60,12 +62,12 @@ void JobsSystem::workJob(Entity e, double tStep)
 	auto& job   = e.getComponent<JobComponent>();
 	auto& stats = e.getComponent<LaborStatsComponent>();
 
-	auto jobType = job.currentJob.jobType;
+	const auto jobType = job.currentJob.jobType;
 
 	// Multiply time step seconds by Entity skill level job speed multiplier
-	double realSeconds = JobSpeedMultiplier[stats.laborStats[jobType]] * tSeconds;
+	double workSeconds = JobSpeedMultiplier[stats.laborStats[jobType]] * tSeconds;
 
-	job.progress += tSeconds;
+	job.progress += workSeconds;
 
 	// If job has progressed past the duration set
 	// by job creator the job is finished
@@ -82,7 +84,7 @@ void JobsSystem::workJob(Entity e, double tStep)
 		// level in this jobType, raise their level
 		if (stats.laborStats[jobType] < MAX_SKILL_LVL
 			&& stats.skillLevel[jobType] >= skillLevelReq[stats.laborStats[jobType] + 1])
-			stats.skillLevel[jobType] += 1;
+			stats.laborStats[jobType] += 1;
 
 		onJobComplete(e, jobType);
 	}
@@ -90,10 +92,10 @@ void JobsSystem::workJob(Entity e, double tStep)
 
 void JobsSystem::onJobComplete(Entity & e, Job::Jobs job)
 {
-
 	switch (job)
 	{
 	case Job::MINER:
+		mining(e);
 		break;
 
 	case Job::MASON:
@@ -107,4 +109,14 @@ void JobsSystem::onJobComplete(Entity & e, Job::Jobs job)
 	}
 
 	return;
+}
+
+void JobsSystem::mining(Entity & e)
+{
+	// Lookup what stone/Ore/Gem was mined
+
+	// Based on material type and miner skill
+	// decided whether to produce stone/Ore/Gem
+
+	// Add an Entity of that type
 }

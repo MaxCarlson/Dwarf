@@ -38,10 +38,15 @@ private:
 	{
 		auto& mov = e.getComponent<MovementComponent>();
 
+		// Update progress by moveSpeed * timeStep,
+		// in seconds
 		mov.progress += (tStep * mov.speed / 1000);
 
-		// If progress has passed 1.0
+		// If progress has passed 1.0, 
 		// it's time to move to next tile
+
+		// This needs to be 1.44 for diagonal movement!!!
+		// Find easy way to calc this
 		if (mov.progress >= 1.0)
 		{
 			// Will this need to be changed eventually?

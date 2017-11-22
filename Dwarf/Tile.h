@@ -61,7 +61,6 @@ public:
 	TileManager(int width, int height, int depth) : width(width), height(height), depth(depth)
 	{
 		tileMap.resize(width * height * depth);
-		tileMapSize = tileMap.size();
 	}
 
 	// Alters the TileProperty P property of a tile
@@ -98,7 +97,7 @@ public:
 	}
 
 	// Returns a refrence to tile at coordinates
-	inline Tile& tileAt(const Coordinates co)
+	inline Tile& tileAt(Coordinates co)
 	{
 		return tileMap[TILE_ARRAY_LOOKUP];
 	}
@@ -126,16 +125,7 @@ public:
 	// Checks if it's possible to walk through tile ~~ wall check probably isn't neccasary so long as obstructed is updated correctly!!
 	inline bool canWalk(Coordinates co) const
 	{
-		return isSafe(co) && (getProperty<Tile::FLOOR>(co) && !(getProperty<Tile::WALL>(co) | getProperty<Tile::OBSTRUCTED>(co)));
-	}
-
-	// Used for fast bounds checking on coordinates
-	// Doesn't work for checking map edge boundries,
-	// only validity of index
-	inline bool isSafe(Coordinates co) const
-	{
-		const int cor = TILE_ARRAY_LOOKUP;
-		return (cor > 0 && cor < tileMapSize);
+		return boundsCheck(co) && (getProperty<Tile::FLOOR>(co) && !(getProperty<Tile::WALL>(co) | getProperty<Tile::OBSTRUCTED>(co)));
 	}
 
 	// Checks to make sure things don't go off the map
@@ -156,7 +146,7 @@ public:
 	// check for floor
 	inline bool canPass(Coordinates co) const
 	{
-		return isOnPlane(co) && !(getProperty<Tile::WALL>(co) | getProperty<Tile::OBSTRUCTED>(co)); //isSafe(co) is this needed as well? Will have to see
+		return isOnPlane(co) && !(getProperty<Tile::WALL>(co) | getProperty<Tile::OBSTRUCTED>(co)); 
 	}
 
 	// Should only be used for map generation, will not gurentee things are completely empty
@@ -170,9 +160,4 @@ private:
 
 	// 1D vector of Tiles indexed by 3D formula
 	std::vector<Tile> tileMap;
-
-	// Holds the size of the tileMap 
-	// so we can quickly check if a position
-	// is in bounds with > -1 < tileMapSize
-	size_t tileMapSize;
 };

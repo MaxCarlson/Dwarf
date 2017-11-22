@@ -19,8 +19,8 @@ struct Job
 	static const int MAX_LABORS = 5;
 
 	Job() = default;
-	Job(Coordinates co, int exp, int bSkill, double duration, Job::Jobs jobType) 
-		: co(co), experience(exp), baseSkillReq(bSkill),  baseDuration(duration), jobType(jobType) {}
+	Job(Coordinates co, int exp, int baseSkill, double duration, Job::Jobs jobType) 
+		: co(co), experience(exp), baseSkillReq(baseSkill),  baseDuration(duration), jobType(jobType) {}
 
 	inline void reset()
 	{
@@ -60,6 +60,9 @@ public:
 	JobComponent() = default;
 
 	// currentJob.jobType = 0 for no Job
+	// currentJob.jobType is the only thing checked to see
+	// if Entity currently has a job. All other stats are not reset
+	// after job has finished
 	Job currentJob;
 
 	// Amount of progress done on job

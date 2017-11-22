@@ -1,6 +1,7 @@
 #include "MovementAiSystem.h"
 #include "../Tile.h"
 #include "../Components/PositionComponent.h"
+#include "../Components/JobComponent.h"
 #include <queue>
 #include <functional>
 #include <utility>
@@ -102,6 +103,7 @@ void MovementAiSystem::initMap(TileManager * tileMan)
 	pathGraph.depth = tileManager->depth;
 }
 
+// Not Yet working!
 void MovementAiSystem::floodFillMap()
 {
 	std::queue<Coordinates> frontier;
@@ -161,6 +163,10 @@ void MovementAiSystem::update()
 			else
 			{
 				mov.destination = EMPTY_COORDINATES;
+
+				// Set Entities job to none if Job can't be reached,
+				// We will need to announce this eventually
+				e.getComponent<JobComponent>().currentJob.jobType = Job::NONE;
 			}
 		}
 	}

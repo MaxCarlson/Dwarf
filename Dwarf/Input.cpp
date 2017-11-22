@@ -64,7 +64,7 @@ void Input::read()
 		//Job(Coordinates co, int exp, int bSkill, double duration, Job::Jobs jobType)
 		//	: co(co), experience(exp), baseSkillReq(bSkill), baseDuration(duration), jobType(jobType) {}
 
-		Job j({ xx, yy, engine.map->mapRenderer->currentZLevel }, 10, 1, 4, Job::MINER);
+		Job j({ xx, yy, engine.map->mapRenderer->currentZLevel }, 10, 1, 14, Job::MINER);
 
 		engine.jobsSystem->addJob(j);
 		break;

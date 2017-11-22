@@ -12,6 +12,8 @@ static const int skillLevelReq[MAX_SKILL_LVL] = { 0, 0, 100, 300, 500, 1100, 180
 // with index skill level
 static const double JobSpeedMultiplier[MAX_SKILL_LVL] = { 1, 1, 1.05, 1.10, 1.15, 1.21, 1.27, 1.33, 1.40, 1.47, 1.54, 1.62, 1.70, 1.78, 1.86, 1.96, 2.06, 2.18, 2.30, 2.50 };
 
+// Need job quality multiplier based on skill level, with random range of qualities
+
 // Holds data on all stats creatures have
 // Possibly split this in two, one for dwarves
 // on for enemys?
@@ -26,5 +28,7 @@ public:
 	int laborStats[Job::MAX_LABORS] = { 1 };
 
 	// Total points accumulated for Labor Skills
+	// Used to determine when to bump up laborStats by one level
+	// with skillLevelReq[laborStats[JobType]+1]
 	int skillLevel[Job::MAX_LABORS] = { 0 };
 };
