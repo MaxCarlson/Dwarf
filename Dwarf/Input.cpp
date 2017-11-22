@@ -5,7 +5,7 @@
 #include "MapRender.h"
 
 #include "BearLibTerminal.h"
-
+#include "ECS\Systems\JobsSystem.h"
 
 Input::Input()
 {
@@ -55,17 +55,21 @@ void Input::read()
 		engine.map->mapRenderer->moveCamera(MapRender::WEST);
 		break;
 
-// Gui
-	case TK_SPACE:
-		//while (terminal_read() != TK_SPACE) {}
+
+// Test
+	case TK_MOUSE_LEFT:
+		int xx = terminal_state(TK_MOUSE_X);
+		int yy = terminal_state(TK_MOUSE_Y);
+
+		//Job(Coordinates co, int exp, int bSkill, double duration, Job::Jobs jobType)
+		//	: co(co), experience(exp), baseSkillReq(bSkill), baseDuration(duration), jobType(jobType) {}
+
+		Job j({ xx, yy, engine.map->mapRenderer->currentZLevel }, 10, 1, 4, Job::MINER);
+
+		engine.jobsSystem->addJob(j);
 		break;
 	
 
-// Mouse scrolling
-	case TK_MOUSE_SCROLL:
-		//handleMouseWheel(keyPress, e);
-		break;
-
-	default: break;
+	//default: break;
 	}
 }

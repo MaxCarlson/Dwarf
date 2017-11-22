@@ -3,11 +3,18 @@
 
 #include "../Components/JobComponent.h"
 #include "../Components/LaborStatsComponent.h"
+#include "../Components/MovementComponent.h"
+#include "../Components/PositionComponent.h"
 #include <queue>
+
+//class MovementComponent;
+//class PositionComponent;
 
 class JobsSystem : public System<Requires<JobComponent, MovementComponent, PositionComponent, LaborStatsComponent>>
 {
 public:
+
+	JobsSystem() = default;
 
 	// External interface to start the job system,
 	// updates in time steps

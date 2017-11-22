@@ -18,6 +18,7 @@ struct Job
 	};
 	static const int MAX_LABORS = 5;
 
+	Job() = default;
 	Job(Coordinates co, int exp, int bSkill, double duration, Job::Jobs jobType) 
 		: co(co), experience(exp), baseSkillReq(bSkill),  baseDuration(duration), jobType(jobType) {}
 

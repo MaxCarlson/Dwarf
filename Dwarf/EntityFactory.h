@@ -11,10 +11,6 @@ class EntityFactory
 public:
 	EntityFactory();
 
-	// Create a camera, done only once right now
-	// with local world generation
-	Entity createCamera(int screenWidth, int screenHeight);
-
 	Entity createDwarf(Coordinates co);
 };
 

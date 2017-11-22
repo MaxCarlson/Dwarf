@@ -19,7 +19,6 @@ class LaborStatsComponent : public Component
 {
 public:
 	LaborStatsComponent() = default;
-	LaborStatsComponent() {};
 
 	// Array of LaborStats indexed by Job::Jobs,
 	// for skill level associated with jobType

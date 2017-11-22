@@ -10,6 +10,7 @@
 #include "ECS\Systems\CameraSystem.h"
 #include "ECS\Systems\MovementSystem.h"
 #include "ECS\Systems\MovementAiSystem.h"
+#include "ECS\Systems\JobsSystem.h"
 #include "BearLibTerminal.h"
 
 #include <chrono>
@@ -29,10 +30,12 @@ Engine::Engine(int screenWidth, int screenHeight) : screenWidth(screenWidth), sc
 	renderSystem = new RenderSystem(map);
 	movementSystem = new MovementSystem();
 	movementAiSystem = new MovementAiSystem(&map->tileManager);
+	jobsSystem = new JobsSystem();
 
 	world.addSystem(*renderSystem);
 	world.addSystem(*movementSystem);
 	world.addSystem(*movementAiSystem);
+	world.addSystem(*jobsSystem);
 
 	// FloodFill from 0, 0, MAX_Z_LVL - 1
 	// explored areas. Not working yet.
@@ -102,12 +105,13 @@ void Engine::run()
 	}
 }
 
-void Engine::update(float deltaTime)
+void Engine::update(double deltaTime)
 {
 
 	// Update systems
 	movementAiSystem->update();
 	movementSystem->update(deltaTime);
+	jobsSystem->update(deltaTime);
 
 	// Should this be called before or after? Probably before?
 	world.refresh();
