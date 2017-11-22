@@ -39,7 +39,8 @@ public:
 	std::vector<Entity> Dwarves;
 
 	// Cache of all alive Entities indexed by their coordinates
-	std::unordered_multimap<Coordinates, Entity, CoordinateHash, CoordinateHashEqual> EntityPosCache;
+	// Worth using? Will have to test
+	//std::unordered_multimap<Coordinates, Entity, CoordinateHash, CoordinateHashEqual> EntityPosCache;
 
 	// Holds local map, 
 	// Local map also holds the map renderer

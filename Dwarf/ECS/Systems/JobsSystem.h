@@ -8,17 +8,13 @@ class JobsSystem : public System<Requires<JobComponent>>
 {
 public:
 
-	void update()
-	{
+	void update(double tStep);
 
-	}
 
-	void addJob(Job job)
-	{
-		notStartedJobs.push(job);
-	}
+	void addJob(Job job);
+	bool assignJob(Entity e);
+	void workJob(Entity e, double tStep);
 
 private:
-	std::queue<Job> notStartedJobs;
-	std::queue<Job> unfinishedJobs;
+	std::queue<Job>  notStarted;
 };

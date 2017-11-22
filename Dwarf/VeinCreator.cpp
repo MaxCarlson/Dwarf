@@ -12,9 +12,9 @@ static const int mediumOre = 139;
 
 struct OreType
 {
-	OreType(int ch, std::string color) : ch(ch), color(color) {};
+	OreType(int ch, int color) : ch(ch), color(color) {};
 	int ch;
-	std::string color;
+	int color;
 };
 
 enum OreIndex
@@ -27,10 +27,10 @@ enum OreIndex
 
 static const int numOreTypes = 4;
 
-#define iron   OreType(139, "#434b4d")
-#define copper OreType(139, "#B87333")
-#define tin    OreType(139, "#C0C0C0")
-#define coal   OreType(136, "#5C5B5D")
+#define iron   OreType(139,  0xFF434b4d)
+#define copper OreType(139,  0xFFB87333)
+#define tin    OreType(139,  0xFFC0C0C0)
+#define coal   OreType(136,  0xFF5C5B5D)
 
 OreType oreArray[numOreTypes] = { iron, copper, tin, coal };
 int oreDepths[numOreTypes]                 = {    0,      0,   0,    0 };

@@ -8,6 +8,7 @@
 static const int MAX_ZLVL = 50;
 
 class MapRender;
+class TileFactory;
 
 class Map
 {
@@ -31,12 +32,10 @@ public:
 	// Access and alter terrain tiles
 	// through this object
 	TileManager tileManager;
+	TileFactory * tileFactory;
 
 private:
 	TCODRandom * rng;
-
-	// Will be used for pathfinding?
-	TCODMap * mapZLvls[MAX_ZLVL]; // Not used for pathfinding, DELTE?  
 
 	// Find places for all ramps
 	void seedRamps();

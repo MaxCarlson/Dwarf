@@ -12,20 +12,20 @@ class Tile {
 public:
 	// These properties are set by set bit's in Tile's properties unsigned int
 	// And accessed through the tile manager
-	// bool explored;		 
-	// bool obstructed;	 
-	// bool isWall;         
-	// bool providesFloor;  
-	// bool stairs/ramp ~ Provides z level access changes
-	// bool mineable
+	// bool Explored;		 
+	// bool Obstructed;	 
+	// bool Wall;         
+	// bool Floor;  
+	// bool Stairs/Ramp ~ Provides z level access changes
+	// bool Mineable
 	enum Property
 	{
-		EXPLORED = 0x1,
-		OBSTRUCTED = 0x2,
-		WALL = 0x4,
-		FLOOR = 0x8,
-		RAMP = 0x10,
-		MINEABLE = 0x20
+		EXPLORED   = 1,
+		OBSTRUCTED = 1 << 1,
+		WALL       = 1 << 2,
+		FLOOR      = 1 << 3,
+		RAMP       = 1 << 4,
+		MINEABLE   = 1 << 5
 	};
 
 	// Integer representation of tileset index
@@ -33,12 +33,16 @@ public:
 	// Will probably use this for matching if tile is mined etc
 	int  ch;	
 
+	// Type of material the Tile
+	// is made from
+	int mat;
+
 	// Use int hex values for colors!!!!
-	std::string color;
+	int color;
 
 
 	// Add a property here denoting if tile is ore/gem vein for quick lookup!!
-	std::uint8_t properties = 0x21; // Change to 0U for unexplored
+	std::uint16_t properties = 0x1; // Change to 0U for unexplored
 };
 
 // Formula for tile indexing with coordinates
@@ -85,7 +89,9 @@ public:
 	}
 
 	// Returns true if tile has property of TileProperty P
-	template<Tile::Property P>
+	// For testing multiple properties, OR/XOR two tile properties together
+	// Should be named hasProperty
+	template<unsigned P>
 	const inline bool getProperty(Coordinates co) const
 	{
 		return tileAt(co).properties & P;
@@ -111,6 +117,7 @@ public:
 
 	// Returns a copy of data at tile below input tile coordinates
 	// Worse performance due to use of .at() for safety
+	// Is this needed?
 	inline Tile tileBelow(Coordinates co) const
 	{
 		return tileMap.at(TILE_ARRAY_LOOKUP);

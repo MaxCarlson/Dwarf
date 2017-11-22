@@ -16,7 +16,8 @@ public:
 	// Character code representation
 	int ch;
 
-	// Code to use to index which layer we want to draw from
+	// Code to use to index which image
+	// we want to draw from
 	int terminalCode;
 
 	// Possibly create a color object to house some simple color opperations?

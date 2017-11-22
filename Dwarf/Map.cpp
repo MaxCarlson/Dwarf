@@ -4,13 +4,15 @@
 #include "Tile.h"
 #include "MapRender.h"
 #include "VeinCreator.h"
+#include "TileFactory.h"
 #include "ECS\Components\PositionComponent.h"
 #include "ECS\Components\RenderComponent.h"
 #include "ECS\Components\HealthComponent.h"
+//#include "ECS\Systems\MovementAiSystem.h"
 
 #include "BearLibTerminal.h"
 
-#include "ECS\Systems\MovementAiSystem.h"
+
 
 static const int MIN_LVLS_OF_ROCK = 40;
 
@@ -19,10 +21,7 @@ Map::Map(int width, int height, int depth) : width(width), height(height), depth
 	rng = TCODRandom::getInstance();
 
 	mapRenderer = new MapRender(*this);
-
-	for (int i = 0; i < MAX_ZLVL; ++i) {
-		mapZLvls[i] = new TCODMap(width, height);
-	}
+	tileFactory = new TileFactory(tileManager);
 
 	createHeightMap(3, 0.3f);
 	
@@ -35,11 +34,8 @@ Map::Map(int width, int height, int depth) : width(width), height(height), depth
 
 Map::~Map()
 {
-	for (int i = 0; i < MAX_ZLVL; ++i)
-		delete mapZLvls[i];
-
-	delete[] mapZLvls;
 	delete mapRenderer;
+	delete tileFactory;
 	delete rng;
 }
 // Needs serious work!!!!
@@ -167,7 +163,6 @@ void Map::addRamp(Coordinates co)
 void Map::populateGrass()
 {
 	int grassCharList[] = { 130, 147, 244, 244 };
-	int grassChar = 244;
 
 	for (int h = MIN_LVLS_OF_ROCK; h < depth; ++h)
 		for (int i = 0; i < width; ++i)
@@ -176,9 +171,7 @@ void Map::populateGrass()
 				if (    tileManager.getProperty<Tile::FLOOR>({ i, j, h })
 					&& !tileManager.getProperty<Tile::OBSTRUCTED>({ i, j, h }))
 				{
-					// Move this to EntityFactory???
-					tileManager.tileAt({ i, j, h }).ch = grassCharList[rng->getInt(0, 3, 3)];
-					tileManager.tileAt({ i, j, h }).color = "dark green";
+					tileFactory->createGrass({ i, j, h });
 				}
 			}
 }
@@ -196,8 +189,7 @@ void Map::populateRock()
 			{
 				if (tileManager.getProperty<Tile::WALL>({ i, j, h }))
 				{
-					tileManager.tileAt({ i, j, h }).ch = 133; 
-					tileManager.tileAt({ i, j, h }).color = "grey";
+					tileFactory->createRock({ i, j, h });
 				}
 			}
 
@@ -278,8 +270,6 @@ void Map::placeDwarves(int number)
 // Create impassable wall that provides a floor
 inline void Map::createWall(Coordinates co)
 {
-	mapZLvls[co.z]->setProperties(co.x, co.y, false, false);
-
 	tileManager.setProperty<Tile::OBSTRUCTED>(co);
 	tileManager.setProperty<Tile::WALL>(co);
 
@@ -292,8 +282,6 @@ inline void Map::createWall(Coordinates co)
 // Create a space that is transparant and can be walked through, does not provide floor
 inline void Map::createWalkableSpace(Coordinates co)
 {
-	mapZLvls[co.z]->setProperties(co.x, co.y, true, true);
-
 	tileManager.setProperty<Tile::FLOOR>(co);
 	tileManager.removeProperty<Tile::OBSTRUCTED>(co);
 	tileManager.removeProperty<Tile::WALL>(co);
@@ -302,109 +290,7 @@ inline void Map::createWalkableSpace(Coordinates co)
 // Create a space that is transparant and is not walkable
 inline void Map::createOpenSpace(Coordinates co)
 {
-	mapZLvls[co.z]->setProperties(co.x, co.y, true, false);
 	tileManager.removeProperty<Tile::OBSTRUCTED>(co);
 	tileManager.removeProperty<Tile::WALL>(co);
 	tileManager.removeProperty<Tile::FLOOR>(co);
 }
-
-
-/*
-void Map::dig(int x1, int y1, int x2, int y2)
-{
-	if (x2 < x1) {
-		int tmp = x2;
-		x2 = x1;
-		x1 = tmp;
-	}
-	if (y2 < y1) {
-		int tmp = y2;
-		y2 = y1;
-		y1 = tmp;
-	}
-	for (int tilex = x1; tilex <= x2; ++tilex)
-		for (int tiley = y1; tiley <= y2; ++tiley)
-			map->setProperties(tilex, tiley, true, true); // digging out walkable, transparent tiles
-}
-
-void Map::createRoom(bool first, int x1, int y1, int x2, int y2)
-{
-	dig(x1, y1, x2, y2);
-	if (first) {
-		engine.player->x = (x1 + x2) / 2; // center of first room
-		engine.player->y = (y1 + y2) / 2;
-	}
-	else {
-		TCODRandom *rng = TCODRandom::getInstance();
-		int nbMonsters = rng->getInt(0, MAX_ROOM_MONSTERS); // Random num monsters between 0 and max
-
-		while (nbMonsters > 0)
-		{
-			int x = rng->getInt(x1, x2); // x and y between room size
-			int y = rng->getInt(y1, y2);
-			if (canWalk(x, y))
-				addMonster(x, y);
-			--nbMonsters;
-		}
-	}
-}
-
-// Traverses the bsp tree creating rooms/corridors for map
-class BspListener : public ITCODBspCallback {
-public:
-BspListener(Map & map) : map(map), roomNum(0) {}
-
-bool visitNode(TCODBsp * node, void *userData) {
-if (node->isLeaf()) { // Only creeate rooms in bsp leaf
-int x, y, w, h;
-// Dig the room
-TCODRandom * rng = TCODRandom::getInstance();
-w = rng->getInt(ROOM_MIN_SIZE, node->w - 2);
-h = rng->getInt(ROOM_MIN_SIZE, node->h - 2);
-x = rng->getInt(node->x + 1, node->x + node->w - w - 1);
-y = rng->getInt(node->y + 1, node->y + node->h - h - 1);
-map.createRoom(roomNum == 0, x, y, x + w - 1, y + h - 1);
-
-// Dig corridor from first room
-if (roomNum != 0) {
-map.dig(lastx, lasty, x+w / 2, lasty);
-map.dig(x+w / 2, lasty, x+w / 2, y+h / 2);
-}
-// Dig corridor from center to last room
-lastx = x + w / 2;
-lasty = y + h / 2;
-roomNum++;
-}
-return true;
-}
-private:
-Map & map;
-int roomNum;
-int lastx, lasty; // Center of last room, used for corridor digging
-};
-
-
-
-void Map::addMonster(int x, int y)
-{
-TCODRandom *rng = TCODRandom::getInstance();
-if (rng->getInt(0, 100) < 80)
-{
-Actor *orc = new Actor(x, y, 'o', "orc", TCODColor::desaturatedGreen);
-orc->destructible = new MonsterDestructible(10, 0, "Dead Orc");
-orc->attacker = new Attacker(3);
-orc->ai = new MonsterAi();
-
-engine.actors.push(orc);
-}
-else
-{
-Actor * troll = new Actor(x, y, 'T', "troll", TCODColor::darkerGreen);
-troll->destructible = new MonsterDestructible(16, 1, "Troll carcas");
-troll->attacker = new Attacker(4);
-troll->ai = new MonsterAi();
-
-engine.actors.push(troll);
-}
-}
-*/
