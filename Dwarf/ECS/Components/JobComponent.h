@@ -21,6 +21,18 @@ struct Job
 	Job(Coordinates co, int exp, int bSkill, double duration, Job::Jobs jobType) 
 		: co(co), experience(exp), baseSkillReq(bSkill),  baseDuration(duration), jobType(jobType) {}
 
+	inline void reset()
+	{
+		// None of these should be reset
+		// as only jobType should be used to check if this
+		// Entity has a job
+		//co = EMPTY_COORDINATES;
+		//experience = 0;
+		//baseSkillReq = 0;
+		//baseDuration = 0;
+		jobType = NONE;
+	}
+
 	// Job location
 	Coordinates co;
 
@@ -49,10 +61,8 @@ public:
 	// currentJob.jobType = 0 for no Job
 	Job currentJob;
 
-	// Indicates if and when the Entity 
-	// should start working on job
-	bool started;
-
 	// Amount of progress done on job
+	// This is in seconds and is matched with
+	// base duration to determine if the job is complete
 	double progress = 0.0;
 };
