@@ -1,18 +1,17 @@
 #include "include/libtcod.hpp"
 #include "BearLibTerminal.h"
 
-//#define  _CRT_SECURE_NO_WARNINGS 
-//#define _CRT_SECURE_NO_WARNINGS_GLOBALS
-//#ifdef _MSC_VER
-//#define _CRT_SECURE_NO_WARNINGS
-//#endif
-
 #include "Map.h"
 #include "Engine.h"
+#include "MainMenu.h"
+
 
 // Numbers a screen width and height, make more 
 // dynamic eventually
-Engine engine(80, 80);
+Engine engine;
+
+// temp variable for map size
+static const int mapSize = 80;
 
 int main()
 {
@@ -25,11 +24,16 @@ int main()
 	terminal_set("input.filter = [keyboard, mouse+]");
 	terminal_composition(true);
 
-	// Start the game loop.
-	// Need to add controls before game loop
-	// for loading and start screens
-	engine.run();
+	while (true)
+	{
+		MainMenu menu;
+		menu.render();
 
+		engine.init(mapSize, mapSize);
+
+		// Start the game loop.
+		engine.run();
+	}
 
 	return 0;
 }

@@ -21,7 +21,18 @@ inline TimePoint now() {
 }
 
 
-Engine::Engine(int screenWidth, int screenHeight) : screenWidth(screenWidth), screenHeight(screenHeight)
+Engine::Engine()
+{
+}
+
+
+Engine::~Engine()
+{
+	delete map;
+	delete renderSystem;
+}
+
+void Engine::init(int screenWidth, int screenHeight)
 {
 	// Create local map
 	map = new Map(screenWidth, screenHeight, MAX_ZLVL);
@@ -44,43 +55,9 @@ Engine::Engine(int screenWidth, int screenHeight) : screenWidth(screenWidth), sc
 	world.refresh();
 }
 
-
-Engine::~Engine()
-{
-	delete map;
-	delete renderSystem;
-}
-
 // Game loop
 void Engine::run()
 {
-	/*
-	double t = 0.0;
-	static const double dt = 1.0 / 60.0;
-
-	double currentTime = now();
-
-	while (true)
-	{
-
-		double newTime = now();
-		double frameTime = newTime - currentTime;
-		currentTime = newTime;
-
-		// This will have issues when the game becomes simulation bound!@!@!@!@!@!
-		while (frameTime > 0.0)
-		{
-			double deltaTime = std::min(frameTime, dt);
-			update(deltaTime);
-
-			frameTime -= deltaTime;
-			t += deltaTime;
-		}	
-		render();
-	}
-	*/
-	// This loop vs above??
-
 	const double MS_PER_UPDATE = 10.0;
 	double previous = now();
 	double lag = 0.0;

@@ -10,6 +10,7 @@ public:
 	Gui();
 	~Gui();
 
+	// Render local map
 	void render();
 
 	// The starting locations of the 

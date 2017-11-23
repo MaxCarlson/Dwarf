@@ -31,13 +31,9 @@ public:
 	MovementAiSystem * movementAiSystem;
 	JobsSystem * jobsSystem;
 
-	// Holds entity ID of camera
-	// so we can do a lookup if need be
-	//Entity camera;
-
 	// Vector of dwarven Entities
 	// for fast lookup anywhere in program
-	// Possibly cache all Entities by their Coordinates in an unorederd_map?????
+	// Possibly cache all Entities by their Coordinates in an unorederdmulti_map?????
 	std::vector<Entity> Dwarves;
 
 	// Cache of all alive Entities indexed by their coordinates
@@ -56,8 +52,10 @@ public:
 	int screenHeight;
 
 	
-	Engine(int screenWidth, int screenHeight);
+	Engine();
 	~Engine();
+
+	void init(int screenWidth, int screenHeight);
 
 	// Game loop
 	void run();
