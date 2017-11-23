@@ -2,18 +2,10 @@
 #include "BearLibTerminal.h"
 
 
-MainMenu::MainMenu()
-{
-}
 
+static const int NUM_MAIN_MEN_OPTIONS = 4;
 
-MainMenu::~MainMenu()
-{
-}
-
-static const int NUM_MAIN_MEN_OPTIONS = 3;
-
-void MainMenu::render()
+int MainMenu::render()
 {
 	int panelWidth = terminal_state(TK_WIDTH);
 	int panelHeight = terminal_state(TK_HEIGHT);
@@ -24,18 +16,25 @@ void MainMenu::render()
 	{
 		terminal_clear();
 
-		determineHighlight(selected, 0);
+		determineHighlight(selected, START_GAME);
 		terminal_print_ext(0, panelHeight / 2 - 15, panelWidth, panelHeight, TK_ALIGN_CENTER, "Start Game");
 
-		determineHighlight(selected, 1);
-		terminal_print_ext(0, panelHeight / 2 - 10, panelWidth, panelHeight, TK_ALIGN_CENTER, "Settings");
+		determineHighlight(selected, CREATE_WORLD);
+		terminal_print_ext(0, panelHeight / 2 - 10, panelWidth, panelHeight, TK_ALIGN_CENTER, "Create World");
 
-		determineHighlight(selected, 2);
-		terminal_print_ext(0, panelHeight / 2 - 5, panelWidth, panelHeight, TK_ALIGN_CENTER, "Quit");
+		determineHighlight(selected, SETTINGS);
+		terminal_print_ext(0, panelHeight / 2 - 5, panelWidth, panelHeight, TK_ALIGN_CENTER, "Settings");
 
+		determineHighlight(selected, QUIT);
+		terminal_print_ext(0, panelHeight / 2, panelWidth, panelHeight, TK_ALIGN_CENTER, "Quit");
+		
 		terminal_refresh();
+		resetColor();
 
-		selected = processInput(selected);
+		selected = mainMenuInput(selected);
+
+		if (selected == EXIT_CODE)
+			return EXIT_CODE;
 	}
 }
 
@@ -59,12 +58,9 @@ void MainMenu::determineHighlight(int h, int num)
 		resetColor();
 }
 
-int MainMenu::processInput(int selected)
+int MainMenu::mainMenuInput(int selected)
 {
-	int key = terminal_read();
-
-	if (key == TK_DOWN)
-		
+	const int key = terminal_read();
 	
 	switch (key)
 	{
@@ -74,6 +70,24 @@ int MainMenu::processInput(int selected)
 
 	case TK_UP:
 		--selected;
+		break;
+
+	case TK_ENTER:
+		switch (selected)
+		{
+		case START_GAME:
+			break;
+
+		case CREATE_WORLD:
+			break;
+
+		case SETTINGS:
+			break;
+
+		case QUIT:
+			return EXIT_CODE;
+		}
+
 		break;
 	}
 

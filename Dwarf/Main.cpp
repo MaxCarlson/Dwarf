@@ -27,7 +27,10 @@ int main()
 	while (true)
 	{
 		MainMenu menu;
-		menu.render();
+		int code = menu.render();
+
+		if (code == MainMenu::EXIT_CODE)
+			break;
 
 		engine.init(mapSize, mapSize);
 
