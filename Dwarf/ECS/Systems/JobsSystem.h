@@ -10,7 +10,9 @@
 //class MovementComponent;
 //class PositionComponent;
 
-class JobsSystem : public System<Requires<JobComponent, MovementComponent, PositionComponent, LaborStatsComponent>>
+
+
+class JobsSystem : public System<Requires<JobComponent, MovementComponent, PositionComponent, LaborStatsComponent>> // Possibly try passing Components instead of Entities if perf becomes an issue!
 {
 public:
 
@@ -28,6 +30,10 @@ public:
 	// This will need to be fleshed out in the 
 	// future with checks for min lvl req, etc
 	bool assignJob(Entity e);
+
+	// Job has failed for some reason with this Entity
+	// try and give it to another worker
+	void retryJob(Entity e);
 
 	// Progress in working the current or new job
 	void workJob(Entity e, double tStep);

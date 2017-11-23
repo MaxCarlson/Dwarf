@@ -12,11 +12,21 @@ void JobsSystem::update(double tStep)
 	{
 		auto& job = e.getComponent<JobComponent>();
 		auto& co  = e.getComponent<PositionComponent>().co;
+		auto& mov = e.getComponent<MovementComponent>();
 
 		// If the Entity has a job and 
 		// is at job site start or coninue working
 		if (job.currentJob.jobType && co == job.currentJob.co)
 			workJob(e, tStep);
+
+		// If this Entity failed to reach (or eventually do?) 
+		// this job, try and give it to another Entity
+		else if (job.currentJob.jobType && mov.cannotFindPath)
+		{
+			retryJob(e);
+			continue;
+		}
+			
 
 		// If the Entity has no job,
 		// and there are jobs try to assign it one
@@ -49,6 +59,24 @@ bool JobsSystem::assignJob(Entity e)
 	// job was accepted once we have different types of
 	// job abilities
 	return true;
+}
+
+void JobsSystem::retryJob(Entity e)
+{
+	auto& job = e.getComponent<JobComponent>();
+	e.getComponent<MovementComponent>().cannotFindPath = false;
+
+	// If job has been attempted less than 10 times
+	// Re add it to the job storage and increment attempts
+	if (job.currentJob.numberOfAttempts < 10)
+	{
+		++job.currentJob.numberOfAttempts;
+
+		notStarted.push(job.currentJob);
+	}
+
+	// Reset Entities job to inactive
+	job.currentJob.jobType = Job::NONE;
 }
 
 // Need to add quality multiplier to Jobs that can produce

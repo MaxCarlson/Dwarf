@@ -155,18 +155,18 @@ void MovementAiSystem::update()
 
 			// If path is found
 			// Add the path to our Entities MovementComponent
-			if(found)
+			if (found)
+			{
 				mov.path = reconstructPath(pos.co, mov.destination, pathMap);
-
+				mov.cannotFindPath = false;
+			}
 			// Else, remove desination square
 			// need to send an update to GUI at somepoint to notify no path found
 			else
 			{
 				mov.destination = EMPTY_COORDINATES;
 
-				// Set Entities job to none if Job can't be reached,
-				// We will need to announce this eventually
-				e.getComponent<JobComponent>().currentJob.jobType = Job::NONE;
+				mov.cannotFindPath = true;
 			}
 		}
 	}

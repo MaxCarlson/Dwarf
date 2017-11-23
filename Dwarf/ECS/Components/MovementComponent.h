@@ -29,6 +29,12 @@ public:
 	Coordinates destination;
 
 
+	// Designate that this path finding failed.
+	// designation will be removed by JobSystem for now
+	// later it will probably be removed by messaging system
+	bool cannotFindPath = false;
+
+
 	// Holds the entire path calcualted by MovementAiSystem
 	// Direction the entity is moving in is in path[0]
 	// Using coordinates for easy offsets 

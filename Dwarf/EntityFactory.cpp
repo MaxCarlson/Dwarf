@@ -34,7 +34,7 @@ Entity EntityFactory::createDwarf(Coordinates co)
 	dwarf.addComponent<LaborStatsComponent>();
 
 	// Movement speed in constructor in tiles per second
-	dwarf.addComponent<MovementComponent>(2.0);
+	dwarf.addComponent<MovementComponent>(3.5);
 
 	//dwarf.addComponent<HealthComponent>(1000, 1000, 1);
 

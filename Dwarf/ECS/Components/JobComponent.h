@@ -50,6 +50,12 @@ struct Job
 
 	// Job type
 	Jobs jobType;
+
+	// Number of times this job has been
+	// Attempted by different Entities
+	// at a threshold this job will be discarded
+	// with a message (eventually)
+	int numberOfAttempts = 0;
 };
 
 // Going to be used for filtering capable
