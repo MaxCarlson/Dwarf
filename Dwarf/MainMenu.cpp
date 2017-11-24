@@ -136,6 +136,8 @@ bool MainMenu::pickDwarves()
 	int selected = 0;
 	static const int NumberOfDwaves = 7;
 
+	dwarfStats.resize(NumberOfDwaves);
+
 	while (true)
 	{
 		terminal_clear();
@@ -194,18 +196,28 @@ int MainMenu::pickDwarvesInput(int selected, int maxNumber)
 	return selected;
 }
 
-void MainMenu::printDwafStatOptions(int selected)
+void MainMenu::printDwafStatOptions(int dwarfSelected)
 {
 	int statSelected = 0;
-	static const int statIdent = 15;
+	static const int statIndent = 15;
+	static const int statValueIndent = 25;
 
+	static const int totalStatNumber = listOfAllJobsByIndex.size(); // + listOfAllCombatStats.Size()
+
+	// Resize each dwarves stat vector
+	{
+		int statCounterDwarf = 0;
+		for (auto& dwarVec : dwarfStats)
+			dwarfStats[statCounterDwarf++].resize(totalStatNumber);
+	}
+		
 	while (true)
 	{
 		terminal_clear_area(12, 0, panelWidth, panelHeight);
 
 		// Labor Stats
 		int tileIndent = 2;
-		int statCouner = -1; // -1 due to first job being Job::NONE
+		int statCounter = -1; // -1 due to first job being Job::NONE
 		for (int stat : listOfAllJobsByIndex)
 		{
 			if (stat == Job::Jobs::NONE)
@@ -215,10 +227,17 @@ void MainMenu::printDwafStatOptions(int selected)
 
 			const char * jobStr = listOfAllJobsByString[stat].c_str();
 
-			terminal_print_ext(statIdent, tileIndent, panelWidth, panelHeight, TK_ALIGN_LEFT, jobStr);
+			// Print the stat
+			terminal_print_ext(statIndent, tileIndent, panelWidth, panelHeight, TK_ALIGN_LEFT, jobStr);
+			resetColor();
+
+			std::string statVal = std::to_string(dwarfStats.at(dwarfSelected).at(stat));
+
+			// Print the stats value
+			terminal_print_ext(statValueIndent, tileIndent, panelWidth, panelHeight, TK_ALIGN_LEFT, statVal.c_str());
 
 			tileIndent += 1;
-			++statCouner;
+			++statCounter;
 		}
 
 		// Need for loop printing Combat
@@ -227,14 +246,14 @@ void MainMenu::printDwafStatOptions(int selected)
 		terminal_refresh();
 		resetColor();
 
-		statSelected = dwarfStatOptionsInput(statSelected, statCouner);
+		statSelected = dwarfStatOptionsInput(dwarfSelected, statSelected, statCounter);
 
 		if (statSelected == EXIT_CODE)
 			return;	
 	}
 }
 
-int MainMenu::dwarfStatOptionsInput(int statSelected, int maxStats)
+int MainMenu::dwarfStatOptionsInput(int dwarfSelected, int statSelected, int maxStats)
 {
 	const int key = terminal_read();
 
@@ -248,9 +267,11 @@ int MainMenu::dwarfStatOptionsInput(int statSelected, int maxStats)
 	case TK_EQUALS:
 		// Fall Through
 	case TK_KP_PLUS:
+		++dwarfStats.at(dwarfSelected).at(statSelected + 1);
 		break;
 
 	case TK_MINUS:
+		--dwarfStats.at(dwarfSelected).at(statSelected + 1);
 		break;
 
 

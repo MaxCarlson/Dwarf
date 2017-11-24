@@ -1,4 +1,6 @@
 #pragma once
+#include <vector>
+
 
 struct GameInit
 {
@@ -47,10 +49,14 @@ private:
 
 	int startGame();
 
+	
 	bool pickDwarves();
 	int pickDwarvesInput(int selected, int maxNumber);
-	void printDwafStatOptions(int selected);
-	int dwarfStatOptionsInput(int selected, int maxStats);
+
+	// Vector of desired stats for dwarves
+	std::vector<std::vector<int>> dwarfStats;
+	void printDwafStatOptions(int dwarfSelected);
+	int dwarfStatOptionsInput(int dwarfSelected, int selected, int maxStats);
 
 	//void settings();
 };
