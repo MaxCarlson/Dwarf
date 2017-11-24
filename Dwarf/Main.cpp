@@ -10,9 +10,6 @@
 // dynamic eventually
 Engine engine;
 
-// temp variable for map size
-static const int mapSize = 80;
-
 int main()
 {
 	// BearslibTerminal Init stuff
@@ -32,7 +29,7 @@ int main()
 		if (code == MainMenu::EXIT_CODE)
 			break;
 
-		engine.init(mapSize, mapSize);
+		engine.init(menu.mapWidth, menu.mapHeight);
 
 		// Start the game loop.
 		engine.run();
