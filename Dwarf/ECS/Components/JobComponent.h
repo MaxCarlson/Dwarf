@@ -76,3 +76,21 @@ public:
 	// base duration to determine if the job is complete
 	double progress = 0.0;
 };
+
+static const std::vector<Job::Jobs> listOfAllJobsByIndex = 
+{
+	Job::NONE,
+	Job::MINER,
+	Job::MASON,
+	Job::WOODCUTTER,
+	Job::CARPENTER
+};
+
+static const std::vector<std::string> listOfAllJobsByString =
+{
+	"None",
+	"Miner",
+	"Mason",
+	"Woodcutter",
+	"Carpenter"
+};

@@ -24,7 +24,7 @@ public:
 
 		// Codes for different 
 		// actions on MainMenu::render() return
-		EXIT_CODE = 100,
+		EXIT_CODE = 10001,
 		START_CODE
 	};
 
@@ -43,11 +43,14 @@ private:
 	void resetColor();
 	void determineHighlight(int h, int num);
 	int mainMenuInput(int selected);
+	void upOrDownInput(int key, int & selected);
 
 	int startGame();
 
 	bool pickDwarves();
 	int pickDwarvesInput(int selected, int maxNumber);
+	void printDwafStatOptions(int selected);
+	int dwarfStatOptionsInput(int selected, int maxStats);
 
 	//void settings();
 };

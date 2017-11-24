@@ -2,6 +2,7 @@
 #include "BearLibTerminal.h"
 #include "Engine.h"
 #include "EntityFactory.h"
+#include "ECS\Components\JobComponent.h"
 
 
 static const int NUM_MAIN_MEN_OPTIONS = 4;
@@ -61,21 +62,15 @@ void MainMenu::determineHighlight(int h, int num)
 	else
 		resetColor();
 }
-
+// Make all these input functions into one big template?
 int MainMenu::mainMenuInput(int selected)
 {
 	const int key = terminal_read();
+
+	upOrDownInput(key, selected);
 	
 	switch (key)
 	{
-	case TK_DOWN:
-		++selected;
-		break;
-
-	case TK_UP:
-		--selected;
-		break;
-
 	case TK_ENTER:
 		switch (selected)
 		{
@@ -97,7 +92,7 @@ int MainMenu::mainMenuInput(int selected)
 		break;
 	}
 
-
+	// Wrap scrolling highlighting
 	if (selected < 0)
 		selected = NUM_MAIN_MEN_OPTIONS - 1;
 
@@ -105,6 +100,23 @@ int MainMenu::mainMenuInput(int selected)
 		selected = 0;
 
 	return selected;
+}
+
+void MainMenu::upOrDownInput(int key, int & selected)
+{
+	switch (key)
+	{
+	case TK_DOWN:
+		++selected;
+		break;
+
+	case TK_UP:
+		--selected;
+		break;
+
+	default:
+		break;
+	}
 }
 
 // Eventually this function will handle
@@ -130,13 +142,16 @@ bool MainMenu::pickDwarves()
 
 		terminal_print_ext(0, 0, panelWidth, panelHeight, TK_ALIGN_LEFT, "Dwaves");
 
+		// Print out dwarfs to select from
+		// Generate names/allow name picking eventually
 		int tileIndent = 2;
 		for (int d = 0; d < NumberOfDwaves; ++d)
 		{
 			determineHighlight(selected, d);
 
+			// Rudimentry naming
 			std::string ds = "Dwarf ";
-			ds += d + '0';
+			ds += d + 1 + '0';
 
 			terminal_print_ext(0, tileIndent, panelWidth, panelHeight, TK_ALIGN_LEFT, ds.c_str());
 
@@ -144,9 +159,11 @@ bool MainMenu::pickDwarves()
 		}
 
 		terminal_refresh();
+		resetColor();
 
 		selected = pickDwarvesInput(selected, NumberOfDwaves);
 
+		// Local exit of this menu to main menu
 		if (selected == EXIT_CODE)
 			return false;
 	}
@@ -156,24 +173,94 @@ int MainMenu::pickDwarvesInput(int selected, int maxNumber)
 {
 	const int key = terminal_read();
 
+	upOrDownInput(key, selected);
+
 	switch (key)
 	{
 	case TK_ESCAPE:
 		return EXIT_CODE;
 
-	case TK_UP:
-		--selected;
-		break;
-
-	case TK_DOWN:
-		++selected;
+	case TK_ENTER:
+		printDwafStatOptions(selected);
 		break;
 	}
 
+	// Wrap scrolling highlighting
 	if (selected >= maxNumber)
 		selected = 0;
 	else if (selected < 0)
 		selected = maxNumber - 1;
 
 	return selected;
+}
+
+void MainMenu::printDwafStatOptions(int selected)
+{
+	int statSelected = 0;
+	static const int statIdent = 15;
+
+	while (true)
+	{
+		terminal_clear_area(12, 0, panelWidth, panelHeight);
+
+		// Labor Stats
+		int tileIndent = 2;
+		int statCouner = -1; // -1 due to first job being Job::NONE
+		for (int stat : listOfAllJobsByIndex)
+		{
+			if (stat == Job::Jobs::NONE)
+				continue;
+
+			determineHighlight(statSelected, stat - 1);
+
+			const char * jobStr = listOfAllJobsByString[stat].c_str();
+
+			terminal_print_ext(statIdent, tileIndent, panelWidth, panelHeight, TK_ALIGN_LEFT, jobStr);
+
+			tileIndent += 1;
+			++statCouner;
+		}
+
+		// Need for loop printing Combat
+		// stats after labor stats here!
+
+		terminal_refresh();
+		resetColor();
+
+		statSelected = dwarfStatOptionsInput(statSelected, statCouner);
+
+		if (statSelected == EXIT_CODE)
+			return;	
+	}
+}
+
+int MainMenu::dwarfStatOptionsInput(int statSelected, int maxStats)
+{
+	const int key = terminal_read();
+
+	upOrDownInput(key, statSelected);
+
+	switch (key)
+	{
+	case TK_ESCAPE:
+		return EXIT_CODE;
+
+	case TK_EQUALS:
+		// Fall Through
+	case TK_KP_PLUS:
+		break;
+
+	case TK_MINUS:
+		break;
+
+
+	}
+
+	// Handle wrapping
+	if (statSelected > maxStats)
+		statSelected = 0;
+	else if (statSelected < 0)
+		statSelected = maxStats - 1;
+
+	return statSelected;
 }
