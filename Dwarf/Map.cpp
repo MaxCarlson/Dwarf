@@ -252,7 +252,7 @@ void Map::placeDwarves(int number)
 			{
 				if (tileManager.canWalk({ i, j, h }))
 				{
-					engine.factory.createDwarf({ i, j, h });
+					engine.Dwarves.at(dwarfNumber).getComponent<PositionComponent>().co = { i, j, h };
 					mapRenderer->currentZLevel = h;
 					++dwarfNumber;
 				}

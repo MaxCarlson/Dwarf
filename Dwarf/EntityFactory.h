@@ -1,7 +1,9 @@
 #pragma once
+#include "Coordinates.h"
+
 
 class Entity;
-struct Coordinates;
+
 
 // Used for creating a variety of Entities
 // Also probably going to be the place for 
@@ -11,6 +13,19 @@ class EntityFactory
 public:
 	EntityFactory();
 
-	Entity createDwarf(Coordinates co);
+	Entity createDwarf(DwarfCreationObj dwarfConstruct);
 };
 
+struct DwarfCreationObj
+{
+	// Dwarf Location
+	Coordinates co;
+
+	// Dwarf skill level and dwarf
+	// skill points
+	std::vector<int> laborStats;
+	std::vector<int> skillLevel;
+
+	// Not in use yet
+	std::string name;
+};

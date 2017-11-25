@@ -136,7 +136,15 @@ bool MainMenu::pickDwarves()
 	int selected = 0;
 	static const int NumberOfDwaves = 7;
 
+	// Resize each dwarves stat vector
+	// THIS SHOULD BE MOVED ELSEWHERE!!
 	dwarfStats.resize(NumberOfDwaves);
+	static const int totalStatNumber = listOfAllJobsByIndex.size(); // + listOfAllCombatStats.Size()
+	{
+		int statCounterDwarf = 0;
+		for (auto& dwarVec : dwarfStats)
+			dwarfStats[statCounterDwarf++].resize(totalStatNumber);
+	}
 
 	// Do we want to be scrolling through
 	// stats or dwaves?
@@ -151,7 +159,7 @@ bool MainMenu::pickDwarves()
 		// Print out dwarfs to select from
 		// Generate names/allow name picking eventually
 		int tileIndent = 2;
-		for (int d = 0; d < NumberOfDwaves; ++d)
+		for (int d = 0; d < NumberOfDwaves + 1; ++d)
 		{
 			determineHighlight(selected, d);
 
@@ -159,17 +167,22 @@ bool MainMenu::pickDwarves()
 			std::string ds = "Dwarf ";
 			ds += d + 1 + '0';
 
-			terminal_print_ext(0, tileIndent, panelWidth, panelHeight, TK_ALIGN_LEFT, ds.c_str());
+			if(d < NumberOfDwaves)
+				terminal_print_ext(0, tileIndent, panelWidth, panelHeight, TK_ALIGN_LEFT, ds.c_str());
+
+			else
+				terminal_print_ext(0, tileIndent + 1, panelWidth, panelHeight, TK_ALIGN_LEFT, "Start Now!");
 			
 			tileIndent += 1;
 		}
 
-		printDwafStatOptions(selected, statsSelected);
+		if(selected < NumberOfDwaves)
+			printDwafStatOptions(selected, statsSelected);
 
 		terminal_refresh();
 		resetColor();
 
-		selected = pickDwarvesInput(selected, statsSelected, NumberOfDwaves);
+		selected = pickDwarvesInput(selected, statsSelected, NumberOfDwaves + 1);
 
 		// Local exit of this menu to main menu
 		if (selected == EXIT_CODE)
@@ -177,30 +190,34 @@ bool MainMenu::pickDwarves()
 	}
 }
 
-int MainMenu::pickDwarvesInput(int selected, bool &statsSelected, int maxNumber)
+int MainMenu::pickDwarvesInput(int dwarfSelected, bool &statsSelected, int maxNumber)
 {
 	const int key = terminal_read();
 
-	upOrDownInput(key, selected);
+	upOrDownInput(key, dwarfSelected);
 
 	switch (key)
 	{
 	case TK_ESCAPE:
 		return EXIT_CODE;
 
-	case TK_ENTER: // Fall Through..
+	case TK_ENTER: 
+		if (dwarfSelected == maxNumber - 1)
+			finalizeDwarfPicks();
+		break;
+
 	case TK_RIGHT:
 		statsSelected = true;
 		break;
 	}
 
 	// Wrap scrolling highlighting
-	if (selected >= maxNumber)
-		selected = 0;
-	else if (selected < 0)
-		selected = maxNumber - 1;
+	if (dwarfSelected >= maxNumber)
+		dwarfSelected = 0;
+	else if (dwarfSelected < 0)
+		dwarfSelected = maxNumber - 1;
 
-	return selected;
+	return dwarfSelected;
 }
 
 void MainMenu::printDwafStatOptions(int dwarfSelected, bool &statsSelected)
@@ -208,19 +225,17 @@ void MainMenu::printDwafStatOptions(int dwarfSelected, bool &statsSelected)
 	int statSelected = 0;
 	static const int statIndent = 15;
 	static const int statValueIndent = 25;
-
-	static const int totalStatNumber = listOfAllJobsByIndex.size(); // + listOfAllCombatStats.Size()
-
-	// Resize each dwarves stat vector
-	{
-		int statCounterDwarf = 0;
-		for (auto& dwarVec : dwarfStats)
-			dwarfStats[statCounterDwarf++].resize(totalStatNumber);
-	}
 		
 	do
 	{
+	CLEAR_HIGHLIGHT_BEFORE_EXIT:
+
 		terminal_clear_area(12, 0, panelWidth, panelHeight);
+
+		// Availbile points to spend 
+		std::string points = "Availbile Points ";
+		points += std::to_string(availablePoints);
+		terminal_print_ext(15, 0, panelWidth, panelHeight, TK_ALIGN_LEFT, points.c_str());
 
 		// Labor Stats
 		int tileIndent = 2;
@@ -230,6 +245,8 @@ void MainMenu::printDwafStatOptions(int dwarfSelected, bool &statsSelected)
 			if (stat == Job::Jobs::NONE)
 				continue;
 
+			// If the stats are selected instead of dwaves
+			// figure out which stat to highlight
 			if(statsSelected)
 				determineHighlight(statSelected, stat - 1);
 
@@ -256,8 +273,15 @@ void MainMenu::printDwafStatOptions(int dwarfSelected, bool &statsSelected)
 
 		statSelected = dwarfStatOptionsInput(dwarfSelected, statsSelected, statSelected, statCounter);
 
-		//if (statSelected == EXIT_CODE)
-			//return;	
+		// If we're exiting statSelection
+		// Run through the loop one more time
+		// to clear the highlight off the Stat
+		if (statSelected == EXIT_CODE)
+		{
+			statSelected = -1;
+			goto CLEAR_HIGHLIGHT_BEFORE_EXIT;
+		}
+
 	} while (statsSelected);
 }
 
@@ -274,24 +298,29 @@ int MainMenu::dwarfStatOptionsInput(int dwarfSelected, bool &statsSelected, int 
 
 	switch (key)
 	{
-	case TK_ESCAPE:
+	// Break back to dwarf selection
+	case TK_ESCAPE: case TK_LEFT:
 		statsSelected = false;
 		return EXIT_CODE;
 
-	case TK_EQUALS:
-		// Fall Through
-	case TK_KP_PLUS:
-		++dwarfStats.at(dwarfSelected).at(statSelected + 1);
+	// Increment Dwarf Starting Stat
+	case TK_KP_PLUS: case TK_EQUALS:
+		if (availablePoints
+			&& dwarfStats.at(dwarfSelected).at(statSelected + 1) < 20)
+		{
+			++dwarfStats.at(dwarfSelected).at(statSelected + 1);
+			--availablePoints;
+		}		
 		break;
 
-	case TK_MINUS:
-		--dwarfStats.at(dwarfSelected).at(statSelected + 1);
+	// Decrement Dwarf Starting Stat
+	case TK_MINUS: case TK_KP_MINUS:
+		if (dwarfStats.at(dwarfSelected).at(statSelected + 1))
+		{
+			--dwarfStats.at(dwarfSelected).at(statSelected + 1);
+			++availablePoints;
+		}		
 		break;
-
-	case TK_LEFT:
-		statsSelected = false;
-		return EXIT_CODE;
-
 	}
 
 	// Handle wrapping
@@ -301,4 +330,9 @@ int MainMenu::dwarfStatOptionsInput(int dwarfSelected, bool &statsSelected, int 
 		statSelected = maxStats - 1;
 
 	return statSelected;
+}
+
+void MainMenu::finalizeDwarfPicks()
+{
+	
 }

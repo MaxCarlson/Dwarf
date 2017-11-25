@@ -2,6 +2,7 @@
 
 #include "../Component.h"
 #include "JobComponent.h"
+#include <vector>
 
 static const int MAX_SKILL_LVL = 25;
 
@@ -21,14 +22,15 @@ class LaborStatsComponent : public Component
 {
 public:
 	LaborStatsComponent() = default;
+	LaborStatsComponent(std::vector<int> laborStats, std::vector<int> skillLevel) : laborStats(laborStats), skillLevel(skillLevel) {};
 
 	// Array of LaborStats indexed by Job::Jobs,
 	// for skill level associated with jobType
 	// Stats corrispond to skillLevel points from skillLevelReq
-	int laborStats[Job::MAX_LABORS] = { 1 };
+	std::vector<int> laborStats;
 
 	// Total points accumulated for Labor Skills
 	// Used to determine when to bump up laborStats by one level
 	// with skillLevelReq[laborStats[JobType]+1]
-	int skillLevel[Job::MAX_LABORS] = { 0 };
+	std::vector<int> skillLevel;
 };

@@ -3,7 +3,6 @@
 #include "ECS\EntityManager.h"
 #include "Engine.h"
 #include "ECS\World.h"
-#include "Tile.h"
 
 #include "ECS\Components\PositionComponent.h"
 #include "ECS\Components\RenderComponent.h"
@@ -21,17 +20,18 @@ EntityFactory::EntityFactory()
 
 // Need to create ui interface for starting dwarves
 // Also should probably store a vector of dwarves for qucik access
-Entity EntityFactory::createDwarf(Coordinates co)
+Entity EntityFactory::createDwarf(DwarfCreationObj dwarfConstruct)
 {
 	Entity dwarf = engine.world.createEntity();
 
 	dwarf.addComponent<RenderComponent>(1, 0xE300, "default");
-	dwarf.addComponent<PositionComponent>(co);
+	dwarf.addComponent<PositionComponent>(dwarfConstruct.co);
 	dwarf.addComponent<JobComponent>();
 
 	// Need to set stats here, probably as a variable for 
 	// this function
-	dwarf.addComponent<LaborStatsComponent>();
+	std::vector<int> a(Job::MAX_LABORS);
+	dwarf.addComponent<LaborStatsComponent>(a, a);
 
 	// Movement speed in constructor in tiles per second
 	dwarf.addComponent<MovementComponent>(3.5);
