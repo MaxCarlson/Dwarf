@@ -186,6 +186,8 @@ bool MainMenu::pickDwarves()
 		// Local exit of this menu to main menu
 		if (selected == EXIT_CODE)
 			return false;
+		else if (selected == START_CODE)
+			return true;
 	}
 }
 
@@ -201,9 +203,13 @@ int MainMenu::pickDwarvesInput(int dwarfSelected, bool &statsSelected, int maxNu
 		return EXIT_CODE;
 
 	case TK_ENTER: 
-		if (dwarfSelected == maxNumber - 1)
+		if (dwarfSelected == maxNumber - 1) 
+		{
 			finalizeDwarfPicks();
+			return START_CODE;
+		}
 		break;
+
 
 	case TK_RIGHT:
 		statsSelected = true;
