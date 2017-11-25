@@ -93,7 +93,7 @@ void JobsSystem::workJob(Entity e, double tStep)
 	const auto jobType = job.currentJob.jobType;
 
 	// Multiply time step seconds by Entity skill level job speed multiplier
-	double workSeconds = JobSpeedMultiplier[stats.laborStats[jobType]] * tSeconds;
+	double workSeconds = JobSpeedMultiplier[stats.laborLevel[jobType]] * tSeconds;
 
 	job.progress += workSeconds;
 
@@ -105,14 +105,12 @@ void JobsSystem::workJob(Entity e, double tStep)
 		job.currentJob.jobType = Job::NONE;
 		
 		// Add experience to the Entity for completing job
-		stats.skillLevel[jobType] += job.currentJob.experience;
+		stats.skillPoints[jobType] += job.currentJob.experience;
 
-		// If the Entities skill stat is less than max
-		// and their skill level >= the required number to gain an experience
-		// level in this jobType, raise their level
-		if (stats.laborStats[jobType] < MAX_SKILL_LVL
-			&& stats.skillLevel[jobType] >= skillLevelReq[stats.laborStats[jobType] + 1])
-			stats.laborStats[jobType] += 1;
+		// If Entity has enough skill points in a labor, and they're not at
+		// max labor level, increase their skill level by one
+		if (laborSkillIncrease(stats.skillPoints[jobType], stats.laborLevel[jobType]))
+			stats.laborLevel[jobType] += 1;
 
 		onJobComplete(e, jobType);
 	}

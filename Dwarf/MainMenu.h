@@ -50,11 +50,13 @@ private:
 	int startGame();
 
 	// Dwarf picking functions
-	// UI and gui
-	bool pickDwarves();
-	int pickDwarvesInput(int selected, bool &statsSelected, int maxNumber);
+	// UI and gui Below
+	const int NumberOfDwaves = 7;
 	// Vector of desired stats for dwarves
 	std::vector<std::vector<int>> dwarfStats;
+
+	bool pickDwarves();
+	int pickDwarvesInput(int selected, bool &statsSelected, int maxNumber);
 	int availablePoints = 30;
 	void printDwafStatOptions(int dwarfSelected, bool &statsSelected);
 	int dwarfStatOptionsInput(int dwarfSelected, bool &statsSelected, int selected, int maxStats);

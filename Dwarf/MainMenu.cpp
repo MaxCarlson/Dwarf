@@ -134,7 +134,6 @@ int MainMenu::startGame()
 bool MainMenu::pickDwarves()
 {
 	int selected = 0;
-	static const int NumberOfDwaves = 7;
 
 	// Resize each dwarves stat vector
 	// THIS SHOULD BE MOVED ELSEWHERE!!
@@ -334,5 +333,28 @@ int MainMenu::dwarfStatOptionsInput(int dwarfSelected, bool &statsSelected, int 
 
 void MainMenu::finalizeDwarfPicks()
 {
-	
+	std::vector<DwarfCreationObj> dwarvesInit(NumberOfDwaves);
+
+	// Loop through potential dwarves 
+	// add stats to dwarCreationObj's
+	// and create them
+	int dwarfCounter = 0;
+	for (auto& dwarf : dwarvesInit)
+	{		
+		dwarf.skillPoints.resize(dwarfStats[0].size());
+		// To dwarfCreationObj add 35 skill points per
+		// point invested in Should this be in EntityFactory??
+		int statCounter = 0;
+		for (auto& dwarfSkillPoints : dwarf.skillPoints)
+		{
+			dwarfSkillPoints = dwarfStats[dwarfCounter][statCounter] * 35;
+			++statCounter;
+		}
+
+		// Need to name dwarves here
+
+		engine.factory.createDwarf(dwarf);
+
+		++dwarfCounter;
+	}
 }

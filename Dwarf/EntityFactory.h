@@ -1,9 +1,10 @@
 #pragma once
 #include "Coordinates.h"
-
+#include <string>
+#include <vector>
 
 class Entity;
-
+struct DwarfCreationObj;
 
 // Used for creating a variety of Entities
 // Also probably going to be the place for 
@@ -23,8 +24,8 @@ struct DwarfCreationObj
 
 	// Dwarf skill level and dwarf
 	// skill points
-	std::vector<int> laborStats;
-	std::vector<int> skillLevel;
+	//std::vector<int> laborStats;
+	std::vector<int> skillPoints;
 
 	// Not in use yet
 	std::string name;
