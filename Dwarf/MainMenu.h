@@ -51,12 +51,12 @@ private:
 
 	
 	bool pickDwarves();
-	int pickDwarvesInput(int selected, int maxNumber);
+	int pickDwarvesInput(int selected, bool &statsSelected, int maxNumber);
 
 	// Vector of desired stats for dwarves
 	std::vector<std::vector<int>> dwarfStats;
-	void printDwafStatOptions(int dwarfSelected);
-	int dwarfStatOptionsInput(int dwarfSelected, int selected, int maxStats);
+	void printDwafStatOptions(int dwarfSelected, bool &statsSelected);
+	int dwarfStatOptionsInput(int dwarfSelected, bool &statsSelected, int selected, int maxStats);
 
 	//void settings();
 };
