@@ -52,7 +52,7 @@ inline bool laborSkillIncrease(int skillPoints, int laborSkillLvl)
 	if (laborSkillLvl >= MAX_LABOR_LVL)
 		return false;
 
-	if (skillPoints > laborLevelReq[laborSkillLvl])
+	if (skillPoints > laborLevelReq[laborSkillLvl + 1])
 		return true;
 
 	return false;
