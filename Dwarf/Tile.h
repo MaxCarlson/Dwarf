@@ -48,6 +48,16 @@ public:
 // Formula for tile indexing with coordinates
 #define TILE_ARRAY_LOOKUP co.z * width * height + co.y * width + co.x
 
+enum Directions
+{
+	CAN_GO_NORTH,
+	CAN_GO_SOUTH,
+	CAN_GO_EAST,
+	CAN_GO_WEST,
+	CAN_GO_UP,
+	CAN_GO_DOWN
+};
+
 
 // Creates a 1D Vector of Tile objects used to
 // simulate a 3D area of tiles. Access Tiles through here
@@ -85,6 +95,28 @@ public:
 	inline void removeProperty(Coordinates co)
 	{
 		tileAt(co).properties &= ~P;
+	}
+
+	template<Directions D>
+	inline bool canGo(Coordinates co)
+	{
+		if (D == CAN_GO_NORTH)
+			return canWalk({ co.x, co.y - 1, co.z });
+		if(D == CAN_GO_SOUTH)
+			return canWalk({ co.x, co.y + 1, co.z });
+		if (D == CAN_GO_EAST)
+			return canWalk({ co.x + 1, co.y, co.z });
+		if (D == CAN_GO_WEST)
+			return canWalk({ co.x - 1, co.y, co.z });
+
+		// These will need to be changed since enventually 
+		// we don't want dwarves walking on air and dropping down 
+		if (D == CAN_GO_UP)
+			return canWalk({ co.x, co.y, co.z + 1}) && getProperty<Tile::RAMP>(co);
+		if (D == CAN_GO_DOWN)
+			return canWalk({ co.x, co.y, co.z - 1 }) && getProperty<Tile::RAMP>({co.x, co.y, co.z - 1});
+
+		return false;
 	}
 
 	// Returns true if tile has property of TileProperty P

@@ -9,11 +9,12 @@ MiningSystem::MiningSystem()
 {
 }
 
-void MiningSystem::init(int width_i, int height_i, int depth_i)
+void MiningSystem::init(TileManager* tileManager_i)
 {
-	width = width_i;
-	height = height_i;
-	depth = depth_i;
+	tileManager = tileManager_i; 
+	width = tileManager->width;
+	height = tileManager->height;
+	depth = tileManager->depth;
 	miningMap.resize(width * depth * height);
 	miningTargets.resize(width * depth * height);
 }
@@ -44,6 +45,7 @@ void MiningSystem::makeMiningMap()
 						startingPoints.push_back(std::make_tuple(x, y + 1, z, idx));
 						break;
 
+						// Everything after here will not be implemented for a while
 					case 2: // Channeling
 						startingPoints.push_back(std::make_tuple(x, y, z, idx));
 						startingPoints.push_back(std::make_tuple(x, y, z - 1, idx));
@@ -90,9 +92,35 @@ void MiningSystem::makeMiningMap()
 						startingPoints.push_back(std::make_tuple(x, y + 1, z, idx));
 						break;
 					}
-
 				}
 			}
+
+	for (auto& pos : startingPoints)
+		walkMiningMap({ std::get<0>(pos), std::get<1>(pos), std::get<2>(pos) }, 0, std::get<3>(pos));
+}
+
+void MiningSystem::walkMiningMap(const Coordinates co, const int distance, const int idx)
+{
+	if (distance > 200)
+		return;
+
+	const auto newIdx = TILE_ARRAY_LOOKUP;
+
+	if (miningMap[newIdx] > distance)
+	{
+		if (!tileManager->canWalk(co))
+			return;
+
+		miningMap[newIdx] = distance;
+		miningTargets[newIdx] = idx;
+
+		if (tileManager->canGo<CAN_GO_NORTH>(co)) walkMiningMap({ co.x, co.y - 1, co.z }, distance + 1, idx);
+		if (tileManager->canGo<CAN_GO_SOUTH>(co)) walkMiningMap({ co.x, co.y + 1, co.z }, distance + 1, idx);
+		if (tileManager->canGo<CAN_GO_EAST >(co)) walkMiningMap({ co.x + 1, co.y, co.z }, distance + 1, idx);
+		if (tileManager->canGo<CAN_GO_WEST >(co)) walkMiningMap({ co.x - 1, co.y, co.z }, distance + 1, idx);
+		if (tileManager->canGo<CAN_GO_UP   >(co)) walkMiningMap({ co.x, co.y, co.z + 1 }, distance + 1, idx);
+		if (tileManager->canGo<CAN_GO_DOWN >(co)) walkMiningMap({ co.x, co.y, co.z - 1 }, distance + 1, idx);
+	}
 }
 
 void MiningSystem::issueJob()
