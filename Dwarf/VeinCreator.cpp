@@ -32,7 +32,7 @@ static const int numOreTypes = 4;
 #define tin    OreType(139,  0xFFC0C0C0)
 #define coal   OreType(136,  0xFF5C5B5D)
 
-OreType oreArray[numOreTypes] = { iron, copper, tin, coal };
+OreType oreArray[numOreTypes];
 int oreDepths[numOreTypes]                 = {    0,      0,   0,    0 };
 float medianOreDepths[numOreTypes]         = { 0.35,   0.55,0.75, 0.75 }; // In % of map z level
 

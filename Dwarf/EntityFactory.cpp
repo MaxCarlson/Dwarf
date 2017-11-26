@@ -34,9 +34,9 @@ Entity EntityFactory::createDwarf(DwarfCreationObj dwarfConstruct)
 	for (auto& skillPoints : dwarfConstruct.skillPoints)
 	{
 		// Determine labor skill Level
-		int lbLevel = determineLaborSkillLvl(skillPoints);
+		const int lbsLevel = determineLaborSkillLvl(skillPoints);
 
-		laborSkillLevels.push_back(lbLevel);
+		laborSkillLevels.push_back(lbsLevel);
 	}
 	dwarf.addComponent<LaborStatsComponent>(laborSkillLevels, dwarfConstruct.skillPoints);
 
@@ -47,6 +47,7 @@ Entity EntityFactory::createDwarf(DwarfCreationObj dwarfConstruct)
 
 	dwarf.activate();
 
+	// Add dwarves to engine vector
 	engine.Dwarves.push_back(dwarf);
 
 	return dwarf;

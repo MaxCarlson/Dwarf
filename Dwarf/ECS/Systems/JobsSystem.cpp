@@ -19,7 +19,7 @@ void JobsSystem::update(double tStep)
 		if (job.currentJob.jobType && co == job.currentJob.co)
 			workJob(e, tStep);
 
-		// If this Entity failed to reach (or eventually do?) 
+		// If this Entity failed to reach (or eventually do?) -- Just make sure an Entity can never start or get assigned a job it can't do 
 		// this job, try and give it to another Entity
 		else if (job.currentJob.jobType && mov.cannotFindPath)
 		{
@@ -27,7 +27,6 @@ void JobsSystem::update(double tStep)
 			continue;
 		}
 			
-
 		// If the Entity has no job,
 		// and there are jobs try to assign it one
 		if (!job.currentJob.jobType && !notStarted.empty()

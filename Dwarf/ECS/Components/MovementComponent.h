@@ -9,7 +9,7 @@ class MovementComponent : public Component
 {
 public:
 	MovementComponent() : speed(1), progress(0), destination(EMPTY_COORDINATES) {};
-	MovementComponent(double speed) : speed(speed) {};
+	MovementComponent(double speed) : speed(speed), destination(EMPTY_COORDINATES) {};
 
 
 	// How fast is the Entity currently moving?

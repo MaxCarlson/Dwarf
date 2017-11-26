@@ -11,7 +11,7 @@ class Tile {
 
 public:
 	// These properties are set by set bit's in Tile's properties unsigned int
-	// And accessed through the tile manager
+	// And accessed through the tile manager getProperty, setProperty, reverseProperty
 	// bool Explored;		 
 	// bool Obstructed;	 
 	// bool Wall;         

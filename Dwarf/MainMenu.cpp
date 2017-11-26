@@ -18,16 +18,16 @@ int MainMenu::render()
 	{
 		terminal_clear();
 
-		determineHighlight(selected, START_GAME_O);
+		determineHighlight(selected, START_GAME_M);
 		terminal_print_ext(0, panelHeight / 2 - 15, panelWidth, panelHeight, TK_ALIGN_CENTER, "Start Game");
 
-		determineHighlight(selected, CREATE_WORLD_O);
+		determineHighlight(selected, CREATE_WORLD_M);
 		terminal_print_ext(0, panelHeight / 2 - 10, panelWidth, panelHeight, TK_ALIGN_CENTER, "Create World");
 
-		determineHighlight(selected, SETTINGS_O);
+		determineHighlight(selected, SETTINGS_M);
 		terminal_print_ext(0, panelHeight / 2 - 5, panelWidth, panelHeight, TK_ALIGN_CENTER, "Settings");
 
-		determineHighlight(selected, QUIT_O);
+		determineHighlight(selected, QUIT_M);
 		terminal_print_ext(0, panelHeight / 2, panelWidth, panelHeight, TK_ALIGN_CENTER, "Quit");
 		
 		terminal_refresh();
@@ -74,18 +74,18 @@ int MainMenu::mainMenuInput(int selected)
 	case TK_ENTER:
 		switch (selected)
 		{
-		case START_GAME_O:
+		case START_GAME_M:
 			return startGame();
 			break;
 
-		case CREATE_WORLD_O:
+		case CREATE_WORLD_M:
 			break;
 
-		case SETTINGS_O:
+		case SETTINGS_M:
 			//settings();
 			break;
 
-		case QUIT_O:
+		case QUIT_M:
 			return EXIT_CODE;
 		}
 
@@ -233,6 +233,7 @@ void MainMenu::printDwafStatOptions(int dwarfSelected, bool &statsSelected)
 		
 	do
 	{
+	// Get rid of this goto!!
 	CLEAR_HIGHLIGHT_BEFORE_EXIT:
 
 		terminal_clear_area(12, 0, panelWidth, panelHeight);

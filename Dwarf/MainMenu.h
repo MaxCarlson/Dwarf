@@ -19,10 +19,10 @@ public:
 	{
 		// Visual / UI
 		// Option Enums
-		START_GAME_O,
-		CREATE_WORLD_O,
-		SETTINGS_O,
-		QUIT_O,
+		START_GAME_M,
+		CREATE_WORLD_M,
+		SETTINGS_M,
+		QUIT_M,
 
 		// Codes for different 
 		// actions on MainMenu::render() return

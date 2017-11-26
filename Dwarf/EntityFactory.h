@@ -27,6 +27,9 @@ struct DwarfCreationObj
 	//std::vector<int> laborStats;
 	std::vector<int> skillPoints;
 
+	//std::vector<int> attributes;
+	//std::vector<int> combatStats;
+
 	// Not in use yet
 	std::string name;
 };
