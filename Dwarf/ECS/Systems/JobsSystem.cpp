@@ -75,7 +75,7 @@ void JobsSystem::retryJob(Entity e)
 	}
 
 	// Reset Entities job to inactive
-	job.currentJob.jobType = Job::NONE;
+	job.currentJob.reset();
 }
 
 // Need to add quality multiplier to Jobs that can produce
@@ -101,7 +101,7 @@ void JobsSystem::workJob(Entity e, double tStep)
 	if (job.progress >= job.currentJob.baseDuration)
 	{
 		// Set the current job to NONE
-		job.currentJob.jobType = Job::NONE;
+		job.currentJob.reset();
 		
 		// Add experience to the Entity for completing job
 		stats.skillPoints[jobType] += job.currentJob.experience;
@@ -120,7 +120,7 @@ void JobsSystem::onJobComplete(Entity & e, Job::Jobs job)
 	switch (job)
 	{
 	case Job::MINER:
-		mining(e);
+		mining(e); 
 		break;
 
 	case Job::MASON:

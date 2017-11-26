@@ -138,6 +138,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Designations.cpp" />
     <ClCompile Include="ECS\EntityManager.cpp" />
     <ClCompile Include="ECS\Systems\JobsSystem.cpp" />
     <ClCompile Include="Engine.cpp" />
@@ -151,11 +152,13 @@
     <ClCompile Include="ECS\World.cpp" />
     <ClCompile Include="MapRender.cpp" />
     <ClCompile Include="ECS\Systems\MovementAiSystem.cpp" />
+    <ClCompile Include="ECS\Systems\MiningSystem.cpp" />
     <ClCompile Include="TileFactory.cpp" />
     <ClCompile Include="VeinCreator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BearLibTerminal.h" />
+    <ClInclude Include="Designations.h" />
     <ClInclude Include="ECS\Camera.h" />
     <ClInclude Include="ECS\Component.h" />
     <ClInclude Include="ECS\Components\CameraComponent.h" />
@@ -185,6 +188,7 @@
     <ClInclude Include="Map.h" />
     <ClInclude Include="MapRender.h" />
     <ClInclude Include="ECS\Systems\MovementAiSystem.h" />
+    <ClInclude Include="ECS\Systems\MiningSystem.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="ECS\World.h" />
     <ClInclude Include="TileFactory.h" />

@@ -114,6 +114,12 @@ public:
 		return tileMap[exactPos];
 	}
 
+	// Get the index of Coordinates 
+	inline int getIdx(Coordinates co)
+	{
+		return TILE_ARRAY_LOOKUP;
+	}
+
 	// Returns a copy of data at tile below input tile coordinates
 	// Worse performance due to use of .at() for safety
 	// Is this needed?

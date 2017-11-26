@@ -24,14 +24,14 @@ struct Job
 
 	inline void reset()
 	{
-		// None of these should be reset
-		// as only jobType should be used to check if this
-		// Entity has a job
+		jobType = NONE;
 		//co = EMPTY_COORDINATES;
 		//experience = 0;
 		//baseSkillReq = 0;
 		//baseDuration = 0;
-		jobType = NONE;
+		// None of these should be reset
+		// as only jobType should be used to check if this
+		// Entity has a job
 	}
 
 	// Job location
