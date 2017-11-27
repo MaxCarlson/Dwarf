@@ -7,12 +7,8 @@
 #include "../Components/PositionComponent.h"
 #include <queue>
 
-//class MovementComponent;
-//class PositionComponent;
 
-
-
-class JobsSystem : public System<Requires<JobComponent, MovementComponent, PositionComponent, LaborStatsComponent>> // Possibly try passing Components instead of Entities if perf becomes an issue!
+class JobsSystem : public System<Requires<JobComponent, MovementComponent, PositionComponent, LaborStatsComponent>> // Possibly try passing sepperate JobType Components instead of Entities if perf becomes an issue!
 {
 public:
 

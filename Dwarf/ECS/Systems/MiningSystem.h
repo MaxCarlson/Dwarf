@@ -12,13 +12,11 @@ struct Coordinates;
 extern std::vector<uint8_t> miningMap;
 extern std::vector<int> miningTargets;
 
-class MiningSystem : public System<Requires<LaborStatsComponent, JobComponent>>
+class MiningSystem : public System<Requires<>>//Requires<LaborStatsComponent, JobComponent>> // Does not interate through Entities
 {
 public:
 	MiningSystem() = default;
-	//~MiningSystem();
-
-	void init(TileManager* tileManager_i);
+	MiningSystem(TileManager* tileManager);
 
 	//void designateMining(Coordinates topLeft, Coordinates botRight); // Make a designations class
 

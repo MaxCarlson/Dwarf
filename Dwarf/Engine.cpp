@@ -11,6 +11,7 @@
 #include "ECS\Systems\MovementSystem.h"
 #include "ECS\Systems\ai\MovementAiSystem.h"
 #include "ECS\Systems\JobsSystem.h"
+#include "ECS\Systems\MiningSystem.h"
 #include "BearLibTerminal.h"
 
 #include <chrono>
@@ -42,6 +43,9 @@ void Engine::init(int screenWidth, int screenHeight)
 	movementSystem = new MovementSystem();
 	movementAiSystem = new MovementAiSystem(&map->tileManager);
 	jobsSystem = new JobsSystem();
+
+	// Non Entity Systems
+	miningSystem = new MiningSystem(&map->tileManager);
 
 	world.addSystem(*renderSystem);
 	world.addSystem(*movementSystem);

@@ -13,6 +13,7 @@ class RenderSystem;
 class MovementSystem;
 class MovementAiSystem;
 class JobsSystem;
+class MiningSystem;
 
 class Engine
 {
@@ -30,6 +31,9 @@ public:
 	MovementSystem * movementSystem;
 	MovementAiSystem * movementAiSystem;
 	JobsSystem * jobsSystem;
+
+	// Systems that don't touch Entities
+	MiningSystem * miningSystem;
 
 	// Vector of dwarven Entities
 	// for fast lookup anywhere in program

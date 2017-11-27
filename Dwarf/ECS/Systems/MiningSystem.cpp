@@ -5,9 +5,8 @@
 std::vector<uint8_t> miningMap;
 std::vector<int> miningTargets;
 
-void MiningSystem::init(TileManager* tileManager_i)
+MiningSystem::MiningSystem(TileManager * tileManager) : tileManager(tileManager)
 {
-	tileManager = tileManager_i; 
 	width = tileManager->width;
 	height = tileManager->height;
 	depth = tileManager->depth;
