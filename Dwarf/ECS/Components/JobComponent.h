@@ -71,6 +71,11 @@ public:
 	// after job has finished
 	Job currentJob;
 
+	// For some jobs like mining, on completion
+	// this will be set to the enum value of the job completed
+	// so the mining system can revisit and see if it wants to give it another job
+	int jobSystemRecalc = 0;
+
 	// Amount of progress done on job
 	// This is in seconds and is matched with
 	// base duration to determine if the job is complete
