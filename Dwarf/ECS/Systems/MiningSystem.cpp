@@ -5,10 +5,6 @@
 std::vector<uint8_t> miningMap;
 std::vector<int> miningTargets;
 
-MiningSystem::MiningSystem()
-{
-}
-
 void MiningSystem::init(TileManager* tileManager_i)
 {
 	tileManager = tileManager_i; 
@@ -95,6 +91,8 @@ void MiningSystem::makeMiningMap()
 				}
 			}
 
+	// Loop through starting points and generate
+	// a mining distance map
 	for (auto& pos : startingPoints)
 		walkMiningMap({ std::get<0>(pos), std::get<1>(pos), std::get<2>(pos) }, 0, std::get<3>(pos));
 }

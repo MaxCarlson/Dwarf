@@ -23,7 +23,7 @@ public:
 	// a given tile. Once it reaches > 1 it'll pass to the 
 	// next tile or farther
 	// Possibly make an int if float is perf hog?
-	float progress;
+	double progress;
 
 	// Destination square coordinates
 	Coordinates destination;

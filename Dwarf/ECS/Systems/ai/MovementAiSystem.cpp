@@ -1,7 +1,7 @@
 #include "MovementAiSystem.h"
 #include "../Tile.h"
-#include "../Components/PositionComponent.h"
-#include "../Components/JobComponent.h"
+#include "../../Components/PositionComponent.h"
+#include "../../Components/JobComponent.h"
 #include <queue>
 #include <functional>
 #include <utility>

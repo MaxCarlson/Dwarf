@@ -12,6 +12,7 @@ static const int mediumOre = 139;
 
 struct OreType
 {
+	OreType() = default;
 	OreType(int ch, int color) : ch(ch), color(color) {};
 	int ch;
 	int color;

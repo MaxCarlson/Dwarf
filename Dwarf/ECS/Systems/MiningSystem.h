@@ -15,7 +15,7 @@ extern std::vector<int> miningTargets;
 class MiningSystem : public System<Requires<LaborStatsComponent, JobComponent>>
 {
 public:
-	MiningSystem();
+	MiningSystem() = default;
 	//~MiningSystem();
 
 	void init(TileManager* tileManager_i);
@@ -32,4 +32,3 @@ private:
 	int width, height, depth;
 	void issueJob(); // Possibly make this to Emit a message to Job's system? // Possibly make an Entity have a queue of jobs that it needs to complete for easy mining? Or a vector of queues for each job type?
 };
-

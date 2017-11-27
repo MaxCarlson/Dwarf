@@ -3,8 +3,10 @@
 #include "../Components/MovementComponent.h"
 
 
+
 void JobsSystem::update(double tStep)
 {
+
 	auto& entities = getEntities();
 
 	// Loop through all entities with JobComponent

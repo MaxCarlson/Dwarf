@@ -9,7 +9,7 @@
 #include "ECS\Systems\RenderSystem.h"
 #include "ECS\Systems\CameraSystem.h"
 #include "ECS\Systems\MovementSystem.h"
-#include "ECS\Systems\MovementAiSystem.h"
+#include "ECS\Systems\ai\MovementAiSystem.h"
 #include "ECS\Systems\JobsSystem.h"
 #include "BearLibTerminal.h"
 

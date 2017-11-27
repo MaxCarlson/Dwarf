@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../Systems.h"
-#include "../Components/MovementComponent.h"
+#include "../../Systems.h"
+#include "../../Components/MovementComponent.h"
 #include <unordered_map>
 
 class TileManager;
