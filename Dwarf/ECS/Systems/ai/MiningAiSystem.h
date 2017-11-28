@@ -3,27 +3,26 @@
 
 class LaborStatsComponent;
 class JobComponent;
-class JobsSystem;
-class Mining_JC;
+class MiningSystem;
+class TileFactory;
 
 class MiningAiSystem : public System<Requires<LaborStatsComponent, JobComponent >>
 {
 public:
 	MiningAiSystem() = default;
-	MiningAiSystem(JobsSystem * jobsSystem);
+	MiningAiSystem(MiningSystem * miningSystem, TileFactory * tileFactory);
 
 	void update();
 
 	int currentJobs;
 
 private:
-	JobsSystem * jobsSystem;
+	MiningSystem * miningSystem;
 
-	void createJobs();
+	// Should probably be using the TileCreator class so we can
+	// change a tile to a floor tile with just a function
+	TileFactory * tileFactory;
 
-	void findPick();
-	//void dropPick();
-	void setDesination();
-	//void tileMined(); // Should this be handled here or in jobs ?
+	void mineTile(const Entity e);
 };
 

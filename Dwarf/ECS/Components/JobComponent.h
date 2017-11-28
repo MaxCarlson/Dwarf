@@ -19,8 +19,8 @@ struct Job
 	static const int MAX_LABORS = 5;
 
 	Job() = default;
-	Job(Coordinates co, int exp, int baseSkill, double duration, Job::Jobs jobType) 
-		: co(co), experience(exp), baseSkillReq(baseSkill),  baseDuration(duration), jobType(jobType) {}
+	Job(Coordinates co, int exp, int baseSkill, double duration, Job::Jobs jobType, Coordinates coObj = EMPTY_COORDINATES) 
+		: co(co), experience(exp), baseSkillReq(baseSkill),  baseDuration(duration), jobType(jobType), coObj(coObj) {}
 
 	inline void reset()
 	{
@@ -56,6 +56,11 @@ struct Job
 	// at a threshold this job will be discarded
 	// with a message (eventually)
 	int numberOfAttempts = 0;
+
+	// Coordinates of object this job works on
+	// Used for jobs like mining so we know where we mined
+	// For jobs that don't require it, it'll be set to EMPTY_COORDINATES
+	Coordinates coObj;
 };
 
 // Going to be used for filtering capable
@@ -71,10 +76,9 @@ public:
 	// after job has finished
 	Job currentJob;
 
-	// For some jobs like mining, on completion
-	// this will be set to the enum value of the job completed
-	// so the mining system can revisit and see if it wants to give it another job
-	int jobSystemRecalc = 0;
+	// This is used by various systems to do extra things
+	// on job completion, other than rewarding xp, gaining levels
+	bool jobDone = false;
 
 	// Amount of progress done on job
 	// This is in seconds and is matched with

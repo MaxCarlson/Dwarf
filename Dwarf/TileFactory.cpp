@@ -27,3 +27,15 @@ void TileFactory::createGrass(Coordinates co)
 	tileManager.tileAt(co).ch = grassCharList[rng.getInt(0, 3, 3)];
 	tileManager.tileAt(co).color = 0xC53DFC00;
 }
+
+void TileFactory::createRockFloor(Coordinates co)
+{
+	tileManager.tileAt(co).ch = 44;
+	tileManager.tileAt(co).color = 0xAAAFAFAF;
+
+	tileManager.removeProperty<Tile::MINEABLE>(co);
+	tileManager.removeProperty<Tile::WALL>(co);
+	tileManager.removeProperty<Tile::OBSTRUCTED>(co);
+	tileManager.removeProperty<Tile::RAMP>(co);
+	tileManager.setProperty<Tile::FLOOR>(co);
+}

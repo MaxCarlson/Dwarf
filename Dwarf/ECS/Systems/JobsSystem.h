@@ -44,8 +44,4 @@ private:
 	// Probably make this a vector of priority queues
 	// vector by job type, priority queue by user/internal priority.
 	std::queue<Job>  notStarted;
-
-	// Possibly unOrdered multiMap? indexed by coordinates? For mining/choping jobs?
-
-	void mining(Entity& e);
 };

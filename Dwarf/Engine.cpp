@@ -12,7 +12,12 @@
 #include "ECS\Systems\ai\MovementAiSystem.h"
 #include "ECS\Systems\JobsSystem.h"
 #include "ECS\Systems\MiningSystem.h"
+#include "ECS\Systems\ai\MiningAiSystem.h"
 #include "BearLibTerminal.h"
+#include "Designations.h"
+
+#include "Coordinates.h"
+#include <unordered_map>
 
 #include <chrono>
 typedef std::chrono::milliseconds::rep TimePoint;
@@ -43,14 +48,21 @@ void Engine::init(int screenWidth, int screenHeight)
 	movementSystem = new MovementSystem();
 	movementAiSystem = new MovementAiSystem(&map->tileManager);
 	jobsSystem = new JobsSystem();
+	miningAiSystem = new MiningAiSystem(miningSystem, map->tileFactory);
 
 	// Non Entity Systems
-	miningSystem = new MiningSystem(&map->tileManager);
+	miningSystem = new MiningSystem(&map->tileManager, jobsSystem);
 
+	// Introduce systems to the world
 	world.addSystem(*renderSystem);
 	world.addSystem(*movementSystem);
 	world.addSystem(*movementAiSystem);
 	world.addSystem(*jobsSystem);
+	world.addSystem(*miningAiSystem);
+	world.addSystem(*miningAiSystem);
+
+	// Init misc maps
+	designations = new Designations;
 
 	// FloodFill from 0, 0, MAX_Z_LVL - 1
 	// explored areas. Not working yet.
@@ -93,6 +105,8 @@ void Engine::update(double deltaTime)
 	movementAiSystem->update();
 	movementSystem->update(deltaTime);
 	jobsSystem->update(deltaTime);
+	miningSystem->update();
+	miningAiSystem->update();
 
 	// Should this be called before or after? Probably before?
 	world.refresh();

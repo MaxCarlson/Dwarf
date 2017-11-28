@@ -21,6 +21,8 @@ public:
 
 	void createGrass(Coordinates co);
 
+	void createRockFloor(Coordinates co);
+
 private:
 	TileManager& tileManager;
 	TCODRandom rng;

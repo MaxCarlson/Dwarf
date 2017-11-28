@@ -28,6 +28,11 @@ void JobsSystem::update(double tStep)
 			retryJob(e);
 			continue;
 		}
+
+		// Skip all Entities whose jobs are done and haven't 
+		// been proccessed by their respective systems
+		if (job.jobDone)
+			continue;
 			
 		// If the Entity has no job,
 		// and there are jobs try to assign it one
@@ -103,7 +108,8 @@ void JobsSystem::workJob(Entity e, double tStep)
 	if (job.progress >= job.currentJob.baseDuration)
 	{
 		// Set the current job to NONE
-		job.currentJob.reset();
+		//job.currentJob.reset(); // This should be done in the particular system!!
+		job.jobDone = true;
 		
 		// Add experience to the Entity for completing job
 		stats.skillPoints[jobType] += job.currentJob.experience;
@@ -113,7 +119,10 @@ void JobsSystem::workJob(Entity e, double tStep)
 		if (laborSkillIncrease(stats.skillPoints[jobType], stats.laborLevel[jobType]))
 			stats.laborLevel[jobType] += 1;
 
-		onJobComplete(e, jobType);
+		// This is replaced by the bool job.jobDone, 
+		// allowing systems to scan for Entities with jobs done that
+		// are in their job type system
+		//onJobComplete(e, jobType);
 	}
 }
 
@@ -122,7 +131,6 @@ void JobsSystem::onJobComplete(Entity & e, Job::Jobs job)
 	switch (job)
 	{
 	case Job::MINER:
-		mining(e); 
 		break;
 
 	case Job::MASON:
@@ -136,14 +144,4 @@ void JobsSystem::onJobComplete(Entity & e, Job::Jobs job)
 	}
 
 	return;
-}
-
-void JobsSystem::mining(Entity & e)
-{
-	// Lookup what stone/Ore/Gem was mined
-
-	// Based on material type and miner skill
-	// decided whether to produce stone/Ore/Gem
-
-	// Add an Entity of that type
 }

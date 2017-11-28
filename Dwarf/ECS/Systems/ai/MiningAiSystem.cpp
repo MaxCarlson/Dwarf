@@ -2,10 +2,12 @@
 #include "../JobsSystem.h"
 #include "../Designations.h"
 #include "../MiningSystem.h"
+#include "../TileFactory.h"
+#include "../Designations.h"
 
 
 
-MiningAiSystem::MiningAiSystem(JobsSystem * jobsSystem) : jobsSystem(jobsSystem)
+MiningAiSystem::MiningAiSystem(MiningSystem * miningSystem, TileFactory * tileFactory) : miningSystem(miningSystem), tileFactory(tileFactory)
 {
 }
 
@@ -19,21 +21,30 @@ void MiningAiSystem::update()
 
 	for (auto& e : entities)
 	{
+		auto& job = e.getComponent<JobComponent>();
 
+		// If Entity is not currently a miner, or if
+		// their job is not done yet, skip them
+		if (!job.currentJob.jobType == Job::MINER || !job.jobDone)
+			continue;
+
+		
+
+		mineTile(e);
 	}
 	
 }
 
-void MiningAiSystem::createJobs()
+void MiningAiSystem::mineTile(const Entity e)
 {
-	
+	auto& job = e.getComponent<JobComponent>();
+
+
+	tileFactory->createRockFloor(job.currentJob.coObj);
+
+	designations->mining.erase(job.currentJob.coObj);
+
+	job.jobDone = false;
+	job.currentJob.reset();
 }
 
-void MiningAiSystem::findPick()
-{
-}
-
-void MiningAiSystem::setDesination()
-{
-
-}
