@@ -55,6 +55,9 @@ bool JobsSystem::assignJob(Entity e)
 	// This needs to be redone to take into accound
 	// individual Dwarf stats, prefrences, priorities, etc.
 	job.currentJob = notStarted.front();
+	job.progress = 0.0;
+	job.jobDone = false;
+
 	notStarted.pop();
 
 	// Set Entity destination for job

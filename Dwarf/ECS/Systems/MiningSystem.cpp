@@ -23,12 +23,25 @@ MiningSystem::MiningSystem(TileManager * tileManager, JobsSystem * jobsSystem) :
 void MiningSystem::update()
 {
 	// No designations, no mining!!!!
-	if (designations->mining.empty())
+	if (designations->mining.empty() || !mapUpdate)
 		return;
 
 	// This should only be called if the mining map has changed due to 
 	// something being mined or other events
 	findStartingPoints();
+}
+
+void MiningSystem::updateCurrentJobs(Job job)
+{
+	int c = 0;
+	for (auto it = currentJobs.begin(); it != currentJobs.end(); ++c)
+	{
+		if (job.co == currentJobs[c].co)
+		{
+			currentJobs.erase(it);
+			return;
+		}			
+	}
 }
 
 void MiningSystem::findStartingPoints()
@@ -51,6 +64,8 @@ void MiningSystem::findStartingPoints()
 	}
 
 	issueJobs();
+
+	mapUpdate = false;
 }
 
 inline void MiningSystem::regularDigging(const Coordinates co)
@@ -69,9 +84,24 @@ void MiningSystem::issueJobs()
 		// This is too simplistic here, will have to modify all these values
 		// by skill, MaterialType, distance underground, etc.
 		Job newJob(startPoint.first, BASE_MINING_EXP, BASE_MINING_SKILL, BASE_MINING_DUR, Job::MINER, startPoint.second);
+
+		if (jobAlreadyIssued(newJob))
+			continue;
+
 		jobsSystem->addJob(newJob);
+
+		currentJobs.push_back(newJob);
+	}	
+}
+
+bool MiningSystem::jobAlreadyIssued(Job job)
+{
+	for (auto& possibleJob : currentJobs)
+	{
+		if (job.co == possibleJob.co)
+			return true;
 	}
-	
+	return false;
 }
 
 /*

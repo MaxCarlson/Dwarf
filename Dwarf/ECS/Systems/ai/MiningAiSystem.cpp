@@ -39,6 +39,8 @@ void MiningAiSystem::mineTile(const Entity e)
 {
 	auto& job = e.getComponent<JobComponent>();
 
+	// Delete job from current active jobs in MiningSystem
+	miningSystem->updateCurrentJobs(job.currentJob);
 
 	tileFactory->createRockFloor(job.currentJob.coObj);
 
@@ -46,5 +48,9 @@ void MiningAiSystem::mineTile(const Entity e)
 
 	job.jobDone = false;
 	job.currentJob.reset();
+
+	// Tell mining System it needs to update
+	// and possibly issue more jobs ~!~~!~~! Make this into a lambda message with boost bind?
+	miningSystem->updateMap();
 }
 

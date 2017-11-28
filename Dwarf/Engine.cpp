@@ -48,10 +48,12 @@ void Engine::init(int screenWidth, int screenHeight)
 	movementSystem = new MovementSystem();
 	movementAiSystem = new MovementAiSystem(&map->tileManager);
 	jobsSystem = new JobsSystem();
-	miningAiSystem = new MiningAiSystem(miningSystem, map->tileFactory);
 
 	// Non Entity Systems
 	miningSystem = new MiningSystem(&map->tileManager, jobsSystem);
+
+	// Must be init after mining system. Change all these pointers needed?
+	miningAiSystem = new MiningAiSystem(miningSystem, map->tileFactory);
 
 	// Introduce systems to the world
 	world.addSystem(*renderSystem);
@@ -61,7 +63,7 @@ void Engine::init(int screenWidth, int screenHeight)
 	world.addSystem(*miningAiSystem);
 	world.addSystem(*miningAiSystem);
 
-	// Init misc maps
+	// Init misc maps and designations
 	designations = new Designations;
 
 	// FloodFill from 0, 0, MAX_Z_LVL - 1
