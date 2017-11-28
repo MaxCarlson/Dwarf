@@ -165,7 +165,6 @@ void MovementAiSystem::update()
 			else
 			{
 				mov.destination = EMPTY_COORDINATES;
-
 				mov.cannotFindPath = true;
 			}
 		}

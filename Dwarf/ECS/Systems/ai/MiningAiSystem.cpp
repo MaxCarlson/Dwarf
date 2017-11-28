@@ -15,9 +15,6 @@ void MiningAiSystem::update()
 	if (designations->mining.empty())
 		return;
 
-	if (currentJobs == miningMap.f)
-		return;
-
 	const auto& entities = getEntities();
 
 	for (auto& e : entities)
@@ -29,11 +26,6 @@ void MiningAiSystem::update()
 
 void MiningAiSystem::createJobs()
 {
-	for (int i = 0; i < designations->mining.count(0); ++i)
-	{
-		Job newJob()
-		jobsSystem->addJob()
-	}
 	
 }
 
