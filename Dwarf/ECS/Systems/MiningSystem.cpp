@@ -8,7 +8,7 @@
 
 static const int BASE_MINING_EXP = 7;
 static const int BASE_MINING_SKILL = 1;
-static const double BASE_MINING_DUR = 7.5;
+static const double BASE_MINING_DUR = 0.5;
 
 MiningSystem::MiningSystem(TileManager * tileManager, JobsSystem * jobsSystem) : tileManager(tileManager), jobsSystem(jobsSystem)
 {
@@ -34,7 +34,7 @@ void MiningSystem::update()
 void MiningSystem::updateCurrentJobs(Job job)
 {
 	int c = 0;
-	for (auto it = currentJobs.begin(); it != currentJobs.end(); ++c)
+	for (auto it = currentJobs.begin(); it != currentJobs.end(); ++it, ++c)
 	{
 		if (job.co == currentJobs[c].co)
 		{
