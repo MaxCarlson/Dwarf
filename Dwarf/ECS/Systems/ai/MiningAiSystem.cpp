@@ -31,8 +31,7 @@ void MiningAiSystem::update()
 		
 
 		mineTile(e);
-	}
-	
+	}	
 }
 
 void MiningAiSystem::mineTile(const Entity e)
@@ -42,10 +41,13 @@ void MiningAiSystem::mineTile(const Entity e)
 	// Delete job from current active jobs in MiningSystem
 	miningSystem->updateCurrentJobs(job.currentJob);
 
+	// Will have to make these templates based on material?
 	tileFactory->createRockFloor(job.currentJob.coObj);
 
+	// Erase mined tile from designations
 	designations->mining.erase(job.currentJob.coObj);
 
+	// Remove Entity job tags
 	job.jobDone = false;
 	job.currentJob.reset();
 

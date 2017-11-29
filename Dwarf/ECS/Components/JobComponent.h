@@ -4,8 +4,9 @@
 
 // Holds info about the job to be done
 // Used in jobs system for assigning jobs
-struct Job
+class Job
 {
+public:
 	// Used not only for Id'ing job types
 	// but also in indexing assciated Job skill in LaborStatsComponent ~!~!~ This should be moved somewhere else? Perhaps even read in serially?
 	enum Jobs

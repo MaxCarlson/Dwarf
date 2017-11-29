@@ -11,9 +11,6 @@ struct Coordinates;
 class JobsSystem;
 class Job;
 
-//extern std::vector<uint8_t> miningMap;
-//extern std::vector<int> miningTargets;
-
 class MiningSystem : public System<Requires<>>//Requires<LaborStatsComponent, JobComponent>> // Does not interate through Entities
 {
 public:

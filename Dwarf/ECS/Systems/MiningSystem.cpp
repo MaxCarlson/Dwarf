@@ -3,20 +3,15 @@
 #include "../Designations.h"
 #include "JobsSystem.h"
 
-//std::vector<uint8_t> miningMap;
-//std::vector<int> miningTargets;
-
 static const int BASE_MINING_EXP = 7;
 static const int BASE_MINING_SKILL = 1;
-static const double BASE_MINING_DUR = 0.5;
+static const double BASE_MINING_DUR = 0.5; //6.5 ?
 
 MiningSystem::MiningSystem(TileManager * tileManager, JobsSystem * jobsSystem) : tileManager(tileManager), jobsSystem(jobsSystem)
 {
 	width = tileManager->width;
 	height = tileManager->height;
 	depth = tileManager->depth;
-	//miningMap.resize(width * depth * height);
-	//miningTargets.resize(width * depth * height);
 	startingPoints.reserve(200);
 }
 
@@ -33,6 +28,8 @@ void MiningSystem::update()
 
 void MiningSystem::updateCurrentJobs(Job job)
 {
+	// Change structure of current jobs so we don't have to
+	// delete from random points in a vector!
 	int c = 0;
 	for (auto it = currentJobs.begin(); it != currentJobs.end(); ++it, ++c)
 	{
@@ -82,7 +79,7 @@ void MiningSystem::issueJobs()
 	for (auto& startPoint : startingPoints)
 	{
 		// This is too simplistic here, will have to modify all these values
-		// by skill, MaterialType, distance underground, etc.
+		// by skill, MaterialType, distance underground?, etc.
 		Job newJob(startPoint.first, BASE_MINING_EXP, BASE_MINING_SKILL, BASE_MINING_DUR, Job::MINER, startPoint.second);
 
 		if (jobAlreadyIssued(newJob))
