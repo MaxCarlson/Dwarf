@@ -3,6 +3,7 @@
 #include <functional>
 #include "../Coordinates.h"
 #include "../../World.h"
+#include <memory>
 
 namespace JobsBoard
 {
@@ -14,9 +15,9 @@ namespace JobsBoard
 
 	struct JobEvaluatorBase
 	{
-		virtual bool has_tag(const Entity &e) = 0;
-		virtual void set_tag(const Entity &e) = 0;
-		virtual void exec(JobBoard & board, const Entity & e, Coordinates & co) = 0;
+		virtual bool has_tag(Entity e) = 0;
+		virtual void set_tag(Entity e) = 0;
+		virtual void exec(JobBoard & board, const Entity e, Coordinates & co) = 0;
 	};
 
 	template<typename TAG>
@@ -27,12 +28,15 @@ namespace JobsBoard
 		// Functions scores job of type TAG
 		const JobEvaluator eval_func;
 
-		virtual bool has_tag(const Entity& e) override final
+		virtual bool has_tag(Entity e) override final
 		{
-			return e.hasComponent<TAG>();
+			if (&e.getComponent<TAG>())
+				return true;
+			return false;
+			//return e.hasComponent<TAG>(); 
 		}
 
-		virtual void set_tag(const Entity& e) override final
+		virtual void set_tag(Entity e) override final
 		{
 			e.addComponent<TAG>();
 		}
@@ -48,12 +52,12 @@ namespace JobsBoard
 
 	template <typename T>
 	inline void register_job_offer(JobEvaluator evaluator) {
-		std::unique_ptr<JobEvaluatorBase> base = std::make_unique<job_evaluator_concrete<T>>(evaluator);
+		std::unique_ptr<JobEvaluatorBase> base = std::make_unique<JobEvaluatorConcrete<T>>(evaluator);
 
 		evaluators.emplace_back(std::move(base));
 	}
 
-	bool is_working(const Entity &e);
+	bool is_working(Entity e);
 	void evaluate(JobBoard &board, const Entity &entity, Coordinates &co);
 }
 

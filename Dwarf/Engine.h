@@ -16,6 +16,9 @@ class JobsSystem;
 class MiningSystem;
 class MiningAiSystem;
 
+class MiningAi;
+class AiWorkSystem;
+
 class Engine
 {
 public:
@@ -33,6 +36,9 @@ public:
 	MovementAiSystem * movementAiSystem;
 	JobsSystem * jobsSystem;
 	MiningAiSystem * miningAiSystem;
+
+	MiningAi * miningAi;
+	AiWorkSystem * aiWorkSystem;
 
 	// Systems that don't touch Entities
 	MiningSystem * miningSystem;

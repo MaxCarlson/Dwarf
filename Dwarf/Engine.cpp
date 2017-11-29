@@ -16,6 +16,9 @@
 #include "BearLibTerminal.h"
 #include "Designations.h"
 
+#include "ECS\Systems\ai\AiWorkSystem.h"
+#include "ECS\Systems\ai\MiningAi.h"
+
 #include "Coordinates.h"
 #include <unordered_map>
 
@@ -52,8 +55,13 @@ void Engine::init(int screenWidth, int screenHeight)
 	// Non Entity Systems
 	miningSystem = new MiningSystem(&map->tileManager, jobsSystem);
 
+	aiWorkSystem = new AiWorkSystem();
+
+	miningAi = new MiningAi();
+	miningAi->init();
+
 	// Must be init after mining system. Change all these pointers needed?
-	miningAiSystem = new MiningAiSystem(miningSystem, map->tileFactory);
+	//miningAiSystem = new MiningAiSystem(miningSystem, map->tileFactory);
 
 	// Introduce systems to the world
 	world.addSystem(*renderSystem);
@@ -62,6 +70,9 @@ void Engine::init(int screenWidth, int screenHeight)
 	world.addSystem(*jobsSystem);
 	//world.addSystem(*miningSystem);
 	//world.addSystem(*miningAiSystem);
+
+	world.addSystem(*aiWorkSystem);
+	world.addSystem(*miningAi);
 
 	// Init misc maps and designations
 	designations = new Designations;
@@ -77,12 +88,12 @@ void Engine::init(int screenWidth, int screenHeight)
 void Engine::run()
 {
 	const double MS_PER_UPDATE = 10.0;
-	double previous = now();
+	double previous = double(now());
 	double lag = 0.0;
 
 	while (true)
 	{
-		double current = now();
+		double current = double(now());
 		double elapsed = current - previous;
 		previous = current;
 		lag += elapsed;
@@ -109,6 +120,9 @@ void Engine::update(double deltaTime)
 	jobsSystem->update(deltaTime);
 	miningSystem->update();
 	//miningAiSystem->update();
+
+	aiWorkSystem->update();
+	miningAi->update(deltaTime);
 
 	// Should this be called before or after? Probably before?
 	world.refresh();

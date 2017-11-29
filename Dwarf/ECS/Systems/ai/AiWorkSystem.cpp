@@ -13,16 +13,6 @@ namespace JobsBoard
 	}
 }
 
-
-AiWorkSystem::AiWorkSystem()
-{
-}
-
-
-AiWorkSystem::~AiWorkSystem()
-{
-}
-
 void AiWorkSystem::update()
 {
 	auto& entities = getEntities();

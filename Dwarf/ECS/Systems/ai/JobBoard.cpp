@@ -7,7 +7,7 @@ namespace JobsBoard
 	// If the Entity has any of the work tags which
 	// have a function pointer tied to them
 	// Entity is working
-	bool is_working(const Entity & e)
+	bool is_working(Entity e)
 	{
 		for (const auto &job : evaluators) {
 			if (job->has_tag(e)) 

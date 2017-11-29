@@ -8,8 +8,7 @@ class PositionComponent;
 class AiWorkSystem : public System<Requires<JobComponent, PositionComponent>> // Replace this component
 {
 public:
-	AiWorkSystem();
-	~AiWorkSystem();
+	AiWorkSystem() = default;
 
 	void update();
 };

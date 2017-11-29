@@ -1,13 +1,12 @@
 #include "MiningAi.h"
 #include "WorkTemplate.h"
-#include "Tags\MiningTag.h"
 #include "JobBoard.h"
 #include "../Designations.h"
 #include "../Tile.h"
 
 namespace JobsBoard
 {
-	void evaluate_mining(JobBoard & board, Entity & e, Coordinates co, JobEvaluatorBase * jt)
+	void evaluate_mining(JobBoard & board, const Entity & e, Coordinates co, JobEvaluatorBase * jt)
 	{
 		if (designations->mining.empty())
 			return;
@@ -21,9 +20,9 @@ namespace JobsBoard
 	}
 }
 
-
-MiningAi::MiningAi()
+void MiningAi::init()
 {
+	JobsBoard::register_job_offer<MiningTag>(JobsBoard::evaluate_mining);
 }
 
 void MiningAi::update(double deltaT)

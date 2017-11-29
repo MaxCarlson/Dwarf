@@ -2,12 +2,14 @@
 
 #include "../../Systems.h"
 
-class MiningTag;
+#include "Tags\MiningTag.h"
 
 class MiningAi : public System<Requires<MiningTag>>
 {
 public:
-	MiningAi();
+	MiningAi() = default;
+
+	void init();
 	
 	void update(double deltaT);
 
