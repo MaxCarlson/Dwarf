@@ -12,7 +12,6 @@
 #include "ECS\Systems\ai\MovementAiSystem.h"
 #include "ECS\Systems\JobsSystem.h"
 #include "ECS\Systems\MiningSystem.h"
-#include "ECS\Systems\ai\MiningAiSystem.h"
 #include "BearLibTerminal.h"
 #include "Designations.h"
 
@@ -28,12 +27,6 @@ inline TimePoint now() {
 	return std::chrono::duration_cast<std::chrono::milliseconds>
 		(std::chrono::steady_clock::now().time_since_epoch()).count();
 }
-
-
-Engine::Engine()
-{
-}
-
 
 Engine::~Engine()
 {
@@ -53,7 +46,7 @@ void Engine::init(int screenWidth, int screenHeight)
 	jobsSystem = new JobsSystem();
 
 	// Non Entity Systems
-	miningSystem = new MiningSystem(&map->tileManager, jobsSystem);
+	miningSystem = new MiningSystem(&map->tileManager);
 
 	aiWorkSystem = new AiWorkSystem();
 
@@ -68,8 +61,7 @@ void Engine::init(int screenWidth, int screenHeight)
 	world.addSystem(*movementSystem);
 	world.addSystem(*movementAiSystem);
 	world.addSystem(*jobsSystem);
-	//world.addSystem(*miningSystem);
-	//world.addSystem(*miningAiSystem);
+	world.addSystem(*miningSystem);
 
 	world.addSystem(*aiWorkSystem);
 	world.addSystem(*miningAi);
@@ -119,7 +111,6 @@ void Engine::update(double deltaTime)
 	movementSystem->update(deltaTime);
 	jobsSystem->update(deltaTime);
 	miningSystem->update();
-	//miningAiSystem->update();
 
 	aiWorkSystem->update();
 	miningAi->update(deltaTime);

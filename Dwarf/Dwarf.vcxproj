@@ -155,8 +155,8 @@
     <ClCompile Include="MapRender.cpp" />
     <ClCompile Include="ECS\Systems\ai\MovementAiSystem.cpp" />
     <ClCompile Include="ECS\Systems\MiningSystem.cpp" />
-    <ClCompile Include="ECS\Systems\ai\MiningAiSystem.cpp" />
     <ClCompile Include="ECS\Systems\ai\MiningAi.cpp" />
+    <ClCompile Include="Tile.cpp" />
     <ClCompile Include="TileFactory.cpp" />
     <ClCompile Include="VeinCreator.cpp" />
   </ItemGroup>
@@ -179,7 +179,7 @@
     <ClInclude Include="ECS\Components\PositionComponent.h" />
     <ClInclude Include="ECS\Components\RenderComponent.h" />
     <ClInclude Include="ECS\Systems.h" />
-    <ClInclude Include="ECS\Systems\ai\Tags\MiningTag.h" />
+    <ClInclude Include="ECS\Components\Tags\MiningTag.h" />
     <ClInclude Include="ECS\Systems\ai\WorkTemplate.h" />
     <ClInclude Include="ECS\Systems\CameraSystem.h" />
     <ClInclude Include="ECS\Systems\JobsSystem.h" />
@@ -197,7 +197,6 @@
     <ClInclude Include="MapRender.h" />
     <ClInclude Include="ECS\Systems\ai\MovementAiSystem.h" />
     <ClInclude Include="ECS\Systems\MiningSystem.h" />
-    <ClInclude Include="ECS\Systems\ai\MiningAiSystem.h" />
     <ClInclude Include="ECS\Systems\ai\MiningAi.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="ECS\World.h" />

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../../../Component.h"
-#include "../Coordinates.h"
+#include "../../Component.h"
+#include "../../Coordinates.h"
 
 class MiningTag : public Component
 {
@@ -21,8 +21,4 @@ public:
 	// Final destination for job
 	// Where Entity needs to stand to mine
 	Coordinates desination;
-
-	// The actual tile that will be mined, 
-	// not where the Entity needs to stand to mine
-	Coordinates tileToBeMined;
 };

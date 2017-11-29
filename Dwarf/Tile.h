@@ -58,6 +58,8 @@ enum Directions
 	CAN_GO_DOWN
 };
 
+extern int MAP_WIDTH, MAP_HEIGHT, MAP_DEPTH;
+
 
 // Creates a 1D Vector of Tile objects used to
 // simulate a 3D area of tiles. Access Tiles through here
@@ -71,6 +73,9 @@ public:
 	TileManager(int width, int height, int depth) : width(width), height(height), depth(depth)
 	{
 		tileMap.resize(width * height * depth);
+		MAP_WIDTH = width;
+		MAP_HEIGHT = height;
+		MAP_DEPTH = depth;
 	}
 
 	// Alters the TileProperty P property of a tile

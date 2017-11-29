@@ -22,6 +22,8 @@ class AiWorkSystem;
 class Engine
 {
 public:
+	Engine() = default;
+	~Engine();
 
 	// Holds all the entities active
 	// as well as all the components and systems
@@ -35,10 +37,10 @@ public:
 	MovementSystem * movementSystem;
 	MovementAiSystem * movementAiSystem;
 	JobsSystem * jobsSystem;
-	MiningAiSystem * miningAiSystem;
 
-	MiningAi * miningAi;
+	
 	AiWorkSystem * aiWorkSystem;
+	MiningAi * miningAi;
 
 	// Systems that don't touch Entities
 	MiningSystem * miningSystem;
@@ -62,10 +64,6 @@ public:
 
 	int screenWidth;
 	int screenHeight;
-
-	
-	Engine();
-	~Engine();
 
 	void init(int screenWidth, int screenHeight);
 

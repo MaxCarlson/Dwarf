@@ -2,7 +2,7 @@
 
 #include "../../Systems.h"
 
-#include "Tags\MiningTag.h"
+#include "../../Components/Tags/MiningTag.h"
 
 class MiningAi : public System<Requires<MiningTag>>
 {

@@ -66,9 +66,6 @@
     <ClCompile Include="ECS\Systems\ai\MovementAiSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ECS\Systems\ai\MiningAiSystem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ECS\Systems\ai\MiningAi.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -76,6 +73,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ECS\Systems\ai\AiWorkSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Tile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -188,13 +188,7 @@
     <ClInclude Include="ECS\Systems\ai\MovementAiSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ECS\Systems\ai\MiningAiSystem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ECS\Systems\ai\WorkTemplate.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ECS\Systems\ai\Tags\MiningTag.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ECS\Systems\ai\MiningAi.h">
@@ -204,6 +198,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ECS\Systems\ai\AiWorkSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Components\Tags\MiningTag.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
