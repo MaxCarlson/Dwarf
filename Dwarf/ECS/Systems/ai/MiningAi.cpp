@@ -3,6 +3,7 @@
 #include "JobBoard.h"
 #include "../Designations.h"
 #include "../Tile.h"
+#include "../MiningSystem.h"
 
 namespace JobsBoard
 {
@@ -14,7 +15,7 @@ namespace JobsBoard
 		// Pick distance evaluate
 
 		// Find total distance for job
-		int distance = get_rough_distance(e.getComponent<PositionComponent>().co, co); // + pick distance;
+		int distance = miningMap[getIdx(co)]; // + PickDistance
 
 		board.insert(std::make_pair(distance, jt));
 	}
@@ -51,8 +52,29 @@ void MiningAi::updateMiner(Entity e)
 		break;
 
 	case MiningTag::GOTO_SITE:
-		if (work.followPath(e, tag))
+		auto& mov = e.getComponent<MovementComponent>();
+
+		// If entity is already moving, 
+		// don't change it's destination
+		if (mov.progress)
+			return;
+
+		auto& co = e.getComponent<PositionComponent>().co;
+		const auto idx = getIdx(co);
+
+		if (miningMap[idx] == 0)
+		{
 			tag.step = MiningTag::DIG;
+			return;
+		}
+			
+		int currentDir = 0;
+		uint8_t min_value = std::numeric_limits<uint8_t>::max();
+
+		if (miningMap[getIdx({co.x, co.y - 1, co.z})] < min_value && tileManager->CAN_GO_EAST)
+
+
+			
 		break;
 
 	case MiningTag::DIG:

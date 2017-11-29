@@ -45,9 +45,6 @@ public:
 	std::uint16_t properties = 0x1; // Change to 0U for unexplored
 };
 
-// Formula for tile indexing with coordinates
-#define TILE_ARRAY_LOOKUP co.z * width * height + co.y * width + co.x
-
 enum Directions
 {
 	CAN_GO_NORTH,
@@ -60,6 +57,8 @@ enum Directions
 
 extern int MAP_WIDTH, MAP_HEIGHT, MAP_DEPTH;
 
+// Formula for tile indexing with coordinates
+#define TILE_ARRAY_LOOKUP co.z * MAP_WIDTH * MAP_HEIGHT + co.y * MAP_WIDTH + co.x
 
 // Creates a 1D Vector of Tile objects used to
 // simulate a 3D area of tiles. Access Tiles through here
@@ -151,12 +150,6 @@ public:
 		return tileMap[exactPos];
 	}
 
-	// Get the index of Coordinates 
-	inline int getIdx(Coordinates co)
-	{
-		return TILE_ARRAY_LOOKUP;
-	}
-
 	// Returns a copy of data at tile below input tile coordinates
 	// Worse performance due to use of .at() for safety
 	// Is this needed?
@@ -204,6 +197,12 @@ private:
 	// 1D vector of Tiles indexed by 3D formula
 	std::vector<Tile> tileMap;
 };
+
+// Get the index of Coordinates 
+inline int getIdx(Coordinates co)
+{
+	return TILE_ARRAY_LOOKUP;
+}
 
 inline int get_rough_distance(Coordinates loc, Coordinates dest)
 {

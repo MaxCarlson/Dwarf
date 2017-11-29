@@ -20,6 +20,11 @@ public:
 		//mov.destination = tool_location;
 	}
 
+	void followMap(Entity e, std::vector<int> map)
+	{
+
+	}
+
 	bool followPath(Entity& e, TAG & tag)
 	{
 		auto& pos = e.getComponent<PositionComponent>();
