@@ -199,3 +199,11 @@ private:
 	// 1D vector of Tiles indexed by 3D formula
 	std::vector<Tile> tileMap;
 };
+
+inline int get_rough_distance(Coordinates loc, Coordinates dest)
+{
+	int x = dest.x - loc.x;
+	int y = dest.y - loc.y;
+	int z = dest.z - loc.z;
+	return (x * x + y * y + z * z);
+}

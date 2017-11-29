@@ -11,7 +11,7 @@ struct Coordinates;
 class JobsSystem;
 class Job;
 
-class MiningSystem : public System<Requires<>>//Requires<LaborStatsComponent, JobComponent>> // Does not interate through Entities
+class MiningSystem : public System<Requires<>> // Does not interate through Entities
 {
 public:
 	MiningSystem() = default;

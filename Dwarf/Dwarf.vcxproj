@@ -138,6 +138,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ECS\Systems\ai\AiWorkSystem.cpp" />
     <ClCompile Include="Designations.cpp" />
     <ClCompile Include="ECS\EntityManager.cpp" />
     <ClCompile Include="ECS\Systems\JobsSystem.cpp" />
@@ -146,6 +147,7 @@
     <ClCompile Include="EntityFactory.cpp" />
     <ClCompile Include="Gui.cpp" />
     <ClCompile Include="Input.cpp" />
+    <ClCompile Include="ECS\Systems\ai\JobBoard.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="Map.cpp" />
@@ -154,10 +156,12 @@
     <ClCompile Include="ECS\Systems\ai\MovementAiSystem.cpp" />
     <ClCompile Include="ECS\Systems\MiningSystem.cpp" />
     <ClCompile Include="ECS\Systems\ai\MiningAiSystem.cpp" />
+    <ClCompile Include="ECS\Systems\ai\MiningAi.cpp" />
     <ClCompile Include="TileFactory.cpp" />
     <ClCompile Include="VeinCreator.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ECS\Systems\ai\AiWorkSystem.h" />
     <ClInclude Include="BearLibTerminal.h" />
     <ClInclude Include="Designations.h" />
     <ClInclude Include="ECS\Camera.h" />
@@ -175,6 +179,8 @@
     <ClInclude Include="ECS\Components\PositionComponent.h" />
     <ClInclude Include="ECS\Components\RenderComponent.h" />
     <ClInclude Include="ECS\Systems.h" />
+    <ClInclude Include="ECS\Systems\ai\Tags\MiningTag.h" />
+    <ClInclude Include="ECS\Systems\ai\WorkTemplate.h" />
     <ClInclude Include="ECS\Systems\CameraSystem.h" />
     <ClInclude Include="ECS\Systems\JobsSystem.h" />
     <ClInclude Include="ECS\Systems\MovementSystem.h" />
@@ -185,12 +191,14 @@
     <ClInclude Include="EntityFactory.h" />
     <ClInclude Include="Gui.h" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="ECS\Systems\ai\JobBoard.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="MapRender.h" />
     <ClInclude Include="ECS\Systems\ai\MovementAiSystem.h" />
     <ClInclude Include="ECS\Systems\MiningSystem.h" />
     <ClInclude Include="ECS\Systems\ai\MiningAiSystem.h" />
+    <ClInclude Include="ECS\Systems\ai\MiningAi.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="ECS\World.h" />
     <ClInclude Include="TileFactory.h" />

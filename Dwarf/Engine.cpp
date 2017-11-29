@@ -60,8 +60,8 @@ void Engine::init(int screenWidth, int screenHeight)
 	world.addSystem(*movementSystem);
 	world.addSystem(*movementAiSystem);
 	world.addSystem(*jobsSystem);
-	world.addSystem(*miningAiSystem);
-	world.addSystem(*miningAiSystem);
+	//world.addSystem(*miningSystem);
+	//world.addSystem(*miningAiSystem);
 
 	// Init misc maps and designations
 	designations = new Designations;
@@ -108,7 +108,7 @@ void Engine::update(double deltaTime)
 	movementSystem->update(deltaTime);
 	jobsSystem->update(deltaTime);
 	miningSystem->update();
-	miningAiSystem->update();
+	//miningAiSystem->update();
 
 	// Should this be called before or after? Probably before?
 	world.refresh();
