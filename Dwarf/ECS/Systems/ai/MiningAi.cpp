@@ -127,6 +127,7 @@ void MiningAi::updateMiner(Entity e)
 			tag.step = MiningTag::DROP_TOOL;
 		}
 
+		mov.destination = co;
 		Coordinates & dest = mov.destination;
 
 		switch (currentDir)

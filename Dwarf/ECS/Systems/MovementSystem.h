@@ -50,7 +50,7 @@ private:
 		if (mov.progress >= 1.0)
 		{
 			// Will this need to be changed eventually?
-			mov.progress -= 1.0;
+			mov.progress = 0.0;
 
 			auto& co = e.getComponent<PositionComponent>().co;
 

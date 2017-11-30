@@ -109,10 +109,8 @@ void Engine::update(double deltaTime)
 //	jobsSystem->update(deltaTime);
 	miningSystem->update();
 
+	// Work Systems
 	aiWorkSystem->update();
-
-	auto& a = Dwarves[0].getAllComponents();
-
 	miningAi->update(deltaTime);
 
 	// Should this be called before or after? Probably before?

@@ -37,7 +37,7 @@ void MiningSystem::makeMiningMap()
 
 	std::vector<std::tuple<int, int, int, int>> startingPoints;
 
-	for(int z = 0; z < depth; ++z)
+	for(int z = 1; z < depth; ++z)
 		for(int y = 0; y < height; ++y)
 			for (int x = 0; x < width; ++x)
 			{

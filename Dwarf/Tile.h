@@ -81,7 +81,7 @@ enum Directions
 extern int MAP_WIDTH, MAP_HEIGHT, MAP_DEPTH;
 
 // Formula for tile indexing with coordinates
-#define TILE_ARRAY_LOOKUP co.z * MAP_WIDTH * MAP_HEIGHT + co.y * MAP_WIDTH + co.x
+#define TILE_ARRAY_LOOKUP (co.z * MAP_WIDTH * MAP_HEIGHT) + (co.y * MAP_WIDTH) + co.x
 
 // Creates a 1D Vector of Tile objects used to
 // simulate a 3D area of tiles. Access Tiles through here
@@ -234,9 +234,27 @@ private:
 };
 
 // Get the index of Coordinates 
+// Returns 0 if index isn't in the map
 inline int getIdx(Coordinates co)
 {
+	if (co.z >= MAP_DEPTH || co.z < 0 || co.y >= MAP_HEIGHT || co.y < 0 || co.x >= MAP_WIDTH || co.x < 0)
+		return 0;
+
 	return TILE_ARRAY_LOOKUP;
+}
+
+// Returns Coordinates from a vector index
+inline Coordinates getIndice(int idx)
+{
+	int z = idx / (MAP_HEIGHT * MAP_WIDTH);
+	idx -= (z * MAP_WIDTH * MAP_HEIGHT);
+
+	int y = idx / MAP_WIDTH;
+	idx -= (y * MAP_WIDTH);
+
+	int x = idx;
+
+	return { x, y, z };
 }
 
 inline int get_rough_distance(Coordinates loc, Coordinates dest)
@@ -250,6 +268,9 @@ inline int get_rough_distance(Coordinates loc, Coordinates dest)
 template <Directions D>
 inline Coordinates positionAt(Coordinates co)
 {
+	if (co.z >= MAP_DEPTH || co.z < 0 || co.y >= MAP_HEIGHT || co.y < 0 || co.x >= MAP_WIDTH || co.x < 0)
+		return { 0, 0, 0 };
+
 	if (D == NORTH)
 		return { co.x, co.y - 1, co.z };
 
@@ -280,5 +301,5 @@ inline Coordinates positionAt(Coordinates co)
 	if (D == DOWN)
 		return { co.x, co.y, co.z - 1 };
 
-	return EMPTY_COORDINATES;
+	return { 0, 0, 0 };
 }
