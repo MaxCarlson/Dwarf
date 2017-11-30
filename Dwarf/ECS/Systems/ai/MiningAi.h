@@ -7,8 +7,9 @@
 #include "../../Components/Tags/MiningTag.h"
 
 class TileManager;
+class PositionComponent;
 
-class MiningAi : public System<Requires<MiningTag>>
+class MiningAi : public System<Requires<MiningTag, PositionComponent>>
 {
 public:
 	MiningAi() = default;

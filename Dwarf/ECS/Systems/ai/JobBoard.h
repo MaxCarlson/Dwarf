@@ -39,6 +39,7 @@ namespace JobsBoard
 		virtual void set_tag(Entity e) override final
 		{
 			e.addComponent<TAG>();
+			e.activate();
 		}
 
 		virtual void exec(JobBoard & board, const Entity e, Coordinates & co) override final

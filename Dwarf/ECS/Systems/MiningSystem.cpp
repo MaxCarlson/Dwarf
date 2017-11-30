@@ -19,11 +19,15 @@ MiningSystem::MiningSystem(TileManager * tileManager) : tileManager(tileManager)
 
 	miningMap.resize(width * height * depth);
 	miningTargets.resize(width * height * depth);
+	makeMiningMap();
 }
 
 void MiningSystem::update()
 {
-
+	if (designations->mining.empty())
+		return;
+	
+	
 }
 
 void MiningSystem::makeMiningMap()

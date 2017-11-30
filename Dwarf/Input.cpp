@@ -9,7 +9,7 @@
 #include "Designations.h"
 
 #include "Tile.h"
-
+#include "ECS\Systems\MiningSystem.h"
 Input::Input()
 {
 }
@@ -74,7 +74,7 @@ void Input::read()
 		designations->mining.emplace(TILE_ARRAY_LOOKUP, 1);
 
 		//Job j({ xx, yy, engine.map->mapRenderer->currentZLevel }, 10, 1, 14, Job::MINER);
-
+		engine.miningSystem->makeMiningMap();
 		//engine.jobsSystem->addJob(j);
 		break;
 	

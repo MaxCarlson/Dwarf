@@ -13,7 +13,6 @@
 #include "ECS\Components\MovementComponent.h"
 #include "ECS\Components\JobComponent.h"
 
-
 EntityFactory::EntityFactory()
 {
 }
@@ -27,7 +26,6 @@ Entity EntityFactory::createDwarf(DwarfCreationObj dwarfConstruct)
 	dwarf.addComponent<RenderComponent>(1, 0xE300, "default");
 	dwarf.addComponent<PositionComponent>(dwarfConstruct.co);
 	dwarf.addComponent<JobComponent>();
-	
 
 	// Convert LaborSkill Points into skill levels
 	std::vector<int> laborSkillLevels;

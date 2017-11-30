@@ -39,35 +39,32 @@ void Engine::init(int screenWidth, int screenHeight)
 	// Create local map
 	map = new Map(screenWidth, screenHeight, MAX_ZLVL);
 
+	// Init misc maps and designations
+	designations = new Designations;
+
 	// Add systems at boot -> move all these things to local map once made ?
 	renderSystem = new RenderSystem(map);
 	movementSystem = new MovementSystem();
 	movementAiSystem = new MovementAiSystem(&map->tileManager);
-	jobsSystem = new JobsSystem();
+	//jobsSystem = new JobsSystem();
 
 	// Non Entity Systems
 	miningSystem = new MiningSystem(&map->tileManager);
 
 	aiWorkSystem = new AiWorkSystem();
 
-	miningAi = new MiningAi();
+	miningAi = new MiningAi(&map->tileManager);
 	miningAi->init();
-
-	// Must be init after mining system. Change all these pointers needed?
-	//miningAiSystem = new MiningAiSystem(miningSystem, map->tileFactory);
 
 	// Introduce systems to the world
 	world.addSystem(*renderSystem);
 	world.addSystem(*movementSystem);
 	world.addSystem(*movementAiSystem);
-	world.addSystem(*jobsSystem);
+	//world.addSystem(*jobsSystem);
 	world.addSystem(*miningSystem);
 
 	world.addSystem(*aiWorkSystem);
 	world.addSystem(*miningAi);
-
-	// Init misc maps and designations
-	designations = new Designations;
 
 	// FloodFill from 0, 0, MAX_Z_LVL - 1
 	// explored areas. Not working yet.
@@ -109,10 +106,13 @@ void Engine::update(double deltaTime)
 	// Update systems
 	movementAiSystem->update();
 	movementSystem->update(deltaTime);
-	jobsSystem->update(deltaTime);
+//	jobsSystem->update(deltaTime);
 	miningSystem->update();
 
 	aiWorkSystem->update();
+
+	auto& a = Dwarves[0].getAllComponents();
+
 	miningAi->update(deltaTime);
 
 	// Should this be called before or after? Probably before?

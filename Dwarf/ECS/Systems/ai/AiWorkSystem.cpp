@@ -3,6 +3,9 @@
 #include "../../Components/JobComponent.h"
 #include "../../Components/PositionComponent.h"
 
+#include "../../World.h"
+#include "../../../Engine.h"
+
 namespace JobsBoard
 {
 	JobBoard job_evaluations(const Entity &e, Coordinates &co) {
@@ -15,9 +18,7 @@ namespace JobsBoard
 
 void AiWorkSystem::update()
 {
-	auto& entities = getEntities();
-
-	for (auto& e : entities)
+	for (Entity e : getEntities())
 	{
 		if (JobsBoard::is_working(e))
 			continue;

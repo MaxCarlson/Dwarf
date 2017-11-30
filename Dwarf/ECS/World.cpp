@@ -125,14 +125,14 @@ void World::refresh() // Split this into three different functions for activated
 					EnsureCapacity(attribute.systems, systemIdx);
 					attribute.systems[systemIdx] = true;
 				}
-				// If the entity is already in the system, 
-				// but we no longer want it to be remove entity from system
-				// and mark in attributes that entity is no longer part of system
-				else if (attribute.systems.size() > systemIdx && attribute.systems[systemIdx])
-				{
-					sys.second->remove(entity);
-					attribute.systems[systemIdx] = false;
-				}
+			}
+			// If the entity is already in the system, 
+			// but we no longer want it to be remove entity from system
+			// and mark in attributes that entity is no longer part of system
+			else if (attribute.systems.size() > systemIdx && attribute.systems[systemIdx])
+			{
+				sys.second->remove(entity);
+				attribute.systems[systemIdx] = false;
 			}
 		}
 	}
