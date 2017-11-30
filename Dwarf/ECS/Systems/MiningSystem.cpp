@@ -3,22 +3,6 @@
 #include "../Designations.h"
 #include "JobsSystem.h"
 
-static const int BASE_MINING_EXP = 7;
-static const int BASE_MINING_SKILL = 1;
-static const double BASE_MINING_DUR = 0.5; //6.5 ?
-
-MiningSystem::MiningSystem(TileManager * tileManager) : tileManager(tileManager)
-{
-	width = tileManager->width;
-	height = tileManager->height;
-	depth = tileManager->depth;
-}
-
-void MiningSystem::update()
-{
-
-}
-
 // Map of distances to designated mining
 // targets
 std::vector<uint8_t> miningMap;
@@ -26,6 +10,21 @@ std::vector<uint8_t> miningMap;
 // The location of the tile being mined
 // Indexed by the idx of the current Entities positon
 std::vector<int> miningTargets;
+
+MiningSystem::MiningSystem(TileManager * tileManager) : tileManager(tileManager)
+{
+	width = tileManager->width;
+	height = tileManager->height;
+	depth = tileManager->depth;
+
+	miningMap.resize(width * height * depth);
+	miningTargets.resize(width * height * depth);
+}
+
+void MiningSystem::update()
+{
+
+}
 
 void MiningSystem::makeMiningMap()
 {
@@ -40,7 +39,7 @@ void MiningSystem::makeMiningMap()
 			{
 				Coordinates co = { x, y, z };
 				const auto idx = TILE_ARRAY_LOOKUP;
-				auto des = designations->mining.find(co);
+				auto des = designations->mining.find(idx);
 
 				if (des != designations->mining.end())
 				{

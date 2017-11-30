@@ -191,9 +191,6 @@
     <ClInclude Include="ECS\Systems\ai\WorkTemplate.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ECS\Systems\ai\MiningAi.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ECS\Systems\ai\JobBoard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -201,6 +198,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ECS\Components\Tags\MiningTag.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Systems\ai\MiningAi.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

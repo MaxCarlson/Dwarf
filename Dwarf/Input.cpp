@@ -8,6 +8,8 @@
 #include "ECS\Systems\JobsSystem.h"
 #include "Designations.h"
 
+#include "Tile.h"
+
 Input::Input()
 {
 }
@@ -65,7 +67,11 @@ void Input::read()
 		//Job(Coordinates co, int exp, int bSkill, double duration, Job::Jobs jobType)
 		//	: co(co), experience(exp), baseSkillReq(bSkill), baseDuration(duration), jobType(jobType) {}
 
-		designations->mining.emplace(Coordinates{ xx, yy, engine.map->mapRenderer->currentZLevel }, 1);
+		//designations->mining.emplace(Coordinates{ xx, yy, engine.map->mapRenderer->currentZLevel }, 1);
+
+		Coordinates co = { xx, yy, engine.map->mapRenderer->currentZLevel };
+
+		designations->mining.emplace(TILE_ARRAY_LOOKUP, 1);
 
 		//Job j({ xx, yy, engine.map->mapRenderer->currentZLevel }, 10, 1, 14, Job::MINER);
 

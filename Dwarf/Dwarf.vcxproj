@@ -180,6 +180,7 @@
     <ClInclude Include="ECS\Components\RenderComponent.h" />
     <ClInclude Include="ECS\Systems.h" />
     <ClInclude Include="ECS\Components\Tags\MiningTag.h" />
+    <ClInclude Include="ECS\Systems\ai\MiningAi.h" />
     <ClInclude Include="ECS\Systems\ai\WorkTemplate.h" />
     <ClInclude Include="ECS\Systems\CameraSystem.h" />
     <ClInclude Include="ECS\Systems\JobsSystem.h" />
@@ -197,7 +198,6 @@
     <ClInclude Include="MapRender.h" />
     <ClInclude Include="ECS\Systems\ai\MovementAiSystem.h" />
     <ClInclude Include="ECS\Systems\MiningSystem.h" />
-    <ClInclude Include="ECS\Systems\ai\MiningAi.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="ECS\World.h" />
     <ClInclude Include="TileFactory.h" />

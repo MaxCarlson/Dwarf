@@ -45,16 +45,39 @@ public:
 	std::uint16_t properties = 0x1; // Change to 0U for unexplored
 };
 
-enum Directions
+enum MoveDirections
 {
 	CAN_GO_NORTH,
 	CAN_GO_SOUTH,
 	CAN_GO_EAST,
 	CAN_GO_WEST,
+	CAN_GO_NORTH_W,
+	CAN_GO_NORTH_E,
+	CAN_GO_SOUTH_E,
+	CAN_GO_SOUTH_W,
 	CAN_GO_UP,
 	CAN_GO_DOWN
 };
 
+enum Directions
+{
+	NORTH,
+	SOUTH,
+	EAST,
+	WEST,
+	NORTH_W,
+	NORTH_E,
+	SOUTH_E,
+	SOUTH_W,
+	UP,
+	DOWN
+};
+
+//constexpr Directions DirectionsArray[] = { NORTH, SOUTH, EAST, WEST, NORTH_W, NORTH_E, SOUTH_E, SOUTH_W, UP, DOWN };
+//static const int NUMBER_OF_DIRECTIONS = 10;
+
+// These are set inside tile manager when constructing
+// Number of tiles for each dimension of the current map
 extern int MAP_WIDTH, MAP_HEIGHT, MAP_DEPTH;
 
 // Formula for tile indexing with coordinates
@@ -101,7 +124,7 @@ public:
 		tileAt(co).properties &= ~P;
 	}
 
-	template<Directions D>
+	template<MoveDirections D>
 	inline bool canGo(Coordinates co)
 	{
 		if (D == CAN_GO_NORTH)
@@ -112,6 +135,18 @@ public:
 			return canWalk({ co.x + 1, co.y, co.z });
 		if (D == CAN_GO_WEST)
 			return canWalk({ co.x - 1, co.y, co.z });
+
+		if (D == CAN_GO_NORTH_W)
+			return  canWalk({ co.x - 1, co.y - 1, co.z });
+
+		if (D == CAN_GO_NORTH_E)
+			return  canWalk({ co.x + 1, co.y - 1, co.z });
+
+		if (D == CAN_GO_SOUTH_E)
+			return canWalk({ co.x + 1, co.y + 1, co.z });
+
+		if (D == CAN_GO_SOUTH_W)
+			return canWalk({ co.x - 1, co.y + 1, co.z });
 
 		// These will need to be changed since enventually 
 		// we don't want dwarves walking on air and dropping down 
@@ -210,4 +245,40 @@ inline int get_rough_distance(Coordinates loc, Coordinates dest)
 	int y = dest.y - loc.y;
 	int z = dest.z - loc.z;
 	return (x * x + y * y + z * z);
+}
+
+template <Directions D>
+inline Coordinates positionAt(Coordinates co)
+{
+	if (D == NORTH)
+		return { co.x, co.y - 1, co.z };
+
+	if (D == SOUTH)
+		return{ co.x, co.y + 1, co.z };
+
+	if (D == EAST)
+		return { co.x + 1, co.y, co.z };
+
+	if (D == WEST)
+		return { co.x - 1, co.y, co.z };
+
+	if (D == NORTH_W)
+		return { co.x - 1, co.y - 1, co.z };
+
+	if (D == NORTH_E)
+		return { co.x + 1, co.y - 1, co.z };
+
+	if (D == SOUTH_E)
+		return { co.x + 1, co.y + 1, co.z };
+
+	if (D == SOUTH_W)
+		return { co.x - 1, co.y + 1, co.z };
+
+	if (D == UP)
+		return { co.x, co.y, co.z + 1 };
+
+	if (D == DOWN)
+		return { co.x, co.y, co.z - 1 };
+
+	return EMPTY_COORDINATES;
 }
