@@ -5,6 +5,8 @@
 #include "../Tile.h"
 #include "../MiningSystem.h"
 
+#include "../../Messages/recalculate_mining_message.h"
+
 #include <iostream>
 
 namespace JobsBoard
@@ -163,6 +165,7 @@ void MiningAi::updateMiner(Entity e)
 			designations->mining.erase(targetIdx);
 
 			// Recalculate mining map
+			emit(recalculate_mining_message{});
 		}
 
 		tag.step = MiningTag::DROP_TOOL;

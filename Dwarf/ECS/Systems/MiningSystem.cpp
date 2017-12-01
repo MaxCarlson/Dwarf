@@ -4,6 +4,7 @@
 #include "JobsSystem.h"
 
 #include "../Messages/recalculate_mining_message.h"
+#include "../World.h"
 
 // Map of distances to designated mining
 // targets
@@ -22,8 +23,11 @@ MiningSystem::MiningSystem(TileManager * tileManager) : tileManager(tileManager)
 	miningMap.resize(width * height * depth);
 	miningTargets.resize(width * height * depth);
 	makeMiningMap();
+}
 
-	subscribe<recalculate_mining_message>([this](recalculate_mining_message &msg) 
+void MiningSystem::init()
+{
+	subscribe<recalculate_mining_message>([this](recalculate_mining_message &msg)
 	{
 		makeMiningMap();
 	});
@@ -33,8 +37,7 @@ void MiningSystem::update()
 {
 	if (designations->mining.empty())
 		return;
-	
-	
+		
 }
 
 void MiningSystem::makeMiningMap()

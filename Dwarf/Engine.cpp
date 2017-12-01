@@ -66,6 +66,9 @@ void Engine::init(int screenWidth, int screenHeight)
 	world.addSystem(*aiWorkSystem);
 	world.addSystem(*miningAi);
 
+	// Init systems with messages
+	miningSystem->init();
+
 	// FloodFill from 0, 0, MAX_Z_LVL - 1
 	// explored areas. Not working yet.
 	//movementAiSystem->floodFillMap();

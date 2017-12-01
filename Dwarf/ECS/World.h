@@ -117,6 +117,17 @@ public:
 		}
 	}
 
+	template <class MSG>
+	inline void emit_deferred(MSG message) {
+		impl::message_t<MSG> handle(message);
+		if (pubsub_holder.size() > handle.family_id) {
+
+			auto * subholder = static_cast<impl::subscription_holder_t<MSG> *>(pubsub_holder[handle.family_id].get());
+			std::lock_guard<std::mutex> postlock(subholder->delivery_mutex);
+			subholder->delivery_queue.push(message);
+		}
+	}
+
 	// Mailbox system
 	std::vector<std::unique_ptr<impl::subscription_base_t>> pubsub_holder;
 

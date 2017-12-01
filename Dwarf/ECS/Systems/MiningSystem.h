@@ -20,7 +20,9 @@ public:
 	MiningSystem() = default;
 	MiningSystem(TileManager* tileManager);
 
+	void init();
 	void update();
+	
 
 	void makeMiningMap();
 	void walkMiningMap(const Coordinates co, const int distance, const int idx);	

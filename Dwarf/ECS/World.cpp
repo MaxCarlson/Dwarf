@@ -23,10 +23,12 @@ void World::SystemDeleter::operator()(SystemBase * system) const
 
 World::World() : World(DEFAULT_ENTITY_POOL_SIZE)
 {
+	pubsub_holder.resize(10);
 }
 
 World::World(std::size_t entityPoolSize) : entityIdPool(entityPoolSize), entityAttributes(entityPoolSize)
 {
+	pubsub_holder.resize(10);
 }
 
 void World::removeAllSystems()

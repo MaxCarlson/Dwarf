@@ -37,6 +37,7 @@ namespace impl
 		}
 	};
 
+
 	template<class MSG>
 	inline void subscribe(World &ECS, SystemBase &B, std::function<void(MSG &message)> destination);
 
@@ -111,8 +112,10 @@ public:
 	// Returns all entitys of a system
 	const std::vector<Entity>& getEntities() const { return entities; }
 
+	// Holds subscribed messages
 	std::unordered_map<std::size_t, std::unique_ptr<impl::subscription_mailbox_t>> mailboxes;
 
+	// Subscribe this system to messages of class MSG
 	template<class MSG>
 	void subscribe(World &ECS, std::function<void(MSG &message)> destination) {
 		impl::subscribe<MSG>(ECS, *this, destination);
@@ -153,6 +156,20 @@ public:
 			mailbox->pop();
 			func(msg);
 		}
+	}
+
+	// Emit message immeidetly from within
+	// this system
+	template<class MSG>
+	inline void emit(MSG message)
+	{
+		this->world->emit<MSG>(message);
+	}
+
+	template<class MSG>
+	inline void emit_deffered(MSG message)
+	{
+		this->world->emit_deferred<MSG>(message);
 	}
 
 private:
