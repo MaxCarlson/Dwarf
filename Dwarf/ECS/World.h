@@ -98,6 +98,35 @@ public:
 	// Returns entity and index of idx
 	Entity getEntity(std::size_t idx);
 
+	template <class MSG>
+	inline void emit(MSG message) {
+		impl::message_t<MSG> handle(message);
+		if (pubsub_holder.size() > handle.family_id) {
+			for (auto &func : static_cast<impl::subscription_holder_t<MSG> *>(pubsub_holder[handle.family_id].get())->subscriptions) {
+				if (std::get<0>(func) && std::get<1>(func)) {
+					std::get<1>(func)(message);
+				}
+				else {
+					// It is destined for the system's mailbox queue.
+					auto finder = std::get<2>(func)->mailboxes.find(handle.family_id);
+					if (finder != std::get<2>(func)->mailboxes.end()) {
+						static_cast<impl::mailbox_t<MSG> *>(finder->second.get())->messages.push(message);
+					}
+				}
+			}
+		}
+	}
+
+	// Mailbox system
+	std::vector<std::unique_ptr<impl::subscription_base_t>> pubsub_holder;
+
+	/* Delivers the queue; called at the end of each system call */
+	inline void deliver_messages() {
+		for (auto &holder : pubsub_holder) {
+			if (holder) holder->deliver_messages();
+		}
+	}
+
 private:
 
 	SystemArray systems;
@@ -211,4 +240,34 @@ inline bool World::doesSystemExist() const
 	return doesSystemExist(SystemTypeId<TSystem>());
 }
 
-// Add does system exist in this world function?
+// Messaging
+namespace impl
+{
+	template<class MSG>
+	inline void subscribe(World &ECS, SystemBase &B, std::function<void(MSG &message)> destination) {
+		MSG empty_message{};
+		impl::message_t<MSG> handle(empty_message);
+		if (ECS.pubsub_holder.size() < handle.family_id + 1) {
+			ECS.pubsub_holder.resize(handle.family_id + 1);
+		}
+		if (!ECS.pubsub_holder[handle.family_id]) {
+			ECS.pubsub_holder[handle.family_id] = std::move(std::make_unique<subscription_holder_t<MSG>>());
+		}
+		static_cast<subscription_holder_t<MSG> *>(ECS.pubsub_holder[handle.family_id].get())->subscriptions.push_back(std::make_tuple(true, destination, nullptr));
+	}
+
+	template<class MSG>
+	inline void subscribe_mbox(World &ECS, SystemBase &B) {
+		MSG empty_message{};
+		impl::message_t<MSG> handle(empty_message);
+		if (ECS.pubsub_holder.size() < handle.family_id + 1) {
+			ECS.pubsub_holder.resize(handle.family_id + 1);
+		}
+		if (!ECS.pubsub_holder[handle.family_id]) {
+			ECS.pubsub_holder[handle.family_id] = std::move(std::make_unique<subscription_holder_t<MSG>>());
+		}
+		std::function<void(MSG &message)> destination; // Deliberately empty
+		static_cast<impl::subscription_holder_t<MSG> *>(ECS.pubsub_holder[handle.family_id].get())->subscriptions.push_back(std::make_tuple(false, destination, &B));
+		B.mailboxes[handle.family_id] = std::make_unique<impl::mailbox_t<MSG>>();
+	}
+}

@@ -61,6 +61,7 @@ enum MoveDirections
 
 enum Directions
 {
+	NO_DIRECTION = -1,
 	NORTH,
 	SOUTH,
 	EAST,
@@ -244,7 +245,7 @@ inline int getIdx(Coordinates co)
 }
 
 // Returns Coordinates from a vector index
-inline Coordinates getIndice(int idx)
+inline Coordinates idxToCo(int idx)
 {
 	int z = idx / (MAP_HEIGHT * MAP_WIDTH);
 	idx -= (z * MAP_WIDTH * MAP_HEIGHT);

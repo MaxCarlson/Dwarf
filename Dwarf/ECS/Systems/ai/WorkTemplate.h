@@ -27,15 +27,7 @@ public:
 
 	bool followPath(Entity& e, TAG & tag)
 	{
-		auto& pos = e.getComponent<PositionComponent>();
-		auto& mov = e.getComponent<MovementComponent>();
 
-		if (mov.destination == EMPTY_COORDINATES)
-			mov.destination = tag.desination;
-
-		// Entity is at site!
-		if (pos.co == mov.destination)
-			return true;
 
 		return false;
 	}
@@ -43,7 +35,7 @@ public:
 	inline void cancel_work(Entity & e)
 	{
 		e.removeComponent<TAG>();
-
+		e.activate();
 		// status marker for idle here?
 	}
 

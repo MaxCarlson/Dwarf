@@ -4,8 +4,91 @@
 
 #include <vector>
 
+#include <queue>
+#include <mutex>
+
 class World;
 class Entity;
+class SystemBase;
+
+struct base_message_t
+{
+	static std::size_t type_counter;
+};
+
+namespace impl
+{
+	template<class C>
+	struct message_t : public base_message_t {
+		message_t() {
+			C empty;
+			data = empty;
+			family();
+		}
+		message_t(C comp) : data(comp) {
+			family();
+		}
+		std::size_t family_id;
+		C data;
+
+		inline void family() {
+			static std::size_t family_id_tmp = base_message_t::type_counter++;
+			family_id = family_id_tmp;
+		}
+	};
+
+	template<class MSG>
+	inline void subscribe(World &ECS, SystemBase &B, std::function<void(MSG &message)> destination);
+
+	template<class MSG>
+	inline void subscribe_mbox(World &ECS, SystemBase &B);
+
+	/*
+	* Base class for storing subscriptions to messages
+	*/
+	struct subscription_base_t {
+		virtual void deliver_messages() = 0;
+	};
+
+	/* Base class for subscription mailboxes */
+	struct subscription_mailbox_t {
+	};
+
+	/* Implementation class for mailbox subscriptions; stores a queue */
+	template <class C>
+	struct mailbox_t : subscription_mailbox_t {
+		std::queue<C> messages;
+	};
+
+	template <class C>
+	struct subscription_holder_t : subscription_base_t {
+		std::queue<C> delivery_queue;
+		std::mutex delivery_mutex;
+		std::vector<std::tuple<bool, std::function<void(C& message)>, SystemBase *>> subscriptions;
+
+		virtual void deliver_messages() override {
+			std::lock_guard<std::mutex> guard(delivery_mutex);
+			while (!delivery_queue.empty()) {
+				C message = delivery_queue.front();
+				delivery_queue.pop();
+				message_t<C> handle(message);
+
+				for (auto &func : subscriptions) {
+					if (std::get<0>(func) && std::get<1>(func)) {
+						std::get<1>(func)(message);
+					}
+					else {
+						// It is destined for the system's mailbox queue.
+						auto finder = std::get<2>(func)->mailboxes.find(handle.family_id);
+						if (finder != std::get<2>(func)->mailboxes.end()) {
+							static_cast<mailbox_t<C> *>(finder->second.get())->messages.push(message);
+						}
+					}
+				}
+			}
+		}
+	};
+}
 
 class SystemBase
 {
@@ -27,6 +110,50 @@ public:
 
 	// Returns all entitys of a system
 	const std::vector<Entity>& getEntities() const { return entities; }
+
+	std::unordered_map<std::size_t, std::unique_ptr<impl::subscription_mailbox_t>> mailboxes;
+
+	template<class MSG>
+	void subscribe(World &ECS, std::function<void(MSG &message)> destination) {
+		impl::subscribe<MSG>(ECS, *this, destination);
+	}
+
+	template<class MSG>
+	void subscribe(std::function<void(MSG &message)> destination) {
+		subscribe<MSG>(*this->world, destination);
+	}
+
+	template<class MSG>
+	void subscribe_mbox(World &ECS) {
+		impl::subscribe_mbox<MSG>(ECS, *this);
+	}
+
+	template<class MSG>
+	void subscribe_mbox() {
+		subscribe_mbox<MSG>(*this->world);
+	}
+
+	template<class MSG>
+	std::queue<MSG> * mbox() {
+		impl::message_t<MSG> handle(MSG{});
+		auto finder = mailboxes.find(handle.family_id);
+		if (finder != mailboxes.end()) {
+			return &static_cast<impl::mailbox_t<MSG> *>(finder->second.get())->messages;
+		}
+		else {
+			return nullptr;
+		}
+	}
+
+	template<class MSG>
+	void each_mbox(const std::function<void(const MSG&)> &func) {
+		std::queue<MSG> * mailbox = mbox<MSG>();
+		while (!mailbox->empty()) {
+			MSG msg = mailbox->front();
+			mailbox->pop();
+			func(msg);
+		}
+	}
 
 private:
 
@@ -83,3 +210,13 @@ TypeId SystemTypeId()
 {
 	return ClassTypeId<SystemBase>::getTypeId<T>();
 }
+
+
+
+
+
+
+
+
+
+

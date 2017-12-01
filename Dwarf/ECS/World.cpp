@@ -1,5 +1,6 @@
 #include "World.h"
 
+std::size_t base_message_t::type_counter = 1;
 
 template<class Container>
 void EnsureCapacity(Container& container, typename Container::size_type index) // Revisit this if performance is an issue here

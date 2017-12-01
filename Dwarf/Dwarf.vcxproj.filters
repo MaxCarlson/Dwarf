@@ -203,5 +203,8 @@
     <ClInclude Include="ECS\Systems\ai\MiningAi.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ECS\Messages\recalculate_mining_message.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -3,6 +3,8 @@
 #include "../Designations.h"
 #include "JobsSystem.h"
 
+#include "../Messages/recalculate_mining_message.h"
+
 // Map of distances to designated mining
 // targets
 std::vector<uint8_t> miningMap;
@@ -20,6 +22,11 @@ MiningSystem::MiningSystem(TileManager * tileManager) : tileManager(tileManager)
 	miningMap.resize(width * height * depth);
 	miningTargets.resize(width * height * depth);
 	makeMiningMap();
+
+	subscribe<recalculate_mining_message>([this](recalculate_mining_message &msg) 
+	{
+		makeMiningMap();
+	});
 }
 
 void MiningSystem::update()

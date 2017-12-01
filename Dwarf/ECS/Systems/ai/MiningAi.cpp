@@ -16,6 +16,10 @@ namespace JobsBoard
 
 		// Pick distance evaluate
 
+		// Other evaluations based on Entity skill
+		// so we're not only looking at distance as a measure of 
+		// who should do which work?
+
 		// Find total distance for job
 		int distance = miningMap[getIdx(co)]; // + PickDistance
 
@@ -34,9 +38,7 @@ void MiningAi::init()
 
 void MiningAi::update(double deltaT)
 {
-	auto& entities = getEntities();
-
-	for (auto& e : entities)
+	for (auto& e : getEntities())
 	{
 		updateMiner(e);
 	}
@@ -47,10 +49,11 @@ void MiningAi::updateMiner(Entity e)
 	WorkTemplate<MiningTag> work;
 
 	auto& tag = e.getComponent<MiningTag>(); 
-
+	auto& co = e.getComponent<PositionComponent>().co;
 
 	if (tag.step == MiningTag::GET_PICK)
 	{
+		// Not implemented yet as we have no tools!!!!!!@!@
 		work.pickup_tool(e);
 
 		// On success (which needs to be added in)
@@ -66,8 +69,6 @@ void MiningAi::updateMiner(Entity e)
 		if (mov.progress)
 			return;
 
-		auto& co = e.getComponent<PositionComponent>().co;
-
 		// If the mining map at our idx is zero,
 		// we're at a mining site!
 		const auto idx = getIdx(co);
@@ -77,10 +78,10 @@ void MiningAi::updateMiner(Entity e)
 			return;
 		}
 
-		int currentDir = -1;
+		int currentDir = NO_DIRECTION;
 		uint8_t min_value = std::numeric_limits<uint8_t>::max();
 
-		if (miningMap[getIdx(positionAt<NORTH>(co))] < min_value && tileManager->canGo<CAN_GO_NORTH>(co)) {
+		if (miningMap[getIdx(positionAt<NORTH>(co))] < min_value && tileManager->canGo<CAN_GO_NORTH>(co)) { // Find a better system than this!!
 			min_value = miningMap[getIdx(positionAt<NORTH>(co))];
 			currentDir = NORTH;
 		}
@@ -121,7 +122,7 @@ void MiningAi::updateMiner(Entity e)
 			currentDir = DOWN;
 		}
 
-		if (currentDir == -1)
+		if (currentDir == NO_DIRECTION)
 		{
 			std::cout << "Cannot find mining path!!!" << std::endl;
 			tag.step = MiningTag::DROP_TOOL;
@@ -143,16 +144,35 @@ void MiningAi::updateMiner(Entity e)
 		case UP:      ++dest.z; break;
 		case DOWN:    --dest.z; break;
 		}
+		return;
 	}
 
 	else if (tag.step == MiningTag::DIG)
 	{
+		
+		const auto idx = getIdx(co);
 
+		const int targetIdx = miningTargets[idx];
+		const int targetMiningType = designations->mining[targetIdx];
+
+		if (targetMiningType > 0)
+		{
+
+			// Perform mining
+
+			designations->mining.erase(targetIdx);
+
+			// Recalculate mining map
+		}
+
+		tag.step = MiningTag::DROP_TOOL;
+		return;
 	}
 
 	else if (tag.step == MiningTag::DROP_TOOL)
 	{
 		work.cancel_work(e);
+		return;
 	}
 }
 
