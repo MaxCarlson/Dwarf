@@ -10,7 +10,6 @@
 #include "ECS\Systems\CameraSystem.h"
 #include "ECS\Systems\MovementSystem.h"
 #include "ECS\Systems\ai\MovementAiSystem.h"
-#include "ECS\Systems\JobsSystem.h"
 #include "ECS\Systems\MiningSystem.h"
 #include "BearLibTerminal.h"
 #include "Designations.h"
@@ -42,17 +41,15 @@ void Engine::init(int screenWidth, int screenHeight)
 	// Init misc maps and designations
 	designations = new Designations;
 
-	// Add systems at boot -> move all these things to local map once made ?
+	// Add systems at init
 	renderSystem = new RenderSystem(map);
 	movementSystem = new MovementSystem();
 	movementAiSystem = new MovementAiSystem(&map->tileManager);
-	//jobsSystem = new JobsSystem();
 
 	// Non Entity Systems
 	miningSystem = new MiningSystem(&map->tileManager);
 
 	aiWorkSystem = new AiWorkSystem();
-
 	miningAi = new MiningAi(&map->tileManager);
 	miningAi->init();
 
@@ -60,9 +57,7 @@ void Engine::init(int screenWidth, int screenHeight)
 	world.addSystem(*renderSystem);
 	world.addSystem(*movementSystem);
 	world.addSystem(*movementAiSystem);
-	//world.addSystem(*jobsSystem);
 	world.addSystem(*miningSystem);
-
 	world.addSystem(*aiWorkSystem);
 	world.addSystem(*miningAi);
 
@@ -72,14 +67,14 @@ void Engine::init(int screenWidth, int screenHeight)
 	// FloodFill from 0, 0, MAX_Z_LVL - 1
 	// explored areas. Not working yet.
 	//movementAiSystem->floodFillMap();
-
+	
 	world.refresh();
 }
 
 // Game loop
 void Engine::run()
 {
-	const double MS_PER_UPDATE = 10.0;
+	const double MS_PER_UPDATE = 15.0;
 	double previous = double(now());
 	double lag = 0.0;
 
@@ -105,11 +100,12 @@ void Engine::run()
 
 void Engine::update(double deltaTime)
 {
+	// Deliver any deffered messages to systems
+	world.deliver_messages();
 
 	// Update systems
 	movementAiSystem->update();
 	movementSystem->update(deltaTime);
-//	jobsSystem->update(deltaTime);
 	miningSystem->update();
 
 	// Work Systems

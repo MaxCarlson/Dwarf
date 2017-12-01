@@ -1,6 +1,6 @@
 #include "AiWorkSystem.h"
 #include "JobBoard.h"
-#include "../../Components/JobComponent.h"
+
 #include "../../Components/PositionComponent.h"
 
 #include "../../World.h"

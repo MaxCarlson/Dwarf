@@ -1,8 +1,6 @@
 #include "MiningSystem.h"
 #include "../Tile.h"
 #include "../Designations.h"
-#include "JobsSystem.h"
-
 #include "../Messages/recalculate_mining_message.h"
 #include "../World.h"
 
@@ -35,8 +33,9 @@ void MiningSystem::init()
 
 void MiningSystem::update()
 {
-	if (designations->mining.empty())
-		return;
+	return; // Handling is done through recalculate_mining_message
+	//if (designations->mining.empty())
+	//	return;
 		
 }
 

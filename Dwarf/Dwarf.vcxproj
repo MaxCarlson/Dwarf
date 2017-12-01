@@ -141,7 +141,6 @@
     <ClCompile Include="ECS\Systems\ai\AiWorkSystem.cpp" />
     <ClCompile Include="Designations.cpp" />
     <ClCompile Include="ECS\EntityManager.cpp" />
-    <ClCompile Include="ECS\Systems\JobsSystem.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="ECS\Entities.cpp" />
     <ClCompile Include="EntityFactory.cpp" />
@@ -184,7 +183,6 @@
     <ClInclude Include="ECS\Systems\ai\MiningAi.h" />
     <ClInclude Include="ECS\Systems\ai\WorkTemplate.h" />
     <ClInclude Include="ECS\Systems\CameraSystem.h" />
-    <ClInclude Include="ECS\Systems\JobsSystem.h" />
     <ClInclude Include="ECS\Systems\MovementSystem.h" />
     <ClInclude Include="ECS\Systems\RenderSystem.h" />
     <ClInclude Include="ECS\TypeID.h" />

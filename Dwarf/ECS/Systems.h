@@ -6,6 +6,7 @@
 
 #include <queue>
 #include <mutex>
+#include <unordered_map>
 
 class World;
 class Entity;

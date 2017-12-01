@@ -151,9 +151,10 @@ void MiningAi::updateMiner(Entity e)
 
 	else if (tag.step == MiningTag::DIG)
 	{
-		
+		// Get Entity position index
+		// get out mining targets idx using our position idx
+		// and find out which type of mining we'd like to do
 		const auto idx = getIdx(co);
-
 		const int targetIdx = miningTargets[idx];
 		const int targetMiningType = designations->mining[targetIdx];
 

@@ -248,7 +248,7 @@ void MainMenu::printDwafStatOptions(int dwarfSelected, bool &statsSelected)
 		int statCounter = -1; // -1 due to first job being Job::NONE
 		for (int stat : listOfAllJobsByIndex)
 		{
-			if (stat == Job::Jobs::NONE)
+			if (stat == int(Jobs::NONE))
 				continue;
 
 			// If the stats are selected instead of dwaves

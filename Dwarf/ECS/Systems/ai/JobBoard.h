@@ -33,7 +33,7 @@ namespace JobsBoard
 			if (&e.getComponent<TAG>())
 				return true;
 			return false;
-			//return e.hasComponent<TAG>(); 
+			//return e.hasComponent<TAG>(); // Doesn't work? Why?
 		}
 
 		virtual void set_tag(Entity e) override final

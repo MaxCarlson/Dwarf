@@ -5,11 +5,11 @@
 #include "MapRender.h"
 
 #include "BearLibTerminal.h"
-#include "ECS\Systems\JobsSystem.h"
 #include "Designations.h"
 
-#include "Tile.h"
+#include "Tile.h" // Delete these once done with testing
 #include "ECS\Systems\MiningSystem.h"
+
 Input::Input()
 {
 }

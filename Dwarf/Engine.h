@@ -12,7 +12,6 @@ class CameraSystem;
 class RenderSystem;
 class MovementSystem;
 class MovementAiSystem;
-class JobsSystem;
 class MiningSystem;
 class MiningAiSystem;
 
@@ -35,10 +34,7 @@ public:
 	// Systems
 	RenderSystem * renderSystem;
 	MovementSystem * movementSystem;
-	MovementAiSystem * movementAiSystem;
-	JobsSystem * jobsSystem;
-
-	
+	MovementAiSystem * movementAiSystem;	
 	AiWorkSystem * aiWorkSystem;
 	MiningAi * miningAi;
 
