@@ -165,6 +165,8 @@ void MiningAi::updateMiner(Entity e)
 
 			designations->mining.erase(targetIdx);
 
+			// Emit message to perform mining? Do we want to do this on a skill based chance roll?
+
 			// Recalculate mining map
 			emit(recalculate_mining_message{});
 		}

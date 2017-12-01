@@ -106,11 +106,13 @@ void Engine::update(double deltaTime)
 	// Update systems
 	movementAiSystem->update();
 	movementSystem->update(deltaTime);
-	miningSystem->update();
 
 	// Work Systems
 	aiWorkSystem->update();
 	miningAi->update(deltaTime);
+
+	// Systems that don't need updates
+	// miningSystem->update();
 
 	// Should this be called before or after? Probably before?
 	world.refresh();

@@ -227,7 +227,7 @@ public:
 	{
 		return !(getProperty<Tile::FLOOR>(co) | getProperty<Tile::WALL>(co) | getProperty<Tile::OBSTRUCTED>(co));
 	}
-
+	
 private:
 
 	// 1D vector of Tiles indexed by 3D formula

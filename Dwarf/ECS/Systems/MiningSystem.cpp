@@ -36,7 +36,6 @@ void MiningSystem::update()
 	return; // Handling is done through recalculate_mining_message
 	//if (designations->mining.empty())
 	//	return;
-		
 }
 
 void MiningSystem::makeMiningMap()
