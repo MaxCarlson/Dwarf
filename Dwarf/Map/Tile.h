@@ -1,5 +1,5 @@
 #pragma once
-#include "Coordinates.h"
+#include "../Coordinates.h"
 
 #include <vector>
 
@@ -40,6 +40,7 @@ public:
 	// Use int hex values for colors!!!!
 	int color;
 
+	int health = 500;
 
 	// Add a property here denoting if tile is ore/gem vein for quick lookup!!
 	std::uint16_t properties = 0x1; // Change to 0U for unexplored
@@ -92,6 +93,8 @@ public:
 	// Dimensions of map we're 
 	// going to render
 	int width, height, depth;
+
+	//TileManager() = default;
 
 	TileManager(int width, int height, int depth) : width(width), height(height), depth(depth)
 	{
@@ -180,6 +183,11 @@ public:
 		return tileMap[TILE_ARRAY_LOOKUP];
 	}
 
+	inline Tile& tileAt(int exactPos)
+	{
+		return tileMap[exactPos];
+	}
+
 	// Direct lookup by tile index instead of coordinates
 	inline Tile tileAt(int exactPos) const
 	{
@@ -233,6 +241,8 @@ private:
 	// 1D vector of Tiles indexed by 3D formula
 	std::vector<Tile> tileMap;
 };
+
+extern TileManager * tileManager;
 
 // Get the index of Coordinates 
 // Returns 0 if index isn't in the map

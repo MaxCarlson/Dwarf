@@ -1,6 +1,6 @@
 #pragma once
 #include "../Component.h"
-#include "../../Tile.h"
+#include "../Coordinates.h"
 
 // Holds positions of Entities
 class PositionComponent : public Component

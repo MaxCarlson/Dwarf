@@ -1,5 +1,5 @@
 #include "MovementAiSystem.h"
-#include "../Tile.h"
+#include "../Map/Tile.h"
 #include "../../Components/PositionComponent.h"
 #include "../../Components/JobComponent.h"
 #include <queue>
@@ -82,25 +82,12 @@ std::vector<Coordinates> PathGraph::floodFill(Coordinates co) const
 	}
 	return result;
 }
-//(tileManager->canWalk(dest)
-// !(tileManager->getProperty<TileManager::WALL>(dest) | tileManager->getProperty<TileManager::OBSTRUCTED>(dest)) && tileManager->getProperty<TileManager::FLOOR>(dest)
-//|| (tileManager->getProperty<TileManager::RAMP>(start) && start.x == dest.x && start.y == dest.y));
 
-MovementAiSystem::MovementAiSystem(TileManager * tileManager) : tileManager(tileManager)
+void MovementAiSystem::init()
 {
-	pathGraph.tileManager = tileManager;
-	pathGraph.width = tileManager->width;
-	pathGraph.height = tileManager->height;
-	pathGraph.depth = tileManager->depth;
-}
-
-void MovementAiSystem::initMap(TileManager * tileMan)
-{
-	tileManager = tileMan;
-	pathGraph.tileManager = tileManager;
-	pathGraph.width = tileManager->width;
-	pathGraph.height = tileManager->height;
-	pathGraph.depth = tileManager->depth;
+	pathGraph.width = MAP_WIDTH;
+	pathGraph.height = MAP_HEIGHT;
+	pathGraph.depth = MAP_DEPTH;
 }
 
 // Not Yet working!

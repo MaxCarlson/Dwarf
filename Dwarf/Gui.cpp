@@ -3,8 +3,8 @@
 #include "BearLibTerminal.h"
 
 #include "Engine.h"
-#include "Map.h"
-#include "MapRender.h"
+#include "Map/Map.h"
+#include "Map/MapRender.h"
 
 static const int GUI_PANEL_VERT_PIX = 4;
 static const char* guiMainColor = "#386687";

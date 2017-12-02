@@ -149,15 +149,15 @@
     <ClCompile Include="ECS\Systems\ai\JobBoard.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MainMenu.cpp" />
-    <ClCompile Include="Map.cpp" />
+    <ClCompile Include="Map\Map.cpp" />
     <ClCompile Include="ECS\World.cpp" />
-    <ClCompile Include="MapRender.cpp" />
+    <ClCompile Include="Map\MapRender.cpp" />
     <ClCompile Include="ECS\Systems\ai\MovementAiSystem.cpp" />
     <ClCompile Include="ECS\Systems\MiningSystem.cpp" />
     <ClCompile Include="ECS\Systems\ai\MiningAi.cpp" />
-    <ClCompile Include="Tile.cpp" />
+    <ClCompile Include="Map\Tile.cpp" />
     <ClCompile Include="TileFactory.cpp" />
-    <ClCompile Include="VeinCreator.cpp" />
+    <ClCompile Include="Map\VeinCreator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ECS\Messages\perform_mining_message.h" />
@@ -194,14 +194,14 @@
     <ClInclude Include="Input.h" />
     <ClInclude Include="ECS\Systems\ai\JobBoard.h" />
     <ClInclude Include="MainMenu.h" />
-    <ClInclude Include="Map.h" />
-    <ClInclude Include="MapRender.h" />
+    <ClInclude Include="Map\Map.h" />
+    <ClInclude Include="Map\MapRender.h" />
     <ClInclude Include="ECS\Systems\ai\MovementAiSystem.h" />
     <ClInclude Include="ECS\Systems\MiningSystem.h" />
-    <ClInclude Include="Tile.h" />
+    <ClInclude Include="Map\Tile.h" />
     <ClInclude Include="ECS\World.h" />
     <ClInclude Include="TileFactory.h" />
-    <ClInclude Include="VeinCreator.h" />
+    <ClInclude Include="Map\VeinCreator.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

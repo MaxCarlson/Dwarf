@@ -1,7 +1,7 @@
 #include "Engine.h"
 
-#include "Map.h"
-#include "MapRender.h"
+#include "Map/Map.h"
+#include "Map/MapRender.h"
 #include "ECS\Components\PositionComponent.h"
 #include "ECS\Components\RenderComponent.h"
 #include "ECS\Components\KeyBoardComponent.h"
@@ -30,13 +30,15 @@ inline TimePoint now() {
 Engine::~Engine()
 {
 	delete map;
-	delete designations;
 	delete renderSystem;
 	delete movementSystem;
 	delete movementAiSystem;
 	delete miningSystem;
 	delete aiWorkSystem;
 	delete miningAi;
+
+	// Some globals
+	delete designations;
 }
 
 void Engine::init(int screenWidth, int screenHeight)
@@ -50,13 +52,14 @@ void Engine::init(int screenWidth, int screenHeight)
 	// Add systems at init
 	renderSystem = new RenderSystem(map);
 	movementSystem = new MovementSystem();
-	movementAiSystem = new MovementAiSystem(&map->tileManager);
+	movementAiSystem = new MovementAiSystem();
+	movementAiSystem->init();
 
 	// Non Entity Systems
-	miningSystem = new MiningSystem(&map->tileManager, map->tileFactory);
+	miningSystem = new MiningSystem();
 
 	aiWorkSystem = new AiWorkSystem();
-	miningAi = new MiningAi(&map->tileManager);
+	miningAi = new MiningAi();
 	miningAi->init();
 
 	// Introduce systems to the world

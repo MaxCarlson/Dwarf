@@ -2,13 +2,15 @@
 #include "WorkTemplate.h"
 #include "JobBoard.h"
 #include "../Designations.h"
-#include "../Tile.h"
+#include "../Map/Tile.h"
 #include "../MiningSystem.h"
 
 #include "../../Messages/recalculate_mining_message.h"
 #include "../../Messages/perform_mining_message.h"
 
 #include <iostream>
+
+#include <libtcod.hpp>
 
 namespace JobsBoard
 {
@@ -28,10 +30,6 @@ namespace JobsBoard
 
 		board.insert(std::make_pair(distance, jt));
 	}
-}
-
-MiningAi::MiningAi(TileManager * tileManager) : tileManager(tileManager)
-{
 }
 
 void MiningAi::init()
@@ -154,6 +152,7 @@ void MiningAi::updateMiner(Entity e)
 
 	else if (tag.step == MiningTag::DIG)
 	{
+
 		// Get Entity position index
 		// get out mining targets idx using our position idx
 		// and find out which type of mining we'd like to do
@@ -163,17 +162,16 @@ void MiningAi::updateMiner(Entity e)
 
 		if (targetMiningType > 0)
 		{
-			designations->mining.erase(targetIdx);
-
 			// Emit message to perform mining? Do we want to do this on a skill based chance roll?
-			emit(perform_mining_message{ e, targetIdx, targetMiningType });
-
+			emit(perform_mining_message{ e, targetIdx, targetMiningType });		
+		}
+		else
+		{
 			// Recalculate mining map
 			emit(recalculate_mining_message{});
-		}
 
-		tag.step = MiningTag::DROP_TOOL;
-		return;
+			tag.step = MiningTag::DROP_TOOL;
+		}
 	}
 
 	else if (tag.step == MiningTag::DROP_TOOL)

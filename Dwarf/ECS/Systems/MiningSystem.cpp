@@ -1,10 +1,11 @@
 #include "MiningSystem.h"
-#include "../Tile.h"
+#include "../Map/Tile.h"
 #include "../Designations.h"
 #include "../Messages/recalculate_mining_message.h"
 #include "../Messages/perform_mining_message.h"
 #include "../World.h"
 #include "../TileFactory.h"
+#include "../Components/LaborStatsComponent.h"
 
 // Map of distances to designated mining
 // targets
@@ -13,17 +14,6 @@ std::vector<uint8_t> miningMap;
 // The location of the tile being mined
 // Indexed by the idx of the current Entities positon
 std::vector<int> miningTargets;
-
-MiningSystem::MiningSystem(TileManager * tileManager, TileFactory * tileFactory) : tileManager(tileManager), tileFactory(tileFactory)
-{
-	width = tileManager->width;
-	height = tileManager->height;
-	depth = tileManager->depth;
-
-	miningMap.resize(width * height * depth);
-	miningTargets.resize(width * height * depth);
-	makeMiningMap();
-}
 
 void MiningSystem::init()
 {
@@ -36,13 +26,14 @@ void MiningSystem::init()
 	{
 		performMining(msg.e, msg.targetIdx, msg.opperation);
 	});
+
+	miningMap.resize(MAP_WIDTH * MAP_HEIGHT * MAP_DEPTH);
+	miningTargets.resize(MAP_WIDTH * MAP_HEIGHT * MAP_DEPTH);
 }
 
 void MiningSystem::update()
 {
-	return; // Handling is done through recalculate_mining_message
-	//if (designations->mining.empty())
-	//	return;
+	return; 
 }
 
 void MiningSystem::makeMiningMap()
@@ -52,12 +43,11 @@ void MiningSystem::makeMiningMap()
 
 	std::vector<std::tuple<int, int, int, int>> startingPoints;
 
-	for(int z = 1; z < depth; ++z)
-		for(int y = 0; y < height; ++y)
-			for (int x = 0; x < width; ++x)
+	for(int z = 1; z < MAP_DEPTH; ++z)
+		for(int y = 0; y < MAP_HEIGHT; ++y)
+			for (int x = 0; x < MAP_WIDTH; ++x)
 			{
-				Coordinates co = { x, y, z };
-				const auto idx = TILE_ARRAY_LOOKUP;
+				const auto idx = getIdx({ x, y, z });
 				auto des = designations->mining.find(idx);
 
 				if (des != designations->mining.end())
@@ -153,5 +143,26 @@ void MiningSystem::walkMiningMap(const Coordinates co, const int distance, const
 
 void MiningSystem::performMining(Entity e, const int targetIdx, const uint8_t miningType)
 {
-	tileFactory->createRockFloor(idxToCo(targetIdx));
+	const Coordinates co = idxToCo(targetIdx);
+
+	Tile& t = tileManager->tileAt(targetIdx);
+
+	if (t.health > 0)
+	{
+
+		auto& labor = e.getComponent<LaborStatsComponent>();
+
+		t.health -= 4 * JobSpeedMultiplier[labor.laborLevel[int(Jobs::MINER)]];
+
+		t = tileManager->tileAt(targetIdx);
+
+		return;
+	}
+
+	// Remove the designation and change the tile
+	designations->mining.erase(targetIdx);
+
+	// Eventually this should probably be a template that takes
+	// a tile material as a param and produces a floor of that material
+	tileFactory->createRockFloor(co);
 }

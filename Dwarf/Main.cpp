@@ -1,7 +1,7 @@
 #include "include/libtcod.hpp"
 #include "BearLibTerminal.h"
 
-#include "Map.h"
+#include "Map/Map.h"
 #include "Engine.h"
 #include "MainMenu.h"
 

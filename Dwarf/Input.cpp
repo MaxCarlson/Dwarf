@@ -1,14 +1,12 @@
 #include "Input.h"
 
 #include "Engine.h"
-#include "Map.h"
-#include "MapRender.h"
+#include "Map/Map.h"
+#include "Map/MapRender.h"
 
 #include "BearLibTerminal.h"
 #include "Designations.h"
-
-#include "Tile.h" // Delete these once done with testing
-#include "ECS\Systems\MiningSystem.h"
+#include "ECS\Messages\recalculate_mining_message.h"
 
 Input::Input()
 {
@@ -64,18 +62,21 @@ void Input::read()
 		int xx = terminal_state(TK_MOUSE_X);
 		int yy = terminal_state(TK_MOUSE_Y);
 
-		//Job(Coordinates co, int exp, int bSkill, double duration, Job::Jobs jobType)
-		//	: co(co), experience(exp), baseSkillReq(bSkill), baseDuration(duration), jobType(jobType) {}
+		Coordinates co1 = { xx, yy, engine.map->mapRenderer->currentZLevel };
 
-		//designations->mining.emplace(Coordinates{ xx, yy, engine.map->mapRenderer->currentZLevel }, 1);
+		for (int i = 0; i < 10; ++i)
+		{
+			Coordinates co = co1;
+			co.x = co1.x + i;
+			for (int j = 0; j < 10; ++j)
+			{
+				co.y = co1.y + j;
+				designations->mining.emplace(getIdx(co), 1);
+			}
+		}		
 
-		Coordinates co = { xx, yy, engine.map->mapRenderer->currentZLevel };
+		engine.world.emit(recalculate_mining_message{});
 
-		designations->mining.emplace(TILE_ARRAY_LOOKUP, 1);
-
-		//Job j({ xx, yy, engine.map->mapRenderer->currentZLevel }, 10, 1, 14, Job::MINER);
-		engine.miningSystem->makeMiningMap();
-		//engine.jobsSystem->addJob(j);
 		break;
 	
 

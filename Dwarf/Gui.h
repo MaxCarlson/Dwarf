@@ -1,5 +1,5 @@
 #pragma once
-#include "Tile.h"
+#include "Map/Tile.h"
 
 static const int numberOfButtons = 6;
 

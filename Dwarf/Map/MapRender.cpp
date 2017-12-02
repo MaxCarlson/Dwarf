@@ -1,10 +1,10 @@
 #include "MapRender.h"
-#include "Engine.h"
+#include "../Engine.h"
 #include "Map.h"
 #include "Tile.h"
 
 #include "libtcod.hpp"
-#include "BearLibTerminal.h"
+#include "../BearLibTerminal.h"
 
 
 
@@ -32,7 +32,7 @@ void MapRender::render()
 	for (int x = offsetX; x < renderWidth; ++x)
 		for (int y = offsetY; y < renderHeight; ++y)
 		{
-			const auto & t = map.tileManager.tileAt({ x, y, currentZLevel });
+			const auto & t = tileManager->tileAt({ x, y, currentZLevel });
 
 			// Adjusted x and y values
 			// based of camera offset from top left corner
@@ -40,7 +40,7 @@ void MapRender::render()
 			int adjY = y - offsetY;
 
 			// Use this for darkening/blacking-out unexplored in mountain/underground tiles
-			if (!map.tileManager.getProperty<Tile::EXPLORED>({ x, y, currentZLevel }))
+			if (!tileManager->getProperty<Tile::EXPLORED>({ x, y, currentZLevel }))
 			{
 
 			}

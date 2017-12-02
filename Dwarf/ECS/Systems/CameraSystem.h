@@ -5,7 +5,7 @@
 #include "../Components/PositionComponent.h"
 #include "../Components/CameraComponent.h"
 #include "../../Engine.h"
-#include "../../Map.h"
+#include "../Map/Map.h"
 #include "../BearLibTerminal.h"
 #include <string>
 

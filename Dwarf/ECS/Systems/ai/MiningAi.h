@@ -13,14 +13,11 @@ class MiningAi : public System<Requires<MiningTag, PositionComponent>>
 {
 public:
 	MiningAi() = default;
-	MiningAi(TileManager * tileManager);
 
 	void init();
 
 	void update(double deltaT);
 
 private:
-	TileManager * tileManager;
-
 	void updateMiner(Entity e);
 };

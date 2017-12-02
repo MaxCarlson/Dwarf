@@ -1,5 +1,5 @@
 #pragma once
-#include "include/libtcod.hpp"
+#include "../include/libtcod.hpp"
 #include "Tile.h"
 
 #include <vector>
@@ -29,9 +29,6 @@ public:
 	// Should these be moved to Entities, and an array setup for which to render depending on z level?
 	MapRender * mapRenderer;
 
-	// Access and alter terrain tiles
-	// through this object
-	TileManager tileManager;
 	TileFactory * tileFactory;
 
 private:

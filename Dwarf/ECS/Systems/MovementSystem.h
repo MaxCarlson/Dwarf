@@ -3,7 +3,7 @@
 #include "../Components/MovementComponent.h"
 #include "../Components/PositionComponent.h"
 #include "../../Engine.h"
-#include "../../Map.h"
+#include "../Map/Map.h"
 #include <queue>
 
 class MovementSystem : public System<Requires<MovementComponent, PositionComponent>>
@@ -34,7 +34,7 @@ private:
 	// zero their movement direction, then let MovementAI
 	// know to do more pathfinding. Could be better to hold a vector of movement squares in 
 	// movement component, and only change it if the map changes!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	bool updatePos(double tStep, const Entity & e)
+	void updatePos(double tStep, const Entity & e)
 	{
 		auto& mov = e.getComponent<MovementComponent>();
 
@@ -52,7 +52,18 @@ private:
 			// Will this need to be changed eventually?
 			mov.progress = 0.0;
 
+			// If the square we're trying to move into is already occupied
+			// discard progress and recalcuate path. This needs to be handled better eventually
+			if (tileManager->getProperty<Tile::OBSTRUCTED>(mov.path.back()))
+			{
+				mov.destination = EMPTY_COORDINATES;
+				return;
+			}
+				
+
 			auto& co = e.getComponent<PositionComponent>().co;
+
+			tileManager->removeProperty<Tile::OBSTRUCTED>(co);
 
 			// Move Entity to next path coordiantes
 			// and pop it from the path vector
@@ -60,21 +71,20 @@ private:
 			co = mov.path.back();
 			mov.path.pop_back();
 
+			tileManager->setProperty<Tile::OBSTRUCTED>(co);
+
 			// If this Entity has finished following it's path
 			// reset it's destination coordinates to none
 			if (mov.path.empty())
 				mov.destination = EMPTY_COORDINATES;
 
-			return true;
 		}
-
-		return false;
 	}
 
 	// Check that Entity can move into the square
 	// so we avoid people walking through walls
 	inline bool canMoveDir(Coordinates co)
 	{
-		return engine.map->tileManager.canPass(co);
+		return tileManager->canPass(co);
 	}
 };

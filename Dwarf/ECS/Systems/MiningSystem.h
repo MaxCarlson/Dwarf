@@ -16,7 +16,6 @@ class MiningSystem : public System<Requires<>> // Does not interate through Enti
 {
 public:
 	MiningSystem() = default;
-	MiningSystem(TileManager* tileManager, TileFactory * tileFactory);
 
 	void init();
 	void update();
@@ -26,9 +25,5 @@ public:
 	void performMining(Entity e, const int targetIdx, const uint8_t miningType);
 
 private:
-	int width, height, depth;
-	TileManager * tileManager;
-	TileFactory * tileFactory;
-
 	void walkMiningMap(const Coordinates co, const int distance, const int idx);
 };

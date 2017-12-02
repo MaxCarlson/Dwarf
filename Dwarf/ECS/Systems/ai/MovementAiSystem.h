@@ -12,11 +12,7 @@ struct PathGraph
 
 	int width, height, depth;
 
-	TileManager * tileManager;
-
 	PathGraph() = default;
-	PathGraph(TileManager * tileManager) : tileManager(tileManager) {};
-	//~PathGraph();
 
 
 	// Bounds checking. This can probably be optomized
@@ -86,11 +82,8 @@ class MovementAiSystem : public System<Requires<MovementComponent>>
 {
 public:
 	MovementAiSystem() = default;
-	MovementAiSystem(TileManager * tileManager);
-	//~MovementAiSystem();
-
-	void initMap(TileManager * tileMan);
-
+	
+	void init();
 	void update();
 
 	// Work in progress. Supposed to explore all reachable 
@@ -108,7 +101,6 @@ public:
 	std::vector<Coordinates> reconstructPath(Coordinates start, Coordinates end, std::unordered_map<Coordinates, Coordinates, CoordinateHash, CoordinateHashEqual>& cameFrom);
 
 private:
-	TileManager * tileManager;
 	PathGraph pathGraph;
 };
 
