@@ -26,6 +26,8 @@ void AiWorkSystem::update()
 		auto& co = e.getComponent<PositionComponent>().co;
 
 		// Find a list of availible jobs
+		// Use job evaluations to determine which
+		// job Tag the Enitity should get
 		auto& availableJobs = JobsBoard::job_evaluations(e, co);
 
 		// No Jobs!!

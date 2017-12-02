@@ -160,6 +160,7 @@
     <ClCompile Include="VeinCreator.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ECS\Messages\perform_mining_message.h" />
     <ClInclude Include="ECS\Messages\recalculate_mining_message.h" />
     <ClInclude Include="ECS\Systems\ai\AiWorkSystem.h" />
     <ClInclude Include="BearLibTerminal.h" />

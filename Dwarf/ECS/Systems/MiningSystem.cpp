@@ -2,7 +2,9 @@
 #include "../Tile.h"
 #include "../Designations.h"
 #include "../Messages/recalculate_mining_message.h"
+#include "../Messages/perform_mining_message.h"
 #include "../World.h"
+#include "../TileFactory.h"
 
 // Map of distances to designated mining
 // targets
@@ -12,7 +14,7 @@ std::vector<uint8_t> miningMap;
 // Indexed by the idx of the current Entities positon
 std::vector<int> miningTargets;
 
-MiningSystem::MiningSystem(TileManager * tileManager) : tileManager(tileManager)
+MiningSystem::MiningSystem(TileManager * tileManager, TileFactory * tileFactory) : tileManager(tileManager), tileFactory(tileFactory)
 {
 	width = tileManager->width;
 	height = tileManager->height;
@@ -28,6 +30,11 @@ void MiningSystem::init()
 	subscribe<recalculate_mining_message>([this](recalculate_mining_message &msg)
 	{
 		makeMiningMap();
+	});
+
+	subscribe<perform_mining_message>([this](perform_mining_message &msg)
+	{
+		performMining(msg.e, msg.targetIdx, msg.opperation);
 	});
 }
 
@@ -144,3 +151,7 @@ void MiningSystem::walkMiningMap(const Coordinates co, const int distance, const
 	}
 }
 
+void MiningSystem::performMining(Entity e, const int targetIdx, const uint8_t miningType)
+{
+	tileFactory->createRockFloor(idxToCo(targetIdx));
+}

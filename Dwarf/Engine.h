@@ -8,15 +8,12 @@
 #include <unordered_map>
 
 class Map;
-class CameraSystem;
 class RenderSystem;
 class MovementSystem;
 class MovementAiSystem;
-class MiningSystem;
-class MiningAiSystem;
-
-class MiningAi;
 class AiWorkSystem;
+class MiningAi;
+class MiningSystem;
 
 class Engine
 {
@@ -44,18 +41,17 @@ public:
 	// Vector of dwarven Entities
 	// for fast lookup anywhere in program
 	// Possibly cache all Entities by their Coordinates in an unorederdmulti_map?????
-	std::vector<Entity> Dwarves;
 
-	// Cache of all alive Entities indexed by their coordinates
-	// Worth using? Will have to test
-	//std::unordered_multimap<Coordinates, Entity, CoordinateHash, CoordinateHashEqual> EntityPosCache;
+	// These need to be pointers because their id's won't be up to date!!!!!!!!!!!!!!!!???????????????????
+	std::vector<Entity> Dwarves;
 
 	// Holds local map, 
 	// Local map also holds the map renderer
 	Map * map;
 
-	Gui gui;
 
+	// Should these be made into systems?
+	Gui gui;
 	Input input;
 
 	int screenWidth;
@@ -70,11 +66,10 @@ public:
 	// take inputs
 	void update(double deltaTime);
 
+private:
 	// Render local map 
 	// as well as Entities on it
 	void render();
-
-private:
 };
 
 extern Engine engine;

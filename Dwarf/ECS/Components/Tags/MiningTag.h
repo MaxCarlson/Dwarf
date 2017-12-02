@@ -17,8 +17,4 @@ public:
 	};
 
 	mining_steps step = GET_PICK;
-
-	// Final destination for job
-	// Where Entity needs to stand to mine
-	Coordinates desination;
 };

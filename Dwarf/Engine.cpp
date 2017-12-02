@@ -30,7 +30,13 @@ inline TimePoint now() {
 Engine::~Engine()
 {
 	delete map;
+	delete designations;
 	delete renderSystem;
+	delete movementSystem;
+	delete movementAiSystem;
+	delete miningSystem;
+	delete aiWorkSystem;
+	delete miningAi;
 }
 
 void Engine::init(int screenWidth, int screenHeight)
@@ -47,7 +53,7 @@ void Engine::init(int screenWidth, int screenHeight)
 	movementAiSystem = new MovementAiSystem(&map->tileManager);
 
 	// Non Entity Systems
-	miningSystem = new MiningSystem(&map->tileManager);
+	miningSystem = new MiningSystem(&map->tileManager, map->tileFactory);
 
 	aiWorkSystem = new AiWorkSystem();
 	miningAi = new MiningAi(&map->tileManager);

@@ -6,6 +6,7 @@
 #include "../MiningSystem.h"
 
 #include "../../Messages/recalculate_mining_message.h"
+#include "../../Messages/perform_mining_message.h"
 
 #include <iostream>
 
@@ -128,8 +129,10 @@ void MiningAi::updateMiner(Entity e)
 		{
 			std::cout << "Cannot find mining path!!!" << std::endl;
 			tag.step = MiningTag::DROP_TOOL;
+			return;
 		}
 
+		// Set movement components destination
 		mov.destination = co;
 		Coordinates & dest = mov.destination;
 
@@ -156,16 +159,14 @@ void MiningAi::updateMiner(Entity e)
 		// and find out which type of mining we'd like to do
 		const auto idx = getIdx(co);
 		const int targetIdx = miningTargets[idx];
-		const int targetMiningType = designations->mining[targetIdx];
+		const auto targetMiningType = designations->mining[targetIdx];
 
 		if (targetMiningType > 0)
 		{
-
-			// Perform mining
-
 			designations->mining.erase(targetIdx);
 
 			// Emit message to perform mining? Do we want to do this on a skill based chance roll?
+			emit(perform_mining_message{ e, targetIdx, targetMiningType });
 
 			// Recalculate mining map
 			emit(recalculate_mining_message{});

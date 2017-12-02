@@ -4,12 +4,10 @@
 #include <vector>
 #include <unordered_map>
 
-class LaborStatsComponent;
-class JobComponent;
+
 class TileManager;
 struct Coordinates;
-class JobsSystem;
-class Job;
+class TileFactory;
 
 extern std::vector<uint8_t> miningMap;
 extern std::vector<int> miningTargets;
@@ -18,16 +16,19 @@ class MiningSystem : public System<Requires<>> // Does not interate through Enti
 {
 public:
 	MiningSystem() = default;
-	MiningSystem(TileManager* tileManager);
+	MiningSystem(TileManager* tileManager, TileFactory * tileFactory);
 
 	void init();
 	void update();
 	
+	void makeMiningMap();	
 
-	void makeMiningMap();
-	void walkMiningMap(const Coordinates co, const int distance, const int idx);	
+	void performMining(Entity e, const int targetIdx, const uint8_t miningType);
 
 private:
 	int width, height, depth;
 	TileManager * tileManager;
+	TileFactory * tileFactory;
+
+	void walkMiningMap(const Coordinates co, const int distance, const int idx);
 };
