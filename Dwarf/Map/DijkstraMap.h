@@ -20,7 +20,7 @@ public:
 private:
 	std::mutex mapLock;
 
-	std::vector<uint16_t> distanceMap;
+	std::vector<int16_t> distanceMap;
 
 	void updateAsync(const std::vector<int>& startingPoints);
 };
