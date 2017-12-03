@@ -138,6 +138,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Map\DijkstraMap.cpp" />
     <ClCompile Include="ECS\Systems\ai\AiWorkSystem.cpp" />
     <ClCompile Include="Designations.cpp" />
     <ClCompile Include="ECS\EntityManager.cpp" />
@@ -160,6 +161,7 @@
     <ClCompile Include="Map\VeinCreator.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Map\DijkstraMap.h" />
     <ClInclude Include="ECS\Messages\perform_mining_message.h" />
     <ClInclude Include="ECS\Messages\recalculate_mining_message.h" />
     <ClInclude Include="ECS\Systems\ai\AiWorkSystem.h" />

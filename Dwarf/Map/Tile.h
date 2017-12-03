@@ -18,7 +18,7 @@ public:
 	// bool Floor;  
 	// bool Stairs/Ramp ~ Provides z level access changes
 	// bool Mineable
-	enum Property
+	enum Property // In future remove some properties from here and place them into sepperate vectors!!
 	{
 		EXPLORED   = 1,
 		OBSTRUCTED = 1 << 1,
@@ -75,12 +75,9 @@ enum Directions
 	DOWN
 };
 
-//constexpr Directions DirectionsArray[] = { NORTH, SOUTH, EAST, WEST, NORTH_W, NORTH_E, SOUTH_E, SOUTH_W, UP, DOWN };
-//static const int NUMBER_OF_DIRECTIONS = 10;
-
 // These are set inside tile manager when constructing
 // Number of tiles for each dimension of the current map
-extern int MAP_WIDTH, MAP_HEIGHT, MAP_DEPTH;
+extern int MAP_WIDTH, MAP_HEIGHT, MAP_DEPTH, TOTAL_MAP_TILES;
 
 // Formula for tile indexing with coordinates
 #define TILE_ARRAY_LOOKUP (co.z * MAP_WIDTH * MAP_HEIGHT) + (co.y * MAP_WIDTH) + co.x
@@ -102,6 +99,7 @@ public:
 		MAP_WIDTH = width;
 		MAP_HEIGHT = height;
 		MAP_DEPTH = depth;
+		TOTAL_MAP_TILES = MAP_WIDTH * MAP_HEIGHT * MAP_DEPTH;
 	}
 
 	// Alters the TileProperty P property of a tile
