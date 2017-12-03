@@ -32,7 +32,7 @@ Entity EntityFactory::createDwarf(DwarfCreationObj dwarfConstruct)
 	for (auto& skillPoints : dwarfConstruct.skillPoints)
 	{
 		// Determine labor skill Level
-		const int lbsLevel = determineLaborSkillLvl(skillPoints);
+		const int lbsLevel = determine_labor_skill_Lvl(skillPoints);
 
 		laborSkillLevels.push_back(lbsLevel);
 	}

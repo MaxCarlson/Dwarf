@@ -163,15 +163,12 @@ void MiningAi::updateMiner(Entity e)
 		if (targetMiningType > 0)
 		{
 			// Emit message to perform mining? Do we want to do this on a skill based chance roll?
-			emit(perform_mining_message{ e, targetIdx, targetMiningType });		
+			emit(perform_mining_message{ e, targetIdx, targetMiningType });	
+			return;
 		}
-		else
-		{
-			// Recalculate mining map
-			emit(recalculate_mining_message{});
 
-			tag.step = MiningTag::DROP_TOOL;
-		}
+		tag.step = MiningTag::DROP_TOOL;
+		return;
 	}
 
 	else if (tag.step == MiningTag::DROP_TOOL)

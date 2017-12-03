@@ -143,8 +143,6 @@ void MiningSystem::walkMiningMap(const Coordinates co, const int distance, const
 
 void MiningSystem::performMining(Entity e, const int targetIdx, const uint8_t miningType)
 {
-	const Coordinates co = idxToCo(targetIdx);
-
 	Tile& t = tileManager->tileAt(targetIdx);
 
 	if (t.health > 0)
@@ -152,17 +150,23 @@ void MiningSystem::performMining(Entity e, const int targetIdx, const uint8_t mi
 
 		auto& labor = e.getComponent<LaborStatsComponent>();
 
+		// Health needs to be changed to be dependant on material
 		t.health -= 4 * JobSpeedMultiplier[labor.laborLevel[int(Jobs::MINER)]];
 
-		t = tileManager->tileAt(targetIdx);
+		labor.skillPoints[int(Jobs::MINER)] += 2;
 
 		return;
 	}
+
+	// Need to add in code to increase level when skill points
+	// reach critical point, Possibly in just a sepperate system?
 
 	// Remove the designation and change the tile
 	designations->mining.erase(targetIdx);
 
 	// Eventually this should probably be a template that takes
 	// a tile material as a param and produces a floor of that material
-	tileFactory->createRockFloor(co);
+	tileFactory->createRockFloor(idxToCo(targetIdx));
+
+	makeMiningMap();
 }

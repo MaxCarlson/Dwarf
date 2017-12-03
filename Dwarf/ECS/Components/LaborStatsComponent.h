@@ -37,7 +37,7 @@ public:
 
 // Determine exact labor skill level by looping through
 // labor level requirements
-inline int determineLaborSkillLvl(int skillPoints)
+inline int determine_labor_skill_Lvl(int skillPoints)
 {
 	for (int i = 0; i < MAX_LABOR_LVL; ++i)
 	{
@@ -47,7 +47,7 @@ inline int determineLaborSkillLvl(int skillPoints)
 }
 
 // Used for determining if an Entities labor skill level should be increased by one
-inline bool laborSkillIncrease(int skillPoints, int laborSkillLvl)
+inline bool labor_skill_increase(int skillPoints, int laborSkillLvl)
 {
 	if (laborSkillLvl >= MAX_LABOR_LVL)
 		return false;
