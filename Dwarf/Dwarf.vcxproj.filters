@@ -227,5 +227,8 @@
     <ClInclude Include="ECS\Messages\pick_map_changed_message.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Raws\Defs\ItemDefs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

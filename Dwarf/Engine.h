@@ -14,6 +14,7 @@ class MovementAiSystem;
 class AiWorkSystem;
 class MiningAi;
 class MiningSystem;
+class DijkstraMapsHandler;
 
 class Engine
 {
@@ -37,6 +38,7 @@ public:
 
 	// Systems that don't touch Entities
 	MiningSystem * miningSystem;
+	DijkstraMapsHandler * dijkstraHandler;
 
 	// Vector of dwarven Entities
 	// for fast lookup anywhere in program

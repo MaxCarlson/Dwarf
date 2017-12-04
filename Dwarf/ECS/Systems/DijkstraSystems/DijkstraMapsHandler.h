@@ -11,13 +11,14 @@ class DijkstraMapsHandler : public System<Requires<>> // Does not interate throu
 {
 public:
 	DijkstraMapsHandler() = default;
+	~DijkstraMapsHandler();
 
 	void init();
 	void update();
 
 private:
 	// Dijk map system pointers
-	std::unique_ptr<PickMapSystem> pickMapSystem;
+	PickMapSystem * pickMapSystem;
 
 	// bool's for updating
 	bool update_pick_map = true;

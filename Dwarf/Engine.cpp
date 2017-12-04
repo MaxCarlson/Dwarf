@@ -11,6 +11,7 @@
 #include "ECS\Systems\MovementSystem.h"
 #include "ECS\Systems\ai\MovementAiSystem.h"
 #include "ECS\Systems\MiningSystem.h"
+#include "ECS\Systems\DijkstraSystems\DijkstraMapsHandler.h"
 #include "BearLibTerminal.h"
 #include "Designations.h"
 
@@ -57,6 +58,8 @@ void Engine::init(int screenWidth, int screenHeight)
 
 	// Non Entity Systems
 	miningSystem = new MiningSystem();
+	dijkstraHandler = new DijkstraMapsHandler();
+
 
 	aiWorkSystem = new AiWorkSystem();
 	miningAi = new MiningAi();
@@ -69,9 +72,11 @@ void Engine::init(int screenWidth, int screenHeight)
 	world.addSystem(*miningSystem);
 	world.addSystem(*aiWorkSystem);
 	world.addSystem(*miningAi);
+	world.addSystem(*dijkstraHandler);
 
 	// Init systems with messages
 	miningSystem->init();
+	dijkstraHandler->init();
 
 	// FloodFill from 0, 0, MAX_Z_LVL - 1
 	// explored areas. Not working yet.

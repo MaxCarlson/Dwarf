@@ -2,13 +2,22 @@
 #include "PickMapSystem.h"
 #include "../../Messages/pick_map_changed_message.h"
 #include "../../World.h"
+#include "../../../Engine.h"
 
 DijkstraMap pick_map;
+
+DijkstraMapsHandler::~DijkstraMapsHandler()
+{
+	delete pickMapSystem;
+}
 
 void DijkstraMapsHandler::init()
 {
 	// Create systems
-	pickMapSystem = std::make_unique<PickMapSystem>();
+	pickMapSystem = new PickMapSystem;
+
+	// Add systems to world
+	engine.world.addSystem(*pickMapSystem);
 
 	// Subscribe to messages
 	subscribe_mbox<pick_map_changed_message>();
