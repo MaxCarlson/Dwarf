@@ -138,6 +138,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ECS\Systems\DijkstraSystems\DijkstraMapsHandler.cpp" />
     <ClCompile Include="Map\DijkstraMap.cpp" />
     <ClCompile Include="ECS\Systems\ai\AiWorkSystem.cpp" />
     <ClCompile Include="Designations.cpp" />
@@ -157,10 +158,14 @@
     <ClCompile Include="ECS\Systems\MiningSystem.cpp" />
     <ClCompile Include="ECS\Systems\ai\MiningAi.cpp" />
     <ClCompile Include="Map\Tile.cpp" />
+    <ClCompile Include="ECS\Systems\DijkstraSystems\PickMapSystem.cpp" />
     <ClCompile Include="TileFactory.cpp" />
     <ClCompile Include="Map\VeinCreator.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ECS\Components\Item.h" />
+    <ClInclude Include="ECS\Messages\pick_map_changed_message.h" />
+    <ClInclude Include="ECS\Systems\DijkstraSystems\DijkstraMapsHandler.h" />
     <ClInclude Include="Map\DijkstraMap.h" />
     <ClInclude Include="ECS\Messages\perform_mining_message.h" />
     <ClInclude Include="ECS\Messages\recalculate_mining_message.h" />
@@ -202,6 +207,7 @@
     <ClInclude Include="ECS\Systems\MiningSystem.h" />
     <ClInclude Include="Map\Tile.h" />
     <ClInclude Include="ECS\World.h" />
+    <ClInclude Include="ECS\Systems\DijkstraSystems\PickMapSystem.h" />
     <ClInclude Include="TileFactory.h" />
     <ClInclude Include="Map\VeinCreator.h" />
   </ItemGroup>

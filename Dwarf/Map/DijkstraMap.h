@@ -25,3 +25,4 @@ private:
 	void updateAsync(const std::vector<int>& startingPoints);
 };
 
+extern DijkstraMap pick_map;

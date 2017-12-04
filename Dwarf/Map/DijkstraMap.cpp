@@ -175,4 +175,6 @@ Coordinates DijkstraMap::findDestination(const Coordinates co)
 		const int dest = getIdx({ co.x, co.y, co.z - 1 });
 		candidnates.insert(std::make_pair(distanceMap[dest], dest));
 	}
+
+	return idxToCo(candidnates.begin()->second);
 }
