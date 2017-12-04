@@ -4,7 +4,8 @@
 #include <deque>
 #include <map>
 
-DijkstraMap::DijkstraMap()
+
+void DijkstraMap::init()
 {
 	distanceMap.resize(TOTAL_MAP_TILES);
 	std::fill(distanceMap.begin(), distanceMap.end(), MAX_DIJKSTRA_DISTANCE);

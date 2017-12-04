@@ -9,7 +9,8 @@ constexpr int16_t MAX_DIJKSTRA_DISTANCE = 256;
 class DijkstraMap
 {
 public:
-	DijkstraMap();
+	DijkstraMap() = default;
+	void init();
 
 	void update(const std::vector<int>& startingPoints);
 
@@ -25,4 +26,3 @@ private:
 	void updateAsync(const std::vector<int>& startingPoints);
 };
 
-extern DijkstraMap pick_map;

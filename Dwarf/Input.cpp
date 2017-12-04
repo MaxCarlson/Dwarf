@@ -5,8 +5,17 @@
 #include "Map/MapRender.h"
 
 #include "BearLibTerminal.h"
+
+// For testing mining
 #include "Designations.h"
 #include "ECS\Messages\recalculate_mining_message.h"
+
+// For testing items
+#include "Raws\Defs\ItemDefs.h"
+#include "ECS\Components\Item.h"
+#include "ECS\Components\RenderComponent.h"
+#include "ECS\Components\PositionComponent.h"
+#include "ECS\Messages\pick_map_changed_message.h"
 
 Input::Input()
 {
@@ -29,8 +38,8 @@ void Input::read()
 
 	switch (keyPress)
 	{
-// Camera
-	// Move camera up or down z Levels
+		// Camera
+			// Move camera up or down z Levels
 	case TK_COMMA:
 		engine.map->mapRenderer->incrementZLevel(-1);
 		break;
@@ -39,7 +48,7 @@ void Input::read()
 		engine.map->mapRenderer->incrementZLevel(1);
 		break;
 
-	// Directional movement for camera
+		// Directional movement for camera
 	case TK_UP:
 		engine.map->mapRenderer->moveCamera(MapRender::NORTH);
 		break;
@@ -57,11 +66,14 @@ void Input::read()
 		break;
 
 
-// Test
-	case TK_MOUSE_LEFT:
-		int xx = terminal_state(TK_MOUSE_X);
-		int yy = terminal_state(TK_MOUSE_Y);
+		//default: break;
+	}
 
+	int xx = terminal_state(TK_MOUSE_X);
+	int yy = terminal_state(TK_MOUSE_Y);
+
+	if (keyPress == TK_MOUSE_LEFT) 
+	{
 		Coordinates co1 = { xx, yy, engine.map->mapRenderer->currentZLevel };
 
 		for (int i = 0; i < 10; ++i)
@@ -73,13 +85,29 @@ void Input::read()
 				co.y = co1.y + j;
 				designations->mining.emplace(getIdx(co), 1);
 			}
-		}		
+		}
 
 		engine.world.emit(recalculate_mining_message{});
 
-		break;
-	
+	}
+	else if (keyPress == TK_MOUSE_RIGHT)
+	{
+		Entity e = engine.world.createEntity();
+		e.addComponent<Item>();
+		e.addComponent<RenderComponent>();
+		e.addComponent<PositionComponent>(Coordinates{xx, yy, engine.map->mapRenderer->currentZLevel });
 
-	//default: break;
+		auto& it = e.getComponent<Item>();
+		it.catagory.set(TOOL_DIGGING);
+
+		auto& rend = e.getComponent<RenderComponent>();
+
+		rend.ch = 55;
+		rend.colorStr = "blue";
+		rend.terminalCode = 0xE300;
+
+		e.activate();
+
+		engine.world.emit(pick_map_changed_message{});
 	}
 }

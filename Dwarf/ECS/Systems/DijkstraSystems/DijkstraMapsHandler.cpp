@@ -16,6 +16,9 @@ void DijkstraMapsHandler::init()
 	// Create systems
 	pickMapSystem = new PickMapSystem;
 
+	// Init maps
+	pick_map.init();
+
 	// Add systems to world
 	engine.world.addSystem(*pickMapSystem);
 

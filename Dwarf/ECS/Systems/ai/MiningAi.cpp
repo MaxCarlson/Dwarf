@@ -4,6 +4,7 @@
 #include "../Designations.h"
 #include "../Map/Tile.h"
 #include "../MiningSystem.h"
+#include "../DijkstraSystems/DijkstraMapsHandler.h"
 
 #include "../../Messages/recalculate_mining_message.h"
 #include "../../Messages/perform_mining_message.h"
@@ -20,13 +21,18 @@ namespace JobsBoard
 			return;
 
 		// Pick distance evaluate
+		auto pickDistance = pick_map.get(getIdx(co));
+
+		// No pick close enough
+		if (pickDistance > MAX_DIJKSTRA_DISTANCE - 1)
+			return;
 
 		// Other evaluations based on Entity skill
 		// so we're not only looking at distance as a measure of 
 		// who should do which work?
 
 		// Find total distance for job
-		int distance = miningMap[getIdx(co)]; // + PickDistance
+		int distance = miningMap[getIdx(co)] + pickDistance;
 
 		board.insert(std::make_pair(distance, jt));
 	}
@@ -53,10 +59,19 @@ void MiningAi::updateMiner(Entity e)
 	auto& co = e.getComponent<PositionComponent>().co;
 
 	if (tag.step == MiningTag::GET_PICK)
-	{
+	{/*
+		work.followMap(pick_map, e, co, [&e, &work]()
+		{
+			work.cancel_work(e);
+			return;
+
+		}, [&e]
+		{
+			
+		});
+		*/
 		// Not implemented yet as we have no tools!!!!!!@!@
 		work.pickup_tool(e);
-
 		// On success (which needs to be added in)
 		tag.step = MiningTag::GOTO_SITE;
 	}
