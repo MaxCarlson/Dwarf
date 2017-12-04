@@ -120,6 +120,7 @@ void Engine::update(double deltaTime)
 	// Update systems
 	movementAiSystem->update();
 	movementSystem->update(deltaTime);
+	dijkstraHandler->update();
 
 	// Work Systems
 	aiWorkSystem->update();

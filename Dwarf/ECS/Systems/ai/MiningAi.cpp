@@ -59,21 +59,21 @@ void MiningAi::updateMiner(Entity e)
 	auto& co = e.getComponent<PositionComponent>().co;
 
 	if (tag.step == MiningTag::GET_PICK)
-	{/*
+	{
 		work.followMap(pick_map, e, co, [&e, &work]()
 		{
 			work.cancel_work(e);
 			return;
 
-		}, [&e]
+		}, [&tag]
 		{
-			
+			// On success (which needs to be added in)
+			tag.step = MiningTag::GOTO_SITE;
 		});
-		*/
+		
 		// Not implemented yet as we have no tools!!!!!!@!@
 		work.pickup_tool(e);
-		// On success (which needs to be added in)
-		tag.step = MiningTag::GOTO_SITE;
+
 	}
 
 	else if (tag.step == MiningTag::GOTO_SITE)

@@ -33,5 +33,6 @@ void DijkstraMapsHandler::update()
 	if (update_pick_map)
 	{
 		pickMapSystem->update();
+		update_pick_map = false;
 	}
 }
