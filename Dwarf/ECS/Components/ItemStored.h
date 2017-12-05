@@ -7,6 +7,7 @@ class RenderComponent;
 
 struct ItemStored : public Component
 {
+	ItemStored() = default;
 	ItemStored(std::size_t eid) : eid(eid) {}
 
 	// Refrence to the Entity of the item itself

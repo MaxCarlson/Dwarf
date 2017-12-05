@@ -4,6 +4,7 @@
 #include "../Components/PositionComponent.h"
 #include "../../Engine.h"
 #include "../Map/Map.h"
+#include "../Messages/entity_moved_message.h"
 #include <queue>
 
 class MovementSystem : public System<Requires<MovementComponent, PositionComponent>>
@@ -62,7 +63,7 @@ private:
 				
 
 			auto& co = e.getComponent<PositionComponent>().co;
-
+			Coordinates oldCo = co;
 			//tileManager->removeProperty<Tile::OBSTRUCTED>(co);
 
 			// Move Entity to next path coordiantes
@@ -70,6 +71,12 @@ private:
 			// which is stored in reverse order
 			co = mov.path.back();
 			mov.path.pop_back();
+
+
+			// Probably don't want this to be deffered since cache would
+			// be wrong sometimes
+			emit(entity_moved_message{ e, co, oldCo });
+			//emit_deffered(entity_moved_message{ e, co, oldCo });
 
 			//tileManager->setProperty<Tile::OBSTRUCTED>(co);
 

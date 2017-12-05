@@ -9,6 +9,7 @@
 
 #include "../../../Engine.h"
 #include "../../Components/Item.h"
+#include "../EntityPositionCache.h"
 
 template<typename TAG>
 class WorkTemplate
@@ -18,7 +19,27 @@ public:
 	template<typename MSG, typename CANCEL, typename SUCCESS>
 	void pickup_tool(const Entity& e, Coordinates co, const int &catagory, const CANCEL &cancel, const SUCCESS &success)
 	{
+		auto& entitiesAtPos = engine.entityPositionCache->findEntities(co);
 		
+		for (auto& ent : entitiesAtPos)
+		{
+			auto& toolPos = ent.getComponent<PositionComponent>().co;
+
+			if (toolPos == co && &ent.getComponent<Item>() && ent.getComponent<Item>().catagory.test(catagory))
+			{
+				auto& stored = ent.addComponent<ItemStored>();
+				stored.eid = e.getId().index;
+				stored.rend = ent.getComponent<RenderComponent>();
+				ent.removeComponent<RenderComponent>();
+				toolPos = EMPTY_COORDINATES;
+				ent.activate();
+
+				e.getWorld().emit<MSG>();
+
+				success();
+			}
+		}
+		cancel();
 	}
 
 	template<typename CANCEL, typename SUCCESS>

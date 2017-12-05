@@ -68,14 +68,19 @@ void MiningAi::updateMiner(const Entity& e)
 			work.cancel_work(e);
 			return;
 
-		}, [&tag, &work, &e]
+		}, [&tag, &work, &e, &co]
 		{
-			// Not implemented yet as we have no tools!!!!!!@!@
-			//work.pickup_tool(e);
+			work.pickup_tool<pick_map_changed_message>(e, co, TOOL_DIGGING, [&e, &work]()
+			{
+				// On Cancel
+				work.cancel_work(e);
 
-			// On success (which needs to be added in)
-			tag.step = MiningTag::GOTO_SITE;
-			return;
+			}, [&tag] 
+			{
+
+				tag.step = MiningTag::GOTO_SITE;
+				return;
+			});
 		});
 	}
 
