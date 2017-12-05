@@ -8,6 +8,8 @@
 
 #include "../../Messages/recalculate_mining_message.h"
 #include "../../Messages/perform_mining_message.h"
+#include "../../Messages/pick_map_changed_message.h"
+#include "../../../Raws/Defs/ItemDefs.h"
 
 #include <iostream>
 
@@ -51,7 +53,7 @@ void MiningAi::update(double deltaT)
 	}
 }
 
-void MiningAi::updateMiner(Entity e)
+void MiningAi::updateMiner(const Entity& e)
 {
 	WorkTemplate<MiningTag> work;
 
@@ -62,18 +64,19 @@ void MiningAi::updateMiner(Entity e)
 	{
 		work.followMap(pick_map, e, co, [&e, &work]()
 		{
+			// On failure
 			work.cancel_work(e);
 			return;
 
-		}, [&tag]
+		}, [&tag, &work, &e]
 		{
+			// Not implemented yet as we have no tools!!!!!!@!@
+			//work.pickup_tool(e);
+
 			// On success (which needs to be added in)
 			tag.step = MiningTag::GOTO_SITE;
+			return;
 		});
-		
-		// Not implemented yet as we have no tools!!!!!!@!@
-		work.pickup_tool(e);
-
 	}
 
 	else if (tag.step == MiningTag::GOTO_SITE)

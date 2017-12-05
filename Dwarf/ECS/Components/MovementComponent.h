@@ -34,7 +34,6 @@ public:
 	// later it will probably be removed by messaging system
 	bool cannotFindPath = false;
 
-
 	// Holds the entire path calcualted by MovementAiSystem
 	// Direction the entity is moving in is in path[0]
 	// Using coordinates for easy offsets 
@@ -42,4 +41,9 @@ public:
 	// Values should never be below -1 or above 1
 	// for individual coordinate values
 	std::vector<Coordinates> path;
+
+
+	// Just a simple check to see if Entity was interrupted
+	// while walking, usually by another Entity
+	//bool interrupted = false;
 };

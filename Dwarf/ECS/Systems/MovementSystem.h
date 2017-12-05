@@ -54,16 +54,16 @@ private:
 
 			// If the square we're trying to move into is already occupied
 			// discard progress and recalcuate path. This needs to be handled better eventually
-			if (tileManager->getProperty<Tile::OBSTRUCTED>(mov.path.back()))
-			{
-				mov.destination = EMPTY_COORDINATES;
-				return;
-			}
+			//if (tileManager->getProperty<Tile::OBSTRUCTED>(mov.path.back()))
+			//{
+			//	mov.progress = 0.1;
+			//	return;
+			//}
 				
 
 			auto& co = e.getComponent<PositionComponent>().co;
 
-			tileManager->removeProperty<Tile::OBSTRUCTED>(co);
+			//tileManager->removeProperty<Tile::OBSTRUCTED>(co);
 
 			// Move Entity to next path coordiantes
 			// and pop it from the path vector
@@ -71,7 +71,7 @@ private:
 			co = mov.path.back();
 			mov.path.pop_back();
 
-			tileManager->setProperty<Tile::OBSTRUCTED>(co);
+			//tileManager->setProperty<Tile::OBSTRUCTED>(co);
 
 			// If this Entity has finished following it's path
 			// reset it's destination coordinates to none

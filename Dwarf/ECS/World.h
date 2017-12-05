@@ -98,6 +98,8 @@ public:
 	// Returns entity and index of idx
 	Entity getEntity(std::size_t idx);
 
+	// Message Emitter, immeditely calls function pointer
+	// associated with message
 	template <class MSG>
 	inline void emit(MSG message) {
 		impl::message_t<MSG> handle(message);
@@ -117,6 +119,7 @@ public:
 		}
 	}
 
+	// Message is deffered until all messages are checked by world
 	template <class MSG>
 	inline void emit_deferred(MSG message) {
 		impl::message_t<MSG> handle(message);

@@ -19,5 +19,5 @@ public:
 	void update(double deltaT);
 
 private:
-	void updateMiner(Entity e);
+	void updateMiner(const Entity& e);
 };
