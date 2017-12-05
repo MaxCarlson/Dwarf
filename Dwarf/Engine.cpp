@@ -12,6 +12,7 @@
 #include "ECS\Systems\ai\MovementAiSystem.h"
 #include "ECS\Systems\MiningSystem.h"
 #include "ECS\Systems\DijkstraSystems\DijkstraMapsHandler.h"
+#include "ECS\Systems\EntityPositionCache.h"
 #include "BearLibTerminal.h"
 #include "Designations.h"
 
@@ -55,15 +56,15 @@ void Engine::init(int screenWidth, int screenHeight)
 	movementSystem = new MovementSystem();
 	movementAiSystem = new MovementAiSystem();
 	movementAiSystem->init();
-
-	// Non Entity Systems
-	miningSystem = new MiningSystem();
-	dijkstraHandler = new DijkstraMapsHandler();
-
-
 	aiWorkSystem = new AiWorkSystem();
 	miningAi = new MiningAi();
 	miningAi->init();
+
+	// Non Entity or non Updating Systems
+	miningSystem = new MiningSystem();
+	dijkstraHandler = new DijkstraMapsHandler();
+	entityPositionCache = new EntityPositionCache();
+
 
 	// Introduce systems to the world
 	world.addSystem(*renderSystem);
@@ -73,10 +74,12 @@ void Engine::init(int screenWidth, int screenHeight)
 	world.addSystem(*aiWorkSystem);
 	world.addSystem(*miningAi);
 	world.addSystem(*dijkstraHandler);
+	world.addSystem(*entityPositionCache);
 
 	// Init systems with messages
 	miningSystem->init();
 	dijkstraHandler->init();
+	entityPositionCache->init();
 
 	// FloodFill from 0, 0, MAX_Z_LVL - 1
 	// explored areas. Not working yet.
@@ -128,6 +131,7 @@ void Engine::update(double deltaTime)
 
 	// Systems that don't need updates
 	// miningSystem->update();
+	// entityPositionCache->update();
 
 	// Should this be called before or after? Probably before?
 	world.refresh();

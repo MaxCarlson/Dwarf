@@ -166,6 +166,7 @@
   <ItemGroup>
     <ClInclude Include="ECS\Components\Item.h" />
     <ClInclude Include="ECS\Components\ItemStored.h" />
+    <ClInclude Include="ECS\Messages\entity_moved_message.h" />
     <ClInclude Include="ECS\Messages\pick_map_changed_message.h" />
     <ClInclude Include="ECS\Systems\DijkstraSystems\DijkstraMapsHandler.h" />
     <ClInclude Include="ECS\Systems\EntityPositionCache.h" />

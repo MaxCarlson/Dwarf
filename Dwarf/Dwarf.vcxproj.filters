@@ -239,5 +239,8 @@
     <ClInclude Include="ECS\Systems\EntityPositionCache.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ECS\Messages\entity_moved_message.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
