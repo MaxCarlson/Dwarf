@@ -4,8 +4,9 @@
 struct pickup_item_message : public base_message_t
 {
 	pickup_item_message() = default;
-	pickup_item_message(std::size_t itemEid, std::size_t outTool) : itemEid(itemEid), outItem(outItem) {}
+	pickup_item_message(std::size_t entityId, std::size_t itemEid, std::size_t outTool) : entityId(entityId), itemEid(itemEid), outItem(outItem) {}
 
+	std::size_t entityId;
 	std::size_t itemEid;
 	std::size_t outItem;
 };

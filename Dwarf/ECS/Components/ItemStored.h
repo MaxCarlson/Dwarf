@@ -10,7 +10,7 @@ struct ItemStored : public Component
 	ItemStored() = default;
 	ItemStored(std::size_t eid) : eid(eid) {}
 
-	// Refrence to the Entity of the item itself
+	// Refrence to the Entity storing the tool
 	std::size_t eid;
 
 	// Copy of the stored Items renderer

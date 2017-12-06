@@ -10,6 +10,8 @@
 #include "../../../Engine.h"
 #include "../../Components/Item.h"
 #include "../EntityPositionCache.h"
+#include "../../Messages/pickup_item_message.h"
+#include "../../Components/Sentients/Inventory.h"
 
 template<typename TAG>
 class WorkTemplate
@@ -24,10 +26,19 @@ public:
 		
 		std::size_t tool_id = 0;
 
+		// Entities current tool
+		std::size_t out_tool = e.getComponent<Inventory>().inventory[INV_TOOL];
+
+		// If entity already has the correct tool, we don't need to look
+		// for one
+		if (out_tool && e.getWorld().getEntity(out_tool).getComponent<Item>().catagory.test(catagory))
+			success();	
+
+		// For all Entities at this position
 		for (auto& ent : entitiesAtPos)
 		{
 			auto& pos = ent.getComponent<PositionComponent>().co;
-			auto* tool = ent.getComponent<Item>();
+			auto* tool = &ent.getComponent<Item>();
 
 			// If position cache is wrong, or Entity doesn't have an
 			// Item component, skip it
@@ -38,17 +49,7 @@ public:
 			if (tool.catagory.test(catagory))
 			{
 
-
-
-
-
-				auto& stored = ent.addComponent<ItemStored>();
-				stored.eid = e.getId().index;
-				stored.rend = ent.getComponent<RenderComponent>();
-				ent.removeComponent<RenderComponent>();
-				toolPos = EMPTY_COORDINATES;
-				ent.activate();
-
+				e.getWorld().emit(pickup_item_message{e.getId().index, ent.getId().index, out_tool});
 				e.getWorld().emit(MSG{});
 
 				success();

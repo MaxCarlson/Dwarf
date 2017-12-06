@@ -12,6 +12,7 @@
 #include "ECS\Components\LaborStatsComponent.h"
 #include "ECS\Components\MovementComponent.h"
 #include "ECS\Components\JobComponent.h"
+#include "ECS\Components\Sentients\Inventory.h"
 
 EntityFactory::EntityFactory()
 {
@@ -42,6 +43,8 @@ Entity EntityFactory::createDwarf(DwarfCreationObj dwarfConstruct)
 	dwarf.addComponent<MovementComponent>(3.5);
 
 	//dwarf.addComponent<HealthComponent>(1000, 1000, 1);
+
+	dwarf.addComponent<Inventory>();
 
 	dwarf.activate();
 

@@ -140,6 +140,7 @@
   <ItemGroup>
     <ClCompile Include="ECS\Systems\DijkstraSystems\DijkstraMapsHandler.cpp" />
     <ClCompile Include="ECS\Systems\EntityPositionCache.cpp" />
+    <ClCompile Include="ECS\Systems\ai\EquipHandler.cpp" />
     <ClCompile Include="Map\DijkstraMap.cpp" />
     <ClCompile Include="ECS\Systems\ai\AiWorkSystem.cpp" />
     <ClCompile Include="Designations.cpp" />
@@ -166,12 +167,14 @@
   <ItemGroup>
     <ClInclude Include="ECS\Components\Item.h" />
     <ClInclude Include="ECS\Components\ItemStored.h" />
+    <ClInclude Include="ECS\Components\Sentients\Inventory.h" />
     <ClInclude Include="ECS\Messages\drop_item_message.h" />
     <ClInclude Include="ECS\Messages\entity_moved_message.h" />
     <ClInclude Include="ECS\Messages\pickup_item_message.h" />
     <ClInclude Include="ECS\Messages\pick_map_changed_message.h" />
     <ClInclude Include="ECS\Systems\DijkstraSystems\DijkstraMapsHandler.h" />
     <ClInclude Include="ECS\Systems\EntityPositionCache.h" />
+    <ClInclude Include="ECS\Systems\ai\EquipHandler.h" />
     <ClInclude Include="Map\DijkstraMap.h" />
     <ClInclude Include="ECS\Messages\perform_mining_message.h" />
     <ClInclude Include="ECS\Messages\recalculate_mining_message.h" />
