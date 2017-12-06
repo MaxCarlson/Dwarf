@@ -16,6 +16,7 @@ class MiningAi;
 class MiningSystem;
 class EntityPositionCache;
 class DijkstraMapsHandler;
+class EquipHandler;
 
 class Engine
 {
@@ -36,6 +37,7 @@ public:
 	MovementAiSystem * movementAiSystem;	
 	AiWorkSystem * aiWorkSystem;
 	MiningAi * miningAi;
+	EquipHandler * equipHandler;
 
 	// Systems that don't touch Entities
 	MiningSystem * miningSystem;

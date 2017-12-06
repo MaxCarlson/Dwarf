@@ -14,17 +14,17 @@ void EquipHandler::init()
 {
 	subscribe<pickup_item_message>( [this] (pickup_item_message &msg)
 	{
-		pickupItem(msg.entityId, msg.itemEid, msg.outItem);
+		pickupItem(msg.itemSlot, msg.entityId, msg.itemEid, msg.outItem);
 	});
 
 	subscribe<drop_item_message>( [this] (drop_item_message &msg)
 	{
-		dropItem(msg.entityId, msg.itemEid, msg.co);
+		dropItem(msg.itemSlot, msg.entityId, msg.itemEid, msg.co);
 	});
 }
 
 // Need to add in an inventory component for Entities while holding things!~!~!~!~
-void EquipHandler::pickupItem(std::size_t entityId, std::size_t itemEid, std::size_t outItemEid)
+void EquipHandler::pickupItem(int itemSlot, std::size_t entityId, std::size_t itemEid, std::size_t outItemEid)
 {
 	auto& item = getWorld().getEntity(itemEid);
 
@@ -38,7 +38,14 @@ void EquipHandler::pickupItem(std::size_t entityId, std::size_t itemEid, std::si
 
 	// Store item in entities inventory
 	auto& entity = getWorld().getEntity(entityId);
-	entity.getComponent<Inventory>();
+	auto& inv = entity.getComponent<Inventory>();
+
+	if (itemSlot < MAX_INVENTORY_SLOTS)
+		inv.inventory[itemSlot] = itemEid;
+	else
+		std::cout << "Other Item Types Not Implemented Yet Error!!" << std::endl;
+
+
 
 	// Remove item position component
 	item.removeComponent<PositionComponent>();
@@ -51,15 +58,21 @@ void EquipHandler::pickupItem(std::size_t entityId, std::size_t itemEid, std::si
 	// This could cause issues if first Entity is an item!!!
 	// Or if this eid gets reused!!
 	if (outItemEid != 0)
-		dropItem(entityId, outItemEid, getWorld().getEntity(outItemEid).getComponent<PositionComponent>().co);
+		dropItem( finditemSlot(inv, outItemEid), entityId, outItemEid, getWorld().getEntity(outItemEid).getComponent<PositionComponent>().co);
 
 	item.activate();
 }
 
-// Need to add in an inventory component for Entities while holding things!~!~!~!~
-void EquipHandler::dropItem(std::size_t entityId, std::size_t itemEid, Coordinates co)
+// It looks like we don't need to pass the itemEid when we have entity eid since we can get it
+// from searching the inventory?
+void EquipHandler::dropItem(int itemSlot, std::size_t entityId, std::size_t itemEid, Coordinates co)
 {
 	auto& item = getWorld().getEntity(itemEid);
+	auto& entity = getWorld().getEntity(entityId);
+
+	// Reset inventory slot
+	auto& inv = entity.getComponent<Inventory>();
+	inv.inventory[itemSlot] = 0;
 
 	auto* stored = &item.getComponent<ItemStored>();
 
@@ -74,7 +87,16 @@ void EquipHandler::dropItem(std::size_t entityId, std::size_t itemEid, Coordinat
 	//
 	// Perhaps we should remove the position component of stored
 	// Entities for better system sorting?
-	item.getComponent<PositionComponent>().co = co;
+	item.addComponent<PositionComponent>().co = co;
 
 	item.activate();
+}
+
+int EquipHandler::finditemSlot(const Inventory & einv, std::size_t item)
+{
+	for (auto i = 0; i < MAX_INVENTORY_SLOTS; ++i)
+	{
+		if (einv.inventory[i] == item)
+			return i;
+	}
 }

@@ -13,6 +13,7 @@
 #include "ECS\Systems\MiningSystem.h"
 #include "ECS\Systems\DijkstraSystems\DijkstraMapsHandler.h"
 #include "ECS\Systems\EntityPositionCache.h"
+#include "ECS\Systems\ai\EquipHandler.h"
 #include "BearLibTerminal.h"
 #include "Designations.h"
 
@@ -64,6 +65,7 @@ void Engine::init(int screenWidth, int screenHeight)
 	miningSystem = new MiningSystem();
 	dijkstraHandler = new DijkstraMapsHandler();
 	entityPositionCache = new EntityPositionCache();
+	equipHandler = new EquipHandler();
 
 
 	// Introduce systems to the world
@@ -75,11 +77,13 @@ void Engine::init(int screenWidth, int screenHeight)
 	world.addSystem(*miningAi);
 	world.addSystem(*dijkstraHandler);
 	world.addSystem(*entityPositionCache);
+	world.addSystem(*equipHandler);
 
 	// Init systems with messages
 	miningSystem->init();
 	dijkstraHandler->init();
 	entityPositionCache->init();
+	equipHandler->init();
 
 	// FloodFill from 0, 0, MAX_Z_LVL - 1
 	// explored areas. Not working yet.

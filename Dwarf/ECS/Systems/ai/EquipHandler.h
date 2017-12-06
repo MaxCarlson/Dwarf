@@ -2,6 +2,7 @@
 #include "../../Systems.h"
 
 class Coordinates;
+class Inventory;
 
 // Handles the picking up and equipping of 
 // items as well as the dropping of them as well
@@ -12,8 +13,10 @@ public:
 	void init();
 
 private:
-	void pickupItem(std::size_t entityId, std::size_t itemEid, std::size_t outItemEid);
+	void pickupItem(int itemType, std::size_t entityId, std::size_t itemEid, std::size_t outItemEid);
 
-	void dropItem(std::size_t entityId, std::size_t itemEid, Coordinates co);
+	void dropItem(int itemType, std::size_t entityId, std::size_t itemEid, Coordinates co);
+
+	int finditemSlot(const Inventory & einv, std::size_t item);
 };
 

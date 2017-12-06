@@ -27,7 +27,7 @@ public:
 		std::size_t tool_id = 0;
 
 		// Entities current tool
-		std::size_t out_tool = e.getComponent<Inventory>().inventory[INV_TOOL];
+		std::size_t out_tool = e.getComponent<Inventory>().inventory[SLOT_TOOL];
 
 		// If entity already has the correct tool, we don't need to look
 		// for one
@@ -46,10 +46,10 @@ public:
 				continue;
 
 			// Test and make sure it's the proper tool
-			if (tool.catagory.test(catagory))
+			if (tool->catagory.test(catagory))
 			{
 
-				e.getWorld().emit(pickup_item_message{e.getId().index, ent.getId().index, out_tool});
+				e.getWorld().emit(pickup_item_message{SLOT_TOOL ,e.getId().index, ent.getId().index, out_tool});
 				e.getWorld().emit(MSG{});
 
 				success();

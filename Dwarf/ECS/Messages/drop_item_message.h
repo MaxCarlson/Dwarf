@@ -5,8 +5,9 @@
 struct drop_item_message : public base_message_t
 {
 	drop_item_message() = default;
-	drop_item_message(std::size_t entityId, std::size_t itemEid, Coordinates co) : entityId(entityId), itemEid(itemEid), co(co) {}
+	drop_item_message(int itemSlot, std::size_t entityId, std::size_t itemEid, Coordinates co) : itemSlot(itemSlot), entityId(entityId), itemEid(itemEid), co(co) {}
 
+	int itemSlot;
 	std::size_t entityId;
 	std::size_t itemEid;
 	const Coordinates co;
