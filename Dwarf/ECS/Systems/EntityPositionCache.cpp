@@ -76,9 +76,4 @@ void EntityPositionCache::onEntityAdd(Entity & entity)
 	positionCache.emplace(getIdx(co), entity);
 }
 
-void EntityPositionCache::onEntityRemoval(Entity & entity)
-{
-	auto co = entity.getComponent<PositionComponent>().co;
-	updateEntity<true>(entity, EMPTY_COORDINATES, co);
-}
 

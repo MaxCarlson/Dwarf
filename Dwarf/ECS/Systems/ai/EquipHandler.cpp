@@ -7,6 +7,7 @@
 #include "../../Components/ItemStored.h"
 #include "../../Messages/entity_moved_message.h"
 #include "../../Components/Sentients/Inventory.h"
+#include "../EntityPositionCache.h"
 
 #include <iostream>
 
@@ -48,6 +49,10 @@ void EquipHandler::pickupItem(int itemSlot, std::size_t entityId, std::size_t it
 
 
 	// Remove item position component
+	// Must first remove from caching
+	// perhaps this isn't worth it
+	auto itemCo = item.getComponent<PositionComponent>().co;
+	deletePositionCache(item, itemCo);
 	item.removeComponent<PositionComponent>();
 	
 	// Not needed since this is done automatically

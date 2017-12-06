@@ -190,13 +190,13 @@ void MiningAi::updateMiner(const Entity& e)
 			return;
 		}
 
-		tag.step = MiningTag::DROP_TOOL;
+		tag.step = MiningTag::DROP_TOOL; // MiningTag::GET_PICK;
 		return;
 	}
 
 	else if (tag.step == MiningTag::DROP_TOOL)
 	{
-		work.cancel_work(e);
+		//work.cancel_work(e);
 		return;
 	}
 }

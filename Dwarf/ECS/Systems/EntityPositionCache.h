@@ -2,6 +2,8 @@
 
 #include "../Systems.h"
 #include "../Components/PositionComponent.h"
+#include "../Engine.h"
+#include "../World.h"
 #include <unordered_map>
 
 class EntityPositionCache : public System<Requires<PositionComponent>>
@@ -29,6 +31,15 @@ private:
 	std::unordered_multimap<int, Entity> positionCache;
 
 	void onEntityAdd(Entity & entity);
-	void onEntityRemoval(Entity & entity);
+
+	// This must be done manually with function below
+	//void onEntityRemoval(Entity & entity);
 };
+
+// Delete entity from position cache
+// This must be done manually!
+inline void deletePositionCache(const Entity e, Coordinates co)
+{
+	engine.entityPositionCache->updateEntity<false>(e, EMPTY_COORDINATES, co);
+}
 
