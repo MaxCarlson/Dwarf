@@ -19,14 +19,29 @@ public:
 	template<typename MSG, typename CANCEL, typename SUCCESS>
 	void pickup_tool(const Entity& e, Coordinates co, const int &catagory, const CANCEL &cancel, const SUCCESS &success)
 	{
+		// Load all Entities at positon from cache
 		auto& entitiesAtPos = engine.entityPositionCache->findEntities(co);
 		
+		std::size_t tool_id = 0;
+
 		for (auto& ent : entitiesAtPos)
 		{
-			auto& toolPos = ent.getComponent<PositionComponent>().co;
+			auto& pos = ent.getComponent<PositionComponent>().co;
+			auto* tool = ent.getComponent<Item>();
 
-			if (toolPos == co && &ent.getComponent<Item>() && ent.getComponent<Item>().catagory.test(catagory))
+			// If position cache is wrong, or Entity doesn't have an
+			// Item component, skip it
+			if (pos != co || !tool)
+				continue;
+
+			// Test and make sure it's the proper tool
+			if (tool.catagory.test(catagory))
 			{
+
+
+
+
+
 				auto& stored = ent.addComponent<ItemStored>();
 				stored.eid = e.getId().index;
 				stored.rend = ent.getComponent<RenderComponent>();
@@ -34,7 +49,7 @@ public:
 				toolPos = EMPTY_COORDINATES;
 				ent.activate();
 
-				e.getWorld().emit<MSG>();
+				e.getWorld().emit(MSG{});
 
 				success();
 			}

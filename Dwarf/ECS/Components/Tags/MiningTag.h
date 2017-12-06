@@ -17,4 +17,6 @@ public:
 	};
 
 	mining_steps step = GET_PICK;
+
+	std::size_t currentPick = 0;
 };

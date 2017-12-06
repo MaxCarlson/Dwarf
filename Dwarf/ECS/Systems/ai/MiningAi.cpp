@@ -77,7 +77,7 @@ void MiningAi::updateMiner(const Entity& e)
 
 			}, [&tag] 
 			{
-
+				// On Success
 				tag.step = MiningTag::GOTO_SITE;
 				return;
 			});

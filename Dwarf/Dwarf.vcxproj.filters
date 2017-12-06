@@ -242,5 +242,11 @@
     <ClInclude Include="ECS\Messages\entity_moved_message.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ECS\Messages\pickup_item_message.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Messages\drop_item_message.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
