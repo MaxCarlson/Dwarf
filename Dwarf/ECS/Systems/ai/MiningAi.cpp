@@ -9,6 +9,7 @@
 #include "../../Messages/recalculate_mining_message.h"
 #include "../../Messages/perform_mining_message.h"
 #include "../../Messages/pick_map_changed_message.h"
+#include "../../Messages/drop_item_message.h"
 #include "../../../Raws/Defs/ItemDefs.h"
 
 #include <iostream>
@@ -196,7 +197,8 @@ void MiningAi::updateMiner(const Entity& e)
 
 	else if (tag.step == MiningTag::DROP_TOOL)
 	{
-		//work.cancel_work(e);
+		emit(drop_item_message{ SLOT_TOOL, e.getId().index, tag.currentPick, co });
+		work.cancel_work(e);
 		return;
 	}
 }

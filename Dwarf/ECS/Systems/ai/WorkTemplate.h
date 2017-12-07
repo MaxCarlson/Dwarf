@@ -35,10 +35,10 @@ public:
 			success();	
 
 		// For all Entities at this position
-		for (auto& ent : entitiesAtPos)
+		for (auto& item : entitiesAtPos)
 		{
-			auto& pos = ent.getComponent<PositionComponent>().co;
-			auto* tool = &ent.getComponent<Item>();
+			auto& pos = item.getComponent<PositionComponent>().co;
+			auto* tool = &item.getComponent<Item>();
 
 			// If position cache is wrong, or Entity doesn't have an
 			// Item component, skip it
@@ -49,13 +49,15 @@ public:
 			if (tool->catagory.test(catagory))
 			{
 
-				e.getWorld().emit(pickup_item_message{SLOT_TOOL ,e.getId().index, ent.getId().index, out_tool});
+				e.getWorld().emit(pickup_item_message{SLOT_TOOL ,e.getId().index, item.getId().index, out_tool});
 				e.getWorld().emit(MSG{});
 
 				success();
+				return;
 			}
 		}
 		cancel();
+		return;
 	}
 
 	template<typename CANCEL, typename SUCCESS>

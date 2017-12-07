@@ -52,18 +52,14 @@ void EquipHandler::pickupItem(int itemSlot, std::size_t entityId, std::size_t it
 	// Must first remove from caching
 	// perhaps this isn't worth it
 	auto itemCo = item.getComponent<PositionComponent>().co;
+
 	deletePositionCache(item, itemCo);
 	item.removeComponent<PositionComponent>();
-	
-	// Not needed since this is done automatically
-	// with onEntityRemove
-	//emit(entity_moved_message{ item, EMPTY_COORDINATES, co });
 
-	
 	// This could cause issues if first Entity is an item!!!
 	// Or if this eid gets reused!!
 	if (outItemEid != 0)
-		dropItem( finditemSlot(inv, outItemEid), entityId, outItemEid, getWorld().getEntity(outItemEid).getComponent<PositionComponent>().co);
+		dropItem( finditemSlot(inv, outItemEid), entityId, outItemEid, itemCo); // Item co should be the same as the out item in these cases?
 
 	item.activate();
 }
