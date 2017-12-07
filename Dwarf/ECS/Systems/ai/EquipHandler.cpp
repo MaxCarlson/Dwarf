@@ -57,7 +57,7 @@ void EquipHandler::pickupItem(int itemSlot, std::size_t entityId, std::size_t it
 	item.removeComponent<PositionComponent>();
 
 	// This could cause issues if first Entity is an item!!!
-	// Or if this eid gets reused!!
+	// Or if this eid gets reused!! ~~ Perhaps start at Entity id 1?
 	if (outItemEid != 0)
 		dropItem( finditemSlot(inv, outItemEid), entityId, outItemEid, itemCo); // Item co should be the same as the out item in these cases?
 
@@ -85,10 +85,7 @@ void EquipHandler::dropItem(int itemSlot, std::size_t entityId, std::size_t item
 	rend = stored->rend;
 
 	// Restore the items correct positon
-	//
-	// Perhaps we should remove the position component of stored
-	// Entities for better system sorting?
-	item.addComponent<PositionComponent>().co = co;
+	item.addComponent<PositionComponent>(co);
 
 	item.activate();
 }

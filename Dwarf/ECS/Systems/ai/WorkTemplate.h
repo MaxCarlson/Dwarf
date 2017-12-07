@@ -19,21 +19,24 @@ class WorkTemplate
 public:
 
 	template<typename MSG, typename CANCEL, typename SUCCESS>
-	void pickup_tool(const Entity& e, Coordinates co, const int &catagory, const CANCEL &cancel, const SUCCESS &success)
+	void pickup_tool(const Entity& e, Coordinates co, const int &catagory, std::size_t& out_tool, const CANCEL &cancel, const SUCCESS &success)
 	{
 		// Load all Entities at positon from cache
 		auto& entitiesAtPos = engine.entityPositionCache->findEntities(co);
-		
-		std::size_t tool_id = 0;
 
 		// Entities current tool
-		std::size_t out_tool = e.getComponent<Inventory>().inventory[SLOT_TOOL];
+		// ( Possibly no tool )
+		out_tool = e.getComponent<Inventory>().inventory[SLOT_TOOL];
 
 		// If entity already has the correct tool, we don't need to look
 		// for one
 		if (out_tool && e.getWorld().getEntity(out_tool).getComponent<Item>().catagory.test(catagory))
-			success();	
-
+		{
+			success();
+			return;
+		}
+			
+		// Entity doesn't have correct tool
 		// For all Entities at this position
 		for (auto& item : entitiesAtPos)
 		{
@@ -42,22 +45,25 @@ public:
 
 			// If position cache is wrong, or Entity doesn't have an
 			// Item component, skip it
-			if (pos != co || !tool)
+			if (!tool || pos != co)
 				continue;
 
 			// Test and make sure it's the proper tool
 			if (tool->catagory.test(catagory))
 			{
-
-				e.getWorld().emit(pickup_item_message{SLOT_TOOL ,e.getId().index, item.getId().index, out_tool});
+				// Pickup tool if it matches catagory
+				// dump old tool in tool slot if it exists
+				e.getWorld().emit(pickup_item_message{SLOT_TOOL , e.getId().index, item.getId().index, out_tool});
 				e.getWorld().emit(MSG{});
+
+				// Set current tool to tool being picked up
+				out_tool = item.getId().index;
 
 				success();
 				return;
 			}
 		}
 		cancel();
-		return;
 	}
 
 	template<typename CANCEL, typename SUCCESS>

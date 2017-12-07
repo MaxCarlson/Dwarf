@@ -71,10 +71,11 @@ void MiningAi::updateMiner(const Entity& e)
 
 		}, [&tag, &work, &e, &co]
 		{
-			work.pickup_tool<pick_map_changed_message>(e, co, TOOL_DIGGING, [&e, &work]()
+			work.pickup_tool<pick_map_changed_message>(e, co, TOOL_DIGGING, tag.currentPick, [&e, &work]()
 			{
 				// On Cancel
 				work.cancel_work(e);
+				return;
 
 			}, [&tag] 
 			{
@@ -188,16 +189,18 @@ void MiningAi::updateMiner(const Entity& e)
 		{
 			// Emit message to perform mining? Do we want to do this on a skill based chance roll?
 			emit(perform_mining_message{ e, targetIdx, targetMiningType });	
+			//tag.step = MiningTag::DROP_TOOL; //TESTING!!! DELETE AFTER
 			return;
 		}
 
-		tag.step = MiningTag::DROP_TOOL; // MiningTag::GET_PICK;
+		tag.step = MiningTag::DROP_TOOL; //MiningTag::GET_PICK; ////
 		return;
 	}
 
 	else if (tag.step == MiningTag::DROP_TOOL)
 	{
 		emit(drop_item_message{ SLOT_TOOL, e.getId().index, tag.currentPick, co });
+		emit(pick_map_changed_message{});
 		work.cancel_work(e);
 		return;
 	}
