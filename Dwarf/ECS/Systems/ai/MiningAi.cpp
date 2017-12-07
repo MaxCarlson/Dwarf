@@ -108,7 +108,7 @@ void MiningAi::updateMiner(const Entity& e)
 		int currentDir = NO_DIRECTION;
 		uint8_t min_value = std::numeric_limits<uint8_t>::max();
 
-		if (miningMap[getIdx(positionAt<NORTH>(co))] < min_value && tileManager->canGo<CAN_GO_NORTH>(co)) { // Find a better system than this!!
+		if (miningMap[getIdx(positionAt<NORTH>(co))] < min_value && tileManager->canGo<CAN_GO_NORTH>(co)) { // Find a better system than this!! ~~ And run this system at not fullspeed, no need
 			min_value = miningMap[getIdx(positionAt<NORTH>(co))];
 			currentDir = NORTH;
 		}
@@ -189,10 +189,8 @@ void MiningAi::updateMiner(const Entity& e)
 			tag.step = MiningTag::GOTO_SITE;
 			return;
 		}
-			
 
 		const int targetIdx = miningTargets[idx];
-		const auto coxx = idxToCo(targetIdx); // <<<<< DELETE WHEN DONE TESTING
 		const auto targetMiningType = designations->mining[targetIdx];
 
 		if (targetMiningType > 0)
