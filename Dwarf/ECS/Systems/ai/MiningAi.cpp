@@ -65,7 +65,7 @@ void MiningAi::updateMiner(const Entity& e)
 	{
 		work.followMap(pick_map, e, co, [&e, &work]()
 		{
-			// On failure
+			// On Failure
 			work.cancel_work(e);
 			return;
 
@@ -73,13 +73,14 @@ void MiningAi::updateMiner(const Entity& e)
 		{
 			work.pickup_tool<pick_map_changed_message>(e, co, TOOL_DIGGING, tag.currentPick, [&e, &work]()
 			{
-				// On Cancel
+				// On Failure
 				work.cancel_work(e);
 				return;
 
 			}, [&tag] 
 			{
 				// On Success
+				// Entity has already picked up tool
 				tag.step = MiningTag::GOTO_SITE;
 				return;
 			});
@@ -182,18 +183,26 @@ void MiningAi::updateMiner(const Entity& e)
 		// get out mining targets idx using our position idx
 		// and find out which type of mining we'd like to do
 		const auto idx = getIdx(co);
+
+		if (miningMap[idx] > 0) // This shouldn't be neccasary, why is it?
+		{
+			tag.step = MiningTag::GOTO_SITE;
+			return;
+		}
+			
+
 		const int targetIdx = miningTargets[idx];
+		const auto coxx = idxToCo(targetIdx); // <<<<< DELETE WHEN DONE TESTING
 		const auto targetMiningType = designations->mining[targetIdx];
 
 		if (targetMiningType > 0)
 		{
-			// Emit message to perform mining? Do we want to do this on a skill based chance roll?
+			// Emit message to perform mining
 			emit(perform_mining_message{ e, targetIdx, targetMiningType });	
-			//tag.step = MiningTag::DROP_TOOL; //TESTING!!! DELETE AFTER
 			return;
 		}
 
-		tag.step = MiningTag::DROP_TOOL; //MiningTag::GET_PICK; ////
+		tag.step = MiningTag::DROP_TOOL; 
 		return;
 	}
 

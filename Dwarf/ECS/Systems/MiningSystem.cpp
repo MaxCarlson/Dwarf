@@ -44,8 +44,8 @@ void MiningSystem::makeMiningMap()
 	std::vector<std::tuple<int, int, int, int>> startingPoints;
 
 	for(int z = 1; z < MAP_DEPTH; ++z)
-		for(int y = 0; y < MAP_HEIGHT; ++y)
-			for (int x = 0; x < MAP_WIDTH; ++x)
+		for(int y = 1; y < MAP_HEIGHT - 1; ++y)
+			for (int x = 1; x < MAP_WIDTH - 1; ++x)
 			{
 				const auto idx = getIdx({ x, y, z });
 				auto des = designations->mining.find(idx);
@@ -119,6 +119,7 @@ void MiningSystem::makeMiningMap()
 
 void MiningSystem::walkMiningMap(const Coordinates co, const int distance, const int idx)
 {
+	// This is too small!!?
 	if (distance > 200)
 		return;
 
@@ -132,6 +133,10 @@ void MiningSystem::walkMiningMap(const Coordinates co, const int distance, const
 		miningMap[newIdx] = distance;
 		miningTargets[newIdx] = idx;
 
+		// All of this needs to be pre-calcuated!!!!
+		// Probably multi-threaded calcuating needs to be done
+		// when updating these map flags
+		// Medium-High priority
 		if (tileManager->canGo<CAN_GO_NORTH>(co)) walkMiningMap({ co.x, co.y - 1, co.z }, distance + 1, idx);
 		if (tileManager->canGo<CAN_GO_SOUTH>(co)) walkMiningMap({ co.x, co.y + 1, co.z }, distance + 1, idx);
 		if (tileManager->canGo<CAN_GO_EAST >(co)) walkMiningMap({ co.x + 1, co.y, co.z }, distance + 1, idx);
