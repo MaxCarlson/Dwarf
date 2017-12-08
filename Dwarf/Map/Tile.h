@@ -31,7 +31,7 @@ public:
 	// Integer representation of tileset index
 	// as well as tag used to identify material
 	// Will probably use this for matching if tile is mined etc
-	int  ch;	
+	int ch;	
 
 	// Type of material the Tile
 	// is made from

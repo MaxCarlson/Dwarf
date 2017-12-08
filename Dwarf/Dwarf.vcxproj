@@ -161,6 +161,7 @@
     <ClCompile Include="ECS\Systems\ai\MiningAi.cpp" />
     <ClCompile Include="Map\Tile.cpp" />
     <ClCompile Include="ECS\Systems\DijkstraSystems\PickMapSystem.cpp" />
+    <ClCompile Include="Map\Region.cpp" />
     <ClCompile Include="TileFactory.cpp" />
     <ClCompile Include="Map\VeinCreator.cpp" />
   </ItemGroup>
@@ -218,6 +219,7 @@
     <ClInclude Include="ECS\World.h" />
     <ClInclude Include="ECS\Systems\DijkstraSystems\PickMapSystem.h" />
     <ClInclude Include="Raws\Defs\ItemDefs.h" />
+    <ClInclude Include="Map\Region.h" />
     <ClInclude Include="TileFactory.h" />
     <ClInclude Include="Map\VeinCreator.h" />
   </ItemGroup>

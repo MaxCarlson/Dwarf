@@ -13,6 +13,7 @@ void DijkstraMap::init()
 
 void DijkstraMap::update(const std::vector<int>& startingPoints)
 {
+	// Make a thread pool!!!
 	std::thread{ &DijkstraMap::updateAsync, this, startingPoints }.detach();
 }
 
