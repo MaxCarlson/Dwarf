@@ -102,7 +102,7 @@ namespace region
 	void makeEmptySpace(const int idx)
 	{
 		currentRegion->tileFlags[idx].reset(CAN_STAND_HERE);
-
+		
 		removeProperty<Tile::OBSTRUCTED>(idxToCo(idx));
 		removeProperty<Tile::WALL>(idxToCo(idx));
 		removeProperty<Tile::FLOOR>(idxToCo(idx));
@@ -180,7 +180,7 @@ namespace region
 		tileFlags[idx].reset(CAN_GO_DOWN);
 		tileFlags[idx].reset(CAN_GO_UP);
 
-		if (getProperty<Tile::WALL> || !tileFlags[idx].test(CAN_STAND_HERE))
+		if (getProperty<Tile::WALL>(co))
 		{
 		}
 		else
@@ -200,9 +200,8 @@ namespace region
 			if (co.y < MAP_HEIGHT - 1 && co.x > 0             && tileFlags[getIdx({ co.x - 1, co.y + 1, co.z })].test(CAN_STAND_HERE)) tileFlags[idx].set(CAN_GO_SOUTH_W);
 			if (co.y < MAP_HEIGHT - 1 && co.x < MAP_WIDTH - 1 && tileFlags[getIdx({ co.x + 1, co.y + 1, co.z })].test(CAN_STAND_HERE)) tileFlags[idx].set(CAN_GO_SOUTH_E);
 
-			if (co.z > 0             && tileFlags[getIdx({ co.x, co.y, co.z - 1 })].test(CAN_STAND_HERE) && getProperty<Tile::RAMP>({ co.x, co.y, co.z    })) tileFlags[idx].set(CAN_GO_DOWN);
-			if (co.z < MAP_DEPTH - 1 && tileFlags[getIdx({ co.x, co.y, co.z + 1 })].test(CAN_STAND_HERE) && getProperty<Tile::RAMP>({ co.x, co.y, co.z + 1})) tileFlags[idx].set(CAN_GO_UP);
-			
+			if (co.z < MAP_DEPTH - 1 && tileFlags[getIdx({ co.x, co.y, co.z + 1 })].test(CAN_STAND_HERE) && getProperty<Tile::RAMP>(  co                    )) tileFlags[idx].set(CAN_GO_UP);
+			if (co.z > 0             && tileFlags[getIdx({ co.x, co.y, co.z - 1 })].test(CAN_STAND_HERE) && getProperty<Tile::RAMP>({ co.x, co.y, co.z - 1 })) tileFlags[idx].set(CAN_GO_DOWN);		
 		}
 	}
 }

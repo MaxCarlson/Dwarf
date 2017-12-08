@@ -45,9 +45,9 @@ void MiningSystem::makeMiningMap()
 
 	std::vector<std::tuple<int, int, int, int>> startingPoints;
 
-	for(int z = 1; z < MAP_DEPTH; ++z)
-		for(int y = 1; y < MAP_HEIGHT - 1; ++y)
-			for (int x = 1; x < MAP_WIDTH - 1; ++x)
+	for(int z = 1; z < MAP_DEPTH - 2; ++z)
+		for(int y = 1; y < MAP_HEIGHT - 2; ++y)
+			for (int x = 1; x < MAP_WIDTH - 2; ++x)
 			{
 				const auto idx = getIdx({ x, y, z });
 				auto des = designations->mining.find(idx);
@@ -129,7 +129,7 @@ void MiningSystem::walkMiningMap(const Coordinates co, const int distance, const
 
 	if (miningMap[newIdx] > distance)
 	{
-		if (!canWalk(co))
+		if (!flag(co, CAN_STAND_HERE))
 			return;
 
 		miningMap[newIdx] = distance;

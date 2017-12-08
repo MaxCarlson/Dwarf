@@ -45,6 +45,17 @@ public:
 // Formula for tile indexing with coordinates
 #define TILE_ARRAY_LOOKUP (co.z * MAP_WIDTH * MAP_HEIGHT) + (co.y * MAP_WIDTH) + co.x
 
+#define CO_NORTH   {co.x, co.y, co.z + 1}
+#define CO_SOUTH   {co.x, co.y, co.z - 1}
+#define CO_EAST    {co.x + 1, co.y, co.z }
+#define CO_WEST    {co.y - 1, co.y, co.z }
+#define CO_NORTH_W {co.x - 1, co.y - 1, co.z }
+#define CO_NORTH_E {co.x + 1, co.y - 1, co.z }
+#define CO_SOUTH_W {co.x - 1, co.y + 1, co.z }
+#define CO_SOUTH_E {co.x + 1, co.y + 1, co.z }
+#define CO_UP      {co.x, co.y, co.z + 1}
+#define CO_DOWN    {co.x, co.y, co.z - 1}
+
 
 // These are set inside tile manager when constructing
 // Number of tiles for each dimension of the current map
@@ -57,16 +68,16 @@ namespace region
 	enum Flag
 	{
 		CAN_STAND_HERE = 1,
-		CAN_GO_NORTH,
-		CAN_GO_SOUTH,
-		CAN_GO_EAST,
-		CAN_GO_WEST,
-		CAN_GO_NORTH_W,
-		CAN_GO_NORTH_E,
-		CAN_GO_SOUTH_E,
-		CAN_GO_SOUTH_W,
-		CAN_GO_UP,
-		CAN_GO_DOWN
+		CAN_GO_NORTH = 1 << 2,
+		CAN_GO_SOUTH = 1 << 3,
+		CAN_GO_EAST = 1 << 4,
+		CAN_GO_WEST = 1 << 5,
+		CAN_GO_NORTH_W = 1 << 6,
+		CAN_GO_NORTH_E = 1 << 7,
+		CAN_GO_SOUTH_E = 1 << 8,
+		CAN_GO_SOUTH_W = 1 << 9,
+		CAN_GO_UP = 1 << 10,
+		CAN_GO_DOWN = 1 << 11
 	};
 
 	enum Directions
