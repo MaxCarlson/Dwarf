@@ -139,12 +139,12 @@ void MiningSystem::walkMiningMap(const Coordinates co, const int distance, const
 		// Probably multi-threaded calcuating needs to be done
 		// when updating these map flags
 		// Medium-High priority		
-		if (canGo<CAN_GO_NORTH>(co)) walkMiningMap({ co.x, co.y - 1, co.z }, distance + 1, idx);
-		if (canGo<CAN_GO_SOUTH>(co)) walkMiningMap({ co.x, co.y + 1, co.z }, distance + 1, idx);
-		if (canGo<CAN_GO_EAST >(co)) walkMiningMap({ co.x + 1, co.y, co.z }, distance + 1, idx);
-		if (canGo<CAN_GO_WEST >(co)) walkMiningMap({ co.x - 1, co.y, co.z }, distance + 1, idx);
-		if (canGo<CAN_GO_UP   >(co)) walkMiningMap({ co.x, co.y, co.z + 1 }, distance + 1, idx);
-		if (canGo<CAN_GO_DOWN >(co)) walkMiningMap({ co.x, co.y, co.z - 1 }, distance + 1, idx);	
+		if (flag(co, CAN_GO_NORTH)) walkMiningMap({ co.x, co.y - 1, co.z }, distance + 1, idx);
+		if (flag(co, CAN_GO_SOUTH)) walkMiningMap({ co.x, co.y + 1, co.z }, distance + 1, idx);
+		if (flag(co,  CAN_GO_EAST)) walkMiningMap({ co.x + 1, co.y, co.z }, distance + 1, idx);
+		if (flag(co,  CAN_GO_WEST)) walkMiningMap({ co.x - 1, co.y, co.z }, distance + 1, idx);
+		if (flag(co,    CAN_GO_UP)) walkMiningMap({ co.x, co.y, co.z + 1 }, distance + 1, idx);
+		if (flag(co,  CAN_GO_DOWN)) walkMiningMap({ co.x, co.y, co.z - 1 }, distance + 1, idx);
 	}
 }
 

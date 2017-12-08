@@ -20,10 +20,6 @@ public:
 
 	void createHeightMap(int howMountainous, float rainAmount);
 
-	inline void createWall(Coordinates co);
-	inline void createWalkableSpace(Coordinates co);
-	inline void createOpenSpace(Coordinates co);
-
 	// Performs the rendering of the map
 	// and associated built with map generation tiles
 	// Should these be moved to Entities, and an array setup for which to render depending on z level?
@@ -40,9 +36,6 @@ private:
 	// Check possible ramp position is a place
 	// a ramp could be
 	bool rampSanityCheck(Coordinates rampLoc, Coordinates rampLand) const;
-
-	// Add ramp at co
-	void addRamp(Coordinates co);
 
 	// Add different grasses / bushes
 	void populateGrass();

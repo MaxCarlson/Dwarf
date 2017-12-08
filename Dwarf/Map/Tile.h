@@ -54,9 +54,9 @@ extern int MAP_WIDTH, MAP_HEIGHT, MAP_DEPTH, TOTAL_MAP_TILES;
 namespace region
 {
 
-	enum MoveDirections
+	enum Flag
 	{
-		//CAN_STAND_HERE,
+		CAN_STAND_HERE = 1,
 		CAN_GO_NORTH,
 		CAN_GO_SOUTH,
 		CAN_GO_EAST,
@@ -91,6 +91,23 @@ namespace region
 
 	// Returns Coordinates from a vector index
 	Coordinates idxToCo(int idx);
+
+	bool flag(Coordinates co, Flag f);
+
+	//void setFlag();
+
+	//void resetFlag();
+
+	void tileRecalcAll();
+
+
+	void makeWall(const int idx);
+
+	void makeRamp(const int idx);
+
+	void makeFloor(const int idx);
+
+	void makeEmptySpace(const int idx);
 
 
 	int get_rough_distance(Coordinates loc, Coordinates dest);
@@ -155,7 +172,7 @@ namespace region
 		tileAt(co).properties &= ~P;
 	}
 
-	template<MoveDirections D> // Wil be deleting this and replacing with flags
+	template<Flag D> // Wil be deleting this and replacing with flags
 	bool canGo(Coordinates co)
 	{
 		if (D == CAN_GO_NORTH)

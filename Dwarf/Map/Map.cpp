@@ -29,6 +29,8 @@ Map::Map(int width, int height, int depth) : width(width), height(height), depth
 	populateGrass();
 	seedRamps();
 	placeDwarves(7);
+
+	tileRecalcAll();
 }
 
 Map::~Map()
@@ -65,22 +67,22 @@ void Map::createHeightMap(int howMountainous, float rainAmount)
 				double heightMapPoint = heightMap->getValue(i, j) * 100;
 
 				if (h <= MIN_LVLS_OF_ROCK) {															      
-					createWall({ i, j, h });
+					makeWall(getIdx({ i, j, h })); 
 				}
 				// If there's a floor but height ratio is too low, create walkable space
 				else  if (heightThreshold < heightMapPoint && getProperty<Tile::FLOOR>({ i, j, h }))
 				{   
-					createWalkableSpace({ i, j, h });
+					makeFloor(getIdx({ i, j, h }));
 				}
 				// If there is a wall below, and height is high enough create more land
 				else if (canWalk({ i, j, h }))
 				{                                               
-					createWall({ i, j, h });
+					makeWall(getIdx({ i, j, h }));
 				}
 				// else create open space
 				else 
 				{														                  
-					createOpenSpace({ i, j, h });
+					makeEmptySpace(getIdx({ i, j, h }));
 				}
 
 			}
@@ -99,7 +101,7 @@ void Map::createHeightMap(int howMountainous, float rainAmount)
 		{
 			if (getProperty<Tile::WALL>({ i, j, depth - 1 }))
 			{
-				createWalkableSpace({ i, j, depth - 1 });
+				makeFloor(getIdx({ i, j, depth - 1 }));
 			}
 		}
 
@@ -122,19 +124,19 @@ void Map::seedRamps()
 
 					if (rampSanityCheck(walkableTop, northWalk))
 					{
-						addRamp(northWalk);
+						makeRamp(getIdx(northWalk));
 					}
 					else if (rampSanityCheck(walkableTop, southWalk))
 					{
-						addRamp(southWalk);
+						makeRamp(getIdx(southWalk));
 					}
 					else if (rampSanityCheck(walkableTop, eastWalk))
 					{
-						addRamp(eastWalk);
+						makeRamp(getIdx(eastWalk));
 					}
 					else if (rampSanityCheck(walkableTop, westWalk))
 					{
-						addRamp(westWalk);
+						makeRamp(getIdx(westWalk));
 					}
 				}
 			}
@@ -147,15 +149,6 @@ bool Map::rampSanityCheck(Coordinates rampLoc, Coordinates rampLand) const
 		return true;
 
 	return false;
-}
-
-void Map::addRamp(Coordinates co)
-{
-	tileAt(co).ch = 30;
-	//tileAt(co).color = "grey";
-	setProperty<Tile::RAMP>(co);
-	setProperty<Tile::FLOOR>({co.x, co.y, co.z + 1});
-	//setProperty<Tile::OBSTRUCTED>(co);
 }
 
 // Possibly move all these loops into one or two to minimize looping??
@@ -263,33 +256,4 @@ void Map::placeDwarves(int number)
 				}
 					
 			}
-}
-
-
-// Create impassable wall that provides a floor
-inline void Map::createWall(Coordinates co)
-{
-	setProperty<Tile::OBSTRUCTED>(co);
-	setProperty<Tile::WALL>(co);
-
-	// Add a floor property
-	// to any Tile above a wall Tile
-	if(co.z < MAX_ZLVL - 1)
-		setProperty<Tile::FLOOR>({co.x, co.y, co.z + 1});
-}
-
-// Create a space that is transparant and can be walked through, does not provide floor
-inline void Map::createWalkableSpace(Coordinates co)
-{
-	setProperty<Tile::FLOOR>(co);
-	removeProperty<Tile::OBSTRUCTED>(co);
-	removeProperty<Tile::WALL>(co);
-}
-
-// Create a space that is transparant and is not walkable
-inline void Map::createOpenSpace(Coordinates co)
-{
-	removeProperty<Tile::OBSTRUCTED>(co);
-	removeProperty<Tile::WALL>(co);
-	removeProperty<Tile::FLOOR>(co);
 }
