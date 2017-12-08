@@ -7,6 +7,8 @@
 #include "../Messages/entity_moved_message.h"
 #include <queue>
 
+using namespace region;
+
 class MovementSystem : public System<Requires<MovementComponent, PositionComponent>>
 {
 public:
@@ -92,6 +94,6 @@ private:
 	// so we avoid people walking through walls
 	inline bool canMoveDir(Coordinates co)
 	{
-		return tileManager->canPass(co);
+		return canPass(co);
 	}
 };

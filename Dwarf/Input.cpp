@@ -17,6 +17,8 @@
 #include "ECS\Components\PositionComponent.h"
 #include "ECS\Messages\pick_map_changed_message.h"
 
+using namespace region;
+
 Input::Input()
 {
 }

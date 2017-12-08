@@ -5,6 +5,8 @@
 
 #include <iostream>
 
+using namespace region;
+
 EntityPositionCache::EntityPositionCache()
 {
 	positionCache.reserve(15000); // Look into sizing?

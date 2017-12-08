@@ -3,10 +3,6 @@
 
 #include <vector>
 
-
-
-
-
 class Tile {
 
 public:
@@ -20,18 +16,18 @@ public:
 	// bool Mineable
 	enum Property // In future remove some properties from here and place them into sepperate vectors!!
 	{
-		EXPLORED   = 1,
+		EXPLORED = 1,
 		OBSTRUCTED = 1 << 1,
-		WALL       = 1 << 2,
-		FLOOR      = 1 << 3,
-		RAMP       = 1 << 4,
-		MINEABLE   = 1 << 5
+		WALL = 1 << 2,
+		FLOOR = 1 << 3,
+		RAMP = 1 << 4,
+		MINEABLE = 1 << 5
 	};
 
 	// Integer representation of tileset index
 	// as well as tag used to identify material
 	// Will probably use this for matching if tile is mined etc
-	int ch;	
+	int ch;
 
 	// Type of material the Tile
 	// is made from
@@ -46,66 +42,99 @@ public:
 	std::uint16_t properties = 0x1; // Change to 0U for unexplored
 };
 
-enum MoveDirections
-{
-	CAN_GO_NORTH,
-	CAN_GO_SOUTH,
-	CAN_GO_EAST,
-	CAN_GO_WEST,
-	CAN_GO_NORTH_W,
-	CAN_GO_NORTH_E,
-	CAN_GO_SOUTH_E,
-	CAN_GO_SOUTH_W,
-	CAN_GO_UP,
-	CAN_GO_DOWN
-};
+// Formula for tile indexing with coordinates
+#define TILE_ARRAY_LOOKUP (co.z * MAP_WIDTH * MAP_HEIGHT) + (co.y * MAP_WIDTH) + co.x
 
-enum Directions
-{
-	NO_DIRECTION = -1,
-	NORTH,
-	SOUTH,
-	EAST,
-	WEST,
-	NORTH_W,
-	NORTH_E,
-	SOUTH_E,
-	SOUTH_W,
-	UP,
-	DOWN
-};
 
 // These are set inside tile manager when constructing
 // Number of tiles for each dimension of the current map
 extern int MAP_WIDTH, MAP_HEIGHT, MAP_DEPTH, TOTAL_MAP_TILES;
 
-// Formula for tile indexing with coordinates
-#define TILE_ARRAY_LOOKUP (co.z * MAP_WIDTH * MAP_HEIGHT) + (co.y * MAP_WIDTH) + co.x
 
-// Creates a 1D Vector of Tile objects used to
-// simulate a 3D area of tiles. Access Tiles through here
-class TileManager
+namespace region
 {
-public:
-	// Dimensions of map we're 
-	// going to render
-	int width, height, depth;
 
-	//TileManager() = default;
-
-	TileManager(int width, int height, int depth) : width(width), height(height), depth(depth)
+	enum MoveDirections
 	{
-		tileMap.resize(width * height * depth);
-		MAP_WIDTH = width;
-		MAP_HEIGHT = height;
-		MAP_DEPTH = depth;
-		TOTAL_MAP_TILES = MAP_WIDTH * MAP_HEIGHT * MAP_DEPTH;
+		//CAN_STAND_HERE,
+		CAN_GO_NORTH,
+		CAN_GO_SOUTH,
+		CAN_GO_EAST,
+		CAN_GO_WEST,
+		CAN_GO_NORTH_W,
+		CAN_GO_NORTH_E,
+		CAN_GO_SOUTH_E,
+		CAN_GO_SOUTH_W,
+		CAN_GO_UP,
+		CAN_GO_DOWN
+	};
+
+	enum Directions
+	{
+		NO_DIRECTION = -1,
+		NORTH,
+		SOUTH,
+		EAST,
+		WEST,
+		NORTH_W,
+		NORTH_E,
+		SOUTH_E,
+		SOUTH_W,
+		UP,
+		DOWN
+	};
+
+	// Get the index of Coordinates 
+	// Returns 0 if index isn't in the map
+	int getIdx(Coordinates co);
+
+
+	// Returns Coordinates from a vector index
+	Coordinates idxToCo(int idx);
+
+
+	int get_rough_distance(Coordinates loc, Coordinates dest);
+
+
+	void new_region(int width, int height, int depth);
+
+
+	// Returns a refrence to tile at coordinates
+	Tile& tileAt(Coordinates co);
+
+
+	Tile& tileAt(int exactPos);
+
+
+	// Checks if it's possible to walk through tile ~~ wall check probably isn't neccasary so long as obstructed is updated correctly!!
+	bool canWalk(Coordinates co);
+
+
+	// Checks all bounds in a coordinate to make sure
+	// it's entirely valid
+	bool boundsCheck(Coordinates co);
+
+
+	// Slightly different from canWalk in that it doesn't 
+	// check for floor
+	bool canPass(Coordinates co);
+
+
+	// Should only be used for map generation, will not gurentee things are completely empty
+	// Possibly move this to the map object???????
+	bool isEmptySpace(Coordinates co);
+
+	// Should be called hasProperty
+	template<unsigned P>
+	const bool getProperty(Coordinates co)
+	{
+		return tileAt(co).properties & P;
 	}
 
 	// Alters the TileProperty P property of a tile
 	// only if that tile did not have TileType T property
 	template<Tile::Property P>
-	inline void setProperty(Coordinates co)                  // Test all these functions for perf with const Coordinates ?
+	void setProperty(Coordinates co)
 	{
 		tileAt(co).properties |= P;
 	}
@@ -114,24 +143,24 @@ public:
 	// Faster than remove if we know what tile prop
 	// is ahead of time
 	template<Tile::Property P>
-	inline void reverseProperty(Coordinates co)
+	void reverseProperty(Coordinates co)
 	{
 		tileAt(co).properties ^= P;
 	}
 
 	// Remove property P from Tile
 	template<Tile::Property P>
-	inline void removeProperty(Coordinates co)
+	void removeProperty(Coordinates co)
 	{
 		tileAt(co).properties &= ~P;
 	}
 
-	template<MoveDirections D>
-	inline bool canGo(Coordinates co)
+	template<MoveDirections D> // Wil be deleting this and replacing with flags
+	bool canGo(Coordinates co)
 	{
 		if (D == CAN_GO_NORTH)
 			return canWalk({ co.x, co.y - 1, co.z });
-		if(D == CAN_GO_SOUTH)
+		if (D == CAN_GO_SOUTH)
 			return canWalk({ co.x, co.y + 1, co.z });
 		if (D == CAN_GO_EAST)
 			return canWalk({ co.x + 1, co.y, co.z });
@@ -153,162 +182,50 @@ public:
 		// These will need to be changed since enventually 
 		// we don't want dwarves walking on air and dropping down 
 		if (D == CAN_GO_UP)
-			return canWalk({ co.x, co.y, co.z + 1}) && getProperty<Tile::RAMP>(co);
+			return canWalk({ co.x, co.y, co.z + 1 }) && getProperty<Tile::RAMP>(co);
 		if (D == CAN_GO_DOWN)
-			return canWalk({ co.x, co.y, co.z - 1 }) && getProperty<Tile::RAMP>({co.x, co.y, co.z - 1});
+			return canWalk({ co.x, co.y, co.z - 1 }) && getProperty<Tile::RAMP>({ co.x, co.y, co.z - 1 });
 
 		return false;
 	}
 
-	// Returns true if tile has property of TileProperty P
-	// For testing multiple properties, OR/XOR two tile properties together
-	// Should be named hasProperty
-	template<unsigned P>
-	const inline bool getProperty(Coordinates co) const
+	template<Directions D>
+	Coordinates positionAt(Coordinates co) // Should probably delete this an replace with a define?
 	{
-		return tileAt(co).properties & P;
-	}
+		if (co.z >= MAP_DEPTH || co.z < 0 || co.y >= MAP_HEIGHT || co.y < 0 || co.x >= MAP_WIDTH || co.x < 0)
+			return { 0, 0, 0 };
 
-	// Returns a refrence to tile at coordinates
-	inline Tile& tileAt(Coordinates co)
-	{
-		return tileMap[TILE_ARRAY_LOOKUP];
-	}
+		if (D == NORTH)
+			return { co.x, co.y - 1, co.z };
 
-	// Returns a copy of tile at coordinates
-	inline Tile tileAt(Coordinates co) const
-	{
-		return tileMap[TILE_ARRAY_LOOKUP];
-	}
+		if (D == SOUTH)
+			return{ co.x, co.y + 1, co.z };
 
-	inline Tile& tileAt(int exactPos)
-	{
-		return tileMap[exactPos];
-	}
+		if (D == EAST)
+			return { co.x + 1, co.y, co.z };
 
-	// Direct lookup by tile index instead of coordinates
-	inline Tile tileAt(int exactPos) const
-	{
-		return tileMap[exactPos];
-	}
+		if (D == WEST)
+			return { co.x - 1, co.y, co.z };
 
-	// Returns a copy of data at tile below input tile coordinates
-	// Worse performance due to use of .at() for safety
-	// Is this needed?
-	inline Tile tileBelow(Coordinates co) const
-	{
-		return tileMap.at(TILE_ARRAY_LOOKUP);
-	}
+		if (D == NORTH_W)
+			return { co.x - 1, co.y - 1, co.z };
 
-	// Checks if it's possible to walk through tile ~~ wall check probably isn't neccasary so long as obstructed is updated correctly!!
-	inline bool canWalk(Coordinates co) const
-	{
-		return boundsCheck(co) && (getProperty<Tile::FLOOR>(co) && !(getProperty<Tile::WALL>(co) | getProperty<Tile::OBSTRUCTED>(co)));
-	}
+		if (D == NORTH_E)
+			return { co.x + 1, co.y - 1, co.z };
 
-	// Checks to make sure things don't go off the map
-	// with bounds checking DOES NOT do z bound checking
-	inline bool isOnPlane(Coordinates co) const
-	{
-		return (co.x < width && co.x >= 0 && co.y < height && co.y >= 0);
-	}
+		if (D == SOUTH_E)
+			return { co.x + 1, co.y + 1, co.z };
 
-	// Checks all bounds in a coordinate to make sure
-	// it's entirely valid
-	inline bool boundsCheck(Coordinates co) const
-	{
-		return(co.x < width && co.x >= 0 && co.y < height && co.y >= 0 && co.z < depth && co.z >= 0);
-	}
+		if (D == SOUTH_W)
+			return { co.x - 1, co.y + 1, co.z };
 
-	// Slightly different from canWalk in that it doesn't 
-	// check for floor
-	inline bool canPass(Coordinates co) const
-	{
-		return isOnPlane(co) && !(getProperty<Tile::WALL>(co) | getProperty<Tile::OBSTRUCTED>(co)); 
-	}
+		if (D == UP)
+			return { co.x, co.y, co.z + 1 };
 
-	// Should only be used for map generation, will not gurentee things are completely empty
-	// Possibly move this to the map object???????
-	inline bool isEmptySpace(Coordinates co) const
-	{
-		return !(getProperty<Tile::FLOOR>(co) | getProperty<Tile::WALL>(co) | getProperty<Tile::OBSTRUCTED>(co));
-	}
-	
-private:
+		if (D == DOWN)
+			return { co.x, co.y, co.z - 1 };
 
-	// 1D vector of Tiles indexed by 3D formula
-	std::vector<Tile> tileMap;
-};
-
-extern TileManager * tileManager;
-
-// Get the index of Coordinates 
-// Returns 0 if index isn't in the map
-inline int getIdx(Coordinates co)
-{
-	if (co.z >= MAP_DEPTH || co.z < 0 || co.y >= MAP_HEIGHT || co.y < 0 || co.x >= MAP_WIDTH || co.x < 0)
-		return 0;
-
-	return TILE_ARRAY_LOOKUP;
-}
-
-// Returns Coordinates from a vector index
-inline Coordinates idxToCo(int idx)
-{
-	int z = idx / (MAP_HEIGHT * MAP_WIDTH);
-	idx -= (z * MAP_WIDTH * MAP_HEIGHT);
-
-	int y = idx / MAP_WIDTH;
-	idx -= (y * MAP_WIDTH);
-
-	int x = idx;
-
-	return { x, y, z };
-}
-
-inline int get_rough_distance(Coordinates loc, Coordinates dest)
-{
-	int x = dest.x - loc.x;
-	int y = dest.y - loc.y;
-	int z = dest.z - loc.z;
-	return (x * x + y * y + z * z);
-}
-
-template <Directions D>
-inline Coordinates positionAt(Coordinates co)
-{
-	if (co.z >= MAP_DEPTH || co.z < 0 || co.y >= MAP_HEIGHT || co.y < 0 || co.x >= MAP_WIDTH || co.x < 0)
 		return { 0, 0, 0 };
-
-	if (D == NORTH)
-		return { co.x, co.y - 1, co.z };
-
-	if (D == SOUTH)
-		return{ co.x, co.y + 1, co.z };
-
-	if (D == EAST)
-		return { co.x + 1, co.y, co.z };
-
-	if (D == WEST)
-		return { co.x - 1, co.y, co.z };
-
-	if (D == NORTH_W)
-		return { co.x - 1, co.y - 1, co.z };
-
-	if (D == NORTH_E)
-		return { co.x + 1, co.y - 1, co.z };
-
-	if (D == SOUTH_E)
-		return { co.x + 1, co.y + 1, co.z };
-
-	if (D == SOUTH_W)
-		return { co.x - 1, co.y + 1, co.z };
-
-	if (D == UP)
-		return { co.x, co.y, co.z + 1 };
-
-	if (D == DOWN)
-		return { co.x, co.y, co.z - 1 };
-
-	return { 0, 0, 0 };
+	}
 }
+

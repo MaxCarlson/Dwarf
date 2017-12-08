@@ -3,6 +3,8 @@
 #include "../../../Map/Tile.h"
 #include "DijkstraMapsHandler.h"
 
+using namespace region;
+
 void PickMapSystem::init()
 {
 

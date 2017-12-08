@@ -1,6 +1,6 @@
 #pragma once
 #include "../include/libtcod.hpp"
-#include "Tile.h"
+#include "../Coordinates.h"
 
 #include <vector>
 

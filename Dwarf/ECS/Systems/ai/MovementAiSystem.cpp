@@ -7,7 +7,7 @@
 #include <utility>
 
 
-
+using namespace region;
 
 // Wrapper for the priority queue
 // class so we can use pair's easily
@@ -59,11 +59,11 @@ inline double heuristic(Coordinates co, Coordinates co1)
 // Stairs this should be possible, not ramps
 inline bool PathGraph::passable(Coordinates start, Coordinates dest) const
 {
-	return (tileManager->canWalk(dest)
+	return (canWalk(dest)
 		// On bottom area of ramp
-		|| (tileManager->getProperty<Tile::RAMP>(start) && start.x == dest.x && start.y == dest.y)
+		|| (getProperty<Tile::RAMP>(start) && start.x == dest.x && start.y == dest.y)
 		// On top of ramp
-		|| (tileManager->getProperty<Tile::RAMP>({start.x, start.y, start.z - 1}) && start.x == dest.x && start.y == dest.y));
+		|| (getProperty<Tile::RAMP>({start.x, start.y, start.z - 1}) && start.x == dest.x && start.y == dest.y));
 }
 std::vector<Coordinates> PathGraph::floodFill(Coordinates co) const
 {
@@ -75,7 +75,7 @@ std::vector<Coordinates> PathGraph::floodFill(Coordinates co) const
 
 		dest += dir;
 
-		if (inBounds(dest) && tileManager->canPass(dest))
+		if (inBounds(dest) && canPass(dest))
 		{
 			result.push_back(dest);
 		}
@@ -96,8 +96,8 @@ void MovementAiSystem::floodFillMap()
 	std::queue<Coordinates> frontier;
 	std::unordered_map<Coordinates, Coordinates, CoordinateHash, CoordinateHashEqual> exploredMap;
 
-	int depth = tileManager->depth;
-	Coordinates start = { 0, 0, depth - 1 };
+
+	Coordinates start = { 0, 0, MAP_DEPTH - 1 };
 
 	frontier.emplace(start);
 	exploredMap[start] = start;
@@ -119,7 +119,7 @@ void MovementAiSystem::floodFillMap()
 		{
 			frontier.emplace(next);
 			exploredMap[next] = current;
-			tileManager->setProperty<Tile::EXPLORED>(next);
+			setProperty<Tile::EXPLORED>(next);
 		}
 	}
 }

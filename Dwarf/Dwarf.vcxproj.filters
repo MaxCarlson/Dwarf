@@ -90,7 +90,7 @@
     <ClCompile Include="ECS\Systems\ai\EquipHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Map\Region.cpp">
+    <ClCompile Include="Map\Util.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -260,7 +260,7 @@
     <ClInclude Include="ECS\Components\Sentients\Inventory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Map\Region.h">
+    <ClInclude Include="Map\Util.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

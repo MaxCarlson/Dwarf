@@ -2,10 +2,10 @@
 #include "../Coordinates.h"
 
 #include <vector>
-#include <bitset>
 #include <cstdint>
 #include <limits>
 #include <type_traits>
+#include <memory>
 
 namespace Util
 {
@@ -46,39 +46,3 @@ namespace Util
 		BITSET_64 = std::numeric_limits<std::int64_t>::max()
 	};
 }
-
-
-
-class Region
-{
-public:
-	Region(int width, int height, int depth);
-
-	int width, height, depth;
-
-	std::vector<char> explored;
-	std::vector<char> solid;
-
-	std::vector<uint8_t> tileType;
-	std::vector<uint8_t> material;
-	std::vector<uint16_t> health;
-
-	std::vector<Util::Bitset<Util::BITSET_16>> tileFlags;
-};
-
-extern Region region;
-
-enum Flag
-{
-
-};
-
-
-inline bool canWalk(Coordinates co);
-
-inline bool flag(Coordinates co, Flag f);
-
-inline void setFlag(Coordinates co, Flag f);
-
-inline void resetFlag(Coordinates co, Flag f);
-

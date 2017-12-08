@@ -7,6 +7,8 @@
 #include "../TileFactory.h"
 #include "../Components/LaborStatsComponent.h"
 
+using namespace region;
+
 // Map of distances to designated mining
 // targets
 std::vector<uint8_t> miningMap;
@@ -127,7 +129,7 @@ void MiningSystem::walkMiningMap(const Coordinates co, const int distance, const
 
 	if (miningMap[newIdx] > distance)
 	{
-		if (!tileManager->canWalk(co))
+		if (!canWalk(co))
 			return;
 
 		miningMap[newIdx] = distance;
@@ -137,18 +139,18 @@ void MiningSystem::walkMiningMap(const Coordinates co, const int distance, const
 		// Probably multi-threaded calcuating needs to be done
 		// when updating these map flags
 		// Medium-High priority		
-		if (tileManager->canGo<CAN_GO_NORTH>(co)) walkMiningMap({ co.x, co.y - 1, co.z }, distance + 1, idx);
-		if (tileManager->canGo<CAN_GO_SOUTH>(co)) walkMiningMap({ co.x, co.y + 1, co.z }, distance + 1, idx);
-		if (tileManager->canGo<CAN_GO_EAST >(co)) walkMiningMap({ co.x + 1, co.y, co.z }, distance + 1, idx);
-		if (tileManager->canGo<CAN_GO_WEST >(co)) walkMiningMap({ co.x - 1, co.y, co.z }, distance + 1, idx);
-		if (tileManager->canGo<CAN_GO_UP   >(co)) walkMiningMap({ co.x, co.y, co.z + 1 }, distance + 1, idx);
-		if (tileManager->canGo<CAN_GO_DOWN >(co)) walkMiningMap({ co.x, co.y, co.z - 1 }, distance + 1, idx);	
+		if (canGo<CAN_GO_NORTH>(co)) walkMiningMap({ co.x, co.y - 1, co.z }, distance + 1, idx);
+		if (canGo<CAN_GO_SOUTH>(co)) walkMiningMap({ co.x, co.y + 1, co.z }, distance + 1, idx);
+		if (canGo<CAN_GO_EAST >(co)) walkMiningMap({ co.x + 1, co.y, co.z }, distance + 1, idx);
+		if (canGo<CAN_GO_WEST >(co)) walkMiningMap({ co.x - 1, co.y, co.z }, distance + 1, idx);
+		if (canGo<CAN_GO_UP   >(co)) walkMiningMap({ co.x, co.y, co.z + 1 }, distance + 1, idx);
+		if (canGo<CAN_GO_DOWN >(co)) walkMiningMap({ co.x, co.y, co.z - 1 }, distance + 1, idx);	
 	}
 }
 
 void MiningSystem::performMining(Entity e, const int targetIdx, const uint8_t miningType)
 {
-	Tile& t = tileManager->tileAt(targetIdx);
+	Tile& t = tileAt(targetIdx);
 
 	if (t.health > 0)
 	{

@@ -4,6 +4,7 @@
 #include <deque>
 #include <map>
 
+using namespace region;
 
 void DijkstraMap::init()
 {
@@ -55,52 +56,52 @@ void DijkstraMap::updateAsync(const std::vector<int>& startingPoints)
 
 			Coordinates co = idxToCo(openNode.first);
 
-			if (tileManager->canGo<CAN_GO_NORTH>(co))
+			if (canGo<CAN_GO_NORTH>(co))
 			{
 				dijkstra_add_candidate(openNodes, { co.x, co.y - 1, co.z }, openNode.second + 1);
 			}
 
-			if (tileManager->canGo<CAN_GO_SOUTH>(co))
+			if (canGo<CAN_GO_SOUTH>(co))
 			{
 				dijkstra_add_candidate(openNodes, { co.x, co.y + 1, co.z }, openNode.second + 1);
 			}
 
-			if (tileManager->canGo<CAN_GO_EAST>(co))
+			if (canGo<CAN_GO_EAST>(co))
 			{
 				dijkstra_add_candidate(openNodes, { co.x + 1, co.y, co.z }, openNode.second + 1);
 			}
 
-			if (tileManager->canGo<CAN_GO_WEST>(co))
+			if (canGo<CAN_GO_WEST>(co))
 			{
 				dijkstra_add_candidate(openNodes, { co.x - 1, co.y, co.z }, openNode.second + 1);
 			}
 
-			if (tileManager->canGo<CAN_GO_NORTH_W>(co))
+			if (canGo<CAN_GO_NORTH_W>(co))
 			{
 				dijkstra_add_candidate(openNodes, { co.x - 1, co.y - 1, co.z }, openNode.second + 1);
 			}
 
-			if (tileManager->canGo<CAN_GO_NORTH_E>(co))
+			if (canGo<CAN_GO_NORTH_E>(co))
 			{
 				dijkstra_add_candidate(openNodes, { co.x + 1, co.y - 1, co.z }, openNode.second + 1);
 			}
 
-			if (tileManager->canGo<CAN_GO_SOUTH_W>(co))
+			if (canGo<CAN_GO_SOUTH_W>(co))
 			{
 				dijkstra_add_candidate(openNodes, { co.x - 1, co.y + 1, co.z }, openNode.second + 1);
 			}
 
-			if (tileManager->canGo<CAN_GO_SOUTH_E>(co))
+			if (canGo<CAN_GO_SOUTH_E>(co))
 			{
 				dijkstra_add_candidate(openNodes, { co.x + 1, co.y - 1, co.z }, openNode.second + 1);
 			}
 
-			if (tileManager->canGo<CAN_GO_UP>(co))
+			if (canGo<CAN_GO_UP>(co))
 			{
 				dijkstra_add_candidate(openNodes, { co.x, co.y, co.z + 1}, openNode.second + 1);
 			}
 
-			if (tileManager->canGo<CAN_GO_DOWN>(co))
+			if (canGo<CAN_GO_DOWN>(co))
 			{
 				dijkstra_add_candidate(openNodes, { co.x, co.y, co.z - 1 }, openNode.second + 1);
 			}
@@ -118,61 +119,61 @@ Coordinates DijkstraMap::findDestination(const Coordinates co)
 	const int idx = getIdx(co);
 	std::map<int16_t, int> candidnates;
 
-	if (tileManager->canGo<CAN_GO_NORTH>(co))
+	if (canGo<CAN_GO_NORTH>(co))
 	{
 		const int dest = getIdx({ co.x, co.y - 1, co.z });
 		candidnates.insert(std::make_pair(distanceMap[dest], dest));
 	}
 
-	if (tileManager->canGo<CAN_GO_SOUTH>(co))
+	if (canGo<CAN_GO_SOUTH>(co))
 	{
 		const int dest = getIdx({ co.x, co.y + 1, co.z });
 		candidnates.insert(std::make_pair(distanceMap[dest], dest));
 	}
 
-	if (tileManager->canGo<CAN_GO_EAST>(co))
+	if (canGo<CAN_GO_EAST>(co))
 	{
 		const int dest = getIdx({ co.x + 1, co.y, co.z });
 		candidnates.insert(std::make_pair(distanceMap[dest], dest));
 	}
 
-	if (tileManager->canGo<CAN_GO_WEST>(co))
+	if (canGo<CAN_GO_WEST>(co))
 	{
 		const int dest = getIdx({ co.x - 1, co.y, co.z });
 		candidnates.insert(std::make_pair(distanceMap[dest], dest));
 	}
 
-	if (tileManager->canGo<CAN_GO_NORTH_W>(co))
+	if (canGo<CAN_GO_NORTH_W>(co))
 	{
 		const int dest = getIdx({ co.x - 1, co.y - 1, co.z });
 		candidnates.insert(std::make_pair(distanceMap[dest], dest));
 	}
 
-	if (tileManager->canGo<CAN_GO_NORTH_E>(co))
+	if (canGo<CAN_GO_NORTH_E>(co))
 	{
 		const int dest = getIdx({ co.x + 1, co.y - 1, co.z });
 		candidnates.insert(std::make_pair(distanceMap[dest], dest));
 	}
 
-	if (tileManager->canGo<CAN_GO_SOUTH_W>(co))
+	if (canGo<CAN_GO_SOUTH_W>(co))
 	{
 		const int dest = getIdx({ co.x - 1, co.y + 1, co.z });
 		candidnates.insert(std::make_pair(distanceMap[dest], dest));
 	}
 
-	if (tileManager->canGo<CAN_GO_SOUTH_E>(co))
+	if (canGo<CAN_GO_SOUTH_E>(co))
 	{
 		const int dest = getIdx({ co.x + 1, co.y + 1, co.z });
 		candidnates.insert(std::make_pair(distanceMap[dest], dest));
 	}
 
-	if (tileManager->canGo<CAN_GO_UP>(co))
+	if (canGo<CAN_GO_UP>(co))
 	{
 		const int dest = getIdx({ co.x, co.y, co.z + 1 });
 		candidnates.insert(std::make_pair(distanceMap[dest], dest));
 	}
 
-	if (tileManager->canGo<CAN_GO_DOWN>(co))
+	if (canGo<CAN_GO_DOWN>(co))
 	{
 		const int dest = getIdx({ co.x, co.y, co.z - 1 });
 		candidnates.insert(std::make_pair(distanceMap[dest], dest));

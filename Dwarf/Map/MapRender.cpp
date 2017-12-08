@@ -6,7 +6,7 @@
 #include "libtcod.hpp"
 #include "../BearLibTerminal.h"
 
-
+using namespace region;
 
 MapRender::MapRender(Map & map) : map(map)
 {
@@ -32,7 +32,7 @@ void MapRender::render()
 	for (int x = offsetX; x < renderWidth; ++x)
 		for (int y = offsetY; y < renderHeight; ++y)
 		{
-			const auto & t = tileManager->tileAt({ x, y, currentZLevel });
+			const auto & t = tileAt({ x, y, currentZLevel });
 
 			// Adjusted x and y values
 			// based of camera offset from top left corner
@@ -40,7 +40,7 @@ void MapRender::render()
 			int adjY = y - offsetY;
 
 			// Use this for darkening/blacking-out unexplored in mountain/underground tiles
-			if (!tileManager->getProperty<Tile::EXPLORED>({ x, y, currentZLevel }))
+			if (!getProperty<Tile::EXPLORED>({ x, y, currentZLevel }))
 			{
 
 			}

@@ -10,7 +10,7 @@
 #include "../ECS\Components\HealthComponent.h"
 #include "../BearLibTerminal.h"
 
-
+using namespace region;
 
 static const int MIN_LVLS_OF_ROCK = 40;
 
@@ -18,7 +18,7 @@ Map::Map(int width, int height, int depth) : width(width), height(height), depth
 {
 	rng = TCODRandom::getInstance();
 
-	tileManager = new TileManager(width, height, depth);
+	new_region(width, height, depth);
 	tileFactory = new TileFactory();
 	mapRenderer = new MapRender(*this);
 
@@ -33,7 +33,6 @@ Map::Map(int width, int height, int depth) : width(width), height(height), depth
 
 Map::~Map()
 {
-	delete tileManager;
 	delete tileFactory;
 	delete mapRenderer;
 	delete rng;
@@ -69,12 +68,12 @@ void Map::createHeightMap(int howMountainous, float rainAmount)
 					createWall({ i, j, h });
 				}
 				// If there's a floor but height ratio is too low, create walkable space
-				else  if (heightThreshold < heightMapPoint && tileManager->getProperty<Tile::FLOOR>({ i, j, h }))
+				else  if (heightThreshold < heightMapPoint && getProperty<Tile::FLOOR>({ i, j, h }))
 				{   
 					createWalkableSpace({ i, j, h });
 				}
 				// If there is a wall below, and height is high enough create more land
-				else if (tileManager->canWalk({ i, j, h }))
+				else if (canWalk({ i, j, h }))
 				{                                               
 					createWall({ i, j, h });
 				}
@@ -98,7 +97,7 @@ void Map::createHeightMap(int howMountainous, float rainAmount)
 	for (int i = 0; i < width; ++i)
 		for (int j = 0; j < height; ++j)
 		{
-			if (tileManager->getProperty<Tile::WALL>({ i, j, depth - 1 }))
+			if (getProperty<Tile::WALL>({ i, j, depth - 1 }))
 			{
 				createWalkableSpace({ i, j, depth - 1 });
 			}
@@ -112,7 +111,7 @@ void Map::seedRamps()
 		for (int i = 0; i < width; ++i)
 			for (int j = 0; j < height; ++j)
 			{
-				if (tileManager->getProperty<Tile::WALL>({ i, j, h }))
+				if (getProperty<Tile::WALL>({ i, j, h }))
 				{
 					const Coordinates walkableTop = { i, j, h + 1 };
 
@@ -144,7 +143,7 @@ void Map::seedRamps()
 
 bool Map::rampSanityCheck(Coordinates rampLoc, Coordinates rampLand) const
 {
-	if (tileManager->boundsCheck(rampLoc) && tileManager->canWalk(rampLoc) && tileManager->boundsCheck(rampLand) && tileManager->canWalk(rampLand))
+	if (boundsCheck(rampLoc) && canWalk(rampLoc) && boundsCheck(rampLand) && canWalk(rampLand))
 		return true;
 
 	return false;
@@ -152,11 +151,11 @@ bool Map::rampSanityCheck(Coordinates rampLoc, Coordinates rampLand) const
 
 void Map::addRamp(Coordinates co)
 {
-	tileManager->tileAt(co).ch = 30;
-	//tileManager->tileAt(co).color = "grey";
-	tileManager->setProperty<Tile::RAMP>(co);
-	tileManager->setProperty<Tile::FLOOR>({co.x, co.y, co.z + 1});
-	//tileManager->setProperty<Tile::OBSTRUCTED>(co);
+	tileAt(co).ch = 30;
+	//tileAt(co).color = "grey";
+	setProperty<Tile::RAMP>(co);
+	setProperty<Tile::FLOOR>({co.x, co.y, co.z + 1});
+	//setProperty<Tile::OBSTRUCTED>(co);
 }
 
 // Possibly move all these loops into one or two to minimize looping??
@@ -168,8 +167,8 @@ void Map::populateGrass()
 		for (int i = 0; i < width; ++i)
 			for (int j = 0; j < height; ++j)
 			{
-				if (    tileManager->getProperty<Tile::FLOOR>({ i, j, h })
-					&& !tileManager->getProperty<Tile::OBSTRUCTED>({ i, j, h }))
+				if (    getProperty<Tile::FLOOR>({ i, j, h })
+					&& !getProperty<Tile::OBSTRUCTED>({ i, j, h }))
 				{
 					tileFactory->createGrass({ i, j, h });
 				}
@@ -187,16 +186,16 @@ void Map::populateRock()
 		for (int i = 0; i < width; ++i)
 			for (int j = 0; j < height; ++j)
 			{
-				if (tileManager->getProperty<Tile::WALL>({ i, j, h }))
+				if (getProperty<Tile::WALL>({ i, j, h }))
 				{
 					tileFactory->createRock({ i, j, h });
 				}
 			}
 
 	// Add ore veins to map
-	VeinCreator veins(width, height, depth);
-	veins.calcualteOreDepths();
-	veins.addOre(*tileManager);
+	//VeinCreator veins(width, height, depth);
+	//veins.calcualteOreDepths();
+	//veins.addOre(*tileManager);
 }
 
 void Map::addTrees(int treeDensity)
@@ -221,7 +220,7 @@ void Map::addTrees(int treeDensity)
 			co.y = rng->getInt(0, height-1);
 			co.z = rng->getInt(MIN_LVLS_OF_ROCK, depth-1);
 
-			const Tile t = tileManager->tileAt(co);
+			const Tile t = tileAt(co);
 
 			// If the space is clear/hasfloor plant a tree and obstruct the space
 			if (t.properties & Tile::FLOOR && !(t.properties & Tile::OBSTRUCTED)) // Move this to EntityFactory???
@@ -231,7 +230,7 @@ void Map::addTrees(int treeDensity)
 				trees[counter].addComponent<HealthComponent>(300, 300, 0);
 				trees[counter].activate();
 
-				tileManager->setProperty<Tile::OBSTRUCTED>(co);
+				setProperty<Tile::OBSTRUCTED>(co);
 				break;
 			}
 
@@ -250,7 +249,7 @@ void Map::placeDwarves(int number)
 		for (int i = 3; i < 80; ++i)
 			for (int j = 3; j < 80; ++j)
 			{
-				if (tileManager->canWalk({ i, j, h }))
+				if (canWalk({ i, j, h }))
 				{
 					engine.Dwarves.at(dwarfNumber).getComponent<PositionComponent>().co = { i, j, h };
 					mapRenderer->currentZLevel = h;
@@ -270,27 +269,27 @@ void Map::placeDwarves(int number)
 // Create impassable wall that provides a floor
 inline void Map::createWall(Coordinates co)
 {
-	tileManager->setProperty<Tile::OBSTRUCTED>(co);
-	tileManager->setProperty<Tile::WALL>(co);
+	setProperty<Tile::OBSTRUCTED>(co);
+	setProperty<Tile::WALL>(co);
 
 	// Add a floor property
 	// to any Tile above a wall Tile
 	if(co.z < MAX_ZLVL - 1)
-		tileManager->setProperty<Tile::FLOOR>({co.x, co.y, co.z + 1});
+		setProperty<Tile::FLOOR>({co.x, co.y, co.z + 1});
 }
 
 // Create a space that is transparant and can be walked through, does not provide floor
 inline void Map::createWalkableSpace(Coordinates co)
 {
-	tileManager->setProperty<Tile::FLOOR>(co);
-	tileManager->removeProperty<Tile::OBSTRUCTED>(co);
-	tileManager->removeProperty<Tile::WALL>(co);
+	setProperty<Tile::FLOOR>(co);
+	removeProperty<Tile::OBSTRUCTED>(co);
+	removeProperty<Tile::WALL>(co);
 }
 
 // Create a space that is transparant and is not walkable
 inline void Map::createOpenSpace(Coordinates co)
 {
-	tileManager->removeProperty<Tile::OBSTRUCTED>(co);
-	tileManager->removeProperty<Tile::WALL>(co);
-	tileManager->removeProperty<Tile::FLOOR>(co);
+	removeProperty<Tile::OBSTRUCTED>(co);
+	removeProperty<Tile::WALL>(co);
+	removeProperty<Tile::FLOOR>(co);
 }

@@ -16,6 +16,8 @@
 
 #include <libtcod.hpp>
 
+using namespace region;
+
 namespace JobsBoard
 {
 	void evaluate_mining(JobBoard & board, const Entity & e, Coordinates co, JobEvaluatorBase * jt)
@@ -108,43 +110,43 @@ void MiningAi::updateMiner(const Entity& e)
 		int currentDir = NO_DIRECTION;
 		uint8_t min_value = std::numeric_limits<uint8_t>::max();
 
-		if (miningMap[getIdx(positionAt<NORTH>(co))] < min_value && tileManager->canGo<CAN_GO_NORTH>(co)) { // Find a better system than this!! ~~ And run this system at not fullspeed, no need
+		if (miningMap[getIdx(positionAt<NORTH>(co))] < min_value && canGo<CAN_GO_NORTH>(co)) { // Find a better system than this!! ~~ And run this system at not fullspeed, no need
 			min_value = miningMap[getIdx(positionAt<NORTH>(co))];
 			currentDir = NORTH;
 		}
-		if (miningMap[getIdx(positionAt<SOUTH>(co))] < min_value && tileManager->canGo<CAN_GO_SOUTH>(co)) {
+		if (miningMap[getIdx(positionAt<SOUTH>(co))] < min_value && canGo<CAN_GO_SOUTH>(co)) {
 			min_value = miningMap[getIdx(positionAt<SOUTH>(co))];
 			currentDir = SOUTH;
 		}
-		if (miningMap[getIdx(positionAt<EAST>(co))] < min_value && tileManager->canGo<CAN_GO_EAST>(co)) {
+		if (miningMap[getIdx(positionAt<EAST>(co))] < min_value && canGo<CAN_GO_EAST>(co)) {
 			min_value = miningMap[getIdx(positionAt<EAST>(co))];
 			currentDir = EAST;
 		}
-		if (miningMap[getIdx(positionAt<WEST>(co))] < min_value && tileManager->canGo<CAN_GO_WEST>(co)) {
+		if (miningMap[getIdx(positionAt<WEST>(co))] < min_value && canGo<CAN_GO_WEST>(co)) {
 			min_value = miningMap[getIdx(positionAt<WEST>(co))];
 			currentDir = WEST;
 		}
-		if (miningMap[getIdx(positionAt<NORTH_W>(co))] < min_value && tileManager->canGo<CAN_GO_NORTH_W>(co)) {
+		if (miningMap[getIdx(positionAt<NORTH_W>(co))] < min_value && canGo<CAN_GO_NORTH_W>(co)) {
 			min_value = miningMap[getIdx(positionAt<NORTH_W>(co))];
 			currentDir = NORTH_W;
 		}
-		if (miningMap[getIdx(positionAt<NORTH_E>(co))] < min_value && tileManager->canGo<CAN_GO_NORTH_E>(co)) {
+		if (miningMap[getIdx(positionAt<NORTH_E>(co))] < min_value && canGo<CAN_GO_NORTH_E>(co)) {
 			min_value = miningMap[getIdx(positionAt<NORTH_E>(co))];
 			currentDir = NORTH_E;
 		}
-		if (miningMap[getIdx(positionAt<SOUTH_E>(co))] < min_value && tileManager->canGo<CAN_GO_SOUTH_E>(co)) {
+		if (miningMap[getIdx(positionAt<SOUTH_E>(co))] < min_value && canGo<CAN_GO_SOUTH_E>(co)) {
 			min_value = miningMap[getIdx(positionAt<SOUTH_E>(co))];
 			currentDir = SOUTH_E;
 		}
-		if (miningMap[getIdx(positionAt<SOUTH_W>(co))] < min_value && tileManager->canGo<CAN_GO_SOUTH_W>(co)) {
+		if (miningMap[getIdx(positionAt<SOUTH_W>(co))] < min_value && canGo<CAN_GO_SOUTH_W>(co)) {
 			min_value = miningMap[getIdx(positionAt<SOUTH_W>(co))];
 			currentDir = SOUTH_W;
 		}
-		if (miningMap[getIdx(positionAt<UP>(co))] < min_value && tileManager->canGo<CAN_GO_UP>(co)) {
+		if (miningMap[getIdx(positionAt<UP>(co))] < min_value && canGo<CAN_GO_UP>(co)) {
 			min_value = miningMap[getIdx(positionAt<UP>(co))];
 			currentDir = UP;
 		}
-		if (miningMap[getIdx(positionAt<DOWN>(co))] < min_value && tileManager->canGo<CAN_GO_DOWN>(co)) {
+		if (miningMap[getIdx(positionAt<DOWN>(co))] < min_value && canGo<CAN_GO_DOWN>(co)) {
 			min_value = miningMap[getIdx(positionAt<DOWN>(co))];
 			currentDir = DOWN;
 		}

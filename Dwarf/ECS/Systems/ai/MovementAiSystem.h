@@ -4,7 +4,9 @@
 #include "../../Components/MovementComponent.h"
 #include <unordered_map>
 
-class TileManager;
+#include "../../../Map/Tile.h"
+
+using namespace region;
 
 struct PathGraph
 {

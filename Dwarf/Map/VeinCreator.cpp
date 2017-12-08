@@ -5,6 +5,8 @@
 #include "Tile.h"
 #include <string>
 
+using namespace region;
+
 static const int coalType  = 136;
 static const int oreType   = 137;
 static const int smallOre  = 138;
@@ -71,7 +73,7 @@ static const int oreFrequencyPlvl[] = {10, 15, 15, 9};
 static const int orePerVein[] = { 45, 75, 75, 66 };
 
 // This needs serious work!!!
-void VeinCreator::addOre(TileManager & tileManager)
+void VeinCreator::addOre()
 {
 	for(int ore = 0; ore < numOreTypes; ++ore)
 		for (int h = 1; h < mapDepth; ++h)
@@ -89,14 +91,14 @@ void VeinCreator::addOre(TileManager & tileManager)
 				co.x = rng->getInt(0, mapWidth - 1);
 				co.y = rng->getInt(0, mapHeight - 1);
 
-				if (tileManager.getProperty<Tile::WALL>(co))
+				if (getProperty<Tile::WALL>(co))
 				{
 					for (int j = 0; j < orePerVein[ore]; ++j)
 					{
-						if (tileManager.getProperty<Tile::WALL>(co))
+						if (getProperty<Tile::WALL>(co))
 						{
-							tileManager.tileAt(co).ch = oreArray[ore].ch;
-							tileManager.tileAt(co).color = oreArray[ore].color;
+							tileAt(co).ch = oreArray[ore].ch;
+							tileAt(co).color = oreArray[ore].color;
 						}
 
 						int r = rng->getInt(0, 2);

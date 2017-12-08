@@ -1,7 +1,6 @@
 #pragma once
 
 class TCODRandom;
-class TileManager;
 
 class VeinCreator
 {
@@ -15,7 +14,7 @@ public:
 	TCODRandom * rng;
 
 	void calcualteOreDepths();
-	void addOre(TileManager & tileManager);
+	void addOre();
 
 private:
 	int mapWidth;
