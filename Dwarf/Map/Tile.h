@@ -95,6 +95,9 @@ namespace region
 		DOWN
 	};
 
+	// Create a new region, will overwrite the old region
+	void new_region(int width, int height, int depth);
+
 	// Get the index of Coordinates 
 	// Returns 0 if index isn't in the map
 	int getIdx(Coordinates co);
@@ -103,14 +106,22 @@ namespace region
 	// Returns Coordinates from a vector index
 	Coordinates idxToCo(int idx);
 
-	bool flag(Coordinates co, Flag f);
+	/* Tile Flag functions, Flags are above */
+	bool flag(const Coordinates co, Flag f);
 
-	//void setFlag();
+	void setFlag(const Coordinates co, Flag f);
 
-	//void resetFlag();
+	void resetFlag(const Coordinates co, Flag f);
 
+	// Recalcuate tile pathing when only one
+	// tile has changed, instead of calculating 
+	// entire map
+	void spot_recalc_paths(const Coordinates co);
+
+	//void tileRecalc(const Coordinates co);
+
+	// Recalculate all pathing Flags on map
 	void tileRecalcAll();
-
 
 	void makeWall(const int idx);
 
@@ -120,12 +131,9 @@ namespace region
 
 	void makeEmptySpace(const int idx);
 
-
+	// Get a fast estimate of the distance between two
+	// 3D points
 	int get_rough_distance(Coordinates loc, Coordinates dest);
-
-
-	void new_region(int width, int height, int depth);
-
 
 	// Returns a refrence to tile at coordinates
 	Tile& tileAt(Coordinates co);
@@ -183,77 +191,6 @@ namespace region
 		tileAt(co).properties &= ~P;
 	}
 
-	template<Flag D> // Wil be deleting this and replacing with flags
-	bool canGo(Coordinates co)
-	{
-		if (D == CAN_GO_NORTH)
-			return canWalk({ co.x, co.y - 1, co.z });
-		if (D == CAN_GO_SOUTH)
-			return canWalk({ co.x, co.y + 1, co.z });
-		if (D == CAN_GO_EAST)
-			return canWalk({ co.x + 1, co.y, co.z });
-		if (D == CAN_GO_WEST)
-			return canWalk({ co.x - 1, co.y, co.z });
 
-		if (D == CAN_GO_NORTH_W)
-			return  canWalk({ co.x - 1, co.y - 1, co.z });
-
-		if (D == CAN_GO_NORTH_E)
-			return  canWalk({ co.x + 1, co.y - 1, co.z });
-
-		if (D == CAN_GO_SOUTH_E)
-			return canWalk({ co.x + 1, co.y + 1, co.z });
-
-		if (D == CAN_GO_SOUTH_W)
-			return canWalk({ co.x - 1, co.y + 1, co.z });
-
-		// These will need to be changed since enventually 
-		// we don't want dwarves walking on air and dropping down 
-		if (D == CAN_GO_UP)
-			return canWalk({ co.x, co.y, co.z + 1 }) && getProperty<Tile::RAMP>(co);
-		if (D == CAN_GO_DOWN)
-			return canWalk({ co.x, co.y, co.z - 1 }) && getProperty<Tile::RAMP>({ co.x, co.y, co.z - 1 });
-
-		return false;
-	}
-
-	template<Directions D>
-	Coordinates positionAt(Coordinates co) // Should probably delete this an replace with a define?
-	{
-		if (co.z >= MAP_DEPTH || co.z < 0 || co.y >= MAP_HEIGHT || co.y < 0 || co.x >= MAP_WIDTH || co.x < 0)
-			return { 0, 0, 0 };
-
-		if (D == NORTH)
-			return { co.x, co.y - 1, co.z };
-
-		if (D == SOUTH)
-			return{ co.x, co.y + 1, co.z };
-
-		if (D == EAST)
-			return { co.x + 1, co.y, co.z };
-
-		if (D == WEST)
-			return { co.x - 1, co.y, co.z };
-
-		if (D == NORTH_W)
-			return { co.x - 1, co.y - 1, co.z };
-
-		if (D == NORTH_E)
-			return { co.x + 1, co.y - 1, co.z };
-
-		if (D == SOUTH_E)
-			return { co.x + 1, co.y + 1, co.z };
-
-		if (D == SOUTH_W)
-			return { co.x - 1, co.y + 1, co.z };
-
-		if (D == UP)
-			return { co.x, co.y, co.z + 1 };
-
-		if (D == DOWN)
-			return { co.x, co.y, co.z - 1 };
-
-		return { 0, 0, 0 };
-	}
 }
 

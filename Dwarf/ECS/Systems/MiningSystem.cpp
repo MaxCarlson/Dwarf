@@ -176,7 +176,8 @@ void MiningSystem::performMining(Entity e, const int targetIdx, const uint8_t mi
 	tileFactory->createRockFloor(idxToCo(targetIdx));
 
 
-	tileRecalcAll(); // This should be a partial recalc based on tile mined!!
+	//tileRecalcAll(); // This should be a partial recalc based on tile mined!!
+	spot_recalc_paths(idxToCo(targetIdx));
 
 	makeMiningMap();
 }

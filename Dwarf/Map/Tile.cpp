@@ -24,8 +24,10 @@ namespace region
 		std::vector<Tile> tileMap;
 		std::vector<Util::Bitset<Util::BITSET_16>> tileFlags;
 
+		//void tileRecalc(const Coordinates co);
 		void tileRecalcAll();
-		void tilePathing(Coordinates co);
+		void spot_recalc_paths(const Coordinates co);
+		void tilePathing(const Coordinates co);
 	};
 
 
@@ -67,10 +69,30 @@ namespace region
 		return { x, y, z };
 	}
 
-	bool flag(Coordinates co, Flag f)
+	bool flag(const Coordinates co, Flag f)
 	{
 		return currentRegion->tileFlags[getIdx(co)].test(f);
 	}
+
+	void setFlag(const Coordinates co, Flag f)
+	{
+		currentRegion->tileFlags[getIdx(co)].set(f);
+	}
+
+	void resetFlag(const Coordinates co, Flag f)
+	{
+		currentRegion->tileFlags[getIdx(co)].reset(f);
+	}
+
+	void spot_recalc_paths(const Coordinates co)
+	{
+		currentRegion->spot_recalc_paths(co);
+	}
+
+	//void tileRecalc(const Coordinates co)
+	//{
+	//	currentRegion->tileRecalc(co);
+	//}
 
 	void tileRecalcAll()
 	{
@@ -127,6 +149,7 @@ namespace region
 		return (x * x + y * y + z * z);
 	}
 
+	/* Get rid of these, replace completely with flags and std::vector<uint8/16_t> tileTypes */
 	Tile & tileAt(Coordinates co)
 	{
 		return currentRegion->tileMap[TILE_ARRAY_LOOKUP];
@@ -156,6 +179,11 @@ namespace region
 	{
 		return !(getProperty<Tile::FLOOR>(co) | getProperty<Tile::WALL>(co) | getProperty<Tile::OBSTRUCTED>(co));
 	}
+	/* END */
+
+	//void Region::tileRecalc(const Coordinates co)
+	//{
+	//}
 
 	void Region::tileRecalcAll()
 	{
@@ -165,7 +193,22 @@ namespace region
 					tilePathing({ x, y, z });
 	}
 
-	void Region::tilePathing(Coordinates co)
+	void Region::spot_recalc_paths(const Coordinates co)
+	{
+		tilePathing(CO_NORTH);
+		tilePathing(CO_SOUTH);
+		tilePathing(CO_WEST);
+		tilePathing(CO_EAST);
+		tilePathing(CO_NORTH_W);
+		tilePathing(CO_NORTH_E);
+		tilePathing(CO_SOUTH_W);
+		tilePathing(CO_SOUTH_E);
+		tilePathing(CO_UP);
+		tilePathing(CO_DOWN);
+		tilePathing(co);
+	}
+
+	void Region::tilePathing(const Coordinates co)
 	{
 		const auto idx = getIdx(co);
 
