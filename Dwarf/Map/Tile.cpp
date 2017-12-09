@@ -3,6 +3,9 @@
 #include <memory>
 #include <iostream>
 
+#include "../cereal/cereal.hpp"
+#include "../cereal/archives/binary.hpp"
+
 // External map info
 int MAP_WIDTH, MAP_HEIGHT, MAP_DEPTH, TOTAL_MAP_TILES;
 
@@ -21,13 +24,18 @@ namespace region
 		}
 
 		// 1D vector of Tiles indexed by 3D formula
-		std::vector<Tile> tileMap;
+		std::vector<Tile> tileMap; // Remove this and replace with sepperate vectors of properties
+
 		std::vector<Util::Bitset<Util::BITSET_16>> tileFlags;
 
 		//void tileRecalc(const Coordinates co);
 		void tileRecalcAll();
 		void spot_recalc_paths(const Coordinates co);
 		void tilePathing(const Coordinates co);
+
+		template<class Archive>
+		void serialize(Archive & archive);
+		void load();
 	};
 
 
@@ -54,6 +62,12 @@ namespace region
 		TOTAL_MAP_TILES = MAP_WIDTH * MAP_HEIGHT * MAP_DEPTH;
 
 		currentRegion = std::make_unique<Region>();
+
+		std::stringstream ss;
+		cereal::BinaryOutputArchive oarchive(ss);
+
+		currentRegion->serialize<oarchive>();
+		currentRegion->load();
 	}
 
 	Coordinates idxToCo(int idx)
@@ -243,6 +257,19 @@ namespace region
 			if (co.z < MAP_DEPTH - 1 && tileFlags[getIdx(CO_UP  )].test(CAN_STAND_HERE) && getProperty<Tile::RAMP>(co     )) tileFlags[idx].set(CAN_GO_UP);
 			if (co.z > 0             && tileFlags[getIdx(CO_DOWN)].test(CAN_STAND_HERE) && getProperty<Tile::RAMP>(CO_DOWN)) tileFlags[idx].set(CAN_GO_DOWN);		
 		}
+	}
+
+	void Region::save()
+	{
+
+	}
+	void Region::load()
+	{
+
+	}
+	template<class Archive>
+	void Region::serialize(Archive & archive)
+	{
 	}
 }
 

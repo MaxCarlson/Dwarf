@@ -10,6 +10,7 @@
 #include "../ECS\Components\HealthComponent.h"
 #include "../BearLibTerminal.h"
 
+
 using namespace region;
 
 static const int MIN_LVLS_OF_ROCK = 40;

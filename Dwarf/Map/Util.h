@@ -42,7 +42,7 @@ namespace Util
 	{
 		BITSET_8  = 0,
 		BITSET_16 = std::numeric_limits<std::uint16_t>::max(),
-		BITSET_32 = std::numeric_limits<std::uint32_t>::max(),
+		BITSET_32 = std::numeric_limits<std::uint32_t>::max(), // These are -1, why?
 		BITSET_64 = std::numeric_limits<std::uint64_t>::max()
 	};
 }
