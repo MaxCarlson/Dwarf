@@ -117,7 +117,7 @@ Coordinates DijkstraMap::findDestination(const Coordinates co)
 	std::lock_guard<std::mutex> lock(mapLock);
 
 	const int idx = getIdx(co);
-	std::map<int16_t, int> candidnates;
+	std::map<int32_t, int> candidnates;
 
 	if (flag(co, CAN_GO_NORTH))
 	{

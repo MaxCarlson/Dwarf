@@ -44,6 +44,16 @@ namespace region
 		return TILE_ARRAY_LOOKUP;
 	}
 
+	void new_region(int width, int height, int depth)
+	{
+		MAP_WIDTH = width;
+		MAP_HEIGHT = height;
+		MAP_DEPTH = depth;
+		TOTAL_MAP_TILES = MAP_WIDTH * MAP_HEIGHT * MAP_DEPTH;
+
+		currentRegion = std::make_unique<Region>();
+	}
+
 	Coordinates idxToCo(int idx)
 	{
 		int z = idx / (MAP_HEIGHT * MAP_WIDTH);
@@ -77,7 +87,7 @@ namespace region
 		// Add a floor property
 		// to any Tile above a wall Tile DELETE THIS EVENTUALLY
 		if (co.z < MAP_DEPTH - 1)
-			setProperty<Tile::FLOOR>({ co.x, co.y, co.z + 1 });
+			makeFloor(getIdx({ co.x, co.y, co.z + 1 }));
 	}
 
 	void makeRamp(const int idx)
@@ -87,7 +97,7 @@ namespace region
 
 		tileAt(co).ch = 30;
 		setProperty<Tile::RAMP>(co);
-		setProperty<Tile::FLOOR>({ co.x, co.y, co.z + 1 });
+		makeFloor(getIdx({ co.x, co.y, co.z + 1 }));
 	}
 
 	void makeFloor(const int idx)
@@ -115,16 +125,6 @@ namespace region
 		int y = dest.y - loc.y;
 		int z = dest.z - loc.z;
 		return (x * x + y * y + z * z);
-	}
-
-	void new_region(int width, int height, int depth)
-	{
-		MAP_WIDTH = width;
-		MAP_HEIGHT = height;
-		MAP_DEPTH = depth;
-		TOTAL_MAP_TILES = MAP_WIDTH * MAP_HEIGHT * MAP_DEPTH;
-
-		currentRegion = std::make_unique<Region>();
 	}
 
 	Tile & tileAt(Coordinates co)
@@ -179,16 +179,13 @@ namespace region
 		tileFlags[idx].reset(CAN_GO_SOUTH_E);
 		tileFlags[idx].reset(CAN_GO_DOWN);
 		tileFlags[idx].reset(CAN_GO_UP);
-
-		if (getProperty<Tile::WALL>(co))
+		
+		if (!tileFlags[getIdx(co)].test(CAN_STAND_HERE) || getProperty<Tile::WALL>(co))
 		{
 		}
 		else
 		{
-			if (co.y > 0 && tileFlags[getIdx(CO_NORTH)].test(CAN_STAND_HERE)) { 
-				tileFlags[idx].set(CAN_GO_NORTH);
-			}
-
+			if (co.y > 0              && tileFlags[getIdx(CO_NORTH)].test(CAN_STAND_HERE)) tileFlags[idx].set(CAN_GO_NORTH);
 			if (co.y < MAP_HEIGHT - 1 && tileFlags[getIdx(CO_SOUTH)].test(CAN_STAND_HERE)) tileFlags[idx].set(CAN_GO_SOUTH);
 
 			if (co.x > 0             && tileFlags[getIdx(CO_WEST)].test(CAN_STAND_HERE)) tileFlags[idx].set(CAN_GO_WEST);
@@ -200,7 +197,7 @@ namespace region
 			if (co.y < MAP_HEIGHT - 1 && co.x > 0             && tileFlags[getIdx(CO_SOUTH_W)].test(CAN_STAND_HERE)) tileFlags[idx].set(CAN_GO_SOUTH_W);
 			if (co.y < MAP_HEIGHT - 1 && co.x < MAP_WIDTH - 1 && tileFlags[getIdx(CO_SOUTH_E)].test(CAN_STAND_HERE)) tileFlags[idx].set(CAN_GO_SOUTH_E);
 
-			if (co.z < MAP_DEPTH - 1 && tileFlags[getIdx(CO_UP)].test(CAN_STAND_HERE)   && getProperty<Tile::RAMP>(co     )) tileFlags[idx].set(CAN_GO_UP);
+			if (co.z < MAP_DEPTH - 1 && tileFlags[getIdx(CO_UP  )].test(CAN_STAND_HERE) && getProperty<Tile::RAMP>(co     )) tileFlags[idx].set(CAN_GO_UP);
 			if (co.z > 0             && tileFlags[getIdx(CO_DOWN)].test(CAN_STAND_HERE) && getProperty<Tile::RAMP>(CO_DOWN)) tileFlags[idx].set(CAN_GO_DOWN);		
 		}
 	}

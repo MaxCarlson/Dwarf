@@ -21,7 +21,7 @@ namespace Util
 			std::uint16_t,
 			typename std::conditional < K <= UINT32_MAX,
 			std::uint32_t,
-			std::uint64_t>::type>::type>::type bits;
+			std::uint64_t>::type>::type>::type bits = 0;
 
 		void set(const uint16_t flag)
 		{
@@ -38,11 +38,11 @@ namespace Util
 			return bits & flag;
 		}
 	};
-	enum
+	enum 
 	{
-		BITSET_8 = 0,
-		BITSET_16 = std::numeric_limits<std::int16_t>::max(),
-		BITSET_32 = std::numeric_limits<std::int32_t>::max(),
-		BITSET_64 = std::numeric_limits<std::int64_t>::max()
+		BITSET_8  = 0,
+		BITSET_16 = std::numeric_limits<std::uint16_t>::max(),
+		BITSET_32 = std::numeric_limits<std::uint32_t>::max(),
+		BITSET_64 = std::numeric_limits<std::uint64_t>::max()
 	};
 }

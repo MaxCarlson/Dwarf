@@ -55,6 +55,8 @@ void Gui::drawGui()
 	}
 	
 	drawButtons();
+
+	printDebugTileProps();
 }
 
 void Gui::drawButtons()
@@ -91,10 +93,6 @@ void Gui::drawButtons()
 
 		xButtonOffset += buttonSize;
 	}
-
-	int mouseX = terminal_state(TK_MOUSE_X);
-	int mouseY = terminal_state(TK_MOUSE_Y);
-
 }
 
 bool Gui::isMouseOverButton(Coordinates co)
@@ -137,3 +135,54 @@ void Gui::highlightButton(Coordinates co)
 		}
 }
 
+#include "Map\Tile.h"
+using namespace region;
+
+void Gui::printDebugTileProps()
+{
+	terminal_color("red");
+
+	int xx = terminal_state(TK_MOUSE_X);
+	int yy = terminal_state(TK_MOUSE_Y);
+
+	// debug print info on tile
+	const int z = engine.map->mapRenderer->currentZLevel;
+
+	std::string tInfo = "DEFAULT \n";
+	bool csth = flag({ xx, yy, z }, CAN_STAND_HERE);
+
+	if (csth)
+		tInfo += "CAN_STAND_HERE \n";
+
+	csth = flag({ xx, yy, z }, CAN_GO_NORTH);
+
+	if (csth)
+		tInfo += "CAN_GO_NORTH \n";
+
+	csth = flag({ xx, yy, z }, CAN_GO_SOUTH);
+
+	if (csth)
+		tInfo += "CAN_GO_SOUTH \n";
+
+	csth = flag({ xx, yy, z }, CAN_GO_EAST);
+
+	if (csth)
+		tInfo += "CAN_GO_EAST \n";
+
+	csth = flag({ xx, yy, z }, CAN_GO_WEST);
+
+	if (csth)
+		tInfo += "CAN_GO_WEST \n";
+
+	csth = flag({ xx, yy, z }, CAN_GO_UP);
+
+	if (csth)
+		tInfo += "CAN_GO_UP \n";
+
+	csth = flag({ xx, yy, z }, CAN_GO_DOWN);
+
+	if (csth)
+		tInfo += "CAN_GO_DOWN \n";
+
+	terminal_printf(xx, yy, tInfo.c_str());
+}

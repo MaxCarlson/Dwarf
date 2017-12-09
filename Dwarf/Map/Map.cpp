@@ -22,7 +22,7 @@ Map::Map(int width, int height, int depth) : width(width), height(height), depth
 	tileFactory = new TileFactory();
 	mapRenderer = new MapRender(*this);
 
-	createHeightMap(3, 0.3f);
+	createHeightMap(7, 0.3f);
 	
 	populateRock();
 	addTrees(10);
@@ -51,7 +51,7 @@ void Map::createHeightMap(int howMountainous, float rainAmount)
 
 	// Add in howMountainous here so we can increase or decrease howMountainous
 	double mountinStep = double(depth - MIN_LVLS_OF_ROCK);
-	double heightThreshold = 100;
+	double heightThreshold = 90;
 
 
 	// If height is below a threshold, mark that area walkable/visible. else not. 
@@ -63,11 +63,14 @@ void Map::createHeightMap(int howMountainous, float rainAmount)
 			for (int j = 0; j < height; ++j)
 			{
 				// Values between -100 and 100
-				//int heightMapPoint = int(heightMap->getValue(i, j) * 100);
 				double heightMapPoint = heightMap->getValue(i, j) * 100;
 
 				if (h <= MIN_LVLS_OF_ROCK) {															      
 					makeWall(getIdx({ i, j, h })); 
+				}
+				else if (h >= depth - 2 && getProperty<Tile::WALL>({ i, j, h - 1}))
+				{
+					makeFloor(getIdx({ i, j, h }));
 				}
 				// If there's a floor but height ratio is too low, create walkable space
 				else  if (heightThreshold < heightMapPoint && getProperty<Tile::FLOOR>({ i, j, h }))

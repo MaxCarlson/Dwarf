@@ -33,11 +33,12 @@ private:
 	void drawGui();
 	void drawButtons();
 
-	
-
 	// Finds which button mouse is over
 	// must call isMouseOverButton first to get
 	// accurate result
 	int whichButton(Coordinates co);
+
+
+	void printDebugTileProps();
 };
 
