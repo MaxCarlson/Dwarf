@@ -142,7 +142,7 @@ void MiningAi::updateMiner(const Entity& e)
 			min_value = miningMap[getIdx(CO_SOUTH_W)];
 			currentDir = SOUTH_W;
 		}
-		if (co.z < MAP_DEPTH - 1 && miningMap[getIdx(CO_UP)] < min_value && flag(co, CAN_GO_UP)) {
+		if (miningMap[getIdx(CO_UP)] < min_value && flag(co, CAN_GO_UP)) { // co.z < MAP_DEPTH - 1 ?
 			min_value = miningMap[getIdx(CO_UP)];
 			currentDir = UP;
 		}

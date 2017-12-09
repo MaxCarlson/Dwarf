@@ -185,23 +185,23 @@ namespace region
 		}
 		else
 		{
-			if (co.y > 0 && tileFlags[getIdx({ co.x, co.y - 1, co.z })].test(CAN_STAND_HERE)) { 
+			if (co.y > 0 && tileFlags[getIdx(CO_NORTH)].test(CAN_STAND_HERE)) { 
 				tileFlags[idx].set(CAN_GO_NORTH);
 			}
 
-			if (co.y < MAP_HEIGHT - 1 && tileFlags[getIdx({ co.x, co.y + 1, co.z })].test(CAN_STAND_HERE)) tileFlags[idx].set(CAN_GO_SOUTH);
+			if (co.y < MAP_HEIGHT - 1 && tileFlags[getIdx(CO_SOUTH)].test(CAN_STAND_HERE)) tileFlags[idx].set(CAN_GO_SOUTH);
 
-			if (co.x > 0             && tileFlags[getIdx({ co.x - 1, co.y, co.z })].test(CAN_STAND_HERE)) tileFlags[idx].set(CAN_GO_WEST);
-			if (co.x < MAP_WIDTH - 1 && tileFlags[getIdx({ co.x + 1, co.y, co.z })].test(CAN_STAND_HERE)) tileFlags[idx].set(CAN_GO_EAST);
+			if (co.x > 0             && tileFlags[getIdx(CO_WEST)].test(CAN_STAND_HERE)) tileFlags[idx].set(CAN_GO_WEST);
+			if (co.x < MAP_WIDTH - 1 && tileFlags[getIdx(CO_EAST)].test(CAN_STAND_HERE)) tileFlags[idx].set(CAN_GO_EAST);
 
-			if (co.y > 0 && co.x > 0             && tileFlags[getIdx({ co.x - 1, co.y - 1, co.z })].test(CAN_STAND_HERE)) tileFlags[idx].set(CAN_GO_NORTH_W);
-			if (co.y > 0 && co.x < MAP_WIDTH - 1 && tileFlags[getIdx({ co.x + 1, co.y - 1, co.z })].test(CAN_STAND_HERE)) tileFlags[idx].set(CAN_GO_NORTH_E);
+			if (co.y > 0 && co.x > 0             && tileFlags[getIdx(CO_NORTH_W)].test(CAN_STAND_HERE)) tileFlags[idx].set(CAN_GO_NORTH_W);
+			if (co.y > 0 && co.x < MAP_WIDTH - 1 && tileFlags[getIdx(CO_NORTH_E)].test(CAN_STAND_HERE)) tileFlags[idx].set(CAN_GO_NORTH_E);
 
-			if (co.y < MAP_HEIGHT - 1 && co.x > 0             && tileFlags[getIdx({ co.x - 1, co.y + 1, co.z })].test(CAN_STAND_HERE)) tileFlags[idx].set(CAN_GO_SOUTH_W);
-			if (co.y < MAP_HEIGHT - 1 && co.x < MAP_WIDTH - 1 && tileFlags[getIdx({ co.x + 1, co.y + 1, co.z })].test(CAN_STAND_HERE)) tileFlags[idx].set(CAN_GO_SOUTH_E);
+			if (co.y < MAP_HEIGHT - 1 && co.x > 0             && tileFlags[getIdx(CO_SOUTH_W)].test(CAN_STAND_HERE)) tileFlags[idx].set(CAN_GO_SOUTH_W);
+			if (co.y < MAP_HEIGHT - 1 && co.x < MAP_WIDTH - 1 && tileFlags[getIdx(CO_SOUTH_E)].test(CAN_STAND_HERE)) tileFlags[idx].set(CAN_GO_SOUTH_E);
 
-			if (co.z < MAP_DEPTH - 1 && tileFlags[getIdx({ co.x, co.y, co.z + 1 })].test(CAN_STAND_HERE) && getProperty<Tile::RAMP>(  co                    )) tileFlags[idx].set(CAN_GO_UP);
-			if (co.z > 0             && tileFlags[getIdx({ co.x, co.y, co.z - 1 })].test(CAN_STAND_HERE) && getProperty<Tile::RAMP>({ co.x, co.y, co.z - 1 })) tileFlags[idx].set(CAN_GO_DOWN);		
+			if (co.z < MAP_DEPTH - 1 && tileFlags[getIdx(CO_UP)].test(CAN_STAND_HERE)   && getProperty<Tile::RAMP>(co     )) tileFlags[idx].set(CAN_GO_UP);
+			if (co.z > 0             && tileFlags[getIdx(CO_DOWN)].test(CAN_STAND_HERE) && getProperty<Tile::RAMP>(CO_DOWN)) tileFlags[idx].set(CAN_GO_DOWN);		
 		}
 	}
 }

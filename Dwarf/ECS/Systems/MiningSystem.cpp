@@ -175,5 +175,8 @@ void MiningSystem::performMining(Entity e, const int targetIdx, const uint8_t mi
 	// a tile material as a param and produces a floor of that material
 	tileFactory->createRockFloor(idxToCo(targetIdx));
 
+
+	tileRecalcAll(); // This should be a partial recalc based on tile mined!!
+
 	makeMiningMap();
 }

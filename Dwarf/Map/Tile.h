@@ -45,10 +45,10 @@ public:
 // Formula for tile indexing with coordinates
 #define TILE_ARRAY_LOOKUP (co.z * MAP_WIDTH * MAP_HEIGHT) + (co.y * MAP_WIDTH) + co.x
 
-#define CO_NORTH   {co.x, co.y, co.z + 1}
-#define CO_SOUTH   {co.x, co.y, co.z - 1}
+#define CO_NORTH   {co.x, co.y - 1, co.z}
+#define CO_SOUTH   {co.x, co.y + 1, co.z}
 #define CO_EAST    {co.x + 1, co.y, co.z }
-#define CO_WEST    {co.y - 1, co.y, co.z }
+#define CO_WEST    {co.x - 1, co.y, co.z }
 #define CO_NORTH_W {co.x - 1, co.y - 1, co.z }
 #define CO_NORTH_E {co.x + 1, co.y - 1, co.z }
 #define CO_SOUTH_W {co.x - 1, co.y + 1, co.z }

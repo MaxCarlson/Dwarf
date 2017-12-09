@@ -1,9 +1,7 @@
 #include "EntityPositionCache.h"
 #include "../Messages/entity_moved_message.h"
-#include "../Map/Tile.h"
 #include "../World.h"
 
-#include <iostream>
 
 using namespace region;
 
@@ -37,38 +35,6 @@ std::vector<Entity> EntityPositionCache::findEntities(Coordinates co)
 	}
 
 	return entities;
-}
-
-template<bool remove>
-void EntityPositionCache::updateEntity(const Entity e, const Coordinates & newCo, const Coordinates & oldCo)
-{
-	// Delete old position for cache if it exists
-	auto oldIdx = getIdx(oldCo);
-
-	auto range = positionCache.equal_range(oldIdx);
-
-	for (auto& it = range.first; it != range.second; ++it)
-	{
-		// If the Entities match by eid.index 
-		// ( doesn't check counter, maybe it should? )
-		if (it->second.getId().index == e.getId().index)
-		{
-			// Erase old position entry
-			// Possibly this should be a move operation
-			// for non deleting ops? or maybe just emplace_hint?
-			positionCache.erase(it);
-
-			// If we're updating the entity
-			// move Entity to new position in cache
-			if(!remove)
-				positionCache.emplace(getIdx(newCo), e);
-
-			return;
-		}
-			
-	}
-
-	std::cout << "Entity Position Cache Issue!!" << std::endl;
 }
 
 void EntityPositionCache::onEntityAdd(Entity & entity)

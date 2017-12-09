@@ -32,9 +32,11 @@ void TileFactory::createRockFloor(Coordinates co)
 	tileAt(co).ch = 44;
 	tileAt(co).color = 0xAAAFAFAF;
 
-	removeProperty<Tile::MINEABLE>(co);
-	removeProperty<Tile::WALL>(co);
-	removeProperty<Tile::OBSTRUCTED>(co);
-	removeProperty<Tile::RAMP>(co);
-	setProperty<Tile::FLOOR>(co);
+	//removeProperty<Tile::MINEABLE>(co);
+	//removeProperty<Tile::WALL>(co);
+	//removeProperty<Tile::OBSTRUCTED>(co);
+	//removeProperty<Tile::RAMP>(co);
+	//setProperty<Tile::FLOOR>(co);
+
+	makeFloor(getIdx(co));
 }
