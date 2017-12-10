@@ -4,6 +4,11 @@
 #include "EntityFactory.h"
 #include "ECS\Components\JobComponent.h"
 
+#include <string>
+#include <iostream>
+#include <filesystem>
+namespace fs = std::experimental::filesystem;
+
 
 static const int NUM_MAIN_MEN_OPTIONS = 4;
 
@@ -34,9 +39,13 @@ enum InputCode
 	IN_EXIT
 };
 
-int handleInput(int& selected, const int limit)
+int handleInput(bool hangInput, int& selected, const int limit)
 {
-	int input = terminal_read();
+	int input = 0;
+	if (!hangInput && terminal_peek())
+		input = terminal_read();
+	else
+		input = terminal_read();
 
 	if (input == TK_ENTER)
 		return IN_ENTER;
@@ -59,43 +68,45 @@ int handleInput(int& selected, const int limit)
 	return IN_NOTHING;
 }
 
-template<typename T>
-int listHandler(const std::vector<T>& vec, int &selected, int alignment, int initX, int initY, int spacing, std::string highlightC = "#d1ce38", std::string color = "default")
+template<typename T, bool hangInput>
+int listHandler(const std::vector<T>& vec, int &selected, int alignment, int initX, int initY, int spacing, bool clear, bool print = true, bool skipIn = false, std::string highlightC = "#d1ce38", std::string color = "default")
 {
 	int panelWidth  = terminal_state( TK_WIDTH);
 	int panelHeight = terminal_state(TK_HEIGHT);
 	const int size = vec.size();
 
 
-	while (true)
-	{
+	if(clear)
 		terminal_clear();
 
-		int spc = initY;
-		int counter = 0;
-		for (auto i : vec)
-		{
-			std::string pr = i;
+	int spc = initY;
+	int counter = 0;
+	for (auto i : vec)
+	{
+		std::string pr = i;
 		
-			if (counter == selected)
-				setColor(highlightC);
-			else
-				resetColor();
+		if (counter == selected)
+			setColor(highlightC);
+		else
+			resetColor();
 
-			terminal_print_ext(initX, spc, panelWidth, panelHeight, alignment, pr.c_str());
+		terminal_print_ext(initX, spc, panelWidth, panelHeight, alignment, pr.c_str());
 
-			++counter;
-			spc += spacing;
-		}
+		++counter;
+		spc += spacing;
+	}
 
+	if (print)
+	{
 		terminal_refresh();
 		resetColor();
-
-		int code = handleInput(selected, size);
-
-		if (code != IN_NOTHING)
-			return code;
 	}
+
+	int code = IN_NOTHING;
+	if(!skipIn)
+		code = handleInput(hangInput, selected, size);
+
+	return code;
 }
 
 int MainMenu::render()
@@ -103,76 +114,52 @@ int MainMenu::render()
 	panelWidth = terminal_state(TK_WIDTH);
 	panelHeight = terminal_state(TK_HEIGHT);
 
+	// Resize each dwarves stat vector
+	// THIS SHOULD BE MOVED ELSEWHERE!!
+	dwarfStats.resize(NumberOfDwaves);
+	static const int totalStatNumber = listOfAllJobsByIndex.size(); // + listOfAllCombatStats.Size()
+	{
+		int statCounterDwarf = 0;
+		for (auto& dwarVec : dwarfStats)
+			dwarfStats[statCounterDwarf++].resize(totalStatNumber);
+	}
+
 	int selected = 0;
 
 	while (true)
 	{
-		terminal_clear();
+		std::vector<std::string> menuOptions = { "Start Game" , "Create World", "Settings", "Quit" };
 
-		determineHighlight(selected, START_GAME_M);
-		terminal_print_ext(0, panelHeight / 2 - 15, panelWidth, panelHeight, TK_ALIGN_CENTER, "Start Game");
+		int code = listHandler<std::string, false>(menuOptions, selected, TK_ALIGN_CENTER, 0, panelHeight / 2 - 15, 5, true);	
 
-		determineHighlight(selected, CREATE_WORLD_M);
-		terminal_print_ext(0, panelHeight / 2 - 10, panelWidth, panelHeight, TK_ALIGN_CENTER, "Create World");
-
-		determineHighlight(selected, SETTINGS_M);
-		terminal_print_ext(0, panelHeight / 2 - 5, panelWidth, panelHeight, TK_ALIGN_CENTER, "Settings");
-
-		determineHighlight(selected, QUIT_M);
-		terminal_print_ext(0, panelHeight / 2, panelWidth, panelHeight, TK_ALIGN_CENTER, "Quit");
-		
-		terminal_refresh();
-		resetColor();
-
-		selected = mainMenuInput(selected);
-
-		if (selected == EXIT_CODE)
-			return EXIT_CODE;
-
-		else if (selected == START_CODE)
-			return START_CODE;
-	}
-}
-
-// Make all these input functions into one big template?
-int MainMenu::mainMenuInput(int selected)
-{
-	const int key = terminal_read();
-
-	upOrDownInput(key, selected);
-	
-	switch (key)
-	{
-	case TK_ENTER:
-		switch (selected)
+		if (code == IN_ENTER)
 		{
-		case START_GAME_M:
-			return loadWorld();
-			break;
+			switch (selected)
+			{
+			case 0:
+				code = loadWorld();
+				break;
 
-		case CREATE_WORLD_M:
-			return createWorld();
-			break;
+			case 1:
+				code = pickDwarves();
+				break;
 
-		case SETTINGS_M:
-			//settings();
-			break;
+			case 2:
+				//settings();
+				break;
 
-		case QUIT_M:
-			return EXIT_CODE;
+			case 3:
+				return EXIT_CODE;
+			}
 		}
 
-		break;
+		else if (code == IN_EXIT)
+		{
+			return EXIT_CODE;
+		}
+		else if (code == START_CODE)
+			return START_CODE;
 	}
-
-	// Wrap scrolling highlighting
-	if (selected < 0)
-		selected = NUM_MAIN_MEN_OPTIONS - 1;
-
-	else if (selected >= NUM_MAIN_MEN_OPTIONS)
-		selected = 0;
-
-	return selected;
 }
 
 void MainMenu::upOrDownInput(int key, int & selected)
@@ -208,16 +195,6 @@ bool MainMenu::pickDwarves()
 {
 	int selected = 0;
 
-	// Resize each dwarves stat vector
-	// THIS SHOULD BE MOVED ELSEWHERE!!
-	dwarfStats.resize(NumberOfDwaves);
-	static const int totalStatNumber = listOfAllJobsByIndex.size(); // + listOfAllCombatStats.Size()
-	{
-		int statCounterDwarf = 0;
-		for (auto& dwarVec : dwarfStats)
-			dwarfStats[statCounterDwarf++].resize(totalStatNumber);
-	}
-
 	// Do we want to be scrolling through
 	// stats or dwaves?
 	bool statsSelected = false;
@@ -228,74 +205,34 @@ bool MainMenu::pickDwarves()
 
 		terminal_print_ext(0, 0, panelWidth, panelHeight, TK_ALIGN_LEFT, "Dwaves");
 
-		// Print out dwarfs to select from
-		// Generate names/allow name picking eventually
-		int tileIndent = 2;
-		for (int d = 0; d < NumberOfDwaves + 1; ++d)
+		std::vector<std::string> dwarfNames;
+		for (int d = 0; d < NumberOfDwaves; ++d)
 		{
-			determineHighlight(selected, d);
-
 			// Rudimentry naming
 			std::string ds = "Dwarf ";
 			ds += d + 1 + '0';
-
-			if(d < NumberOfDwaves)
-				terminal_print_ext(0, tileIndent, panelWidth, panelHeight, TK_ALIGN_LEFT, ds.c_str());
-
-			else
-				terminal_print_ext(0, tileIndent + 1, panelWidth, panelHeight, TK_ALIGN_LEFT, "Start Now!");
-			
-			tileIndent += 1;
+			dwarfNames.push_back(ds);
 		}
+		dwarfNames.push_back("Start Now!");
+
+		int code = listHandler<std::string, false>(dwarfNames, selected, TK_ALIGN_LEFT, 0, 2, 1, false, true);
 
 		if(selected < NumberOfDwaves)
 			printDwafStatOptions(selected, statsSelected);
 
-		terminal_refresh();
-		resetColor();
-
-		selected = pickDwarvesInput(selected, statsSelected, NumberOfDwaves + 1);
 
 		// Local exit of this menu to main menu
-		if (selected == EXIT_CODE)
-			return false;
-		else if (selected == START_CODE)
-			return true;
-	}
-}
+		if (code == IN_EXIT)
+			return IN_NOTHING;
 
-int MainMenu::pickDwarvesInput(int dwarfSelected, bool &statsSelected, int maxNumber)
-{
-	const int key = terminal_read();
-
-	upOrDownInput(key, dwarfSelected);
-
-	switch (key)
-	{
-	case TK_ESCAPE:
-		return EXIT_CODE;
-
-	case TK_ENTER: 
-		if (dwarfSelected == maxNumber - 1) 
+		else if (code == IN_ENTER && selected == NumberOfDwaves)
 		{
 			finalizeDwarfPicks();
 			return START_CODE;
 		}
-		break;
-
-
-	case TK_RIGHT:
-		statsSelected = true;
-		break;
+		else if (code == IN_ENTER)
+			statsSelected = true;
 	}
-
-	// Wrap scrolling highlighting
-	if (dwarfSelected >= maxNumber)
-		dwarfSelected = 0;
-	else if (dwarfSelected < 0)
-		dwarfSelected = maxNumber - 1;
-
-	return dwarfSelected;
 }
 
 void MainMenu::printDwafStatOptions(int dwarfSelected, bool &statsSelected)
@@ -316,6 +253,25 @@ void MainMenu::printDwafStatOptions(int dwarfSelected, bool &statsSelected)
 		points += std::to_string(availablePoints);
 		terminal_print_ext(15, 0, panelWidth, panelHeight, TK_ALIGN_LEFT, points.c_str());
 
+		/*
+		std::vector<std::string> jobsVec;
+		for (int stat : listOfAllJobsByIndex)
+		{
+			if (stat == 0) continue;
+			jobsVec.push_back(listOfAllJobsByString[stat]);
+		}
+		int statCounter = jobsVec.size() - 1;
+
+		int code = listHandler<std::string, true>(jobsVec, statSelected, TK_ALIGN_LEFT, statIndent, 2, 1, false, true, true);
+
+		if (code == IN_EXIT)
+		{
+			statsSelected = false;
+		}
+		else if (code == IN_ENTER)
+			statsSelected = true;
+		*/
+		///*
 		// Labor Stats
 		int tileIndent = 2;
 		int statCounter = -1; // -1 due to first job being Job::NONE
@@ -343,7 +299,7 @@ void MainMenu::printDwafStatOptions(int dwarfSelected, bool &statsSelected)
 			tileIndent += 1;
 			++statCounter;
 		}
-
+		//*/
 		// Need for loop printing Combat
 		// stats after labor stats here!
 
@@ -441,36 +397,34 @@ void MainMenu::finalizeDwarfPicks()
 
 // Loading already created world
 
-#include <string>
-#include <iostream>
-#include <filesystem>
-namespace fs = std::experimental::filesystem;
-
 int MainMenu::loadWorld()
 {
 	int selected = 0;
-	while (true)
+
+	std::string dirpath = "Saves";
+	std::vector<std::string> paths;
+	for (auto & p : fs::directory_iterator(dirpath))
 	{
-		std::string dirpath = "Saves";
-		std::vector<std::string> paths;
-		for (auto & p : fs::directory_iterator(dirpath))
-		{
-			paths.push_back(p.path().string());
-			//terminal_print_ext(10, 10, panelWidth, panelHeight, TK_ALIGN_LEFT, p.path().c_str());
-		}
-
-		int code = listHandler<std::string>(paths, selected, TK_ALIGN_LEFT, 7, 7, 2);
-			
-		if (code == IN_EXIT)
-			return;
-
-		else if (code == IN_ENTER)
-		{
-
-		}
+		paths.push_back(p.path().string());
+		//terminal_print_ext(10, 10, panelWidth, panelHeight, TK_ALIGN_LEFT, p.path().c_str());
 	}
 
-	return 0; 
+	if (!paths.size())
+		paths.push_back("No save games on File! Press Esc");
+
+	int code = listHandler<std::string, true>(paths, selected, TK_ALIGN_LEFT, 7, 7, 2, true);
+
+	if (code == IN_EXIT)
+		return IN_NOTHING;
+
+	else if (code == IN_ENTER)
+	{
+		mapPath = paths[selected];
+		finalizeDwarfPicks(); // Delete this once ECS is Serialized
+		return Load_World;
+	}
+	
+	return IN_NOTHING; 
 }
 
 

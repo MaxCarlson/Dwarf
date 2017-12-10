@@ -24,6 +24,8 @@ public:
 		SETTINGS_M,
 		QUIT_M,
 
+		Load_World,
+
 		// Codes for different 
 		// actions on MainMenu::render() return
 		EXIT_CODE = 10001,
@@ -34,13 +36,14 @@ public:
 	int mapWidth = 80;
 	int mapHeight = 80;
 
+	std::string mapPath;
+
 private:
 
 	int panelWidth;
 	int panelHeight;
 
 	// Main Menu functions
-	int mainMenuInput(int selected);
 	void upOrDownInput(int key, int & selected);
 
 	int createWorld();
@@ -54,7 +57,7 @@ private:
 	std::vector<std::vector<int>> dwarfStats;
 
 	bool pickDwarves();
-	int pickDwarvesInput(int selected, bool &statsSelected, int maxNumber);
+
 	int availablePoints = 30;
 	void printDwafStatOptions(int dwarfSelected, bool &statsSelected);
 	int dwarfStatOptionsInput(int dwarfSelected, bool &statsSelected, int selected, int maxStats);

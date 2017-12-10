@@ -63,7 +63,8 @@ public:
 	int screenWidth;
 	int screenHeight;
 
-	void init(int screenWidth, int screenHeight);
+	void init(std::string mapPath, int screenWidth, int screenHeight);
+	void loadMap(std::string filePath);
 
 	// Game loop
 	void run();

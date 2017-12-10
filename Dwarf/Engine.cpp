@@ -44,10 +44,13 @@ Engine::~Engine()
 	delete designations;
 }
 
-void Engine::init(int screenWidth, int screenHeight)
+void Engine::init(std::string mapPath, int screenWidth, int screenHeight)
 {
 	// Create local map
-	map = new Map(screenWidth, screenHeight, MAX_ZLVL);
+	if (!mapPath.size())
+		map = new Map(screenWidth, screenHeight, MAX_ZLVL);
+	else
+		loadMap(mapPath);
 
 	// Init misc maps and designations
 	designations = new Designations;
@@ -90,6 +93,11 @@ void Engine::init(int screenWidth, int screenHeight)
 	//movementAiSystem->floodFillMap();
 	
 	world.refresh();
+}
+
+void Engine::loadMap(std::string filePath)
+{
+
 }
 
 // Game loop
