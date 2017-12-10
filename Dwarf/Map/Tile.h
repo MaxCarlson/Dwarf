@@ -6,6 +6,7 @@
 class Tile {
 
 public:
+	Tile() = default;
 	// These properties are set by set bit's in Tile's properties unsigned int
 	// And accessed through the tile manager getProperty, setProperty, reverseProperty
 	// bool Explored;		 
@@ -97,6 +98,10 @@ namespace region
 
 	// Create a new region, will overwrite the old region
 	void new_region(int width, int height, int depth);
+
+	void save_region();
+
+	void load_region();
 
 	// Get the index of Coordinates 
 	// Returns 0 if index isn't in the map

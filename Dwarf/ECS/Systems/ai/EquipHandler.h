@@ -1,7 +1,7 @@
 #pragma once
 #include "../../Systems.h"
 
-class Coordinates;
+struct Coordinates;
 class Inventory;
 
 // Handles the picking up and equipping of 

@@ -3,8 +3,11 @@
 #include <memory>
 #include <iostream>
 
-#include "../cereal/cereal.hpp"
+#include <cereal.hpp>
 #include "../cereal/archives/binary.hpp"
+#include "../cereal/types/memory.hpp"
+#include "../cereal/types/vector.hpp"
+#include <fstream>
 
 // External map info
 int MAP_WIDTH, MAP_HEIGHT, MAP_DEPTH, TOTAL_MAP_TILES;
@@ -34,7 +37,12 @@ namespace region
 		void tilePathing(const Coordinates co);
 
 		template<class Archive>
-		void serialize(Archive & archive);
+		void serialize(Archive & archive)
+		{
+			archive(tileMap);
+			//archive(tileFlags);
+			archive(MAP_WIDTH, MAP_HEIGHT, MAP_DEPTH);
+		}
 		void load();
 	};
 
@@ -62,12 +70,19 @@ namespace region
 		TOTAL_MAP_TILES = MAP_WIDTH * MAP_HEIGHT * MAP_DEPTH;
 
 		currentRegion = std::make_unique<Region>();
+	}
 
-		std::stringstream ss;
-		cereal::BinaryOutputArchive oarchive(ss);
+	void save_region()
+	{
+		std::ofstream os("out.cereal", std::ios::binary);
+		cereal::BinaryOutputArchive oarchive(os);
 
-		currentRegion->serialize<oarchive>();
-		currentRegion->load();
+		currentRegion->serialize(oarchive);
+	}
+
+	void load_region()
+	{
+
 	}
 
 	Coordinates idxToCo(int idx)
@@ -259,17 +274,9 @@ namespace region
 		}
 	}
 
-	void Region::save()
-	{
-
-	}
 	void Region::load()
 	{
 
-	}
-	template<class Archive>
-	void Region::serialize(Archive & archive)
-	{
 	}
 }
 
