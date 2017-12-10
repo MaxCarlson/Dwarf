@@ -30,10 +30,6 @@ public:
 	// Will probably use this for matching if tile is mined etc
 	int ch;
 
-	// Type of material the Tile
-	// is made from
-	int mat;
-
 	// Use int hex values for colors!!!!
 	int color;
 
@@ -41,6 +37,12 @@ public:
 
 	// Add a property here denoting if tile is ore/gem vein for quick lookup!!
 	std::uint16_t properties = 0x1; // Change to 0U for unexplored
+
+	template<class Archive>
+	void serialize(Archive & archive)
+	{
+		archive(ch, color, health, properties);
+	}
 };
 
 // Formula for tile indexing with coordinates

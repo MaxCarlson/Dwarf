@@ -37,6 +37,13 @@ namespace Util
 		{
 			return bits & flag;
 		}
+
+		template<class Archive>
+		void serialize(Archive & archive)
+		{
+			archive(k_);
+			archive(bits);
+		}
 	};
 	enum 
 	{

@@ -40,10 +40,9 @@ namespace region
 		void serialize(Archive & archive)
 		{
 			archive(tileMap);
-			//archive(tileFlags);
+			archive(tileFlags);
 			archive(MAP_WIDTH, MAP_HEIGHT, MAP_DEPTH);
 		}
-		void load();
 	};
 
 
@@ -74,7 +73,7 @@ namespace region
 
 	void save_region()
 	{
-		std::ofstream os("out.cereal", std::ios::binary);
+		std::ofstream os("Region_test_save.sv", std::ios::binary);
 		cereal::BinaryOutputArchive oarchive(os);
 
 		currentRegion->serialize(oarchive);
@@ -82,7 +81,14 @@ namespace region
 
 	void load_region()
 	{
+		currentRegion = std::make_unique<Region>();
 
+		std::ifstream os("Region_test_save.sv", std::ios::binary);
+		cereal::BinaryInputArchive iarchive(os);
+
+		iarchive(currentRegion->tileMap);
+		iarchive(currentRegion->tileFlags);
+		iarchive(MAP_WIDTH, MAP_HEIGHT, MAP_DEPTH);
 	}
 
 	Coordinates idxToCo(int idx)
@@ -272,11 +278,6 @@ namespace region
 			if (co.z < MAP_DEPTH - 1 && tileFlags[getIdx(CO_UP  )].test(CAN_STAND_HERE) && getProperty<Tile::RAMP>(co     )) tileFlags[idx].set(CAN_GO_UP);
 			if (co.z > 0             && tileFlags[getIdx(CO_DOWN)].test(CAN_STAND_HERE) && getProperty<Tile::RAMP>(CO_DOWN)) tileFlags[idx].set(CAN_GO_DOWN);		
 		}
-	}
-
-	void Region::load()
-	{
-
 	}
 }
 
