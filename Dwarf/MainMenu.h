@@ -39,15 +39,13 @@ private:
 	int panelWidth;
 	int panelHeight;
 
-	void setColor();
-
 	// Main Menu functions
-	void resetColor();
-	void determineHighlight(int h, int num);
 	int mainMenuInput(int selected);
 	void upOrDownInput(int key, int & selected);
 
-	int startGame();
+	int createWorld();
+
+	int loadWorld();
 
 	// Dwarf picking functions
 	// UI and gui Below
@@ -64,4 +62,5 @@ private:
 
 	//void settings();
 };
+
 

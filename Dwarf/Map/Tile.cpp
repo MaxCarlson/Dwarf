@@ -71,19 +71,19 @@ namespace region
 		currentRegion = std::make_unique<Region>();
 	}
 
-	void save_region()
+	void save_region(std::string fileName)
 	{
-		std::ofstream os("Region_test_save.sv", std::ios::binary);
+		std::ofstream os(fileName, std::ios::binary);
 		cereal::BinaryOutputArchive oarchive(os);
 
 		currentRegion->serialize(oarchive);
 	}
 
-	void load_region()
+	void load_region(std::string fileName)
 	{
-		currentRegion = std::make_unique<Region>();
+		currentRegion = std::make_unique<Region>(); 
 
-		std::ifstream os("Region_test_save.sv", std::ios::binary);
+		std::ifstream os(fileName, std::ios::binary);
 		cereal::BinaryInputArchive iarchive(os);
 
 		iarchive(currentRegion->tileMap);

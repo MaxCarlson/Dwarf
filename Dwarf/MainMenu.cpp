@@ -7,6 +7,97 @@
 
 static const int NUM_MAIN_MEN_OPTIONS = 4;
 
+void setColor(std::string color)
+{
+	terminal_bkcolor(color.c_str());
+	terminal_color("black");
+}
+
+void resetColor()
+{
+	terminal_color("default");
+	terminal_bkcolor("black");
+}
+
+void determineHighlight(int h, int num)
+{
+	if (num == h)
+		setColor("#d1ce38");
+	else
+		resetColor();
+}
+
+enum InputCode
+{
+	IN_NOTHING,
+	IN_ENTER,
+	IN_EXIT
+};
+
+int handleInput(int& selected, const int limit)
+{
+	int input = terminal_read();
+
+	if (input == TK_ENTER)
+		return IN_ENTER;
+
+	else if (input == TK_ESCAPE)
+		return IN_EXIT;
+
+	else if (input == TK_UP)
+		--selected;
+
+	else if (input == TK_DOWN)
+		++selected;
+
+	// Handle Selected Wrapping
+	if (selected >= limit)
+		selected = 0;
+	else if (selected < 0)
+		selected = limit - 1;
+
+	return IN_NOTHING;
+}
+
+template<typename T>
+int listHandler(const std::vector<T>& vec, int &selected, int alignment, int initX, int initY, int spacing, std::string highlightC = "#d1ce38", std::string color = "default")
+{
+	int panelWidth  = terminal_state( TK_WIDTH);
+	int panelHeight = terminal_state(TK_HEIGHT);
+	const int size = vec.size();
+
+
+	while (true)
+	{
+		terminal_clear();
+
+		int spc = initY;
+		int counter = 0;
+		for (auto i : vec)
+		{
+			std::string pr = i;
+		
+			if (counter == selected)
+				setColor(highlightC);
+			else
+				resetColor();
+
+			terminal_print_ext(initX, spc, panelWidth, panelHeight, alignment, pr.c_str());
+
+			++counter;
+			spc += spacing;
+		}
+
+		terminal_refresh();
+		resetColor();
+
+		int code = handleInput(selected, size);
+
+		if (code != IN_NOTHING)
+			return code;
+	}
+}
+
 int MainMenu::render()
 {
 	panelWidth = terminal_state(TK_WIDTH);
@@ -43,25 +134,6 @@ int MainMenu::render()
 	}
 }
 
-void MainMenu::setColor()
-{
-	terminal_bkcolor("#d1ce38");
-	terminal_color("black");
-}
-
-void MainMenu::resetColor()
-{
-	terminal_color("default");
-	terminal_bkcolor("black");
-}
-
-void MainMenu::determineHighlight(int h, int num)
-{
-	if (num == h)
-		setColor();
-	else
-		resetColor();
-}
 // Make all these input functions into one big template?
 int MainMenu::mainMenuInput(int selected)
 {
@@ -75,10 +147,11 @@ int MainMenu::mainMenuInput(int selected)
 		switch (selected)
 		{
 		case START_GAME_M:
-			return startGame();
+			return loadWorld();
 			break;
 
 		case CREATE_WORLD_M:
+			return createWorld();
 			break;
 
 		case SETTINGS_M:
@@ -123,7 +196,7 @@ void MainMenu::upOrDownInput(int key, int & selected)
 // picking an already generated world
 // and loading info Right now it just tells us to pick
 // dwaves
-int MainMenu::startGame()
+int MainMenu::createWorld()
 {
 	if (pickDwarves())
 		return START_CODE;
@@ -365,3 +438,39 @@ void MainMenu::finalizeDwarfPicks()
 		++dwarfCounter;
 	}
 }
+
+// Loading already created world
+
+#include <string>
+#include <iostream>
+#include <filesystem>
+namespace fs = std::experimental::filesystem;
+
+int MainMenu::loadWorld()
+{
+	int selected = 0;
+	while (true)
+	{
+		std::string dirpath = "Saves";
+		std::vector<std::string> paths;
+		for (auto & p : fs::directory_iterator(dirpath))
+		{
+			paths.push_back(p.path().string());
+			//terminal_print_ext(10, 10, panelWidth, panelHeight, TK_ALIGN_LEFT, p.path().c_str());
+		}
+
+		int code = listHandler<std::string>(paths, selected, TK_ALIGN_LEFT, 7, 7, 2);
+			
+		if (code == IN_EXIT)
+			return;
+
+		else if (code == IN_ENTER)
+		{
+
+		}
+	}
+
+	return 0; 
+}
+
+
