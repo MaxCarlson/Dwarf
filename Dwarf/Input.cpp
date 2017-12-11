@@ -186,10 +186,8 @@ void Input::drawSaveMenu()
 {
 	std::string fileName;
 
-	int selected = 0;
-
-	std::string dirpath = "../Saves";
-	std::vector<std::string> paths;
+	std::string dirpath = "Saves";
+	std::vector<std::string> paths = { "New save game" };
 	for (auto & p : fs::directory_iterator(dirpath))
 	{
 		paths.push_back(p.path().string());
@@ -199,9 +197,58 @@ void Input::drawSaveMenu()
 	if (!paths.size())
 		paths.push_back("No save games on File! Press Esc");
 
-	int code = draw::listHandler<std::string, true>(paths, selected, TK_ALIGN_LEFT, 7, 7, 2, true);
+	int selected = 0, code;
 
-	save_region(fileName);
+	while (true)
+	{
+		while (true)
+		{
+			code = draw::listHandler<std::string, true>(paths, selected, TK_ALIGN_LEFT, 7, 7, 2, true);
+
+			if (code == draw::IN_EXIT)
+				return;
+			else if (code == draw::IN_ENTER)
+				break;
+		}
+
+		// If enter was pressed on new save game
+		if (code == draw::IN_ENTER && selected == 0)
+		{
+			paths[0] = "";
+
+			std::wstring s;
+			while (true)
+			{
+				// Draw list but skip input
+				draw::listHandler<std::string, false>(paths, selected, TK_ALIGN_LEFT, 7, 7, 2, true, true, true);
+
+				int input = terminal_read();
+
+				if (input == TK_ESCAPE || (input == TK_ENTER && s.size() <= 0))
+				{
+					paths[0] = "No save games on File! Press Esc";
+					break;
+				}
+
+				else if (input == TK_ENTER) // && s.size() > 0 ~ implied
+					goto SAVE_REGION;
+
+				// Delete chars
+				else if (input == TK_BACKSPACE && s.length() > 0)
+					s.resize(s.length() - 1);
+
+				// Add chars
+				else if (terminal_check(TK_WCHAR))
+					s += (wchar_t)terminal_state(TK_WCHAR);
+
+				paths[0] = {s.begin(), s.end()};
+			}
+		}
+	}
+	SAVE_REGION:
+
+
+	save_region(paths[0]);
 }
 
 
