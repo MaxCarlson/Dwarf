@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Drawing\draw.cpp" />
     <ClCompile Include="ECS\Systems\DijkstraSystems\DijkstraMapsHandler.cpp" />
     <ClCompile Include="ECS\Systems\EntityPositionCache.cpp" />
     <ClCompile Include="ECS\Systems\ai\EquipHandler.cpp" />
@@ -247,6 +248,7 @@
     <ClInclude Include="cereal\types\utility.hpp" />
     <ClInclude Include="cereal\types\valarray.hpp" />
     <ClInclude Include="cereal\types\vector.hpp" />
+    <ClInclude Include="Drawing\draw.h" />
     <ClInclude Include="ECS\Components\Item.h" />
     <ClInclude Include="ECS\Components\ItemStored.h" />
     <ClInclude Include="ECS\Components\Sentients\Inventory.h" />

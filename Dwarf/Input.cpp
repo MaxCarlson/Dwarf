@@ -3,7 +3,7 @@
 #include "Engine.h"
 #include "Map/Map.h"
 #include "Map/MapRender.h"
-
+#include "Drawing\draw.h"
 #include "BearLibTerminal.h"
 
 // For testing mining
@@ -117,20 +117,39 @@ void Input::read()
 
 			engine->world.emit(pick_map_changed_message{});
 		}
-		else if (keyPress == TK_ESCAPE)
-		{
-			if (engine->current_game_state == Engine::ESC_MENU)
-			{
-
-			}
-			pauseGame();
-			engine->current_game_state = Engine::TO_MAIN_MENU;
-		}
 		else if (keyPress == TK_SPACE)
 		{
 			pauseGame();
 		}
+		else if (keyPress == TK_ESCAPE)
+		{
+			pauseGame();
+
+			int selected = 0;
+			int choice = drawEscMenu(selected);
+
+			if (choice == draw::IN_ENTER)
+			{
+				if (selected == 0)
+					engine->current_game_state = Engine::PLAY;
+
+				else if (selected == 1)
+					engine->current_game_state = Engine::TO_MAIN_MENU;
+			}
+
+			else if (choice == draw::IN_EXIT)
+				engine->current_game_state = Engine::PLAY;
+		}
 	}
+
+	else if (engine->current_game_state == Engine::ESC_MENU)
+	{
+		if (keyPress == TK_ESCAPE)
+		{
+			pauseGame();
+		}
+	}
+
 
 }
 
@@ -141,4 +160,20 @@ void Input::pauseGame()
 
 	else
 		engine->current_game_state = Engine::PAUSED;
+}
+
+int Input::drawEscMenu(int& selected)
+{
+	terminal_clear();
+
+	std::vector<std::string> escMenuOp = { "Keep Playing", "Quit To Main Menu" };
+
+	int choice;
+	while (true)
+	{
+		choice = draw::listHandler<std::string, true>(escMenuOp, selected, TK_ALIGN_CENTER, 0, 15, 3, true);
+
+		if (choice == draw::IN_ENTER || choice == draw::IN_EXIT)
+			return choice;
+	}
 }

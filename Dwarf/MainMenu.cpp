@@ -3,111 +3,14 @@
 #include "Engine.h"
 #include "EntityFactory.h"
 #include "ECS\Components\JobComponent.h"
+#include "Drawing\draw.h"
 
 #include <string>
 #include <iostream>
 #include <filesystem>
 namespace fs = std::experimental::filesystem;
 
-
-static const int NUM_MAIN_MEN_OPTIONS = 4;
-
-void setColor(std::string color)
-{
-	terminal_bkcolor(color.c_str());
-	terminal_color("black");
-}
-
-void resetColor()
-{
-	terminal_color("default");
-	terminal_bkcolor("black");
-}
-
-void determineHighlight(int h, int num)
-{
-	if (num == h)
-		setColor("#d1ce38");
-	else
-		resetColor();
-}
-
-enum InputCode
-{
-	IN_NOTHING,
-	IN_ENTER,
-	IN_EXIT
-};
-
-int handleInput(bool hangInput, int& selected, const int limit)
-{
-	int input = 0;
-	if (!hangInput && terminal_peek())
-		input = terminal_read();
-	else
-		input = terminal_read();
-
-	if (input == TK_ENTER)
-		return IN_ENTER;
-
-	else if (input == TK_ESCAPE)
-		return IN_EXIT;
-
-	else if (input == TK_UP)
-		--selected;
-
-	else if (input == TK_DOWN)
-		++selected;
-
-	// Handle Selected Wrapping
-	if (selected >= limit)
-		selected = 0;
-	else if (selected < 0)
-		selected = limit - 1;
-
-	return IN_NOTHING;
-}
-
-template<typename T, bool hangInput>
-int listHandler(const std::vector<T>& vec, int &selected, int alignment, int initX, int initY, int spacing, bool clear, bool print = true, bool skipIn = false, std::string highlightC = "#d1ce38", std::string color = "default")
-{
-	int panelWidth  = terminal_state( TK_WIDTH);
-	int panelHeight = terminal_state(TK_HEIGHT);
-	const int size = vec.size();
-
-
-	if(clear)
-		terminal_clear();
-
-	int spc = initY;
-	int counter = 0;
-	for (auto i : vec)
-	{
-		std::string pr = i;
-		
-		if (counter == selected)
-			setColor(highlightC);
-		else
-			resetColor();
-
-		terminal_print_ext(initX, spc, panelWidth, panelHeight, alignment, pr.c_str());
-
-		++counter;
-		spc += spacing;
-	}
-
-	if (print)
-	{
-		terminal_refresh();
-		resetColor();
-	}
-
-	int code = IN_NOTHING;
-	if(!skipIn)
-		code = handleInput(hangInput, selected, size);
-
-	return code;
-}
+using namespace draw;
 
 int MainMenu::render()
 {

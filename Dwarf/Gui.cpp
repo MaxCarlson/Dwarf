@@ -195,5 +195,5 @@ void Gui::printDebugTileProps()
 
 void Gui::drawEscMenu()
 {
-	terminal_clear();
+
 }

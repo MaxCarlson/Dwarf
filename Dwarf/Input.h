@@ -8,5 +8,7 @@ public:
 	void read();
 
 	void pauseGame();
+
+	int drawEscMenu(int& selected);
 };
 
