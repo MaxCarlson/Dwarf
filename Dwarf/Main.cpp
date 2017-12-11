@@ -35,7 +35,7 @@ int main()
 		else if (code == MainMenu::START_CODE)
 			mapPath = "";
 
-		else if (code == MainMenu::Load_World)
+		else if (code == MainMenu::LOAD_WORLD)
 		{
 			mapPath = menu.mapPath;
 		}

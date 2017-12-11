@@ -24,7 +24,7 @@ public:
 		SETTINGS_M,
 		QUIT_M,
 
-		Load_World,
+		LOAD_WORLD,
 
 		// Codes for different 
 		// actions on MainMenu::render() return

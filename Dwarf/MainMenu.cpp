@@ -62,6 +62,8 @@ int MainMenu::render()
 		}
 		else if (code == START_CODE)
 			return START_CODE;
+		else if (code == LOAD_WORLD)
+			return LOAD_WORLD;
 	}
 }
 
@@ -311,8 +313,9 @@ int MainMenu::loadWorld()
 	else if (code == IN_ENTER)
 	{
 		mapPath = paths[selected];
+		region::load_region(mapPath);
 		finalizeDwarfPicks(); // Delete this once ECS is Serialized
-		return Load_World;
+		return LOAD_WORLD;
 	}
 	
 	return IN_NOTHING; 

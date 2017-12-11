@@ -58,7 +58,8 @@ namespace region
 
 	void save_region(std::string fileName)
 	{
-		std::ofstream os(fileName, std::ios::binary);
+		std::string dirpath = "Saves/" + fileName;
+		std::ofstream os(dirpath, std::ios::binary);
 		cereal::BinaryOutputArchive oarchive(os);
 
 		currentRegion->serialize(oarchive);
