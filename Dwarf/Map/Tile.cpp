@@ -12,8 +12,6 @@
 // External map info
 int MAP_WIDTH, MAP_HEIGHT, MAP_DEPTH, TOTAL_MAP_TILES;
 
-#define BOUNDS_CHECKING
-
 namespace region
 {
 	// Creates a 1D Vector of Tile objects used to

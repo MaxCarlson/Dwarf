@@ -20,7 +20,7 @@ int MainMenu::render()
 	// Resize each dwarves stat vector
 	// THIS SHOULD BE MOVED ELSEWHERE!!
 	dwarfStats.resize(NumberOfDwaves);
-	static const int totalStatNumber = listOfAllJobsByIndex.size(); // + listOfAllCombatStats.Size()
+	static const std::size_t totalStatNumber = listOfAllJobsByIndex.size(); // + listOfAllCombatStats.Size()
 	{
 		int statCounterDwarf = 0;
 		for (auto& dwarVec : dwarfStats)

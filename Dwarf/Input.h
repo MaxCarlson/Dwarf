@@ -10,5 +10,6 @@ public:
 	void pauseGame();
 
 	int drawEscMenu(int& selected);
+	void drawSaveMenu();
 };
 

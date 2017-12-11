@@ -79,9 +79,7 @@ public:
 	{
 		PLAY,
 		PAUSED,
-		PLAY_TO_ESC,
-		ESC_MENU,
-		ESC_TO_PLAY,
+		SAVE_GAME,
 
 		TO_MAIN_MENU
 	} 

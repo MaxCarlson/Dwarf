@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../Coordinates.h"
+struct Coordinates;
 
-inline int getIdx(Coordinates co);
+int getIdx(Coordinates co);
 
 
-inline Coordinates idxToCo(int idx);
+Coordinates idxToCo(int idx);

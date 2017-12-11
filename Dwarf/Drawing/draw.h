@@ -29,7 +29,7 @@ namespace draw
 	{
 		int panelWidth = terminal_state(TK_WIDTH);
 		int panelHeight = terminal_state(TK_HEIGHT);
-		const int size = vec.size();
+		const std::size_t size = vec.size();
 
 
 		if (clear)

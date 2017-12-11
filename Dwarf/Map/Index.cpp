@@ -1,7 +1,10 @@
 #include "Index.h"
 #include "Tile.h"
+#include <iostream>
 
-inline int getIdx(Coordinates co)
+#define BOUNDS_CHECKING
+
+int getIdx(Coordinates co)
 {
 #ifdef BOUNDS_CHECKING
 
@@ -13,7 +16,7 @@ inline int getIdx(Coordinates co)
 	return TILE_ARRAY_LOOKUP;
 }
 
-inline Coordinates idxToCo(int idx)
+Coordinates idxToCo(int idx)
 {
 	int z = idx / (MAP_HEIGHT * MAP_WIDTH);
 	idx -= (z * MAP_WIDTH * MAP_HEIGHT);

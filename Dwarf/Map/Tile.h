@@ -2,6 +2,7 @@
 #include "../Coordinates.h"
 #include "Index.h"
 #include <vector>
+#include <string>
 
 class Tile {
 
@@ -101,9 +102,9 @@ namespace region
 	// Create a new region, will overwrite the old region
 	void new_region(int width, int height, int depth);
 
-	void save_region();
+	void save_region(std::string fileName);
 
-	void load_region();
+	void load_region(std::string fileName);
 
 	/* Tile Flag functions, Flags are above */
 	bool flag(const Coordinates co, Flag f);

@@ -39,7 +39,5 @@ private:
 	int whichButton(Coordinates co);
 
 	void printDebugTileProps();
-
-	void drawEscMenu();
 };
 

@@ -37,10 +37,7 @@ void Gui::render()
 
 		drawGui();
 	}
-	else if (engine->current_game_state == Engine::ESC_MENU)
-	{
-		drawEscMenu();
-	}
+
 }
 
 void Gui::drawGui()
@@ -191,9 +188,4 @@ void Gui::printDebugTileProps()
 		tInfo += "CAN_GO_DOWN \n";
 
 	terminal_printf(xx, yy, tInfo.c_str());
-}
-
-void Gui::drawEscMenu()
-{
-
 }

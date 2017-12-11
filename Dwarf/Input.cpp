@@ -17,9 +17,18 @@
 #include "ECS\Components\PositionComponent.h"
 #include "ECS\Messages\pick_map_changed_message.h"
 
+// For draw functions that need to
+// be moved else where for my sanity
+#include <string>
+#include <iostream>
+#include <filesystem>
+namespace fs = std::experimental::filesystem;
+
 using namespace region;
 
 /// ######################## MAKE This into a System!!!
+// Also remove all draw functions and place them into
+// a gui system ~~ Possibly communicate with system messages???
 
 Input::Input()
 {
@@ -134,6 +143,10 @@ void Input::read()
 					engine->current_game_state = Engine::PLAY;
 
 				else if (selected == 1)
+					drawSaveMenu();
+
+
+				else if (selected == 2)
 					engine->current_game_state = Engine::TO_MAIN_MENU;
 			}
 
@@ -141,15 +154,6 @@ void Input::read()
 				engine->current_game_state = Engine::PLAY;
 		}
 	}
-
-	else if (engine->current_game_state == Engine::ESC_MENU)
-	{
-		if (keyPress == TK_ESCAPE)
-		{
-			pauseGame();
-		}
-	}
-
 
 }
 
@@ -166,7 +170,7 @@ int Input::drawEscMenu(int& selected)
 {
 	terminal_clear();
 
-	std::vector<std::string> escMenuOp = { "Keep Playing", "Quit To Main Menu" };
+	std::vector<std::string> escMenuOp = { "Keep Playing", "Save Game", "Quit To Main Menu" };
 
 	int choice;
 	while (true)
@@ -177,3 +181,27 @@ int Input::drawEscMenu(int& selected)
 			return choice;
 	}
 }
+
+void Input::drawSaveMenu()
+{
+	std::string fileName;
+
+	int selected = 0;
+
+	std::string dirpath = "../Saves";
+	std::vector<std::string> paths;
+	for (auto & p : fs::directory_iterator(dirpath))
+	{
+		paths.push_back(p.path().string());
+		//terminal_print_ext(10, 10, panelWidth, panelHeight, TK_ALIGN_LEFT, p.path().c_str());
+	}
+
+	if (!paths.size())
+		paths.push_back("No save games on File! Press Esc");
+
+	int code = draw::listHandler<std::string, true>(paths, selected, TK_ALIGN_LEFT, 7, 7, 2, true);
+
+	save_region(fileName);
+}
+
+
