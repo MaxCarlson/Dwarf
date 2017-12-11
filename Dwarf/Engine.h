@@ -18,7 +18,6 @@ class EntityPositionCache;
 class DijkstraMapsHandler;
 class EquipHandler;
 
-extern bool Game_Paused;
 
 class Engine
 {

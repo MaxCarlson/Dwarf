@@ -136,9 +136,9 @@ void Input::read()
 
 void Input::pauseGame()
 {
-	if (Game_Paused)
-		Game_Paused = false;
+	if (engine->current_game_state != Engine::PLAY)
+		engine->current_game_state = Engine::PLAY;
 
 	else
-		Game_Paused = true;
+		engine->current_game_state = Engine::PAUSED;
 }

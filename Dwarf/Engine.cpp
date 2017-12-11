@@ -30,20 +30,9 @@ inline TimePoint now() {
 		(std::chrono::steady_clock::now().time_since_epoch()).count();
 }
 
-bool Game_Paused = false;
-
 Engine::~Engine()
 {
 	delete map;
-	//delete renderSystem;
-	//delete movementSystem;
-	//delete movementAiSystem;
-	//delete miningSystem;
-	//delete aiWorkSystem;
-	//delete miningAi;
-	//delete dijkstraHandler;
-	//delete entityPositionCache;
-	//delete equipHandler;
 
 	// Some globals
 	delete designations;
@@ -121,7 +110,7 @@ void Engine::run()
 
 		input.read();
 
-		if (!Game_Paused)
+		if (current_game_state != Engine::PAUSED)
 		{
 			while (lag >= MS_PER_UPDATE)
 			{
