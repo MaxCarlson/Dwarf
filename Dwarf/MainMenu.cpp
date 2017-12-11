@@ -153,7 +153,7 @@ int MainMenu::render()
 			}
 		}
 
-		else if (code == IN_EXIT)
+		if (code == IN_EXIT)
 		{
 			return EXIT_CODE;
 		}
@@ -179,19 +179,7 @@ void MainMenu::upOrDownInput(int key, int & selected)
 	}
 }
 
-// Eventually this function will handle
-// picking an already generated world
-// and loading info Right now it just tells us to pick
-// dwaves
-int MainMenu::createWorld()
-{
-	if (pickDwarves())
-		return START_CODE;
-
-	return 0;
-}
-
-bool MainMenu::pickDwarves()
+int MainMenu::pickDwarves()
 {
 	int selected = 0;
 
@@ -389,7 +377,7 @@ void MainMenu::finalizeDwarfPicks()
 
 		// Need to name dwarves here
 
-		engine.factory.createDwarf(dwarf);
+		engine->factory.createDwarf(dwarf);
 
 		++dwarfCounter;
 	}

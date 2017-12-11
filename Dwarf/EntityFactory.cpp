@@ -22,7 +22,7 @@ EntityFactory::EntityFactory()
 // Also should probably store a vector of dwarves for qucik access
 Entity EntityFactory::createDwarf(DwarfCreationObj dwarfConstruct)
 {
-	Entity dwarf = engine.world.createEntity();
+	Entity dwarf = engine->world.createEntity();
 
 	dwarf.addComponent<RenderComponent>(1, 0xE300, "default");
 	dwarf.addComponent<PositionComponent>(dwarfConstruct.co);
@@ -49,7 +49,7 @@ Entity EntityFactory::createDwarf(DwarfCreationObj dwarfConstruct)
 	dwarf.activate();
 
 	// Add dwarves to engine vector
-	engine.Dwarves.push_back(dwarf);
+	engine->Dwarves.push_back(dwarf);
 
 	return dwarf;
 }

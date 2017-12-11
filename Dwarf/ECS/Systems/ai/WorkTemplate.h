@@ -22,7 +22,7 @@ public:
 	void pickup_tool(const Entity& e, Coordinates co, const int &catagory, std::size_t& out_tool, const CANCEL &cancel, const SUCCESS &success)
 	{
 		// Load all Entities at positon from cache
-		auto& entitiesAtPos = engine.entityPositionCache->findEntities(co);
+		auto& entitiesAtPos = engine->entityPositionCache->findEntities(co);
 
 		// Entities current tool
 		// ( Possibly no tool )

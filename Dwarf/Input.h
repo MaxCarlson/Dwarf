@@ -6,5 +6,7 @@ public:
 	~Input();
 
 	void read();
+
+	void pauseGame();
 };
 

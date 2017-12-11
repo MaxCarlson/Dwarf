@@ -18,12 +18,14 @@ class EntityPositionCache;
 class DijkstraMapsHandler;
 class EquipHandler;
 
+extern bool Game_Paused;
+
 class Engine
 {
 public:
 	Engine() = default;
 	~Engine();
-
+	
 	// Holds all the entities active
 	// as well as all the components and systems
 	World world;
@@ -73,11 +75,24 @@ public:
 	// take inputs
 	void update(double deltaTime);
 
+
+	enum GameStates
+	{
+		PLAY,
+		PAUSED,
+		PLAY_TO_ESC,
+		ESC_MENU,
+		ESC_TO_PLAY,
+
+		TO_MAIN_MENU
+	} 
+	current_game_state = PLAY;
+
 private:
 	// Render local map 
 	// as well as Entities on it
 	void render();
 };
 
-extern Engine engine;
+extern std::unique_ptr<Engine> engine;
 

@@ -38,7 +38,8 @@ private:
 	// accurate result
 	int whichButton(Coordinates co);
 
-
 	void printDebugTileProps();
+
+	void drawEscMenu();
 };
 

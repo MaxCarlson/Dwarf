@@ -6,8 +6,14 @@ using namespace region;
 
 TileFactory * tileFactory;
 
+TileFactory::TileFactory()
+{
+	rng = TCODRandom::getInstance();
+}
+
 TileFactory::~TileFactory()
 {
+	//delete rng;
 }
 
 void TileFactory::createRock(Coordinates co)
@@ -23,7 +29,7 @@ void TileFactory::createGrass(Coordinates co)
 {
 	int grassCharList[] = { 130, 147, 244, 244 };
 	// Move this to EntityFactory???
-	tileAt(co).ch = grassCharList[rng.getInt(0, 3, 3)];
+	tileAt(co).ch = grassCharList[rng->getInt(0, 3, 3)];
 	tileAt(co).color = 0xC53DFC00;
 }
 

@@ -10,7 +10,7 @@ struct Coordinates;
 class TileFactory
 {
 public:
-	TileFactory() = default;
+	TileFactory();
 	~TileFactory();
 
 
@@ -24,7 +24,7 @@ public:
 	void createRockFloor(Coordinates co);
 
 private:
-	TCODRandom rng;
+	TCODRandom * rng;
 };
 
 extern TileFactory * tileFactory;

@@ -27,14 +27,20 @@ void Gui::render()
 	panelWidth = terminal_state(TK_WIDTH);
 	panelHeight = terminal_state(TK_HEIGHT);
 
+	if (engine->current_game_state == Engine::PLAY)
+	{
+		// Calculate panel size
+		verticalOffset = panelHeight - GUI_PANEL_VERT_PIX;
 
-	// Calculate panel size
-	verticalOffset = panelHeight - GUI_PANEL_VERT_PIX;
+		// Bottom gui
+		terminal_clear_area(0, verticalOffset, panelWidth, panelHeight);
 
-	// Bottom gui
-	terminal_clear_area(0, verticalOffset, panelWidth, panelHeight);
-
-	drawGui();
+		drawGui();
+	}
+	else if (engine->current_game_state == Engine::ESC_MENU)
+	{
+		drawEscMenu();
+	}
 }
 
 void Gui::drawGui()
@@ -146,7 +152,7 @@ void Gui::printDebugTileProps()
 	int yy = terminal_state(TK_MOUSE_Y);
 
 	// debug print info on tile
-	const int z = engine.map->mapRenderer->currentZLevel;
+	const int z = engine->map->mapRenderer->currentZLevel;
 
 	std::string tInfo = "DEFAULT \n";
 	bool csth = flag({ xx, yy, z }, CAN_STAND_HERE);
@@ -185,4 +191,9 @@ void Gui::printDebugTileProps()
 		tInfo += "CAN_GO_DOWN \n";
 
 	terminal_printf(xx, yy, tInfo.c_str());
+}
+
+void Gui::drawEscMenu()
+{
+	terminal_clear();
 }

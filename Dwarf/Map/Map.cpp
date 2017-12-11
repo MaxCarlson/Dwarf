@@ -38,7 +38,7 @@ Map::~Map()
 {
 	delete tileFactory;
 	delete mapRenderer;
-	delete rng;
+	//delete rng;
 }
 // Needs serious work!!!!
 void Map::createHeightMap(int howMountainous, float rainAmount)
@@ -46,7 +46,7 @@ void Map::createHeightMap(int howMountainous, float rainAmount)
 	// Create height map of area
 	// Want to normalize map eventually?
 	TCODHeightMap * heightMap = new TCODHeightMap(width, height);
-	heightMap->midPointDisplacement();
+	heightMap->midPointDisplacement(rng);
 
 	//heightMap->normalize(-0.9, 0.9);
 
@@ -204,7 +204,7 @@ void Map::addTrees(int treeDensity)
 	int treeNum = ((width * height) / 1000) * treeDensity;
 
 	// Store these these trees in map eventually??!!!!!!!!!!!!!!!!!!
-	std::vector<Entity> trees = engine.world.createEntities(treeNum);
+	std::vector<Entity> trees = engine->world.createEntities(treeNum);
 
 	TCODRandom * rng = TCODRandom::getInstance();
 
@@ -248,14 +248,14 @@ void Map::placeDwarves(int number)
 			{
 				if (canWalk({ i, j, h }))
 				{
-					engine.Dwarves.at(dwarfNumber).getComponent<PositionComponent>().co = { i, j, h };
+					engine->Dwarves.at(dwarfNumber).getComponent<PositionComponent>().co = { i, j, h };
 					mapRenderer->currentZLevel = h;
 					++dwarfNumber;
 				}
 
 				if (dwarfNumber >= number)
 				{
-					//engine.world.refresh();
+					//engine->world.refresh();
 					return;
 				}
 					

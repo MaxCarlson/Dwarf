@@ -8,7 +8,6 @@
 #include <iostream>
 #include <unordered_map>
 
-using region::getIdx;
 
 class EntityPositionCache : public System<Requires<PositionComponent>>
 {
@@ -78,6 +77,6 @@ void EntityPositionCache::updateEntity(const Entity e, const Coordinates & newCo
 // This must be done manually!
 inline void deletePositionCache(const Entity e, Coordinates co)
 {
-	engine.entityPositionCache->updateEntity<true>(e, EMPTY_COORDINATES, co);
+	engine->entityPositionCache->updateEntity<true>(e, EMPTY_COORDINATES, co);
 }
 

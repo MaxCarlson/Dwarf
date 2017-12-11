@@ -46,8 +46,6 @@ private:
 	// Main Menu functions
 	void upOrDownInput(int key, int & selected);
 
-	int createWorld();
-
 	int loadWorld();
 
 	// Dwarf picking functions
@@ -56,7 +54,7 @@ private:
 	// Vector of desired stats for dwarves
 	std::vector<std::vector<int>> dwarfStats;
 
-	bool pickDwarves();
+	int pickDwarves();
 
 	int availablePoints = 30;
 	void printDwafStatOptions(int dwarfSelected, bool &statsSelected);

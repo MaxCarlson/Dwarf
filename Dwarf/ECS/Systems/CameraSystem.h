@@ -33,31 +33,31 @@ public:
 
 			// Move camera up or down z Levels
 			case TK_COMMA:
-				if (engine.map->mapRenderer->incrementZLevel(-1))
+				if (engine->map->mapRenderer->incrementZLevel(-1))
 					co.z -= 1;
 				break;
 
 			case TK_PERIOD:
-				if (engine.map->mapRenderer->incrementZLevel(1))
+				if (engine->map->mapRenderer->incrementZLevel(1))
 					co.z += 1;
 				break;
 
 			// Directional movement for camera
 			case TK_UP:
-				engine.map->mapRenderer->moveCamera(MapRender::NORTH);
+				engine->map->mapRenderer->moveCamera(MapRender::NORTH);
 				break;
 
 			case TK_DOWN:
-				engine.map->mapRenderer->moveCamera(MapRender::SOUTH);
+				engine->map->mapRenderer->moveCamera(MapRender::SOUTH);
 				break;
 
 			case TK_RIGHT:
-				engine.map->mapRenderer->moveCamera(MapRender::EAST);
+				engine->map->mapRenderer->moveCamera(MapRender::EAST);
 				break;
 
 
 			case TK_LEFT:
-				engine.map->mapRenderer->moveCamera(MapRender::WEST);
+				engine->map->mapRenderer->moveCamera(MapRender::WEST);
 				break;
 				
 
@@ -105,13 +105,13 @@ switch (key.lastKeyPressed->vk)
 case TCODK_TEXT:
 switch (key.lastKeyPressed->text[0]) { // For single entry non coded keys
 case '<':
-if (engine.map->incrementZLevel(-1))
+if (engine->map->incrementZLevel(-1))
 co.z -= 1;
 
 break;
 
 case '>':
-if(engine.map->incrementZLevel(1))
+if(engine->map->incrementZLevel(1))
 co.z += 1;
 
 break;

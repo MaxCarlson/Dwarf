@@ -14,7 +14,6 @@ class RenderSystem : public System<Requires<PositionComponent, RenderComponent>>
 public:
 	RenderSystem() = default;
 	RenderSystem(Map * map) : map(map) {};
-	~RenderSystem() { delete map; }
 
 	// Render system holds a pointer to the map we're 
 	// rendering. Map also holds the MapRender object which holds camera info

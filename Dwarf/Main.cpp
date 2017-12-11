@@ -8,7 +8,7 @@
 
 // Numbers a screen width and height, make more 
 // dynamic eventually
-Engine engine;
+std::unique_ptr<Engine> engine;
 
 int main()
 {
@@ -23,6 +23,8 @@ int main()
 
 	while (true)
 	{
+		engine = std::make_unique<Engine>();
+
 		MainMenu menu;
 		int code = menu.render();
 
@@ -38,10 +40,10 @@ int main()
 			mapPath = menu.mapPath;
 		}
 
-		engine.init(mapPath, menu.mapWidth, menu.mapHeight);
+		engine->init(mapPath, menu.mapWidth, menu.mapHeight);
 
 		// Start the game loop.
-		engine.run();
+		engine->run();
 	}
 
 	return 0;

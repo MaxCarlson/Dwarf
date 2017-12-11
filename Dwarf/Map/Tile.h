@@ -1,6 +1,6 @@
 #pragma once
 #include "../Coordinates.h"
-
+#include "Index.h"
 #include <vector>
 
 class Tile {
@@ -104,14 +104,6 @@ namespace region
 	void save_region();
 
 	void load_region();
-
-	// Get the index of Coordinates 
-	// Returns 0 if index isn't in the map
-	int getIdx(Coordinates co);
-
-
-	// Returns Coordinates from a vector index
-	Coordinates idxToCo(int idx);
 
 	/* Tile Flag functions, Flags are above */
 	bool flag(const Coordinates co, Flag f);

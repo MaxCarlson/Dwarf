@@ -16,29 +16,34 @@
 #include "ECS\Systems\ai\EquipHandler.h"
 #include "BearLibTerminal.h"
 #include "Designations.h"
-
 #include "ECS\Systems\ai\AiWorkSystem.h"
 #include "ECS\Systems\ai\MiningAi.h"
-
 #include "Coordinates.h"
 #include <unordered_map>
-
 #include <chrono>
+
+
+
 typedef std::chrono::milliseconds::rep TimePoint;
 inline TimePoint now() {
 	return std::chrono::duration_cast<std::chrono::milliseconds>
 		(std::chrono::steady_clock::now().time_since_epoch()).count();
 }
 
+bool Game_Paused = false;
+
 Engine::~Engine()
 {
 	delete map;
-	delete renderSystem;
-	delete movementSystem;
-	delete movementAiSystem;
-	delete miningSystem;
-	delete aiWorkSystem;
-	delete miningAi;
+	//delete renderSystem;
+	//delete movementSystem;
+	//delete movementAiSystem;
+	//delete miningSystem;
+	//delete aiWorkSystem;
+	//delete miningAi;
+	//delete dijkstraHandler;
+	//delete entityPositionCache;
+	//delete equipHandler;
 
 	// Some globals
 	delete designations;
@@ -114,16 +119,28 @@ void Engine::run()
 		previous = current;
 		lag += elapsed;
 
-		// Read user input
 		input.read();
 
-		while (lag >= MS_PER_UPDATE)
+		if (!Game_Paused)
 		{
-			update(MS_PER_UPDATE);
-			lag -= MS_PER_UPDATE;
+			while (lag >= MS_PER_UPDATE)
+			{
+				update(MS_PER_UPDATE);
+				lag -= MS_PER_UPDATE;
+			}
 		}
 
+		else
+			lag = 0.0;
+
 		render();
+
+		if (current_game_state == Engine::TO_MAIN_MENU)
+		{
+			terminal_clear();
+			return;
+		}
+			
 	}
 }
 
@@ -146,6 +163,8 @@ void Engine::update(double deltaTime)
 	// entityPositionCache->update();
 
 	// Should this be called before or after? Probably before?
+	// Possibly right after deliver messages, so systems can work on updated entities?
+	// Figure it out!
 	world.refresh();
 }
 

@@ -20,7 +20,7 @@ void DijkstraMapsHandler::init()
 	pick_map.init();
 
 	// Add systems to world
-	engine.world.addSystem(*pickMapSystem);
+	engine->world.addSystem(*pickMapSystem);
 
 	// Subscribe to messages
 	subscribe_mbox<pick_map_changed_message>();
