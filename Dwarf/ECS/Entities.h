@@ -30,11 +30,23 @@ public:
 
 		std::uint64_t index;
 		std::uint32_t counter;
+
+		template<class Archive>
+		void serialize(Archive & archive)
+		{
+			archive(index, counter);
+		}
 	};
 
 	Entity();
 
 	Entity(World & entityWorld, Id id);
+
+	template<class Archive>
+	void serialize(Archive & archive)
+	{
+		archive(eId);
+	}
 
 
 	Entity(const Entity &)			  = default;

@@ -10,6 +10,11 @@ class JobComponent : public Component
 {
 public:
 	JobComponent() = default;
+
+	template<class Archive>
+	void serialize(Archive& archive)
+	{
+	}
 };
 
 enum class Jobs

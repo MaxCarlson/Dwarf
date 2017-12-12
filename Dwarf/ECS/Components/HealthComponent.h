@@ -16,4 +16,10 @@ public:
 	int health;
 	int maxHealth;
 	int recoverRate;
+
+	template<class Archive>
+	void serialize(Archive& archive)
+	{
+		archive(cereal::base_class<Component>(this), health, maxHealth, recoverRate);
+	}
 };

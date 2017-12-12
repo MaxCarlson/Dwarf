@@ -37,15 +37,17 @@ Engine::~Engine()
 
 void Engine::init(std::string mapPath, int screenWidth, int screenHeight)
 {
-	// Create new local map
-	if (!mapPath.size())
-		map = std::make_unique<Map>(screenWidth, screenHeight, MAX_ZLVL);
-	else
-		loadMap(mapPath);
-
 	// Init misc maps and designations
 	designations = new Designations;
 	mapRenderer = std::make_unique<MapRender>();
+
+	// Create new local map
+	if (!mapPath.size())
+		map = std::make_unique<Map>(screenWidth, screenHeight, MAX_ZLVL);
+
+	// Or load it from a save file
+	else
+		loadMap(mapPath);
 
 	// Add systems at init
 	renderSystem = new RenderSystem();

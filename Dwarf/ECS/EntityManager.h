@@ -9,6 +9,11 @@
 #include <array>
 #include <vector>
 #include <type_traits>
+#include <cereal.hpp>
+#include "../cereal/types/vector.hpp"
+#include "../cereal/types/array.hpp"
+#include "../cereal/types/bitset.hpp"
+#include "../cereal/types/memory.hpp"
 
 
 class EntityIdPool
@@ -39,6 +44,18 @@ public:
 	// Clears all entity Id's
 	// Will invalidate every entity Id given out so far
 	void clear();
+
+	template<class Archive>
+	void serialize(Archive & archive)
+	{
+		archive(counts, freeIdList, nextId, defaultPoolSize);
+	}
+
+	template<class Archive>
+	void load(Archive & iarchive)
+	{
+		iarchive(counts, freeIdList, nextId, defaultPoolSize);
+	}
 
 private:
 
@@ -89,6 +106,18 @@ public:
 
 	void clear();
 
+	template<class Archive>
+	void serialize(Archive & archive)
+	{
+		archive(componentEntries);
+	}
+
+	template<class Archive>
+	void load(Archive & iarchive)
+	{
+		iarchive(componentEntries);
+	}
+
 private:
 	typedef std::array<std::unique_ptr<Component>, MAX_COMPONENTS> ImplComponentArray;
 
@@ -109,6 +138,12 @@ private:
 		// Components bits are set based on order of first component
 		// generation.
 		ComponentTypeList componentTypeList;
+
+		template<class Archive>
+		void serialize(Archive & archive)
+		{
+			archive(components, componentTypeList);
+		}
 	};
 
 	// All components for every entity. Indexed by entity ID

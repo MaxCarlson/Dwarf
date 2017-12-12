@@ -18,4 +18,10 @@ public:
 
 	bool claimed = false;
 	int stackSize = 1;
+
+	template<class Archive>
+	void serialize(Archive& archive)
+	{
+		archive(cereal::base_class<Component>(this), itemName, itemTag, catagory, type, claimed, stackSize);
+	}
 };

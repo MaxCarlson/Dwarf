@@ -19,4 +19,10 @@ public:
 	mining_steps step = GET_PICK;
 
 	std::size_t currentPick = 0;
+
+	template<class Archive>
+	void serialize(Archive& archive)
+	{
+		archive(cereal::base_class<Component>(this), step, currentPick);
+	}
 };

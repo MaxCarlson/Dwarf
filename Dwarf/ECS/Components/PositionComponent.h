@@ -11,4 +11,10 @@ public:
 	PositionComponent() = default;
 	PositionComponent(Coordinates co) : co(co) {};
 	~PositionComponent() {};
+
+	template<class Archive>
+	void serialize(Archive& archive)
+	{
+		archive(cereal::base_class<Component>(this), co);
+	}
 };

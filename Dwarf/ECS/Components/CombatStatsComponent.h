@@ -18,4 +18,10 @@ enum CombatStats
 class CombatStatComponent : public Component
 {
 	CombatStatComponent() = default;
+
+	template<class Archive>
+	void serialize(Archive& archive)
+	{
+
+	}
 };

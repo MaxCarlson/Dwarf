@@ -23,7 +23,7 @@ namespace draw
 			resetColor();
 	}
 
-	int handleInput(bool hangInput, int & selected, const int limit)
+	int handleInput(bool hangInput, int & selected, const std::size_t limit)
 	{
 		int input = 0;
 		if (!hangInput && terminal_peek())

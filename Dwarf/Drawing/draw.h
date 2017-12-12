@@ -21,7 +21,7 @@ namespace draw
 		IN_EXIT
 	};
 
-	int handleInput(bool hangInput, int& selected, const int limit);
+	int handleInput(bool hangInput, int& selected, const std::size_t limit);
 
 
 	template<typename T, bool hangInput>

@@ -6,6 +6,8 @@
 
 #include <unordered_map>
 #include <memory>
+#include <cereal.hpp>
+#include "../cereal/types/unordered_map.hpp"
 
 class World
 {
@@ -98,6 +100,9 @@ public:
 	// Returns entity and index of idx
 	Entity getEntity(std::size_t idx);
 
+	// Mailbox message holder
+	std::vector<std::unique_ptr<impl::subscription_base_t>> pubsub_holder;
+
 	// Message Emitter, immeditely calls function pointer
 	// associated with message
 	template <class MSG>
@@ -131,14 +136,17 @@ public:
 		}
 	}
 
-	// Mailbox system
-	std::vector<std::unique_ptr<impl::subscription_base_t>> pubsub_holder;
-
 	/* Delivers the queue; called at the end of each system call */
 	inline void deliver_messages() {
 		for (auto &holder : pubsub_holder) {
 			if (holder) holder->deliver_messages();
 		}
+	}
+
+	template<class Archive>
+	void serialize(Archive& archive)
+	{
+		archive(entityIdPool, entityAttributes, entityCache);
 	}
 
 private:
@@ -160,6 +168,12 @@ private:
 			// whether entity has a particual systsem
 			// or set of systems
 			std::vector<bool> systems;
+
+			template<class Archive>
+			void serialize(Archive& archive)
+			{
+				archive(activated, systems);
+			}
 		};
 
 		explicit EntityAttributes(std::size_t amountOfEntities) 
@@ -182,6 +196,12 @@ private:
 		{
 			entityManager.clear();
 			attributes.clear();
+		}
+
+		template<class Archive>
+		void serialize(Archive& archive)
+		{
+			archive(entityManager, attributes);
 		}
 	};
 
@@ -219,6 +239,12 @@ private:
 		{
 			alive.clear();
 			clearTemp();
+		}
+
+		template<class Archive>
+		void serialize(Archive& archive)
+		{
+			archive(alive, killed, activated, deactivated);
 		}
 	};
 

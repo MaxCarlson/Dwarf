@@ -17,4 +17,10 @@ public:
 	// Current size of the length/width in pixels
 	// of tiles
 	int currentCellSize;
+
+	template<class Archive>
+	void serialize(Archive& archive)
+	{
+		archive(cereal::base_class<Component>(this), width, height, currentCellSize);
+	}
 };

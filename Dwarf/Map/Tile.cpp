@@ -9,6 +9,8 @@
 #include "../cereal/types/vector.hpp"
 #include <fstream>
 
+#include "../Engine.h"
+
 // External map info
 int MAP_WIDTH, MAP_HEIGHT, MAP_DEPTH, TOTAL_MAP_TILES;
 
@@ -56,11 +58,14 @@ namespace region
 		currentRegion = std::make_unique<Region>();
 	}
 
+
 	void save_region(std::string fileName)
 	{
 		std::string dirpath = "Saves/" + fileName;
 		std::ofstream os(dirpath, std::ios::binary);
 		cereal::BinaryOutputArchive oarchive(os);
+
+		engine->world.serialize(oarchive);
 
 		currentRegion->serialize(oarchive);
 	}

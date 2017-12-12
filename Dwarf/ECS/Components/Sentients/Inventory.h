@@ -24,4 +24,10 @@ public:
 	// Array holding entity indicies of 
 	// equipped items
 	std::size_t inventory[MAX_INVENTORY_SLOTS];
+
+	template<class Archive>
+	void serialize(Archive& archive)
+	{
+		archive(cereal::base_class<Component>(this), inventory);
+	}
 };

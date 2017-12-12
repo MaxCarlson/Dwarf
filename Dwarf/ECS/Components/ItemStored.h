@@ -16,4 +16,10 @@ struct ItemStored : public Component
 	// Copy of the stored Items renderer
 	// when it's stored
 	RenderComponent rend;
+
+	template<class Archive>
+	void serialize(Archive& archive)
+	{
+		archive(cereal::base_class<Component>(this), eid, rend);
+	}
 };

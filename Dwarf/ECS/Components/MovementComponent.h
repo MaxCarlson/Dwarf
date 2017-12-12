@@ -46,4 +46,10 @@ public:
 	// Just a simple check to see if Entity was interrupted
 	// while walking, usually by another Entity
 	//bool interrupted = false;
+
+	template<class Archive>
+	void serialize(Archive& archive)
+	{
+		archive(cereal::base_class<Component>(this), speed, progress, destination, cannotFindPath, path);
+	}
 };

@@ -24,4 +24,12 @@ public:
 	// Color string for BLT renderer
 	// Will convert to const char* when actually rendering
 	std::string colorStr;
+
+	template<class Archive>
+	void serialize(Archive& archive)
+	{
+		archive(cereal::base_class<Component>(this), ch, terminalCode, colorStr);
+	}
 };
+
+CEREAL_REGISTER_TYPE(RenderComponent);

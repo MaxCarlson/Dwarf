@@ -35,6 +35,12 @@ struct Coordinates
 	{
 		return {x - co.x, y - co.y, z - co.z};
 	}
+
+	template<class Archive>
+	void serialize(Archive& archive)
+	{
+		archive(x, y, z);
+	}
 };
 
 // Hashing algorithm for Coordinates

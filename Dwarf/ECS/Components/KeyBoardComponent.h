@@ -8,5 +8,9 @@ class KeyboardComponent : public Component
 {
 public:
 	KeyboardComponent() = default;
+	template<class Archive>
+	void serialize(Archive& archive)
+	{
 
+	}
 };

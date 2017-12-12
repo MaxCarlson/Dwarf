@@ -33,6 +33,12 @@ public:
 	// Used to determine when to bump up laborStats by one level
 	// with skillLevelReq[laborStats[JobType]+1]
 	std::vector<int> skillPoints;
+
+	template<class Archive>
+	void serialize(Archive& archive)
+	{
+		archive(cereal::base_class<Component>(this), laborLevel, skillPoints);
+	}
 };
 
 // Determine exact labor skill level by looping through
