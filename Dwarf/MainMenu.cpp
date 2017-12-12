@@ -305,18 +305,23 @@ int MainMenu::loadWorld()
 	if (!paths.size())
 		paths.push_back("No save games on File! Press Esc");
 
-	int code = listHandler<std::string, true>(paths, selected, TK_ALIGN_LEFT, 7, 7, 2, true);
-
-	if (code == IN_EXIT)
-		return IN_NOTHING;
-
-	else if (code == IN_ENTER)
+	while (true)
 	{
-		mapPath = paths[selected];
-		region::load_region(mapPath);
-		finalizeDwarfPicks(); // Delete this once ECS is Serialized
-		return LOAD_WORLD;
+		int code = listHandler<std::string, true>(paths, selected, TK_ALIGN_LEFT, 7, 7, 2, true);
+
+		if (code == IN_EXIT)
+			return IN_NOTHING;
+
+		else if (code == IN_ENTER)
+		{
+			mapPath = paths[selected];
+			region::load_region(mapPath);
+			finalizeDwarfPicks(); // Delete this once ECS is Serialized
+			return LOAD_WORLD;
+		}
 	}
+
+
 	
 	return IN_NOTHING; 
 }

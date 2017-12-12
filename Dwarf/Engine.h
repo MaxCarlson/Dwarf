@@ -1,13 +1,16 @@
 #pragma once
 #include "include\libtcod.hpp"
+#include "Map\MapRender.h"
 #include "ECS\EntityManager.h"
 #include "ECS\World.h"
 #include "EntityFactory.h"
 #include "Gui.h"
 #include "Input.h"
 #include <unordered_map>
+#include <memory>
 
 class Map;
+class TileFactory;
 class RenderSystem;
 class MovementSystem;
 class MovementAiSystem;
@@ -30,7 +33,15 @@ public:
 	World world;
 
 	// Used for producing all Entities simply
-	EntityFactory factory;
+	EntityFactory factory; // Replace this with serialized read in data!
+
+	// Performs the rendering of the map
+	// and associated built with map generation tiles
+	// Should these be moved to Entities, and an array setup for which to render depending on z level?
+	std::unique_ptr<MapRender> mapRenderer;
+	
+	// Replace this with serialized read in data!
+	TileFactory * tileFactory;
 
 	// Systems
 	RenderSystem * renderSystem;
@@ -53,8 +64,7 @@ public:
 	std::vector<Entity> Dwarves;
 
 	// Holds local map, 
-	// Local map also holds the map renderer
-	Map * map;
+	std::unique_ptr<Map> map;
 
 
 	// Should these be made into systems?

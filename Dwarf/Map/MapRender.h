@@ -8,14 +8,12 @@ class Map;
 class MapRender
 {
 public:
-	MapRender(Map & map);
-	~MapRender();
+	MapRender();
+	//~MapRender();
 
 	// Render whichever Map MapRender 
 	// is associated with
 	void render();
-
-	Map & map;
 
 	// Current vertical slice of map
 	// we're rendering right now
@@ -43,7 +41,5 @@ private:
 	// Width and height of current window
 	// displaying game
 	int panelWidth, panelHeight;
-
-	friend class Map;
 };
 

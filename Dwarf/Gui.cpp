@@ -149,7 +149,7 @@ void Gui::printDebugTileProps()
 	int yy = terminal_state(TK_MOUSE_Y);
 
 	// debug print info on tile
-	const int z = engine->map->mapRenderer->currentZLevel;
+	const int z = engine->mapRenderer->currentZLevel;
 
 	std::string tInfo = "DEFAULT \n";
 	bool csth = flag({ xx, yy, z }, CAN_STAND_HERE);

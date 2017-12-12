@@ -21,7 +21,6 @@ Map::Map(int width, int height, int depth) : width(width), height(height), depth
 
 	new_region(width, height, depth);
 	tileFactory = new TileFactory();
-	mapRenderer = new MapRender(*this);
 
 	createHeightMap(7, 0.3f);
 	
@@ -37,7 +36,6 @@ Map::Map(int width, int height, int depth) : width(width), height(height), depth
 Map::~Map()
 {
 	delete tileFactory;
-	delete mapRenderer;
 	//delete rng;
 }
 // Needs serious work!!!!
@@ -58,7 +56,7 @@ void Map::createHeightMap(int howMountainous, float rainAmount)
 	// If height is below a threshold, mark that area walkable/visible. else not. 
 	for (int h = 0; h < depth; ++h) {
 
-		mapRenderer->currentZLevel = h; // Change these functions around when placing player
+		engine->mapRenderer->currentZLevel = h; // Change these functions around when placing player
 
 		for (int i = 0; i < width; ++i)
 			for (int j = 0; j < height; ++j)
@@ -249,7 +247,7 @@ void Map::placeDwarves(int number)
 				if (canWalk({ i, j, h }))
 				{
 					engine->Dwarves.at(dwarfNumber).getComponent<PositionComponent>().co = { i, j, h };
-					mapRenderer->currentZLevel = h;
+					engine->mapRenderer->currentZLevel = h;
 					++dwarfNumber;
 				}
 

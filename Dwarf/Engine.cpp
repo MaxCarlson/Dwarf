@@ -7,7 +7,6 @@
 #include "ECS\Components\KeyBoardComponent.h"
 #include "ECS\Components\CameraComponent.h"
 #include "ECS\Systems\RenderSystem.h"
-#include "ECS\Systems\CameraSystem.h"
 #include "ECS\Systems\MovementSystem.h"
 #include "ECS\Systems\ai\MovementAiSystem.h"
 #include "ECS\Systems\MiningSystem.h"
@@ -32,25 +31,24 @@ inline TimePoint now() {
 
 Engine::~Engine()
 {
-	delete map;
-
 	// Some globals
 	delete designations;
 }
 
 void Engine::init(std::string mapPath, int screenWidth, int screenHeight)
 {
-	// Create local map
+	// Create new local map
 	if (!mapPath.size())
-		map = new Map(screenWidth, screenHeight, MAX_ZLVL);
+		map = std::make_unique<Map>(screenWidth, screenHeight, MAX_ZLVL);
 	else
 		loadMap(mapPath);
 
 	// Init misc maps and designations
 	designations = new Designations;
+	mapRenderer = std::make_unique<MapRender>();
 
 	// Add systems at init
-	renderSystem = new RenderSystem(map);
+	renderSystem = new RenderSystem();
 	movementSystem = new MovementSystem();
 	movementAiSystem = new MovementAiSystem();
 	movementAiSystem->init();
@@ -163,7 +161,7 @@ void Engine::render()
 	terminal_clear();
 
 	// Render the local map
-	map->mapRenderer->render();
+	mapRenderer->render();
 
 	// Render Entities
 	renderSystem->update();

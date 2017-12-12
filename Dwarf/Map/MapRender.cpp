@@ -8,13 +8,11 @@
 
 using namespace region;
 
-MapRender::MapRender(Map & map) : map(map)
+MapRender::MapRender()
 {
+	currentZLevel = MAP_DEPTH - 1;
 }
 
-MapRender::~MapRender()
-{
-}
 
 // Move all this stuff to render system?
 // force render system to read from a vector of entities stored at z level?
@@ -76,11 +74,11 @@ void MapRender::moveCamera(const CamDirections D)
 		offsetY -= 1;
 
 	// Adjust for Gui size  + engine->gui.verticalSize ???
-	else if (D == SOUTH && offsetY + panelHeight < map.height)
+	else if (D == SOUTH && offsetY + panelHeight < MAP_HEIGHT)
 		offsetY += 1;
 
 	// Adjust for gui size
-	else if (D == EAST && offsetX + panelWidth < map.width + engine->gui.horizontalOffset)
+	else if (D == EAST && offsetX + panelWidth < MAP_WIDTH + engine->gui.horizontalOffset)
 		offsetX += 1;
 
 	else if (D == WEST && offsetX > 0)

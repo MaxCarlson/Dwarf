@@ -283,7 +283,6 @@
     <ClInclude Include="ECS\Components\Tags\MiningTag.h" />
     <ClInclude Include="ECS\Systems\ai\MiningAi.h" />
     <ClInclude Include="ECS\Systems\ai\WorkTemplate.h" />
-    <ClInclude Include="ECS\Systems\CameraSystem.h" />
     <ClInclude Include="ECS\Systems\MovementSystem.h" />
     <ClInclude Include="ECS\Systems\RenderSystem.h" />
     <ClInclude Include="ECS\TypeID.h" />

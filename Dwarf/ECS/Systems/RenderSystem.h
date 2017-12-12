@@ -13,18 +13,13 @@ class RenderSystem : public System<Requires<PositionComponent, RenderComponent>>
 {
 public:
 	RenderSystem() = default;
-	RenderSystem(Map * map) : map(map) {};
-
-	// Render system holds a pointer to the map we're 
-	// rendering. Map also holds the MapRender object which holds camera info
-	Map * map;
 
 	void update()
 	{
 		const auto& entities = getEntities();
 
-		int offsetX = map->mapRenderer->offsetX; // Use gui offset if rendering becomes a resource drain!!
-		int offsetY = map->mapRenderer->offsetY;		
+		int offsetX = engine->mapRenderer->offsetX; // Use gui offset if rendering becomes a resource drain!!
+		int offsetY = engine->mapRenderer->offsetY;
 		
 		terminal_color("default");
 
@@ -60,7 +55,7 @@ public:
 	// within view of the camera ? // Performance wise, is it worth adding more checks such as co.x < 0 at the risk of branching?? Revisit
 	inline bool isInCameraRange(Coordinates co)
 	{
-		if(map->mapRenderer->currentZLevel != co.z
+		if(engine->mapRenderer->currentZLevel != co.z
 			|| co.x < 0
 			|| co.y < 0
 			)

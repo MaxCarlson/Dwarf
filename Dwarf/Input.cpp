@@ -57,28 +57,28 @@ void Input::read()
 			// Camera
 			// Move camera up or down z Levels
 		case TK_COMMA:
-			engine->map->mapRenderer->incrementZLevel(-1);
+			engine->mapRenderer->incrementZLevel(-1);
 			break;
 
 		case TK_PERIOD:
-			engine->map->mapRenderer->incrementZLevel(1);
+			engine->mapRenderer->incrementZLevel(1);
 			break;
 
 			// Directional movement for camera
 		case TK_UP:
-			engine->map->mapRenderer->moveCamera(MapRender::NORTH);
+			engine->mapRenderer->moveCamera(MapRender::NORTH);
 			break;
 
 		case TK_DOWN:
-			engine->map->mapRenderer->moveCamera(MapRender::SOUTH);
+			engine->mapRenderer->moveCamera(MapRender::SOUTH);
 			break;
 
 		case TK_RIGHT:
-			engine->map->mapRenderer->moveCamera(MapRender::EAST);
+			engine->mapRenderer->moveCamera(MapRender::EAST);
 			break;
 
 		case TK_LEFT:
-			engine->map->mapRenderer->moveCamera(MapRender::WEST);
+			engine->mapRenderer->moveCamera(MapRender::WEST);
 			break;
 
 
@@ -90,7 +90,7 @@ void Input::read()
 
 		if (keyPress == TK_MOUSE_LEFT)
 		{
-			Coordinates co1 = { xx, yy, engine->map->mapRenderer->currentZLevel };
+			Coordinates co1 = { xx, yy, engine->mapRenderer->currentZLevel };
 
 			for (int i = 0; i < 10; ++i)
 			{
@@ -111,7 +111,7 @@ void Input::read()
 			Entity e = engine->world.createEntity();
 			e.addComponent<Item>();
 			e.addComponent<RenderComponent>();
-			e.addComponent<PositionComponent>(Coordinates{ xx, yy, engine->map->mapRenderer->currentZLevel });
+			e.addComponent<PositionComponent>(Coordinates{ xx, yy, engine->mapRenderer->currentZLevel });
 
 			auto& it = e.getComponent<Item>();
 			it.catagory.set(TOOL_DIGGING);

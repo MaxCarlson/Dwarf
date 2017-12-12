@@ -8,7 +8,6 @@
 static const int MAX_ZLVL = 50;
 
 class MapRender;
-class TileFactory;
 
 class Map
 {
@@ -19,13 +18,6 @@ public:
 	~Map();
 
 	void createHeightMap(int howMountainous, float rainAmount);
-
-	// Performs the rendering of the map
-	// and associated built with map generation tiles
-	// Should these be moved to Entities, and an array setup for which to render depending on z level?
-	MapRender * mapRenderer;
-
-	TileFactory * tileFactory;
 
 private:
 	TCODRandom * rng;
