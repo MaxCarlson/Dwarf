@@ -63,3 +63,6 @@ inline bool labor_skill_increase(int skillPoints, int laborSkillLvl)
 
 	return false;
 }
+
+CEREAL_REGISTER_TYPE(LaborStatsComponent);
+CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, LaborStatsComponent);

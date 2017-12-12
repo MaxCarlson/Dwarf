@@ -25,3 +25,6 @@ class CombatStatComponent : public Component
 
 	}
 };
+
+CEREAL_REGISTER_TYPE(CombatStatComponent);
+CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, CombatStatComponent);

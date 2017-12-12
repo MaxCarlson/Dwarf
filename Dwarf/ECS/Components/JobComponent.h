@@ -43,3 +43,6 @@ static const std::vector<std::string> listOfAllJobsByString =
 	"Woodcutter",
 	"Carpenter"
 };
+
+CEREAL_REGISTER_TYPE(JobComponent);
+CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, JobComponent);

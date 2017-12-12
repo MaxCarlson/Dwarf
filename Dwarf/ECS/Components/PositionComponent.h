@@ -18,3 +18,6 @@ public:
 		archive(cereal::base_class<Component>(this), co);
 	}
 };
+
+CEREAL_REGISTER_TYPE(PositionComponent);
+CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, PositionComponent);

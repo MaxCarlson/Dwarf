@@ -14,3 +14,6 @@ public:
 
 	}
 };
+
+CEREAL_REGISTER_TYPE(KeyboardComponent);
+CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, KeyboardComponent);

@@ -5,7 +5,6 @@
 #include "ECS\Components\PositionComponent.h"
 #include "ECS\Components\RenderComponent.h"
 #include "ECS\Components\KeyBoardComponent.h"
-#include "ECS\Components\CameraComponent.h"
 #include "ECS\Systems\RenderSystem.h"
 #include "ECS\Systems\MovementSystem.h"
 #include "ECS\Systems\ai\MovementAiSystem.h"

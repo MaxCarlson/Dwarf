@@ -267,7 +267,6 @@
     <ClInclude Include="Designations.h" />
     <ClInclude Include="ECS\Camera.h" />
     <ClInclude Include="ECS\Component.h" />
-    <ClInclude Include="ECS\Components\CameraComponent.h" />
     <ClInclude Include="Coordinates.h" />
     <ClInclude Include="ECS\Components\CombatStatsComponent.h" />
     <ClInclude Include="ECS\Components\HealthComponent.h" />

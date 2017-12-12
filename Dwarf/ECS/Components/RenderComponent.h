@@ -33,3 +33,4 @@ public:
 };
 
 CEREAL_REGISTER_TYPE(RenderComponent);
+CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, RenderComponent);

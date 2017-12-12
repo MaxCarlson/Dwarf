@@ -31,3 +31,6 @@ public:
 		archive(cereal::base_class<Component>(this), inventory);
 	}
 };
+
+CEREAL_REGISTER_TYPE(Inventory);
+CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, Inventory);

@@ -23,3 +23,6 @@ struct ItemStored : public Component
 		archive(cereal::base_class<Component>(this), eid, rend);
 	}
 };
+
+CEREAL_REGISTER_TYPE(ItemStored);
+CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, ItemStored);

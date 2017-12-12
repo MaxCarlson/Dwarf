@@ -146,9 +146,6 @@
     <ClInclude Include="BearLibTerminal.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ECS\Components\CameraComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="EntityFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>

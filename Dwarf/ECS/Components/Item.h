@@ -25,3 +25,6 @@ public:
 		archive(cereal::base_class<Component>(this), itemName, itemTag, catagory, type, claimed, stackSize);
 	}
 };
+
+CEREAL_REGISTER_TYPE(Item);
+CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, Item);

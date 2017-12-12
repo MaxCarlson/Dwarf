@@ -4,7 +4,6 @@
 #include "../Components/PositionComponent.h"
 #include "../Components/RenderComponent.h"
 #include "../BearLibTerminal.h"
-#include "../Components/CameraComponent.h"
 
 
 // Render all entities that are within camera fov/zlevel

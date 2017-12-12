@@ -53,3 +53,6 @@ public:
 		archive(cereal::base_class<Component>(this), speed, progress, destination, cannotFindPath, path);
 	}
 };
+
+CEREAL_REGISTER_TYPE(MovementComponent);
+CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, MovementComponent);

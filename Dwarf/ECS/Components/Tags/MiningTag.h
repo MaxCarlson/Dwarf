@@ -26,3 +26,6 @@ public:
 		archive(cereal::base_class<Component>(this), step, currentPick);
 	}
 };
+
+CEREAL_REGISTER_TYPE(MiningTag);
+CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, MiningTag);

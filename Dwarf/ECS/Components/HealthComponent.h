@@ -23,3 +23,6 @@ public:
 		archive(cereal::base_class<Component>(this), health, maxHealth, recoverRate);
 	}
 };
+
+CEREAL_REGISTER_TYPE(HealthComponent);
+CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, HealthComponent);
