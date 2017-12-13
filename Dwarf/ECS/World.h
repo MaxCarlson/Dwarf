@@ -146,9 +146,23 @@ public:
 	}
 
 	template<class Archive>
-	void serialize(Archive& archive)
+	void save(Archive& archive)
+	{
+		deliver_messages();
+		archive(entityIdPool, entityAttributes, entityCache);
+	}
+
+	template<class Archive>
+	void load(Archive& archive)
 	{
 		archive(entityIdPool, entityAttributes, entityCache);
+
+		for (auto& e : getAllEntities())
+		{
+			e.setWorld(*this);
+			e.activate();
+		}
+		//refresh();
 	}
 
 private:

@@ -107,9 +107,9 @@ void Engine::loadMap(std::string filePath)
 	std::ifstream is(dirpath);
 	cereal::JSONInputArchive iarchive(is);
 
-	world.serialize(iarchive);
+	world.load(iarchive);
 
-
+	/*
 	// This logic should be in the world itself
 	auto& ents = world.getAllEntities();
 
@@ -118,7 +118,7 @@ void Engine::loadMap(std::string filePath)
 		e.setWorld(world);
 		e.activate();
 	}
-		
+	*/	
 }
 
 void Engine::saveMap(std::string filePath)
@@ -129,7 +129,7 @@ void Engine::saveMap(std::string filePath)
 	std::ofstream os(dirpath);
 	cereal::JSONOutputArchive archive(os);
 
-	world.serialize(archive);
+	world.save(archive);
 }
 
 // Game loop
