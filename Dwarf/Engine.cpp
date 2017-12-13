@@ -20,6 +20,12 @@
 #include <unordered_map>
 #include <chrono>
 
+#include <cereal.hpp>
+#include "../cereal/archives/binary.hpp"
+#include "../cereal/types/memory.hpp"
+#include "../cereal/types/vector.hpp"
+#include <fstream>
+
 
 
 typedef std::chrono::milliseconds::rep TimePoint;
@@ -88,7 +94,25 @@ void Engine::init(std::string mapPath, int screenWidth, int screenHeight)
 
 void Engine::loadMap(std::string filePath)
 {
+	std::string dirpath = "Saves/" + filePath;
 
+	load_region(dirpath);
+	
+	std::ifstream is(dirpath);
+	cereal::JSONInputArchive iarchive(is);
+
+	world.serialize(iarchive);
+}
+
+void Engine::saveMap(std::string filePath)
+{
+	std::string dirpath = "Saves/" + filePath;
+	save_region(dirpath);
+
+	std::ofstream os(dirpath);
+	cereal::JSONOutputArchive archive(os);
+
+	world.serialize(archive);
 }
 
 // Game loop

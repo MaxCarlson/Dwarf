@@ -65,6 +65,7 @@ public:
 // Number of tiles for each dimension of the current map
 extern int MAP_WIDTH, MAP_HEIGHT, MAP_DEPTH, TOTAL_MAP_TILES;
 
+class Archive;
 
 namespace region
 {
@@ -101,10 +102,11 @@ namespace region
 
 	// Create a new region, will overwrite the old region
 	void new_region(int width, int height, int depth);
+	
+	
+	void save_region(std::string filePath);
 
-	void save_region(std::string fileName);
-
-	void load_region(std::string fileName);
+	void load_region(std::string filePath);
 
 	/* Tile Flag functions, Flags are above */
 	bool flag(const Coordinates co, Flag f);

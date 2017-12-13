@@ -58,30 +58,23 @@ namespace region
 		currentRegion = std::make_unique<Region>();
 	}
 
-
-	void save_region(std::string fileName)
+	void save_region(std::string filePath)
 	{
-		std::string dirpath = "Saves/" + fileName;
-		std::ofstream os(dirpath);
+		std::string regionPath = filePath + std::string("/region");
+
+		std::ofstream os(regionPath);
 		cereal::BinaryOutputArchive oarchive(os);
-		//cereal::JSONOutputArchive oarchive(os);
-
-		engine->world.serialize(oarchive);
-
 		currentRegion->serialize(oarchive);
 	}
 
-	void load_region(std::string fileName)
+	void load_region(std::string filePath)
 	{
-		currentRegion = std::make_unique<Region>(); 
+		std::string regionPath = filePath + std::string("/region");
 
-		std::ifstream os(fileName);
+		std::ifstream os(regionPath);
 		cereal::BinaryInputArchive iarchive(os);
-		//cereal::JSONInputArchive iarchive(os);
 
-		iarchive(currentRegion->tileMap);
-		iarchive(currentRegion->tileFlags);
-		iarchive(MAP_WIDTH, MAP_HEIGHT, MAP_DEPTH);
+		currentRegion->serialize(iarchive);
 	}
 
 	bool flag(const Coordinates co, Flag f)

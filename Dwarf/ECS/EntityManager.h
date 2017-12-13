@@ -51,11 +51,6 @@ public:
 		archive(counts, freeIdList, nextId, defaultPoolSize);
 	}
 
-	template<class Archive>
-	void load(Archive & iarchive)
-	{
-		iarchive(counts, freeIdList, nextId, defaultPoolSize);
-	}
 
 private:
 
@@ -110,12 +105,6 @@ public:
 	void serialize(Archive & archive)
 	{
 		archive(componentEntries);
-	}
-
-	template<class Archive>
-	void load(Archive & iarchive)
-	{
-		iarchive(componentEntries);
 	}
 
 private:

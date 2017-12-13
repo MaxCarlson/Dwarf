@@ -314,9 +314,12 @@ int MainMenu::loadWorld()
 
 		else if (code == IN_ENTER)
 		{
+			// Set the path so engine
+			// can load the world when it's 
+			// initialized
 			mapPath = paths[selected];
-			region::load_region(mapPath);
-			finalizeDwarfPicks(); // Delete this once ECS is Serialized
+			//engine->loadMap(mapPath);
+			//finalizeDwarfPicks(); // Delete this once ECS is Serialized
 			return LOAD_WORLD;
 		}
 	}
