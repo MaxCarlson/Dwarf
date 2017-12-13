@@ -41,7 +41,6 @@ namespace region
 		{
 			archive(tileMap);
 			archive(tileFlags);
-			archive(MAP_WIDTH, MAP_HEIGHT, MAP_DEPTH);
 		}
 	};
 
@@ -60,20 +59,25 @@ namespace region
 
 	void save_region(std::string filePath)
 	{
-		std::string regionPath = filePath + std::string("/region");
+		std::string regionPath = filePath + std::string("_region.sav");
 
-		std::ofstream os(regionPath);
+		std::ofstream os(regionPath, std::ios::binary);
 		cereal::BinaryOutputArchive oarchive(os);
+
+		oarchive(MAP_WIDTH, MAP_HEIGHT, MAP_DEPTH, TOTAL_MAP_TILES);
 		currentRegion->serialize(oarchive);
 	}
 
 	void load_region(std::string filePath)
 	{
-		std::string regionPath = filePath + std::string("/region");
+		std::string regionPath = filePath + std::string("_region.sav");
 
-		std::ifstream os(regionPath);
+		std::ifstream os(regionPath, std::ios::binary);
 		cereal::BinaryInputArchive iarchive(os);
 
+		currentRegion = std::make_unique<Region>();
+
+		iarchive(MAP_WIDTH, MAP_HEIGHT, MAP_DEPTH, TOTAL_MAP_TILES);
 		currentRegion->serialize(iarchive);
 	}
 

@@ -48,6 +48,13 @@ public:
 		archive(eId);
 	}
 
+	// Used to reset world when loading ecs
+	// from serilization
+	void setWorld(World & eworld)
+	{
+		world = &eworld;
+	}
+
 
 	Entity(const Entity &)			  = default;
 	Entity(Entity &&)			      = default;

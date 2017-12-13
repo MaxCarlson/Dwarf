@@ -196,6 +196,11 @@ const World::EntityArray & World::getAllEntities() const
 	return entityCache.alive;
 }
 
+World::EntityArray & World::getAllEntities()
+{
+	return entityCache.alive;
+}
+
 Entity World::getEntity(std::size_t idx)
 {
 	return Entity{ *this, entityIdPool.get(idx) };

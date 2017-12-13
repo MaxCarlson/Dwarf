@@ -97,6 +97,8 @@ public:
 	// Return all entities in world
 	const EntityArray& getAllEntities() const;
 
+	EntityArray& getAllEntities();
+
 	// Returns entity and index of idx
 	Entity getEntity(std::size_t idx);
 
@@ -172,7 +174,9 @@ private:
 			template<class Archive>
 			void serialize(Archive& archive)
 			{
-				archive(activated, systems);
+				// Systems are not serialized as
+				// systems will be added when entity is re-activated on load
+				archive(activated);
 			}
 		};
 

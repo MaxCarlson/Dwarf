@@ -40,17 +40,23 @@ Engine::~Engine()
 
 void Engine::init(std::string mapPath, int screenWidth, int screenHeight)
 {
-	// Init misc maps and designations
-	designations = std::make_unique<Designations>();
-	mapRenderer = std::make_unique<MapRender>();
-
 	// Create new local map
 	if (!mapPath.size())
+	{
+		mapRenderer = std::make_unique<MapRender>();
 		map = std::make_unique<Map>(screenWidth, screenHeight, MAX_ZLVL);
-
+	}
+		
 	// Or load it from a save file
 	else
+	{
 		loadMap(mapPath);
+		mapRenderer = std::make_unique<MapRender>();
+	}
+		
+
+	// Init misc maps and designations
+	designations = std::make_unique<Designations>();
 
 	// Add systems at init
 	renderSystem = new RenderSystem();
@@ -94,7 +100,7 @@ void Engine::init(std::string mapPath, int screenWidth, int screenHeight)
 
 void Engine::loadMap(std::string filePath)
 {
-	std::string dirpath = "Saves/" + filePath;
+	std::string dirpath =  filePath;
 
 	load_region(dirpath);
 	
@@ -102,6 +108,17 @@ void Engine::loadMap(std::string filePath)
 	cereal::JSONInputArchive iarchive(is);
 
 	world.serialize(iarchive);
+
+
+	// This logic should be in the world itself
+	auto& ents = world.getAllEntities();
+
+	for (auto& e : ents)
+	{
+		e.setWorld(world);
+		e.activate();
+	}
+		
 }
 
 void Engine::saveMap(std::string filePath)
