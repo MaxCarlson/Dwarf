@@ -38,26 +38,59 @@ Engine::~Engine()
 {
 }
 
-void Engine::init(std::string mapPath, int screenWidth, int screenHeight)
+void Engine::newGame(int screenWidth, int screenHeight)
 {
-	// Create new local map
-	if (!mapPath.size())
-	{
-		mapRenderer = std::make_unique<MapRender>();
-		map = std::make_unique<Map>(screenWidth, screenHeight, MAX_ZLVL);
-	}
-		
-	// Or load it from a save file
-	else
-	{
-		loadMap(mapPath);
-		mapRenderer = std::make_unique<MapRender>();
-	}
-		
+	mapRenderer = std::make_unique<MapRender>();
+
+	// Create map
+	map = std::make_unique<Map>(screenWidth, screenHeight, MAX_ZLVL);
 
 	// Init misc maps and designations
 	designations = std::make_unique<Designations>();
+	positionCache = std::make_unique<std::unordered_multimap<int, std::size_t>>();
 
+	// Init systems
+	init();
+}
+
+void Engine::loadGame(std::string filePath)
+{
+	std::string dirpath = filePath;
+	std::ifstream is(dirpath);
+
+	cereal::JSONInputArchive iarchive(is);
+
+	// Load region then world
+	// Systems aren't loaded, just re-created
+	load_region(dirpath);
+	world.load(iarchive);
+	// Misc archives, move somewhere else
+	iarchive(designations);
+	positionCache = std::make_unique<std::unordered_multimap<int, std::size_t>>();
+	//iarchive(positionCache);
+
+	mapRenderer = std::make_unique<MapRender>();
+
+	init();
+}
+
+void Engine::saveGame(std::string filePath)
+{
+	std::string dirpath = "Saves/" + filePath;
+	std::ofstream os(dirpath);
+
+	cereal::JSONOutputArchive archive(os);
+
+	// Save region then world
+	save_region(dirpath);
+	world.save(archive);
+	// Misc archives, move somewhere else
+	archive(designations);
+//	archive(positionCache);
+}
+
+void Engine::init()
+{		
 	// Add systems at init
 	renderSystem = new RenderSystem();
 	movementSystem = new MovementSystem();
@@ -90,46 +123,10 @@ void Engine::init(std::string mapPath, int screenWidth, int screenHeight)
 	dijkstraHandler->init();
 	entityPositionCache->init();
 	equipHandler->init();
-
-	// FloodFill from 0, 0, MAX_Z_LVL - 1
-	// explored areas. Not working yet.
-	//movementAiSystem->floodFillMap();
 	
 	world.refresh();
-}
 
-void Engine::loadMap(std::string filePath)
-{
-	std::string dirpath =  filePath;
-
-	load_region(dirpath);
-	
-	std::ifstream is(dirpath);
-	cereal::JSONInputArchive iarchive(is);
-
-	world.load(iarchive);
-
-	/*
-	// This logic should be in the world itself
-	auto& ents = world.getAllEntities();
-
-	for (auto& e : ents)
-	{
-		e.setWorld(world);
-		e.activate();
-	}
-	*/	
-}
-
-void Engine::saveMap(std::string filePath)
-{
-	std::string dirpath = "Saves/" + filePath;
-	save_region(dirpath);
-
-	std::ofstream os(dirpath);
-	cereal::JSONOutputArchive archive(os);
-
-	world.save(archive);
+	run();
 }
 
 // Game loop

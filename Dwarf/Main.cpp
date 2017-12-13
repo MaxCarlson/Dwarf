@@ -28,19 +28,19 @@ int main()
 		MainMenu menu;
 		int code = menu.render();
 
-		std::string mapPath;
 		if (code == MainMenu::EXIT_CODE)
 			break;
 
 		else if (code == MainMenu::START_CODE)
-			mapPath = "";
+			engine->newGame(menu.mapWidth, menu.mapHeight);
+			
 
 		else if (code == MainMenu::LOAD_WORLD)
-		{
-			mapPath = menu.mapPath;
-		}
+			engine->loadGame(menu.mapPath);
+			
+		
 
-		engine->init(mapPath, menu.mapWidth, menu.mapHeight);
+		
 
 		// Start the game loop.
 		engine->run();

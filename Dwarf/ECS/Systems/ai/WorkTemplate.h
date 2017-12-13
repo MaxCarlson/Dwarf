@@ -21,9 +21,6 @@ public:
 	template<typename MSG, typename CANCEL, typename SUCCESS>
 	void pickup_tool(const Entity& e, Coordinates co, const int &catagory, std::size_t& out_tool, const CANCEL &cancel, const SUCCESS &success)
 	{
-		// Load all Entities at positon from cache
-		auto& entitiesAtPos = engine->entityPositionCache->findEntities(co);
-
 		// Entities current tool
 		// ( Possibly no tool )
 		out_tool = e.getComponent<Inventory>().inventory[SLOT_TOOL];
@@ -35,6 +32,9 @@ public:
 			success();
 			return;
 		}
+
+		// Load all Entities at positon from cache
+		auto& entitiesAtPos = engine->entityPositionCache->findEntities(co);
 			
 		// Entity doesn't have correct tool
 		// For all Entities at this position

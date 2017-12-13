@@ -248,7 +248,7 @@ void Input::drawSaveMenu()
 	SAVE_REGION:
 
 
-	engine->saveMap(paths[0]);
+	engine->saveGame(paths[0]);
 }
 
 

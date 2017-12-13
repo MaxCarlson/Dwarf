@@ -8,6 +8,7 @@
 #include <iostream>
 #include <unordered_map>
 
+extern std::unique_ptr<std::unordered_multimap<int, std::size_t>> positionCache;
 
 class EntityPositionCache : public System<Requires<PositionComponent>>
 {
@@ -33,7 +34,6 @@ public:
 	
 
 private:
-	std::unordered_multimap<int, Entity> positionCache;
 
 	void onEntityAdd(Entity & entity);
 
@@ -47,23 +47,23 @@ void EntityPositionCache::updateEntity(const Entity e, const Coordinates & newCo
 	// Delete old position for cache if it exists
 	auto oldIdx = getIdx(oldCo);
 
-	auto range = positionCache.equal_range(oldIdx);
+	auto range = positionCache->equal_range(oldIdx);
 
 	for (auto& it = range.first; it != range.second; ++it)
 	{
 		// If the Entities match by eid.index 
 		// ( doesn't check counter, maybe it should? )
-		if (it->second.getId().index == e.getId().index)
+		if (it->second == e.getId().index)
 		{
 			// Erase old position entry
 			// Possibly this should be a move operation
 			// for non deleting ops? or maybe just emplace_hint?
-			positionCache.erase(it);
+			positionCache->erase(it);
 
 			// If we're updating the entity
 			// move Entity to new position in cache
 			if (!remove)
-				positionCache.emplace(getIdx(newCo), e);
+				positionCache->emplace(getIdx(newCo), e.getId().index);
 
 			return;
 		}
