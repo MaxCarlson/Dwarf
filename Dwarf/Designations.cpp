@@ -1,5 +1,5 @@
 #include "Designations.h"
 
-Designations*  designations;
+std::unique_ptr<Designations>  designations;
 
 

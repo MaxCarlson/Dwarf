@@ -30,14 +30,12 @@ inline TimePoint now() {
 
 Engine::~Engine()
 {
-	// Some globals
-	delete designations;
 }
 
 void Engine::init(std::string mapPath, int screenWidth, int screenHeight)
 {
 	// Init misc maps and designations
-	designations = new Designations;
+	designations = std::make_unique<Designations>();
 	mapRenderer = std::make_unique<MapRender>();
 
 	// Create new local map

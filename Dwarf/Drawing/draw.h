@@ -21,7 +21,7 @@ namespace draw
 		IN_EXIT
 	};
 
-	int handleInput(bool hangInput, int& selected, const std::size_t limit);
+	int handleInput(bool hangInput, int& selected, const int limit);
 
 
 	template<typename T, bool hangInput>
@@ -29,7 +29,7 @@ namespace draw
 	{
 		int panelWidth = terminal_state(TK_WIDTH);
 		int panelHeight = terminal_state(TK_HEIGHT);
-		const std::size_t size = vec.size();
+		const int size = (int)vec.size();
 
 
 		if (clear)

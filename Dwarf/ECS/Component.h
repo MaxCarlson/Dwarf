@@ -8,6 +8,7 @@
 #include "../cereal/types/polymorphic.hpp"
 #include "../cereal/types/base_class.hpp"
 #include "../cereal/archives/binary.hpp"
+#include "../cereal/archives/json.hpp"
 
 // Max components entity can hold
 // This can be changed to whatever, best keep it power of two and small

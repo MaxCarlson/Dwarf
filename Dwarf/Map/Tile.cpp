@@ -62,8 +62,9 @@ namespace region
 	void save_region(std::string fileName)
 	{
 		std::string dirpath = "Saves/" + fileName;
-		std::ofstream os(dirpath, std::ios::binary);
+		std::ofstream os(dirpath);
 		cereal::BinaryOutputArchive oarchive(os);
+		//cereal::JSONOutputArchive oarchive(os);
 
 		engine->world.serialize(oarchive);
 
@@ -74,8 +75,9 @@ namespace region
 	{
 		currentRegion = std::make_unique<Region>(); 
 
-		std::ifstream os(fileName, std::ios::binary);
+		std::ifstream os(fileName);
 		cereal::BinaryInputArchive iarchive(os);
+		//cereal::JSONInputArchive iarchive(os);
 
 		iarchive(currentRegion->tileMap);
 		iarchive(currentRegion->tileFlags);

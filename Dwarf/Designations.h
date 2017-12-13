@@ -2,7 +2,7 @@
 #include "Coordinates.h"
 #include <unordered_map>
 #include <vector>
-
+#include <memory>
 
 
 struct Designations
@@ -12,4 +12,4 @@ struct Designations
 	std::unordered_map<int, uint8_t> mining;
 };
 
-extern Designations* designations;
+extern std::unique_ptr<Designations> designations;
