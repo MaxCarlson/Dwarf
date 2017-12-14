@@ -89,6 +89,8 @@ void Engine::saveGame(std::string filePath)
 //	archive(positionCache);
 }
 
+#include "ECS\Components\Tags\MiningTag.h"
+
 void Engine::init()
 {		
 	// Add systems at init
@@ -125,6 +127,10 @@ void Engine::init()
 	equipHandler->init();
 	
 	world.refresh();
+
+	auto& e = world.createEntity();
+	e.addComponent<PositionComponent>();
+	e.addComponent<MiningTag>();
 
 	run();
 }

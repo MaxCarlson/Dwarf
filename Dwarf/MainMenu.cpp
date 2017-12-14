@@ -318,8 +318,6 @@ int MainMenu::loadWorld()
 			// can load the world when it's 
 			// initialized
 			mapPath = paths[selected];
-			//engine->loadMap(mapPath);
-			//finalizeDwarfPicks(); // Delete this once ECS is Serialized
 			return LOAD_WORLD;
 		}
 	}
