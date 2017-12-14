@@ -16,6 +16,11 @@
 #include "Designations.h"
 #include "ECS\Systems\ai\AiWorkSystem.h"
 #include "ECS\Systems\ai\MiningAi.h"
+#include "ECS\Components\ItemStored.h"
+//#include "ECS\Components\CombatStatsComponent.h"
+#include "ECS\Components\HealthComponent.h"
+#include "ECS\Components\Item.h"
+#include "ECS\Components\LaborStatsComponent.h"
 #include "Coordinates.h"
 #include <unordered_map>
 #include <chrono>
@@ -89,8 +94,30 @@ void Engine::saveGame(std::string filePath)
 //	archive(positionCache);
 }
 
+// This is a placeholder untill ECS no longer requires components
+// to be in the same order
+void Engine::regComponents()
+{
+	world.registerComponent<PositionComponent>();
+	world.registerComponent<MovementComponent>();
+	world.registerComponent<RenderComponent>();
+	world.registerComponent<LaborStatsComponent>();
+	world.registerComponent<JobComponent>();
+	world.registerComponent<Inventory>();
+	world.registerComponent<ItemStored>();
+	world.registerComponent<Item>();
+	world.registerComponent<HealthComponent>();
+	//world.registerComponent<CombatStatsComponent>();
+	world.registerComponent<MiningTag>();
+	
+}
+
 void Engine::init()
 {		
+	// Ensure component Index's match before and after
+	// serialization
+	regComponents();
+
 	// Add systems at init
 	renderSystem = new RenderSystem();
 	movementSystem = new MovementSystem();

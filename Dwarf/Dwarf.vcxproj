@@ -265,7 +265,6 @@
     <ClInclude Include="ECS\Systems\ai\AiWorkSystem.h" />
     <ClInclude Include="BearLibTerminal.h" />
     <ClInclude Include="Designations.h" />
-    <ClInclude Include="ECS\Camera.h" />
     <ClInclude Include="ECS\Component.h" />
     <ClInclude Include="Coordinates.h" />
     <ClInclude Include="ECS\Components\CombatStatsComponent.h" />

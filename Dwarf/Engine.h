@@ -43,7 +43,8 @@ public:
 	// Replace this with serialized read in data!
 	TileFactory * tileFactory;
 
-	// Systems
+	// Systems ~ move these into a sepperate wrapper?
+	// also probably don't need to be public if they stay here?
 	RenderSystem * renderSystem;
 	MovementSystem * movementSystem;
 	MovementAiSystem * movementAiSystem;	
@@ -61,6 +62,7 @@ public:
 	// Possibly cache all Entities by their Coordinates in an unorederdmulti_map?????
 
 	// These need to be pointers because their id's won't be up to date!!!!!!!!!!!!!!!!???????????????????
+	// Get rid of these?
 	std::vector<Entity> Dwarves;
 
 	// Holds local map, 
@@ -71,15 +73,16 @@ public:
 	Gui gui;
 	Input input;
 
-	int screenWidth;
+	int screenWidth; // Git rid of these?
 	int screenHeight;
-
-	void init();
 
 
 	void newGame(int screenWidth, int screenHeight);
 	void loadGame(std::string filePath);
 	void saveGame(std::string filePath);
+
+	void regComponents();
+	void init();
 
 	// Game loop
 	void run();

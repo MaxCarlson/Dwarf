@@ -23,6 +23,7 @@ void AiWorkSystem::update()
 		if (JobsBoard::is_working(e))
 			continue;
 
+		//auto& pos = e.getComponent<PositionComponent>();
 		auto& co = e.getComponent<PositionComponent>().co;
 
 		// Find a list of availible jobs

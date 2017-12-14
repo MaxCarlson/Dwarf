@@ -146,6 +146,10 @@ public:
 		}
 	}
 	
+	// Save the world!
+	// Saves all entities, all their components
+	// does not save systems as those will likely be created
+	// in the same order each time
 	template<class Archive>
 	void save(Archive& archive)
 	{
@@ -153,6 +157,11 @@ public:
 		archive(entityIdPool, entityAttributes, entityCache);
 	}
 
+	// Load the world!
+	// Cereal cannot store raw pointers so we 
+	// set the Entities world pointers here
+	// Do not refresh the world before adding all systems
+	// which the world that your loading had
 	template<class Archive>
 	void load(Archive& archive)
 	{
@@ -163,6 +172,14 @@ public:
 			e.setWorld(*this);
 			e.activate();
 		}
+	}
+
+	// If you wish to serialize data you must
+	// Register each component in an identical order
+	template<typename T>
+	void registerComponent()
+	{
+		ComponentTypeId<T>();
 	}
 
 private:
