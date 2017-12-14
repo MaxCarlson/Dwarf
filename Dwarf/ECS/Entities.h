@@ -133,7 +133,6 @@ private:
 template<typename T, typename ...Args>
 inline T & Entity::addComponent(Args && ...args)
 {
-	// TODO: insert return statement here
 	auto component = new T{ std::forward<Args>(args)... };
 	addComponent(component, ComponentTypeId<T>());
 	return *component;

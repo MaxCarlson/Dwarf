@@ -107,6 +107,7 @@ public:
 		archive(componentEntries);
 	}
 
+
 private:
 	typedef std::array<std::unique_ptr<Component>, MAX_COMPONENTS> ImplComponentArray;
 

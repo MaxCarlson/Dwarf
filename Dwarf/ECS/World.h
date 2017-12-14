@@ -138,13 +138,14 @@ public:
 		}
 	}
 
-	/* Delivers the queue; called at the end of each system call */
+	// Deliver all messages to systems.
+	// Must be called manually
 	inline void deliver_messages() {
 		for (auto &holder : pubsub_holder) {
 			if (holder) holder->deliver_messages();
 		}
 	}
-
+	
 	template<class Archive>
 	void save(Archive& archive)
 	{
@@ -162,7 +163,6 @@ public:
 			e.setWorld(*this);
 			e.activate();
 		}
-		//refresh();
 	}
 
 private:
@@ -181,7 +181,7 @@ private:
 			bool activated;
 
 			// A bitset that can be &'d against to test
-			// whether entity has a particual systsem
+			// whether entity has a particual system
 			// or set of systems
 			std::vector<bool> systems;
 
