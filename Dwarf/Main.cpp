@@ -24,6 +24,7 @@ int main()
 	while (true)
 	{
 		engine = std::make_unique<Engine>();
+		engine->regComponents();
 
 		MainMenu menu;
 		int code = menu.render();

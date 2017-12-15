@@ -1,5 +1,5 @@
 #pragma once
-
+#include "../cereal/archives/binary.hpp"
 // Holds what it says, used for 
 // index lookups
 struct Coordinates 

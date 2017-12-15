@@ -1,10 +1,12 @@
 #include "Engine.h"
-
-#include "Map/Map.h"
-#include "Map/MapRender.h"
 #include "ECS\Components\PositionComponent.h"
 #include "ECS\Components\RenderComponent.h"
 #include "ECS\Components\KeyBoardComponent.h"
+#include "ECS\Components\ItemStored.h"
+//#include "ECS\Components\CombatStatsComponent.h"
+#include "ECS\Components\HealthComponent.h"
+#include "ECS\Components\Item.h"
+#include "ECS\Components\LaborStatsComponent.h"
 #include "ECS\Systems\RenderSystem.h"
 #include "ECS\Systems\MovementSystem.h"
 #include "ECS\Systems\ai\MovementAiSystem.h"
@@ -12,19 +14,16 @@
 #include "ECS\Systems\DijkstraSystems\DijkstraMapsHandler.h"
 #include "ECS\Systems\EntityPositionCache.h"
 #include "ECS\Systems\ai\EquipHandler.h"
-#include "BearLibTerminal.h"
-#include "Designations.h"
 #include "ECS\Systems\ai\AiWorkSystem.h"
 #include "ECS\Systems\ai\MiningAi.h"
-#include "ECS\Components\ItemStored.h"
-//#include "ECS\Components\CombatStatsComponent.h"
-#include "ECS\Components\HealthComponent.h"
-#include "ECS\Components\Item.h"
-#include "ECS\Components\LaborStatsComponent.h"
 #include "Coordinates.h"
+#include "Designations.h"
+#include "Map/Map.h"
+#include "Map/MapRender.h"
+
+#include "BearLibTerminal.h"
 #include <unordered_map>
 #include <chrono>
-
 #include <cereal.hpp>
 #include "../cereal/archives/binary.hpp"
 #include "../cereal/types/memory.hpp"
@@ -61,19 +60,24 @@ void Engine::newGame(int screenWidth, int screenHeight)
 void Engine::loadGame(std::string filePath)
 {
 	std::string dirpath = filePath;
-	std::ifstream is(dirpath);
 
-	cereal::JSONInputArchive iarchive(is);
+	std::ifstream is(dirpath, std::ios::binary);
+	cereal::BinaryInputArchive iarchive(is);
+
+	//std::ifstream is(dirpath); // JSON
+	//cereal::JSONInputArchive iarchive(is);
 
 	// Load region then world
 	// Systems aren't loaded, just re-created
 	load_region(dirpath);
 	world.load(iarchive);
+
 	// Misc archives, move somewhere else
 	iarchive(designations);
-	positionCache = std::make_unique<std::unordered_multimap<int, std::size_t>>();
 	//iarchive(positionCache);
 
+	// Init misc maps and designations
+	positionCache = std::make_unique<std::unordered_multimap<int, std::size_t>>();
 	mapRenderer = std::make_unique<MapRender>();
 
 	init();
@@ -82,13 +86,17 @@ void Engine::loadGame(std::string filePath)
 void Engine::saveGame(std::string filePath)
 {
 	std::string dirpath = "Saves/" + filePath;
-	std::ofstream os(dirpath);
 
-	cereal::JSONOutputArchive archive(os);
+	std::ofstream os(dirpath, std::ios::binary);
+	cereal::BinaryOutputArchive archive(os);
+
+	//std::ofstream os(dirpath);  // JSON
+	//cereal::JSONOutputArchive archive(os);
 
 	// Save region then world
 	save_region(dirpath);
 	world.save(archive);
+
 	// Misc archives, move somewhere else
 	archive(designations);
 //	archive(positionCache);
@@ -122,7 +130,6 @@ void Engine::init()
 	renderSystem = new RenderSystem();
 	movementSystem = new MovementSystem();
 	movementAiSystem = new MovementAiSystem();
-	movementAiSystem->init();
 	aiWorkSystem = new AiWorkSystem();
 	miningAi = new MiningAi();
 	miningAi->init();

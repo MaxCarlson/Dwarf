@@ -43,85 +43,11 @@ struct PriorityQueue
 	}
 };
 
-// Order of Coordinates in DIRS array 
-// enum Directions N, NW, NE, S, SW, SE, E, W, UP, DOWN
-std::array<Coordinates, 10> PathGraph::DIRS{ Coordinates{ 0, -1, 0 },{ -1, -1, 0 },{ 1, -1, 0 },{ 0, 1, 0 },{ -1, 1, 0 },{ 1, 1, 0 },{ 1, 0, 0 },{ -1, 0, 0 },{ 0, 0, 1 },{ 0, 0, -1 } };
-
 // This heuristic needs many more variables eventually!!!
 // so user can prioritize pathing for one
 inline double heuristic(Coordinates co, Coordinates co1)
 {
 	return std::abs(co.x - co1.x) + std::abs(co.y - co1.y) + std::abs(co.z - co1.z);
-}
-
-// Move these features to tileManager or keep here?
-// Right now this isn't ideal as dwarves stand on empty tiles above ramps
-// Stairs this should be possible, not ramps
-inline bool PathGraph::passable(Coordinates start, Coordinates dest) const
-{
-	return (canWalk(dest)
-		// On bottom area of ramp
-		|| (getProperty<Tile::RAMP>(start) && start.x == dest.x && start.y == dest.y)
-		// On top of ramp
-		|| (getProperty<Tile::RAMP>({start.x, start.y, start.z - 1}) && start.x == dest.x && start.y == dest.y));
-}
-std::vector<Coordinates> PathGraph::floodFill(Coordinates co) const
-{
-	std::vector<Coordinates> result;
-
-	for (auto dir : DIRS)
-	{
-		Coordinates dest = co;
-
-		dest += dir;
-
-		if (inBounds(dest) && canPass(dest))
-		{
-			result.push_back(dest);
-		}
-	}
-	return result;
-}
-
-void MovementAiSystem::init()
-{
-	pathGraph.width = MAP_WIDTH;
-	pathGraph.height = MAP_HEIGHT;
-	pathGraph.depth = MAP_DEPTH;
-}
-
-// Not Yet working!
-void MovementAiSystem::floodFillMap()
-{
-	std::queue<Coordinates> frontier;
-	std::unordered_map<Coordinates, Coordinates, CoordinateHash, CoordinateHashEqual> exploredMap;
-
-
-	Coordinates start = { 0, 0, MAP_DEPTH - 1 };
-
-	frontier.emplace(start);
-	exploredMap[start] = start;
-
-	bool pathFound = false;
-
-	while (!frontier.empty())
-	{
-		auto current = frontier.front();
-		frontier.pop();
-
-		if (exploredMap.count(current))
-			continue;
-
-		exploredMap.emplace(current, current);
-
-		// Loop through all neighbors of currrent tile
-		for (auto& next : pathGraph.floodFill(current))
-		{
-			frontier.emplace(next);
-			exploredMap[next] = current;
-			setProperty<Tile::EXPLORED>(next);
-		}
-	}
 }
 
 void MovementAiSystem::update()
@@ -158,6 +84,42 @@ void MovementAiSystem::update()
 	}
 }
 
+inline void findNeighbors(const Coordinates co, std::vector<Coordinates> & points)
+{
+	points.clear();
+
+	if (flag(co, CAN_GO_NORTH))
+		points.push_back(CO_NORTH);
+	if (flag(co, CAN_GO_SOUTH))
+		points.push_back(CO_SOUTH);
+	if (flag(co, CAN_GO_EAST))
+		points.push_back(CO_EAST);
+	if (flag(co, CAN_GO_WEST))
+		points.push_back(CO_WEST);
+	if (flag(co, CAN_GO_NORTH_W))
+		points.push_back(CO_NORTH_W);
+	if (flag(co, CAN_GO_NORTH_E))
+		points.push_back(CO_NORTH_E);
+	if (flag(co, CAN_GO_SOUTH_W))
+		points.push_back(CO_SOUTH_W);
+	if (flag(co, CAN_GO_SOUTH_E))
+		points.push_back(CO_SOUTH_E);
+	if (flag(co, CAN_GO_UP))
+		points.push_back(CO_UP);
+	if (flag(co, CAN_GO_DOWN))
+		points.push_back(CO_DOWN);
+}
+
+inline double cost(const Coordinates co, const Coordinates dest)
+{
+	static double baseCost = 1.0;
+
+	if (co.x != dest.x && co.y != dest.y)
+		return 1.44;
+
+	return baseCost;
+}
+
 // Test doubles vs doubles in this and helper structs!!
 bool MovementAiSystem::aStar(Coordinates start, Coordinates end, std::unordered_map<Coordinates, Coordinates, CoordinateHash, CoordinateHashEqual> &path)
 {
@@ -171,6 +133,9 @@ bool MovementAiSystem::aStar(Coordinates start, Coordinates end, std::unordered_
 
 	bool pathFound = false;
 
+	std::vector<Coordinates> neighbors;
+	neighbors.reserve(10);
+
  	while (!frontier.empty())
 	{
 		auto current = frontier.get();
@@ -182,11 +147,12 @@ bool MovementAiSystem::aStar(Coordinates start, Coordinates end, std::unordered_
 			break;
 		}
 
+		findNeighbors(current, neighbors);
 
 		// Loop through all neighbors of currrent tile
-		for (auto& next : pathGraph.neighbors(current))
+		for (auto& next : neighbors)//pathGraph.neighbors(current))
 		{
-			double newCost = costSoFar[current] + pathGraph.cost(current, next);
+			double newCost = costSoFar[current] + cost(current, next);
 
 			if (!costSoFar.count(next) || newCost < costSoFar[next])
 			{

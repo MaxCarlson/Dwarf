@@ -87,6 +87,7 @@ public:
 			{
 				const auto destination = map.findDestination(co);
 				mov.destination = destination;
+				//mov.path.push_back(destination);
 				return;
 			}
 		}
