@@ -1,8 +1,17 @@
 #pragma once
 
-#include "../../../dependencies/lua-5.3.4/Lua/Lua/lua.h"
-#inc
 
-extern lua_State* lua_state;
+extern "C" {
+	
+#include "lualib.h"
+#include "lauxlib.h"
+}
+
+//#include "lua.hpp"
+
+extern lua_State* luaState;
+
+void initLua();
+void exitLua();
 
 
