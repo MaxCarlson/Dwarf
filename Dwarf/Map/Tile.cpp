@@ -79,6 +79,8 @@ namespace region
 
 		iarchive(MAP_WIDTH, MAP_HEIGHT, MAP_DEPTH, TOTAL_MAP_TILES);
 		currentRegion->serialize(iarchive);
+		//tileRecalcAll(); 
+		
 	}
 
 	bool flag(const Coordinates co, Flag f)

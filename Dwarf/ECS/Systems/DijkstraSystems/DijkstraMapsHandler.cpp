@@ -24,6 +24,7 @@ void DijkstraMapsHandler::init()
 
 	// Subscribe to messages
 	subscribe_mbox<pick_map_changed_message>();
+//	emit(pick_map_changed_message{});
 }
 
 void DijkstraMapsHandler::update()

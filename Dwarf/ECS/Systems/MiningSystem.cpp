@@ -31,6 +31,7 @@ void MiningSystem::init()
 
 	miningMap.resize(MAP_WIDTH * MAP_HEIGHT * MAP_DEPTH);
 	miningTargets.resize(MAP_WIDTH * MAP_HEIGHT * MAP_DEPTH);
+	makeMiningMap();
 }
 
 void MiningSystem::update()
