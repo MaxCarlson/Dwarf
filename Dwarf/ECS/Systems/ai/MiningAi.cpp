@@ -16,8 +16,6 @@
 
 #include <libtcod.hpp>
 
-
-
 using namespace region;
 
 namespace JobsBoard
@@ -113,7 +111,7 @@ void MiningAi::updateMiner(const Entity& e)
 		uint8_t min_value = std::numeric_limits<uint8_t>::max();
 
 		if (miningMap[getIdx(CO_NORTH)] < min_value && flag(co, CAN_GO_NORTH)) { // Find a better system than this!! ~~ And run this system at not fullspeed, no need
-			min_value = miningMap[getIdx(CO_NORTH)];
+			min_value = miningMap[getIdx(CO_NORTH)];							 // This systems makes miners walk close together and to the same spots leading to clumping of miners, find a way to avoid this!
 			currentDir = NORTH;
 		}
 		if (miningMap[getIdx(CO_SOUTH)] < min_value && flag(co, CAN_GO_SOUTH)) {
