@@ -11,11 +11,19 @@ extern "C" {
 
 extern lua_State* luaState;
 
-using luaParser = std::unordered_map<std::string, const std::function<void()>>;
-
 void initLua();
 void exitLua();
 
+struct LuaLife
+{
+	LuaLife() { initLua(); }
+	~LuaLife() { exitLua(); }
+};
+
+using luaParser = std::unordered_map<std::string, const std::function<void()>>;
+
+
+void loadLuaScript(std::string fileName);
 void readLuaTable(const std::string &table, const std::function<void(std::string)> &onStart, const std::function<void(std::string)> &onEnd, const luaParser & parser);
 void readLuaInnerT(const std::string &table, const std::function<void(std::string)> &functor);
 

@@ -102,7 +102,10 @@
     <ClCompile Include="Raws\Lua.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ItemRead.cpp">
+    <ClCompile Include="Raws\ItemRead.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Raws\raws.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -512,11 +515,19 @@
     <ClInclude Include="Raws\Lua.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ItemRead.h">
+    <ClInclude Include="Raws\ItemRead.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Raws\raws.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="cereal\external\rapidxml\manual.html" />
+    <None Include="Raws\LuaDefs\items.lua" />
+    <None Include="Raws\LuaDefs\items_tools.lua" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Raws\LuaDefs\index.txt" />
   </ItemGroup>
 </Project>

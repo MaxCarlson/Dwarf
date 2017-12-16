@@ -1,4 +1,5 @@
 #include "Lua.h"
+#include <iostream>
 
 lua_State* luaState;
 
@@ -35,6 +36,14 @@ inline void callFunctorkey(const luaParser & parser, const std::string& field, c
 	}
 	else {
 		throw std::runtime_error(std::string("Lua - no known parser for [") + field + std::string("] in table: " + table));
+	}
+}
+
+void loadLuaScript(std::string fileName)
+{
+	if (luaL_loadfile(luaState, fileName.c_str()) || lua_pcall(luaState, 0, 0, 0))
+	{
+		std::cout << lua_tostring(luaState, -1) << std::endl;
 	}
 }
 

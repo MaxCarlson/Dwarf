@@ -16,4 +16,5 @@ struct ItemDef
 	uint16_t charCode;
 	int tilesetKey;
 	int color;
+	int stackSize;
 };

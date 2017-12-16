@@ -5,7 +5,8 @@
 #include "Engine.h"
 #include "MainMenu.h"
 
-
+#include "Raws\ItemRead.h"
+#include "Raws\Lua.h"
 // Numbers a screen width and height, make more 
 // dynamic eventually
 std::unique_ptr<Engine> engine;
@@ -25,6 +26,10 @@ int main()
 	{
 		engine = std::make_unique<Engine>();
 		engine->regComponents();
+
+		auto lf = LuaLife();
+		readInItems();
+
 
 		MainMenu menu;
 		int code = menu.render();

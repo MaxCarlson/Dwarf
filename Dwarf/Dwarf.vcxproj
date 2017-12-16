@@ -143,7 +143,8 @@
     <ClCompile Include="ECS\Systems\DijkstraSystems\DijkstraMapsHandler.cpp" />
     <ClCompile Include="ECS\Systems\EntityPositionCache.cpp" />
     <ClCompile Include="ECS\Systems\ai\EquipHandler.cpp" />
-    <ClCompile Include="ItemRead.cpp" />
+    <ClCompile Include="Raws\raws.cpp" />
+    <ClCompile Include="Raws\ItemRead.cpp" />
     <ClCompile Include="Raws\Lua.cpp" />
     <ClCompile Include="Map\DijkstraMap.cpp" />
     <ClCompile Include="ECS\Systems\ai\AiWorkSystem.cpp" />
@@ -261,7 +262,8 @@
     <ClInclude Include="ECS\Systems\DijkstraSystems\DijkstraMapsHandler.h" />
     <ClInclude Include="ECS\Systems\EntityPositionCache.h" />
     <ClInclude Include="ECS\Systems\ai\EquipHandler.h" />
-    <ClInclude Include="ItemRead.h" />
+    <ClInclude Include="Raws\raws.h" />
+    <ClInclude Include="Raws\ItemRead.h" />
     <ClInclude Include="Raws\Lua.h" />
     <ClInclude Include="Map\DijkstraMap.h" />
     <ClInclude Include="ECS\Messages\perform_mining_message.h" />
@@ -310,6 +312,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="cereal\external\rapidxml\manual.html" />
+    <None Include="Raws\LuaDefs\items.lua" />
+    <None Include="Raws\LuaDefs\items_tools.lua" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Raws\LuaDefs\index.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
