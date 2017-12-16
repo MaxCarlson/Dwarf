@@ -30,6 +30,7 @@ void readInItems() noexcept
 				//{ "foreground", [&c]() { c.bg = lua_int("foreground"); } },
 				{ "glyph", [&c]() { c.charCode = lua_int(); } },
 				{ "stackSize", [&c]() { c.stackSize = lua_int(); } },
+				{ "tcode", [&c]() { c.tilesetKey = lua_int(); } },
 				{ "itemType", [&c]() {
 				readLuaInnerT("itemType", [&c](auto type) {
 					if (type == "choppingTool") c.categories.set(TOOL_CHOPPING);

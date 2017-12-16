@@ -16,6 +16,7 @@
 #include "ECS\Components\RenderComponent.h"
 #include "ECS\Components\PositionComponent.h"
 #include "ECS\Messages\pick_map_changed_message.h"
+#include "Raws\ItemRead.h"
 
 // For draw functions that need to
 // be moved else where for my sanity
@@ -113,14 +114,18 @@ void Input::read()
 			e.addComponent<RenderComponent>();
 			e.addComponent<PositionComponent>(Coordinates{ xx, yy, engine->mapRenderer->currentZLevel });
 
+			auto axe = getItemDef("pickaxe");
+
+			
+
 			auto& it = e.getComponent<Item>();
 			it.catagory.set(TOOL_DIGGING);
 
 			auto& rend = e.getComponent<RenderComponent>();
 
-			rend.ch = 55;
-			rend.colorStr = "blue";
-			rend.terminalCode = 0xE300;
+			rend.ch = axe->charCode;
+			rend.colorStr = axe->color;
+			rend.terminalCode = axe->tilesetKey;
 
 			e.activate();
 

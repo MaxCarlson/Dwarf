@@ -221,7 +221,7 @@ void Map::addTrees(int treeDensity)
 			if (t.properties & Tile::FLOOR && !(t.properties & Tile::OBSTRUCTED)) // Move this to EntityFactory???
 			{
 				trees[counter].addComponent<PositionComponent>(co);
-				trees[counter].addComponent<RenderComponent>(treeChar, 0xE200, "brown");
+				trees[counter].addComponent<RenderComponent>(treeChar, 2, "brown");
 				trees[counter].addComponent<HealthComponent>(300, 300, 0);
 				trees[counter].activate();
 

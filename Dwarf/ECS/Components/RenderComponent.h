@@ -17,8 +17,8 @@ public:
 	int ch;
 
 	// Code to use to index which image
-	// we want to draw from
-	int terminalCode;
+	// we want to draw from, is used for index in render system
+	uint8_t terminalCode;
 
 	// Possibly create a color object to house some simple color opperations?
 	// Color string for BLT renderer

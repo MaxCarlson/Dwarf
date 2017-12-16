@@ -15,9 +15,14 @@ int main()
 	// BearslibTerminal Init stuff
 	terminal_open();
 	terminal_set("window.title='Dwarf'; window.size=80x80; window.cellsize=16x16");
+
+	// Move these into config files that don't require compiling
+	// so outside users can modify tilesets/etc
 	terminal_set("U+E100: ../Obsidian_16x16.png, size=16x16");
 	terminal_set("U+E200: ../Spacefox_16x16Dibujor01.png, size=16x16");
 	terminal_set("U+E300: ../dwarves.png, size=16x16");
+	terminal_set("U+E400: ../_VanillaDF-24x-Items.png, size=24x24");
+
 	terminal_set("input.filter = [keyboard, mouse+]");
 	terminal_composition(true);
 

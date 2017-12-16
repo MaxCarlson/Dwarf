@@ -13,6 +13,8 @@ class RenderSystem : public System<Requires<PositionComponent, RenderComponent>>
 public:
 	RenderSystem() = default;
 
+	const int terminalCodes[9] = { 0xE000, 0xE100, 0xE200, 0xE300, 0xE400, 0xE500, 0xE600, 0xE700, 0xE800 };
+
 	void update()
 	{
 		const auto& entities = getEntities();
@@ -45,7 +47,7 @@ public:
 
 				// Draw tile image, from tile set associated with rend.terminalcode
 				// with location in tileset being rend.ch
-				terminal_put(co.x, co.y, rend.terminalCode + rend.ch);
+				terminal_put(co.x, co.y, terminalCodes[rend.terminalCode] + rend.ch);
 			}
 		}
 	}
