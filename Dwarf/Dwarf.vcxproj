@@ -143,6 +143,7 @@
     <ClCompile Include="ECS\Systems\DijkstraSystems\DijkstraMapsHandler.cpp" />
     <ClCompile Include="ECS\Systems\EntityPositionCache.cpp" />
     <ClCompile Include="ECS\Systems\ai\EquipHandler.cpp" />
+    <ClCompile Include="ItemRead.cpp" />
     <ClCompile Include="Raws\Lua.cpp" />
     <ClCompile Include="Map\DijkstraMap.cpp" />
     <ClCompile Include="ECS\Systems\ai\AiWorkSystem.cpp" />
@@ -260,6 +261,7 @@
     <ClInclude Include="ECS\Systems\DijkstraSystems\DijkstraMapsHandler.h" />
     <ClInclude Include="ECS\Systems\EntityPositionCache.h" />
     <ClInclude Include="ECS\Systems\ai\EquipHandler.h" />
+    <ClInclude Include="ItemRead.h" />
     <ClInclude Include="Raws\Lua.h" />
     <ClInclude Include="Map\DijkstraMap.h" />
     <ClInclude Include="ECS\Messages\perform_mining_message.h" />
