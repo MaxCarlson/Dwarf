@@ -2,15 +2,15 @@
 items["pickaxe"] = {
 	name = "Pickaxe",
 	description = "You can dig with this..",
-	itemType = {"digging-tool"},
+	itemType = {"diggingTool"},
 	glyph = 33,
-	color = 0xAACCBBEE
+	color = "grey"
 };
 
-items["woodaxe"] = {
-	name = "Wood Axe",
+items["hatchet"] = {
+	name = "Hatchet",
 	description = "You can hurt trees with this..",
-	itemType = {"chopping-tool"},
+	itemType = {"choppingTool"},
 	glyph = 44,
-	color = 0xDD3322AA
+	color = "brown"
 };

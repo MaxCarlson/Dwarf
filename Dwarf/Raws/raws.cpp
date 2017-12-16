@@ -3,6 +3,11 @@
 #include "ItemRead.h"
 #include "FileReader.h"
 
+void sanityChecks()
+{
+	sanityCheckItems();
+}
+
 void loadGameTables()
 {
 	readInItems();
@@ -21,4 +26,5 @@ void loadRaws()
 	}
 
 	loadGameTables();
+	sanityChecks();
 }

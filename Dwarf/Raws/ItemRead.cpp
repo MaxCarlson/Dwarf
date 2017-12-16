@@ -26,14 +26,14 @@ void readInItems() noexcept
 			luaParser{
 				{ "name", [&c]() { c.name = lua_str(); } },
 				{ "description", [&c]() { c.description = lua_str(); } },
-				{ "color", [&c]() { c.color = lua_int(); } },
+				{ "color", [&c]() { c.color = lua_str(); } },
 				//{ "foreground", [&c]() { c.bg = lua_int("foreground"); } },
 				{ "glyph", [&c]() { c.charCode = lua_int(); } },
-				{ "stack_size", [&c]() { c.stackSize = lua_int(); } },
+				{ "stackSize", [&c]() { c.stackSize = lua_int(); } },
 				{ "itemType", [&c]() {
 				readLuaInnerT("itemType", [&c](auto type) {
-					if (type == "chopping-tool") c.categories.set(TOOL_CHOPPING);
-					if (type == "digging-tool")  c.categories.set(TOOL_DIGGING);
+					if (type == "choppingTool") c.categories.set(TOOL_CHOPPING);
+					if (type == "diggingTool")  c.categories.set(TOOL_DIGGING);
 				});
 			}}
 		}
