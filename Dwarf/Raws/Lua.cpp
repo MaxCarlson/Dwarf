@@ -30,7 +30,8 @@ void exitLua()
 inline void callFunctorkey(const luaParser & parser, const std::string& field, const std::string& table)
 {
 	auto finder = parser.find(field);
-	if (finder != parser.end()) {
+	if (finder != parser.end()) 
+	{
 		const auto functor = finder->second;
 		functor();
 	}

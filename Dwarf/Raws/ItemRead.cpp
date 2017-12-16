@@ -20,7 +20,7 @@ void readInItems() noexcept
 	std::string tag;
 	ItemDef c;
 
-	readLuaTable("items_tools",
+	readLuaTable("items",
 		[&c, &tag](const auto &key) { tag = key; c = ItemDef{}; c.tag = tag; },
 		[&c, &tag](const auto &key) { itemDefs[tag] = c; },
 			luaParser{
@@ -30,10 +30,10 @@ void readInItems() noexcept
 				//{ "foreground", [&c]() { c.bg = lua_int("foreground"); } },
 				{ "glyph", [&c]() { c.charCode = lua_int(); } },
 				{ "stack_size", [&c]() { c.stackSize = lua_int(); } },
-				{ "itemtype", [&c]() {
-				readLuaInnerT("itemtype", [&c](auto type) {
-					if (type == "chopping tool") c.categories.set(TOOL_CHOPPING);
-					if (type == "digging tool")  c.categories.set(TOOL_DIGGING);
+				{ "itemType", [&c]() {
+				readLuaInnerT("itemType", [&c](auto type) {
+					if (type == "chopping-tool") c.categories.set(TOOL_CHOPPING);
+					if (type == "digging-tool")  c.categories.set(TOOL_DIGGING);
 				});
 			}}
 		}
