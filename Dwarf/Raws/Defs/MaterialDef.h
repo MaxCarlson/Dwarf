@@ -11,8 +11,8 @@ enum MaterialType
 	MAT_SOIL,
 	MAT_SAND,
 	MAT_METAL,
-	//MAT_SYTHETIC,
-	//MAT_ORGANIC
+	MAT_SYTHETIC,
+	MAT_ORGANIC
 };
 
 struct MaterialDef

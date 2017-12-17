@@ -6,26 +6,32 @@
 boost::container::flat_map<std::string, std::size_t> materialDefsIdx;
 std::vector<MaterialDef> materialDefs;
 
-MaterialDef * returnMaterial(const std::string & tag)
+MaterialDef * getMaterial(const std::string & tag)
 {
 	auto idx = materialDefsIdx.at(tag);
 
 	return &materialDefs[idx];
 }
 
-MaterialDef * returnMaterial(const int idx)
+MaterialDef * getMaterial(const int idx)
 {
 	return &materialDefs[idx];
 }
 
-void readInMaterials()
+const std::size_t getMaterialIdx(const std::string & tag)
+{
+	return materialDefsIdx[tag];
+}
+
+void readInMaterials() noexcept
 {
 	std::string tag;
 	MaterialDef m;
+	int matIdx = 0;
 
 	readLuaTable("materials",
 		[&m, &tag](const auto &key) { tag = key; m = MaterialDef{}; m.tag = tag; },
-		[&m, &tag](const auto &key) { materialDefs[tag] = m; },
+		[&m, &tag, &matIdx](const auto &key) { materialDefsIdx[tag] = matIdx++; materialDefs.push_back(m); },
 			luaParser{
 				{ "name", [&m]() { m.name = lua_str(); } },
 				{ "description", [&m]() { m.description = lua_str(); } },
@@ -35,12 +41,14 @@ void readInMaterials()
 				{ "health", [&m]() { m.health = lua_int(); } },
 				{ "minesTo", [&m]() { m.minesToTag = lua_str(); } },
 				{ "mineAmt", [&m]() { m.minesToAmount = lua_int(); } },
-				{"matType", [&m]() {
+				{ "matType", [&m]() {
 				readLuaInnerT("matType", [&m](auto type) {
-					if (type == "rock")  m.matType == MAT_ROCK;
-					if (type == "soil")  m.matType == MAT_SOIL;
-					if (type == "sand")  m.matType == MAT_SAND;
-					if (type == "metal") m.matType == MAT_METAL;
+					if (type == "rock")		 m.matType = MAT_ROCK;
+					if (type == "soil")		 m.matType = MAT_SOIL;
+					if (type == "sand")		 m.matType = MAT_SAND;
+					if (type == "metal")     m.matType = MAT_METAL;
+					if (type == "synthetic") m.matType = MAT_SYTHETIC;
+					if (type == "organic")   m.matType = MAT_ORGANIC;
 				});
 			}}
 		}

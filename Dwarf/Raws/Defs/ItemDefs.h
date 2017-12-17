@@ -2,7 +2,7 @@
 #include <string>
 #include <bitset>
 
-constexpr int NUMBER_OF_ITEM_CATEGORIES = 32;
+constexpr int NUMBER_OF_ITEM_CATEGORIES = 64;
 
 constexpr int TOOL_DIGGING = 0;
 constexpr int TOOL_CHOPPING = 1;

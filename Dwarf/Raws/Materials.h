@@ -3,9 +3,11 @@
 
 struct MaterialDef;
 
-MaterialDef * returnMaterial(const std::string &tag);
-MaterialDef * returnMaterial(const int idx);
+MaterialDef * getMaterial(const std::string &tag);
+MaterialDef * getMaterial(const int idx);
 
-void readInMaterials();
+const std::size_t getMaterialIdx(const std::string &tag);
+
+void readInMaterials() noexcept;
 void sanityCheckMaterials();
 

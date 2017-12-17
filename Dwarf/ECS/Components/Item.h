@@ -2,27 +2,26 @@
 
 #include "../Component.h"
 
-enum ItemType { CLOTHING, ITEM };
-
 class Item : public Component
 {
 public:
 	Item() = default;
-	Item(const std::string name) : itemName(name) {}
+	//Item(const std::string name) : name(name) {}
+	Item(std::string& name, std::string& tag, std::bitset<64>& catagory, std::size_t material, int stackSize) 
+		: name(name), tag(tag), catagory(catagory), material(material), stackSize(stackSize) {}
 
-	std::string itemName;
-	std::string itemTag;
+	std::string name;
+	std::string tag;
 	std::bitset<64> catagory;
-
-	ItemType type = ITEM;
+	std::size_t material;
+	int stackSize = 1;
 
 	bool claimed = false;
-	int stackSize = 1;
 
 	template<class Archive>
 	void serialize(Archive& archive)
 	{
-		archive(cereal::base_class<Component>(this), itemName, itemTag, catagory, type, claimed, stackSize);
+		archive(cereal::base_class<Component>(this), name, tag, catagory, material, stackSize, claimed);
 	}
 };
 
