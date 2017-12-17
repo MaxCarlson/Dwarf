@@ -16,7 +16,6 @@ ItemDef * getItemDef(const std::string tag)
 
 void readInItems() noexcept
 {
-
 	std::string tag;
 	ItemDef c;
 

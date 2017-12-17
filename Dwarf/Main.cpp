@@ -21,7 +21,7 @@ int main()
 	terminal_set("U+E100: ../Obsidian_16x16.png, size=16x16");
 	terminal_set("U+E200: ../Spacefox_16x16Dibujor01.png, size=16x16");
 	terminal_set("U+E300: ../dwarves.png, size=16x16");
-	terminal_set("U+E400: ../_VanillaDF-24x-Items.png, size=24x24");
+	terminal_set("U+E400: ../tools+weapons.png, size=16x16");
 
 	terminal_set("input.filter = [keyboard, mouse+]");
 	terminal_composition(true);

@@ -12,7 +12,7 @@ items["hatchet"] = {
 	name = "Hatchet",
 	description = "You can hurt trees with this..",
 	itemType = {"choppingTool"},
-	glyph = 44,
+	glyph = 67,
 	color = "brown",
 	tcode = 4
 };

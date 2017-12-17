@@ -143,6 +143,7 @@
     <ClCompile Include="ECS\Systems\DijkstraSystems\DijkstraMapsHandler.cpp" />
     <ClCompile Include="ECS\Systems\EntityPositionCache.cpp" />
     <ClCompile Include="ECS\Systems\ai\EquipHandler.cpp" />
+    <ClCompile Include="Raws\Materials.cpp" />
     <ClCompile Include="Raws\FileReader.cpp" />
     <ClCompile Include="Raws\raws.cpp" />
     <ClCompile Include="Raws\ItemRead.cpp" />
@@ -263,6 +264,8 @@
     <ClInclude Include="ECS\Systems\DijkstraSystems\DijkstraMapsHandler.h" />
     <ClInclude Include="ECS\Systems\EntityPositionCache.h" />
     <ClInclude Include="ECS\Systems\ai\EquipHandler.h" />
+    <ClInclude Include="Raws\Materials.h" />
+    <ClInclude Include="Raws\Defs\MaterialDef.h" />
     <ClInclude Include="Raws\FileReader.h" />
     <ClInclude Include="Raws\raws.h" />
     <ClInclude Include="Raws\ItemRead.h" />
@@ -316,6 +319,7 @@
     <None Include="cereal\external\rapidxml\manual.html" />
     <None Include="Raws\LuaDefs\items.lua" />
     <None Include="Raws\LuaDefs\items_tools.lua" />
+    <None Include="Raws\LuaDefs\materials.lua" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Raws\LuaDefs\index.txt" />
