@@ -1,15 +1,16 @@
 materials = {}
 
+--Switch Render system to a lookup based on lua traits
 
 -- Misc Ores
 materials["bitumous coal"] = {
 	name = "Bitumous coal",
 	description = "A soft tar-like coal",
-	color = "grey",
+	color = "coal",
 	glyph = 136,
 	tcode = 2,
 	health = 250,
-	minesTo = "raw_coal",
+	minesTo = "coal",
 	mineAmt = 1,
 	matType = { "rock" }
 };
@@ -22,7 +23,7 @@ materials["copper_ore"] = {
 	glyph = 139,
 	tcode = 2,
 	health = 550,
-	minesTo = "raw_copper",
+	minesTo = "ore",
 	mineAmt = 1,
 	matType = { "rock" }
 };
@@ -34,7 +35,7 @@ materials["tin_ore"] = {
 	glyph = 139,
 	tcode = 2,
 	health = 475,
-	minesTo = "raw_tin",
+	minesTo = "ore",
 	mineAmt = 1,
 	matType = { "rock" }
 };
@@ -46,7 +47,21 @@ materials["iron_ore"] = {
 	glyph = 139,
 	tcode = 2,
 	health = 625,
-	minesTo = "raw_iron",
+	minesTo = "ore",
+	mineAmt = 1,
+	matType = { "rock" }
+};
+
+-- Garden variety stone
+
+materials["granite"] = {
+	name = "Granite",
+	description = "A very hard and sparkly rock of many colors",
+	color = "grey",
+	glyph = 139, -- Add glyp index
+	tcode = 2,
+	health = 200,
+	minesTo = "stoneBoulder",
 	mineAmt = 1,
 	matType = { "rock" }
 };

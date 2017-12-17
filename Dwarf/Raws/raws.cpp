@@ -53,4 +53,6 @@ Entity spawnItemOnGround(const std::string & itemTag, const std::size_t material
 	e.addComponent<Item>(Item{ item->name, item->tag, item->categories, material, item->stackSize });
 
 	e.activate();
+
+	return e;
 }

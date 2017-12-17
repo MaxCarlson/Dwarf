@@ -542,6 +542,7 @@
     <None Include="Raws\LuaDefs\items.lua" />
     <None Include="Raws\LuaDefs\items_tools.lua" />
     <None Include="Raws\LuaDefs\materials.lua" />
+    <None Include="Raws\LuaDefs\render.lua" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Raws\LuaDefs\index.txt" />
