@@ -89,11 +89,4 @@ private:
 
 		}
 	}
-
-	// Check that Entity can move into the square
-	// so we avoid people walking through walls
-	inline bool canMoveDir(Coordinates co)
-	{
-		return canPass(co);
-	}
 };

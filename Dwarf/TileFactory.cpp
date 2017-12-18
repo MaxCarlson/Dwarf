@@ -15,7 +15,7 @@ TileFactory::~TileFactory()
 {
 	//delete rng;
 }
-
+/*
 void TileFactory::createRock(Coordinates co)
 {
 	tileAt(co).ch = 133;
@@ -46,3 +46,4 @@ void TileFactory::createRockFloor(Coordinates co)
 
 	makeFloor(getIdx(co));
 }
+*/

@@ -32,44 +32,38 @@ void MapRender::render()
 	for (int x = offsetX; x < renderWidth; ++x)
 		for (int y = offsetY; y < renderHeight; ++y)
 		{
-			const auto & t = tileAt({ x, y, currentZLevel });
-
 			// Adjusted x and y values
 			// based of camera offset from top left corner
 			int adjX = x - offsetX;
 			int adjY = y - offsetY;
 
-			// Use this for darkening/blacking-out unexplored in mountain/underground tiles
-			if (!getProperty<Tile::EXPLORED>({ x, y, currentZLevel }))
-			{
 
+			//terminal_color(t.color);
+			//terminal_put(adjX, adjY, 0xE200 + t.ch);
+
+			auto* mat = getMaterial(region::getTileMaterial({ x, y, currentZLevel }));
+			terminal_color(mat->color.c_str());
+
+			const int idx = getIdx({ x, y, currentZLevel });
+
+			if ( getTileType(idx) == TileTypes::EMPTY_SPACE)
+			{
+				terminal_color("black");
+				terminal_put(adjX, adjY, 0xE200 + 0);
 			}
+
+			else if (getTileType(idx) == TileTypes::RAMP)
+			{
+				terminal_put(adjX, adjY, 0xE200 + 29);
+			}
+				
 			else
 			{
-				//terminal_color(t.color);
-				//terminal_put(adjX, adjY, 0xE200 + t.ch);
-
-				auto* mat = getMaterial(region::getMaterial({ x, y, currentZLevel }));
-				terminal_color(mat->color.c_str());
-
-				if (!getProperty<Tile::FLOOR>({ x, y, currentZLevel }))
-				{
-					terminal_color("black");
-					terminal_put(adjX, adjY, 0xE200 + 0);
-				}
-
-				else if (getProperty<Tile::RAMP>({ x, y, currentZLevel }))
-				{
-					terminal_put(adjX, adjY, )
-				}
-				
-				else
-				{
-					terminal_put(adjX, adjY, 0xE200 + mat->charCode);
-				}
-
-				
+				terminal_put(adjX, adjY, 0xE200 + mat->charCode);
 			}
+
+				
+			
 		}
 
 }

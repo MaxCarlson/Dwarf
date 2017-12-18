@@ -57,7 +57,7 @@ void Map::createHeightMap(int howMountainous, float rainAmount)
 	// If height is below a threshold, mark that area walkable/visible. else not. 
 	for (int h = 0; h < depth; ++h) {
 
-		engine->mapRenderer->currentZLevel = h; // Change these functions around when placing player
+		//engine->mapRenderer->currentZLevel = h; // Change these functions around when placing player
 
 		for (int i = 0; i < width; ++i)
 			for (int j = 0; j < height; ++j)
@@ -66,21 +66,21 @@ void Map::createHeightMap(int howMountainous, float rainAmount)
 				double heightMapPoint = heightMap->getValue(i, j) * 100;
 
 				if (h <= MIN_LVLS_OF_ROCK) {															      
-					makeWall(getIdx({ i, j, h })); 
+					makeEarth(getIdx({ i, j, h })); 
 				}
-				else if (h >= depth - 2 && getProperty<Tile::WALL>({ i, j, h - 1}))
+				else if (h >= depth - 2 && getTileType(getIdx({ i, j, h -1 })) == TileTypes::SOLID)
 				{
 					makeFloor(getIdx({ i, j, h }));
 				}
 				// If there's a floor but height ratio is too low, create walkable space
-				else  if (heightThreshold < heightMapPoint && getProperty<Tile::FLOOR>({ i, j, h }))
+				else  if (heightThreshold < heightMapPoint && getTileType(getIdx({ i, j, h })) == TileTypes::FLOOR)
 				{   
 					makeFloor(getIdx({ i, j, h }));
 				}
 				// If there is a wall below, and height is high enough create more land
-				else if (canWalk({ i, j, h }))
+				else if (getTileType(getIdx({ i, j, h - 1})) == TileTypes::SOLID)
 				{                                               
-					makeWall(getIdx({ i, j, h }));
+					makeEarth(getIdx({ i, j, h }));
 				}
 				// else create open space
 				else 
@@ -102,7 +102,7 @@ void Map::createHeightMap(int howMountainous, float rainAmount)
 	for (int i = 0; i < width; ++i)
 		for (int j = 0; j < height; ++j)
 		{
-			if (getProperty<Tile::WALL>({ i, j, depth - 1 }))
+			if (getTileType(getIdx({ i, j, depth - 1 })) == TileTypes::SOLID)
 			{
 				makeFloor(getIdx({ i, j, depth - 1 }));
 			}
@@ -116,7 +116,7 @@ void Map::seedRamps()
 		for (int i = 0; i < width; ++i)
 			for (int j = 0; j < height; ++j)
 			{
-				if (getProperty<Tile::WALL>({ i, j, h }))
+				if (getTileType(getIdx({ i, j, h })) == TileTypes::SOLID)
 				{
 					const Coordinates walkableTop = { i, j, h + 1 };
 
@@ -148,7 +148,7 @@ void Map::seedRamps()
 
 bool Map::rampSanityCheck(Coordinates rampLoc, Coordinates rampLand) const
 {
-	if (boundsCheck(rampLoc) && canWalk(rampLoc) && boundsCheck(rampLand) && canWalk(rampLand))
+	if (boundsCheck(rampLoc) && getTileType(getIdx(rampLoc)) == TileTypes::FLOOR && boundsCheck(rampLand) && getTileType(getIdx(rampLand)) == TileTypes::FLOOR)
 		return true;
 
 	return false;
@@ -163,8 +163,8 @@ void Map::populateGrass()
 		for (int i = 0; i < width; ++i)
 			for (int j = 0; j < height; ++j)
 			{
-				if (    getProperty<Tile::FLOOR>({ i, j, h })
-					&& !getProperty<Tile::OBSTRUCTED>({ i, j, h }))
+				if (getTileType(getIdx({ i, j, h })) == TileTypes::FLOOR
+					&& !solid(getIdx({ i, j, h })))
 				{
 					std::string tmp = "grass";
 					int rg = rng->getInt(1, 3, 3);
@@ -186,9 +186,8 @@ void Map::populateRock()
 		for (int i = 0; i < width; ++i)
 			for (int j = 0; j < height; ++j)
 			{
-				if (getProperty<Tile::WALL>({ i, j, h }))
+				if (getTileType(getIdx({ i, j, h })) == TileTypes::SOLID)
 				{
-					tileFactory->createRock({ i, j, h });
 					region::setMaterial({ i, j, h }, getMaterialIdx("granite_rock"));
 				}
 			}
@@ -221,17 +220,15 @@ void Map::addTrees(int treeDensity)
 			co.y = rng->getInt(0, height-1);
 			co.z = rng->getInt(MIN_LVLS_OF_ROCK, depth-1);
 
-			const Tile t = tileAt(co);
-
 			// If the space is clear/hasfloor plant a tree and obstruct the space
-			if (t.properties & Tile::FLOOR && !(t.properties & Tile::OBSTRUCTED)) // Move this to EntityFactory???
+			if (getTileType(getIdx(co)) == TileTypes::FLOOR && !solid(getIdx(co))) // Move this to EntityFactory???
 			{
 				trees[counter].addComponent<PositionComponent>(co);
 				trees[counter].addComponent<RenderComponent>(treeChar, 2, "brown");
 				trees[counter].addComponent<HealthComponent>(300, 300, 0);
 				trees[counter].activate();
 
-				setProperty<Tile::OBSTRUCTED>(co);
+				setTileType(getIdx(co), TileTypes::SOLID); // Make trees into tile types?
 				break;
 			}
 
@@ -250,7 +247,7 @@ void Map::placeDwarves(int number)
 		for (int i = 3; i < 80; ++i)
 			for (int j = 3; j < 80; ++j)
 			{
-				if (canWalk({ i, j, h }))
+				if (getTileType(getIdx({i, j, h})) == TileTypes::FLOOR)
 				{
 					engine->Dwarves.at(dwarfNumber).getComponent<PositionComponent>().co = { i, j, h };
 					engine->mapRenderer->currentZLevel = h;

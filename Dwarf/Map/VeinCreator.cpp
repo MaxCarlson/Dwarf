@@ -91,15 +91,17 @@ void VeinCreator::addOre()
 				co.x = rng->getInt(0, mapWidth - 1);
 				co.y = rng->getInt(0, mapHeight - 1);
 
-				if (getProperty<Tile::WALL>(co))
+				const int idx = getIdx(co);
+
+				if (getTileType(idx) == TileTypes::SOLID)
 				{
 					for (int j = 0; j < orePerVein[ore]; ++j)
 					{
-						if (getProperty<Tile::WALL>(co))
-						{
-							tileAt(co).ch = oreArray[ore].ch;
-							tileAt(co).color = oreArray[ore].color;
-						}
+						//if (getProperty<Tile::WALL>(co))
+						//{
+						//	tileAt(co).ch = oreArray[ore].ch;
+						//	tileAt(co).color = oreArray[ore].color;
+						//}
 
 						int r = rng->getInt(0, 2);
 

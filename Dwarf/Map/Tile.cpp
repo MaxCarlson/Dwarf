@@ -2,6 +2,8 @@
 #include "Util.h"
 #include <memory>
 #include <iostream>
+#include "../Raws/Materials.h"
+#include "../Raws/Defs/MaterialDef.h"
 
 #include <cereal.hpp>
 #include "../cereal/archives/binary.hpp"
@@ -11,13 +13,7 @@
 
 #include "../Engine.h"
 
-enum TileTypes
-{
-	T_EMPTY_SPACE,
-	T_SOLID,
-	T_FLOOR,
-	T_RAMP,
-};
+
 
 // External map info
 int MAP_WIDTH, MAP_HEIGHT, MAP_DEPTH, TOTAL_MAP_TILES;
@@ -31,19 +27,24 @@ namespace region
 		Region()
 		{
 			//tileMap.resize(TOTAL_MAP_TILES);
+			solid.resize(TOTAL_MAP_TILES, 0);
 			tileTypes.resize(TOTAL_MAP_TILES);
 			tileFlags.resize(TOTAL_MAP_TILES);
 			materials.resize(TOTAL_MAP_TILES);
+			tileHealth.resize(TOTAL_MAP_TILES, 1);
 		}
 
 		// 1D vector of Tiles indexed by 3D formula
 		//std::vector<Tile> tileMap; // Remove this and replace with sepperate vectors of properties
+
+		std::vector<char> solid;
 
 		std::vector<uint16_t> tileTypes;
 
 		std::vector<Util::Bitset<Util::BITSET_16>> tileFlags;
 
 		std::vector<std::size_t> materials;
+		std::vector<uint16_t> tileHealth;
 
 		//void tileRecalc(const Coordinates co);
 		void tileRecalcAll();
@@ -53,9 +54,11 @@ namespace region
 		template<class Archive>
 		void serialize(Archive & archive)
 		{
-			archive(tileMap);
+			archive(solid);
+			archive(tileTypes);
 			archive(tileFlags);
 			archive(materials);
+			archive(tileHealth);
 		}
 	};
 
@@ -113,14 +116,44 @@ namespace region
 		currentRegion->tileFlags[getIdx(co)].reset(f);
 	}
 
+	bool solid(const int idx)
+	{
+		return currentRegion->solid[idx];
+	}
+
 	void setMaterial(const Coordinates co, const std::size_t mat)
 	{
 		currentRegion->materials[getIdx(co)] = mat;
+		auto material = getMaterial(mat);
+		currentRegion->tileHealth[getIdx(co)] = material->health;
 	}
 
-	std::size_t getMaterial(const Coordinates co)
+	int getTileType(const int idx)
+	{
+		return currentRegion->tileTypes[idx];
+	}
+
+	void setTileType(const int idx, const uint8_t type)
+	{
+		currentRegion->tileTypes[idx] = type;
+	}
+
+	std::size_t getTileMaterial(const Coordinates co)
 	{
 		return currentRegion->materials[getIdx(co)];
+	}
+
+	void damageTile(const int idx, const uint16_t dmg)
+	{
+		if (currentRegion->tileHealth[idx] > dmg)
+			currentRegion->tileHealth[idx] -= dmg;
+		else
+			currentRegion->tileHealth[idx] = 0;
+	}
+
+	uint16_t tileHealth(const int idx)
+	{
+		return currentRegion->tileHealth[idx];
 	}
 
 	void spot_recalc_paths(const Coordinates co)
@@ -138,46 +171,49 @@ namespace region
 		currentRegion->tileRecalcAll();
 	}
 
-	void makeWall(const int idx)
+	void makeWall(const int idx) // Add material idx variable
 	{
 		currentRegion->tileFlags[idx].reset(CAN_STAND_HERE);
-		setProperty<Tile::OBSTRUCTED>(idxToCo(idx));
-		setProperty<Tile::WALL>(idxToCo(idx));
+		currentRegion->solid[idx] = true;
+		currentRegion->tileTypes[idx] = TileTypes::WALL;
+	}
+
+	void makeEarth(const int idx)
+	{
+		currentRegion->tileFlags[idx].reset(CAN_STAND_HERE);
+		currentRegion->solid[idx] = true;
+		currentRegion->tileTypes[idx] = TileTypes::SOLID; // Change to tileType Earth?
+
 
 		const Coordinates co = idxToCo(idx);
-		// Add a floor property
-		// to any Tile above a wall Tile DELETE THIS EVENTUALLY
 		if (co.z < MAP_DEPTH - 1)
 			makeFloor(getIdx({ co.x, co.y, co.z + 1 }));
 	}
 
 	void makeRamp(const int idx)
-	{
-		const Coordinates co = idxToCo(idx);
+	{		
 		currentRegion->tileFlags[idx].set(CAN_STAND_HERE);
-		setMaterial(idxToCo(idx), getMaterial(idxToCo(idx)));
+		currentRegion->solid[idx] = false;
+		currentRegion->tileTypes[idx] = TileTypes::RAMP;
 
-		tileAt(co).ch = 30;
-		setProperty<Tile::RAMP>(co);
-		makeFloor(getIdx({ co.x, co.y, co.z + 1 }));
+		const Coordinates co = idxToCo(idx);
+		setMaterial(co, getTileMaterial(idxToCo(idx)));
+
+		currentRegion->tileFlags[getIdx({ co.x, co.y, co.z + 1 })].set(CAN_STAND_HERE); // Remove this eventually?
 	}
 
 	void makeFloor(const int idx)
 	{
 		currentRegion->tileFlags[idx].set(CAN_STAND_HERE);
-
-		setProperty<Tile::FLOOR>(idxToCo(idx));
-		removeProperty<Tile::OBSTRUCTED>(idxToCo(idx));
-		removeProperty<Tile::WALL>(idxToCo(idx));
+		currentRegion->solid[idx] = false;
+		currentRegion->tileTypes[idx] = TileTypes::FLOOR;
 	}
 
 	void makeEmptySpace(const int idx)
 	{
 		currentRegion->tileFlags[idx].reset(CAN_STAND_HERE);
-		
-		removeProperty<Tile::OBSTRUCTED>(idxToCo(idx));
-		removeProperty<Tile::WALL>(idxToCo(idx));
-		removeProperty<Tile::FLOOR>(idxToCo(idx));
+		currentRegion->solid[idx] = false;
+		currentRegion->tileTypes[idx] = TileTypes::EMPTY_SPACE;
 	}
 
 
@@ -190,24 +226,25 @@ namespace region
 	}
 
 	/* Get rid of these, replace completely with flags and std::vector<uint8/16_t> tileTypes */
-	Tile & tileAt(Coordinates co)
-	{
-		return currentRegion->tileMap[TILE_ARRAY_LOOKUP];
-	}
+	//Tile & tileAt(Coordinates co)
+	//{
+	//	return currentRegion->tileMap[TILE_ARRAY_LOOKUP];
+	//}
 
-	Tile & tileAt(int exactPos)
-	{
-		return currentRegion->tileMap[exactPos];
-	}
-
-	bool canWalk(Coordinates co)
-	{
-		return boundsCheck(co) && (getProperty<Tile::FLOOR>(co) && !(getProperty<Tile::WALL>(co) | getProperty<Tile::OBSTRUCTED>(co)));
-	}
+	//Tile & tileAt(int exactPos)
+	//{
+	//	return currentRegion->tileMap[exactPos];
+	//}
 
 	bool boundsCheck(Coordinates co)
 	{
 		return(co.x < MAP_WIDTH && co.x >= 0 && co.y < MAP_HEIGHT && co.y >= 0 && co.z < MAP_DEPTH && co.z >= 0);
+	}
+
+	/*
+	bool canWalk(Coordinates co)
+	{
+		return boundsCheck(co) && (getProperty<Tile::FLOOR>(co) && !(getProperty<Tile::WALL>(co) | getProperty<Tile::OBSTRUCTED>(co)));
 	}
 
 	bool canPass(Coordinates co)
@@ -219,6 +256,7 @@ namespace region
 	{
 		return !(getProperty<Tile::FLOOR>(co) | getProperty<Tile::WALL>(co) | getProperty<Tile::OBSTRUCTED>(co));
 	}
+	*/
 	/* END */
 
 	//void Region::tileRecalc(const Coordinates co)
@@ -252,7 +290,7 @@ namespace region
 	{
 		const auto idx = getIdx(co);
 
-		tileFlags[idx].reset(CAN_GO_NORTH);
+		tileFlags[idx].reset(CAN_GO_NORTH); // Add a function to zero a flags bitset
 		tileFlags[idx].reset(CAN_GO_SOUTH);
 		tileFlags[idx].reset(CAN_GO_EAST);
 		tileFlags[idx].reset(CAN_GO_WEST);
@@ -263,7 +301,7 @@ namespace region
 		tileFlags[idx].reset(CAN_GO_DOWN);
 		tileFlags[idx].reset(CAN_GO_UP);
 		
-		if (!tileFlags[getIdx(co)].test(CAN_STAND_HERE) || getProperty<Tile::WALL>(co))
+		if (solid[idx] || !tileFlags[getIdx(co)].test(CAN_STAND_HERE))
 		{
 		}
 		else
@@ -280,8 +318,8 @@ namespace region
 			if (co.y < MAP_HEIGHT - 1 && co.x > 0             && tileFlags[getIdx(CO_SOUTH_W)].test(CAN_STAND_HERE)) tileFlags[idx].set(CAN_GO_SOUTH_W);
 			if (co.y < MAP_HEIGHT - 1 && co.x < MAP_WIDTH - 1 && tileFlags[getIdx(CO_SOUTH_E)].test(CAN_STAND_HERE)) tileFlags[idx].set(CAN_GO_SOUTH_E);
 
-			if (co.z < MAP_DEPTH - 1 && tileFlags[getIdx(CO_UP  )].test(CAN_STAND_HERE) && getProperty<Tile::RAMP>(co     )) tileFlags[idx].set(CAN_GO_UP);
-			if (co.z > 0             && tileFlags[getIdx(CO_DOWN)].test(CAN_STAND_HERE) && getProperty<Tile::RAMP>(CO_DOWN)) tileFlags[idx].set(CAN_GO_DOWN);		
+			if (co.z < MAP_DEPTH - 1 && tileFlags[getIdx(CO_UP  )].test(CAN_STAND_HERE) && tileTypes[idx] == TileTypes::RAMP) tileFlags[idx].set(CAN_GO_UP);
+			if (co.z > 0             && tileFlags[getIdx(CO_DOWN)].test(CAN_STAND_HERE) && tileTypes[getIdx(CO_DOWN)]) tileFlags[idx].set(CAN_GO_DOWN);
 		}
 	}
 }

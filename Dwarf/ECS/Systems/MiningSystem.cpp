@@ -151,15 +151,17 @@ void MiningSystem::walkMiningMap(const Coordinates co, const int distance, const
 
 void MiningSystem::performMining(Entity e, const int targetIdx, const uint8_t miningType)
 {
-	Tile& t = tileAt(targetIdx);
+	//Tile& t = tileAt(targetIdx);
 
-	if (t.health > 0)
+	if (tileHealth(targetIdx) > 0)
 	{
 
 		auto& labor = e.getComponent<LaborStatsComponent>();
 
 		// Health needs to be changed to be dependant on material
-		t.health -= 4 * JobSpeedMultiplier[labor.laborLevel[int(Jobs::MINER)]];
+		auto dmg = 4 * JobSpeedMultiplier[labor.laborLevel[int(Jobs::MINER)]];
+
+		damageTile(targetIdx, dmg);
 
 		labor.skillPoints[int(Jobs::MINER)] += 2;
 
@@ -174,7 +176,7 @@ void MiningSystem::performMining(Entity e, const int targetIdx, const uint8_t mi
 
 	// Eventually this should probably be a template that takes
 	// a tile material as a param and produces a floor of that material
-	tileFactory->createRockFloor(idxToCo(targetIdx));
+	//tileFactory->createRockFloor(idxToCo(targetIdx));
 
 
 	//tileRecalcAll(); // This should be a partial recalc based on tile mined!!

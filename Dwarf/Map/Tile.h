@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 
+/*
 class Tile {
 
 public:
@@ -44,6 +45,7 @@ public:
 		archive(ch, color, health, properties);
 	}
 };
+*/
 
 // Formula for tile indexing with coordinates
 #define TILE_ARRAY_LOOKUP (co.z * MAP_WIDTH * MAP_HEIGHT) + (co.y * MAP_WIDTH) + co.x
@@ -99,6 +101,15 @@ namespace region
 		DOWN
 	};
 
+	enum TileTypes
+	{
+		EMPTY_SPACE,
+		SOLID,
+		FLOOR,
+		WALL,
+		RAMP,
+	};
+
 	// Create a new region, will overwrite the old region
 	void new_region(int width, int height, int depth);
 	
@@ -113,9 +124,19 @@ namespace region
 
 	void resetFlag(const Coordinates co, Flag f);
 
+	bool solid(const int idx);
+
 	void setMaterial(const Coordinates co, const std::size_t mat);
 
-	std::size_t getMaterial(const Coordinates co);
+	int getTileType(const int idx);
+
+	void setTileType(const int idx, const uint8_t type);
+
+	std::size_t getTileMaterial(const Coordinates co);
+
+	void damageTile(const int idx, const uint16_t dmg);
+
+	uint16_t tileHealth(const int idx);
 
 	// Recalcuate tile pathing when only one
 	// tile has changed, instead of calculating 
@@ -129,6 +150,8 @@ namespace region
 
 	void makeWall(const int idx);
 
+	void makeEarth(const int idx);
+
 	void makeRamp(const int idx);
 
 	void makeFloor(const int idx);
@@ -140,19 +163,21 @@ namespace region
 	int get_rough_distance(Coordinates loc, Coordinates dest);
 
 	// Returns a refrence to tile at coordinates
-	Tile& tileAt(Coordinates co);
+	//Tile& tileAt(Coordinates co);
 
 
-	Tile& tileAt(int exactPos);
-
-
-	// Checks if it's possible to walk through tile ~~ wall check probably isn't neccasary so long as obstructed is updated correctly!!
-	bool canWalk(Coordinates co);
+	//Tile& tileAt(int exactPos);
 
 
 	// Checks all bounds in a coordinate to make sure
 	// it's entirely valid
 	bool boundsCheck(Coordinates co);
+
+/*
+	// Checks if it's possible to walk through tile ~~ wall check probably isn't neccasary so long as obstructed is updated correctly!!
+	bool canWalk(Coordinates co);
+
+
 
 
 	// Slightly different from canWalk in that it doesn't 
@@ -163,7 +188,8 @@ namespace region
 	// Should only be used for map generation, will not gurentee things are completely empty
 	// Possibly move this to the map object???????
 	bool isEmptySpace(Coordinates co);
-
+*/
+	/*
 	// Should be called hasProperty
 	template<unsigned P>
 	const bool getProperty(Coordinates co)
@@ -194,7 +220,7 @@ namespace region
 	{
 		tileAt(co).properties &= ~P;
 	}
-
+	*/
 
 }
 

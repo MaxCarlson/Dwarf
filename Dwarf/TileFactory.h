@@ -17,11 +17,11 @@ public:
 	// These functions need to be expanded dramatically.
 	// Ore creations should probably be moved here, but the ore gen code
 	// can stay in VeinCreator
-	void createRock(Coordinates co);
+	//void createRock(Coordinates co);
 
-	void createGrass(Coordinates co);
+	//void createGrass(Coordinates co);
 
-	void createRockFloor(Coordinates co);
+	//void createRockFloor(Coordinates co);
 
 private:
 	TCODRandom * rng;
