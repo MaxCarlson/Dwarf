@@ -1,67 +1,72 @@
-materials = {}
+materials = {
 
---Switch Render system to a lookup based on lua traits
 
--- Misc Ores prior to being mined
-materials["bitumous coal"] = {
-	name = "Bitumous coal",
-	description = "A soft tar-like coal",
-	color = "coal",
-	glyph = 136,
-	tcode = 2,
-	health = 250,
-	minesTo = "coal",
-	mineAmt = 1,
-	matType = { "rock" }
-};
+	--Switch Render system to a lookup based on lua traits ???
 
--- Metal Ores prior to being mined
-materials["copper_ore"] = {
-	name = "Copper Ore",
-	description = "An reddish orange vein with streaks of green",
-	color = "copper",
-	glyph = 139,
-	tcode = 2,
-	health = 550,
-	minesTo = "ore",
-	mineAmt = 1,
-	matType = { "rock" }
-};
+	-- Metal Ores prior to being mined
+	["copper_ore"] = {
+		name = "Copper Ore",
+		description = "An reddish orange vein with streaks of green",
+		color = "copper",
+		glyph = 139,
+		tcode = 2,
+		health = 550,
+		minesTo = "ore",
+		mineAmt = 1,
+		matType = { "rock" }
+	};
 
-materials["tin_ore"] = {
-	name = "Tin Ore",
-	description = "A lightly silver-grey vein",
-	color = "silver",
-	glyph = 139,
-	tcode = 2,
-	health = 475,
-	minesTo = "ore",
-	mineAmt = 1,
-	matType = { "rock" }
-};
+	["tin_ore"] = {
+		name = "Tin Ore",
+		description = "A lightly silver-grey vein",
+		color = "silver",
+		glyph = 139,
+		tcode = 2,
+		health = 475,
+		minesTo = "ore",
+		mineAmt = 1,
+		matType = { "rock" }
+	};
 
-materials["iron_ore"] = {
-	name = "Iron Ore",
-	description = "Sparkly grey with hints of red",
-	color = "iron",
-	glyph = 139,
-	tcode = 2,
-	health = 625,
-	minesTo = "ore",
-	mineAmt = 1,
-	matType = { "rock" }
-};
+	["iron_ore"] = {
+		name = "Iron Ore",
+		description = "Sparkly grey with hints of red",
+		color = "iron",
+		glyph = 139,
+		tcode = 2,
+		health = 625,
+		minesTo = "ore",
+		mineAmt = 1,
+		matType = { "rock" }
+	};
 
--- Garden variety stone prior to being mined
+	-- Misc Ores prior to being mined
 
-materials["granite"] = {
-	name = "Granite",
-	description = "A very hard and sparkly rock of many colors",
-	color = "grey",
-	glyph = 139, -- Add glyph index
-	tcode = 2,
-	health = 200,
-	minesTo = "stoneBoulder",
-	mineAmt = 1,
-	matType = { "rock" }
-};
+	["bitumous_coal"] = {
+		name = "Bitumous coal",
+		description = "A soft tar-like coal",
+		color = "coal",
+		glyph = 136,
+		tcode = 2,
+		health = 250,
+		minesTo = "coal",
+		mineAmt = 1,
+		matType = { "rock" }
+	};
+
+	-- Garden variety stone prior to being mined
+
+	["granite_rock"] = {
+		name = "Granite",
+		description = "A very hard and sparkly rock of many colors",
+		color = "grey",
+		glyph = 134, -- Add glyph index
+		tcode = 2,
+		health = 200,
+		minesTo = "stone_boulder",
+		mineAmt = 1,
+		matType = { "rock" }
+	};
+
+}
+

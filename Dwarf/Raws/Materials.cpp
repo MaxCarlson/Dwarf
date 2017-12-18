@@ -22,6 +22,7 @@ const std::size_t getMaterialIdx(const std::string & tag)
 {
 	return materialDefsIdx[tag];
 }
+#include <algorithm>
 
 void readInMaterials() noexcept
 {
@@ -53,7 +54,12 @@ void readInMaterials() noexcept
 			}}
 		}
 	);
-	int a = 55;
+
+	// Ensure order is identical each game load
+	std::sort(materialDefs.begin(), materialDefs.end(), [](MaterialDef a, MaterialDef b) {return a.tag < b.tag; });
+
+	for (auto matIdx = 0; matIdx < materialDefs.size(); ++matIdx)
+		materialDefsIdx[materialDefs[matIdx].tag] = matIdx;
 }
 
 void sanityCheckMaterials()

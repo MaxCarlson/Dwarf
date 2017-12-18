@@ -103,7 +103,6 @@ namespace region
 	// Create a new region, will overwrite the old region
 	void new_region(int width, int height, int depth);
 	
-	
 	void save_region(std::string filePath);
 
 	void load_region(std::string filePath);
@@ -114,6 +113,10 @@ namespace region
 	void setFlag(const Coordinates co, Flag f);
 
 	void resetFlag(const Coordinates co, Flag f);
+
+	void setMaterial(const Coordinates co, const std::size_t mat);
+
+	std::size_t getMaterial(const Coordinates co);
 
 	// Recalcuate tile pathing when only one
 	// tile has changed, instead of calculating 

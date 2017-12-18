@@ -14,7 +14,16 @@ items["coal"] = {
 	name = "Coal",
 	description = "Freshly mined coal",
 	itemType = {"component"},
-	glyph = 15,
-	color = "black", -- Note color should be based on material 
-	tcode = 7
+	glyph = 7,
+	color = "black", 
+	tcode = 2
+};
+
+items["stone_boulder"] = {
+	name = "A boulder",
+	description = "A chunk of rock",
+	itemType = {"component"},
+	glyph = 7,
+	color = "grey", -- Note color should be based on material ?
+	tcode = 2
 };

@@ -5,6 +5,8 @@
 
 #include "libtcod.hpp"
 #include "../BearLibTerminal.h"
+#include "../Raws/Materials.h"
+#include "../Raws/Defs/MaterialDef.h"
 
 using namespace region;
 
@@ -44,8 +46,13 @@ void MapRender::render()
 			}
 			else
 			{
-				terminal_color(t.color);
-				terminal_put(adjX, adjY, 0xE200 + t.ch);
+				//terminal_color(t.color);
+				//terminal_put(adjX, adjY, 0xE200 + t.ch);
+
+				auto* mat = getMaterial(region::getMaterial({ x, y, currentZLevel }));
+
+				terminal_color(mat->color.c_str());
+				terminal_put(adjX, adjY, 0xE200 + mat->charCode);
 			}
 		}
 

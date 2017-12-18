@@ -24,12 +24,15 @@ namespace region
 		{
 			tileMap.resize(TOTAL_MAP_TILES);
 			tileFlags.resize(TOTAL_MAP_TILES);
+			materials.resize(TOTAL_MAP_TILES);
 		}
 
 		// 1D vector of Tiles indexed by 3D formula
 		std::vector<Tile> tileMap; // Remove this and replace with sepperate vectors of properties
 
 		std::vector<Util::Bitset<Util::BITSET_16>> tileFlags;
+
+		std::vector<std::size_t> materials;
 
 		//void tileRecalc(const Coordinates co);
 		void tileRecalcAll();
@@ -41,6 +44,7 @@ namespace region
 		{
 			archive(tileMap);
 			archive(tileFlags);
+			archive(materials);
 		}
 	};
 
@@ -96,6 +100,16 @@ namespace region
 	void resetFlag(const Coordinates co, Flag f)
 	{
 		currentRegion->tileFlags[getIdx(co)].reset(f);
+	}
+
+	void setMaterial(const Coordinates co, const std::size_t mat)
+	{
+		currentRegion->materials[getIdx(co)] = mat;
+	}
+
+	std::size_t getMaterial(const Coordinates co)
+	{
+		return currentRegion->materials[getIdx(co)];
 	}
 
 	void spot_recalc_paths(const Coordinates co)

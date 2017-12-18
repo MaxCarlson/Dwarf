@@ -9,6 +9,7 @@
 #include "../ECS\Components\RenderComponent.h"
 #include "../ECS\Components\HealthComponent.h"
 #include "../BearLibTerminal.h"
+#include "../Raws/Materials.h"
 
 
 using namespace region;
@@ -174,8 +175,6 @@ void Map::populateGrass()
 // modify threashold as depth increases to increase/decrease rarity of certain ores
 void Map::populateRock()
 {
-	TCODNoise noise(3, TCOD_NOISE_SIMPLEX);
-
 	// Create filler rock
 	for (int h = 0; h < depth; ++h)
 		for (int i = 0; i < width; ++i)
@@ -184,6 +183,7 @@ void Map::populateRock()
 				if (getProperty<Tile::WALL>({ i, j, h }))
 				{
 					tileFactory->createRock({ i, j, h });
+					region::setMaterial({ i, j, h }, getMaterialIdx("granite_rock"));
 				}
 			}
 
