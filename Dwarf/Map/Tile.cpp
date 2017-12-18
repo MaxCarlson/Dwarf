@@ -11,6 +11,14 @@
 
 #include "../Engine.h"
 
+enum TileTypes
+{
+	T_EMPTY_SPACE,
+	T_SOLID,
+	T_FLOOR,
+	T_RAMP,
+};
+
 // External map info
 int MAP_WIDTH, MAP_HEIGHT, MAP_DEPTH, TOTAL_MAP_TILES;
 
@@ -22,13 +30,16 @@ namespace region
 	{
 		Region()
 		{
-			tileMap.resize(TOTAL_MAP_TILES);
+			//tileMap.resize(TOTAL_MAP_TILES);
+			tileTypes.resize(TOTAL_MAP_TILES);
 			tileFlags.resize(TOTAL_MAP_TILES);
 			materials.resize(TOTAL_MAP_TILES);
 		}
 
 		// 1D vector of Tiles indexed by 3D formula
-		std::vector<Tile> tileMap; // Remove this and replace with sepperate vectors of properties
+		//std::vector<Tile> tileMap; // Remove this and replace with sepperate vectors of properties
+
+		std::vector<uint16_t> tileTypes;
 
 		std::vector<Util::Bitset<Util::BITSET_16>> tileFlags;
 
@@ -144,6 +155,7 @@ namespace region
 	{
 		const Coordinates co = idxToCo(idx);
 		currentRegion->tileFlags[idx].set(CAN_STAND_HERE);
+		setMaterial(idxToCo(idx), getMaterial(idxToCo(idx)));
 
 		tileAt(co).ch = 30;
 		setProperty<Tile::RAMP>(co);

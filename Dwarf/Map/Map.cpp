@@ -166,7 +166,13 @@ void Map::populateGrass()
 				if (    getProperty<Tile::FLOOR>({ i, j, h })
 					&& !getProperty<Tile::OBSTRUCTED>({ i, j, h }))
 				{
-					tileFactory->createGrass({ i, j, h });
+					std::string tmp = "grass";
+					int rg = rng->getInt(1, 3, 3);
+
+					tmp += rg + '0';
+
+					//tileFactory->createGrass({ i, j, h });
+					region::setMaterial({ i, j, h }, getMaterialIdx(tmp));
 				}
 			}
 }

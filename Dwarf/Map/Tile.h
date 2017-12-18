@@ -23,7 +23,6 @@ public:
 		WALL = 1 << 2,
 		FLOOR = 1 << 3,
 		RAMP = 1 << 4,
-		MINEABLE = 1 << 5
 	};
 
 	// Integer representation of tileset index

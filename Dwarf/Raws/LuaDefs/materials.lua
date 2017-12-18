@@ -68,5 +68,30 @@ materials = {
 		matType = { "rock" }
 	};
 
+	-- Placeholders in order to switch to new system of rendering
+
+	["grass1"] = {
+		color = "dark green",
+		glyph = 130,
+		tcode = 2,
+		health = 200,
+		matType = {"organic"}
+	};
+
+	["grass2"] = {
+		color = "dark green",
+		glyph = 147,
+		tcode = 2,
+		health = 200,
+		matType = {"organic"}
+	};
+
+	["grass3"] = {
+		color = "dark green",
+		glyph = 244,
+		tcode = 2,
+		health = 200,
+		matType = {"organic"}
+	};
 }
 

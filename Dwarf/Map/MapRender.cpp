@@ -50,9 +50,25 @@ void MapRender::render()
 				//terminal_put(adjX, adjY, 0xE200 + t.ch);
 
 				auto* mat = getMaterial(region::getMaterial({ x, y, currentZLevel }));
-
 				terminal_color(mat->color.c_str());
-				terminal_put(adjX, adjY, 0xE200 + mat->charCode);
+
+				if (!getProperty<Tile::FLOOR>({ x, y, currentZLevel }))
+				{
+					terminal_color("black");
+					terminal_put(adjX, adjY, 0xE200 + 0);
+				}
+
+				else if (getProperty<Tile::RAMP>({ x, y, currentZLevel }))
+				{
+					terminal_put(adjX, adjY, )
+				}
+				
+				else
+				{
+					terminal_put(adjX, adjY, 0xE200 + mat->charCode);
+				}
+
+				
 			}
 		}
 
