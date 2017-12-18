@@ -2,7 +2,7 @@ materials = {}
 
 --Switch Render system to a lookup based on lua traits
 
--- Misc Ores
+-- Misc Ores prior to being mined
 materials["bitumous coal"] = {
 	name = "Bitumous coal",
 	description = "A soft tar-like coal",
@@ -15,7 +15,7 @@ materials["bitumous coal"] = {
 	matType = { "rock" }
 };
 
--- Metal Ores
+-- Metal Ores prior to being mined
 materials["copper_ore"] = {
 	name = "Copper Ore",
 	description = "An reddish orange vein with streaks of green",
@@ -52,13 +52,13 @@ materials["iron_ore"] = {
 	matType = { "rock" }
 };
 
--- Garden variety stone
+-- Garden variety stone prior to being mined
 
 materials["granite"] = {
 	name = "Granite",
 	description = "A very hard and sparkly rock of many colors",
 	color = "grey",
-	glyph = 139, -- Add glyp index
+	glyph = 139, -- Add glyph index
 	tcode = 2,
 	health = 200,
 	minesTo = "stoneBoulder",

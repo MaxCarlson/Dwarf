@@ -318,6 +318,7 @@
   <ItemGroup>
     <None Include="cereal\external\rapidxml\manual.html" />
     <None Include="Raws\LuaDefs\items.lua" />
+    <None Include="Raws\LuaDefs\items_raw.lua" />
     <None Include="Raws\LuaDefs\items_tools.lua" />
     <None Include="Raws\LuaDefs\materials.lua" />
     <None Include="Raws\LuaDefs\render.lua" />

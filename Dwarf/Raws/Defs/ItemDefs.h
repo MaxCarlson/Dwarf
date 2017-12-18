@@ -4,8 +4,9 @@
 
 constexpr int NUMBER_OF_ITEM_CATEGORIES = 64;
 
-constexpr int TOOL_DIGGING = 0;
-constexpr int TOOL_CHOPPING = 1;
+constexpr int COMPONENT = 0;
+constexpr int TOOL_DIGGING = 1;
+constexpr int TOOL_CHOPPING = 2;
 
 struct ItemDef
 {

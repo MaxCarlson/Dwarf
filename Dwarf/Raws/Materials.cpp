@@ -53,6 +53,7 @@ void readInMaterials() noexcept
 			}}
 		}
 	);
+	int a = 55;
 }
 
 void sanityCheckMaterials()

@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <vector>
 
 // Structure for holding info read from lua files
 // on materials. Will have a bunch more properties once
@@ -24,6 +25,8 @@ struct MaterialDef
 	std::string color;
 	uint16_t charCode;
 	int tilesetKey;
+
+	//std::vector<std::string> layers;
 
 	MaterialType matType;
 	int health = 1;

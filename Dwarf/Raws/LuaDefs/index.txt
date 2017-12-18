@@ -1,3 +1,4 @@
 items.lua
 items_tools.lua
+items_raw.lua
 materials.lua
