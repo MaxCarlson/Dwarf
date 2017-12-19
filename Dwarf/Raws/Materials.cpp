@@ -38,6 +38,7 @@ void readInMaterials() noexcept
 				{ "description", [&m]() { m.description = lua_str(); } },
 				{ "color", [&m]() { m.color = lua_str(); } },
 				{ "glyph", [&m]() { m.charCode = lua_int(); } },
+				{ "floorGlyph", [&m]() {m.floorCode = lua_int(); } },
 				{ "tcode", [&m]() { m.tilesetKey = lua_int(); } },
 				{ "health", [&m]() { m.health = lua_int(); } },
 				{ "minesTo", [&m]() { m.minesToTag = lua_str(); } },

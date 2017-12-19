@@ -136,7 +136,6 @@ void MiningSystem::walkMiningMap(const Coordinates co, const int distance, const
 		miningMap[newIdx] = distance;
 		miningTargets[newIdx] = idx;
 
-		// All of this needs to be pre-calcuated!!!!
 		// Probably multi-threaded calcuating needs to be done
 		// when updating these map flags
 		// Medium-High priority		
@@ -174,9 +173,7 @@ void MiningSystem::performMining(Entity e, const int targetIdx, const uint8_t mi
 	// Remove the designation and change the tile
 	designations->mining.erase(targetIdx);
 
-	// Eventually this should probably be a template that takes
-	// a tile material as a param and produces a floor of that material
-	//tileFactory->createRockFloor(idxToCo(targetIdx));
+	makeFloor(targetIdx);
 
 
 	//tileRecalcAll(); // This should be a partial recalc based on tile mined!!

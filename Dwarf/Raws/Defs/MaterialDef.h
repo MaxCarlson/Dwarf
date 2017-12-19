@@ -24,6 +24,7 @@ struct MaterialDef
 
 	std::string color;
 	uint16_t charCode;
+	uint16_t floorCode;
 	int tilesetKey;
 
 	//std::vector<std::string> layers;

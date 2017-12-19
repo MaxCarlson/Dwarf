@@ -42,24 +42,51 @@ void MapRender::render()
 			//terminal_put(adjX, adjY, 0xE200 + t.ch);
 
 			auto* mat = getMaterial(region::getTileMaterial({ x, y, currentZLevel }));
-			terminal_color(mat->color.c_str());
 
 			const int idx = getIdx({ x, y, currentZLevel });
+			auto tileType = getTileType(idx);
 
-			if ( getTileType(idx) == TileTypes::EMPTY_SPACE)
+			terminal_color(mat->color.c_str());
+
+			switch (tileType)
 			{
+			case TileTypes::EMPTY_SPACE:
 				terminal_color("black");
 				terminal_put(adjX, adjY, 0xE200 + 0);
+				break;
+
+			case TileTypes::SOLID:
+				terminal_put(adjX, adjY, 0xE200 + mat->charCode);
+				break;
+
+			case TileTypes::FLOOR:
+				terminal_put(adjX, adjY, 0xE200 + mat->floorCode);
+				break;
+
+			case TileTypes::WALL: // Not implemented yet
+
+				break;
+
+			case TileTypes::RAMP:
+				terminal_put(adjX, adjY, 0xE200 + 30);
+				break;
+
+
 			}
 
-			else if (getTileType(idx) == TileTypes::RAMP)
+			if ( tileType == TileTypes::EMPTY_SPACE)
 			{
-				terminal_put(adjX, adjY, 0xE200 + 29);
+				
+			}
+
+			else if (tileType == TileTypes::RAMP)
+			{
+				
 			}
 				
 			else
 			{
-				terminal_put(adjX, adjY, 0xE200 + mat->charCode);
+				
 			}
 
 				
