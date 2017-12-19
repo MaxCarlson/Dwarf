@@ -7,21 +7,16 @@
 
 
 const int noiseSize = 88;
-const int WORLD_D = 80;
+const int R_SMOOTHNESS = 37; // Smoothness
 constexpr unsigned int octaves = 7;
 constexpr float persistence = 0.5F;
 constexpr float frequency = 2.0F;
 
-double noiseX(int regionX, int regionXS)
-{
-	const double x = regionX + regionXS;
-	return x / MAP_WIDTH * noiseSize;
-}
 
-double noiseY(int regionX, int regionXS)
+double noiseXY(int regionX, int regionXS)
 {
-	const double x = regionX  + regionXS;
-	return x / MAP_WIDTH  * noiseSize;
+	const double x = regionX * R_SMOOTHNESS + regionXS;
+	return x / (MAP_WIDTH * R_SMOOTHNESS) * noiseSize;
 }
 
 inline uint8_t noiseToHeight(const double n)
@@ -35,8 +30,8 @@ void buildHeightMap(FastNoise & noise, std::vector<uint8_t>& heightMap)
 	for(int x = 0; x < MAP_WIDTH; ++x)
 		for (int y = 0; y < MAP_HEIGHT; ++y)
 		{
-			const double nx = noiseX(MAP_WIDTH, x);
-			const double ny = noiseY(MAP_HEIGHT, y);
+			const double nx = noiseXY(MAP_WIDTH, x);
+			const double ny = noiseXY(MAP_HEIGHT, y);
 			const double nz = noise.GetNoise(nx, ny);
 
 			auto alt = noiseToHeight(nz);
@@ -64,10 +59,6 @@ void buildRegion(Coordinates dimensions)
 	std::vector<uint8_t> heightMapt;
 	buildHeightMap(noise, heightMapt);
 
-	
-	TCODHeightMap * heightMap = new TCODHeightMap(dimensions.x, dimensions.y);
-	heightMap->midPointDisplacement(rng);
-	heightMap->normalize();
-
-	layRock(*heightMap, heightMapt, *rng);
+	buildStrata(noise);
+	layRock(heightMapt, *rng);
 }

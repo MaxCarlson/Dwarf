@@ -27,7 +27,8 @@ struct MaterialDef
 	uint16_t floorCode;
 	int tilesetKey;
 
-	//std::vector<std::string> layers;
+	// Where is this material found
+	std::string layer = "";
 
 	MaterialType matType;
 	int health = 1;

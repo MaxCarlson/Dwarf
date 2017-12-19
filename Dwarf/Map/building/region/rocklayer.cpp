@@ -7,20 +7,20 @@
 
 using region::TileTypes;
 
-void buildStrata()
+void buildStrata(FastNoise &noise, TCODRandom & rng)
 {
+	Strata strata;
 
+	strata.strata_map.resize(TOTAL_MAP_TILES);
 }
 
-void layRock(const TCODHeightMap & heightMap, std::vector<uint8_t> heightMapt, TCODRandom & rng)
+void layRock(std::vector<uint8_t> heightMapt, TCODRandom & rng)
 {
 
 	for (int i = 0; i < MAP_WIDTH; ++i)
 		for (int j = 0; j < MAP_HEIGHT; ++j)
 		{
 			int z = 1;
-			//int alt = heightMap.getValue(i, j) * 100;
-
 			const int cell_idx = (j * MAP_WIDTH) + i;
 			int alt = heightMapt[cell_idx];
 

@@ -3,6 +3,8 @@
 #include "boost\container\flat_map.hpp"
 #include "Lua.h"
 
+#include <algorithm>
+
 boost::container::flat_map<std::string, std::size_t> materialDefsIdx;
 std::vector<MaterialDef> materialDefs;
 
@@ -22,7 +24,7 @@ const std::size_t getMaterialIdx(const std::string & tag)
 {
 	return materialDefsIdx[tag];
 }
-#include <algorithm>
+
 
 void readInMaterials() noexcept
 {
@@ -35,6 +37,7 @@ void readInMaterials() noexcept
 		[&m, &tag, &matIdx](const auto &key) { materialDefsIdx[tag] = matIdx++; materialDefs.push_back(m); },
 			luaParser{
 				{ "name", [&m]() { m.name = lua_str(); } },
+				{ "layer", [&m]() {m.layer = lua_str(); } },
 				{ "description", [&m]() { m.description = lua_str(); } },
 				{ "color", [&m]() { m.color = lua_str(); } },
 				{ "glyph", [&m]() { m.charCode = lua_int(); } },
@@ -65,4 +68,9 @@ void readInMaterials() noexcept
 
 void sanityCheckMaterials()
 {
+}
+
+void getStrataLayers(std::vector<std::size_t>& soils, std::vector<std::size_t>& sedimentries, std::vector<std::size_t>& igneous, std::vector<std::size_t>& sands)
+{
+
 }
