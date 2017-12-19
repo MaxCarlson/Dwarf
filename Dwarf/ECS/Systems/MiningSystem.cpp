@@ -6,6 +6,9 @@
 #include "../World.h"
 #include "../TileFactory.h"
 #include "../Components/LaborStatsComponent.h"
+#include "../Raws/raws.h"
+#include "../Raws/Materials.h"
+#include "../Raws/Defs/MaterialDef.h"
 
 using namespace region;
 
@@ -175,6 +178,14 @@ void MiningSystem::performMining(Entity e, const int targetIdx, const uint8_t mi
 
 	makeFloor(targetIdx);
 
+
+	// Don't really want to spawn a stone boulder for each thing being mined do we?
+	// might have to change
+	auto matIdx = getTileMaterial(idxToCo(targetIdx));
+	auto mat = getMaterial(matIdx);
+
+	for(int i = 0; i < mat->minesToAmount; ++i)
+		spawnItemOnGround(mat->minesToTag, matIdx, idxToCo(targetIdx));
 
 	//tileRecalcAll(); // This should be a partial recalc based on tile mined!!
 	spot_recalc_paths(idxToCo(targetIdx));
