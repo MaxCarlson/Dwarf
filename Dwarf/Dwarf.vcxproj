@@ -143,6 +143,7 @@
     <ClCompile Include="ECS\Systems\DijkstraSystems\DijkstraMapsHandler.cpp" />
     <ClCompile Include="ECS\Systems\EntityPositionCache.cpp" />
     <ClCompile Include="ECS\Systems\ai\EquipHandler.cpp" />
+    <ClCompile Include="Helpers\FastNoise.cpp" />
     <ClCompile Include="Raws\Materials.cpp" />
     <ClCompile Include="Raws\FileReader.cpp" />
     <ClCompile Include="Raws\raws.cpp" />
@@ -170,8 +171,9 @@
     <ClCompile Include="Map\Tile.cpp" />
     <ClCompile Include="ECS\Systems\DijkstraSystems\PickMapSystem.cpp" />
     <ClCompile Include="Map\Util.cpp" />
-    <ClCompile Include="TileFactory.cpp" />
     <ClCompile Include="Map\VeinCreator.cpp" />
+    <ClCompile Include="Map\building\regionBuilder.cpp" />
+    <ClCompile Include="Map\building\region\rocklayer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cereal\access.hpp" />
@@ -264,6 +266,7 @@
     <ClInclude Include="ECS\Systems\DijkstraSystems\DijkstraMapsHandler.h" />
     <ClInclude Include="ECS\Systems\EntityPositionCache.h" />
     <ClInclude Include="ECS\Systems\ai\EquipHandler.h" />
+    <ClInclude Include="Helpers\FastNoise.h" />
     <ClInclude Include="Raws\Materials.h" />
     <ClInclude Include="Raws\Defs\MaterialDef.h" />
     <ClInclude Include="Raws\FileReader.h" />
@@ -312,8 +315,9 @@
     <ClInclude Include="ECS\Systems\DijkstraSystems\PickMapSystem.h" />
     <ClInclude Include="Raws\Defs\ItemDefs.h" />
     <ClInclude Include="Map\Util.h" />
-    <ClInclude Include="TileFactory.h" />
     <ClInclude Include="Map\VeinCreator.h" />
+    <ClInclude Include="Map\building\regionBuilder.h" />
+    <ClInclude Include="Map\building\region\rocklayer.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cereal\external\rapidxml\manual.html" />

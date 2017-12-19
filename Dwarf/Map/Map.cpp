@@ -4,12 +4,12 @@
 #include "Tile.h"
 #include "MapRender.h"
 #include "VeinCreator.h"
-#include "../TileFactory.h"
 #include "../ECS\Components\PositionComponent.h"
 #include "../ECS\Components\RenderComponent.h"
 #include "../ECS\Components\HealthComponent.h"
 #include "../BearLibTerminal.h"
 #include "../Raws/Materials.h"
+#include "building\regionBuilder.h"
 
 
 using namespace region;
@@ -20,24 +20,24 @@ Map::Map(int width, int height, int depth) : width(width), height(height), depth
 {
 	rng = TCODRandom::getInstance();
 
-	new_region(width, height, depth);
-	tileFactory = new TileFactory();
+	buildRegion({ width, height, depth });
 
-	createHeightMap(7, 0.3f);
+	//new_region(width, height, depth);
+
+	//createHeightMap(7, 0.3f);
 	
-	populateRock();
-	addTrees(10);
-	populateGrass();
-	seedRamps();
-	placeDwarves(7);
+	//populateRock();
+	//addTrees(10);
+	//populateGrass();
+	//seedRamps();
+	//placeDwarves(7);
 
+	engine->mapRenderer->currentZLevel = MAP_DEPTH - 2;
 	tileRecalcAll();
 }
 
 Map::~Map()
 {
-	delete tileFactory;
-	//delete rng;
 }
 // Needs serious work!!!!
 void Map::createHeightMap(int howMountainous, float rainAmount)
@@ -56,9 +56,6 @@ void Map::createHeightMap(int howMountainous, float rainAmount)
 
 	// If height is below a threshold, mark that area walkable/visible. else not. 
 	for (int h = 0; h < depth; ++h) {
-
-		//engine->mapRenderer->currentZLevel = h; // Change these functions around when placing player
-
 		for (int i = 0; i < width; ++i)
 			for (int j = 0; j < height; ++j)
 			{

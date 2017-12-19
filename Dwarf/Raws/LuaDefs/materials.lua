@@ -73,6 +73,19 @@ materials = {
 		matType = { "rock" }
 	};
 
+	-- Soils
+
+	["fertile_soil"] = {
+		name = "Fertile Soil",
+		description = "Dark, rich, fertile soil",
+		color = "brown",
+		floorGlyph = 126,
+		glyph = 142, -- Add glyph index
+		tcode = 2,
+		health = 200,
+		matType = { "soil" }	
+	};
+
 	-- Placeholders in order to switch to new system of rendering
 
 	["grass1"] = {

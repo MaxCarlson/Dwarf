@@ -5,7 +5,7 @@
 #include <vector>
 
 // Make this feature dynamic !!
-static const int MAX_ZLVL = 50;
+static const int MAX_ZLVL = 100;
 
 class MapRender;
 

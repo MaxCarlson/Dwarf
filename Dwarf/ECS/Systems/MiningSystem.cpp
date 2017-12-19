@@ -4,7 +4,6 @@
 #include "../Messages/recalculate_mining_message.h"
 #include "../Messages/perform_mining_message.h"
 #include "../World.h"
-#include "../TileFactory.h"
 #include "../Components/LaborStatsComponent.h"
 #include "../Raws/raws.h"
 #include "../Raws/Materials.h"
@@ -129,7 +128,7 @@ void MiningSystem::walkMiningMap(const Coordinates co, const int distance, const
 	if (distance > 200)
 		return;
 
-	const auto newIdx = TILE_ARRAY_LOOKUP;
+	const int newIdx = TILE_ARRAY_LOOKUP;
 
 	if (miningMap[newIdx] > distance)
 	{
@@ -153,14 +152,11 @@ void MiningSystem::walkMiningMap(const Coordinates co, const int distance, const
 
 void MiningSystem::performMining(Entity e, const int targetIdx, const uint8_t miningType)
 {
-	//Tile& t = tileAt(targetIdx);
-
 	if (tileHealth(targetIdx) > 0)
 	{
 
 		auto& labor = e.getComponent<LaborStatsComponent>();
 
-		// Health needs to be changed to be dependant on material
 		auto dmg = 4 * JobSpeedMultiplier[labor.laborLevel[int(Jobs::MINER)]];
 
 		damageTile(targetIdx, dmg);
@@ -176,6 +172,8 @@ void MiningSystem::performMining(Entity e, const int targetIdx, const uint8_t mi
 	// Remove the designation and change the tile
 	designations->mining.erase(targetIdx);
 
+	// Change tile to a floor, Probably don't want to do this
+	// if tile is over open space?
 	makeFloor(targetIdx);
 
 
