@@ -33,5 +33,8 @@ struct MaterialDef
 	MaterialType matType;
 	int health = 1;
 	std::string minesToTag = "";
+	//std::vector<std::string> ores;
+	std::string oreProduct; // Want to add multiple at some point?
+
 	int minesToAmount = 0;
 };

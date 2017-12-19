@@ -46,6 +46,7 @@ void readInMaterials() noexcept
 				{ "health", [&m]() { m.health = lua_int(); } },
 				{ "minesTo", [&m]() { m.minesToTag = lua_str(); } },
 				{ "mineAmt", [&m]() { m.minesToAmount = lua_int(); } },
+				{ "ores", [&m]() { m.oreProduct = lua_str(); } }, // Add functionality for multiple ore types?
 				{ "matType", [&m]() {
 				readLuaInnerT("matType", [&m](auto type) {
 					if (type == "rock")		 m.matType = MAT_ROCK;
@@ -54,8 +55,8 @@ void readInMaterials() noexcept
 					if (type == "metal")     m.matType = MAT_METAL;
 					if (type == "synthetic") m.matType = MAT_SYTHETIC;
 					if (type == "organic")   m.matType = MAT_ORGANIC;
-				});
-			}}
+					});
+				}}
 		}
 	);
 
@@ -70,7 +71,15 @@ void sanityCheckMaterials()
 {
 }
 
-void getStrataLayers(std::vector<std::size_t>& soils, std::vector<std::size_t>& sedimentries, std::vector<std::size_t>& igneous, std::vector<std::size_t>& sands)
+void getStrataLayers(std::vector<std::size_t> &soils, std::vector<std::size_t> &sands, std::vector<std::size_t> &igneous, std::vector<std::size_t> &sedimentries)
 {
-
+	std::size_t i = 0;
+	for (auto it : materialDefs)
+	{
+		if (it.matType == MAT_SOIL) soils.push_back(i);
+		if (it.matType == MAT_SAND) sands.push_back(i);
+		if (it.matType == MAT_ROCK && it.layer == "sedimentary") sedimentries.push_back(i);
+		if (it.matType == MAT_ROCK && it.layer == "igneous") igneous.push_back(i);
+		++i;
+	}
 }

@@ -56,9 +56,9 @@ void buildRegion(Coordinates dimensions)
 	noise.SetFractalGain(persistence);
 	noise.SetFractalLacunarity(frequency);
 
-	std::vector<uint8_t> heightMapt;
-	buildHeightMap(noise, heightMapt);
+	std::vector<uint8_t> heightMap;
+	buildHeightMap(noise, heightMap);
 
-	buildStrata(noise);
-	layRock(heightMapt, *rng);
+	Strata strata = buildStrata(heightMap, noise, *rng);
+	layRock(heightMap, strata, *rng);
 }

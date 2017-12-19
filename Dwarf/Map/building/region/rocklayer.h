@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <tuple>
 
 class TCODRandom;
 class FastNoise;
@@ -11,6 +12,6 @@ struct Strata
 	std::vector<std::tuple<int, int, int, int>> counts;
 };
 
-void buildStrata(FastNoise &noise, TCODRandom & rng);
-void layRock(std::vector<uint8_t> heightMapt, TCODRandom & rng);
+Strata buildStrata(std::vector<uint8_t> &heightMap, FastNoise &noise, TCODRandom & rng);
+void layRock(std::vector<uint8_t> heightMap, Strata & strata, TCODRandom & rng);
 

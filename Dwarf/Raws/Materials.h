@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <vector>
 
 struct MaterialDef;
 
@@ -11,5 +12,5 @@ const std::size_t getMaterialIdx(const std::string &tag);
 void readInMaterials() noexcept;
 void sanityCheckMaterials();
 
-void getStrataLayers(std::vector<std::size_t> &soils, std::vector<std::size_t> &sedimentries, std::vector<std::size_t> &igneous, std::vector<std::size_t> &sands);
+void getStrataLayers(std::vector<std::size_t> &soils, std::vector<std::size_t> &sands, std::vector<std::size_t> &igneous, std::vector<std::size_t> &sedimentries);
 

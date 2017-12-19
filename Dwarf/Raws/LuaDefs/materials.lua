@@ -14,6 +14,7 @@ materials = {
 		tcode = 2,
 		health = 550,
 		minesTo = "ore",
+		ores = "copper",
 		mineAmt = 1,
 		matType = { "rock" }
 	};
@@ -28,6 +29,7 @@ materials = {
 		tcode = 2,
 		health = 475,
 		minesTo = "ore",
+		ores = "tin",
 		mineAmt = 1,
 		matType = { "rock" }
 	};
@@ -42,6 +44,22 @@ materials = {
 		tcode = 2,
 		health = 625,
 		minesTo = "ore",
+		ores = "iron",
+		mineAmt = 1,
+		matType = { "rock" }
+	};
+
+	["hematite_s"] = {
+		name = "Hematite",
+		layer = "sedimentary",
+		description = "An iron rich ore",
+		color = "light red",
+		glyph = 139,
+		floorGlyph = 46,
+		tcode = 2,
+		health = 625,
+		minesTo = "ore",
+		ores = "iron",
 		mineAmt = 1,
 		matType = { "rock" }
 	};
@@ -56,6 +74,7 @@ materials = {
 		tcode = 2,
 		health = 180,
 		minesTo = "ore",
+		ores = "gold",
 		mineAmt = 1,
 		matType = { "rock" }
 	};
@@ -80,7 +99,7 @@ materials = {
 
 	["granite_rock"] = {
 		name = "Granite",
-		layer = "igneous"
+		layer = "igneous",
 		description = "A very hard and sparkly rock of many colors",
 		color = "grey",
 		floorGlyph = 46,
@@ -95,7 +114,7 @@ materials = {
 	["marble"] = {
 		name = "Marble",
 		layer = "sedimentary",
-		description = "Making a sculputre are we McDwarf?"
+		description = "Making a sculputre are we McDwarf?",
 		color = "white",
 		floorGlyph = 46,
 		glyph = 137,
@@ -121,7 +140,7 @@ materials = {
 	};
 
 	["olivine"] = {
-		name = "Olivine"
+		name = "Olivine",
 		layer = "igneous",
 		description = "A pleasent green crystally rock",
 		color = "green",
