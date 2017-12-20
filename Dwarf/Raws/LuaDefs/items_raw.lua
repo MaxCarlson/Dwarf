@@ -6,7 +6,7 @@ items["ore"] = {
 	description = "Unprocessed ore",
 	itemType = {"component"},
 	glyph = 15,
-	color = "grey", -- Note color should be based on material 
+	color = "grey",  
 	tcode = 2
 };
 
@@ -24,6 +24,6 @@ items["stone_boulder"] = {
 	description = "A chunk of rock",
 	itemType = {"component"},
 	glyph = 7,
-	color = "grey", -- Note color should be based on material ?
+	color = "grey", 
 	tcode = 2
 };

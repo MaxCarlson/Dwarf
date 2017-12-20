@@ -163,17 +163,13 @@ void layRock(std::vector<uint8_t> heightMap, Strata & strata, TCODRandom & rng)
 			}
 
 			const int idx = getIdx({ i, j, z });
-			//region::setTileType(idx, TileTypes::FLOOR);
 			region::makeFloor(idx);
 
 			// Set vegitation ~~ sepperate vegitation from materials
 
 			std::string tmp = "grass";
 			int rg = rng.getInt(1, 3, 3);
-
 			tmp += rg + '0';
-
-
 			region::setMaterial({ i, j, z }, getMaterialIdx(tmp));
 
 			++z;
