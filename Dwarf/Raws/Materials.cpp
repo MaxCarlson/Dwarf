@@ -77,11 +77,20 @@ void getStrataLayers(std::vector<std::size_t> &soils, std::vector<std::size_t> &
 	std::size_t i = 0;
 	for (auto it : materialDefs)
 	{
-		if (it.matType == MAT_SOIL) soils.push_back(i);
-		if (it.matType == MAT_SAND) sands.push_back(i);
-		if (it.matType == MAT_ROCK && it.layer == "sedimentary") sedimentries.push_back(i);
-		if (it.matType == MAT_ROCK && it.layer == "igneous") igneous.push_back(i);
-		if (it.matType == MAT_ROCK && it.layer == "metamorphic") metamorphics.push_back(i);
+		if (it.layer == "all_rock")
+		{
+			sedimentries.push_back(i);
+			igneous.push_back(i);
+			metamorphics.push_back(i);
+		}
+		else
+		{
+			if (it.matType == MAT_SOIL) soils.push_back(i);
+			if (it.matType == MAT_SAND) sands.push_back(i);
+			if (it.matType == MAT_ROCK && it.layer == "sedimentary") sedimentries.push_back(i);
+			if (it.matType == MAT_ROCK && it.layer == "igneous") igneous.push_back(i);
+			if (it.matType == MAT_ROCK && it.layer == "metamorphic") metamorphics.push_back(i);
+		}
 		++i;
 	}
 }

@@ -60,6 +60,8 @@ Strata buildStrata(std::vector<uint8_t>& heightMap, FastNoise & noise, TCODRando
 		}
 	}
 
+	// Find a better way to distribute the layers with metamorhpic being lowest
+
 	int count_used = 0;
 	for (int i = 0; i < numStrata; ++i) {
 		if (std::get<0>(strata.counts[i]) > 0) {
@@ -78,7 +80,7 @@ Strata buildStrata(std::vector<uint8_t>& heightMap, FastNoise & noise, TCODRando
 			if (z > altitude_at_center - (1 + rng.getInt(1, 4))) {
 				// Soil
 				int roll = rng.getInt(1, 100);
-				if (100) { // REplace once sands
+				if (100) {						 // Replace once sands
 					const std::size_t soil_idx = rng.getInt(1, soils.size()) - 1;
 					//std::cout << material_name(soils[soil_idx]) << "\n";
 					strata.material_idx[i] = soils[soil_idx];
@@ -89,17 +91,25 @@ Strata buildStrata(std::vector<uint8_t>& heightMap, FastNoise & noise, TCODRando
 					strata.material_idx[i] = sands[sand_idx];
 				}
 			}
-			else if (z > (altitude_at_center - 10) / 2) {
+			else if (z > (altitude_at_center - 10) / 2)
+			{
 				// Sedimentary
 				const std::size_t sed_idx = rng.getInt(1, sedimintaries.size()) - 1;
 				//std::cout << material_name(sedimintaries[sed_idx]) << "\n";
 				strata.material_idx[i] = sedimintaries[sed_idx];
 			}
-			else {
+			else if (z > (altitude_at_center - 20) / 2)
+			{
 				// Igneous
 				const std::size_t ig_idx = rng.getInt(1, igneous.size()) - 1;
 				//std::cout << material_name(igneous[ig_idx]) << "\n";
 				strata.material_idx[i] = igneous[ig_idx];
+			}
+			else 
+			{
+				// Metamorphic
+				const std::size_t meta_idx = rng.getInt(1, metamorphics.size()) - 1;
+				strata.material_idx[i] = metamorphics[meta_idx];
 			}
 		}
 		else {

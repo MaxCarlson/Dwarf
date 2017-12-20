@@ -145,7 +145,7 @@ using namespace region;
 
 void Gui::printDebugTileProps()
 {
-	terminal_color("red");
+	terminal_color("black");
 
 	int xx = terminal_state(TK_MOUSE_X);
 	int yy = terminal_state(TK_MOUSE_Y);
@@ -155,9 +155,9 @@ void Gui::printDebugTileProps()
 
 	auto matIdx = region::getTileMaterial({ xx, yy, z });
 
-	auto mat = getMaterial(matIdx);
+	auto mat = getMaterial(matIdx); 
 
-	std::string tInfo = mat->name += '\n';
+	std::string tInfo = mat->name + '\n' + mat->layer + '\n';
 	bool csth = flag({ xx, yy, z }, CAN_STAND_HERE);
 
 	if (csth)

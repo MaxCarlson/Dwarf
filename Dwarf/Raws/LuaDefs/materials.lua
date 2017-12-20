@@ -35,10 +35,10 @@ materials = {
 	};
 
 	-- Iron producers
-	["iron_ore"] = {
-		name = "Iron Ore",
+	["magnetite"] = {
+		name = "Magnetite",
 		layer = "igneous",
-		description = "Sparkly grey with hints of red",
+		description = "Sparkly grey with hints of orange",
 		color = "iron",
 		glyph = glyphs['med_stone'], 
 		floorGlyph = 46,
@@ -104,8 +104,8 @@ materials = {
 		name = "Bitumous coal",
 		layer = "sedimentary",
 		description = "A soft tar-like coal",
-		color = glyphs['coal_stone'],
-		glyph = 136,
+		color = "dark grey",
+		glyph = glyphs['coal_stone'],
 		floorGlyph = 46,
 		tcode = 2,
 		health = 250,
@@ -117,7 +117,7 @@ materials = {
 	-- Flux stones -- Have to add in catagory
 	["marble"] = {
 		name = "Marble",
-		layer = "sedimentary",
+		layer = "metamorphic",
 		description = "Making a sculputre are we McDwarf?",
 		color = "white",
 		glyph = glyphs['flux_stone'],
@@ -159,6 +159,60 @@ materials = {
 		matType = { "rock" }
 	};
 
+	["gneiss"] = {
+		name = "Gneiss",
+		layer = "metamorphic",
+		description = "A rough, banded rock",
+		color = "lightest red",
+		glyph = glyphs['stone4'],
+		floorGlyph = 46,
+		health = 200,
+		minesTo = "stone_boulder",
+		mineAmt = 1,
+		matType = { "rock" }
+	};
+
+	["quartzite"] = {
+		name = "Quartzite",
+		layer = "metamorphic",
+		description = "Ranging in color from red to blue, crystally rock",
+		color = "light blue",
+		glyph = glyphs['stone2'], 
+		floorGlyph = 46,
+		tcode = 2,
+		health = 190,
+		minesTo = "stone_boulder",
+		mineAmt = 1,
+		matType = { "rock" }
+	};
+
+	["serpentinite"] = {
+		name = "Serpentinite",
+		layer = "metamorphic",
+		description = "A dark green banded rock",
+		color = "dark green",
+		glyph = glyphs['stone2'], 
+		floorGlyph = 46,
+		tcode = 2,
+		health = 190,
+		minesTo = "stone_boulder",
+		mineAmt = 1,
+		matType = { "rock" }
+	};
+
+	["slate"] = {
+		name = "Slate",
+		layer = "metamorphic",
+		description = "Comes in a wide variety of colors",
+		color = "darkest grey",
+		glyph = glyphs['stone4'],
+		floorGlyph = 46,
+		health = 200,
+		minesTo = "stone_boulder",
+		mineAmt = 1,
+		matType = { "rock" }
+	};
+
 	["microcline"] = {
 		name = "microcline",
 		layer = "igneous",
@@ -189,7 +243,7 @@ materials = {
 
 	["mica"] = {
 		name = "Mica",
-		layer = "all",
+		layer = "all_rock",
 		description = "A flakey stone found just about everywhere",
 		color = "lightest amber",
 		glyph = glyphs['stone2'],

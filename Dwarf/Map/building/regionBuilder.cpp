@@ -6,7 +6,7 @@
 #include "region\rocklayer.h"
 
 
-const int noiseSize = 88;
+const int noiseSize = 166; //def 88
 const int R_SMOOTHNESS = 37; // Smoothness
 constexpr unsigned int octaves = 7;
 constexpr float persistence = 0.5F;
@@ -21,7 +21,7 @@ double noiseXY(int regionX, int regionXS)
 
 inline uint8_t noiseToHeight(const double n)
 {
-	return static_cast<uint8_t>((n + 1.0f) * 55);
+	return static_cast<uint8_t>((n + 1.0f) * 103);
 }
 
 void buildHeightMap(FastNoise & noise, std::vector<uint8_t>& heightMap)
