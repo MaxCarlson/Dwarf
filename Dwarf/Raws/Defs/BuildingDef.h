@@ -14,7 +14,8 @@ struct BuildingProvides
 {
 	b_provides_enum provides;
 
-	int radius = 0;
+	// Not implemented yet
+	//int radius = 0;
 };
 
 struct BuildingDef
@@ -32,8 +33,12 @@ struct BuildingDef
 	// What does this building do?
 	std::vector<BuildingProvides> provides;
 
+	std::pair<std::string, int> skill_required;
+
 	// contains every render character
 	// needed starting from the top left
 	// to bottom right
 	std::vector<int> charCodes;
+
+	bool structure = false;
 };

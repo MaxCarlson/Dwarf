@@ -25,6 +25,9 @@ glyphs = {
 	soil1 = 142,
 	grass1 = 130,
 	grass2 = 147,
-	grass3 = 244
+	grass3 = 244,
+
+	-- Walls will be calculated based on what other walls they are next to or not
+	wall = 175
 };
 

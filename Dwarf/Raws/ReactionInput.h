@@ -15,7 +15,7 @@ enum MaterialDefSpawnType
 struct ReactionInput
 {
 	std::string tag = "";
-	std::size_t req_material;
+	std::size_t req_material = 0;
 
 	MaterialDefSpawnType req_material_type = spawn_type_none;
 

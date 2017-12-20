@@ -15,14 +15,18 @@ MaterialDef * getMaterial(const std::string & tag)
 	return &materialDefs[idx];
 }
 
-MaterialDef * getMaterial(const int idx)
+MaterialDef * getMaterial(const std::size_t idx)
 {
 	return &materialDefs[idx];
 }
 
 const std::size_t getMaterialIdx(const std::string & tag)
 {
-	return materialDefsIdx[tag];
+	auto find = materialDefsIdx.find(tag);
+	if(find != materialDefsIdx.end())
+		return find->second;
+
+	return 0;
 }
 
 
@@ -63,7 +67,10 @@ void readInMaterials() noexcept
 	// Ensure order is identical each game load
 	std::sort(materialDefs.begin(), materialDefs.end(), [](MaterialDef a, MaterialDef b) {return a.tag < b.tag; });
 
-	for (auto matIdx = 0; matIdx < materialDefs.size(); ++matIdx)
+	// Set index 0 to no material
+	materialDefs.insert(materialDefs.begin(), MaterialDef{});
+
+	for (auto matIdx = 1; matIdx < materialDefs.size(); ++matIdx)
 		materialDefsIdx[materialDefs[matIdx].tag] = matIdx;
 }
 
