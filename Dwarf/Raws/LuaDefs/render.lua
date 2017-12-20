@@ -1,5 +1,5 @@
 
-
+-- Colors defined in main dir bearLibConfig.ini
 glyphs = {
 	mined_gem = 4,
 	stone_boulder = 7,

@@ -41,7 +41,7 @@ void readInMaterials() noexcept
 				{ "description", [&m]() { m.description = lua_str(); } },
 				{ "color", [&m]() { m.color = lua_str(); } },
 				{ "glyph", [&m]() { m.charCode = static_cast<uint16_t>(lua_tonumber(luaState, -1)); } },
-				{ "floorGlyph", [&m]() {m.floorCode = lua_int(); } },
+				{ "floorGlyph", [&m]() {m.floorCode = static_cast<uint16_t>(lua_tonumber(luaState, -1)); } },
 				{ "tcode", [&m]() { m.tilesetKey = lua_int(); } },
 				{ "health", [&m]() { m.health = lua_int(); } },
 				{ "minesTo", [&m]() { m.minesToTag = lua_str(); } },
