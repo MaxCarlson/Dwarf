@@ -163,7 +163,8 @@ void layRock(std::vector<uint8_t> heightMap, Strata & strata, TCODRandom & rng)
 			}
 
 			const int idx = getIdx({ i, j, z });
-			region::setTileType(idx, TileTypes::FLOOR);
+			//region::setTileType(idx, TileTypes::FLOOR);
+			region::makeFloor(idx);
 
 			// Set vegitation ~~ sepperate vegitation from materials
 
@@ -172,18 +173,12 @@ void layRock(std::vector<uint8_t> heightMap, Strata & strata, TCODRandom & rng)
 
 			tmp += rg + '0';
 
-			//tileFactory->createGrass({ i, j, h });
+
 			region::setMaterial({ i, j, z }, getMaterialIdx(tmp));
 
 			++z;
 
-			// Set soil and floor layers
-			//while (z < MAP_DEPTH - 2)
-			//{
-			//	++z;
-			//}
-
-			// Set empty space with remaing space
+			// Set empty space with remaining space
 			while (z < MAP_DEPTH - 1)
 			{
 				const int idx = getIdx({ i, j, z });

@@ -4,7 +4,8 @@
 #include <libtcod.hpp>
 #include "../Helpers/FastNoise.h"
 #include "region\rocklayer.h"
-#include "region\buildings.h"
+#include "region\place_buildings.h"
+#include "region\place_creatures.h"
 
 
 const int noiseSize = 166; //def 88
@@ -64,4 +65,8 @@ void buildRegion(Coordinates dimensions)
 	layRock(heightMap, strata, *rng);
 
 	placeRamps();
+
+	region::tileRecalcAll();
+
+	placeDwarves();
 }

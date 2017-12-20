@@ -145,8 +145,6 @@ using namespace region;
 
 void Gui::printDebugTileProps()
 {
-	terminal_color("black");
-
 	int xx = terminal_state(TK_MOUSE_X);
 	int yy = terminal_state(TK_MOUSE_Y);
 
@@ -193,5 +191,7 @@ void Gui::printDebugTileProps()
 	if (csth)
 		tInfo += "CAN_GO_DOWN \n";
 
+
+	terminal_color("black");
 	terminal_printf(xx, yy, tInfo.c_str());
 }

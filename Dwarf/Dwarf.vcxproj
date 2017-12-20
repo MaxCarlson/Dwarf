@@ -139,12 +139,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Map\building\region\buildings.cpp" />
+    <ClCompile Include="Map\building\region\place_buildings.cpp" />
     <ClCompile Include="Drawing\draw.cpp" />
     <ClCompile Include="ECS\Systems\DijkstraSystems\DijkstraMapsHandler.cpp" />
     <ClCompile Include="ECS\Systems\EntityPositionCache.cpp" />
     <ClCompile Include="ECS\Systems\ai\EquipHandler.cpp" />
     <ClCompile Include="Helpers\FastNoise.cpp" />
+    <ClCompile Include="Map\building\region\place_creatures.cpp" />
     <ClCompile Include="Raws\Materials.cpp" />
     <ClCompile Include="Raws\FileReader.cpp" />
     <ClCompile Include="Raws\raws.cpp" />
@@ -177,7 +178,7 @@
     <ClCompile Include="Map\building\region\rocklayer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Map\building\region\buildings.h" />
+    <ClInclude Include="Map\building\region\place_buildings.h" />
     <ClInclude Include="cereal\access.hpp" />
     <ClInclude Include="cereal\archives\adapters.hpp" />
     <ClInclude Include="cereal\archives\binary.hpp" />
@@ -269,6 +270,7 @@
     <ClInclude Include="ECS\Systems\EntityPositionCache.h" />
     <ClInclude Include="ECS\Systems\ai\EquipHandler.h" />
     <ClInclude Include="Helpers\FastNoise.h" />
+    <ClInclude Include="Map\building\region\place_creatures.h" />
     <ClInclude Include="Raws\Materials.h" />
     <ClInclude Include="Raws\Defs\MaterialDef.h" />
     <ClInclude Include="Raws\FileReader.h" />

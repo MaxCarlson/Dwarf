@@ -32,8 +32,8 @@ Map::Map(int width, int height, int depth) : width(width), height(height), depth
 	//seedRamps();
 	//placeDwarves(7);
 
-	engine->mapRenderer->currentZLevel = MAP_DEPTH - 2;
-	tileRecalcAll();
+	//engine->mapRenderer->currentZLevel = MAP_DEPTH - 2;
+	//tileRecalcAll();
 }
 
 Map::~Map()
