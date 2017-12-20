@@ -18,10 +18,11 @@ Strata buildStrata(std::vector<uint8_t>& heightMap, FastNoise & noise, TCODRando
 	std::vector<std::size_t> sands;
 	std::vector<std::size_t> sedimintaries;
 	std::vector<std::size_t> igneous;
+	std::vector<std::size_t> metamorphics;
 
-	getStrataLayers(soils, sands, igneous, sedimintaries);
+	getStrataLayers(soils, sands, igneous, sedimintaries, metamorphics);
 
-	const int numStrata = (MAP_WIDTH + MAP_HEIGHT) * 3 + rng.getInt(1, 128);
+	const int numStrata = (MAP_WIDTH + MAP_HEIGHT) * 4 + rng.getInt(1, 64);
 
 	strata.strata_map.resize(TOTAL_MAP_TILES);
 	strata.material_idx.resize(numStrata);
@@ -31,9 +32,13 @@ Strata buildStrata(std::vector<uint8_t>& heightMap, FastNoise & noise, TCODRando
 	std::fill(strata.counts.begin(), strata.counts.end(), std::make_tuple<int, int, int, int>(0, 0, 0, 0));
 	strata.counts.resize(numStrata);
 
-	FastNoise strataNoise(rng.getInt(1, 19999));
+	FastNoise strataNoise(rng.getInt(1, 19999)); // Replace with planet seed once implemented
 
 	strataNoise.SetNoiseType(FastNoise::Cellular);
+
+	//strataNoise.SetCellularDistanceFunction(FastNoise::Natural);
+	//strataNoise.SetCellularReturnType(FastNoise::CellularReturnType::Distance2Sub);
+	//strataNoise.SetCellularJitter(0.995f);
 
 	for (int z = 0; z < MAP_DEPTH; ++z) {
 		const float Z = (float)z*8.0F;
@@ -73,7 +78,7 @@ Strata buildStrata(std::vector<uint8_t>& heightMap, FastNoise & noise, TCODRando
 			if (z > altitude_at_center - (1 + rng.getInt(1, 4))) {
 				// Soil
 				int roll = rng.getInt(1, 100);
-				if (roll < 100) {
+				if (100) { // REplace once sands
 					const std::size_t soil_idx = rng.getInt(1, soils.size()) - 1;
 					//std::cout << material_name(soils[soil_idx]) << "\n";
 					strata.material_idx[i] = soils[soil_idx];
@@ -143,10 +148,7 @@ void layRock(std::vector<uint8_t> heightMap, Strata & strata, TCODRandom & rng)
 					std::cout << "Warning - exceeded strata_map size\n";
 				}
 
-				
-
-				region::setMaterial({ i, j, z }, matIdx); // Replace this with strata building once up and running
-
+				region::setMaterial({ i, j, z }, matIdx); 
 				++z;
 			}
 

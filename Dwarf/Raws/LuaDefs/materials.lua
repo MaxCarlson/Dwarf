@@ -9,7 +9,7 @@ materials = {
 		layer = "igneous",
 		description = "An reddish orange vein with streaks of green",
 		color = "copper",
-		glyph = 139,
+		glyph = glyphs['med_stone'], 
 		floorGlyph = 46,
 		tcode = 2,
 		health = 550,
@@ -24,7 +24,7 @@ materials = {
 		layer = "sedimentary",
 		description = "A lightly silver-grey vein",
 		color = "silver",
-		glyph = 139,
+		glyph = glyphs['med_stone'], 
 		floorGlyph = 46,
 		tcode = 2,
 		health = 475,
@@ -34,12 +34,13 @@ materials = {
 		matType = { "rock" }
 	};
 
+	-- Iron producers
 	["iron_ore"] = {
 		name = "Iron Ore",
 		layer = "igneous",
 		description = "Sparkly grey with hints of red",
 		color = "iron",
-		glyph = 139,
+		glyph = glyphs['med_stone'], 
 		floorGlyph = 46,
 		tcode = 2,
 		health = 625,
@@ -54,7 +55,7 @@ materials = {
 		layer = "sedimentary",
 		description = "An iron rich ore",
 		color = "light red",
-		glyph = 139,
+		glyph = glyphs['med_stone'], 
 		floorGlyph = 46,
 		tcode = 2,
 		health = 625,
@@ -64,12 +65,30 @@ materials = {
 		matType = { "rock" }
 	};
 
-	["gold_ore"] = {
-		name = "Gold ore",
+	-- Titanium containers -- Add Ilmenite?
+	["rutile"] = {
+		name = "Rutile",
+		layer = "metamorphic",
+		description = "A dark-reddish ore with a high Titanium concentration",
+		color = "purple",
+		glyph = glyphs['val_stone'],
+		floorGlyph = 46,
+		tcode = 2,
+		health = 625,
+		minesTo = "ore",
+		ores = "titanium",
+		mineAmt = 1,
+		matType = { "rock" }
+	};
+
+	
+
+	["native_gold"] = {
+		name = "Native Gold",
 		layer = "igneous",
 		description = "Worth it's weight in gold",
-		color = "yellow",
-		glyph = 138,
+		color = "dark yellow",
+		glyph = glyphs['val_stone'],
 		floorGlyph = 46,
 		tcode = 2,
 		health = 180,
@@ -85,12 +104,41 @@ materials = {
 		name = "Bitumous coal",
 		layer = "sedimentary",
 		description = "A soft tar-like coal",
-		color = "coal",
+		color = glyphs['coal_stone'],
 		glyph = 136,
 		floorGlyph = 46,
 		tcode = 2,
 		health = 250,
 		minesTo = "coal",
+		mineAmt = 1,
+		matType = { "rock" }
+	};
+	
+	-- Flux stones -- Have to add in catagory
+	["marble"] = {
+		name = "Marble",
+		layer = "sedimentary",
+		description = "Making a sculputre are we McDwarf?",
+		color = "white",
+		glyph = glyphs['flux_stone'],
+		floorGlyph = 46,
+		tcode = 2,
+		health = 145,
+		minesTo = "stone_boulder",
+		mineAmt = 1,
+		matType = { "rock" }
+	};
+
+	["limestone"] = {
+		name = "Limestone",
+		layer = "sedimentary",
+		description = "Is that a skeleton?",
+		color = "lightest amber",
+		glyph = glyphs['flux_stone'],
+		floorGlyph = 46,
+		tcode = 2,
+		health = 120,
+		minesTo = "stone_boulder",
 		mineAmt = 1,
 		matType = { "rock" }
 	};
@@ -102,24 +150,10 @@ materials = {
 		layer = "igneous",
 		description = "A very hard and sparkly rock of many colors",
 		color = "grey",
+		glyph = glyphs['stone4'],
 		floorGlyph = 46,
-		glyph = 134, -- Add glyph index
 		tcode = 2,
 		health = 200,
-		minesTo = "stone_boulder",
-		mineAmt = 1,
-		matType = { "rock" }
-	};
-
-	["marble"] = {
-		name = "Marble",
-		layer = "sedimentary",
-		description = "Making a sculputre are we McDwarf?",
-		color = "white",
-		floorGlyph = 46,
-		glyph = 137,
-		tcode = 2,
-		health = 145,
 		minesTo = "stone_boulder",
 		mineAmt = 1,
 		matType = { "rock" }
@@ -130,8 +164,8 @@ materials = {
 		layer = "igneous",
 		description = "A hard blue rock",
 		color = "light blue",
+		glyph = glyphs['stone2'], 
 		floorGlyph = 46,
-		glyph = 132, 
 		tcode = 2,
 		health = 190,
 		minesTo = "stone_boulder",
@@ -144,13 +178,28 @@ materials = {
 		layer = "igneous",
 		description = "A pleasent green crystally rock",
 		color = "green",
+		glyph = glyphs['stone2'], 
 		floorGlyph = 46,
-		glyph = 132, 
 		tcode = 2,
 		health = 120,
 		minesTo = "stone_boulder",
 		mineAmt = 1,
 		matType = { "rock" }
+	};
+
+	["mica"] = {
+		name = "Mica",
+		layer = "all",
+		description = "A flakey stone found just about everywhere",
+		color = "lightest amber",
+		glyph = glyphs['stone2'],
+		floorGlyph = 46, 
+		tcode = 2,
+		health = 120,
+		minesTo = "stone_boulder",
+		mineAmt = 1,
+		matType = { "rock" }		
+
 	};
 
 	-- Soils
@@ -160,8 +209,8 @@ materials = {
 		layer = "soil",
 		description = "Dark, rich, fertile soil",
 		color = "brown",
+		glyph = glyphs['soil1'], -- Add glyph index
 		floorGlyph = 126,
-		glyph = 142, -- Add glyph index
 		tcode = 2,
 		health = 200,
 		matType = { "soil" }	
@@ -171,7 +220,7 @@ materials = {
 
 	["grass1"] = {
 		color = "dark green",
-		glyph = 130,
+		glyph = glyphs['grass1'], 
 		floorGlyph = 130,
 		tcode = 2,
 		health = 200,
@@ -180,7 +229,7 @@ materials = {
 
 	["grass2"] = {
 		color = "dark green",
-		glyph = 147,
+		glyph = glyphs['grass2'], 
 		floorGlyph = 147,
 		tcode = 2,
 		health = 200,
@@ -189,7 +238,7 @@ materials = {
 
 	["grass3"] = {
 		color = "dark green",
-		glyph = 244,
+		glyph = glyphs['grass3'], 
 		floorGlyph = 244,
 		tcode = 2,
 		health = 200,

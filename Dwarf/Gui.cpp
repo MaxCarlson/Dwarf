@@ -5,6 +5,8 @@
 #include "Engine.h"
 #include "Map/Map.h"
 #include "Map/MapRender.h"
+#include "Raws\Materials.h"
+#include "Raws\Defs\MaterialDef.h"
 
 static const int GUI_PANEL_VERT_PIX = 4;
 static const char* guiMainColor = "#386687";
@@ -151,7 +153,11 @@ void Gui::printDebugTileProps()
 	// debug print info on tile
 	const int z = engine->mapRenderer->currentZLevel;
 
-	std::string tInfo = "DEFAULT \n";
+	auto matIdx = region::getTileMaterial({ xx, yy, z });
+
+	auto mat = getMaterial(matIdx);
+
+	std::string tInfo = mat->name += '\n';
 	bool csth = flag({ xx, yy, z }, CAN_STAND_HERE);
 
 	if (csth)

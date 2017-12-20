@@ -40,7 +40,7 @@ void readInMaterials() noexcept
 				{ "layer", [&m]() {m.layer = lua_str(); } },
 				{ "description", [&m]() { m.description = lua_str(); } },
 				{ "color", [&m]() { m.color = lua_str(); } },
-				{ "glyph", [&m]() { m.charCode = lua_int(); } },
+				{ "glyph", [&m]() { m.charCode = static_cast<uint16_t>(lua_tonumber(luaState, -1)); } },
 				{ "floorGlyph", [&m]() {m.floorCode = lua_int(); } },
 				{ "tcode", [&m]() { m.tilesetKey = lua_int(); } },
 				{ "health", [&m]() { m.health = lua_int(); } },
@@ -69,9 +69,10 @@ void readInMaterials() noexcept
 
 void sanityCheckMaterials()
 {
+	
 }
 
-void getStrataLayers(std::vector<std::size_t> &soils, std::vector<std::size_t> &sands, std::vector<std::size_t> &igneous, std::vector<std::size_t> &sedimentries)
+void getStrataLayers(std::vector<std::size_t> &soils, std::vector<std::size_t> &sands, std::vector<std::size_t> &igneous, std::vector<std::size_t> &sedimentries, std::vector<std::size_t> &metamorphics)
 {
 	std::size_t i = 0;
 	for (auto it : materialDefs)
@@ -80,6 +81,7 @@ void getStrataLayers(std::vector<std::size_t> &soils, std::vector<std::size_t> &
 		if (it.matType == MAT_SAND) sands.push_back(i);
 		if (it.matType == MAT_ROCK && it.layer == "sedimentary") sedimentries.push_back(i);
 		if (it.matType == MAT_ROCK && it.layer == "igneous") igneous.push_back(i);
+		if (it.matType == MAT_ROCK && it.layer == "metamorphic") metamorphics.push_back(i);
 		++i;
 	}
 }
