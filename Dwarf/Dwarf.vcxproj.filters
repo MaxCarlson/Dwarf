@@ -126,6 +126,9 @@
     <ClCompile Include="Map\building\region\place_buildings.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Raws\Buildings.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -558,6 +561,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Map\building\region\place_buildings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Raws\Defs\BuildingDef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Raws\Buildings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Raws\ReactionInput.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Raws\Reaction.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

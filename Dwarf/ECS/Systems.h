@@ -211,11 +211,11 @@ private:
 	friend class World;
 };
 
-template<class RequireList, class ExcludeList = Excludes<>>
+template<class RequireList, class ExcludeList = Excludes<>, class AnyList = Any<>>
 class System : public SystemBase
 {
 public:
-	System() : SystemBase{ MakeFilter<RequireList, ExcludeList>() } {};
+	System() : SystemBase{ MakeFilter<RequireList, ExcludeList, AnyList>() } {};
 
 };
 

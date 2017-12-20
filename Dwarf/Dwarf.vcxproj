@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Raws\Buildings.cpp" />
     <ClCompile Include="Map\building\region\place_buildings.cpp" />
     <ClCompile Include="Drawing\draw.cpp" />
     <ClCompile Include="ECS\Systems\DijkstraSystems\DijkstraMapsHandler.cpp" />
@@ -178,6 +179,8 @@
     <ClCompile Include="Map\building\region\rocklayer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Raws\Buildings.h" />
+    <ClInclude Include="Raws\Defs\BuildingDef.h" />
     <ClInclude Include="Map\building\region\place_buildings.h" />
     <ClInclude Include="cereal\access.hpp" />
     <ClInclude Include="cereal\archives\adapters.hpp" />
@@ -322,6 +325,8 @@
     <ClInclude Include="Map\VeinCreator.h" />
     <ClInclude Include="Map\building\regionBuilder.h" />
     <ClInclude Include="Map\building\region\rocklayer.h" />
+    <ClInclude Include="Raws\Reaction.h" />
+    <ClInclude Include="Raws\ReactionInput.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cereal\external\rapidxml\manual.html" />

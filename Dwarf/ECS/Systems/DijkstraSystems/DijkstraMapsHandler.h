@@ -7,7 +7,7 @@ extern DijkstraMap pick_map;
 
 class PickMapSystem;
 
-class DijkstraMapsHandler : public System<Requires<>> // Does not interate through Entities, only handles other dijkstra map systems
+class DijkstraMapsHandler : public System<Requires<>, Excludes<>, Any<>> // Update any and get rid of other lower dijkstra systems?
 {
 public:
 	DijkstraMapsHandler() = default;
