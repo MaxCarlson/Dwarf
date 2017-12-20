@@ -9,17 +9,21 @@
 #include "../ECS/Components/RenderComponent.h"
 #include "../ECS/Components/Item.h"
 #include "Defs\ItemDefs.h"
+#include "Buildings.h"
 
 
 void sanityChecks()
 {
 	sanityCheckItems();
+	sanityCheckMaterials();
+	sanityCheckBuildings();
 }
 
 void loadGameTables()
 {
 	readInItems();
 	readInMaterials();
+	readInBuildings();
 }
 
 void loadRaws()

@@ -1,7 +1,8 @@
 -- Color of buildings will be based on material of construction
+
 buildings = {
 	
-	["wall"] = {
+	wall = {
 		name = "Wall",
 		description = "I think you already know what a wall is..",
 		width = 1,
@@ -11,5 +12,5 @@ buildings = {
 		skill = { name = "Construction", difficulty = 0 },
 		render = { glyph = glyphs['wall'] },
 		structure = 1
-	};
+	},
 };
