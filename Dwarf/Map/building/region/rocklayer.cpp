@@ -60,7 +60,7 @@ Strata buildStrata(std::vector<uint8_t>& heightMap, FastNoise & noise, TCODRando
 		}
 	}
 
-	// Find a better way to distribute the layers with metamorhpic being lowest
+	// Find a better way to distribute the layers with metamorhpic being lowest ~~ Also add gems?
 
 	int count_used = 0;
 	for (int i = 0; i < numStrata; ++i) {

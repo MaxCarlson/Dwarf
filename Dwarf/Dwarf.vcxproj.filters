@@ -120,6 +120,9 @@
     <ClCompile Include="Map\building\region\rocklayer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Map\building\region\buildings.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -546,6 +549,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Map\building\region\rocklayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Map\building\region\buildings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

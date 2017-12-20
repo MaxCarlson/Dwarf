@@ -4,6 +4,7 @@
 #include <libtcod.hpp>
 #include "../Helpers/FastNoise.h"
 #include "region\rocklayer.h"
+#include "region\buildings.h"
 
 
 const int noiseSize = 166; //def 88
@@ -61,4 +62,6 @@ void buildRegion(Coordinates dimensions)
 
 	Strata strata = buildStrata(heightMap, noise, *rng);
 	layRock(heightMap, strata, *rng);
+
+	placeRamps();
 }

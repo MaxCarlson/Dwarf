@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Map\building\region\buildings.cpp" />
     <ClCompile Include="Drawing\draw.cpp" />
     <ClCompile Include="ECS\Systems\DijkstraSystems\DijkstraMapsHandler.cpp" />
     <ClCompile Include="ECS\Systems\EntityPositionCache.cpp" />
@@ -176,6 +177,7 @@
     <ClCompile Include="Map\building\region\rocklayer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Map\building\region\buildings.h" />
     <ClInclude Include="cereal\access.hpp" />
     <ClInclude Include="cereal\archives\adapters.hpp" />
     <ClInclude Include="cereal\archives\binary.hpp" />
