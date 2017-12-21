@@ -10,7 +10,7 @@ buildings = {
 		components = { {item = "block", qty = 1} },
 		provides = { { wall = {}, floor = {} }},
 		skill = { { name = "Construction", difficulty = 0 } }, -- Not implemented yet
-		render = { { glyph = glyphs['wall'] } },
+		render = { { glyph = glyphs['wall'], glyph1 = glyphs['floor'] } },
 		structure
 	},
 };

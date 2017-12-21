@@ -102,6 +102,9 @@ void readLuaTable2D(const std::string & table, const std::function<void(std::str
 	lua_pushnil(luaState);
 	lua_gettable(luaState, -2);
 
+	if (table == "render") 
+		int a = 5;
+
 	while (lua_next(luaState, -2) != 0)
 	{
 		std::string cf = lua_tostring(luaState, -2);

@@ -17,6 +17,14 @@ BuildingDef * getBuilding(const std::string & tag)
 	return nullptr;
 }
 
+void vecCharIdx(BuildingDef & b, int idx, uint16_t c)
+{
+	if (b.charCodes.size() < idx)
+		b.charCodes.resize(idx);
+
+	b.charCodes[idx - 1] = c;
+}
+
 void readInBuildings() noexcept
 {
 	//lua_getglobal(luaState, "buildings");
@@ -50,10 +58,10 @@ void readInBuildings() noexcept
 				);
 				b.components.push_back(inp);
 			}},
-			{"provides", [&b, &pr]() {
+			{"provides", [&b]() {
 				readLuaTable2D("provides",
-					[&b, &pr](auto type1) {},
-					[&b, &pr](auto type2) {
+					[  ](auto type1) {},
+					[&b](auto type2) {
 						if (type2 == "wall")  b.provides.push_back(BuildingProvides{  provides_wall  });
 						if (type2 == "floor") b.provides.push_back(BuildingProvides{  provides_floor });
 						if (type2 == "ramp")  b.provides.push_back(BuildingProvides{  provides_ramp  });
@@ -72,16 +80,19 @@ void readInBuildings() noexcept
 				);
 				}
 			},
-			{ "render", [&b]() { // Not implemented yet
+			{ "render", [&b]() { 
 				readLuaTable2D("render",
-					[&b](auto type1) {},
+					[  ](auto type1) {},
 					[&b](auto type2) {
-						if (type2 == "glyph") b.charCodes.push_back(static_cast<uint16_t>(lua_tonumber(luaState, -1)));
+						if (type2 == "glyph") { vecCharIdx(b, 1, lua_int()); lua_pop(luaState, 2); }
+						if (type2 == "glyph1")  vecCharIdx(b, 2, static_cast<uint16_t>(lua_tonumber(luaState, -1)));
+						if (type2 == "glyph2") vecCharIdx(b, 3, static_cast<uint16_t>(lua_tonumber(luaState, -1)));
+						if (type2 == "glyph3") vecCharIdx(b, 4, static_cast<uint16_t>(lua_tonumber(luaState, -1)));
 					}
 				);
 				}
 
-			}
+			},
 		}
 	);
 	int a = 5;
