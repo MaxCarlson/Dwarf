@@ -12,6 +12,9 @@ enum b_provides_enum
 
 struct BuildingProvides
 {
+	BuildingProvides() = default;
+	BuildingProvides(b_provides_enum provides) : provides(provides) {}
+
 	b_provides_enum provides;
 
 	// Not implemented yet

@@ -10,16 +10,82 @@ boost::container::flat_map<std::string, BuildingDef> buildingDefs;
 
 BuildingDef * getBuilding(const std::string & tag)
 {
-	return &buildingDefs[tag];
+	auto find = buildingDefs.find(tag);
+	if (find != buildingDefs.end())
+		return &find->second;
+
+	return nullptr;
 }
 
 void readInBuildings() noexcept
 {
-	lua_getglobal(luaState, "buildings");
-	lua_pushnil(luaState);
+	//lua_getglobal(luaState, "buildings");
+	//lua_pushnil(luaState);
 
-	std::vector<BuildingDef> tester;
+	//std::vector<BuildingDef> tester;
 
+	BuildingDef b;
+	std::string tag;
+	ReactionInput inp;
+	BuildingProvides pr;
+
+	readLuaTable("buildings", 
+		[&b, &tag](const auto& key) { tag = key; b = BuildingDef{}; b.tag = tag; },
+		[&b, &tag](const auto& key) { buildingDefs[tag] = b; },
+		luaParser
+		{
+			{ "name", [&b]() {b.name = lua_str(); }},
+			{ "description", [&b]() { b.description = lua_str(); }},
+			{ "width", [&b]() { b.width = lua_int(); }},
+			{ "height", [&b]() { b.height = lua_int(); } },
+			{ "structure", [&b]() { b.structure = true; } },
+			{ "components", [&b, &inp]() {
+				readLuaTable2D("components",
+					[&b, &inp](auto type1) { inp = ReactionInput{}; },
+					[&b, &inp](auto type2) {
+						if (type2 == "item") inp.tag = lua_str();
+						if (type2 == "qty") inp.quantity = lua_int();
+					}
+
+				);
+				b.components.push_back(inp);
+			}},
+			{"provides", [&b, &pr]() {
+				readLuaTable2D("provides",
+					[&b, &pr](auto type1) {},
+					[&b, &pr](auto type2) {
+						if (type2 == "wall")  b.provides.push_back(BuildingProvides{  provides_wall  });
+						if (type2 == "floor") b.provides.push_back(BuildingProvides{  provides_floor });
+						if (type2 == "ramp")  b.provides.push_back(BuildingProvides{  provides_ramp  });
+					} 
+
+				);
+				}		
+			},	
+			{"skill", [&b]() { // Not implemented yet
+				readLuaTable2D("skill",
+					[&b](auto type1) {},
+					[&b](auto type2) {
+						//if (type2 == "name") int bbb = 5;
+						//if (type2 == "difficulty") int ccc = 5;
+					}
+				);
+				}
+			},
+			{ "render", [&b]() { // Not implemented yet
+				readLuaTable2D("render",
+					[&b](auto type1) {},
+					[&b](auto type2) {
+						if (type2 == "glyph") b.charCodes.push_back(static_cast<uint16_t>(lua_tonumber(luaState, -1)));
+					}
+				);
+				}
+
+			}
+		}
+	);
+	int a = 5;
+	/*
 	// Loop through all buildings
 	while (lua_next(luaState, -2) != 0)
 	{
@@ -38,7 +104,7 @@ void readInBuildings() noexcept
 
 			if (field == "name") def.name = lua_tostring(luaState, -1);
 			if (field == "description") def.description = lua_tostring(luaState, -1);
-			if (field == "structure") def.structure = lua_tonumber(luaState, -1);
+			if (field == "structure") def.structure = lua_toboolean(luaState, -1);
 			if (field == "width") def.width = lua_tonumber(luaState, -1);
 			if (field == "height") def.height = lua_tonumber(luaState, -1);
 			
@@ -132,10 +198,10 @@ void readInBuildings() noexcept
 			lua_pop(luaState, 1);
 		}
 		buildingDefs[key] = def;
-		tester.push_back(def);
+		//tester.push_back(def);
 		lua_pop(luaState, 1);
 	}
-	int a = 5;
+	*/
 }
 
 void sanityCheckBuildings() noexcept

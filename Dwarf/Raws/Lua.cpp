@@ -85,3 +85,33 @@ void readLuaInnerT(const std::string & table, const std::function<void(std::stri
 		lua_pop(luaState, 1);
 	}
 }
+
+void readLuaTable2D(const std::string & table, const std::function<void(std::string)>& functor1, const std::function<void(std::string)>& functor2)
+{
+	lua_pushstring(luaState, table.c_str());
+	lua_gettable(luaState, -2);
+
+	//while (lua_next(luaState, -2) != 0)
+	//{
+
+	lua_next(luaState, -2);
+
+	const std::string s = lua_tostring(luaState, -2);
+	functor1(s);
+
+	lua_pushnil(luaState);
+	lua_gettable(luaState, -2);
+
+	while (lua_next(luaState, -2) != 0)
+	{
+		std::string cf = lua_tostring(luaState, -2);
+		functor2(cf);
+
+		lua_pop(luaState, 1);
+	}
+
+	lua_pop(luaState, 1);
+	lua_pop(luaState, 1);
+
+	//}
+}

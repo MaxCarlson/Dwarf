@@ -8,9 +8,9 @@ buildings = {
 		width = 1,
 		height = 1,
 		components = { {item = "block", qty = 1} },
-		provides = { wall = {}, floor = {} },
-		skill = { name = "Construction", difficulty = 0 },
-		render = { glyph = glyphs['wall'] },
-		structure = 1
+		provides = { { wall = {}, floor = {} }},
+		skill = { { name = "Construction", difficulty = 0 } }, -- Not implemented yet
+		render = { { glyph = glyphs['wall'] } },
+		structure
 	},
 };
