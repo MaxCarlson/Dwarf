@@ -3,6 +3,7 @@
 glyphs = {
 	mined_gem = 4,
 	stone_boulder = 7,
+	nest_box = 8,
 
 	floor1 = 47,
 	floor2 = 49,

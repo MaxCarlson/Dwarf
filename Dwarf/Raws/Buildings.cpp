@@ -74,8 +74,8 @@ void readInBuildings() noexcept
 				readLuaTable2D("skill",
 					[&b](auto type1) {},
 					[&b](auto type2) {
-						//if (type2 == "name") int bbb = 5;
-						//if (type2 == "difficulty") int ccc = 5;
+						if (type2 == "name") b.skill_required.first = lua_str();
+						if (type2 == "difficulty") b.skill_required.second = lua_int();
 					}
 				);
 				}
@@ -84,10 +84,10 @@ void readInBuildings() noexcept
 				readLuaTable2D("render",
 					[  ](auto type1) {},
 					[&b](auto type2) {
-						if (type2 == "glyph") { vecCharIdx(b, 1, lua_int()); lua_pop(luaState, 2); }
-						if (type2 == "glyph1")  vecCharIdx(b, 2, static_cast<uint16_t>(lua_tonumber(luaState, -1)));
-						if (type2 == "glyph2") vecCharIdx(b, 3, static_cast<uint16_t>(lua_tonumber(luaState, -1)));
-						if (type2 == "glyph3") vecCharIdx(b, 4, static_cast<uint16_t>(lua_tonumber(luaState, -1)));
+						if (type2 == "glyph")  vecCharIdx(b, 1, lua_int()); 
+						if (type2 == "glyph1") vecCharIdx(b, 2, lua_int());
+						if (type2 == "glyph2") vecCharIdx(b, 3, lua_int());
+						if (type2 == "glyph3") vecCharIdx(b, 4, lua_int());
 					}
 				);
 				}
