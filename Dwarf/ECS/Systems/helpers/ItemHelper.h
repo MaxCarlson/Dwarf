@@ -2,26 +2,19 @@
 #include "../../Systems.h"
 #include "../../Components/Item.h"
 
-class ItemHelper : public System<Requires<Item>>
+struct ItemDef;
+class Item;
+
+class ItemHelper : public System<Requires<Item>> // Excludes<ItemStored> ??
 {
 public:
 	ItemHelper() = default;
-
-	template<typename... Args, typename T>
-	auto forEachItem(T t, Args&&... args);
+	
+	//template<typename T>
+	void forEachItem(const std::function<void(Entity)> & func);
 };
 
-template<typename... Args, typename T>
-inline auto ItemHelper::forEachItem(T t, Args && ...args)
-{
-	auto f = forEachItem(std::forward<Args>(args)...);
+extern ItemHelper itemHelper;
 
-	return f;
-}
+//bool item_match_type(ItemDef d, Item i);
 
-/*
-template<typename F, typename... G>
-auto forEachItem(F&& func, G&&... getters) {
-return std::forward<F>(func)(std::forward<G>(getters)(0)...);
-}
-*/

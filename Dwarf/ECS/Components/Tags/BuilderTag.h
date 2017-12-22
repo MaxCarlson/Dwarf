@@ -10,6 +10,7 @@ struct BuilderTag : public Component
 	enum build_steps
 	{
 		FIND_BUILDING,
+		SET_BUILDING_COMPONENTS,
 		FIND_COMPONENT,
 		GOTO_COMPONENT,
 		GRAB_COMPONENT,

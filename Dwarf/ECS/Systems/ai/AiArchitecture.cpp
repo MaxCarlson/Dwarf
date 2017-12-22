@@ -3,7 +3,7 @@
 
 namespace JobsBoard
 {
-	void evaluate_building(JobBoard & board, const Entity & e, Coordinates co, JobEvaluatorBase * jt)
+	void evaluate_architecture(JobBoard & board, const Entity & e, Coordinates co, JobEvaluatorBase * jt)
 	{
 
 	}

@@ -15,7 +15,7 @@ struct building_designation
 	int width;
 	int height;
 
-	// Id if this building
+	// Id of this building
 	std::size_t entity_id;
 
 	// Keep track of which components are being used for building

@@ -18,6 +18,7 @@
 #include "ECS\Systems\ai\AiWorkSystem.h"
 #include "ECS\Systems\ai\MiningAi.h"
 #include "ECS\Systems\ai\BuildAi.h"
+#include "ECS\Systems\helpers\ItemHelper.h"
 #include "Coordinates.h"
 #include "Designations.h"
 #include "Map/Map.h"
@@ -146,7 +147,7 @@ void Engine::init()
 	equipHandler = new EquipHandler();
 
 
-	// Introduce systems to the world
+	// Introduce systems to the world ~~ These Systems no longer need to be pointers?
 	world.addSystem(*renderSystem);
 	world.addSystem(*movementSystem);
 	world.addSystem(*movementAiSystem);
@@ -157,6 +158,7 @@ void Engine::init()
 	world.addSystem(*entityPositionCache);
 	world.addSystem(*equipHandler);
 	world.addSystem(*buildAi);
+	world.addSystem(itemHelper);
 
 	// Init systems 
 	miningSystem->init();

@@ -5,6 +5,7 @@
 #include "../../../Map/Tile.h"
 #include "../../Components/Tags/BuilderTag.h"
 #include "../../Components/MovementComponent.h"
+#include "../helpers/ItemHelper.h"
 #include "WorkTemplate.h"
 
 
@@ -55,6 +56,7 @@ void BuildAi::doBuild(const Entity & e)
 
 	auto mov = e.getComponent<MovementComponent>();
 
+
 	if (tag.step == BuilderTag::FIND_BUILDING)
 	{
 		if (designations->buildings.empty())
@@ -69,14 +71,50 @@ void BuildAi::doBuild(const Entity & e)
 		tag.step = BuilderTag::FIND_COMPONENT;
 	}
 
+	else if (tag.step == BuilderTag::SET_BUILDING_COMPONENTS)
+	{
+		int dist = std::numeric_limits<int>::max();
+		const auto buildingPos = tag.buildingTarget.co;
+
+		for (auto & component : tag.buildingTarget.componentIds)
+		{
+			Entity item;
+			// Find closest items to building that fit criteria
+			// then set entity searching for component
+			itemHelper.forEachItem([&dist, &item, &buildingPos](auto type)
+			{
+				auto* itemPos = &type.getComponent<PositionComponent>().co;
+
+				if (itemPos)
+				{
+
+					int tdist = region::get_rough_distance(buildingPos, *itemPos);
+					if (tdist < dist)
+					{
+						dist = tdist;
+						item = type;
+					}
+				}
+			});
+		}
+	}
+
 	else if (tag.step == BuilderTag::FIND_COMPONENT)
 	{
+		auto mov = e.getComponent<MovementComponent>();
+
+		// Don't interrupt entity that's inbetween movements
+		if (mov.progress)
+			return;
+
 		bool hasComps = true;
 		for (auto & component : tag.buildingTarget.componentIds)
 		{
 			if (!component.second)
 			{
 				hasComps = false;
+
+
 			}
 		}
 
