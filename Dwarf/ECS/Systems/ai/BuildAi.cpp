@@ -4,6 +4,9 @@
 #include "../../Components/PositionComponent.h"
 #include "../../../Map/Tile.h"
 #include "../../Components/Tags/BuilderTag.h"
+#include "../../Components/MovementComponent.h"
+#include "WorkTemplate.h"
+
 
 namespace JobsBoard
 {
@@ -45,4 +48,41 @@ void BuildAi::update(double duration)
 
 void BuildAi::doBuild(const Entity & e)
 {
+	WorkTemplate<BuilderTag> work;
+
+	auto& tag = e.getComponent<BuilderTag>();
+	auto& co = e.getComponent<PositionComponent>().co;
+
+	auto mov = e.getComponent<MovementComponent>();
+
+	if (tag.step == BuilderTag::FIND_BUILDING)
+	{
+		if (designations->buildings.empty())
+		{
+			work.cancel_work(e);
+			return;
+		}
+
+		tag.buildingTarget = designations->buildings.back();
+		designations->buildings.pop_back(); 
+		
+		tag.step = BuilderTag::FIND_COMPONENT;
+	}
+
+	else if (tag.step == BuilderTag::FIND_COMPONENT)
+	{
+		bool hasComps = true;
+		for (auto & component : tag.buildingTarget.componentIds)
+		{
+			if (!component.second)
+			{
+				hasComps = false;
+			}
+		}
+
+		if (hasComps)
+			tag.step = BuilderTag::GOTO_BUILDING;
+
+		return;
+	}
 }

@@ -1,5 +1,6 @@
 #pragma once
 #include "../../Component.h"
+#include "../helpers/building_designation.h"
 
 struct BuilderTag : public Component
 {
@@ -18,6 +19,16 @@ struct BuilderTag : public Component
 	};
 
 	build_steps step = FIND_BUILDING;
+
+	building_designation buildingTarget;
+
+	std::size_t current_component;
+
+	template<class Archive>
+	void serialize(Archive & archive)
+	{
+		archive(step, buildingTarget, current_component);
+	}
 };
 
 
