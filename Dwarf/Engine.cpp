@@ -7,6 +7,7 @@
 #include "ECS\Components\HealthComponent.h"
 #include "ECS\Components\Item.h"
 #include "ECS\Components\LaborStatsComponent.h"
+#include "ECS\Components\Tags\BuilderTag.h"
 #include "ECS\Systems\RenderSystem.h"
 #include "ECS\Systems\MovementSystem.h"
 #include "ECS\Systems\ai\MovementAiSystem.h"
@@ -16,6 +17,7 @@
 #include "ECS\Systems\ai\EquipHandler.h"
 #include "ECS\Systems\ai\AiWorkSystem.h"
 #include "ECS\Systems\ai\MiningAi.h"
+#include "ECS\Systems\ai\BuildAi.h"
 #include "Coordinates.h"
 #include "Designations.h"
 #include "Map/Map.h"
@@ -106,7 +108,7 @@ void Engine::saveGame(std::string filePath)
 // This is a placeholder untill ECS no longer requires components
 // to be in the same order
 void Engine::regComponents()
-{
+{ 
 	world.registerComponent<PositionComponent>();
 	world.registerComponent<MovementComponent>();
 	world.registerComponent<RenderComponent>();
@@ -118,7 +120,7 @@ void Engine::regComponents()
 	world.registerComponent<HealthComponent>();
 	//world.registerComponent<CombatStatsComponent>();
 	world.registerComponent<MiningTag>();
-	
+	world.registerComponent<BuilderTag>();	
 }
 
 void Engine::init()
@@ -134,6 +136,8 @@ void Engine::init()
 	aiWorkSystem = new AiWorkSystem();
 	miningAi = new MiningAi();
 	miningAi->init();
+	buildAi = new BuildAi();
+	buildAi->init();
 
 	// Non Entity or non Updating Systems
 	miningSystem = new MiningSystem();
@@ -152,8 +156,9 @@ void Engine::init()
 	world.addSystem(*dijkstraHandler);
 	world.addSystem(*entityPositionCache);
 	world.addSystem(*equipHandler);
+	world.addSystem(*buildAi);
 
-	// Init systems with messages
+	// Init systems 
 	miningSystem->init();
 	dijkstraHandler->init();
 	entityPositionCache->init();
@@ -180,9 +185,9 @@ void Engine::run()
 
 		input.read();
 
-		if (current_game_state != Engine::PAUSED)
+		if (current_game_state != Engine::PAUSED) 
 		{
-			while (lag >= MS_PER_UPDATE)
+			while (lag >= MS_PER_UPDATE) // Switch this to only update in steps and not compensate for lag? Probably should...
 			{
 				update(MS_PER_UPDATE);
 				lag -= MS_PER_UPDATE;
@@ -216,6 +221,7 @@ void Engine::update(double deltaTime)
 	// Work Systems
 	aiWorkSystem->update();
 	miningAi->update(deltaTime);
+	buildAi->update(deltaTime);
 
 	// Systems that don't need updates
 	// miningSystem->update();
@@ -232,7 +238,7 @@ void Engine::render()
 	// Clear terminal before render
 	terminal_clear();
 
-	// Render the local map
+	// Render the local map !~!~~~ Replace this swith system?
 	mapRenderer->render();
 
 	// Render Entities

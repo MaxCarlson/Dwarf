@@ -1,6 +1,7 @@
 #pragma once
 #include "../../Component.h"
 #include "../helpers/building_designation.h"
+#include "../cereal/types/utility.hpp"
 
 struct BuilderTag : public Component
 {

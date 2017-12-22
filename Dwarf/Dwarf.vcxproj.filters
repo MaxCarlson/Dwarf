@@ -138,6 +138,9 @@
     <ClCompile Include="ECS\Systems\ai\BuildAi.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ECS\Systems\helpers\ItemHelper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -603,6 +606,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ECS\Components\Tags\BuilderTag.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Systems\helpers\ItemHelper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

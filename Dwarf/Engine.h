@@ -16,6 +16,7 @@ class MovementSystem;
 class MovementAiSystem;
 class AiWorkSystem;
 class MiningAi;
+class BuildAi;
 class MiningSystem;
 class EntityPositionCache;
 class DijkstraMapsHandler;
@@ -51,6 +52,7 @@ public:
 	AiWorkSystem * aiWorkSystem;
 	MiningAi * miningAi;
 	EquipHandler * equipHandler;
+	BuildAi * buildAi;
 
 	// Systems that don't touch Entities
 	MiningSystem * miningSystem;
