@@ -40,7 +40,7 @@ struct BuildingDef
 
 	// contains every render character
 	// needed starting from the top left
-	// to bottom right
+	// to bottom right ~~ possibly make a struct that holds char info as well as forground + background colors?
 	std::vector<int> charCodes;
 
 	bool structure = false;

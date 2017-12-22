@@ -35,7 +35,6 @@ void readInBuildings() noexcept
 	BuildingDef b;
 	std::string tag;
 	ReactionInput inp;
-	BuildingProvides pr;
 
 	readLuaTable("buildings", 
 		[&b, &tag](const auto& key) { tag = key; b = BuildingDef{}; b.tag = tag; },
@@ -84,18 +83,16 @@ void readInBuildings() noexcept
 				readLuaTable2D("render",
 					[  ](auto type1) {},
 					[&b](auto type2) {
-						if (type2 == "glyph")  vecCharIdx(b, 1, lua_int()); 
+						if (type2 == "glyph")  vecCharIdx(b, 1, lua_int()); // Figure out how to integrate the luaState named chars
 						if (type2 == "glyph1") vecCharIdx(b, 2, lua_int());
 						if (type2 == "glyph2") vecCharIdx(b, 3, lua_int());
 						if (type2 == "glyph3") vecCharIdx(b, 4, lua_int());
 					}
 				);
 				}
-
 			},
 		}
 	);
-	int a = 5;
 	/*
 	// Loop through all buildings
 	while (lua_next(luaState, -2) != 0)

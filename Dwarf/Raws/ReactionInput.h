@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+//#include "../ECS/Component.h"
 
 enum MaterialDefSpawnType
 {
@@ -20,4 +21,12 @@ struct ReactionInput
 	MaterialDefSpawnType req_material_type = spawn_type_none;
 
 	int quantity = 0;
+
+	template<class Archive>
+	void serialize(Archive & archive)
+	{
+		archive(tag, req_material, req_material_type, quantity);
+	}
 };
+
+//CEREAL_REGISTER_TYPE(ReactionInput);
