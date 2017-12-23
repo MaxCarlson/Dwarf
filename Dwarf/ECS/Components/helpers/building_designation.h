@@ -18,7 +18,7 @@ struct building_designation
 	// Id of this building
 	std::size_t entity_id;
 
-	// Keep track of which components are being used for building
+	// Keep track of which item entities are being used for building
 	// so we can delete them once done creating the building
 	std::vector<std::pair<std::size_t, bool>> componentIds;
 

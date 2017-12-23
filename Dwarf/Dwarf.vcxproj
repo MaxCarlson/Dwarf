@@ -183,6 +183,7 @@
     <ClCompile Include="ECS\Systems\ai\WorkOrders.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ECS\Components\Claimed.h" />
     <ClInclude Include="ECS\Components\Tags\BuilderTag.h" />
     <ClInclude Include="ECS\Systems\ai\BuildAi.h" />
     <ClInclude Include="ECS\Components\helpers\building_designation.h" />

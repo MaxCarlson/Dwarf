@@ -8,6 +8,7 @@
 #include "ECS\Components\Item.h"
 #include "ECS\Components\LaborStatsComponent.h"
 #include "ECS\Components\Tags\BuilderTag.h"
+#include "ECS\Components\Claimed.h"
 #include "ECS\Systems\RenderSystem.h"
 #include "ECS\Systems\MovementSystem.h"
 #include "ECS\Systems\ai\MovementAiSystem.h"
@@ -122,6 +123,7 @@ void Engine::regComponents()
 	//world.registerComponent<CombatStatsComponent>();
 	world.registerComponent<MiningTag>();
 	world.registerComponent<BuilderTag>();	
+	world.registerComponent<Claimed>();
 }
 
 void Engine::init()

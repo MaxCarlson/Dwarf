@@ -4,6 +4,7 @@
 
 struct ItemDef;
 class Item;
+struct ReactionInput;
 
 class ItemHelper : public System<Requires<Item>> // Excludes<ItemStored> ??
 {
@@ -12,9 +13,11 @@ public:
 	
 	//template<typename T>
 	void forEachItem(const std::function<void(Entity)> & func);
+
+	int num_reaction_input_items(const ReactionInput& react);
+	std::size_t claim_item_by_reaction_inp(const ReactionInput& react);
 };
 
 extern ItemHelper itemHelper;
 
-//bool item_match_type(ItemDef d, Item i);
 
