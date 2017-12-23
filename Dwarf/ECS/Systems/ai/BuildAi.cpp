@@ -71,57 +71,6 @@ void BuildAi::doBuild(const Entity & e)
 		tag.step = BuilderTag::FIND_COMPONENT;
 	}
 
-	else if (tag.step == BuilderTag::SET_BUILDING_COMPONENTS) // Move this step into gui related to buildings once implemented?
-	{
-		bool hasComps = true;
-		for (auto & component : tag.buildingTarget.componentIds)
-			if (!component.second)
-				hasComps = false;
-
-		if (hasComps)
-		{
-			tag.step = BuilderTag::FIND_COMPONENT;
-			return;
-		}
-
-	
-		const auto buildingPos = tag.buildingTarget.co;		
-
-		for (auto & component : tag.buildingTarget.components) // ~~ This is a placeholder, there is definitely a better, faster way to search for matching items
-		{
-			Entity item;
-
-			int dist = std::numeric_limits<int>::max();
-
-			// Find closest items to building that fit criteria
-			// then set entity searching for component
-			itemHelper.forEachItem([&dist, &item, &buildingPos, &component](auto type)
-			{
-				auto* itemPos = &type.getComponent<PositionComponent>().co;
-
-				if (itemPos)
-				{
-					auto* it = &type.getComponent<Item>();
-					
-					// If the item matches the requirements of the building
-					if (it && it.tag == component.tag 
-						&& it.catagory == component.catagory
-						&& it.material == component.req_material)
-					{
-
-						int tdist = region::get_rough_distance(buildingPos, *itemPos);
-						if (tdist < dist)
-						{
-							dist = tdist;
-							item = type;
-						}
-					}
-				}
-			});
-			tag.buildingTarget.c
-		}
-	}
-
 	else if (tag.step == BuilderTag::FIND_COMPONENT)
 	{
 		auto mov = e.getComponent<MovementComponent>();

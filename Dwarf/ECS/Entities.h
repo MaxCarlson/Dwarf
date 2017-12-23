@@ -153,7 +153,7 @@ T& Entity::getComponent() const
 template<typename T>
 bool Entity::hasComponent() const
 {
-	return hasComponent(getComponent(ComponentTypeId<T>()));
+	return hasComponent(ComponentTypeId<T>());
 }
 
 
