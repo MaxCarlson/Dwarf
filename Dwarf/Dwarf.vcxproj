@@ -79,13 +79,13 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\C-60\Desktop\cppPrograms\dependencies\lua-5.3.4\Lua\Lua;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\cereal;C:\Users\C-60\Desktop\cppPrograms\dependencies\Dwarf\boost_1_65_1\boost_1_65_1;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\C-60\Desktop\cppPrograms\dependencies\SFML-2.4.2\include;C:\Users\C-60\Desktop\cppPrograms\dependencies\lua-5.3.4\Lua\Lua;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\cereal;C:\Users\C-60\Desktop\cppPrograms\dependencies\Dwarf\boost_1_65_1\boost_1_65_1;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>C:\Users\C-60\Desktop\cppPrograms\dependencies\lua-5.3.4\Lua\x64\Release;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>BearLibTerminal.lib;libtcod.lib;Lua.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\C-60\Desktop\cppPrograms\dependencies\SFML-2.4.2\lib;C:\Users\C-60\Desktop\cppPrograms\dependencies\lua-5.3.4\Lua\x64\Release;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sfml-system-d.lib;sfml-window-d.lib;sfml-graphics-d.lib;BearLibTerminal.lib;libtcod.lib;Lua.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -95,12 +95,12 @@
       <SDLCheck>true</SDLCheck>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\C-60\Desktop\cppPrograms\dependencies\lua-5.3.4\Lua\Lua;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\cereal;C:\Users\C-60\Desktop\cppPrograms\dependencies\Dwarf\boost_1_65_1\boost_1_65_1;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\C-60\Desktop\cppPrograms\dependencies\SFML-2.4.2\include;C:\Users\C-60\Desktop\cppPrograms\dependencies\lua-5.3.4\Lua\Lua;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\cereal;C:\Users\C-60\Desktop\cppPrograms\dependencies\Dwarf\boost_1_65_1\boost_1_65_1;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>C:\Users\C-60\Desktop\cppPrograms\dependencies\lua-5.3.4\Lua\x64\Release;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>BearLibTerminal.lib;libtcod.lib;Lua.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\C-60\Desktop\cppPrograms\dependencies\SFML-2.4.2\lib;C:\Users\C-60\Desktop\cppPrograms\dependencies\lua-5.3.4\Lua\x64\Release;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sfml-system-d.lib;sfml-window-d.lib;sfml-graphics-d.lib;BearLibTerminal.lib;libtcod.lib;Lua.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -112,13 +112,13 @@
       <SDLCheck>true</SDLCheck>
       <UndefinePreprocessorDefinitions>%(UndefinePreprocessorDefinitions)</UndefinePreprocessorDefinitions>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\C-60\Desktop\cppPrograms\dependencies\lua-5.3.4\Lua\Lua;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\cereal;C:\Users\C-60\Desktop\cppPrograms\dependencies\Dwarf\boost_1_65_1\boost_1_65_1;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\C-60\Desktop\cppPrograms\dependencies\SFML-2.4.2\include;C:\Users\C-60\Desktop\cppPrograms\dependencies\lua-5.3.4\Lua\Lua;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\cereal;C:\Users\C-60\Desktop\cppPrograms\dependencies\Dwarf\boost_1_65_1\boost_1_65_1;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>C:\Users\C-60\Desktop\cppPrograms\dependencies\lua-5.3.4\Lua\x64\Release;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>BearLibTerminal.lib;libtcod.lib;Lua.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\C-60\Desktop\cppPrograms\dependencies\SFML-2.4.2\lib;C:\Users\C-60\Desktop\cppPrograms\dependencies\lua-5.3.4\Lua\x64\Release;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sfml-system.lib;sfml-window.lib;sfml-graphics.lib;BearLibTerminal.lib;libtcod.lib;Lua.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -131,16 +131,18 @@
       <LanguageStandard>stdcpp14</LanguageStandard>
       <UndefinePreprocessorDefinitions>%(UndefinePreprocessorDefinitions)</UndefinePreprocessorDefinitions>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\C-60\Desktop\cppPrograms\dependencies\lua-5.3.4\Lua\Lua;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\cereal;C:\Users\C-60\Desktop\cppPrograms\dependencies\Dwarf\boost_1_65_1\boost_1_65_1;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\C-60\Desktop\cppPrograms\dependencies\SFML-2.4.2\include;C:\Users\C-60\Desktop\cppPrograms\dependencies\lua-5.3.4\Lua\Lua;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\cereal;C:\Users\C-60\Desktop\cppPrograms\dependencies\Dwarf\boost_1_65_1\boost_1_65_1;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>C:\Users\C-60\Desktop\cppPrograms\dependencies\lua-5.3.4\Lua\x64\Release;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>BearLibTerminal.lib;libtcod.lib;Lua.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\C-60\Desktop\cppPrograms\dependencies\SFML-2.4.2\lib;C:\Users\C-60\Desktop\cppPrograms\dependencies\lua-5.3.4\Lua\x64\Release;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sfml-system.lib;sfml-window.lib;sfml-graphics.lib;BearLibTerminal.lib;libtcod.lib;Lua.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Drawing\imgui.cpp" />
+    <ClCompile Include="Drawing\imgui_draw.cpp" />
     <ClCompile Include="ECS\Systems\ai\BuildAi.cpp" />
     <ClCompile Include="ECS\Systems\ai\AiArchitecture.cpp" />
     <ClCompile Include="ECS\Systems\helpers\ItemHelper.cpp" />
@@ -185,6 +187,12 @@
     <ClCompile Include="ECS\Systems\ai\WorkOrders.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Drawing\imconfig.h" />
+    <ClInclude Include="Drawing\imgui.h" />
+    <ClInclude Include="Drawing\imgui_internal.h" />
+    <ClInclude Include="Drawing\stb_rect_pack.h" />
+    <ClInclude Include="Drawing\stb_textedit.h" />
+    <ClInclude Include="Drawing\stb_truetype.h" />
     <ClInclude Include="ECS\Components\Claimed.h" />
     <ClInclude Include="ECS\Components\Tags\BuilderTag.h" />
     <ClInclude Include="ECS\Systems\ai\BuildAi.h" />

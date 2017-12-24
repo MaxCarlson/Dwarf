@@ -8,8 +8,8 @@
 #include <string>
 #include <iostream>
 #include <filesystem>
-namespace fs = std::experimental::filesystem;
 
+namespace fs = std::experimental::filesystem;
 using namespace draw;
 
 int MainMenu::render()
