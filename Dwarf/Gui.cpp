@@ -7,14 +7,11 @@
 #include "Map/MapRender.h"
 #include "Raws\Materials.h"
 #include "Raws\Defs\MaterialDef.h"
+#include "Raws\Buildings.h"
 
-static const int GUI_PANEL_VERT_PIX = 4;
-static const char* guiMainColor = "#386687";
-static const char* guiHighlightColor = "#4a87b2";
-static const char* guiButtonSepColor = "grey";
-static const char* buttonNames[numberOfButtons] = { "Orders", "Build", "Jobs", "Military", "Stockpile", "Stuff" };
 
-Gui::Gui() : horizontalOffset(0), verticalOffset(0), horizontalSize(0), verticalSize(GUI_PANEL_VERT_PIX)
+
+Gui::Gui() 
 {
 }
 
@@ -31,113 +28,71 @@ void Gui::render()
 
 	if (engine->current_game_state == Engine::PLAY)
 	{
-		// Calculate panel size
-		verticalOffset = panelHeight - GUI_PANEL_VERT_PIX;
+		switch (state)
+		{
+		case Gui_State::NO_DISPLAY:
+			return;
 
-		// Bottom gui
-		terminal_clear_area(0, verticalOffset, panelWidth, panelHeight);
+		case Gui_State::MAIN:
+			drawMain();
+			break;
 
-		drawGui();
-	}
+		case Gui_State::BUILD:
+			drawBuild();
+			break;
 
-}
+		case Gui_State::ORDERS:
+			break;
 
-void Gui::drawGui()
-{
-	// Gui outline
-	terminal_color("light grey");
+		}
 
-	int y = verticalOffset;
-
-	// Draw horizontal border
-	int horizCode = 0x2580;
-	for (int i = 0; i < 2; ++i) {
-		for (int w = 0; w < panelWidth; ++w)
-			terminal_put(w, y, horizCode);
-
-		y = panelHeight - 1;
-		horizCode = 0x2583;
+		printDebugTileProps();
 	}
 	
-	drawButtons();
-
-	printDebugTileProps();
 }
 
-void Gui::drawButtons()
+void Gui::clearAndDraw(int x, int y, int width, int height, const std::string color, int symbol)
 {
+	terminal_clear_area(horizontalOffset, verticalOffset, width, height);
+	terminal_color(color.c_str());
 
-	int buttonSize = panelWidth / numberOfButtons;
+	for (int yy = y; yy < height; ++yy)
+		for (int xx = x; xx < width; ++xx)
+			terminal_put(xx, yy, symbol);
+}
 
-	int xButtonOffset = 0;
+void Gui::drawMain()
+{
+	horizontalOffset = panelWidth - (panelWidth / 5);
+	verticalOffset = 0;
 
-	// Place button outlines
-	for (int i = 0; i < numberOfButtons + 1; ++i)
+	clearAndDraw(horizontalOffset, verticalOffset, panelWidth, panelHeight, "#386687", 0x2588);
+
+	static const std::vector<std::string> commands = { "b = build", "o = order" };
+
+	int y = 2;
+	for (const auto& c : commands)
 	{
-		// Store top left coordinate of buttons
-		// so we can use them for finding clicks / hovers
-		if(i < numberOfButtons)
-			buttonCoordiantes[i] = { xButtonOffset, verticalOffset, 0 };
+		terminal_color("black");
+		terminal_print(horizontalOffset + 1, y, c.c_str());
+		y += 2;
+	}
 
+	static const std::vector<std::string> buildings = get_all_building_def_names();
 
-		for (int w = xButtonOffset; w < xButtonOffset + buttonSize; ++w)
-		{
-			for (int h = verticalOffset; h < panelHeight; ++h)
-			{
-				terminal_color(guiMainColor);
-				terminal_put(w, h, 0x2588);		
-
-				if (w == xButtonOffset + buttonSize - 1 && i < numberOfButtons - 1) {
-					terminal_color(guiButtonSepColor);
-					terminal_put(w, h, 0x2502);
-				}
-			}
-		}
-		if (i < numberOfButtons)
-			terminal_print(xButtonOffset + 1, verticalOffset + 2, buttonNames[i]);
-
-		xButtonOffset += buttonSize;
+	for (const auto& b : buildings)
+	{
+		terminal_color("black");
+		terminal_print(horizontalOffset + 1, y, b.c_str());
+		y += 2;
 	}
 }
 
-bool Gui::isMouseOverButton(Coordinates co)
+void Gui::drawBuild()
 {
-	return co.y >= buttonCoordiantes[0].y;
-}
+	clearAndDraw(horizontalOffset, verticalOffset, panelWidth, panelHeight, "#386687", 0x2588);
 
-int Gui::whichButton(Coordinates co)
-{
-	for (int i = 0; i < numberOfButtons - 1; ++i)
-	{
-		if (co.x < buttonCoordiantes[i].x)
-			return i;
-	}
-	return numberOfButtons - 1;
-}
-
-void Gui::highlightButton(Coordinates co)
-{
-	int bttnIdx = whichButton(co);
-
-	int x = buttonCoordiantes[bttnIdx].x;
-	int xStop;
-
-	if (bttnIdx == numberOfButtons - 1)
-		xStop = panelWidth;
-	else
-		xStop = buttonCoordiantes[bttnIdx + 1].x;
-
-	int y = buttonCoordiantes[bttnIdx].y;
-	int yStop = panelHeight;
-
-
-
-	for(x; x < xStop; ++x)
-		for (y; y < yStop; ++y)
-		{
-			terminal_color("black");
-			terminal_put(x, y, 0x2588);
-		}
+	static const std::vector<std::string> buildings = get_all_building_def_names();
 }
 
 #include "Map\Tile.h"

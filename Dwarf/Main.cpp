@@ -6,7 +6,7 @@
 #include "Raws\raws.h"
 #include "Drawing\imgui.h"
 
-#include <SFML\Graphics.hpp>
+//#include <SFML\Graphics.hpp>
 
 // Numbers a screen width and height, make more 
 // dynamic eventually
@@ -14,7 +14,7 @@ std::unique_ptr<Engine> engine;
 
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
+	//sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
 
 	// BearslibTerminal Init stuff
 	terminal_open();

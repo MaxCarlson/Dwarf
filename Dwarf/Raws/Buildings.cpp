@@ -17,6 +17,16 @@ BuildingDef * getBuilding(const std::string & tag)
 	return nullptr;
 }
 
+const std::vector<std::string> get_all_building_def_names()
+{
+	std::vector<std::string> names;
+	for (const auto& b : buildingDefs)
+	{
+		names.push_back(b.second.name);
+	}
+	return names;
+}
+
 void vecCharIdx(BuildingDef & b, int idx, uint16_t c)
 {
 	if (b.charCodes.size() < idx)

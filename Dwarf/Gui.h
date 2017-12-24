@@ -18,25 +18,23 @@ public:
 	int horizontalOffset;
 	int verticalOffset;
 
-	int verticalSize;
-	int horizontalSize;
+	enum Gui_State
+	{
+		NO_DISPLAY,
+		MAIN,
+		BUILD,
+		ORDERS
+	};
 
-	// Array of button top left locations
-	Coordinates buttonCoordiantes[numberOfButtons];
-
-	bool isMouseOverButton(Coordinates co);
-	void highlightButton(Coordinates co);
+	Gui_State state = MAIN;
 
 private:
 	int panelWidth, panelHeight;
 
-	void drawGui();
-	void drawButtons();
+	void drawMain();
+	void drawBuild();
 
-	// Finds which button mouse is over
-	// must call isMouseOverButton first to get
-	// accurate result
-	int whichButton(Coordinates co);
+	void clearAndDraw(int x, int y, int width, int height, const std::string color, int symbol);
 
 	void printDebugTileProps();
 };
