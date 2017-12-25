@@ -20,6 +20,8 @@
 #include "ECS\Systems\ai\MiningAi.h"
 #include "ECS\Systems\ai\BuildAi.h"
 #include "ECS\Systems\helpers\ItemHelper.h"
+#include "ECS\Systems\InputHandler.h"
+#include "ECS\Systems\helpers\DesignationHandler.h"
 #include "Coordinates.h"
 #include "Designations.h"
 #include "Map/Map.h"
@@ -143,6 +145,8 @@ void Engine::init()
 	buildAi->init();
 
 	// Non Entity or non Updating Systems
+	inputHandler = new InputHandler();
+	designationHandler = new DesignationHandler();
 	miningSystem = new MiningSystem();
 	dijkstraHandler = new DijkstraMapsHandler();
 	entityPositionCache = new EntityPositionCache();
@@ -150,6 +154,8 @@ void Engine::init()
 
 
 	// Introduce systems to the world ~~ These Systems no longer need to be pointers?
+	world.addSystem(*inputHandler);
+	world.addSystem(*designationHandler);
 	world.addSystem(*renderSystem);
 	world.addSystem(*movementSystem);
 	world.addSystem(*movementAiSystem);
@@ -167,6 +173,7 @@ void Engine::init()
 	dijkstraHandler->init();
 	entityPositionCache->init();
 	equipHandler->init();
+	designationHandler->init();
 	
 	world.refresh();
 
@@ -187,14 +194,16 @@ void Engine::run()
 		previous = current;
 		lag += elapsed;
 
-		input.read();
+		//input.read();
+		inputHandler->update();
 
 		if (current_game_state != Engine::PAUSED) 
 		{
 			while (lag >= MS_PER_UPDATE) // Switch this to only update in steps and not compensate for lag? Probably should...
 			{
 				update(MS_PER_UPDATE);
-				lag -= MS_PER_UPDATE;
+				//lag -= MS_PER_UPDATE;
+				lag = 0.0; // constant steps for the moment
 			}
 		}
 

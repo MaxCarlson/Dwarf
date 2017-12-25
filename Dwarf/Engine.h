@@ -21,6 +21,8 @@ class MiningSystem;
 class EntityPositionCache;
 class DijkstraMapsHandler;
 class EquipHandler;
+class InputHandler;
+class DesignationHandler;
 
 
 class Engine
@@ -55,6 +57,8 @@ public:
 	BuildAi * buildAi;
 
 	// Systems that don't touch Entities
+	InputHandler * inputHandler;
+	DesignationHandler * designationHandler;
 	MiningSystem * miningSystem;
 	DijkstraMapsHandler * dijkstraHandler;
 	EntityPositionCache * entityPositionCache;
@@ -99,7 +103,6 @@ public:
 		PLAY,
 		PAUSED,
 		SAVE_GAME,
-
 		TO_MAIN_MENU
 	} 
 	current_game_state = PLAY;

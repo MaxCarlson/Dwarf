@@ -24,6 +24,7 @@ public:
 		ESC_MENU,
 		MAIN,
 		BUILD,
+		DESIGNATE,
 		ORDERS
 	};
 

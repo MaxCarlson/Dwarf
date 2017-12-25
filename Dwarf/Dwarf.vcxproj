@@ -141,6 +141,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ECS\Systems\helpers\DesignationHandler.cpp" />
     <ClCompile Include="Drawing\imgui.cpp" />
     <ClCompile Include="Drawing\imgui_draw.cpp" />
     <ClCompile Include="ECS\Systems\ai\BuildAi.cpp" />
@@ -188,6 +189,8 @@
     <ClCompile Include="ECS\Systems\ai\WorkOrders.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ECS\Messages\designation_message.h" />
+    <ClInclude Include="ECS\Systems\helpers\DesignationHandler.h" />
     <ClInclude Include="Drawing\imconfig.h" />
     <ClInclude Include="Drawing\imgui.h" />
     <ClInclude Include="Drawing\imgui_internal.h" />

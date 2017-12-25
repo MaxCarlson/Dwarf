@@ -150,6 +150,9 @@
     <ClCompile Include="ECS\Systems\InputHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ECS\Systems\helpers\DesignationHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -642,6 +645,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ECS\Systems\InputHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Systems\helpers\DesignationHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Messages\designation_message.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

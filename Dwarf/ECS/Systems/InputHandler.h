@@ -7,13 +7,20 @@ public:
 	void update();
 
 private:
-	enum IO_STATE
+	void designate(const int key);
+	void buildMenu(const int key);
+
+	int mouseX;
+	int mouseY;
+
+	// Designation input info ~ not serialized
+	enum designate_states
 	{
-		MAIN,
-		ESC_MENU,
-		BUILD,
-		DESIGNATE,
-		ORDERS,
-	};
+		NONE_D,
+		MINE_D,
+		CHANNEL_D
+	} designate_state = NONE_D;
+
+	int desig_idx = 0;
 };
 
