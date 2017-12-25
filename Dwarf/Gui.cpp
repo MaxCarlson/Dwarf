@@ -9,7 +9,7 @@
 #include "Raws\Defs\MaterialDef.h"
 #include "Raws\Buildings.h"
 
-
+static const std::string gui_color = "#386687";
 
 Gui::Gui() 
 {
@@ -33,6 +33,9 @@ void Gui::render()
 		case Gui_State::NO_DISPLAY:
 			return;
 
+		case Gui_State::ESC_MENU:
+			break;
+
 		case Gui_State::MAIN:
 			drawMain();
 			break;
@@ -53,7 +56,7 @@ void Gui::render()
 
 void Gui::clearAndDraw(int x, int y, int width, int height, const std::string color, int symbol)
 {
-	terminal_clear_area(horizontalOffset, verticalOffset, width, height);
+	terminal_clear_area(x, y, width, height);
 	terminal_color(color.c_str());
 
 	for (int yy = y; yy < height; ++yy)
@@ -66,7 +69,7 @@ void Gui::drawMain()
 	horizontalOffset = panelWidth - (panelWidth / 5);
 	verticalOffset = 0;
 
-	clearAndDraw(horizontalOffset, verticalOffset, panelWidth, panelHeight, "#386687", 0x2588);
+	clearAndDraw(horizontalOffset, verticalOffset, panelWidth, panelHeight, gui_color, 0x2588);
 
 	static const std::vector<std::string> commands = { "b = build", "o = order" };
 
@@ -77,22 +80,24 @@ void Gui::drawMain()
 		terminal_print(horizontalOffset + 1, y, c.c_str());
 		y += 2;
 	}
+}
+
+void Gui::drawBuild()
+{
+	horizontalOffset = panelWidth - (panelWidth / 5);
+	verticalOffset = 0;
+
+	clearAndDraw(horizontalOffset, verticalOffset, panelWidth, panelHeight, gui_color, 0x2588);
 
 	static const std::vector<std::string> buildings = get_all_building_def_names();
 
+	int y = 2;
 	for (const auto& b : buildings)
 	{
 		terminal_color("black");
 		terminal_print(horizontalOffset + 1, y, b.c_str());
 		y += 2;
 	}
-}
-
-void Gui::drawBuild()
-{
-	clearAndDraw(horizontalOffset, verticalOffset, panelWidth, panelHeight, "#386687", 0x2588);
-
-	static const std::vector<std::string> buildings = get_all_building_def_names();
 }
 
 #include "Map\Tile.h"

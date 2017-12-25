@@ -21,6 +21,7 @@ public:
 	enum Gui_State
 	{
 		NO_DISPLAY,
+		ESC_MENU,
 		MAIN,
 		BUILD,
 		ORDERS

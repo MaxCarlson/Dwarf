@@ -17,6 +17,9 @@
 #include "ECS\Components\PositionComponent.h"
 #include "ECS\Messages\pick_map_changed_message.h"
 #include "Raws\ItemRead.h"
+#include "Raws\Materials.h"
+#include "Raws\Defs\MaterialDef.h"
+#include "Raws\Buildings.h"
 
 // For draw functions that need to
 // be moved else where for my sanity
@@ -40,6 +43,16 @@ Input::~Input()
 {
 }
 
+
+void Input::pauseGame()
+{
+	if (engine->current_game_state != Engine::PLAY)
+		engine->current_game_state = Engine::PLAY;
+
+	else
+		engine->current_game_state = Engine::PAUSED;
+}
+
 void Input::read()
 {
 	int keyPress;
@@ -50,125 +63,164 @@ void Input::read()
 	else
 		return;
 
-	if (engine->current_game_state == Engine::PLAY
-		|| engine->current_game_state == Engine::PAUSED)
+	switch (engine->gui.state)
 	{
-		switch (keyPress)
-		{
-			// Camera
-			// Move camera up or down z Levels
-		case TK_COMMA:
-			engine->mapRenderer->incrementZLevel(-1);
-			break;
+	case Gui::ESC_MENU: // Move logic from main into here
+		break;
 
-		case TK_PERIOD:
-			engine->mapRenderer->incrementZLevel(1);
-			break;
+	case Gui::MAIN:
+		normal(keyPress);
+		break;
 
-			// Directional movement for camera
-		case TK_UP:
-			engine->mapRenderer->moveCamera(MapRender::NORTH);
-			break;
+	case Gui::BUILD:
+		build(keyPress);
+		break;
 
-		case TK_DOWN:
-			engine->mapRenderer->moveCamera(MapRender::SOUTH);
-			break;
-
-		case TK_RIGHT:
-			engine->mapRenderer->moveCamera(MapRender::EAST);
-			break;
-
-		case TK_LEFT:
-			engine->mapRenderer->moveCamera(MapRender::WEST);
-			break;
-
-
-			//default: break;
-		}
-
-		int xx = terminal_state(TK_MOUSE_X);
-		int yy = terminal_state(TK_MOUSE_Y);
-
-		if (keyPress == TK_MOUSE_LEFT)
-		{
-			Coordinates co1 = { xx, yy, engine->mapRenderer->currentZLevel };
-
-			for (int i = 0; i < 10; ++i)
-			{
-				Coordinates co = co1;
-				co.x = co1.x + i;
-				for (int j = 0; j < 10; ++j)
-				{
-					co.y = co1.y + j;
-					designations->mining.emplace(getIdx(co), 1);
-				}
-			}
-
-			engine->world.emit(recalculate_mining_message{});
-
-		}
-		else if (keyPress == TK_MOUSE_RIGHT)
-		{
-			Entity e = engine->world.createEntity();
-			e.addComponent<Item>();
-			e.addComponent<RenderComponent>();
-			e.addComponent<PositionComponent>(Coordinates{ xx, yy, engine->mapRenderer->currentZLevel });
-
-			auto axe = getItemDef("pickaxe");
-
-			
-
-			auto& it = e.getComponent<Item>();
-			it.catagory.set(TOOL_DIGGING);
-
-			auto& rend = e.getComponent<RenderComponent>();
-
-			rend.ch = axe->charCode;
-			rend.colorStr = axe->color;
-			rend.terminalCode = axe->tilesetKey;
-
-			e.activate();
-
-			engine->world.emit(pick_map_changed_message{});
-		}
-		else if (keyPress == TK_SPACE)
-		{
-			pauseGame();
-		}
-		else if (keyPress == TK_ESCAPE)
-		{
-			pauseGame();
-
-			int selected = 0;
-			int choice = drawEscMenu(selected);
-
-			if (choice == draw::IN_ENTER)
-			{
-				if (selected == 0)
-					engine->current_game_state = Engine::PLAY;
-
-				else if (selected == 1)
-					drawSaveMenu();
-
-
-				else if (selected == 2)
-					engine->current_game_state = Engine::TO_MAIN_MENU;
-			}
-
-			else if (choice == draw::IN_EXIT)
-				engine->current_game_state = Engine::PLAY;
-		}
+	case Gui::ORDERS:
+		orders(keyPress);
+		break;
 	}
+	
+
 
 }
 
-void Input::pauseGame()
+void Input::normal(const int key)
 {
-	if (engine->current_game_state != Engine::PLAY)
-		engine->current_game_state = Engine::PLAY;
+	switch (key)
+	{
+		// Camera
+		// Move camera up or down z Levels
+	case TK_COMMA:
+		engine->mapRenderer->incrementZLevel(-1);
+		break;
 
-	else
-		engine->current_game_state = Engine::PAUSED;
+	case TK_PERIOD:
+		engine->mapRenderer->incrementZLevel(1);
+		break;
+
+		// Directional movement for camera
+	case TK_UP:
+		engine->mapRenderer->moveCamera(MapRender::NORTH);
+		break;
+
+	case TK_DOWN:
+		engine->mapRenderer->moveCamera(MapRender::SOUTH);
+		break;
+
+	case TK_RIGHT:
+		engine->mapRenderer->moveCamera(MapRender::EAST);
+		break;
+
+	case TK_LEFT:
+		engine->mapRenderer->moveCamera(MapRender::WEST);
+		break;
+
+	case TK_B:
+		engine->gui.state = Gui::BUILD;
+		break;
+
+	case TK_O:
+		engine->gui.state = Gui::ORDERS;
+		break;
+		//default: break;
+	}
+
+	int xx = terminal_state(TK_MOUSE_X);
+	int yy = terminal_state(TK_MOUSE_Y);
+
+	if (key == TK_MOUSE_LEFT)
+	{
+		Coordinates co1 = { xx, yy, engine->mapRenderer->currentZLevel };
+
+		for (int i = 0; i < 10; ++i)
+		{
+			Coordinates co = co1;
+			co.x = co1.x + i;
+			for (int j = 0; j < 10; ++j)
+			{
+				co.y = co1.y + j;
+				designations->mining.emplace(getIdx(co), 1);
+			}
+		}
+
+		engine->world.emit(recalculate_mining_message{});
+
+	}
+	else if (key == TK_MOUSE_RIGHT)
+	{
+		Entity e = engine->world.createEntity();
+		e.addComponent<Item>();
+		e.addComponent<RenderComponent>();
+		e.addComponent<PositionComponent>(Coordinates{ xx, yy, engine->mapRenderer->currentZLevel });
+
+		auto axe = getItemDef("pickaxe");
+
+
+		auto& it = e.getComponent<Item>();
+		it.catagory.set(TOOL_DIGGING);
+
+		auto& rend = e.getComponent<RenderComponent>();
+
+		rend.ch = axe->charCode;
+		rend.colorStr = axe->color;
+		rend.terminalCode = axe->tilesetKey;
+
+		e.activate();
+
+		engine->world.emit(pick_map_changed_message{});
+	}
+	else if (key == TK_SPACE)
+	{
+		pauseGame();
+	}
+	else if (key == TK_ESCAPE)
+	{
+		pauseGame();
+
+		int selected = 0;
+		int choice = drawEscMenu(selected);
+
+		if (choice == draw::IN_ENTER)
+		{
+			if (selected == 0)
+				engine->current_game_state = Engine::PLAY;
+
+			else if (selected == 1)
+				drawSaveMenu();
+
+
+			else if (selected == 2)
+				engine->current_game_state = Engine::TO_MAIN_MENU;
+		}
+
+		else if (choice == draw::IN_EXIT)
+			engine->current_game_state = Engine::PLAY;
+	}
+}
+
+void Input::build(const int key)
+{
+	if (key == TK_ESCAPE)
+		engine->gui.state = Gui::MAIN;
+
+	if (key == TK_1)
+	{
+
+	}
+	
+}
+
+void Input::orders(const int key)
+{
+	if (key == TK_ESCAPE)
+		engine->gui.state = Gui::MAIN;
+}
+
+void Input::esc(const int key)
+{
+	if (key == TK_ESCAPE)
+		engine->gui.state = Gui::MAIN;
 }
 
 int Input::drawEscMenu(int& selected)

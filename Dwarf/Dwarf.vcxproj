@@ -146,6 +146,7 @@
     <ClCompile Include="ECS\Systems\ai\BuildAi.cpp" />
     <ClCompile Include="ECS\Systems\ai\AiArchitecture.cpp" />
     <ClCompile Include="ECS\Systems\helpers\ItemHelper.cpp" />
+    <ClCompile Include="ECS\Systems\InputHandler.cpp" />
     <ClCompile Include="Raws\Buildings.cpp" />
     <ClCompile Include="Map\building\region\place_buildings.cpp" />
     <ClCompile Include="Drawing\draw.cpp" />
@@ -201,6 +202,7 @@
     <ClInclude Include="ECS\Components\Tags\ArchitectTag.h" />
     <ClInclude Include="ECS\Components\Tags\WorkOrderTag.h" />
     <ClInclude Include="ECS\Systems\helpers\ItemHelper.h" />
+    <ClInclude Include="ECS\Systems\InputHandler.h" />
     <ClInclude Include="Raws\Buildings.h" />
     <ClInclude Include="Raws\Defs\BuildingDef.h" />
     <ClInclude Include="Map\building\region\place_buildings.h" />
