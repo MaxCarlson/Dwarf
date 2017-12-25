@@ -6,13 +6,18 @@ struct designation_message : public base_message_t
 {
 	enum DesignationType
 	{
+		NONE,
 		MINING,
-		CHANNELING
+		CHANNELING,
+		RAMPING,
+		UP_STAIRS,
+		DOWN_STAIRS,
+		UP_DOWN_STAIRS
 	};
 	designation_message() = default;
-	designation_message(std::pair<int, int> desIdx, int type) : desIdx(desIdx), type(type) {}
+	designation_message(std::pair<int, int> desIdx, uint8_t type) : desIdx(desIdx), type(type) {}
 
 	std::pair<int, int> desIdx;
 
-	int type = MINING;
+	uint8_t type = MINING;
 };

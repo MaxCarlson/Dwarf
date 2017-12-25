@@ -5,6 +5,8 @@
 #include "../Messages/designation_message.h"
 #include "../Map/Tile.h"
 
+static uint8_t designateState = designation_message::MINING;
+
 void InputHandler::update()
 {
 	int key;
@@ -75,15 +77,13 @@ void InputHandler::update()
 
 	else if (engine->gui.state == Gui::DESIGNATE)
 	{
-		designate_state = designate_states::MINE_D;
 		if (key == TK_ESCAPE)
 		{
 			engine->gui.state = Gui::MAIN;
-			designate_state = designate_states::NONE_D;
 		}
 
 		else if (key == TK_H)
-			designate_state = designate_states::CHANNEL_D;		
+			designateState = designation_message::CHANNELING;
 		
 		designate(key);
 	}
@@ -104,18 +104,22 @@ void InputHandler::update()
 
 void InputHandler::designate(const int key)
 {
+	static int designateIdx = 0;
+
 	if (key == TK_MOUSE_LEFT)
 	{
 		int clickIdx = getIdx({ mouseX, mouseY, engine->mapRenderer->currentZLevel });
-		if (desig_idx == 0)
+		if (designateIdx == 0)
 		{
-			desig_idx = clickIdx;
+			designateIdx = clickIdx;
 		}
 		else
 		{
-			emit(designation_message{ std::make_pair(desig_idx, clickIdx), designate_state });
-			desig_idx = 0;
+			emit(designation_message{ std::make_pair(designateIdx, clickIdx), designateState });
+			designateIdx = 0;
 		}
+
+		designateState = designation_message::MINING;
 	}
 }
 

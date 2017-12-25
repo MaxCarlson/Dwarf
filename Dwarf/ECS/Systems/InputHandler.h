@@ -12,15 +12,5 @@ private:
 
 	int mouseX;
 	int mouseY;
-
-	// Designation input info ~ not serialized
-	enum designate_states
-	{
-		NONE_D,
-		MINE_D,
-		CHANNEL_D
-	} designate_state = NONE_D;
-
-	int desig_idx = 0;
 };
 
