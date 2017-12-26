@@ -9,6 +9,7 @@ public:
 private:
 	void designate(const int key);
 	void buildMenu(const int key);
+	void createItem(const int key);
 
 	int mouseX;
 	int mouseY;

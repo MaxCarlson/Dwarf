@@ -25,16 +25,20 @@ public:
 		MAIN,
 		BUILD,
 		DESIGNATE,
-		ORDERS
+		ORDERS,
+		CREATE_ITEM
 	};
 
 	Gui_State state = MAIN;
+
+	int itemSelected = 0;
 
 private:
 	int panelWidth, panelHeight;
 
 	void drawMain();
 	void drawBuild();
+	void drawCreateItem();
 
 	void clearAndDraw(int x, int y, int width, int height, const std::string color, int symbol);
 

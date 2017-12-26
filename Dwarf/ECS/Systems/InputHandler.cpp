@@ -4,8 +4,12 @@
 #include "../Gui.h"
 #include "../Messages/designation_message.h"
 #include "../Map/Tile.h"
+#include "../Raws/ItemRead.h"
+#include "../Raws/raws.h"
 
+// Desig statics
 static uint8_t designateState = designation_message::MINING;
+static int designateIdx = 0;
 
 void InputHandler::update()
 {
@@ -65,6 +69,10 @@ void InputHandler::update()
 		case TK_O:
 			engine->gui.state = Gui::ORDERS;
 			break;
+
+		case TK_I:
+			engine->gui.state = Gui::CREATE_ITEM;
+			break;
 		}
 
 	else if (engine->gui.state == Gui::BUILD)
@@ -80,6 +88,8 @@ void InputHandler::update()
 		if (key == TK_ESCAPE)
 		{
 			engine->gui.state = Gui::MAIN;
+			designateState = designation_message::MINING;
+			designateIdx = 0;
 		}
 
 		else if (key == TK_H)
@@ -100,16 +110,21 @@ void InputHandler::update()
 			engine->gui.state = Gui::MAIN;
 	}
 	
+	else if (engine->gui.state == Gui::CREATE_ITEM)
+	{
+		if (key == TK_ESCAPE)
+			engine->gui.state = Gui::MAIN;
+
+		createItem(key);
+	}
 }
 
 void InputHandler::designate(const int key)
 {
-	static int designateIdx = 0;
-
 	if (key == TK_MOUSE_LEFT)
 	{
 		int clickIdx = getIdx({ mouseX, mouseY, engine->mapRenderer->currentZLevel });
-		if (designateIdx == 0)
+		if (!designateIdx)
 		{
 			designateIdx = clickIdx;
 		}
@@ -118,12 +133,29 @@ void InputHandler::designate(const int key)
 			emit(designation_message{ std::make_pair(designateIdx, clickIdx), designateState });
 			designateIdx = 0;
 		}
-
-		designateState = designation_message::MINING;
 	}
 }
 
 void InputHandler::buildMenu(const int key)
 {
 
+}
+
+void InputHandler::createItem(const int key)
+{
+	static auto itemTags = get_all_item_tags();
+
+	if (key == TK_PAGEDOWN)
+		++engine->gui.itemSelected;
+
+	else if (key == TK_PAGEUP)
+		--engine->gui.itemSelected;
+
+	else if (key == TK_ENTER || key == TK_MOUSE_LEFT)
+	{
+		const auto tag = itemTags[engine->gui.itemSelected];
+		const Coordinates co = { mouseX, mouseY, engine->mapRenderer->currentZLevel }; // Add material choices once needed
+
+		spawnItemOnGround(tag, 1, co);
+	}
 }

@@ -16,7 +16,7 @@ void DesignationHandler::init()
 
 void DesignationHandler::designate(const designation_message & msg) // Add in checks to make sure improper areas aren't designated
 {
-	auto co1 = idxToCo(msg.desIdx.first);
+	auto co1 = idxToCo(msg.desIdx.first);							// Sepperate functions for differing types of desig checking
 	auto co2 = idxToCo(msg.desIdx.second); 
 	const auto type = msg.type;
 
@@ -42,6 +42,8 @@ void DesignationHandler::designate(const designation_message & msg) // Add in ch
 		co1.y = co2.y;
 		co2.y = tmp;
 	}
+
+
 	
 	for(int x = co1.x; x <= co2.x; ++x)
 		for (int y = co1.y; y <= co2.y; ++y)

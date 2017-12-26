@@ -14,6 +14,16 @@ ItemDef * getItemDef(const std::string tag)
 	return &itemd->second;
 }
 
+const std::vector<std::string> get_all_item_tags()
+{
+	std::vector<std::string> itemNames;
+	for (auto s : itemDefs)
+	{
+		itemNames.push_back(s.first);
+	}
+	return itemNames;
+}
+
 void readInItems() noexcept
 {
 	std::string tag;

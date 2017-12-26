@@ -1,13 +1,16 @@
 #include "Gui.h"
-
 #include "BearLibTerminal.h"
-
 #include "Engine.h"
 #include "Map/Map.h"
 #include "Map/MapRender.h"
 #include "Raws\Materials.h"
 #include "Raws\Defs\MaterialDef.h"
 #include "Raws\Buildings.h"
+#include "Map\Tile.h"
+#include "Raws\ItemRead.h"
+#include "Drawing\draw.h"
+
+using namespace region;
 
 static const std::string gui_color = "#386687";
 
@@ -45,6 +48,10 @@ void Gui::render()
 			break;
 
 		case Gui_State::ORDERS:
+			break;
+
+		case Gui_State::CREATE_ITEM:
+			drawCreateItem();
 			break;
 
 		}
@@ -100,8 +107,31 @@ void Gui::drawBuild()
 	}
 }
 
-#include "Map\Tile.h"
-using namespace region;
+void Gui::drawCreateItem()
+{
+	static auto itemTags = get_all_item_tags();
+
+	horizontalOffset = panelWidth - (panelWidth / 5);
+	verticalOffset = 0;
+
+	clearAndDraw(horizontalOffset, verticalOffset, panelWidth, panelHeight, gui_color, 0x2588);
+
+	if (itemSelected > itemTags.size() - 1)
+		itemSelected = 0;
+	if (itemSelected < 0)
+		itemSelected = itemTags.size() - 1;
+
+	int y = 2;
+	int c = 0;
+	for (const auto& i : itemTags)
+	{
+		draw::determineHighlight(c, itemSelected);
+
+		terminal_print(horizontalOffset + 1, y, i.c_str());
+		y += 2;
+		++c;
+	}
+}
 
 void Gui::printDebugTileProps()
 {
