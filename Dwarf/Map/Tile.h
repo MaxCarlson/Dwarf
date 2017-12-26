@@ -83,7 +83,8 @@ namespace region
 		CAN_GO_SOUTH_E = 1 << 8,
 		CAN_GO_SOUTH_W = 1 << 9,
 		CAN_GO_UP = 1 << 10,
-		CAN_GO_DOWN = 1 << 11
+		CAN_GO_DOWN = 1 << 11,
+		CONSTRUCTION = 1 << 12
 	};
 
 	enum Directions
@@ -160,67 +161,12 @@ namespace region
 
 	// Get a fast estimate of the distance between two
 	// 3D points
-	int get_rough_distance(Coordinates loc, Coordinates dest);
+	double get_3D_distance(Coordinates loc, Coordinates dest);
 
-	// Returns a refrence to tile at coordinates
-	//Tile& tileAt(Coordinates co);
-
-
-	//Tile& tileAt(int exactPos);
-
+	double get_2D_distance(Coordinates loc, Coordinates dest);
 
 	// Checks all bounds in a coordinate to make sure
 	// it's entirely valid
 	bool boundsCheck(Coordinates co);
-
-/*
-	// Checks if it's possible to walk through tile ~~ wall check probably isn't neccasary so long as obstructed is updated correctly!!
-	bool canWalk(Coordinates co);
-
-
-
-
-	// Slightly different from canWalk in that it doesn't 
-	// check for floor
-	bool canPass(Coordinates co);
-
-
-	// Should only be used for map generation, will not gurentee things are completely empty
-	// Possibly move this to the map object???????
-	bool isEmptySpace(Coordinates co);
-*/
-	/*
-	// Should be called hasProperty
-	template<unsigned P>
-	const bool getProperty(Coordinates co)
-	{
-		return tileAt(co).properties & P;
-	}
-
-	// Alters the TileProperty P property of a tile
-	// only if that tile did not have TileType T property
-	template<Tile::Property P>
-	void setProperty(Coordinates co)
-	{
-		tileAt(co).properties |= P;
-	}
-
-	// Reverses property TileProperty P of tile
-	// Faster than remove if we know what tile prop
-	// is ahead of time
-	template<Tile::Property P>
-	void reverseProperty(Coordinates co)
-	{
-		tileAt(co).properties ^= P;
-	}
-
-	// Remove property P from Tile
-	template<Tile::Property P>
-	void removeProperty(Coordinates co)
-	{
-		tileAt(co).properties &= ~P;
-	}
-	*/
-
 }
 

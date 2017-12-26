@@ -6,6 +6,7 @@
 #include "../Raws/Materials.h"
 #include "../Raws/Defs/MaterialDef.h"
 #include "../ECS/World.h"
+#include "../ECS/Components/PositionComponent.h"
 
 ItemHelper itemHelper;
 
@@ -30,6 +31,16 @@ void ItemHelper::claim_item(Entity& item)
 void ItemHelper::unclaim_item_by_id(std::size_t id)
 {
 	getWorld().getEntity(id).removeComponent<Claimed>();
+}
+
+int ItemHelper::get_item_location(std::size_t id)
+{
+	auto* pos = &getWorld().getEntity(id).getComponent<PositionComponent>().co;
+	
+	if (!pos)
+		return 0;
+
+	return getIdx(*pos);
 }
 
 int ItemHelper::num_reaction_input_items(const ReactionInput & react)

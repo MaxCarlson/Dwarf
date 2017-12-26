@@ -4,10 +4,14 @@
 struct Claimed : public Component
 {
 	Claimed() = default;
+	Claimed(std::size_t id) : claimedBy(id) {}
+
+	std::size_t claimedBy = 0;
 
 	template<class Archive>
 	void serialize(Archive& archive)
 	{
+		archive(claimedBy);
 	}
 };
 

@@ -12,6 +12,9 @@
 #include "../helpers/ItemHelper.h"
 #include "../../Components/helpers/building_designation.h"
 #include "../../Components/Building.h"
+#include "../EntityPositionCache.h"
+#include "../../Components/Claimed.h"
+#include "../../../Designations.h"
 
 #include <iostream>
 
@@ -65,6 +68,9 @@ void EquipHandler::pickupItem(int itemSlot, std::size_t entityId, std::size_t it
 	deletePositionCache(item, itemCo);
 	item.removeComponent<PositionComponent>();
 
+	if (!item.hasComponent<Claimed>())
+		item.addComponent<Claimed>(entityId);
+
 	// This could cause issues if first Entity is an item!!!
 	// Or if this eid gets reused!! ~~ Perhaps start at Entity id 1?
 	if (outItemEid != 0)
@@ -84,17 +90,19 @@ void EquipHandler::dropItem(int itemSlot, std::size_t entityId, std::size_t item
 	auto& inv = entity.getComponent<Inventory>();
 	inv.inventory[itemSlot] = 0;
 
-	auto* stored = &item.getComponent<ItemStored>();
-
-	if (!stored)
-		std::cout << "Item being dropped has no ItemStored Component!!!!" << std::endl;
+	auto* stored = &item.getComponent<ItemStored>(); // Make a component for item carried instead of just stored?
 
 	// Restore the items render component
-	auto& rend = item.addComponent<RenderComponent>();
+	auto& rend = item.addComponent<RenderComponent>(); 
 	rend = stored->rend;
+
+	item.removeComponent<ItemStored>();
 
 	// Restore the items correct positon
 	item.addComponent<PositionComponent>(co);
+
+	if (item.hasComponent<Claimed>())
+		item.removeComponent<Claimed>();
 
 	item.activate();
 }
@@ -146,6 +154,12 @@ void EquipHandler::designateBuilding(designate_building_message & msg)
 	for(int x = sx; x < sx + designation.width; ++x)
 		for (int y = sy; y < sy + designation.height; ++y)
 		{
+			const Coordinates co = { x, y, engine->mapRenderer->currentZLevel };
+			region::setFlag(co, region::Flag::CONSTRUCTION);
 
+			// Id's must be manually deleted later
+			positionCache->emplace(getIdx(co), designation.entity_id);
 		}
+
+	designations->buildings.push_back(designation);
 }

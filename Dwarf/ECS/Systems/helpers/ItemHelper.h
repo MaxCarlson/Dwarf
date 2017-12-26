@@ -17,6 +17,8 @@ public:
 	void claim_item(Entity& item);
 	void unclaim_item_by_id(std::size_t id);
 
+	int get_item_location(std::size_t id);
+
 	int num_reaction_input_items(const ReactionInput& react);
 	std::size_t claim_item_by_reaction_inp(const ReactionInput& react);
 };

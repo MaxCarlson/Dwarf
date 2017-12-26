@@ -16,7 +16,7 @@ enum InventorySlots
 	SLOT_DRINK
 };
 
-static const int MAX_INVENTORY_SLOTS = 6;
+static const int MAX_INVENTORY_SLOTS = 9;
 
 class Inventory : public Component
 {

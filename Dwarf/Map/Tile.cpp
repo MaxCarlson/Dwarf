@@ -97,8 +97,7 @@ namespace region
 
 		iarchive(MAP_WIDTH, MAP_HEIGHT, MAP_DEPTH, TOTAL_MAP_TILES);
 		currentRegion->serialize(iarchive);
-		//tileRecalcAll(); 
-		
+		tileRecalcAll(); 	
 	}
 
 	bool flag(const Coordinates co, Flag f)
@@ -216,52 +215,25 @@ namespace region
 		currentRegion->tileTypes[idx] = TileTypes::EMPTY_SPACE;
 	}
 
-
-	int get_rough_distance(Coordinates loc, Coordinates dest)
+	double get_3D_distance(Coordinates loc, Coordinates dest)
 	{
-		int x = dest.x - loc.x;
-		int y = dest.y - loc.y;
-		int z = dest.z - loc.z;
+		double x = dest.x - loc.x;
+		double y = dest.y - loc.y;
+		double z = dest.z - loc.z;
 		return (x * x + y * y + z * z);
 	}
 
-	/* Get rid of these, replace completely with flags and std::vector<uint8/16_t> tileTypes */
-	//Tile & tileAt(Coordinates co)
-	//{
-	//	return currentRegion->tileMap[TILE_ARRAY_LOOKUP];
-	//}
-
-	//Tile & tileAt(int exactPos)
-	//{
-	//	return currentRegion->tileMap[exactPos];
-	//}
+	double get_2D_distance(Coordinates loc, Coordinates dest)
+	{
+		double x = dest.x - loc.x;
+		double y = dest.y - loc.y;
+		return (x * x + y * y);
+	}
 
 	bool boundsCheck(Coordinates co)
 	{
 		return(co.x < MAP_WIDTH && co.x >= 0 && co.y < MAP_HEIGHT && co.y >= 0 && co.z < MAP_DEPTH && co.z >= 0);
 	}
-
-	/*
-	bool canWalk(Coordinates co)
-	{
-		return boundsCheck(co) && (getProperty<Tile::FLOOR>(co) && !(getProperty<Tile::WALL>(co) | getProperty<Tile::OBSTRUCTED>(co)));
-	}
-
-	bool canPass(Coordinates co)
-	{
-		return boundsCheck(co) && !(getProperty<Tile::WALL>(co) | getProperty<Tile::OBSTRUCTED>(co));
-	}
-
-	bool isEmptySpace(Coordinates co)
-	{
-		return !(getProperty<Tile::FLOOR>(co) | getProperty<Tile::WALL>(co) | getProperty<Tile::OBSTRUCTED>(co));
-	}
-	*/
-	/* END */
-
-	//void Region::tileRecalc(const Coordinates co)
-	//{
-	//}
 
 	void Region::tileRecalcAll()
 	{

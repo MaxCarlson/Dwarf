@@ -8,7 +8,7 @@
 #include <iostream>
 #include <unordered_map>
 
-extern std::unique_ptr<std::unordered_multimap<int, std::size_t>> positionCache;
+extern std::unique_ptr<std::unordered_multimap<int, std::size_t>> positionCache; // Switch to unordered map of vectors? Actually switch to a vector of vectors resized to TOTAL_MAP_TILES
 
 class EntityPositionCache : public System<Requires<PositionComponent>>
 {
