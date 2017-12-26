@@ -3,6 +3,7 @@
 
 struct Coordinates;
 class Inventory;
+struct designate_building_message;
 
 // Handles the picking up and equipping of 
 // items as well as the dropping of them as well
@@ -18,5 +19,7 @@ private:
 	void dropItem(int itemType, std::size_t entityId, std::size_t itemEid, Coordinates co);
 
 	int finditemSlot(const Inventory & einv, std::size_t item);
+
+	void designateBuilding(designate_building_message & msg);
 };
 

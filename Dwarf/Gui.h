@@ -38,6 +38,7 @@ private:
 
 	void drawMain();
 	void drawBuild();
+	void drawDesignate();
 	void drawCreateItem();
 
 	void clearAndDraw(int x, int y, int width, int height, const std::string color, int symbol);

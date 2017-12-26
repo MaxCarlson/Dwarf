@@ -653,6 +653,12 @@
     <ClInclude Include="ECS\Messages\designation_message.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ECS\Messages\designate_building_message.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Components\Building.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="cereal\external\rapidxml\manual.html" />

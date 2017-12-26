@@ -14,6 +14,14 @@ using namespace region;
 
 static const std::string gui_color = "#386687";
 
+inline void wrapInput(int& n, int size)
+{
+	if (n < 0)
+		n = size - 1;
+	if (n > size - 1)
+		n = 0;
+}
+
 Gui::Gui() 
 {
 }
@@ -47,6 +55,10 @@ void Gui::render()
 			drawBuild();
 			break;
 
+		case Gui_State::DESIGNATE:
+			drawDesignate();
+			break;
+
 		case Gui_State::ORDERS:
 			break;
 
@@ -75,10 +87,11 @@ void Gui::drawMain()
 {
 	horizontalOffset = panelWidth - (panelWidth / 5);
 	verticalOffset = 0;
+	itemSelected = 0;
 
 	clearAndDraw(horizontalOffset, verticalOffset, panelWidth, panelHeight, gui_color, 0x2588);
 
-	static const std::vector<std::string> commands = { "b = build", "o = order" };
+	static const std::vector<std::string> commands = { "b = build", "i = spawn item", "d = designate", "o = order" };
 
 	int y = 2;
 	for (const auto& c : commands)
@@ -91,35 +104,51 @@ void Gui::drawMain()
 
 void Gui::drawBuild()
 {
-	horizontalOffset = panelWidth - (panelWidth / 5);
-	verticalOffset = 0;
-
-	clearAndDraw(horizontalOffset, verticalOffset, panelWidth, panelHeight, gui_color, 0x2588);
-
 	static const std::vector<std::string> buildings = get_all_building_def_names();
 
+	clearAndDraw(horizontalOffset, verticalOffset, panelWidth, panelHeight, gui_color, 0x2588);
+	wrapInput(itemSelected, buildings.size());
+
+	int c = 0;
 	int y = 2;
 	for (const auto& b : buildings)
 	{
-		terminal_color("black");
+		draw::determineHighlight(c, itemSelected);
+
 		terminal_print(horizontalOffset + 1, y, b.c_str());
 		y += 2;
+		++c;
 	}
+	terminal_bkcolor("black");
+}
+
+void Gui::drawDesignate()
+{
+	static std::vector<std::string> dType = { "Mining", "Channeling" };
+
+	clearAndDraw(horizontalOffset, verticalOffset, panelWidth, panelHeight, gui_color, 0x2588);
+	wrapInput(itemSelected, dType.size());
+
+	int y = 2;
+	int c = 0;
+	for (const auto& d : dType)
+	{
+		draw::determineHighlight(c, itemSelected);
+
+		terminal_print(horizontalOffset + 1, y, d.c_str());
+		y += 2;
+		++c;
+	}
+	terminal_bkcolor("black");
 }
 
 void Gui::drawCreateItem()
 {
 	static auto itemTags = get_all_item_tags();
 
-	horizontalOffset = panelWidth - (panelWidth / 5);
-	verticalOffset = 0;
-
 	clearAndDraw(horizontalOffset, verticalOffset, panelWidth, panelHeight, gui_color, 0x2588);
 
-	if (itemSelected > itemTags.size() - 1)
-		itemSelected = 0;
-	if (itemSelected < 0)
-		itemSelected = itemTags.size() - 1;
+	wrapInput(itemSelected, itemTags.size());
 
 	int y = 2;
 	int c = 0;
@@ -131,6 +160,7 @@ void Gui::drawCreateItem()
 		y += 2;
 		++c;
 	}
+	terminal_bkcolor("black");
 }
 
 void Gui::printDebugTileProps()

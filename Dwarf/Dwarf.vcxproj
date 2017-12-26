@@ -189,6 +189,8 @@
     <ClCompile Include="ECS\Systems\ai\WorkOrders.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ECS\Components\Building.h" />
+    <ClInclude Include="ECS\Messages\designate_building_message.h" />
     <ClInclude Include="ECS\Messages\designation_message.h" />
     <ClInclude Include="ECS\Systems\helpers\DesignationHandler.h" />
     <ClInclude Include="Drawing\imconfig.h" />

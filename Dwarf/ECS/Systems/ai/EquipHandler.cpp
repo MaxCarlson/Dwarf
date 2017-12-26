@@ -8,6 +8,10 @@
 #include "../../Messages/entity_moved_message.h"
 #include "../../Components/Sentients/Inventory.h"
 #include "../EntityPositionCache.h"
+#include "../../Messages/designate_building_message.h"
+#include "../helpers/ItemHelper.h"
+#include "../../Components/helpers/building_designation.h"
+#include "../../Components/Building.h"
 
 #include <iostream>
 
@@ -21,6 +25,11 @@ void EquipHandler::init()
 	subscribe<drop_item_message>( [this] (drop_item_message &msg)
 	{
 		dropItem(msg.itemSlot, msg.entityId, msg.itemEid, msg.co);
+	});
+
+	subscribe<designate_building_message>([this](designate_building_message & msg)
+	{
+		designateBuilding(msg);
 	});
 }
 
@@ -97,4 +106,46 @@ int EquipHandler::finditemSlot(const Inventory & einv, std::size_t item)
 		if (einv.inventory[i] == item)
 			return i;
 	}
+}
+
+void EquipHandler::designateBuilding(designate_building_message & msg)
+{
+	building_designation designation;
+
+	designation.tag = msg.building.tag;
+	designation.name = msg.building.name;
+	designation.co = idxToCo(msg.idx);
+	designation.width = msg.building.width;
+	designation.height = msg.building.height;
+	designation.components = msg.building.components;
+	
+
+	// Find building components
+	for (const auto& comp : msg.building.components)
+	{
+		const auto compId = itemHelper.claim_item_by_reaction_inp(comp);
+
+		std::cout << "Component [" << comp.tag << "] - Id " << compId << "\n";
+
+		designation.componentIds.push_back(std::make_pair(compId, false));
+	}
+
+	auto building = getWorld().createEntity();
+
+	building.addComponent<PositionComponent>(Coordinates{ idxToCo(msg.idx) });
+	building.addComponent<Building>( Building{ designation.tag, designation.width, designation.height, false, msg.building.charCodes });
+
+	designation.entity_id = building.getId().index;
+
+	// Adjust center for 3 tile buildings
+	int sx = designation.co.x;
+	int sy = designation.co.y;
+	if (designation.width == 3) --sx;
+	if (designation.height == 3) --sy;
+
+	for(int x = sx; x < sx + designation.width; ++x)
+		for (int y = sy; y < sy + designation.height; ++y)
+		{
+
+		}
 }
