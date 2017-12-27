@@ -65,7 +65,7 @@ void EquipHandler::pickupItem(int itemSlot, std::size_t entityId, std::size_t it
 	// perhaps this isn't worth it
 	auto itemCo = item.getComponent<PositionComponent>().co;
 
-	deletePositionCache(item, itemCo);
+	positionCache->removeNode({ itemCo, itemEid });
 	item.removeComponent<PositionComponent>();
 
 	if (!item.hasComponent<Claimed>())
@@ -158,7 +158,7 @@ void EquipHandler::designateBuilding(designate_building_message & msg)
 			region::setFlag(co, region::Flag::CONSTRUCTION);
 
 			// Id's must be manually deleted later
-			positionCache->emplace(getIdx(co), designation.entity_id);
+			positionCache->addNode({ co, designation.entity_id });
 		}
 
 	designations->buildings.push_back(designation);

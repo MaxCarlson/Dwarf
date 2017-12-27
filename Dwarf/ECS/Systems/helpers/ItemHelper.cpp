@@ -7,6 +7,8 @@
 #include "../Raws/Defs/MaterialDef.h"
 #include "../ECS/World.h"
 #include "../ECS/Components/PositionComponent.h"
+#include "../Helpers/PositionCache.h"
+#include "../ECS/Systems/EntityPositionCache.h"
 
 ItemHelper itemHelper;
 
@@ -33,14 +35,25 @@ void ItemHelper::unclaim_item_by_id(std::size_t id)
 	getWorld().getEntity(id).removeComponent<Claimed>();
 }
 
+void ItemHelper::deleteItem(const std::size_t id)
+{
+	auto e = getWorld().getEntity(id);
+	auto* pos = &e.getComponent<PositionComponent>();
+
+	if(pos)
+		positionCache->removeNode({ pos->co, id });
+
+	e.kill();
+}
+
 int ItemHelper::get_item_location(std::size_t id)
 {
-	auto* pos = &getWorld().getEntity(id).getComponent<PositionComponent>().co;
-	
-	if (!pos)
-		return 0;
+	auto* pos = &getWorld().getEntity(id).getComponent<PositionComponent>();
 
-	return getIdx(*pos);
+	if(pos)
+		return getIdx(pos->co);
+
+	return 0;
 }
 
 int ItemHelper::num_reaction_input_items(const ReactionInput & react)

@@ -4,6 +4,8 @@
 
 struct CacheLocation
 {
+	CacheLocation(Coordinates co, std::size_t id) : co(co), id(id) {}
+	//CacheLocation(int idx, std::size_t id);
 	Coordinates co;
 	std::size_t id;
 };

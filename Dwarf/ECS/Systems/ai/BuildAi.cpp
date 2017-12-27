@@ -8,6 +8,7 @@
 #include "../helpers/ItemHelper.h"
 #include "WorkTemplate.h"
 #include "../Raws/Buildings.h"
+#include "../ECS/Components/Building.h"
 #include "../ECS/Messages/pickup_item_message.h"
 #include "../ECS/Components/Sentients/Inventory.h"
 #include <utility>
@@ -190,10 +191,27 @@ void BuildAi::doBuild(const Entity & e)
 		// Add a method of incrementally increasing buildings completeness
 		// Should this use time, or use a random roll? Probably time based on difficulty and skill required
 
+		auto & building = getWorld().getEntity(tag.buildingTarget.entity_id).getComponent<Building>();
 
+		// Set materials for building and delete componenets
+		for (auto& compId : tag.buildingTarget.componentIds)
+		{
+			const auto comp = getWorld().getEntity(compId.first);
 
+			const std::string comptag = comp.getComponent<Item>().tag;
+			std::size_t material = comp.getComponent<Item>().material;
+
+			itemHelper.deleteItem(compId.first);
+
+			building.materials.push_back(std::make_pair(comptag, material));
+		}
+
+		building.complete = true;
 
 
 		// Add code for building provides once added in 
+
+
+		work.cancel_work(e);
 	}
 }

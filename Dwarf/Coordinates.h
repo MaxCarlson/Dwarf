@@ -66,4 +66,4 @@ struct CoordinateHashEqual
 };
 
 // Probably won't ever have maps this large!!
-const static Coordinates EMPTY_COORDINATES = { 10000, 10000, 10000 };
+const static Coordinates EMPTY_COORDINATES = { 0, 0, 0 };

@@ -33,13 +33,15 @@ public:
 			return;
 		}
 
-		// Load all Entities at positon from cache
-		auto& entitiesAtPos = engine->entityPositionCache->findEntities(co);
+		// Load all Entities at positon from cache 
+		auto& entitiesAtPos = positionCache->get_location(co);
 			
 		// Entity doesn't have correct tool
 		// For all Entities at this position
-		for (auto& item : entitiesAtPos)
+		for (auto& i : entitiesAtPos)
 		{
+			const auto item = e.getWorld().getEntity(i);
+
 			auto& pos = item.getComponent<PositionComponent>().co;
 			auto* tool = &item.getComponent<Item>();
 

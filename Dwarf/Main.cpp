@@ -4,9 +4,6 @@
 #include "Engine.h"
 #include "MainMenu.h"
 #include "Raws\raws.h"
-#include "Drawing\imgui.h"
-
-//#include <SFML\Graphics.hpp>
 
 // Numbers a screen width and height, make more 
 // dynamic eventually
@@ -14,8 +11,6 @@ std::unique_ptr<Engine> engine;
 
 int main()
 {
-	//sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
-
 	// BearslibTerminal Init stuff
 	terminal_open();
 	terminal_set("window.title='Dwarf'; window.size=80x80; window.cellsize=16x16"); // ~~ Make lua config file

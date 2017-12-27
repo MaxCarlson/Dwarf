@@ -2,6 +2,13 @@
 #include "../Map/Tile.h"
 #include <algorithm>
 
+/*
+CacheLocation::CacheLocation(int idx, std::size_t id)
+{
+	co = idxToCo(idx);
+	id = id;
+}
+*/
 PositionCache::PositionCache()
 {
 	entrys.resize(TOTAL_MAP_TILES);

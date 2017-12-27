@@ -57,7 +57,7 @@ void Engine::newGame(int screenWidth, int screenHeight)
 
 	// Init misc maps and designations
 	designations = std::make_unique<Designations>();
-	positionCache = std::make_unique<std::unordered_multimap<int, std::size_t>>();
+	positionCache = std::make_unique<PositionCache>();
 
 	// Init systems
 	init();
@@ -83,8 +83,8 @@ void Engine::loadGame(std::string filePath)
 	//iarchive(positionCache);
 
 	// Init misc maps and designations
-	positionCache = std::make_unique<std::unordered_multimap<int, std::size_t>>();
-	mapRenderer = std::make_unique<MapRender>();
+	positionCache = std::make_unique<PositionCache>();
+	mapRenderer = std::make_unique<MapRender>(); // ~~~~ Get rid of this and combine render systems
 
 	init();
 }
