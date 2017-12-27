@@ -127,6 +127,8 @@ namespace region
 
 	bool solid(const int idx);
 
+	bool aboveGround(const int idx);
+
 	void setMaterial(const Coordinates co, const std::size_t mat);
 
 	int getTileType(const int idx);
@@ -144,10 +146,12 @@ namespace region
 	// entire map
 	void spot_recalc_paths(const Coordinates co);
 
-	//void tileRecalc(const Coordinates co);
+	void tile_recalc(const Coordinates co);
+
+	void tile_calc_render(const Coordinates co);
 
 	// Recalculate all pathing Flags on map
-	void tileRecalcAll();
+	void tile_recalc_all();
 
 	void makeWall(const int idx);
 

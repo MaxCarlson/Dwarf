@@ -28,6 +28,7 @@ namespace region
 		{
 			//tileMap.resize(TOTAL_MAP_TILES);
 			solid.resize(TOTAL_MAP_TILES, 0);
+			aboveGround.resize(TOTAL_MAP_TILES, 0);
 			tileTypes.resize(TOTAL_MAP_TILES);
 			tileFlags.resize(TOTAL_MAP_TILES);
 			materials.resize(TOTAL_MAP_TILES);
@@ -38,6 +39,7 @@ namespace region
 		//std::vector<Tile> tileMap; // Remove this and replace with sepperate vectors of properties
 
 		std::vector<char> solid;
+		std::vector<char> aboveGround;
 
 		std::vector<uint16_t> tileTypes;
 
@@ -46,15 +48,18 @@ namespace region
 		std::vector<std::size_t> materials;
 		std::vector<uint16_t> tileHealth;
 
-		//void tileRecalc(const Coordinates co);
+		
 		void tileRecalcAll();
 		void spot_recalc_paths(const Coordinates co);
 		void tilePathing(const Coordinates co);
+		void tileRecalc(const Coordinates co);
+		void tileCalcRender(Coordinates co);
 
 		template<class Archive>
 		void serialize(Archive & archive)
 		{
 			archive(solid);
+			archive(aboveGround);
 			archive(tileTypes);
 			archive(tileFlags);
 			archive(materials);
@@ -120,6 +125,11 @@ namespace region
 		return currentRegion->solid[idx];
 	}
 
+	bool aboveGround(const int idx)
+	{
+		return currentRegion->aboveGround[idx];
+	}
+
 	void setMaterial(const Coordinates co, const std::size_t mat)
 	{
 		currentRegion->materials[getIdx(co)] = mat;
@@ -160,14 +170,13 @@ namespace region
 		currentRegion->spot_recalc_paths(co);
 	}
 
-	//void tileRecalc(const Coordinates co)
-	//{
-	//	currentRegion->tileRecalc(co);
-	//}
-
 	void tileRecalcAll()
 	{
 		currentRegion->tileRecalcAll();
+	}
+
+	void tile_recalc_all()
+	{
 	}
 
 	void makeWall(const int idx) // Add material idx variable
@@ -235,15 +244,31 @@ namespace region
 		return(co.x < MAP_WIDTH && co.x >= 0 && co.y < MAP_HEIGHT && co.y >= 0 && co.z < MAP_DEPTH && co.z >= 0);
 	}
 
+
+	void tile_recalc(const Coordinates co)
+	{
+		currentRegion->tileRecalc(co);
+	}
+
+	void tile_calc_render(const Coordinates co)
+	{
+		currentRegion->tileCalcRender(co);
+	}
+
 	void Region::tileRecalcAll()
 	{
 		for (int z = 1; z < MAP_DEPTH - 1; ++z)
 			for (int y = 0; y < MAP_HEIGHT - 1; ++y)
 				for (int x = 0; x < MAP_WIDTH - 1; ++x)
 					tilePathing({ x, y, z });
+
+		for (int z = 1; z < MAP_DEPTH - 1; ++z)
+			for (int y = 0; y < MAP_HEIGHT - 1; ++y)
+				for (int x = 0; x < MAP_WIDTH - 1; ++x)
+					tileRecalc({ x, y, z });
 	}
 
-	void Region::spot_recalc_paths(const Coordinates co)
+	void Region::spot_recalc_paths(const Coordinates co) // Rename this tile_spot_recalc
 	{
 		tilePathing(CO_NORTH);
 		tilePathing(CO_SOUTH);
@@ -256,6 +281,8 @@ namespace region
 		tilePathing(CO_UP);
 		tilePathing(CO_DOWN);
 		tilePathing(co);
+
+		tileRecalc(co);
 	}
 
 	void Region::tilePathing(const Coordinates co)
@@ -293,6 +320,32 @@ namespace region
 			if (co.z < MAP_DEPTH - 1 && tileFlags[getIdx(CO_UP  )].test(CAN_STAND_HERE) && tileTypes[idx] == TileTypes::RAMP) tileFlags[idx].set(CAN_GO_UP);
 			if (co.z > 0             && tileFlags[getIdx(CO_DOWN)].test(CAN_STAND_HERE) && tileTypes[getIdx(CO_DOWN)]) tileFlags[idx].set(CAN_GO_DOWN);
 		}
+	}
+
+	void Region::tileRecalc(const Coordinates co)
+	{
+		tileCalcRender(co);
+		const int idx = getIdx(co);
+
+		if (co.z == MAP_DEPTH - 1)
+			aboveGround[idx] = true;
+
+		else
+		{
+			bool ug = false;
+			for (int z = MAP_DEPTH - 1; z > 1; --z)
+				if (tileTypes[getIdx({ co.x, co.y, z })] == TileTypes::SOLID)
+					ug = true;
+
+			aboveGround[idx] = !ug;
+		}
+
+		tilePathing(co);
+	}
+
+	void Region::tileCalcRender(Coordinates co)
+	{
+
 	}
 }
 
