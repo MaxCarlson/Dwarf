@@ -19,6 +19,8 @@ public:
 
 	void update();
 
+	void updateRender();
+
 	/*
 	void update()
 	{

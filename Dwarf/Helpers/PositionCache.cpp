@@ -56,9 +56,9 @@ std::vector<std::size_t> PositionCache::find_by_region(const int left, const int
 {
 	std::vector<std::size_t> loc;
 
-	for (int z = zbottom; z < ztop; ++z) // Possibly change z order?
-		for(int x = left; x < right; ++x)
-			for (int y = top; y < bottom; ++y)
+	for (int z = zbottom; z <= ztop; ++z) // Possibly change z order?
+		for(int x = left; x <= right; ++x)
+			for (int y = bottom; y <= top; ++y)
 			{
 				for (const auto& ent : entrys[getIdx({ x, y, z })])
 				{
