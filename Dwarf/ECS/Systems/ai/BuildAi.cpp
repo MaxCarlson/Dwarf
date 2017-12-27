@@ -7,6 +7,7 @@
 #include "../../Components/MovementComponent.h"
 #include "../helpers/ItemHelper.h"
 #include "WorkTemplate.h"
+#include "../Raws/Buildings.h"
 #include "../ECS/Messages/pickup_item_message.h"
 #include "../ECS/Components/Sentients/Inventory.h"
 #include <utility>
@@ -56,7 +57,7 @@ void BuildAi::doBuild(const Entity & e)
 
 	auto& tag = e.getComponent<BuilderTag>();
 	auto& co = e.getComponent<PositionComponent>().co;
-	auto mov = e.getComponent<MovementComponent>();
+	auto& mov = e.getComponent<MovementComponent>();
 
 	if (tag.step == BuilderTag::FIND_BUILDING)
 	{
@@ -95,7 +96,7 @@ void BuildAi::doBuild(const Entity & e)
 
 				tag.step = BuilderTag::GOTO_COMPONENT;
 				// Possibly test for path here to avoid convuluted mov system?
-				
+				return;
 			}
 		}
 
@@ -168,6 +169,31 @@ void BuildAi::doBuild(const Entity & e)
 		const bool zeq = co.z == pos->z;
 
 		if (co == *pos || (zeq && dist < 1.41))
-			tag.step = BuilderTag::BUILD_BUILDING;
+			tag.step = BuilderTag::DROP_COMPONENT;
+	}
+
+	else if (tag.step == BuilderTag::DROP_COMPONENT)
+	{
+		itemHelper.unclaim_item_by_id(tag.current_component);
+		tag.current_component = 0;
+
+		tag.step = BuilderTag::FIND_COMPONENT;
+		return;
+	}
+
+	else if (tag.step == BuilderTag::BUILD_BUILDING)
+	{
+		auto target = getBuilding(tag.buildingTarget.tag);
+		if (target == nullptr)
+			throw std::runtime_error("Building tag not found!");
+
+		// Add a method of incrementally increasing buildings completeness
+		// Should this use time, or use a random roll? Probably time based on difficulty and skill required
+
+
+
+
+
+		// Add code for building provides once added in 
 	}
 }

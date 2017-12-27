@@ -93,6 +93,12 @@ public:
 		}
 	}
 
+	template<typename CANCEL, typename SUCCESS>
+	void followPath(const Entity& e, Coordinates co, Coordinates dest, const CANCEL &cancel, const SUCCESS &success)
+	{
+
+	}
+
 	inline void cancel_work(Entity e)
 	{
 		e.removeComponent<TAG>();

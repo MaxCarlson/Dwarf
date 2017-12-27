@@ -5,7 +5,7 @@
 
 using namespace region;
 
-std::unique_ptr<std::unordered_multimap<int, std::size_t>> positionCache;
+std::unique_ptr<PositionCache> positionCache;
 
 EntityPositionCache::EntityPositionCache()
 {

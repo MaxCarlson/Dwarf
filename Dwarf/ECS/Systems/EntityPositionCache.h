@@ -5,10 +5,11 @@
 #include "../Engine.h"
 #include "../World.h"
 #include "../Map/Tile.h"
+#include "../Helpers/PositionCache.h"
 #include <iostream>
 #include <unordered_map>
 
-extern std::unique_ptr<std::unordered_multimap<int, std::size_t>> positionCache; // Switch to unordered map of vectors? Actually switch to a vector of vectors resized to TOTAL_MAP_TILES
+extern std::unique_ptr<PositionCache> positionCache; // Switch to unordered map of vectors? Actually switch to a vector of vectors resized to TOTAL_MAP_TILES
 
 class EntityPositionCache : public System<Requires<PositionComponent>>
 {
@@ -28,9 +29,8 @@ public:
 	// from the cache
 	// Removal is handled automatically when Entity is removed from system
 	// (i.e. loses PositionComponent)
-	template<bool remove>
-	void updateEntity(const Entity e, const Coordinates& newCo, const Coordinates& oldCo);
-	
+	//template<bool remove>
+	//void updateEntity(const Entity e, const Coordinates& newCo, const Coordinates& oldCo);
 	
 
 private:
@@ -41,6 +41,7 @@ private:
 	//void onEntityRemoval(Entity & entity);
 };
 
+/*
 template<bool remove>
 void EntityPositionCache::updateEntity(const Entity e, const Coordinates & newCo, const Coordinates & oldCo)
 {
@@ -79,4 +80,4 @@ inline void deletePositionCache(const Entity e, Coordinates co)
 {
 	engine->entityPositionCache->updateEntity<true>(e, EMPTY_COORDINATES, co);
 }
-
+*/
