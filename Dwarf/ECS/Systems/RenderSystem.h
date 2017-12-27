@@ -15,6 +15,11 @@ public:
 
 	const int terminalCodes[9] = { 0xE000, 0xE100, 0xE200, 0xE300, 0xE400, 0xE500, 0xE600, 0xE700, 0xE800 };
 
+	void init();
+
+	void update();
+
+	/*
 	void update()
 	{
 		const auto& entities = getEntities();
@@ -64,11 +69,9 @@ public:
 
 		return true;
 	}
+	*/
 
-	void initialize() {};
-
-	void onEntityAdd(Entity & entity) {};
-
-	void onEntityRemoval(Entity & entity) {};
 private:
+
+	bool renderChanged = true;
 };

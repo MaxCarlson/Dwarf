@@ -146,6 +146,7 @@
     <ClCompile Include="ECS\Systems\ai\AiArchitecture.cpp" />
     <ClCompile Include="ECS\Systems\helpers\ItemHelper.cpp" />
     <ClCompile Include="ECS\Systems\InputHandler.cpp" />
+    <ClCompile Include="ECS\Systems\RenderSystem.cpp" />
     <ClCompile Include="Helpers\PositionCache.cpp" />
     <ClCompile Include="Raws\Buildings.cpp" />
     <ClCompile Include="Map\building\region\place_buildings.cpp" />
@@ -192,6 +193,7 @@
     <ClInclude Include="ECS\Components\Building.h" />
     <ClInclude Include="ECS\Messages\designate_building_message.h" />
     <ClInclude Include="ECS\Messages\designation_message.h" />
+    <ClInclude Include="ECS\Messages\render_changed_message.h" />
     <ClInclude Include="ECS\Systems\helpers\DesignationHandler.h" />
     <ClInclude Include="ECS\Components\Claimed.h" />
     <ClInclude Include="ECS\Components\Tags\BuilderTag.h" />
