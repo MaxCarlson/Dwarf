@@ -252,7 +252,7 @@ void Engine::render()
 	terminal_clear();
 
 	// Render the local map !~!~~~ Replace this swith system?
-	mapRenderer->render();
+	//mapRenderer->render();
 
 	// Render Entities
 	renderSystem->update();

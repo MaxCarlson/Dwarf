@@ -18,25 +18,52 @@ void RenderSystem::init()
 	subscribe_mbox<render_changed_message>();
 }
 
-const vchar getTileRender(const Coordinates co)
+const RenderComponent RenderSystem::getTileRender(const Coordinates co)
 {
 	const int idx = getIdx(co);
 
-	vchar v = region::getRenderTile(co);
+	const vchar& v = region::renderCache(idx);
 
-	auto rendIt = renderEntities.find(idx);
+	RenderComponent r = { v.c, 2, v.fg };
+
+	auto ids = positionCache->get_location(idx);
+
+	if (ids.size() > 0)
+	{
+		for (const auto& id : ids)
+		{
+			if (getWorld().getEntity(id).hasComponent<RenderComponent>())
+			{
+				const auto& rend = getWorld().getEntity(id).getComponent<RenderComponent>();
+
+				r = { rend.ch, rend.terminalCode, rend.colorStr };
+				break;
+			}
+		}
+	}
+
+	return r;
+}
+
+const vchar getTR(const Coordinates co)
+{
+	vchar v = region::getRenderTile(co);
+	auto rendIt = renderEntities.find((terminal_state(TK_WIDTH) * co.y) + co.x);
 
 	if (rendIt != renderEntities.end())
 	{
 		auto rend = rendIt->second[0]; // Add cycling through glyphs every once in a while if multiple on tile
 
-		return (v = { rend.ch, rend.colorStr, "black" });
+		v = { rend.ch, rend.colorStr, "black" };
 	}
-	
+
+
+	return v;
 }
 
 void RenderSystem::update()
 {	
+	static const int codes[] = { 0xE000, 0xE100, 0xE200, 0xE300, 0xE400, 0xE500, 0xE600, 0xE700, 0xE800 };
 
 	const auto& entities = getEntities();
 
@@ -46,6 +73,27 @@ void RenderSystem::update()
 	const int maxY = (terminal_state(TK_HEIGHT) + offsetY) <= MAP_HEIGHT ? (terminal_state(TK_HEIGHT) + offsetY) : MAP_HEIGHT;
 
 	terminal_color("default");
+
+	/*
+	int z = engine->mapRenderer->currentZLevel;
+	int X = 0;
+	for (int x = offsetX; x < maxX; ++x)
+	{
+		int Y = 0;
+		for (int y = offsetY; y < maxY; ++y)
+		{
+			auto rend = getTileRender({ x, y, z });
+
+			terminal_color(rend.colorStr.c_str());
+			terminal_put(X, Y, codes[rend.terminalCode] + rend.ch);
+			++Y;
+		}
+		++X;
+	}
+	
+	*/
+
+	 //3D rendering, need to implement lighting for it to look okay
 
 	updateRender(); // Remove this and add render_changed_message s ?
 
@@ -58,51 +106,16 @@ void RenderSystem::update()
 		int Y = 0;
 		for (int y = offsetY; y < maxY; ++y)
 		{
-			auto rend = getTileRender({ x, y, z });
+			auto rend = getTR({ x, y, z });
+
+			//terminal_bkcolor(rend.bg.c_str());
+			terminal_color(rend.fg.c_str());
 			terminal_put(X, Y, 0xE200 + rend.c);
 			++Y;
 		}
 		++X;
 	}
-
-
-	for (const auto& rend : renderEntities)
-	{
-
-		// Need to add code to determine which entity to show if one is atop another
-
-		// Also need code for when entity is underground but camera isn't being blocked for viewing entity
-	}
-
-
-	/*
-	for (const auto& e : entities)
-	{
-		auto co = e.getComponent<PositionComponent>().co;
-
-		// Adjust copy of position coordinates to be aligned with camera
-		// coordinates
-		co.x -= offsetX;
-		co.y -= offsetY;
-
-		// If the camera z level matches our entities
-		// zLevel, render it!
-		// (Eventually add opacity to non obscured Entities below camera z Level)
-		if (isInCameraRange(co))
-		{
-			const auto& rend = e.getComponent<RenderComponent>();
-
-			const char* cstr = rend.colorStr.c_str();
-
-			// Switch terminal color to item color
-			terminal_color(cstr);
-
-			// Draw tile image, from tile set associated with rend.terminalcode
-			// with location in tileset being rend.ch
-			terminal_put(co.x, co.y, terminalCodes[rend.terminalCode] + rend.ch);
-		}
-	}
-	*/
+	
 }
 
 void RenderSystem::updateRender()
@@ -110,7 +123,7 @@ void RenderSystem::updateRender()
 	/*
 	std::queue<render_changed_message> * rc = mbox<render_changed_message>(); // Delete this?
 
-	while (!rc->empty()) // And this? Render is going to be changing quite a bit
+	while (rc && !rc->empty()) // And this? Render is going to be changing quite a bit
 	{
 		renderChanged = true;
 		rc->pop();
@@ -153,7 +166,7 @@ void RenderSystem::updateRender()
 			if (!pos || !rend)
 				continue;
 
-			const int idx = getIdx(pos->co);
+			const int idx = (terminal_state(TK_WIDTH) * pos->co.y) + pos->co.x;
 
 			// Render buildings code
 			if (b && pos && !rendered)

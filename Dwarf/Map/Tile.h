@@ -128,7 +128,7 @@ namespace region
 
 	bool solid(const int idx);
 
-	bool aboveGround(const int idx);
+	//bool aboveGround(const int idx);
 
 	vchar& renderCache(const int idx);
 

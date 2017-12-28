@@ -23,8 +23,8 @@ public:
 	void addNode(const CacheLocation & pos);
 	void removeNode(const CacheLocation & pos);
 
-	std::vector<std::size_t> get_location(const Coordinates co);
-	std::vector<std::size_t> get_location(int idx);
+	const std::vector<std::size_t>& get_location(const Coordinates co);
+	const std::vector<std::size_t>& get_location(int idx);
 
 	std::vector<std::size_t> find_by_region(const int left, const int right, const int top, const int bottom, const int ztop, const int zbottom);
 };

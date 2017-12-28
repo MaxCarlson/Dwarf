@@ -17,7 +17,7 @@ PositionCache::PositionCache()
 void PositionCache::addNode(const CacheLocation & pos)
 {
 	const int idx = getIdx(pos.co);
-	entrys.emplace_back(pos.id);
+	entrys[idx].emplace_back(pos.id);
 	++totalNodes;
 }
 
@@ -37,28 +37,23 @@ void PositionCache::removeNode(const CacheLocation & pos)
 	);
 }
 
-std::vector<std::size_t> PositionCache::get_location(const Coordinates co)
+const std::vector<std::size_t>& PositionCache::get_location(const Coordinates co)
 {
 	return get_location(getIdx(co));
 }
 
-std::vector<std::size_t> PositionCache::get_location(int idx)
+const std::vector<std::size_t>& PositionCache::get_location(int idx)
 {
-	std::vector<std::size_t> loc;
-	for (const auto& p : entrys[idx])
-	{
-		loc.push_back(p);
-	}
-	return loc;
+	return entrys[idx];
 }
 
 std::vector<std::size_t> PositionCache::find_by_region(const int left, const int right, const int top, const int bottom, const int ztop, const int zbottom)
 {
 	std::vector<std::size_t> loc;
 
-	for (int z = zbottom; z <= ztop; ++z) // Possibly change z order?
-		for(int x = left; x <= right; ++x)
-			for (int y = bottom; y <= top; ++y)
+	for (int z = zbottom; z < ztop; ++z) // Possibly change z order?
+		for(int x = left; x < right; ++x)
+			for (int y = bottom; y < top; ++y)
 			{
 				for (const auto& ent : entrys[getIdx({ x, y, z })])
 				{
