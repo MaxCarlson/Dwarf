@@ -18,13 +18,15 @@ void RenderSystem::init()
 	subscribe_mbox<render_changed_message>();
 }
 
-const RenderComponent RenderSystem::getTileRender(const Coordinates co)
+const static color_t defaultColor = color_from_name("black");
+
+const RenderItem RenderSystem::getTileRender(const Coordinates co)
 {
 	const int idx = getIdx(co);
 
 	const vchar& v = region::renderCache(idx);
 
-	RenderComponent r = { v.c, 2, v.fg };
+	RenderItem r = { v.c, 2, v.fg, defaultColor };
 
 	auto ids = positionCache->get_location(idx);
 
@@ -36,7 +38,7 @@ const RenderComponent RenderSystem::getTileRender(const Coordinates co)
 			{
 				const auto& rend = getWorld().getEntity(id).getComponent<RenderComponent>();
 
-				r = { rend.ch, rend.terminalCode, rend.colorStr };
+				r = { rend.ch, rend.terminalCode,  color_from_name(rend.colorStr.c_str()), defaultColor };
 				break;
 			}
 		}
@@ -54,7 +56,7 @@ const vchar getTR(const Coordinates co)
 	{
 		auto rend = rendIt->second[0]; // Add cycling through glyphs every once in a while if multiple on tile
 
-		v = { rend.ch, rend.colorStr, "black" };
+		v = { rend.ch, color_from_name(rend.colorStr.c_str()), color_from_name("black") };
 	}
 
 
@@ -74,7 +76,7 @@ void RenderSystem::update()
 
 	terminal_color("default");
 
-	/*
+	
 	int z = engine->mapRenderer->currentZLevel;
 	int X = 0;
 	for (int x = offsetX; x < maxX; ++x)
@@ -84,16 +86,16 @@ void RenderSystem::update()
 		{
 			auto rend = getTileRender({ x, y, z });
 
-			terminal_color(rend.colorStr.c_str());
-			terminal_put(X, Y, codes[rend.terminalCode] + rend.ch);
+			terminal_color(rend.fg);
+			terminal_put(X, Y, codes[rend.code] + rend.ch);
 			++Y;
 		}
 		++X;
 	}
 	
-	*/
+	
 
-	 //3D rendering, need to implement lighting for it to look okay
+	/* //3D rendering, need to implement lighting for it to look okay
 
 	updateRender(); // Remove this and add render_changed_message s ?
 
@@ -115,7 +117,7 @@ void RenderSystem::update()
 		}
 		++X;
 	}
-	
+	*/
 }
 
 void RenderSystem::updateRender()

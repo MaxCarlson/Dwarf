@@ -12,7 +12,7 @@
 #include <fstream>
 #include "../Drawing/vchar.h"
 #include "../Engine.h"
-
+#include "../BearLibTerminal.h"
 
 
 // External map info
@@ -404,7 +404,7 @@ namespace region
 			break;
 		}
 
-		renderCache[idx] = vchar{ ch, fg, bg };
+		renderCache[idx] = vchar{ ch, color_from_name(fg.c_str()), color_from_name(bg.c_str()) };
 	}
 	vchar & Region::getRenderTile(const Coordinates co)
 	{
@@ -417,7 +417,7 @@ namespace region
 			if (tt != TileTypes::EMPTY_SPACE)
 				return renderCache[idx];
 		}
-		return vchar{ 0, "black", "black" };
+		return vchar{ 0, color_from_name("black"), color_from_name("black") };
 	}
 }
 
