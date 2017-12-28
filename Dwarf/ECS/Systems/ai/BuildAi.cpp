@@ -169,15 +169,23 @@ void BuildAi::doBuild(const Entity & e)
 		const auto dist = region::get_2D_distance(co, *pos);
 		const bool zeq = co.z == pos->z;
 
+		// Drop component and tell building it has the component
 		if (co == *pos || (zeq && dist < 1.41))
+		{
+			for (auto & component : tag.buildingTarget.componentIds)
+				if (tag.current_component == component.first)
+					component.second = true;
+
 			tag.step = BuilderTag::DROP_COMPONENT;
+		}
+			
 	}
 
 	else if (tag.step == BuilderTag::DROP_COMPONENT)
 	{
 		itemHelper.unclaim_item_by_id(tag.current_component);
-		tag.current_component = 0;
 
+		tag.current_component = 0;
 		tag.step = BuilderTag::FIND_COMPONENT;
 		return;
 	}
@@ -191,8 +199,14 @@ void BuildAi::doBuild(const Entity & e)
 		// Add a method of incrementally increasing buildings completeness
 		// Should this use time, or use a random roll? Probably time based on difficulty and skill required
 
-		auto & building = getWorld().getEntity(tag.buildingTarget.entity_id).getComponent<Building>();
+		auto& buildingEntity = getWorld().getEntity(tag.buildingTarget.entity_id);
 
+		// Just used for filtering
+		buildingEntity.addComponent<RenderComponent>();
+
+		auto & building = buildingEntity.getComponent<Building>();
+
+	
 		// Set materials for building and delete componenets
 		for (auto& compId : tag.buildingTarget.componentIds)
 		{
@@ -208,7 +222,7 @@ void BuildAi::doBuild(const Entity & e)
 
 		building.complete = true;
 
-
+		buildingEntity.activate();
 		// Add code for building provides once added in 
 
 

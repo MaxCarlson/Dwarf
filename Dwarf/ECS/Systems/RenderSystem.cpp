@@ -11,6 +11,17 @@
 #include "../Engine.h"
 #include "../Map/MapRender.h"
 
+struct RenderItem
+{
+	RenderItem(int ch, uint8_t code, color_t fg, color_t bg)
+		: ch(ch), code(code), fg(fg), bg(bg) {}
+
+	int ch;
+	uint8_t code;
+	color_t fg;
+	color_t bg;
+};
+
 std::unordered_map<int, std::vector<RenderComponent>> renderEntities;
 
 void RenderSystem::init()
@@ -26,7 +37,7 @@ const RenderItem RenderSystem::getTileRender(const Coordinates co)
 
 	const vchar& v = region::renderCache(idx);
 
-	RenderItem r = { v.c, 2, v.fg, defaultColor };
+	RenderItem r = { v.c, 2, v.fg, v.bg };
 
 	auto ids = positionCache->get_location(idx);
 
@@ -47,20 +58,24 @@ const RenderItem RenderSystem::getTileRender(const Coordinates co)
 	return r;
 }
 
-const vchar getTR(const Coordinates co)
+const RenderItem getTR(const Coordinates co)
 {
-	vchar v = region::getRenderTile(co);
+	//const vchar& v = region::getRenderTile(co); // For 3D rendering once we implement lighting
+
+	const vchar& v = region::renderCache(getIdx(co));
+
 	auto rendIt = renderEntities.find((terminal_state(TK_WIDTH) * co.y) + co.x);
+
+	RenderItem r = { v.c, 2, v.fg, v.bg };
 
 	if (rendIt != renderEntities.end())
 	{
-		auto rend = rendIt->second[0]; // Add cycling through glyphs every once in a while if multiple on tile
+		const auto& rend = rendIt->second[0]; // Add cycling through glyphs every once in a while if multiple on tile
 
-		v = { rend.ch, color_from_name(rend.colorStr.c_str()), color_from_name("black") };
+		r = { rend.ch, rend.terminalCode, color_from_name(rend.colorStr.c_str()), defaultColor };
 	}
 
-
-	return v;
+	return r;
 }
 
 void RenderSystem::update()
@@ -76,7 +91,8 @@ void RenderSystem::update()
 
 	terminal_color("default");
 
-	
+	updateRender();
+
 	int z = engine->mapRenderer->currentZLevel;
 	int X = 0;
 	for (int x = offsetX; x < maxX; ++x)
@@ -84,40 +100,18 @@ void RenderSystem::update()
 		int Y = 0;
 		for (int y = offsetY; y < maxY; ++y)
 		{
-			auto rend = getTileRender({ x, y, z });
+			//auto rend = getTileRender({ x, y, z });
+			auto rend = getTR({ x, y, z });
 
 			terminal_color(rend.fg);
+			terminal_bkcolor(rend.bg);
+
 			terminal_put(X, Y, codes[rend.code] + rend.ch);
 			++Y;
 		}
 		++X;
 	}
-	
-	
-
-	/* //3D rendering, need to implement lighting for it to look okay
-
-	updateRender(); // Remove this and add render_changed_message s ?
-
-	// Render map tiles
-	// Possibly move this to it's own function?
-	int z = engine->mapRenderer->currentZLevel;
-	int X = 0;
-	for (int x = offsetX; x < maxX; ++x)
-	{
-		int Y = 0;
-		for (int y = offsetY; y < maxY; ++y)
-		{
-			auto rend = getTR({ x, y, z });
-
-			//terminal_bkcolor(rend.bg.c_str());
-			terminal_color(rend.fg.c_str());
-			terminal_put(X, Y, 0xE200 + rend.c);
-			++Y;
-		}
-		++X;
-	}
-	*/
+	terminal_bkcolor("black");
 }
 
 void RenderSystem::updateRender()
@@ -145,13 +139,13 @@ void RenderSystem::updateRender()
 
 		const int zlvl = engine->mapRenderer->currentZLevel;
 
-		std::vector<std::size_t> visible = positionCache->find_by_region(minX, maxX, maxY, minY, zlvl, zlvl - 10);
+		//std::vector<std::size_t> visible = positionCache->find_by_region(minX, maxX, maxY, minY, zlvl, zlvl - 10); When we want to render more than just one zLvl
 
-		auto &world = getWorld();
+		//auto &world = getWorld();
 
-		for (auto id : visible)
+		for (auto e : getEntities())
 		{
-			auto& e = world.getEntity(id);
+			//auto& e = world.getEntity(id);
 
 			if (!e.isValid())
 			{
@@ -165,8 +159,8 @@ void RenderSystem::updateRender()
 			auto* pos = &e.getComponent<PositionComponent>();
 			auto* rend = &e.getComponent<RenderComponent>();
 
-			if (!pos || !rend)
-				continue;
+			//if (!pos || !rend) // Already implicit in being part of this system
+			//	continue;
 
 			const int idx = (terminal_state(TK_WIDTH) * pos->co.y) + pos->co.x;
 
