@@ -5,7 +5,8 @@
 #include "../Components/PositionComponent.h"
 #include "../Raws/Materials.h"
 #include "../Raws/Defs/MaterialDef.h"
-
+#include "../Map/Tile.h"
+#include "../Drawing/vchar.h"
 // Add these to systems so they're not random obj's
 #include "../Engine.h"
 #include "../Map/MapRender.h"
@@ -17,19 +18,60 @@ void RenderSystem::init()
 	subscribe_mbox<render_changed_message>();
 }
 
+const vchar getTileRender(const Coordinates co)
+{
+	const int idx = getIdx(co);
+
+	vchar v = region::getRenderTile(co);
+
+	auto rendIt = renderEntities.find(idx);
+
+	if (rendIt != renderEntities.end())
+	{
+		auto rend = rendIt->second[0]; // Add cycling through glyphs every once in a while if multiple on tile
+
+		return (v = { rend.ch, rend.colorStr, "black" });
+	}
+	
+}
+
 void RenderSystem::update()
 {	
 
 	const auto& entities = getEntities();
 
-	int offsetX = engine->mapRenderer->offsetX; 
-	int offsetY = engine->mapRenderer->offsetY;
+	const int offsetX = engine->mapRenderer->offsetX; 
+	const int offsetY = engine->mapRenderer->offsetY;
+	const int maxX = (terminal_state(TK_WIDTH) + offsetX) <= MAP_WIDTH ? (terminal_state(TK_WIDTH) + offsetX) : MAP_WIDTH;
+	const int maxY = (terminal_state(TK_HEIGHT) + offsetY) <= MAP_HEIGHT ? (terminal_state(TK_HEIGHT) + offsetY) : MAP_HEIGHT;
 
 	terminal_color("default");
 
+	updateRender(); // Remove this and add render_changed_message s ?
+
+	// Render map tiles
+	// Possibly move this to it's own function?
+	int z = engine->mapRenderer->currentZLevel;
+	int X = 0;
+	for (int x = offsetX; x < maxX; ++x)
+	{
+		int Y = 0;
+		for (int y = offsetY; y < maxY; ++y)
+		{
+			auto rend = getTileRender({ x, y, z });
+			terminal_put(X, Y, 0xE200 + rend.c);
+			++Y;
+		}
+		++X;
+	}
+
+
 	for (const auto& rend : renderEntities)
 	{
-		
+
+		// Need to add code to determine which entity to show if one is atop another
+
+		// Also need code for when entity is underground but camera isn't being blocked for viewing entity
 	}
 
 
@@ -65,6 +107,7 @@ void RenderSystem::update()
 
 void RenderSystem::updateRender()
 {
+	/*
 	std::queue<render_changed_message> * rc = mbox<render_changed_message>(); // Delete this?
 
 	while (!rc->empty()) // And this? Render is going to be changing quite a bit
@@ -72,7 +115,7 @@ void RenderSystem::updateRender()
 		renderChanged = true;
 		rc->pop();
 	}
-
+*/
 	renderChanged = true; // delete this and add in render_changed_messages ? Only once needed?
 
 	if (renderChanged)

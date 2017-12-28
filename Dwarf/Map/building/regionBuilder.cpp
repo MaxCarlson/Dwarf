@@ -66,7 +66,7 @@ void buildRegion(Coordinates dimensions)
 
 	placeRamps();
 
-	region::tileRecalcAll();
+	region::tile_recalc_all();
 
 	placeDwarves();
 }

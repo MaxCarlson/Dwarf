@@ -67,6 +67,7 @@ public:
 extern int MAP_WIDTH, MAP_HEIGHT, MAP_DEPTH, TOTAL_MAP_TILES;
 
 class Archive;
+struct vchar;
 
 namespace region
 {
@@ -128,6 +129,10 @@ namespace region
 	bool solid(const int idx);
 
 	bool aboveGround(const int idx);
+
+	vchar& renderCache(const int idx);
+
+	vchar& getRenderTile(const Coordinates co);
 
 	void setMaterial(const Coordinates co, const std::size_t mat);
 

@@ -10,7 +10,7 @@
 #include "../cereal/types/memory.hpp"
 #include "../cereal/types/vector.hpp"
 #include <fstream>
-
+#include "../Drawing/vchar.h"
 #include "../Engine.h"
 
 
@@ -33,6 +33,7 @@ namespace region
 			tileFlags.resize(TOTAL_MAP_TILES);
 			materials.resize(TOTAL_MAP_TILES);
 			tileHealth.resize(TOTAL_MAP_TILES, 1);
+			renderCache.resize(TOTAL_MAP_TILES);
 		}
 
 		// 1D vector of Tiles indexed by 3D formula
@@ -48,12 +49,15 @@ namespace region
 		std::vector<std::size_t> materials;
 		std::vector<uint16_t> tileHealth;
 
+		std::vector<vchar> renderCache;
+
 		
 		void tileRecalcAll();
 		void spot_recalc_paths(const Coordinates co);
 		void tilePathing(const Coordinates co);
 		void tileRecalc(const Coordinates co);
 		void tileCalcRender(Coordinates co);
+		vchar& getRenderTile(const Coordinates co);
 
 		template<class Archive>
 		void serialize(Archive & archive)
@@ -64,6 +68,7 @@ namespace region
 			archive(tileFlags);
 			archive(materials);
 			archive(tileHealth);
+			archive(renderCache);
 		}
 	};
 
@@ -102,7 +107,7 @@ namespace region
 
 		iarchive(MAP_WIDTH, MAP_HEIGHT, MAP_DEPTH, TOTAL_MAP_TILES);
 		currentRegion->serialize(iarchive);
-		tileRecalcAll(); 	
+		tile_recalc_all();
 	}
 
 	bool flag(const Coordinates co, Flag f)
@@ -128,6 +133,16 @@ namespace region
 	bool aboveGround(const int idx)
 	{
 		return currentRegion->aboveGround[idx];
+	}
+
+	vchar & renderCache(const int idx)
+	{
+		return currentRegion->renderCache[idx];
+	}
+
+	vchar & getRenderTile(const Coordinates co)
+	{
+		return currentRegion->getRenderTile(co);
 	}
 
 	void setMaterial(const Coordinates co, const std::size_t mat)
@@ -333,7 +348,7 @@ namespace region
 		else
 		{
 			bool ug = false;
-			for (int z = MAP_DEPTH - 1; z > 1; --z)
+			for (int z = MAP_DEPTH - 1; z > 0; --z)
 				if (tileTypes[getIdx({ co.x, co.y, z })] == TileTypes::SOLID)
 					ug = true;
 
@@ -345,7 +360,60 @@ namespace region
 
 	void Region::tileCalcRender(Coordinates co)
 	{
+		const int idx = getIdx(co);
+		int ch;
+		std::string fg = "black";
+		std::string bg = "black";
 
+		switch (tileTypes[idx])
+		{
+		case TileTypes::EMPTY_SPACE:
+			ch = 0;
+			break;
+
+		case TileTypes::SOLID:
+		{
+			const auto& mat = getMaterial(materials[idx]); // Switch rendering to use vchars!!! Add debugging tools in here if need be
+			fg = mat->color;
+			ch = mat->charCode;
+		}
+			break;
+
+		case TileTypes::FLOOR:
+		{
+			const auto& mat = getMaterial(materials[idx]); // Switch rendering to use vchars!!! Add debugging tools in here if need be
+			fg = mat->color;
+			ch = mat->floorCode;
+		}
+			break;
+
+		case TileTypes::WALL: // Not implemented yet
+
+			break;
+
+		case TileTypes::RAMP:
+		{
+			const auto& mat = getMaterial(materials[idx]); // Switch rendering to use vchars!!! Add debugging tools in here if need be
+			fg = mat->color;
+			ch = 30;
+		}
+			break;
+		}
+
+		renderCache[idx] = vchar{ ch, fg, bg };
+	}
+	vchar & Region::getRenderTile(const Coordinates co)
+	{
+		// Loop through z levels until hitting ground and return first visible tile
+		for (int z = co.z; z > 0; --z)
+		{
+			const auto idx = getIdx({ co.x, co.y, z });
+			const auto& tt = tileTypes[idx];
+
+			if (tt == TileTypes::SOLID || tt == TileTypes::SOLID)
+				return renderCache[idx];
+		}
+		return vchar{ 0, "black", "black" };
 	}
 }
 

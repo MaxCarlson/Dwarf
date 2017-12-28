@@ -20,6 +20,7 @@ MapRender::MapRender()
 // force render system to read from a vector of entities stored at z level?
 void MapRender::render()
 {
+	/*
 	// Grab window size data
 	panelWidth  = terminal_state( TK_WIDTH);
 	panelHeight = terminal_state(TK_HEIGHT);
@@ -70,29 +71,9 @@ void MapRender::render()
 			case TileTypes::RAMP:
 				terminal_put(adjX, adjY, 0xE200 + 30);
 				break;
-
-
-			}
-
-			if ( tileType == TileTypes::EMPTY_SPACE)
-			{
-				
-			}
-
-			else if (tileType == TileTypes::RAMP)
-			{
-				
-			}
-				
-			else
-			{
-				
-			}
-
-				
-			
+			}		
 		}
-
+	*/
 }
 
 bool MapRender::incrementZLevel(int inc)
