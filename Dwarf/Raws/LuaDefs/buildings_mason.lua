@@ -8,7 +8,7 @@ buildings["mason"] = {
 	height = 2,
 	components = { { item = "stone_boulder", qty = 3 } },
 	skill = { { name = "Construction", difficulty = 0 } }, 
-	render = { { glyph = 123 }, { glyph = 111 }, { glyph = 8 }, { glyph = 43 } },
+	render = { { glyph = glyphs["barrel"] }, { glyph = glyphs["tools2"] }, { glyph = glyphs["nest_box"] }, { glyph = glyphs["placed_floor"] } },
 	structure
 };
 

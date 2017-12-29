@@ -7,7 +7,11 @@ glyphs = {
 
 	floor1 = 47,
 	floor2 = 49,
-	placed_floor = 46,
+	placed_floor = 43,
+
+	barrel = 111,
+
+	tools2 = 123,
 
 	stone1 = 131,
 	stone2 = 132,
@@ -29,6 +33,8 @@ glyphs = {
 	grass3 = 244,
 
 	-- Walls will be calculated based on what other walls they are next to or not
-	wall = 175
+	wall = 173,
+
+	block = 254
 };
 

@@ -27,3 +27,12 @@ items["stone_boulder"] = {
 	color = "grey", 
 	tcode = 2
 };
+
+items["block"] = {
+	name = "Block",
+	description = "This is a block",
+	itemType = {"component"},
+	glyph = glyphs["block"],
+	color = "brown",
+	tcode = 2
+};

@@ -106,7 +106,6 @@ void readInBuildings() noexcept
 			},
 		}
 	);
-	int a = 5;
 }
 
 void sanityCheckBuildings() noexcept
