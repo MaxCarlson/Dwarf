@@ -3,7 +3,7 @@
 
 
 EntityIdPool::EntityIdPool(std::size_t poolSize) 
-	: defaultPoolSize(poolSize), nextId(0), counts(poolSize) {};
+	: defaultPoolSize(poolSize), nextId(1), counts(poolSize) {};
 
 
 Entity::Id EntityIdPool::create()
@@ -38,7 +38,7 @@ Entity::Id EntityIdPool::get(std::size_t index) const
 {
 	// If requested index is within bounds of id's created so far
 	// give the id values back
-	if (index < counts.size())
+	if (index && index < counts.size())
 		return Entity::Id{ index, counts[index] };
 
 	// Else return an invalid id with index of index
@@ -51,10 +51,10 @@ Entity::Id EntityIdPool::get(std::size_t index) const
 // is equal to value stored here, and counter is valid it's true.
 bool EntityIdPool::isValid(Entity::Id id) const
 {
-	if (id.index >= counts.size())
+	if (!id.index || id.index >= counts.size())
 		return false;
 	else
-		return (id.counter == counts[id.index] && id.counter > 0);
+		return (id.index && id.counter == counts[id.index] && id.counter > 0);
 }
 
 std::size_t EntityIdPool::getSize() const
@@ -71,7 +71,7 @@ void EntityIdPool::clear()
 {
 	counts.clear();
 	freeIdList.clear();
-	nextId = 0;
+	nextId = 1;
 }
 
 // Entity Manager starts here

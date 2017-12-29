@@ -145,9 +145,13 @@ void RenderSystem::updateRender()
 
 		for (auto e : getEntities())
 		{
-			//auto& e = world.getEntity(id);
+			// Don't show entities not on camera level (for the moment)
+			// Eventually want to implement lighting to show multiple z levels
+			auto* pos = &e.getComponent<PositionComponent>();
+			if (pos->co.z != zlvl)
+				continue;
 
-			if (!e.isValid())
+			else if (!e.isValid()) // Should almost never be the case, here for debug
 			{
 				std::cout << "Entity " << e.getId().index << " is not valid (In RendeSystem)!! \n";
 				continue;
@@ -156,7 +160,6 @@ void RenderSystem::updateRender()
 			bool rendered = false;
 
 			auto* b = &e.getComponent<Building>();
-			auto* pos = &e.getComponent<PositionComponent>();
 			auto* rend = &e.getComponent<RenderComponent>();
 
 			//if (!pos || !rend) // Already implicit in being part of this system
@@ -180,7 +183,6 @@ void RenderSystem::updateRender()
 				{
 					for (int x = 0; x < b->width; ++x)
 					{
-
 						const int idx = getIdx({ pos->co.x + boffsetX, pos->co.y + boffsetY, pos->co.z });
 
 						int glyph = b->charCodes[glyphIdx++];
@@ -188,12 +190,17 @@ void RenderSystem::updateRender()
 						std::string color;
 
 						if (b->complete)
-							color = getMaterial(b->materials[0].first)->color; // Should color rely on materials? This needs to be enhanced instead of relying on just first material
+							if (getMaterial(b->materials[0].first))
+							{
+								color = getMaterial(b->materials[0].first)->color; // Should color rely on materials? This needs to be enhanced instead of relying on just first material
+							}
+							else
+								color = "grey";
+							
 						else
 							color = "grey";
 
 						renderEntities[idx].push_back({ glyph, rend->terminalCode, color });
-						++glyphIdx;
 						++boffsetX;
 					}
 					boffsetX = 0;

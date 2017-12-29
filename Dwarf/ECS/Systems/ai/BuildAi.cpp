@@ -84,7 +84,7 @@ void BuildAi::doBuild(const Entity & e)
 				hasComps = false;
 				tag.current_component = component.first;
 
-				auto pos = itemHelper.get_item_location(component.second);
+				auto pos = itemHelper.get_item_location(component.first);
 				if (!pos)
 				{
 					designations->buildings.push_back(tag.buildingTarget);

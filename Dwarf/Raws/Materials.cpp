@@ -10,14 +10,22 @@ std::vector<MaterialDef> materialDefs;
 
 MaterialDef * getMaterial(const std::string & tag)
 {
-	auto idx = materialDefsIdx.at(tag);
+	auto it = materialDefsIdx.find(tag);
 
-	return &materialDefs[idx];
+	if (it != materialDefsIdx.end())
+	{
+		return &materialDefs[it->second];
+	}
+
+	return nullptr;
 }
 
 MaterialDef * getMaterial(const std::size_t idx)
 {
-	return &materialDefs[idx];
+	if(idx < materialDefs.size())
+		return &materialDefs[idx];
+
+	return nullptr;
 }
 
 const std::size_t getMaterialIdx(const std::string & tag)

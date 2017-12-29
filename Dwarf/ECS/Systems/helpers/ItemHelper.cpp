@@ -89,25 +89,25 @@ int ItemHelper::num_reaction_input_items(const ReactionInput & react)
 
 std::size_t ItemHelper::claim_item_by_reaction_inp(const ReactionInput & react)
 {
-	std::size_t claimedItem;
-
 	for (auto e : getEntities())
 	{
+		std::size_t claimedItem;
+
 		const auto& item = e.getComponent<Item>();
 
 		if ((react.tag == "any" || item.tag == react.tag) && !e.hasComponent<Claimed>())
 		{
-			bool count = true;
+			bool claim = true;
 			// If the required materials don't match..
 			if (react.req_material != 0)
 				if (react.req_material != item.material)
-					count = false;
+					claim = false;
 
 			if (react.req_material_type != spawn_type_none)
 				if (getMaterial(item.material)->matType != react.req_material_type)
-					count = false;
+					claim = false;
 
-			if (count)
+			if (claim)
 			{
 				claimedItem = e.getId().index;
 				claim_item(e);
@@ -116,6 +116,7 @@ std::size_t ItemHelper::claim_item_by_reaction_inp(const ReactionInput & react)
 			}			
 		}
 	}
+
 	return 0;
 }
 

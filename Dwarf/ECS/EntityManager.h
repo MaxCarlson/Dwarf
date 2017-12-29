@@ -59,7 +59,7 @@ private:
 
 	// Next Id that will be used if Id
 	// is requested
-	std::uint64_t nextId;
+	std::uint64_t nextId = 1;
 
 	// Free entity Id's
 	std::vector<Entity::Id> freeIdList;
