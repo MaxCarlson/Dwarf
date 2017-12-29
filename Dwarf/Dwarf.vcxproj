@@ -187,6 +187,7 @@
     <ClCompile Include="Map\building\regionBuilder.cpp" />
     <ClCompile Include="Map\building\region\rocklayer.cpp" />
     <ClCompile Include="ECS\Systems\ai\WorkOrders.cpp" />
+    <ClCompile Include="Raws\ReadReactions.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Drawing\vchar.h" />
@@ -354,6 +355,7 @@
     <ClInclude Include="Raws\Reaction.h" />
     <ClInclude Include="Raws\ReactionInput.h" />
     <ClInclude Include="ECS\Systems\ai\WorkOrders.h" />
+    <ClInclude Include="Raws\ReadReactions.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cereal\external\rapidxml\manual.html" />

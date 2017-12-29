@@ -13,6 +13,7 @@
 
 struct RenderItem
 {
+	RenderItem() = default;
 	RenderItem(int ch, uint8_t code, color_t fg, color_t bg)
 		: ch(ch), code(code), fg(fg), bg(bg) {}
 
@@ -31,6 +32,7 @@ void RenderSystem::init()
 
 const static color_t defaultColor = color_from_name("black");
 
+// Not in use
 const RenderItem RenderSystem::getTileRender(const Coordinates co)
 {
 	const int idx = getIdx(co);
@@ -66,7 +68,7 @@ const RenderItem getTR(const Coordinates co)
 
 	auto rendIt = renderEntities.find((terminal_state(TK_WIDTH) * co.y) + co.x);
 
-	RenderItem r = { v.c, 2, v.fg, v.bg };
+	RenderItem r;
 
 	if (rendIt != renderEntities.end())
 	{
@@ -74,6 +76,8 @@ const RenderItem getTR(const Coordinates co)
 
 		r = { rend.ch, rend.terminalCode, color_from_name(rend.colorStr.c_str()), defaultColor };
 	}
+	else 
+		r = { v.c, 2, v.fg, v.bg };
 
 	return r;
 }
@@ -86,7 +90,7 @@ void RenderSystem::update()
 
 	const int offsetX = engine->mapRenderer->offsetX; 
 	const int offsetY = engine->mapRenderer->offsetY;
-	const int maxX = (terminal_state(TK_WIDTH) + offsetX) <= MAP_WIDTH ? (terminal_state(TK_WIDTH) + offsetX) : MAP_WIDTH;
+	const int maxX = (terminal_state(TK_WIDTH)  + offsetX) <= MAP_WIDTH  ? (terminal_state(TK_WIDTH)  + offsetX) : MAP_WIDTH;
 	const int maxY = (terminal_state(TK_HEIGHT) + offsetY) <= MAP_HEIGHT ? (terminal_state(TK_HEIGHT) + offsetY) : MAP_HEIGHT;
 
 	terminal_color("default");
@@ -143,8 +147,6 @@ void RenderSystem::updateRender()
 
 		//std::vector<std::size_t> visible = positionCache->find_by_region(minX, maxX, maxY, minY, zlvl, zlvl - 10); When we want to render more than just one zLvl
 
-		//auto &world = getWorld();
-
 		for (auto e : getEntities())
 		{
 			// Don't show entities not on camera level (for the moment)
@@ -167,6 +169,7 @@ void RenderSystem::updateRender()
 			//if (!pos || !rend) // Already implicit in being part of this system
 			//	continue;
 
+			// 2D Idxing 
 			const int idx = (terminal_width * pos->co.y) + pos->co.x;
 
 			// Render buildings code
@@ -189,7 +192,7 @@ void RenderSystem::updateRender()
 
 						int glyph = b->charCodes[glyphIdx++];
 
-						std::string color;
+						std::string color; // Convert all colors to color_t's
 
 						if (b->complete)
 							if (getMaterial(b->materials[0].first))
@@ -223,6 +226,4 @@ void RenderSystem::updateRender()
 			}
 		}
 	}
-
-
 }

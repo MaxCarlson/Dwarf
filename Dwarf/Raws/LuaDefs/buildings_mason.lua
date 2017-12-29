@@ -12,3 +12,17 @@ buildings = {
 		structure
 	}
 };
+
+-- Reactions for the mason building
+reactions = {
+
+	make_stone_blocks = {
+		name = "Make Stone Blocks",
+		workshop = "mason",
+		skill = "Masonry",
+		inputs = {{ item = "stone_boulder", qty = 1 }}, { item="clay", qty=1 } },
+		outputs = {{item = "block", qty = 3 }}
+	}
+
+
+}

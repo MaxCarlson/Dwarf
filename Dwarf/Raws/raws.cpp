@@ -10,6 +10,7 @@
 #include "../ECS/Components/Item.h"
 #include "Defs\ItemDefs.h"
 #include "Buildings.h"
+#include "ReadReactions.h"
 
 
 void sanityChecks()
@@ -17,6 +18,7 @@ void sanityChecks()
 	sanityCheckItems();
 	sanityCheckMaterials();
 	sanityCheckBuildings();
+	sanityCheckReactions();
 }
 
 void loadGameTables()
@@ -24,6 +26,7 @@ void loadGameTables()
 	readInItems();
 	readInMaterials();
 	readInBuildings();
+	readInReactions();
 }
 
 void loadRaws()
