@@ -12,6 +12,10 @@
 
 using namespace region;
 
+#include <iostream>
+#include <filesystem>
+namespace fs = std::experimental::filesystem;
+
 static const std::string gui_color = "#386687";
 
 inline void wrapInput(int& n, int size)
@@ -45,6 +49,7 @@ void Gui::render()
 			return;
 
 		case Gui_State::ESC_MENU:
+			drawEscMenu();
 			break;
 
 		case Gui_State::MAIN:
@@ -66,6 +71,10 @@ void Gui::render()
 			drawCreateItem();
 			break;
 
+		case Gui_State::REACTIONS:
+			drawReactions();
+			break;
+
 		}
 
 		printDebugTileProps();
@@ -81,6 +90,34 @@ void Gui::clearAndDraw(int x, int y, int width, int height, const std::string co
 	for (int yy = y; yy < height; ++yy)
 		for (int xx = x; xx < width; ++xx)
 			terminal_put(xx, yy, symbol);
+}
+
+void Gui::drawEscMenu()
+{
+	static const std::vector<std::string> escOptions = { "Return to game", "Save Game", "Quit To Main Menu" }; //
+	int selected = 0;
+
+	while (true)
+	{
+		int opt = draw::listHandler<std::string, true>(escOptions, selected, TK_ALIGN_CENTER, 0, 0, 4, true);
+
+		if (opt == draw::IN_ENTER)
+		{
+			if (selected == 0)
+				break;
+			// Save game
+			else if (selected == 1)
+			{
+				drawSaveScreen();
+			}
+			else if (selected == 2)
+			{
+				engine->current_game_state = Engine::TO_MAIN_MENU;
+				break;
+			}
+		}		
+	}
+	engine->gui.state = Gui_State::MAIN;
 }
 
 void Gui::drawMain()
@@ -163,6 +200,11 @@ void Gui::drawCreateItem()
 	terminal_bkcolor("black");
 }
 
+void Gui::drawReactions()
+{
+
+}
+
 void Gui::printDebugTileProps()
 {
 	int xx = terminal_state(TK_MOUSE_X);
@@ -214,4 +256,73 @@ void Gui::printDebugTileProps()
 
 	terminal_color("black");
 	terminal_printf(xx, yy, tInfo.c_str());
+}
+
+void Gui::drawSaveScreen()
+{
+	std::string fileName;
+
+	std::string dirpath = "Saves";
+	std::vector<std::string> paths = { "New save game" };
+	for (auto & p : fs::directory_iterator(dirpath))
+	{
+		paths.push_back(p.path().string());
+		//terminal_print_ext(10, 10, panelWidth, panelHeight, TK_ALIGN_LEFT, p.path().c_str());
+	}
+
+	if (!paths.size())
+		paths.push_back("No save games on File! Press Esc");
+
+	int selected = 0, code;
+
+	while (true)
+	{
+		while (true)
+		{
+			code = draw::listHandler<std::string, true>(paths, selected, TK_ALIGN_LEFT, 7, 7, 2, true);
+
+			if (code == draw::IN_EXIT)
+				return;
+			else if (code == draw::IN_ENTER)
+				break;
+		}
+
+		// If enter was pressed on new save game
+		if (code == draw::IN_ENTER && selected == 0)
+		{
+			paths[0] = "";
+
+			std::wstring s;
+			while (true)
+			{
+				// Draw list but skip input
+				draw::listHandler<std::string, false>(paths, selected, TK_ALIGN_LEFT, 7, 7, 2, true, true, true);
+
+				int input = terminal_read();
+
+				if (input == TK_ESCAPE || (input == TK_ENTER && s.size() <= 0))
+				{
+					paths[0] = "No save games on File! Press Esc";
+					break;
+				}
+
+				else if (input == TK_ENTER) // && s.size() > 0 ~ implied
+					goto SAVE_REGION;
+
+				// Delete chars
+				else if (input == TK_BACKSPACE && s.length() > 0)
+					s.resize(s.length() - 1);
+
+				// Add chars
+				else if (terminal_check(TK_WCHAR))
+					s += (wchar_t)terminal_state(TK_WCHAR);
+
+				paths[0] = { s.begin(), s.end() };
+			}
+		}
+	}
+SAVE_REGION:
+
+
+	engine->saveGame(paths[0]);
 }

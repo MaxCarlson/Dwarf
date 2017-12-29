@@ -24,103 +24,103 @@ void InputHandler::update()
 	mouseY = terminal_state(TK_MOUSE_Y);
 
 	// Don't block engine waiting for input
-	if (terminal_peek())
-		key = terminal_read();
-	else
-		return;
-
-	switch (key)
+	while (terminal_peek())
 	{
-	case TK_COMMA:
-		engine->mapRenderer->incrementZLevel(-1); // Move this camera functionality into a system!! ~~ Along with map rendering ~ combine with render system
-		break;
+		key = terminal_read();
 
-	case TK_PERIOD:
-		engine->mapRenderer->incrementZLevel(1);
-		break;
-
-	case TK_UP:
-		engine->mapRenderer->moveCamera(MapRender::NORTH);
-		break;
-
-	case TK_DOWN:
-		engine->mapRenderer->moveCamera(MapRender::SOUTH);
-		break;
-
-	case TK_RIGHT:
-		engine->mapRenderer->moveCamera(MapRender::EAST);
-		break;
-
-	case TK_LEFT:
-		engine->mapRenderer->moveCamera(MapRender::WEST);
-		break;
-	}
-
-	if (engine->gui.state == Gui::MAIN)
 		switch (key)
 		{
-		case TK_ESCAPE:
-			engine->gui.state = Gui::ESC_MENU;
+		case TK_COMMA:
+			engine->mapRenderer->incrementZLevel(-1); // Move this camera functionality into a system!! ~~ Along with map rendering ~ combine with render system
 			break;
 
-		case TK_B:
-			engine->gui.state = Gui::BUILD;
+		case TK_PERIOD:
+			engine->mapRenderer->incrementZLevel(1);
 			break;
 
-		case TK_D:
-			engine->gui.state = Gui::DESIGNATE;
+		case TK_UP:
+			engine->mapRenderer->moveCamera(MapRender::NORTH);
 			break;
 
-		case TK_O:
-			engine->gui.state = Gui::ORDERS;
+		case TK_DOWN:
+			engine->mapRenderer->moveCamera(MapRender::SOUTH);
 			break;
 
-		case TK_I:
-			engine->gui.state = Gui::CREATE_ITEM;
+		case TK_RIGHT:
+			engine->mapRenderer->moveCamera(MapRender::EAST);
+			break;
+
+		case TK_LEFT:
+			engine->mapRenderer->moveCamera(MapRender::WEST);
 			break;
 		}
 
-	else if (engine->gui.state == Gui::BUILD)
-	{
-		if (key == TK_ESCAPE)
-			engine->gui.state = Gui::MAIN;
-		else
-			buildMenu(key);
-	}
+		if (engine->gui.state == Gui::MAIN)
+			switch (key)
+			{
+			case TK_ESCAPE:
+				engine->gui.state = Gui::ESC_MENU;
+				break;
 
-	else if (engine->gui.state == Gui::DESIGNATE)
-	{
-		if (key == TK_ESCAPE)
+			case TK_B:
+				engine->gui.state = Gui::BUILD;
+				break;
+
+			case TK_D:
+				engine->gui.state = Gui::DESIGNATE;
+				break;
+
+			case TK_O:
+				engine->gui.state = Gui::ORDERS;
+				break;
+
+			case TK_I:
+				engine->gui.state = Gui::CREATE_ITEM;
+				break;
+			}
+
+		else if (engine->gui.state == Gui::BUILD)
 		{
-			engine->gui.state = Gui::MAIN;
-			designateState = designation_message::MINING;
-			designateIdx = 0;
+			if (key == TK_ESCAPE)
+				engine->gui.state = Gui::MAIN;
+			else
+				buildMenu(key);
 		}
 
-		else if (key == TK_H)
-			designateState = designation_message::CHANNELING;
-		
-		designate(key);
-	}
+		else if (engine->gui.state == Gui::DESIGNATE)
+		{
+			if (key == TK_ESCAPE)
+			{
+				engine->gui.state = Gui::MAIN;
+				designateState = designation_message::MINING;
+				designateIdx = 0;
+			}
 
-	else if (engine->gui.state == Gui::ORDERS)
-	{
-		if (key == TK_ESCAPE)
-			engine->gui.state = Gui::MAIN;
-	}
+			else if (key == TK_H)
+				designateState = designation_message::CHANNELING;
 
-	else if (engine->gui.state == Gui::ESC_MENU)
-	{
-		if (key == TK_ESCAPE)
-			engine->gui.state = Gui::MAIN;
-	}
-	
-	else if (engine->gui.state == Gui::CREATE_ITEM)
-	{
-		if (key == TK_ESCAPE)
-			engine->gui.state = Gui::MAIN;
+			designate(key);
+		}
 
-		createItem(key);
+		else if (engine->gui.state == Gui::ORDERS)
+		{
+			if (key == TK_ESCAPE)
+				engine->gui.state = Gui::MAIN;
+		}
+
+		else if (engine->gui.state == Gui::ESC_MENU)
+		{
+			if (key == TK_ESCAPE)
+				engine->gui.state = Gui::MAIN;
+		}
+
+		else if (engine->gui.state == Gui::CREATE_ITEM)
+		{
+			if (key == TK_ESCAPE)
+				engine->gui.state = Gui::MAIN;
+
+			createItem(key);
+		}
 	}
 }
 

@@ -26,7 +26,8 @@ public:
 		BUILD,
 		DESIGNATE,
 		ORDERS,
-		CREATE_ITEM
+		CREATE_ITEM,
+		REACTIONS
 	};
 
 	Gui_State state = MAIN;
@@ -36,13 +37,15 @@ public:
 private:
 	int panelWidth, panelHeight;
 
+	void clearAndDraw(int x, int y, int width, int height, const std::string color, int symbol);
+
+	void drawEscMenu();
 	void drawMain();
 	void drawBuild();
 	void drawDesignate();
 	void drawCreateItem();
-
-	void clearAndDraw(int x, int y, int width, int height, const std::string color, int symbol);
-
+	void drawReactions();
 	void printDebugTileProps();
+	void drawSaveScreen();
 };
 
