@@ -1,5 +1,6 @@
 #pragma once
 #include "../Component.h"
+#include "../cereal/types/utility.hpp"
 
 struct Building : public Component
 {
@@ -23,3 +24,6 @@ struct Building : public Component
 		archive(tag, width, height, complete, charCodes, materials);
 	}
 };
+
+CEREAL_REGISTER_TYPE(Building);
+CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, Building);
