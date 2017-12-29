@@ -77,6 +77,7 @@ void BuildAi::doBuild(const Entity & e)
 	else if (tag.step == BuilderTag::FIND_COMPONENT)
 	{
 		bool hasComps = true;
+		int count = 0;
 		for (auto & component : tag.buildingTarget.componentIds)
 		{
 			if (!component.second)
@@ -87,6 +88,14 @@ void BuildAi::doBuild(const Entity & e)
 				auto pos = itemHelper.get_item_location(component.first);
 				if (!pos)
 				{
+					// We failed to find a component for this building
+					// at first, let's try again
+					if (component.first == 0)
+					{						
+						const auto id = itemHelper.claim_item_by_reaction_inp(tag.buildingTarget.components[count]);
+						tag.buildingTarget.componentIds[count] = std::make_pair(id, false);
+					}
+
 					designations->buildings.push_back(tag.buildingTarget);
 					work.cancel_work(e);
 					return;
@@ -99,6 +108,7 @@ void BuildAi::doBuild(const Entity & e)
 				// Possibly test for path here to avoid convuluted mov system?
 				return;
 			}
+			++count;
 		}
 
 		if (hasComps)

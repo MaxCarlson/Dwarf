@@ -36,7 +36,7 @@ void EntityIdPool::remove(Entity::Id id)
 
 Entity::Id EntityIdPool::get(std::size_t index) const
 {
-	// If requested index is within bounds of id's created so far
+	// If requested index is not zero and is within bounds of id's created so far
 	// give the id values back
 	if (index && index < counts.size())
 		return Entity::Id{ index, counts[index] };
