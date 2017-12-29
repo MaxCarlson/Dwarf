@@ -3,8 +3,9 @@
 #include <boost\container\flat_map.hpp>
 
 boost::container::flat_map<std::string, Reaction> reactions;
+boost::container::flat_map<std::string, std::vector<Reaction>> reactionsByBuilding;
 
-Reaction * getReaction(std::string tag)
+Reaction * getReaction(const std::string tag) 
 {
 	auto f = reactions.find(tag);
 
@@ -14,9 +15,14 @@ Reaction * getReaction(std::string tag)
 	return nullptr;
 }
 
-const std::vector<Reaction*> getReactionsByWorkshop(std::string tag)
+const std::vector<Reaction>* getReactionsByWorkshop(const std::string tag)
 {
-	return std::vector<Reaction*>();
+	auto f = reactionsByBuilding.find(tag);
+
+	if (f != reactionsByBuilding.end())
+		return &f->second;
+
+	return nullptr;
 }
 
 void readInReactions() noexcept
@@ -35,26 +41,16 @@ void readInReactions() noexcept
 			{ "workshop", [&r]() { r.workshop = lua_str(); }},
 			{ "skill", [&r]() { r.skill = lua_str(); } },
 			{ "inputs",[&r, &inp]() {
-				readLuaTable2D("inputs",
-					[&inp](auto type1) { inp = ReactionInput{}; },
+				readLuaMultiTable("inputs",
+					[&inp]() { inp = ReactionInput{}; },
 					[&inp](auto type2) {
 						if (type2 == "item") inp.tag = lua_str();
 						if (type2 == "qty") inp.quantity = lua_int();
-					}
-				);
-			
-			}},
-			{ "inputs",[&r, &inp]() {
-				readLuaTable2D("inputs",
-					[](auto type1) {},
-					[&inp](auto type2) {
-						if (type2 == "item") inp.tag = lua_str();
-						if (type2 == "qty") inp.quantity = lua_int();
-					}
+					},
+					[&r, &inp]() { r.inputs.push_back(inp); }
 				);
 			}}
 		}
-
 	);
 	int a = 54;
 }

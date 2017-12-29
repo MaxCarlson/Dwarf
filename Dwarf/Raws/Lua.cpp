@@ -115,3 +115,28 @@ void readLuaTable2D(const std::string & table, const std::function<void(std::str
 
 	//}
 }
+
+void readLuaMultiTable(const std::string & table, const std::function<void()>& functor1, const std::function<void(std::string)>& functor2, const std::function<void()> &functor3)
+{
+	lua_pushstring(luaState, table.c_str());
+	lua_gettable(luaState, -2);
+
+	functor1();
+
+	while (lua_next(luaState, -2) != 0)
+	{
+		lua_pushnil(luaState);
+
+		while (lua_next(luaState, -2) != 0)
+		{
+			const std::string s = lua_tostring(luaState, -2);
+			functor2(s);
+
+			lua_pop(luaState, 1);
+		}
+
+		functor3();
+
+		lua_pop(luaState, 1);
+	}
+}

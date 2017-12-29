@@ -30,6 +30,8 @@ void readLuaInnerT(const std::string &table, const std::function<void(std::strin
 
 void readLuaTable2D(const std::string &table, const std::function<void(std::string)> &functor1, const std::function<void(std::string)> &functor2);
 
+void readLuaMultiTable(const std::string &table, const std::function<void()> &functor1, const std::function<void(std::string)> &functor2, const std::function<void()> &functor3);
+
 inline std::string lua_str() { return lua_tostring(luaState, -1); }
 inline int lua_int() { return static_cast<int>(lua_tonumber(luaState, -1)); }
 inline double lua_double() { return static_cast<double>(lua_tonumber(luaState, -1)); }
