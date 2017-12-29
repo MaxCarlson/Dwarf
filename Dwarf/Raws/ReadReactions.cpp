@@ -29,7 +29,7 @@ void readInReactions() noexcept
 {
 	Reaction r;
 	ReactionInput inp;
-	std::vector<std::pair<std::string, int>> out;
+	std::pair<std::string, int> out;
 	std::string tag;
 
 	readLuaTable("reactions", 
@@ -43,13 +43,25 @@ void readInReactions() noexcept
 			{ "inputs",[&r, &inp]() {
 				readLuaMultiTable("inputs",
 					[&inp]() { inp = ReactionInput{}; },
-					[&inp](auto type2) {
-						if (type2 == "item") inp.tag = lua_str();
-						if (type2 == "qty") inp.quantity = lua_int();
+					[&inp](auto type) {
+						if (type == "item") inp.tag = lua_str();
+						if (type == "qty") inp.quantity = lua_int();
+						if (type == "material") inp.req_material = static_cast<std::size_t>(lua_int());
+						if (type == "mat_type") inp.req_material_type = static_cast<MaterialDefSpawnType>(lua_int());
 					},
 					[&r, &inp]() { r.inputs.push_back(inp); }
 				);
-			}}
+			}},
+			{ "outputs",[&r, &out]() {
+				readLuaMultiTable("outputs",
+					[&out]() { out = std::make_pair("", 0); },
+					[&out](auto type2) {
+					if (type2 == "item") out.first  = lua_str();
+					if (type2 == "qty")  out.second = lua_int();
+				    },
+					[&r, &out]() { r.outputs.push_back(out); }
+				);
+			}},
 		}
 	);
 	int a = 54;

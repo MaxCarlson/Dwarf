@@ -21,7 +21,7 @@ reactions = {
 		workshop = "mason",
 		skill = "Masonry",
 		inputs = {{ item = "stone_boulder", qty = 1 }, { item="clay", qty=3} },
-		--outputs = {{item = "block", qty = 3 }}
+		outputs = {{ item = "block", qty = 3 }, { item = "new", qty = 5 } }
 	}
 
 
