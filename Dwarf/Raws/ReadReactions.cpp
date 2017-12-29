@@ -44,8 +44,8 @@ void readInReactions() noexcept
 				readLuaMultiTable("inputs",
 					[&inp]() { inp = ReactionInput{}; },
 					[&inp](auto type) {
-						if (type == "item") inp.tag = lua_str();
-						if (type == "qty") inp.quantity = lua_int();
+						if (type == "item")     inp.tag = lua_str();
+						if (type == "qty")	    inp.quantity = lua_int();
 						if (type == "material") inp.req_material = static_cast<std::size_t>(lua_int());
 						if (type == "mat_type") inp.req_material_type = static_cast<MaterialDefSpawnType>(lua_int());
 					},
@@ -55,16 +55,19 @@ void readInReactions() noexcept
 			{ "outputs",[&r, &out]() {
 				readLuaMultiTable("outputs",
 					[&out]() { out = std::make_pair("", 0); },
-					[&out](auto type2) {
-					if (type2 == "item") out.first  = lua_str();
-					if (type2 == "qty")  out.second = lua_int();
+					[&out](auto type) {
+					if (type == "item") out.first  = lua_str();
+					if (type == "qty")  out.second = lua_int();
 				    },
 					[&r, &out]() { r.outputs.push_back(out); }
 				);
 			}},
 		}
 	);
-	int a = 54;
+
+	// Add reactions by building to container
+	for (const auto& re : reactions)
+		reactionsByBuilding[re.second.tag].push_back(re.second);
 }
 
 void sanityCheckReactions()
