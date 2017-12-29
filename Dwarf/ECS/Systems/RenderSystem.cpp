@@ -131,8 +131,10 @@ void RenderSystem::updateRender()
 	{
 		renderEntities.clear();
 
+		const int terminal_width = terminal_state(TK_WIDTH);
+
 		const int minX = engine->mapRenderer->offsetX;
-		const int maxX = terminal_state(TK_WIDTH) + minX;
+		const int maxX = terminal_width + minX;
 		const int minY = engine->mapRenderer->offsetY;
 		const int maxY = terminal_state(TK_HEIGHT) + minY;
 
@@ -165,7 +167,7 @@ void RenderSystem::updateRender()
 			//if (!pos || !rend) // Already implicit in being part of this system
 			//	continue;
 
-			const int idx = (terminal_state(TK_WIDTH) * pos->co.y) + pos->co.x;
+			const int idx = (terminal_width * pos->co.y) + pos->co.x;
 
 			// Render buildings code
 			if (b && pos && !rendered)
@@ -183,7 +185,7 @@ void RenderSystem::updateRender()
 				{
 					for (int x = 0; x < b->width; ++x)
 					{
-						const int idx = getIdx({ pos->co.x + boffsetX, pos->co.y + boffsetY, pos->co.z });
+						const int idx = (terminal_width * (pos->co.y + boffsetY)) + pos->co.x + boffsetX; //getIdx({ pos->co.x + boffsetX, pos->co.y + boffsetY, pos->co.z });
 
 						int glyph = b->charCodes[glyphIdx++];
 
@@ -200,7 +202,7 @@ void RenderSystem::updateRender()
 						else
 							color = "grey";
 
-						renderEntities[idx].push_back({ glyph, rend->terminalCode, color });
+						renderEntities[idx].push_back({ glyph, 2, color });
 						++boffsetX;
 					}
 					boffsetX = 0;

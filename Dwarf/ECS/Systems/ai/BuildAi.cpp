@@ -89,7 +89,7 @@ void BuildAi::doBuild(const Entity & e)
 				if (!pos)
 				{
 					// We failed to find a component for this building
-					// at first, let's try again
+					// at first, let's try again ~~ Should we remove this code from EquipHandler and put it solely in here?
 					if (component.first == 0)
 					{						
 						const auto id = itemHelper.claim_item_by_reaction_inp(tag.buildingTarget.components[count]);
@@ -105,7 +105,7 @@ void BuildAi::doBuild(const Entity & e)
 				mov.destination = idxToCo(pos);
 
 				tag.step = BuilderTag::GOTO_COMPONENT;
-				// Possibly test for path here to avoid convuluted mov system?
+				// Possibly test for path here to avoid convaluted mov system?
 				return;
 			}
 			++count;
