@@ -25,7 +25,7 @@ struct WorkOrderTag : public Component
 	template<class Archive>
 	void serialize(Archive &archive)
 	{
-		archive(step, curent_component, workshop_id)
+		archive(step, reaction, curent_component);
 	}
 };
 

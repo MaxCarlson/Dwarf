@@ -159,6 +159,9 @@
     <ClCompile Include="Raws\DefInfo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ECS\Systems\helpers\WorkOrderHelper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -663,6 +666,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ECS\Components\helpers\work_order_reaction.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Systems\helpers\WorkOrderHelper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

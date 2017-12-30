@@ -189,6 +189,7 @@
     <ClCompile Include="Map\building\region\rocklayer.cpp" />
     <ClCompile Include="ECS\Systems\ai\WorkOrders.cpp" />
     <ClCompile Include="Raws\ReadReactions.cpp" />
+    <ClCompile Include="ECS\Systems\helpers\WorkOrderHelper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ECS\Components\helpers\work_order_reaction.h" />
@@ -359,6 +360,7 @@
     <ClInclude Include="Raws\ReactionInput.h" />
     <ClInclude Include="ECS\Systems\ai\WorkOrders.h" />
     <ClInclude Include="Raws\ReadReactions.h" />
+    <ClInclude Include="ECS\Systems\helpers\WorkOrderHelper.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cereal\external\rapidxml\manual.html" />

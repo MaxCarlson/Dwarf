@@ -30,7 +30,7 @@ namespace JobsBoard
 
 		virtual bool has_tag(Entity e) override final
 		{
-			return e.hasComponent<TAG>()
+			return e.hasComponent<TAG>();
 		}
 
 		virtual void set_tag(Entity e) override final
