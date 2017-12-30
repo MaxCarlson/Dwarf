@@ -26,6 +26,9 @@ void DefInfo::updateBuildingReactions(const std::string buildingTag, bool first)
 
 	builtBuildings.push_back(buildingTag);
 
-	availibleReactions[buildingTag] = getReactionsByWorkshop(buildingTag);
+	avReactionsByBuilding[buildingTag] = getReactionsByWorkshop(buildingTag);
+
+	for (auto& avr : avReactionsByBuilding[buildingTag])
+		availibleReactions.push_back(avr);
 }
 

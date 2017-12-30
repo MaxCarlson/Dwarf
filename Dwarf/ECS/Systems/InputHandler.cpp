@@ -8,6 +8,7 @@
 #include "../Raws/raws.h"
 #include "../Raws/Buildings.h"
 #include "../Messages/designate_building_message.h"
+#include "../Designations.h"
 #include "../Raws/DefInfo.h"
 
 // temp till things are placed elsewhere
@@ -209,6 +210,8 @@ void InputHandler::reactions(const int key)
 
 	else if (key == TK_ENTER)
 	{
+		const auto tag = defInfo->availibleReactions[engine->gui.itemSelected];
 
+		designations->workOrders.push_back(std::make_pair(1, tag));
 	}
 }

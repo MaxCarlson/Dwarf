@@ -218,22 +218,19 @@ void Gui::drawReactions()
 	// If we're not searching for reaction by text
 	if (!typing)
 	{
-		if (defInfo->availibleReactions.empty())
+		if (defInfo->availibleReactions.size() == 0)
 		{
 			terminal_print(horizontalOffset + 1, y, "No reactions availible");
 			terminal_print(horizontalOffset + 1, y + 2, "Try building workshops");
 		}
 		else
 			for (const auto& p : defInfo->availibleReactions)
-			{
-				for (const auto& r : p.second)
-				{
-					draw::determineHighlight(c, itemSelected);
+			{				
+				draw::determineHighlight(c, itemSelected);
 
-					terminal_print(horizontalOffset + 1, y, r.c_str());
-					y += 2;
-					++c;
-				}
+				terminal_print(horizontalOffset + 1, y, p.c_str());
+				y += 2;
+				++c;			
 			}
 	}
 	else

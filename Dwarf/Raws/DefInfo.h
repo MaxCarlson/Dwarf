@@ -18,8 +18,11 @@ struct DefInfo
 	// These change depending on defs
 	std::vector<std::string> buildingTags;
 	std::vector<std::string> buildingNames;
+
 	std::vector<std::string> itemTags;
-	std::unordered_map<std::string, std::vector<std::string>> availibleReactions;
+
+	std::vector<std::string> availibleReactions;
+	std::unordered_map<std::string, std::vector<std::string>> avReactionsByBuilding;
 
 	void updateBuildingReactions(const std::string buildingTag, bool first = false);
 

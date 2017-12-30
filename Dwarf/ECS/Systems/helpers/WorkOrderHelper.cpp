@@ -10,6 +10,7 @@ std::unique_ptr<WorkOrderHelper> workOrderHelper;
 // Indexed by Entity id.index
 std::unordered_set<std::size_t> claimed_workshops;
 
+
 std::unique_ptr<work_order_reaction> WorkOrderHelper::find_work_order_reaction(const WorkOrderTag & tag)
 {
 	std::unique_ptr<work_order_reaction> wo_reaction;

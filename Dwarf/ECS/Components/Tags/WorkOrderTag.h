@@ -12,8 +12,9 @@ struct WorkOrderTag : public Component
 		FIND_COMPONENT,
 		GOTO_COMPONENT,
 		GRAB_COMPONENT,
+		GOTO_WORKSHOP,
 		DROP_COMPONENT,
-		DO_WORK
+		WORK_WORKSHOP
 	};
 
 	work_order_steps step = FIND_WORKSHOP;

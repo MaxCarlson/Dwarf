@@ -5,11 +5,11 @@
 struct work_order_reaction 
 {
 	work_order_reaction() = default;
-	work_order_reaction(std::size_t id, std::string jobName, std::vector<std::pair<std::size_t, bool>> components) : workshop_id(id), jobName(jobName), components(components) {}
+	work_order_reaction(std::size_t id, std::string reactionTag, std::vector<std::pair<std::size_t, bool>> components) : workshop_id(id), reactionTag(reactionTag), components(components) {}
 
 	std::size_t workshop_id;
 
-	std::string jobName;
+	std::string reactionTag;
 
 	std::vector<std::pair<std::size_t, bool>> components;
 
@@ -17,6 +17,7 @@ struct work_order_reaction
 	void serialize(Archive &archive)
 	{
 		archive(workshop_id);
+		archive(reactionTag);
 		archive(components);
 	}
 };
