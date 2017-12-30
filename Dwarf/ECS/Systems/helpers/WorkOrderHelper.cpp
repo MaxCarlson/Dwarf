@@ -75,12 +75,12 @@ std::unique_ptr<work_order_reaction> WorkOrderHelper::find_work_order_reaction(c
 			// Reduce number of queued work order jobs
 			if (availible)
 			{
-				wo_reaction = std::make_unique<work_order_reaction>( workshop_id, react->name, components );
+				wo_reaction = std::make_unique<work_order_reaction>( workshop_id, react->tag, components );
 				claimed_workshops.insert(workshop_id);
 				--des.first;
 				updateWorkOrders();
 			}
-
+			
 			// Unclaim components
 			else
 			{

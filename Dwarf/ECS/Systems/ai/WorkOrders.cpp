@@ -200,15 +200,16 @@ void WorkOrders::work(Entity e, const double& duration)
 		for (auto& comp : tag.reaction.components)
 		{
 			auto& cent = world.getEntity(comp.first);
+
 			if (!cent.isValid() || !cent.hasComponent<Item>())
 			{
 				work.cancel_work(e);
 				return;
 			}
 				
-			material = e.getComponent<Item>().material;
-			materialNames += e.getComponent<Item>().name + " ";
-			world.killEntity(e);
+			material = cent.getComponent<Item>().material;
+			materialNames += cent.getComponent<Item>().name + " ";
+			world.killEntity(cent);
 		}
 
 		// Produce outputs ~~ figure out how to deal with mixed outputs
@@ -217,7 +218,7 @@ void WorkOrders::work(Entity e, const double& duration)
 			for (int i = 0; i < out.second; ++i)
 			{
 				std::cout << "Reaction spawning" << out.first << material << "\n";
-				spawnItemOnGround(reaction->tag, material, co);
+				spawnItemOnGround(out.first, material, co);
 			}
 
 		// Finish up

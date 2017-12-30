@@ -21,10 +21,14 @@ const std::vector<std::string> getReactionsByWorkshop(const std::string tag)
 
 	std::vector<std::string> names;
 
-	for (const auto& b : f->second)
+	if (f != reactionsByBuilding.end())
 	{
-		names.push_back(b.tag);
+		for (const auto& b : f->second)
+		{
+			names.push_back(b.tag);
+		}
 	}
+
 
 	return names;
 }
