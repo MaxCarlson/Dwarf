@@ -5,6 +5,8 @@
 #include "ItemHelper.h"
 #include <unordered_set>
 
+std::unique_ptr<WorkOrderHelper> workOrderHelper;
+
 // Indexed by Entity id.index
 std::unordered_set<std::size_t> claimed_workshops;
 
@@ -99,7 +101,7 @@ void WorkOrderHelper::updateWorkOrders()
 {
 	designations->workOrders.erase(
 		std::remove_if(designations->workOrders.begin(), designations->workOrders.end(),
-			[](auto num) { return num < 1; }
+			[](auto num) { return num.first < 1; }
 		),
 		designations->workOrders.end()
 	);

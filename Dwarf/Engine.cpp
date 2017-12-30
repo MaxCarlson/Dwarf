@@ -1,5 +1,6 @@
 #include "Engine.h"
 
+// Components
 #include "ECS\Components\PositionComponent.h"
 #include "ECS\Components\RenderComponent.h"
 #include "ECS\Components\KeyBoardComponent.h"
@@ -11,24 +12,31 @@
 #include "ECS\Components\Claimed.h"
 #include "ECS\Components\Building.h"
 
+// Component Tags
 #include "ECS\Components\Tags\MiningTag.h"
 #include "ECS\Components\Tags\BuilderTag.h"
 #include "ECS\Components\Tags\WorkOrderTag.h"
 
+// Systems
 #include "ECS\Systems\RenderSystem.h"
 #include "ECS\Systems\MovementSystem.h"
 #include "ECS\Systems\ai\MovementAiSystem.h"
 #include "ECS\Systems\MiningSystem.h"
 #include "ECS\Systems\DijkstraSystems\DijkstraMapsHandler.h"
 #include "ECS\Systems\EntityPositionCache.h"
+#include "ECS\Systems\InputHandler.h"
+
+// Ai systems
 #include "ECS\Systems\ai\EquipHandler.h"
 #include "ECS\Systems\ai\AiWorkSystem.h"
 #include "ECS\Systems\ai\MiningAi.h"
 #include "ECS\Systems\ai\BuildAi.h"
-#include "ECS\Systems\helpers\ItemHelper.h"
-#include "ECS\Systems\InputHandler.h"
-#include "ECS\Systems\helpers\DesignationHandler.h"
 #include "ECS\Systems\ai\WorkOrders.h"
+
+// System Helpers
+#include "ECS\Systems\helpers\ItemHelper.h"
+#include "ECS\Systems\helpers\DesignationHandler.h"
+#include "ECS\Systems\helpers\WorkOrderHelper.h"
 
 #include "Coordinates.h"
 #include "Designations.h"
@@ -62,11 +70,10 @@ void Engine::newGame(int screenWidth, int screenHeight)
 	mapRenderer = std::make_unique<MapRender>();
 
 	// Create map
-	map = std::make_unique<Map>(screenWidth, screenHeight, MAX_ZLVL);
+	map = std::make_unique<Map>(screenWidth, screenHeight, MAX_ZLVL); // Delete this and move creat code here
 
 	// Init misc maps and designations
 	designations = std::make_unique<Designations>();
-	positionCache = std::make_unique<PositionCache>();
 	defInfo = std::make_unique<DefInfo>();
 
 	// Init systems
@@ -89,7 +96,6 @@ void Engine::loadGame(std::string filePath)
 	world.load(iarchive);
 
 	// Init misc maps and designations
-	positionCache = std::make_unique<PositionCache>();
 	mapRenderer = std::make_unique<MapRender>(); // ~~~~ Get rid of this and combine render systems
 	defInfo = std::make_unique<DefInfo>();
 
@@ -117,7 +123,6 @@ void Engine::saveGame(std::string filePath)
 	// Misc archives, move somewhere else
 	archive(designations);
 	archive(defInfo);
-//	archive(positionCache);
 
 }
 
@@ -149,6 +154,10 @@ void Engine::init()
 	// Ensure component Index's match before and after
 	// serialization
 	regComponents();
+
+	// Non archived extern items
+	positionCache = std::make_unique<PositionCache>();
+	workOrderHelper = std::make_unique<WorkOrderHelper>();
 
 	// Init raws info, holds other misc 
 	// game stats as well
@@ -187,6 +196,7 @@ void Engine::init()
 	world.addSystem(*buildAi);
 	world.addSystem(itemHelper);
 	world.addSystem(*workOrders);
+	world.addSystem(*workOrderHelper);
 
 	// Init systems 
 	miningSystem->init();

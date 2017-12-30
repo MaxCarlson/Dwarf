@@ -20,12 +20,12 @@ struct WorkOrderTag : public Component
 
 	work_order_reaction reaction;
 
-	std::size_t curent_component = 0;
+	std::size_t current_component = 0;
 
 	template<class Archive>
 	void serialize(Archive &archive)
 	{
-		archive(step, reaction, curent_component);
+		archive(step, reaction, current_component);
 	}
 };
 

@@ -21,4 +21,6 @@ private:
 	void updateWorkOrders();
 };
 
+extern std::unique_ptr<WorkOrderHelper> workOrderHelper;
+
 
