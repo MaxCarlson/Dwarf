@@ -5,6 +5,7 @@
 class WorkOrders : public System<Requires<WorkOrderTag>>
 {
 public:
+	void init();
 	void update(double duration);
 
 private:

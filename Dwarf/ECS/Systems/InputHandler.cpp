@@ -207,7 +207,7 @@ void InputHandler::reactions(const int key)
 	else if (key == TK_PAGEUP)
 		--engine->gui.itemSelected;
 
-	else if (key == TK_ENTER || key == TK_MOUSE_LEFT)
+	else if (key == TK_ENTER)
 	{
 
 	}

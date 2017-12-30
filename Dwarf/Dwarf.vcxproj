@@ -191,6 +191,7 @@
     <ClCompile Include="Raws\ReadReactions.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ECS\Components\helpers\work_order_reaction.h" />
     <ClInclude Include="Raws\DefInfo.h" />
     <ClInclude Include="Drawing\vchar.h" />
     <ClInclude Include="ECS\Components\Building.h" />

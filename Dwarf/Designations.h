@@ -16,10 +16,12 @@ struct Designations
 	// Buildings waiting to be built
 	std::vector<building_designation> buildings;
 
+	std::vector<std::pair<int, std::string>> workOrders;
+
 	template<class Archive>
 	void serialize(Archive& archive)
 	{
-		archive(mining, buildings);
+		archive(mining, buildings, workOrders);
 	}
 
 };

@@ -1,5 +1,6 @@
 #include "WorkOrders.h"
 #include "JobBoard.h"
+#include "../ECS/Components/Tags/WorkOrderTag.h"
 
 namespace JobsBoard
 {
@@ -11,6 +12,12 @@ namespace JobsBoard
 }
 
 
+void WorkOrders::init()
+{
+	JobsBoard::register_job_offer<WorkOrderTag>(JobsBoard::evaluate_work_order);
+}
+
 void WorkOrders::update(double duration)
 {
+	
 }

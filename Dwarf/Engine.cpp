@@ -1,14 +1,20 @@
 #include "Engine.h"
+
 #include "ECS\Components\PositionComponent.h"
 #include "ECS\Components\RenderComponent.h"
 #include "ECS\Components\KeyBoardComponent.h"
 #include "ECS\Components\ItemStored.h"
-//#include "ECS\Components\CombatStatsComponent.h"
 #include "ECS\Components\HealthComponent.h"
 #include "ECS\Components\Item.h"
 #include "ECS\Components\LaborStatsComponent.h"
 #include "ECS\Components\Tags\BuilderTag.h"
 #include "ECS\Components\Claimed.h"
+#include "ECS\Components\Building.h"
+
+#include "ECS\Components\Tags\MiningTag.h"
+#include "ECS\Components\Tags\BuilderTag.h"
+#include "ECS\Components\Tags\WorkOrderTag.h"
+
 #include "ECS\Systems\RenderSystem.h"
 #include "ECS\Systems\MovementSystem.h"
 #include "ECS\Systems\ai\MovementAiSystem.h"
@@ -22,6 +28,8 @@
 #include "ECS\Systems\helpers\ItemHelper.h"
 #include "ECS\Systems\InputHandler.h"
 #include "ECS\Systems\helpers\DesignationHandler.h"
+#include "ECS\Systems\ai\WorkOrders.h"
+
 #include "Coordinates.h"
 #include "Designations.h"
 #include "Map/Map.h"
@@ -121,15 +129,19 @@ void Engine::regComponents()
 	world.registerComponent<MovementComponent>();
 	world.registerComponent<RenderComponent>();
 	world.registerComponent<LaborStatsComponent>();
-	world.registerComponent<JobComponent>();
+	world.registerComponent<JobComponent>(); // Delte this component perma
 	world.registerComponent<Inventory>();
 	world.registerComponent<ItemStored>();
 	world.registerComponent<Item>();
 	world.registerComponent<HealthComponent>();
-	//world.registerComponent<CombatStatsComponent>();
 	world.registerComponent<MiningTag>();
 	world.registerComponent<BuilderTag>();	
 	world.registerComponent<Claimed>();
+	world.registerComponent<Building>();
+
+	world.registerComponent<MiningTag>();
+	world.registerComponent<BuilderTag>();
+	world.registerComponent<WorkOrderTag>();
 }
 
 void Engine::init()
@@ -148,9 +160,8 @@ void Engine::init()
 	movementAiSystem = new MovementAiSystem();
 	aiWorkSystem = new AiWorkSystem();
 	miningAi = new MiningAi();
-	miningAi->init();
 	buildAi = new BuildAi();
-	buildAi->init();
+	workOrders = new WorkOrders();
 
 	// Non Entity or non Updating Systems
 	inputHandler = new InputHandler();
@@ -175,14 +186,19 @@ void Engine::init()
 	world.addSystem(*equipHandler);
 	world.addSystem(*buildAi);
 	world.addSystem(itemHelper);
+	world.addSystem(*workOrders);
 
 	// Init systems 
 	miningSystem->init();
 	dijkstraHandler->init();
 	entityPositionCache->init();
 	equipHandler->init();
+	miningAi->init();
 	designationHandler->init();
-	
+	buildAi->init();
+	workOrders->init();
+
+
 	world.refresh();
 
 	run();
@@ -241,6 +257,7 @@ void Engine::update(double deltaTime)
 
 	// Work Systems
 	aiWorkSystem->update();
+	workOrders->update(deltaTime);
 	miningAi->update(deltaTime);
 	buildAi->update(deltaTime);
 
@@ -259,14 +276,11 @@ void Engine::render()
 	// Clear terminal before render
 	terminal_clear();
 
-	// Render the local map !~!~~~ Replace this swith system?
-	//mapRenderer->render();
-
 	// Render Entities
 	renderSystem->update();
 
 	// Render the gui elements last,
-	// just in case something is showing through
+	// just in case something is showing through ~~ Make this a system
 	// that shouldn't
 	gui.render();
 

@@ -23,6 +23,7 @@ class DijkstraMapsHandler;
 class EquipHandler;
 class InputHandler;
 class DesignationHandler;
+class WorkOrders;
 
 
 class Engine
@@ -55,6 +56,7 @@ public:
 	MiningAi * miningAi;
 	EquipHandler * equipHandler;
 	BuildAi * buildAi;
+	WorkOrders * workOrders;
 
 	// Systems that don't touch Entities
 	InputHandler * inputHandler;
