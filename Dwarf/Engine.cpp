@@ -26,6 +26,7 @@
 #include "Designations.h"
 #include "Map/Map.h"
 #include "Map/MapRender.h"
+#include "Raws\DefInfo.h"
 
 #include "BearLibTerminal.h"
 #include <unordered_map>
@@ -58,6 +59,7 @@ void Engine::newGame(int screenWidth, int screenHeight)
 	// Init misc maps and designations
 	designations = std::make_unique<Designations>();
 	positionCache = std::make_unique<PositionCache>();
+	defInfo = std::make_unique<DefInfo>();
 
 	// Init systems
 	init();
@@ -78,13 +80,14 @@ void Engine::loadGame(std::string filePath)
 	load_region(dirpath);
 	world.load(iarchive);
 
-	// Misc archives, move somewhere else
-	iarchive(designations);
-	//iarchive(positionCache);
-
 	// Init misc maps and designations
 	positionCache = std::make_unique<PositionCache>();
 	mapRenderer = std::make_unique<MapRender>(); // ~~~~ Get rid of this and combine render systems
+	defInfo = std::make_unique<DefInfo>();
+
+	// Misc archives, move somewhere else
+	iarchive(designations);
+	iarchive(defInfo);
 
 	init();
 }
@@ -105,6 +108,7 @@ void Engine::saveGame(std::string filePath)
 
 	// Misc archives, move somewhere else
 	archive(designations);
+	archive(defInfo);
 //	archive(positionCache);
 
 }
@@ -133,6 +137,10 @@ void Engine::init()
 	// Ensure component Index's match before and after
 	// serialization
 	regComponents();
+
+	// Init raws info, holds other misc 
+	// game stats as well
+	defInfo->init();
 
 	// Add systems at init
 	renderSystem = new RenderSystem();

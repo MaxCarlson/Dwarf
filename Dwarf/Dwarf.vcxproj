@@ -141,6 +141,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Raws\DefInfo.cpp" />
     <ClCompile Include="ECS\Systems\helpers\DesignationHandler.cpp" />
     <ClCompile Include="ECS\Systems\ai\BuildAi.cpp" />
     <ClCompile Include="ECS\Systems\ai\AiArchitecture.cpp" />
@@ -190,6 +191,7 @@
     <ClCompile Include="Raws\ReadReactions.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Raws\DefInfo.h" />
     <ClInclude Include="Drawing\vchar.h" />
     <ClInclude Include="ECS\Components\Building.h" />
     <ClInclude Include="ECS\Messages\designate_building_message.h" />

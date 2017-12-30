@@ -27,12 +27,15 @@ public:
 		DESIGNATE,
 		ORDERS,
 		CREATE_ITEM,
-		REACTIONS
+		REACTIONS,
 	};
 
 	Gui_State state = MAIN;
 
 	int itemSelected = 0;
+
+	bool typing = false;
+	std::string inputText;
 
 private:
 	int panelWidth, panelHeight;

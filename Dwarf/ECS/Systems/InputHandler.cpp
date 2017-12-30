@@ -8,6 +8,7 @@
 #include "../Raws/raws.h"
 #include "../Raws/Buildings.h"
 #include "../Messages/designate_building_message.h"
+#include "../Raws/DefInfo.h"
 
 // temp till things are placed elsewhere
 #include "../ECS/Messages/pick_map_changed_message.h"
@@ -77,6 +78,10 @@ void InputHandler::update()
 			case TK_I:
 				engine->gui.state = Gui::CREATE_ITEM;
 				break;
+
+			case TK_M:
+				engine->gui.state = Gui::REACTIONS;
+				break;
 			}
 
 		else if (engine->gui.state == Gui::BUILD)
@@ -118,8 +123,17 @@ void InputHandler::update()
 		{
 			if (key == TK_ESCAPE)
 				engine->gui.state = Gui::MAIN;
+			else
+				createItem(key);
+		}
 
-			createItem(key);
+		else if (engine->gui.state == Gui::REACTIONS)
+		{
+			if (key == TK_ESCAPE)
+				engine->gui.state = Gui::MAIN;
+
+			else
+				reactions(key);
 		}
 	}
 }
@@ -149,8 +163,6 @@ void InputHandler::designate(const int key)
 
 void InputHandler::buildMenu(const int key)
 {
-	static auto buildingTags = get_building_tags();
-
 	if (key == TK_PAGEDOWN)
 		++engine->gui.itemSelected;
 
@@ -159,7 +171,7 @@ void InputHandler::buildMenu(const int key)
 
 	else if (key == TK_ENTER || key == TK_MOUSE_LEFT)
 	{
-		const auto tag = buildingTags[engine->gui.itemSelected];
+		const auto tag = defInfo->buildingTags[engine->gui.itemSelected];
 		int clickIdx = getIdx({ mouseX, mouseY, engine->mapRenderer->currentZLevel });
 
 		emit(designate_building_message{ *getBuilding(tag), clickIdx });
@@ -168,8 +180,6 @@ void InputHandler::buildMenu(const int key)
 
 void InputHandler::createItem(const int key)
 {
-	static auto itemTags = get_all_item_tags();
-
 	if (key == TK_PAGEDOWN)
 		++engine->gui.itemSelected;
 
@@ -178,14 +188,27 @@ void InputHandler::createItem(const int key)
 
 	else if (key == TK_ENTER || key == TK_MOUSE_LEFT)
 	{
-		const auto tag = itemTags[engine->gui.itemSelected];
+		const auto tag = defInfo->itemTags[engine->gui.itemSelected];
 		const Coordinates co = { mouseX, mouseY, engine->mapRenderer->currentZLevel }; // Add material choices once needed
 
 		spawnItemOnGround(tag, 1, co);
 
-
 		// For the moment
 		if(tag == "pickaxe")
 			emit(pick_map_changed_message{});
+	}
+}
+
+void InputHandler::reactions(const int key)
+{
+	if (key == TK_PAGEDOWN)
+		++engine->gui.itemSelected;
+
+	else if (key == TK_PAGEUP)
+		--engine->gui.itemSelected;
+
+	else if (key == TK_ENTER || key == TK_MOUSE_LEFT)
+	{
+
 	}
 }

@@ -15,14 +15,18 @@ Reaction * getReaction(const std::string tag)
 	return nullptr;
 }
 
-const std::vector<Reaction>* getReactionsByWorkshop(const std::string tag)
+const std::vector<std::string> getReactionsByWorkshop(const std::string tag)
 {
 	auto f = reactionsByBuilding.find(tag);
 
-	if (f != reactionsByBuilding.end())
-		return &f->second;
+	std::vector<std::string> names;
 
-	return nullptr;
+	for (const auto& b : f->second)
+	{
+		names.push_back(b.tag);
+	}
+
+	return names;
 }
 
 void readInReactions() noexcept
@@ -67,7 +71,7 @@ void readInReactions() noexcept
 
 	// Add reactions by building to container
 	for (const auto& re : reactions)
-		reactionsByBuilding[re.second.tag].push_back(re.second);
+		reactionsByBuilding[re.second.workshop].push_back(re.second);
 }
 
 void sanityCheckReactions()

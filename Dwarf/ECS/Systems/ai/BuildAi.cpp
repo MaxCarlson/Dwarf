@@ -11,6 +11,7 @@
 #include "../ECS/Components/Building.h"
 #include "../ECS/Messages/pickup_item_message.h"
 #include "../ECS/Components/Sentients/Inventory.h"
+#include "../Raws/DefInfo.h"
 #include <utility>
 
 
@@ -233,6 +234,10 @@ void BuildAi::doBuild(const Entity & e)
 		building.complete = true;
 
 		buildingEntity.activate();
+
+		// Update availible reactions for buildings if this is a new one
+		defInfo->updateBuildingReactions(building.tag);
+
 		// Add code for building provides once added in 
 
 

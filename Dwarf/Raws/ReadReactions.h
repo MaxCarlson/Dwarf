@@ -3,7 +3,9 @@
 
 Reaction * getReaction(const std::string tag);
 
-const std::vector<Reaction>* getReactionsByWorkshop(const std::string tag);
+//std::vector<Reaction>* getReactionsByWorkshop(const std::string tag);
+
+const std::vector<std::string> getReactionsByWorkshop(const std::string tag);
 
 void readInReactions() noexcept;
 

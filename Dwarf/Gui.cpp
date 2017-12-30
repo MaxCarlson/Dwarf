@@ -9,6 +9,9 @@
 #include "Map\Tile.h"
 #include "Raws\ItemRead.h"
 #include "Drawing\draw.h"
+#include "Raws\ReadReactions.h"
+#include "Designations.h"
+#include "Raws\DefInfo.h"
 
 using namespace region;
 
@@ -40,6 +43,10 @@ void Gui::render()
 	// Grab window size data
 	panelWidth = terminal_state(TK_WIDTH);
 	panelHeight = terminal_state(TK_HEIGHT);
+
+	horizontalOffset = panelWidth - (panelWidth / 5);
+	verticalOffset = 0;
+
 
 	if (engine->current_game_state == Engine::PLAY)
 	{
@@ -122,18 +129,17 @@ void Gui::drawEscMenu()
 
 void Gui::drawMain()
 {
-	horizontalOffset = panelWidth - (panelWidth / 5);
-	verticalOffset = 0;
 	itemSelected = 0;
 
 	clearAndDraw(horizontalOffset, verticalOffset, panelWidth, panelHeight, gui_color, 0x2588);
 
-	static const std::vector<std::string> commands = { "b = build", "i = spawn item", "d = designate", "o = order" };
+	static const std::vector<std::string> commands = { "b = build", "i = spawn item", "d = designate", "o = order", "m - reactions" };
+
+	terminal_color("black");
 
 	int y = 2;
 	for (const auto& c : commands)
 	{
-		terminal_color("black");
 		terminal_print(horizontalOffset + 1, y, c.c_str());
 		y += 2;
 	}
@@ -141,14 +147,12 @@ void Gui::drawMain()
 
 void Gui::drawBuild()
 {
-	static const std::vector<std::string> buildings = get_all_building_def_names();
-
 	clearAndDraw(horizontalOffset, verticalOffset, panelWidth, panelHeight, gui_color, 0x2588);
-	wrapInput(itemSelected, buildings.size());
+	wrapInput(itemSelected, defInfo->buildingNames.size());
 
 	int c = 0;
 	int y = 2;
-	for (const auto& b : buildings)
+	for (const auto& b : defInfo->buildingNames)
 	{
 		draw::determineHighlight(c, itemSelected);
 
@@ -181,15 +185,13 @@ void Gui::drawDesignate()
 
 void Gui::drawCreateItem()
 {
-	static auto itemTags = get_all_item_tags();
-
 	clearAndDraw(horizontalOffset, verticalOffset, panelWidth, panelHeight, gui_color, 0x2588);
 
-	wrapInput(itemSelected, itemTags.size());
+	wrapInput(itemSelected, defInfo->itemTags.size());
 
 	int y = 2;
 	int c = 0;
-	for (const auto& i : itemTags)
+	for (const auto& i : defInfo->itemTags)
 	{
 		draw::determineHighlight(c, itemSelected);
 
@@ -202,7 +204,44 @@ void Gui::drawCreateItem()
 
 void Gui::drawReactions()
 {
+	clearAndDraw(horizontalOffset, verticalOffset, panelWidth, panelHeight, gui_color, 0x2588);
 
+	wrapInput(itemSelected, defInfo->availibleReactions.size());
+
+	int y = 2;
+	int c = 0;
+	terminal_print(horizontalOffset + 1, y, "Search for reaction");
+	y = 4;
+
+	static std::vector<std::string> filteredReactions;
+
+	// If we're not searching for reaction by text
+	if (!typing)
+	{
+		if (defInfo->availibleReactions.empty())
+		{
+			terminal_print(horizontalOffset + 1, y, "No reactions availible");
+			terminal_print(horizontalOffset + 1, y + 2, "Try building workshops");
+		}
+		else
+			for (const auto& p : defInfo->availibleReactions)
+			{
+				for (const auto& r : p.second)
+				{
+					draw::determineHighlight(c, itemSelected);
+
+					terminal_print(horizontalOffset + 1, y, r.c_str());
+					y += 2;
+					++c;
+				}
+			}
+	}
+	else
+	{
+		filteredReactions.clear();
+	}
+
+	
 }
 
 void Gui::printDebugTileProps()
