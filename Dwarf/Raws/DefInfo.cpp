@@ -20,11 +20,12 @@ void DefInfo::init()
 
 void DefInfo::updateBuildingReactions(const std::string buildingTag, bool first)
 {
-	if (first || std::find(builtBuildings.begin(), builtBuildings.end(), buildingTag) != builtBuildings.end()) // Possibly make availibleBuildings an unordered_map if there is a speed issue here
+	if (!first && std::find(builtBuildings.begin(), builtBuildings.end(), buildingTag) != builtBuildings.end()) // Possibly make availibleBuildings an unordered_map if there is a speed issue here
 		return;
 
-
-	builtBuildings.push_back(buildingTag);
+	// Don't add buildings that are already saved in built buildings on init
+	if(!first)
+		builtBuildings.push_back(buildingTag);
 
 	avReactionsByBuilding[buildingTag] = getReactionsByWorkshop(buildingTag);
 

@@ -4,6 +4,7 @@
 #include "../Map/Tile.h"
 #include "../Designations.h"
 #include "../ECS/Messages/recalculate_mining_message.h"
+#include "../ECS/Messages/pick_map_changed_message.h"
 
 void DesignationHandler::init()
 {
@@ -52,4 +53,5 @@ void DesignationHandler::designate(const designation_message & msg) // Add in ch
 		}
 
 	emit(recalculate_mining_message{});
+	emit(pick_map_changed_message{});
 }

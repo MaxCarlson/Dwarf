@@ -32,7 +32,7 @@ namespace JobsBoard
 		if (pickDistance > MAX_DIJKSTRA_DISTANCE - 1)
 			return;
 
-		// Other evaluations based on Entity skill
+		// Add Other evaluations based on Entity skill
 		// so we're not only looking at distance as a measure of 
 		// who should do which work?
 

@@ -128,7 +128,7 @@ void MiningSystem::walkMiningMap(const Coordinates co, const int distance, const
 	if (distance > 200)
 		return;
 
-	const int newIdx = TILE_ARRAY_LOOKUP;
+	const int newIdx = getIdx(co);
 
 	if (miningMap[newIdx] > distance)
 	{
@@ -159,7 +159,7 @@ void MiningSystem::performMining(Entity e, const int targetIdx, const uint8_t mi
 
 		auto dmg = 4 * JobSpeedMultiplier[labor.laborLevel[int(Jobs::MINER)]];
 
-		damageTile(targetIdx, dmg);
+		damageTile(targetIdx, static_cast<uint16_t>(dmg));
 
 		labor.skillPoints[int(Jobs::MINER)] += 2;
 

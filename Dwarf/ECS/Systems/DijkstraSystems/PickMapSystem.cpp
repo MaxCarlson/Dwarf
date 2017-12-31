@@ -19,7 +19,7 @@ void PickMapSystem::update()
 		auto& item = e.getComponent<Item>();
 
 		if (!item.catagory.test(TOOL_DIGGING) || item.claimed)
-			return;
+			continue;
 
 		// Claimed component ?
 

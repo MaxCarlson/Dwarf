@@ -4,7 +4,7 @@
 #include <vector>
 #include <mutex>
 
-constexpr int16_t MAX_DIJKSTRA_DISTANCE = 256;
+constexpr int16_t MAX_DIJKSTRA_DISTANCE = 512;
 
 class DijkstraMap
 {
