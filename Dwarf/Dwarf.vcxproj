@@ -190,9 +190,12 @@
     <ClCompile Include="ECS\Systems\ai\WorkOrders.cpp" />
     <ClCompile Include="Raws\ReadReactions.cpp" />
     <ClCompile Include="ECS\Systems\helpers\WorkOrderHelper.cpp" />
+    <ClCompile Include="ECS\Systems\ai\StockpileSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ECS\Components\helpers\work_order_reaction.h" />
+    <ClInclude Include="ECS\Components\ItemCarried.h" />
+    <ClInclude Include="ECS\Components\Stockpile.h" />
     <ClInclude Include="Raws\DefInfo.h" />
     <ClInclude Include="Drawing\vchar.h" />
     <ClInclude Include="ECS\Components\Building.h" />
@@ -361,6 +364,7 @@
     <ClInclude Include="ECS\Systems\ai\WorkOrders.h" />
     <ClInclude Include="Raws\ReadReactions.h" />
     <ClInclude Include="ECS\Systems\helpers\WorkOrderHelper.h" />
+    <ClInclude Include="ECS\Systems\ai\StockpileSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cereal\external\rapidxml\manual.html" />

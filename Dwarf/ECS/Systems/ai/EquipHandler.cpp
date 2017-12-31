@@ -4,7 +4,7 @@
 #include "../Coordinates.h"
 #include "../../World.h"
 #include "../../Components/PositionComponent.h"
-#include "../../Components/ItemStored.h"
+#include "../../Components/ItemCarried.h"
 #include "../../Messages/entity_moved_message.h"
 #include "../../Components/Sentients/Inventory.h"
 #include "../EntityPositionCache.h"
@@ -42,11 +42,11 @@ void EquipHandler::pickupItem(int itemSlot, std::size_t entityId, std::size_t it
 	auto& item = getWorld().getEntity(itemEid);
 
 	// Store Item
-	auto& stored = item.addComponent<ItemStored>();
-	stored.eid = itemEid;
+	auto& carried = item.addComponent<ItemCarried>();
+	carried.eid = itemEid;
 
 	// Store and remove render Component
-	stored.rend = item.getComponent<RenderComponent>();
+	carried.rend = item.getComponent<RenderComponent>();
 	item.removeComponent<RenderComponent>();
 
 	// Store item in entities inventory
@@ -90,13 +90,13 @@ void EquipHandler::dropItem(int itemSlot, std::size_t entityId, std::size_t item
 	auto& inv = entity.getComponent<Inventory>();
 	inv.inventory[itemSlot] = 0;
 
-	auto* stored = &item.getComponent<ItemStored>(); // Make a component for item carried instead of just stored?
+	auto* carried = &item.getComponent<ItemCarried>(); // Make a component for item carried instead of just stored?
 
 	// Restore the items render component
 	auto& rend = item.addComponent<RenderComponent>(); 
-	rend = stored->rend;
+	rend = carried->rend;
 
-	item.removeComponent<ItemStored>();
+	item.removeComponent<ItemCarried>();
 
 	// Restore the items correct positon
 	item.addComponent<PositionComponent>(co);

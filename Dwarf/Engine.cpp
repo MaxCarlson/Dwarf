@@ -11,6 +11,8 @@
 #include "ECS\Components\Tags\BuilderTag.h"
 #include "ECS\Components\Claimed.h"
 #include "ECS\Components\Building.h"
+#include "ECS\Components\ItemCarried.h"
+#include "ECS\Components\Stockpile.h"
 
 // Component Tags
 #include "ECS\Components\Tags\MiningTag.h"
@@ -136,6 +138,7 @@ void Engine::regComponents()
 	world.registerComponent<LaborStatsComponent>();
 	world.registerComponent<JobComponent>(); // Delte this component perma
 	world.registerComponent<Inventory>();
+	world.registerComponent<ItemCarried>();
 	world.registerComponent<ItemStored>();
 	world.registerComponent<Item>();
 	world.registerComponent<HealthComponent>();
@@ -143,6 +146,7 @@ void Engine::regComponents()
 	world.registerComponent<BuilderTag>();	
 	world.registerComponent<Claimed>();
 	world.registerComponent<Building>();
+	world.registerComponent<Stockpile>();
 
 	world.registerComponent<MiningTag>();
 	world.registerComponent<BuilderTag>();
