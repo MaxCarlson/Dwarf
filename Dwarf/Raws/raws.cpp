@@ -15,6 +15,7 @@
 
 void sanityChecks()
 {
+	sanityCheckStockpiles();
 	sanityCheckItems();
 	sanityCheckMaterials();
 	sanityCheckBuildings();
@@ -23,6 +24,7 @@ void sanityChecks()
 
 void loadGameTables()
 {
+	readInStockpiles();
 	readInItems();
 	readInMaterials();
 	readInBuildings();

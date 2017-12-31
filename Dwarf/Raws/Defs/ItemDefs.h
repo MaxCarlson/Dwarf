@@ -8,6 +8,13 @@ constexpr int COMPONENT = 0;
 constexpr int TOOL_DIGGING = 1;
 constexpr int TOOL_CHOPPING = 2;
 
+struct StockpileDef
+{
+	int index = 0;
+	std::string name = "";
+	std::string tag = "";
+};
+
 struct ItemDef
 {
 	std::string name = "";
@@ -20,4 +27,5 @@ struct ItemDef
 	int tilesetKey;
 	
 	int stackSize = 1;
+	int stockpileId = 0;
 };

@@ -4,14 +4,32 @@
 #include <boost\container\flat_map.hpp>
 
 boost::container::flat_map<std::string, ItemDef> itemDefs;
+boost::container::flat_map<std::string, StockpileDef> stockpileDefs;
 
 ItemDef * getItemDef(const std::string tag)
 {
 	auto itemd = itemDefs.find(tag);
-	if (itemd == itemDefs.end())
-		return nullptr;
+
+	if (itemd != itemDefs.end())
+		return &itemd->second;
 	
-	return &itemd->second;
+	return nullptr;
+}
+
+StockpileDef * getStockpileDef(const std::string tag)
+{
+	auto stockd = stockpileDefs.find(tag);
+
+	if (stockd != stockpileDefs.end())
+		return &stockd->second; 
+
+	return nullptr;
+}
+
+void foreachStockpile(const std::function<void(StockpileDef*)>& func) // Change to iterator if we start modifying the stockpileDefs
+{
+	for (auto stock : stockpileDefs)
+		func(&stock.second);
 }
 
 const std::vector<std::string> get_all_item_tags()
@@ -51,5 +69,26 @@ void readInItems() noexcept
 }
 
 void sanityCheckItems() noexcept
+{
+}
+
+void readInStockpiles() noexcept
+{
+	std::string tag;
+	std::string name;
+	StockpileDef s;
+
+	readLuaTable("stockpiles",
+		[&s, &tag](const auto &key) { tag = key; s = StockpileDef{}; s.tag = tag; },
+		[&s, &tag](const auto &key) { stockpileDefs[tag] = s; },
+			luaParser
+			{
+				{"name", [&s]() { s.name = lua_str(); } },
+				{"id", [&s]() { s.index = lua_int(); } }
+			}
+		);
+}
+
+void sanityCheckStockpiles() noexcept
 {
 }

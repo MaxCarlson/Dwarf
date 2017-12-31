@@ -1,7 +1,9 @@
 render.lua
+stockpiles.lua
 items.lua
 items_tools.lua
 items_raw.lua
+items_furniture.lua
 materials.lua
 buildings_structures.lua
 buildings_mason.lua
