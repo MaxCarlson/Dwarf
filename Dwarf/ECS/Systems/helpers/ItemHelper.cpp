@@ -4,6 +4,7 @@
 #include "../Raws/Defs/ItemDefs.h"
 #include "../Raws/ReactionInput.h"
 #include "../ECS/Components/Claimed.h"
+#include "../ECS/Components/ItemStored.h"
 #include "../Raws/Materials.h"
 #include "../Raws/Defs/MaterialDef.h"
 #include "../Helpers/PositionCache.h"
@@ -43,10 +44,24 @@ void ItemHelper::deleteItem(const std::size_t id)
 
 int ItemHelper::get_item_location(std::size_t id)
 {
-	auto* pos = &getWorld().getEntity(id).getComponent<PositionComponent>();
+	const auto& ent = getWorld().getEntity(id);
+	auto* pos = &ent.getComponent<PositionComponent>();
 
-	if(pos)
+	if (!pos)
+	{
+		if (ent.hasComponent<ItemStored>())
+		{
+			auto storedIn = ent.getComponent<ItemStored>().storedIn;
+
+			if(storedIn)
+				return getIdx(getWorld().getEntity(storedIn).getComponent<PositionComponent>().co);
+		}
+		// Add in carried code? Would probably have to ensure that we don't grab an item from an entity already carrying it		
+	}
+
+	else
 		return getIdx(pos->co);
+	
 
 	return 0;
 }

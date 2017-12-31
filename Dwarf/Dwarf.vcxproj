@@ -149,6 +149,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ECS\Systems\ai\HaulingSystem.cpp" />
+    <ClCompile Include="ECS\Systems\helpers\PathFinding.cpp" />
     <ClCompile Include="Raws\DefInfo.cpp" />
     <ClCompile Include="ECS\Systems\helpers\DesignationHandler.cpp" />
     <ClCompile Include="ECS\Systems\ai\BuildAi.cpp" />
@@ -208,7 +210,10 @@
     <ClInclude Include="ECS\Components\helpers\work_order_reaction.h" />
     <ClInclude Include="ECS\Components\ItemCarried.h" />
     <ClInclude Include="ECS\Components\Stockpile.h" />
+    <ClInclude Include="ECS\Components\Tags\HaulingTag.h" />
     <ClInclude Include="ECS\Messages\request_new_stockpile_message.h" />
+    <ClInclude Include="ECS\Systems\ai\HaulingSystem.h" />
+    <ClInclude Include="ECS\Systems\helpers\PathFinding.h" />
     <ClInclude Include="Raws\DefInfo.h" />
     <ClInclude Include="Drawing\vchar.h" />
     <ClInclude Include="ECS\Components\Building.h" />

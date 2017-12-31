@@ -8,6 +8,6 @@ stockpiles = {
 	sand = { name = "Sand", id = 6 },
 	component = { name = "Component" , id = 7 },
 	block = { name = "Block", id = 8 },
-	furiture = { name = "Furniture", id = 9 },
+	furniture = { name = "Furniture", id = 9 },
 
 };

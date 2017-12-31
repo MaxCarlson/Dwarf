@@ -32,6 +32,7 @@ void handleScroll(const int key, int down = TK_PAGEDOWN, int up = TK_PAGEUP)
 	if (key == down)
 		++engine->gui.itemSelected;
 
+
 	else if (key == up)
 		--engine->gui.itemSelected;
 }
