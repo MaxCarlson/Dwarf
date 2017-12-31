@@ -367,6 +367,7 @@
     <None Include="Raws\LuaDefs\buildings_mason.lua" />
     <None Include="Raws\LuaDefs\buildings_structures.lua" />
     <None Include="Raws\LuaDefs\items.lua" />
+    <None Include="Raws\LuaDefs\items_furniture.lua" />
     <None Include="Raws\LuaDefs\items_raw.lua" />
     <None Include="Raws\LuaDefs\items_tools.lua" />
     <None Include="Raws\LuaDefs\materials.lua" />

@@ -1,8 +1,5 @@
 materials = {
 
-
-	--Switch Render system to a lookup based on lua traits ???
-
 	-- Metal Ores prior to being mined
 	["copper_ore"] = {
 		name = "Copper Ore",
