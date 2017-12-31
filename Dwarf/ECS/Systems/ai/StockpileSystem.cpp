@@ -4,14 +4,28 @@
 #include "../../Components/Claimed.h"
 #include "../../../Raws/ItemRead.h"
 #include "../../../Raws/Defs/ItemDefs.h"
+#include "../../Messages/request_new_stockpile_message.h"
+#include "../../World.h"
 
 std::unordered_map<std::size_t, StockpileInfo> stockpiles;
 
 // Map of Stockpiles of type int
 std::unordered_map<int, std::vector<std::size_t>> stockpileTargets;
 
-
 std::vector<StoreableItem> storeableItems;
+
+void createNewStockpile(std::pair<Coordinates, Coordinates>& area, int type)
+{
+
+}
+
+void StockpileSystem::init()
+{
+	subscribe<request_new_stockpile_message>([this](request_new_stockpile_message &msg)
+	{
+		createNewStockpile(msg.area, msg.type);
+	});
+}
 
 void StockpileSystem::update()
 {
@@ -106,3 +120,4 @@ void StockpileSystem::update()
 		}
 	);
 }
+

@@ -26,12 +26,6 @@ StockpileDef * getStockpileDef(const std::string tag)
 	return nullptr;
 }
 
-void foreachStockpile(const std::function<void(StockpileDef*)>& func) // Change to iterator if we start modifying the stockpileDefs
-{
-	for (auto stock : stockpileDefs)
-		func(&stock.second);
-}
-
 const std::vector<std::string> get_all_item_tags()
 {
 	std::vector<std::string> itemNames;
@@ -40,6 +34,25 @@ const std::vector<std::string> get_all_item_tags()
 		itemNames.push_back(s.first);
 	}
 	return itemNames;
+}
+
+
+void foreachStockpile(const std::function<void(StockpileDef*)>& func) // Change to iterator if we start modifying the stockpileDefs
+{
+	for (auto stock : stockpileDefs)
+		func(&stock.second);
+}
+
+const std::vector<std::pair<std::string, std::string>> get_stockpile_names_tags()
+{
+	std::vector<std::pair<std::string, std::string>> namesAndTags;
+
+	for (const auto& sdef : stockpileDefs)
+	{
+		namesAndTags.push_back(std::make_pair(sdef.first, sdef.second.name));
+	}
+
+	return namesAndTags;
 }
 
 void readInItems() noexcept

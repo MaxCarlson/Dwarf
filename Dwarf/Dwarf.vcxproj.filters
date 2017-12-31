@@ -683,6 +683,9 @@
     <ClInclude Include="ECS\Components\ItemCarried.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ECS\Messages\request_new_stockpile_message.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="cereal\external\rapidxml\manual.html" />

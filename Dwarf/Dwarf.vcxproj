@@ -196,6 +196,7 @@
     <ClInclude Include="ECS\Components\helpers\work_order_reaction.h" />
     <ClInclude Include="ECS\Components\ItemCarried.h" />
     <ClInclude Include="ECS\Components\Stockpile.h" />
+    <ClInclude Include="ECS\Messages\request_new_stockpile_message.h" />
     <ClInclude Include="Raws\DefInfo.h" />
     <ClInclude Include="Drawing\vchar.h" />
     <ClInclude Include="ECS\Components\Building.h" />

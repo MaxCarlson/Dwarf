@@ -28,6 +28,7 @@ public:
 		ORDERS,
 		CREATE_ITEM,
 		REACTIONS,
+		STOCKPILES,
 	};
 
 	Gui_State state = MAIN;
@@ -48,6 +49,7 @@ private:
 	void drawDesignate();
 	void drawCreateItem();
 	void drawReactions();
+	void drawStockpiles();
 	void printDebugTileProps();
 	void drawSaveScreen();
 };

@@ -6,6 +6,7 @@
 #include "../Raws\Buildings.h"
 #include "../Designations.h"
 
+
 std::unique_ptr<DefInfo> defInfo;
 
 void DefInfo::init()
@@ -13,6 +14,16 @@ void DefInfo::init()
 	buildingTags = get_building_tags();
 	buildingNames = get_all_building_def_names();
 	itemTags = get_all_item_tags();
+	
+	const auto stocks = get_stockpile_names_tags();
+
+	// Fill all names of stockpile tags and names
+	// Usefull for indexing with an int instead of tag for gui and input
+	for (const auto& s : stocks)
+	{
+		stockpileTags.push_back(s.first);
+		stockpileNames.push_back(s.second);
+	}
 
 	for(const auto& b : builtBuildings)
 		updateBuildingReactions(b, true);

@@ -214,7 +214,7 @@ void Engine::init()
 	designationHandler->init();
 	buildAi->init();
 	workOrders->init();
-
+	stockpileSystem->init();
 
 	world.refresh();
 

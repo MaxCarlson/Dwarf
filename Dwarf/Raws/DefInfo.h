@@ -24,6 +24,9 @@ struct DefInfo
 	std::vector<std::string> availibleReactions;
 	std::unordered_map<std::string, std::vector<std::string>> avReactionsByBuilding;
 
+	std::vector<std::string> stockpileTags;
+	std::vector<std::string> stockpileNames;
+
 	void updateBuildingReactions(const std::string buildingTag, bool first = false);
 
 	template<class Archive>

@@ -82,6 +82,10 @@ void Gui::render()
 			drawReactions();
 			break;
 
+		case Gui_State::STOCKPILES:
+			drawStockpiles();
+			break;
+
 		}
 
 		printDebugTileProps();
@@ -213,6 +217,7 @@ void Gui::drawReactions()
 	terminal_print(horizontalOffset + 1, y, "Search for reaction");
 	y = 4;
 
+	// Add in searching for reactions by name + or by building 
 	static std::vector<std::string> filteredReactions;
 
 	// If we're not searching for reaction by text
@@ -239,6 +244,16 @@ void Gui::drawReactions()
 	}
 
 	
+}
+
+void Gui::drawStockpiles()
+{
+	clearAndDraw(horizontalOffset, verticalOffset, panelWidth, panelHeight, gui_color, 0x2588);
+
+	wrapInput(itemSelected, defInfo->stockpileNames.size());
+
+	int y = 2;
+	int c = 0;
 }
 
 void Gui::printDebugTileProps()

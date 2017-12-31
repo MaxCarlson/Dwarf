@@ -15,6 +15,7 @@
 #include "../EntityPositionCache.h"
 #include "../../Components/Claimed.h"
 #include "../../../Designations.h"
+#include "../../Components/ItemStored.h"
 
 #include <iostream>
 
@@ -37,7 +38,7 @@ void EquipHandler::init()
 }
 
 // Need to add in an inventory component for Entities while holding things!~!~!~!~
-void EquipHandler::pickupItem(int itemSlot, std::size_t entityId, std::size_t itemEid, std::size_t outItemEid)
+void EquipHandler::pickupItem(int itemSlot, std::size_t entityId, std::size_t itemEid, std::size_t outItemEid) // Remove the carry slot and just use the ItemCarried Component
 {
 	auto& item = getWorld().getEntity(itemEid);
 
@@ -53,12 +54,15 @@ void EquipHandler::pickupItem(int itemSlot, std::size_t entityId, std::size_t it
 	auto& entity = getWorld().getEntity(entityId);
 	auto& inv = entity.getComponent<Inventory>();
 
-	if (itemSlot < MAX_INVENTORY_SLOTS)
+	if (itemSlot < MAX_INVENTORY_SLOTS) 
 		inv.inventory[itemSlot] = itemEid;
 	else
 		std::cout << "Other Item Types Not Implemented Yet Error!!" << std::endl;
 
 
+	// If we're picking up a stored item, flag it as not stored
+	if (item.hasComponent<ItemStored>())
+		item.removeComponent<ItemStored>();
 
 	// Remove item position component
 	// Must first remove from caching

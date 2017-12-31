@@ -33,6 +33,8 @@ class StockpileSystem : public System<Requires<Stockpile>>
 public:
 	StockpileSystem() = default;
 
+	void init();
+
 	void update();
 	
 };
