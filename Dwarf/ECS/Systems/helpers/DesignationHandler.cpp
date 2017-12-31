@@ -1,6 +1,6 @@
+#include "../stdafx.h"
 #include "DesignationHandler.h"
 #include "../../Messages/designation_message.h"
-#include "../../World.h"
 #include "../Map/Tile.h"
 #include "../Designations.h"
 #include "../ECS/Messages/recalculate_mining_message.h"

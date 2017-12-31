@@ -1,10 +1,9 @@
+#include "../stdafx.h"
 #include "MapRender.h"
 #include "../Engine.h"
 #include "Map.h"
 #include "Tile.h"
-
 #include "libtcod.hpp"
-#include "../BearLibTerminal.h"
 #include "../Raws/Materials.h"
 #include "../Raws/Defs/MaterialDef.h"
 

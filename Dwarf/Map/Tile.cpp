@@ -1,19 +1,14 @@
+#include "../stdafx.h"
 #include "Tile.h"
 #include "Util.h"
-#include <memory>
-#include <iostream>
 #include "../Raws/Materials.h"
 #include "../Raws/Defs/MaterialDef.h"
-
-#include <cereal.hpp>
 #include "../cereal/archives/binary.hpp"
 #include "../cereal/types/memory.hpp"
 #include "../cereal/types/vector.hpp"
-#include <fstream>
 #include "../Drawing/vchar.h"
 #include "../Engine.h"
-#include "../BearLibTerminal.h"
-#include <boost\container\flat_map.hpp>
+#include <cereal.hpp>
 
 // External map info
 int MAP_WIDTH, MAP_HEIGHT, MAP_DEPTH, TOTAL_MAP_TILES;

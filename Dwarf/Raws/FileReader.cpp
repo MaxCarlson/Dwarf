@@ -1,6 +1,6 @@
+#include "../stdafx.h"
 #include "FileReader.h"
-#include <unordered_map>
-#include <fstream>
+
 
 namespace FileStrings
 {

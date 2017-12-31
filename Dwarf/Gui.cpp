@@ -1,5 +1,5 @@
+#include "stdafx.h"
 #include "Gui.h"
-#include "BearLibTerminal.h"
 #include "Engine.h"
 #include "Map/Map.h"
 #include "Map/MapRender.h"
@@ -13,10 +13,8 @@
 #include "Designations.h"
 #include "Raws\DefInfo.h"
 
-using namespace region;
-
-#include <iostream>
 #include <filesystem>
+using namespace region;
 namespace fs = std::experimental::filesystem;
 
 static const std::string gui_color = "#386687";

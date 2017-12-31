@@ -1,8 +1,8 @@
+#include "../stdafx.h"
 #include "EquipHandler.h"
 #include "../../Messages/drop_item_message.h"
 #include "../../Messages/pickup_item_message.h"
 #include "../Coordinates.h"
-#include "../../World.h"
 #include "../../Components/PositionComponent.h"
 #include "../../Components/ItemCarried.h"
 #include "../../Messages/entity_moved_message.h"
@@ -16,8 +16,6 @@
 #include "../../Components/Claimed.h"
 #include "../../../Designations.h"
 #include "../../Components/ItemStored.h"
-
-#include <iostream>
 
 void EquipHandler::init()
 {

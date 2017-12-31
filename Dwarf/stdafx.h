@@ -1,0 +1,21 @@
+#pragma once
+
+#include <algorithm>
+#include <string>
+#include <vector>
+#include <unordered_map>
+#include <unordered_set>
+#include <iostream>
+#include <fstream>
+#include <ostream>
+#include <bitset>
+#include <memory>
+#include <functional>
+#include <boost/container/flat_map.hpp>
+#include <utility>
+#include <tuple>
+#include <deque>
+#include <map>
+#include "BearLibTerminal.h"
+#include "ECS\World.h"
+#include "ECS\Component.h"

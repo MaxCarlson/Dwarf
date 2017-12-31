@@ -5,7 +5,6 @@
 #include "ECS\World.h"
 #include "EntityFactory.h"
 #include "Gui.h"
-#include "Input.h"
 #include <unordered_map>
 #include <memory>
 
@@ -80,7 +79,6 @@ public:
 
 	// Should these be made into systems?
 	Gui gui;
-	Input input;
 
 	int screenWidth; // Git rid of these?
 	int screenHeight;

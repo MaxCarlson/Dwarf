@@ -1,8 +1,8 @@
+#include "../stdafx.h"
 #include "DijkstraMap.h"
 #include "Tile.h"
 
-#include <deque>
-#include <map>
+
 
 using namespace region;
 

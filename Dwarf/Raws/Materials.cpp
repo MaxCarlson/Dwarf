@@ -1,9 +1,8 @@
+#include "../stdafx.h"
 #include "Materials.h"
 #include "Defs\MaterialDef.h"
-#include "boost\container\flat_map.hpp"
 #include "Lua.h"
 
-#include <algorithm>
 
 boost::container::flat_map<std::string, std::size_t> materialDefsIdx;
 std::vector<MaterialDef> materialDefs;

@@ -1,10 +1,8 @@
+#include "../stdafx.h"
 #include "Buildings.h"
 #include "Defs\BuildingDef.h"
 #include "Materials.h"
 #include "Lua.h"
-#include <boost\container\flat_map.hpp>
-#include <iostream>
-
 
 boost::container::flat_map<std::string, BuildingDef> buildingDefs;
 

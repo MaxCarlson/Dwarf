@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Engine.h"
 
 // Components
@@ -47,15 +48,11 @@
 #include "Map/MapRender.h"
 #include "Raws\DefInfo.h"
 
-#include "BearLibTerminal.h"
-#include <unordered_map>
 #include <chrono>
 #include <cereal.hpp>
 #include "../cereal/archives/binary.hpp"
 #include "../cereal/types/memory.hpp"
 #include "../cereal/types/vector.hpp"
-#include <fstream>
-
 
 
 typedef std::chrono::milliseconds::rep TimePoint;

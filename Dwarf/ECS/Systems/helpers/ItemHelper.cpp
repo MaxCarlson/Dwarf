@@ -1,3 +1,4 @@
+#include "../stdafx.h"
 #include "ItemHelper.h"
 #include "../Map/Tile.h"
 #include "../Raws/Defs/ItemDefs.h"
@@ -5,23 +6,18 @@
 #include "../ECS/Components/Claimed.h"
 #include "../Raws/Materials.h"
 #include "../Raws/Defs/MaterialDef.h"
-#include "../ECS/World.h"
 #include "../Helpers/PositionCache.h"
 #include "../ECS/Systems/EntityPositionCache.h"
 
 ItemHelper itemHelper;
 
 
-
-//template<typename T>
 void ItemHelper::forEachItem(const std::function<void(Entity)>& func)
 {
-	//T t;
 	for (auto e : getEntities())
 	{
 		func(e);
 	}
-
 }
 
 void ItemHelper::claim_item(Entity& item)

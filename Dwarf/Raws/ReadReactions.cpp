@@ -1,6 +1,6 @@
+#include "../stdafx.h"
 #include "ReadReactions.h"
 #include "Lua.h"
-#include <boost\container\flat_map.hpp>
 
 boost::container::flat_map<std::string, Reaction> reactions;
 boost::container::flat_map<std::string, std::vector<Reaction>> reactionsByBuilding;

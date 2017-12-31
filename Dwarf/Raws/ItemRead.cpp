@@ -1,7 +1,7 @@
+#include "../stdafx.h"
 #include "ItemRead.h"
 #include "Lua.h"
 #include "Defs\ItemDefs.h"
-#include <boost\container\flat_map.hpp>
 
 boost::container::flat_map<std::string, ItemDef> itemDefs;
 boost::container::flat_map<std::string, StockpileDef> stockpileDefs;

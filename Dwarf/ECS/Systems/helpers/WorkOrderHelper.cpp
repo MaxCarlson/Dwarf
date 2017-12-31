@@ -1,9 +1,10 @@
+#include "../stdafx.h"
 #include "WorkOrderHelper.h"
 #include "../Designations.h"
 #include "../Raws/ReadReactions.h"
 #include "../ECS/Components/Tags/WorkOrderTag.h"
 #include "ItemHelper.h"
-#include <unordered_set>
+
 
 std::unique_ptr<WorkOrderHelper> workOrderHelper;
 

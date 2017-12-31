@@ -1,5 +1,5 @@
+#include "../stdafx.h"
 #include "InputHandler.h"
-#include "../BearLibTerminal.h"
 #include "../Engine.h"
 #include "../Gui.h"
 #include "../Map/Tile.h"
@@ -260,6 +260,7 @@ void InputHandler::stockpiles(const int key)
 			catagories.set(cata->index);
 
 			emit(request_new_stockpile_message{ std::make_pair(designateIdx, getMouseIdx()), catagories });
+			designateIdx = 0;
 		}	
 	}
 }

@@ -82,6 +82,8 @@
       <AdditionalIncludeDirectories>C:\Users\C-60\Desktop\cppPrograms\dependencies\SFML-2.4.2\include;C:\Users\C-60\Desktop\cppPrograms\dependencies\lua-5.3.4\Lua\Lua;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\cereal;C:\Users\C-60\Desktop\cppPrograms\dependencies\Dwarf\boost_1_65_1\boost_1_65_1;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <ForcedIncludeFiles>StdAfx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>C:\Users\C-60\Desktop\cppPrograms\dependencies\SFML-2.4.2\lib;C:\Users\C-60\Desktop\cppPrograms\dependencies\lua-5.3.4\Lua\x64\Release;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -97,6 +99,8 @@
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\Users\C-60\Desktop\cppPrograms\dependencies\SFML-2.4.2\include;C:\Users\C-60\Desktop\cppPrograms\dependencies\lua-5.3.4\Lua\Lua;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\cereal;C:\Users\C-60\Desktop\cppPrograms\dependencies\Dwarf\boost_1_65_1\boost_1_65_1;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <ForcedIncludeFiles>StdAfx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>C:\Users\C-60\Desktop\cppPrograms\dependencies\SFML-2.4.2\lib;C:\Users\C-60\Desktop\cppPrograms\dependencies\lua-5.3.4\Lua\x64\Release;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -113,6 +117,8 @@
       <UndefinePreprocessorDefinitions>%(UndefinePreprocessorDefinitions)</UndefinePreprocessorDefinitions>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\Users\C-60\Desktop\cppPrograms\dependencies\SFML-2.4.2\include;C:\Users\C-60\Desktop\cppPrograms\dependencies\lua-5.3.4\Lua\Lua;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\cereal;C:\Users\C-60\Desktop\cppPrograms\dependencies\Dwarf\boost_1_65_1\boost_1_65_1;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <ForcedIncludeFiles>StdAfx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -132,6 +138,8 @@
       <UndefinePreprocessorDefinitions>%(UndefinePreprocessorDefinitions)</UndefinePreprocessorDefinitions>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\Users\C-60\Desktop\cppPrograms\dependencies\SFML-2.4.2\include;C:\Users\C-60\Desktop\cppPrograms\dependencies\lua-5.3.4\Lua\Lua;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\cereal;C:\Users\C-60\Desktop\cppPrograms\dependencies\Dwarf\boost_1_65_1\boost_1_65_1;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <ForcedIncludeFiles>StdAfx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -170,7 +178,6 @@
     <ClCompile Include="ECS\Entities.cpp" />
     <ClCompile Include="EntityFactory.cpp" />
     <ClCompile Include="Gui.cpp" />
-    <ClCompile Include="Input.cpp" />
     <ClCompile Include="ECS\Systems\ai\JobBoard.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MainMenu.cpp" />
@@ -184,13 +191,18 @@
     <ClCompile Include="Map\Tile.cpp" />
     <ClCompile Include="ECS\Systems\DijkstraSystems\PickMapSystem.cpp" />
     <ClCompile Include="Map\Util.cpp" />
-    <ClCompile Include="Map\VeinCreator.cpp" />
     <ClCompile Include="Map\building\regionBuilder.cpp" />
     <ClCompile Include="Map\building\region\rocklayer.cpp" />
     <ClCompile Include="ECS\Systems\ai\WorkOrders.cpp" />
     <ClCompile Include="Raws\ReadReactions.cpp" />
     <ClCompile Include="ECS\Systems\helpers\WorkOrderHelper.cpp" />
     <ClCompile Include="ECS\Systems\ai\StockpileSystem.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ECS\Components\helpers\work_order_reaction.h" />
@@ -344,7 +356,6 @@
     <ClInclude Include="ECS\Entities.h" />
     <ClInclude Include="EntityFactory.h" />
     <ClInclude Include="Gui.h" />
-    <ClInclude Include="Input.h" />
     <ClInclude Include="ECS\Systems\ai\JobBoard.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="Map\Index.h" />
@@ -357,7 +368,6 @@
     <ClInclude Include="ECS\Systems\DijkstraSystems\PickMapSystem.h" />
     <ClInclude Include="Raws\Defs\ItemDefs.h" />
     <ClInclude Include="Map\Util.h" />
-    <ClInclude Include="Map\VeinCreator.h" />
     <ClInclude Include="Map\building\regionBuilder.h" />
     <ClInclude Include="Map\building\region\rocklayer.h" />
     <ClInclude Include="Raws\Reaction.h" />
@@ -366,6 +376,7 @@
     <ClInclude Include="Raws\ReadReactions.h" />
     <ClInclude Include="ECS\Systems\helpers\WorkOrderHelper.h" />
     <ClInclude Include="ECS\Systems\ai\StockpileSystem.h" />
+    <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cereal\external\rapidxml\manual.html" />

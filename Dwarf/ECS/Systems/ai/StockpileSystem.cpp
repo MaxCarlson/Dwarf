@@ -1,3 +1,4 @@
+#include "../stdafx.h"
 #include "StockpileSystem.h"
 #include "../helpers/ItemHelper.h"
 #include "../../../Map/Tile.h"
@@ -6,7 +7,6 @@
 #include "../../../Raws/ItemRead.h"
 #include "../../../Raws/Defs/ItemDefs.h"
 #include "../../Messages/request_new_stockpile_message.h"
-#include "../../World.h"
 
 std::unordered_map<std::size_t, StockpileInfo> stockpiles;
 

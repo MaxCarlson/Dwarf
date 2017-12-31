@@ -1,13 +1,11 @@
+#include "../stdafx.h"
 #include "Map.h"
-
 #include "../Engine.h"
 #include "Tile.h"
 #include "MapRender.h"
-#include "VeinCreator.h"
 #include "../ECS\Components\PositionComponent.h"
 #include "../ECS\Components\RenderComponent.h"
 #include "../ECS\Components\HealthComponent.h"
-#include "../BearLibTerminal.h"
 #include "../Raws/Materials.h"
 #include "building\regionBuilder.h"
 

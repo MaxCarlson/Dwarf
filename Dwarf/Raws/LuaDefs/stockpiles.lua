@@ -10,6 +10,4 @@ stockpiles = {
 	block = { name = "Block", id = 8 },
 	furiture = { name = "Furniture", id = 9 },
 
-
-
 };
