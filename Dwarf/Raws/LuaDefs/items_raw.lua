@@ -7,7 +7,8 @@ items["ore"] = {
 	itemType = {"component"},
 	glyph = glyphs["ore"],
 	color = "grey",  
-	tcode = 2
+	tcode = 2,
+	stockpile = stockpiles["ore"].id
 };
 
 items["coal"] = {
@@ -16,7 +17,8 @@ items["coal"] = {
 	itemType = {"component"},
 	glyph = glyphs["stone_boulder"],
 	color = "light black", 
-	tcode = 2
+	tcode = 2,
+	stockpile = stockpiles["ore"].id
 };
 
 items["stone_boulder"] = {
@@ -25,7 +27,8 @@ items["stone_boulder"] = {
 	itemType = {"component"},
 	glyph = glyphs["stone_boulder"],
 	color = "grey", 
-	tcode = 2
+	tcode = 2,
+	stockpile = stockpiles["stone"].id
 };
 
 items["block"] = {
@@ -34,5 +37,6 @@ items["block"] = {
 	itemType = {"component"},
 	glyph = glyphs["block"],
 	color = "brown",
-	tcode = 2
+	tcode = 2,
+	stockpile = stockpiles["block"].id
 };

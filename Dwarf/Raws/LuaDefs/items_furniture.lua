@@ -6,7 +6,8 @@ items["bed"] = {
 	itemType = {"component"},
 	glyph = glyphs["bed"],
 	color = "grey",  
-	tcode = 2
+	tcode = 2,
+	stockpile = stockpiles["furniture"].id
 };
 
 items["door"] = {
@@ -15,5 +16,6 @@ items["door"] = {
 	itemType = {"component"},
 	glyph = glyphs["door"],
 	color = "grey",  
-	tcode = 2
+	tcode = 2,
+	stockpile = stockpiles["furniture"].id
 };

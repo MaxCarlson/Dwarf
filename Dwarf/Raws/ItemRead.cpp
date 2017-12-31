@@ -67,7 +67,7 @@ void readInItems() noexcept
 				{ "name", [&c]() { c.name = lua_str(); } },
 				{ "description", [&c]() { c.description = lua_str(); } },
 				{ "color", [&c]() { c.color = lua_str(); } },
-				//{ "foreground", [&c]() { c.bg = lua_int("foreground"); } },
+				//{ "foreground", [&c]() { c.bg = lua_int("foreground"); } }, // Add in fg and bg as color_from_name(lua_str())'s
 				{ "glyph", [&c]() { c.charCode = lua_int(); } },
 				{ "stackSize", [&c]() { c.stackSize = lua_int(); } },
 				{ "tcode", [&c]() { c.tilesetKey = lua_int(); } },
@@ -75,8 +75,10 @@ void readInItems() noexcept
 				readLuaInnerT("itemType", [&c](auto type) {
 					if (type == "choppingTool") c.categories.set(TOOL_CHOPPING);
 					if (type == "diggingTool")  c.categories.set(TOOL_DIGGING);
-				});
-			}}
+
+					});}
+				},
+				{ "stockpile", [&c]() { c.stockpileId = lua_int(); } },
 		}
 	);
 }

@@ -5,7 +5,8 @@ items["pickaxe"] = {
 	itemType = {"diggingTool"},
 	glyph = 63,
 	color = "grey",
-	tcode = 4
+	tcode = 4,
+	stockpile = stockpiles["tool"].id
 };
 
 items["hatchet"] = {
@@ -14,5 +15,6 @@ items["hatchet"] = {
 	itemType = {"choppingTool"},
 	glyph = 67,
 	color = "brown",
-	tcode = 4
+	tcode = 4,
+	stockpile = stockpiles["tool"].id
 };
