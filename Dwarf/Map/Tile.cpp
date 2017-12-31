@@ -182,6 +182,11 @@ namespace region
 		return currentRegion->tileHealth[idx];
 	}
 
+	void setStockpileId(const int idx, const std::size_t id)
+	{
+		currentRegion->stockpileSquares[idx] = id;
+	}
+
 	std::size_t stockpileId(const int idx)
 	{
 		if(currentRegion->stockpileSquares[idx])

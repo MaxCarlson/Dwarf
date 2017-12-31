@@ -3,6 +3,8 @@
 
 struct Stockpile : public Component
 {
+	Stockpile() = default;
+	Stockpile(const std::bitset<64> catagory) : catagory(catagory) {}
 
 	std::bitset<64> catagory;
 

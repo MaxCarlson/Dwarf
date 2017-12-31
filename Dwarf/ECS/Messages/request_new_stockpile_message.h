@@ -6,9 +6,9 @@ struct Coordinates;
 struct request_new_stockpile_message : public base_message_t
 {
 	request_new_stockpile_message() = default;
-	request_new_stockpile_message(std::pair<Coordinates, Coordinates> area, int type) : area(area), type(type) {}
+	request_new_stockpile_message(std::pair<int, int> area, std::bitset<64> setCatagories) : area(area), setCatagories(setCatagories) {}
 
-	std::pair<Coordinates, Coordinates> area;
+	std::pair<int, int> area;
 
-	int type = 0;
+	std::bitset<64> setCatagories;
 };

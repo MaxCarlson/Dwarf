@@ -2,21 +2,44 @@
 #include "../BearLibTerminal.h"
 #include "../Engine.h"
 #include "../Gui.h"
-#include "../Messages/designation_message.h"
 #include "../Map/Tile.h"
 #include "../Raws/ItemRead.h"
 #include "../Raws/raws.h"
 #include "../Raws/Buildings.h"
+#include "../Messages/designation_message.h"
 #include "../Messages/designate_building_message.h"
+#include "../ECS/Messages/request_new_stockpile_message.h"
 #include "../Designations.h"
 #include "../Raws/DefInfo.h"
+#include "../Raws/Defs/ItemDefs.h"
 
 // temp till things are placed elsewhere
 #include "../ECS/Messages/pick_map_changed_message.h"
 
+
 // Desig statics
 static uint8_t designateState = designation_message::MINING;
 static int designateIdx = 0;
+
+
+void testEsc(const std::function<void()>& func)
+{
+
+}
+
+void handleScroll(const int key, int down = TK_PAGEDOWN, int up = TK_PAGEUP)
+{
+	if (key == down)
+		++engine->gui.itemSelected;
+
+	else if (key == up)
+		--engine->gui.itemSelected;
+}
+
+int InputHandler::getMouseIdx()
+{
+	return getIdx({ mouseX, mouseY, engine->mapRenderer->currentZLevel });
+}
 
 void InputHandler::update()
 {
@@ -58,6 +81,9 @@ void InputHandler::update()
 		}
 
 		if (engine->gui.state == Gui::MAIN)
+		{
+			designateIdx = 0;
+
 			switch (key)
 			{
 			case TK_ESCAPE:
@@ -83,7 +109,12 @@ void InputHandler::update()
 			case TK_M:
 				engine->gui.state = Gui::REACTIONS;
 				break;
+
+			case TK_P:
+				engine->gui.state = Gui::STOCKPILES;
+				break;
 			}
+		}
 
 		else if (engine->gui.state == Gui::BUILD)
 		{
@@ -99,7 +130,6 @@ void InputHandler::update()
 			{
 				engine->gui.state = Gui::MAIN;
 				designateState = designation_message::MINING;
-				designateIdx = 0;
 			}
 
 			else if (key == TK_H)
@@ -136,20 +166,24 @@ void InputHandler::update()
 			else
 				reactions(key);
 		}
+
+		else if (engine->gui.state == Gui::STOCKPILES)
+		{
+			if (key == TK_ESCAPE)
+				engine->gui.state = Gui::MAIN;
+			else
+				stockpiles(key);
+		}
 	}
 }
 
 void InputHandler::designate(const int key)
 {
-	if (key == TK_PAGEDOWN)
-		++engine->gui.itemSelected;
+	handleScroll(key);
 
-	else if (key == TK_PAGEUP)
-		--engine->gui.itemSelected;
-
-	else if (key == TK_ENTER || key == TK_MOUSE_LEFT)
+	if (key == TK_ENTER || key == TK_MOUSE_LEFT)
 	{
-		int clickIdx = getIdx({ mouseX, mouseY, engine->mapRenderer->currentZLevel });
+		int clickIdx = getMouseIdx();
 		if (!designateIdx)
 		{
 			designateIdx = clickIdx;
@@ -164,13 +198,9 @@ void InputHandler::designate(const int key)
 
 void InputHandler::buildMenu(const int key)
 {
-	if (key == TK_PAGEDOWN)
-		++engine->gui.itemSelected;
+	handleScroll(key);
 
-	else if (key == TK_PAGEUP)
-		--engine->gui.itemSelected;
-
-	else if (key == TK_ENTER || key == TK_MOUSE_LEFT)
+	if (key == TK_ENTER || key == TK_MOUSE_LEFT)
 	{
 		const auto tag = defInfo->buildingTags[engine->gui.itemSelected];
 		int clickIdx = getIdx({ mouseX, mouseY, engine->mapRenderer->currentZLevel });
@@ -181,13 +211,9 @@ void InputHandler::buildMenu(const int key)
 
 void InputHandler::createItem(const int key)
 {
-	if (key == TK_PAGEDOWN)
-		++engine->gui.itemSelected;
+	handleScroll(key);
 
-	else if (key == TK_PAGEUP)
-		--engine->gui.itemSelected;
-
-	else if (key == TK_ENTER || key == TK_MOUSE_LEFT)
+	if (key == TK_ENTER || key == TK_MOUSE_LEFT)
 	{
 		const auto tag = defInfo->itemTags[engine->gui.itemSelected];
 		const Coordinates co = { mouseX, mouseY, engine->mapRenderer->currentZLevel }; // Add material choices once needed
@@ -202,16 +228,38 @@ void InputHandler::createItem(const int key)
 
 void InputHandler::reactions(const int key)
 {
-	if (key == TK_PAGEDOWN)
-		++engine->gui.itemSelected;
+	handleScroll(key);
 
-	else if (key == TK_PAGEUP)
-		--engine->gui.itemSelected;
-
-	else if (key == TK_ENTER)
+	if (key == TK_ENTER)
 	{
 		const auto tag = defInfo->availibleReactions[engine->gui.itemSelected];
 
 		designations->workOrders.push_back(std::make_pair(1, tag));
+	}
+}
+
+void InputHandler::stockpiles(const int key)
+{
+	handleScroll(key);
+
+	if (key == TK_ENTER || key == TK_MOUSE_LEFT)
+	{
+		// Nothing designated yet, set idx
+		if (!designateIdx)
+		{
+			designateIdx = getMouseIdx();
+		}
+		else
+		{
+			const auto tag = defInfo->stockpileTags[engine->gui.itemSelected];
+
+			auto cata = getStockpileDef(tag);
+
+			std::bitset<64> catagories;
+
+			catagories.set(cata->index);
+
+			emit(request_new_stockpile_message{ std::make_pair(designateIdx, getMouseIdx()), catagories });
+		}	
 	}
 }

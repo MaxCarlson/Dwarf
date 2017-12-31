@@ -103,6 +103,8 @@ namespace region
 
 	uint16_t tileHealth(const int idx);
 
+	void setStockpileId(const int idx, const std::size_t id);
+
 	std::size_t stockpileId(const int idx);
 
 	void forStockpileSquares(const std::function<void(int, std::size_t)> & func);

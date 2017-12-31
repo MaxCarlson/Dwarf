@@ -11,7 +11,7 @@ struct StockpileInfo
 
 	std::size_t id;
 	std::bitset<64> catagory;
-	int freeSpots;
+	int freeSpots = 0;
 	std::unordered_set<int> openTiles;
 };
 
@@ -36,6 +36,8 @@ public:
 	void init();
 
 	void update();
-	
+
+private:
+	void createNewStockpile(std::pair<int, int>& area, const std::bitset<64> &catagories);
 };
 

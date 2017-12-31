@@ -254,6 +254,15 @@ void Gui::drawStockpiles()
 
 	int y = 2;
 	int c = 0;
+	for (const auto& i : defInfo->stockpileNames)
+	{
+		draw::determineHighlight(c, itemSelected);
+
+		terminal_print(horizontalOffset + 1, y, i.c_str());
+		y += 2;
+		++c;
+	}
+	terminal_bkcolor("black");
 }
 
 void Gui::printDebugTileProps()
