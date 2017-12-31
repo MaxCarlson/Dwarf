@@ -6,7 +6,6 @@
 #include "../Raws/Materials.h"
 #include "../Raws/Defs/MaterialDef.h"
 #include "../ECS/World.h"
-#include "../ECS/Components/PositionComponent.h"
 #include "../Helpers/PositionCache.h"
 #include "../ECS/Systems/EntityPositionCache.h"
 

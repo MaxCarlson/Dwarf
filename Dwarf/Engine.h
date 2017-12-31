@@ -24,7 +24,7 @@ class EquipHandler;
 class InputHandler;
 class DesignationHandler;
 class WorkOrders;
-//class WorkOrderHelper;
+class StockpileSystem;
 
 class Engine
 {
@@ -57,7 +57,7 @@ public:
 	EquipHandler * equipHandler;
 	BuildAi * buildAi;
 	WorkOrders * workOrders;
-	//WorkOrderHelper * workOrderHelper;
+	StockpileSystem * stockpileSystem;
 
 	// Systems that don't touch Entities
 	InputHandler * inputHandler;

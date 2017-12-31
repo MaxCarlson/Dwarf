@@ -34,6 +34,7 @@
 #include "ECS\Systems\ai\MiningAi.h"
 #include "ECS\Systems\ai\BuildAi.h"
 #include "ECS\Systems\ai\WorkOrders.h"
+#include "ECS\Systems\ai\StockpileSystem.h"
 
 // System Helpers
 #include "ECS\Systems\helpers\ItemHelper.h"
@@ -175,6 +176,7 @@ void Engine::init()
 	miningAi = new MiningAi();
 	buildAi = new BuildAi();
 	workOrders = new WorkOrders();
+	stockpileSystem = new StockpileSystem();
 
 	// Non Entity or non Updating Systems
 	inputHandler = new InputHandler();
@@ -201,6 +203,7 @@ void Engine::init()
 	world.addSystem(itemHelper);
 	world.addSystem(*workOrders);
 	world.addSystem(*workOrderHelper);
+	world.addSystem(*stockpileSystem);
 
 	// Init systems 
 	miningSystem->init();
@@ -274,6 +277,8 @@ void Engine::update(double deltaTime)
 	workOrders->update(deltaTime);
 	miningAi->update(deltaTime);
 	buildAi->update(deltaTime);
+
+	stockpileSystem->update(); // Update this only once a second or so?
 
 	// Systems that don't need updates
 	// miningSystem->update();

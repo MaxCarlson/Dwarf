@@ -1,6 +1,6 @@
 #pragma once
 #include "../../Systems.h"
-#include "../../Components/ItemStored.h"
+#include "../../Components/Stockpile.h"
 #include <unordered_map>
 #include <unordered_set>
 
@@ -11,13 +11,24 @@ struct StockpileInfo
 
 	std::size_t id;
 	std::bitset<64> catagory;
-	int free_tiles;
+	int freeSpots;
 	std::unordered_set<int> openTiles;
 };
 
-std::unordered_map<std::size_t, StockpileInfo> stockpiles;
+struct StoreableItem
+{
+	StoreableItem() = default;
+	StoreableItem(std::size_t itemId, int desination) : itemId(itemId), desination(desination) {}
 
-class StockpileSystem : public System<Requires<>>
+	std::size_t itemId;
+	int desination;
+};
+
+extern std::unordered_map<std::size_t, StockpileInfo> stockpiles;
+extern std::unordered_map<int, std::vector<std::size_t>> stockpileTargets;
+extern std::vector<StoreableItem> storeableItems;
+
+class StockpileSystem : public System<Requires<Stockpile>>
 {
 public:
 	StockpileSystem() = default;

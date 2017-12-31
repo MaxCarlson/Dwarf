@@ -4,49 +4,6 @@
 #include <vector>
 #include <string>
 
-/*
-class Tile {
-
-public:
-	Tile() = default;
-	// These properties are set by set bit's in Tile's properties unsigned int
-	// And accessed through the tile manager getProperty, setProperty, reverseProperty
-	// bool Explored;		 
-	// bool Obstructed;	 
-	// bool Wall;         
-	// bool Floor;  
-	// bool Stairs/Ramp ~ Provides z level access changes
-	// bool Mineable
-	enum Property // In future remove some properties from here and place them into sepperate vectors!!
-	{
-		EXPLORED = 1,
-		OBSTRUCTED = 1 << 1,
-		WALL = 1 << 2,
-		FLOOR = 1 << 3,
-		RAMP = 1 << 4,
-	};
-
-	// Integer representation of tileset index
-	// as well as tag used to identify material
-	// Will probably use this for matching if tile is mined etc
-	int ch;
-
-	// Use int hex values for colors!!!!
-	int color;
-
-	int health = 500;
-
-	// Add a property here denoting if tile is ore/gem vein for quick lookup!!
-	std::uint16_t properties = 0x1; // Change to 0U for unexplored
-
-	template<class Archive>
-	void serialize(Archive & archive)
-	{
-		archive(ch, color, health, properties);
-	}
-};
-*/
-
 // Formula for tile indexing with coordinates
 #define TILE_ARRAY_LOOKUP (co.z * MAP_WIDTH * MAP_HEIGHT) + (co.y * MAP_WIDTH) + co.x
 
@@ -145,6 +102,10 @@ namespace region
 	void damageTile(const int idx, const uint16_t dmg);
 
 	uint16_t tileHealth(const int idx);
+
+	std::size_t stockpileId(const int idx);
+
+	void forStockpileSquares(const std::function<void(int, std::size_t)> & func);
 
 	// Recalcuate tile pathing when only one
 	// tile has changed, instead of calculating 

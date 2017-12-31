@@ -1,12 +1,13 @@
 #pragma once
 #include "../../Systems.h"
 #include "../../Components/Item.h"
+#include "../ECS/Components/PositionComponent.h"
 
 struct ItemDef;
 class Item;
 struct ReactionInput;
 
-class ItemHelper : public System<Requires<Item>> // Excludes<ItemStored> ??
+class ItemHelper : public System<Requires<Item, PositionComponent>> 
 {
 public:
 	ItemHelper() = default;

@@ -13,7 +13,7 @@
 #include "../Drawing/vchar.h"
 #include "../Engine.h"
 #include "../BearLibTerminal.h"
-
+#include <boost\container\flat_map.hpp>
 
 // External map info
 int MAP_WIDTH, MAP_HEIGHT, MAP_DEPTH, TOTAL_MAP_TILES;
@@ -33,6 +33,7 @@ namespace region
 			materials.resize(TOTAL_MAP_TILES);
 			tileHealth.resize(TOTAL_MAP_TILES, 1);
 			renderCache.resize(TOTAL_MAP_TILES);
+			stockpileSquares.reserve(100);
 		}
 
 		// 1D vector of Tiles indexed by 3D formula
@@ -50,6 +51,7 @@ namespace region
 
 		std::vector<vchar> renderCache;
 
+		boost::container::flat_map<int, std::size_t> stockpileSquares;
 		
 		void tileRecalcAll();
 		void spot_recalc_paths(const Coordinates co);
@@ -68,6 +70,7 @@ namespace region
 			archive(materials);
 			archive(tileHealth);
 			archive(renderCache);
+			archive(stockpileSquares);
 		}
 	};
 
@@ -177,6 +180,22 @@ namespace region
 	uint16_t tileHealth(const int idx)
 	{
 		return currentRegion->tileHealth[idx];
+	}
+
+	std::size_t stockpileId(const int idx)
+	{
+		if(currentRegion->stockpileSquares[idx])
+			return currentRegion->stockpileSquares[idx];
+
+		return 0;
+	}
+
+	void forStockpileSquares(const std::function<void(int, std::size_t)>& func)
+	{
+		for (auto it = currentRegion->stockpileSquares.cbegin(); it != currentRegion->stockpileSquares.cend(); ++it)
+		{
+			func(it->first, it->second);
+		}
 	}
 
 	void spot_recalc_paths(const Coordinates co)
