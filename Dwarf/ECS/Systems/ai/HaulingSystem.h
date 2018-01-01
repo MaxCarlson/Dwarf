@@ -1,7 +1,8 @@
 #pragma once
 #include "../../Systems.h"
+#include "../../Components/Tags/HaulingTag.h"
 
-class HaulingSystem : public System<Requires<>>
+class HaulingSystem : public System<Requires<HaulingTag>>
 {
 public:
 	HaulingSystem() = default;

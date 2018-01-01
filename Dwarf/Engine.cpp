@@ -19,6 +19,7 @@
 #include "ECS\Components\Tags\MiningTag.h"
 #include "ECS\Components\Tags\BuilderTag.h"
 #include "ECS\Components\Tags\WorkOrderTag.h"
+#include "ECS\Components\Tags\HaulingTag.h"
 
 // Systems
 #include "ECS\Systems\RenderSystem.h"
@@ -36,6 +37,7 @@
 #include "ECS\Systems\ai\BuildAi.h"
 #include "ECS\Systems\ai\WorkOrders.h"
 #include "ECS\Systems\ai\StockpileSystem.h"
+#include "ECS\Systems\ai\HaulingSystem.h"
 
 // System Helpers
 #include "ECS\Systems\helpers\ItemHelper.h"
@@ -149,6 +151,7 @@ void Engine::regComponents()
 	world.registerComponent<MiningTag>();
 	world.registerComponent<BuilderTag>();
 	world.registerComponent<WorkOrderTag>();
+	world.registerComponent<HaulingTag>();
 }
 
 void Engine::init()
@@ -174,6 +177,7 @@ void Engine::init()
 	buildAi = new BuildAi();
 	workOrders = new WorkOrders();
 	stockpileSystem = new StockpileSystem();
+	haulingSystem = new HaulingSystem();
 
 	// Non Entity or non Updating Systems
 	inputHandler = new InputHandler();
@@ -201,6 +205,7 @@ void Engine::init()
 	world.addSystem(*workOrders);
 	world.addSystem(*workOrderHelper);
 	world.addSystem(*stockpileSystem);
+	world.addSystem(*haulingSystem);
 
 	// Init systems 
 	miningSystem->init();
@@ -212,6 +217,7 @@ void Engine::init()
 	buildAi->init();
 	workOrders->init();
 	stockpileSystem->init();
+	haulingSystem->init();
 
 	world.refresh();
 
@@ -276,6 +282,7 @@ void Engine::update(double deltaTime)
 	buildAi->update(deltaTime);
 
 	stockpileSystem->update(); // Update this only once a second or so?
+	haulingSystem->update(deltaTime);
 
 	// Systems that don't need updates
 	// miningSystem->update();

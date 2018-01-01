@@ -2,6 +2,7 @@
 #include "../../../Raws/Defs/ItemDefs.h"
 #include "../../../Map/Tile.h"
 #include "DijkstraMapsHandler.h"
+#include "../../Components/Claimed.h"
 
 using namespace region;
 
@@ -18,7 +19,7 @@ void PickMapSystem::update()
 	{
 		auto& item = e.getComponent<Item>();
 
-		if (!item.catagory.test(TOOL_DIGGING) || item.claimed)
+		if (!item.catagory.test(TOOL_DIGGING) || e.hasComponent<Claimed>())
 			continue;
 
 		// Claimed component ?

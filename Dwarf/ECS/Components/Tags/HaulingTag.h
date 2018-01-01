@@ -9,10 +9,14 @@ struct HaulingTag : public Component
 	{
 		FIND_JOB,
 		GOTO_PIKCUP,
-		DROP_ITEM
+		PICKUP_ITEM,
+		GOTO_STOCKPILE,
+		ADD_TO_STOCKPILE
 	};
 
 	hauling_steps step = FIND_JOB;
+
+	int destination = 0;
 
 	std::size_t currentItem = 0;
 

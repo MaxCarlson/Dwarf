@@ -18,10 +18,10 @@ struct StockpileInfo
 struct StoreableItem
 {
 	StoreableItem() = default;
-	StoreableItem(std::size_t itemId, int desination) : itemId(itemId), desination(desination) {}
+	StoreableItem(std::size_t itemId, int desination) : itemId(itemId), destination(desination) {}
 
 	std::size_t itemId;
-	int desination;
+	int destination;
 };
 
 extern std::unordered_map<std::size_t, StockpileInfo> stockpiles;

@@ -24,11 +24,13 @@ void ItemHelper::forEachItem(const std::function<void(Entity)>& func)
 void ItemHelper::claim_item(Entity& item)
 {
 	item.addComponent<Claimed>();
+	item.activate();
 }
 
 void ItemHelper::unclaim_item_by_id(std::size_t id)
 {
 	getWorld().getEntity(id).removeComponent<Claimed>();
+	getWorld().getEntity(id).activate();
 }
 
 void ItemHelper::deleteItem(const std::size_t id)
