@@ -52,7 +52,7 @@ void EquipHandler::pickupItem(int itemSlot, std::size_t entityId, std::size_t it
 	auto& entity = getWorld().getEntity(entityId);
 	auto& inv = entity.getComponent<Inventory>();
 
-	if (itemSlot < MAX_INVENTORY_SLOTS) 
+	if (itemSlot < MAX_INVENTORY_SLOTS)				// Get rid of this slot system!
 		inv.inventory[itemSlot] = itemEid;
 	else
 		std::cout << "Other Item Types Not Implemented Yet Error!!" << std::endl;
@@ -63,8 +63,7 @@ void EquipHandler::pickupItem(int itemSlot, std::size_t entityId, std::size_t it
 		item.removeComponent<ItemStored>();
 
 	// Remove item position component
-	// Must first remove from caching
-	// perhaps this isn't worth it
+	// Must first remove from cache
 	auto itemCo = item.getComponent<PositionComponent>().co;
 
 	positionCache->removeNode({ itemCo, itemEid });
@@ -73,8 +72,7 @@ void EquipHandler::pickupItem(int itemSlot, std::size_t entityId, std::size_t it
 	if (!item.hasComponent<Claimed>())
 		item.addComponent<Claimed>(entityId);
 
-	// This could cause issues if first Entity is an item!!!
-	// Or if this eid gets reused!! ~~ Perhaps start at Entity id 1?
+
 	if (outItemEid != 0)
 		dropItem( finditemSlot(inv, outItemEid), entityId, outItemEid, itemCo); // Item co should be the same as the out item in these cases?
 

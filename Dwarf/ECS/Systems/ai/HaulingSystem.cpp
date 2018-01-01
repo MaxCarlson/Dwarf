@@ -57,6 +57,9 @@ void HaulingSystem::update(const double duration)
 
 		if (tag.step == HaulingTag::FIND_JOB)
 		{
+			if (storeableItems.empty())
+				work.cancel_work(e);
+
 			auto st = storeableItems.back();
 
 			tag.currentItem = st.itemId;
@@ -118,7 +121,7 @@ void HaulingSystem::update(const double duration)
 
 		else if (tag.step == HaulingTag::PICKUP_ITEM)
 		{
-			std::cout << "Picking up item haul - " << world.getEntity(tag.currentItem).getComponent<Item>().name << "\n";
+			std::cout << "Picking up item haul - " << world.getEntity(tag.currentItem).getComponent<Item>().name << " - " << tag.currentItem << "\n";
 
 			emit(pickup_item_message{ InventorySlots::SLOT_CARRYING, e.getId().index, tag.currentItem, 0 });
 			tag.step = HaulingTag::GOTO_STOCKPILE;
@@ -138,13 +141,13 @@ void HaulingSystem::update(const double duration)
 
 			if (mov.cannotFindPath)
 			{
-				itemHelper.unclaim_item_by_id(tag.currentItem);
+				emit(drop_item_message{ SLOT_CARRYING, e.getId().index, tag.currentItem, co });
 				work.cancel_work(e);
 				mov.cannotFindPath = false;
 			}
 
 			// We're on top of the item!
-			if (getIdx(co) == itemHelper.get_item_location(tag.currentItem))
+			if (getIdx(co) == tag.destination)
 			{
 				tag.step = HaulingTag::ADD_TO_STOCKPILE;
 				return;
@@ -154,15 +157,12 @@ void HaulingSystem::update(const double duration)
 				return;
 
 
-			itemHelper.unclaim_item_by_id(tag.currentItem);
+			emit(drop_item_message{ SLOT_CARRYING, e.getId().index, tag.currentItem, co });
 			work.cancel_work(e); 
 		}
 
 		else if (tag.step == HaulingTag::ADD_TO_STOCKPILE)
 		{
-			itemHelper.unclaim_item_by_id(tag.currentItem);
-			tag.currentItem = 0;
-
 			emit(drop_item_message{ SLOT_CARRYING, e.getId().index, tag.currentItem, co });
 
 			work.cancel_work(e);

@@ -276,7 +276,11 @@ void Engine::update(double deltaTime)
 	dijkstraHandler->update();
 
 	// Work Systems
+
+	// Assign jobs to entities
 	aiWorkSystem->update();
+
+	// Perform assigned jobs
 	workOrders->update(deltaTime);
 	miningAi->update(deltaTime);
 	buildAi->update(deltaTime);

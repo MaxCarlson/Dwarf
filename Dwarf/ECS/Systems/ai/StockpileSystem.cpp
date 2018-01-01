@@ -81,7 +81,7 @@ void StockpileSystem::update()
 		stockpilesExist = true;
 
 		auto& stock = e.getComponent<Stockpile>();
-		const auto  sid = e.getId().index;
+		const auto sid = e.getId().index;
 
 		StockpileInfo info = { sid, stock.catagory };
 		stockpiles[sid] = info;
@@ -124,6 +124,7 @@ void StockpileSystem::update()
 			{
 				--stockpiles[region::stockpileId(idx)].freeSpots;
 				stockpiles[region::stockpileId(idx)].openTiles.erase(idx);
+				return;
 			}
 
 			// Skip claimed items
@@ -143,16 +144,16 @@ void StockpileSystem::update()
 				return;
 
 			// Find a stockpile with storage space
-			// and add item id to list of storeable items
-			for (auto id : find->second)
+			// and add item id and free tile location to list of storeable items and their desinations
+			for (const auto id : find->second)
 			{
 				if (stockpiles[id].freeSpots > 0)
 				{
 					--stockpiles[id].freeSpots;
-					int desination = *stockpiles[id].openTiles.begin();
+					int destination = *stockpiles[id].openTiles.begin();
 
-					stockpiles[id].openTiles.erase(desination);
-					storeableItems.push_back(StoreableItem{ e.getId().index, desination });
+					stockpiles[id].openTiles.erase(destination);
+					storeableItems.push_back(StoreableItem{ e.getId().index, destination });
 					return;
 				}
 			}
