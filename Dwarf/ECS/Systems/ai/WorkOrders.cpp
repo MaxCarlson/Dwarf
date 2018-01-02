@@ -169,7 +169,8 @@ void WorkOrders::work(Entity e, const double& duration)
 		const auto dist = region::get_2D_distance(co, *pos);
 		const bool zeq = co.z == pos->z;
 
-		// Drop component and tell building it has the component
+		// Tell building it has the component
+		// and procede to drop it off
 		if (co == *pos || (zeq && dist < 1.41))
 		{
 			for (auto & component : tag.reaction.components)
@@ -177,12 +178,12 @@ void WorkOrders::work(Entity e, const double& duration)
 					component.second = true;
 
 			tag.step = WorkOrderTag::DROP_COMPONENT;
-			return;
+			return; 
 		}
 
 		if (mov.path.empty())
 		{
-			auto path = findPath(co, idxToCo(itemHelper.get_item_location(tag.current_component)));
+			auto path = findPath(co, *pos);
 
 			if (path->failed)
 			{
@@ -192,6 +193,7 @@ void WorkOrders::work(Entity e, const double& duration)
 			}
 
 			mov.path = path->path;
+			return;
 		}
 	}
 	else if (tag.step == WorkOrderTag::DROP_COMPONENT)

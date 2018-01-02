@@ -6,7 +6,6 @@
 
 #include "ECS\Components\PositionComponent.h"
 #include "ECS\Components\RenderComponent.h"
-#include "ECS\Components\KeyBoardComponent.h"
 #include "ECS\Components\HealthComponent.h"
 #include "ECS\Components\LaborStatsComponent.h"
 #include "ECS\Components\MovementComponent.h"

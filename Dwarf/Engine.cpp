@@ -289,7 +289,7 @@ void Engine::update(double deltaTime)
 	buildAi->update(deltaTime);
 
 	stockpileSystem->update(); // Update this only once a second or so?
-	haulingSystem->update(deltaTime);
+//	haulingSystem->update(deltaTime);
 
 	// Systems that don't need updates
 	// miningSystem->update();

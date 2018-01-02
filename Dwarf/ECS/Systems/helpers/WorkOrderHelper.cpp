@@ -19,7 +19,8 @@ std::unique_ptr<work_order_reaction> WorkOrderHelper::find_work_order_reaction(c
 	if (designations->workOrders.empty())
 		return wo_reaction;
 
-	for (auto & des : designations->workOrders)
+
+	for (std::pair<int, std::string> & des : designations->workOrders)
 	{
 		auto react = getReaction(des.second);
 
@@ -103,7 +104,7 @@ void WorkOrderHelper::updateWorkOrders()
 {
 	designations->workOrders.erase(
 		std::remove_if(designations->workOrders.begin(), designations->workOrders.end(),
-			[](auto num) { return num.first < 1; }
+			[](auto num) { return num.first == 0; }
 		),
 		designations->workOrders.end()
 	);
