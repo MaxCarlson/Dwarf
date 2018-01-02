@@ -87,17 +87,17 @@ void WorkOrders::work(Entity e, const double& duration)
 					return;
 				}
 
-				// Set entity destination
-				//mov.destination = idxToCo(cpos);
+				// Set entity path
 				auto path = findPath(co, idxToCo(cpos));
 				
-				if (!path->failed)
+				if (path->failed)
 				{
-					mov.path = path->path;
-				}
-				else
+					tag.current_component = 0;
 					continue;
+			
+				}
 
+				mov.path = path->path;
 				tag.step = WorkOrderTag::GOTO_COMPONENT;
 				return;
 			}
@@ -119,11 +119,6 @@ void WorkOrders::work(Entity e, const double& duration)
 		if (mov.progress || !mov.path.empty())
 			return;
 
-		if (getIdx(co) != itemHelper.get_item_location(tag.current_component))
-		{
-			mov.destination = idxToCo(itemHelper.get_item_location(tag.current_component));
-			return;
-		}
 
 		// We're on top of the item!
 		if (getIdx(co) == itemHelper.get_item_location(tag.current_component))
@@ -132,12 +127,21 @@ void WorkOrders::work(Entity e, const double& duration)
 			return;
 		}
 
-		// Path didn't work out, try again. Possibly revisit this if there are issues
-		// Testing canceling work instead
-		//tag.step = WorkOrderTag::FIND_COMPONENT;
+		// Look for a path to the component
+		// if there isn't one cancel working and return
+		if (mov.path.empty())
+		{
+			auto path = findPath(co, idxToCo(itemHelper.get_item_location(tag.current_component)));
 
-		work.cancel_work(e); // We might need to unclaim components???
-		return;
+			if (path->failed)
+			{
+				work.cancel_work(e);
+				return;
+			}
+
+			mov.path = path->path;
+			return;
+		}
 	}
 
 	else if (tag.step == WorkOrderTag::GRAB_COMPONENT)
@@ -178,8 +182,16 @@ void WorkOrders::work(Entity e, const double& duration)
 
 		if (mov.path.empty())
 		{
-			emit(drop_item_message{ SLOT_CARRYING, e.getId().index, tag.current_component, co });
-			work.cancel_work(e);
+			auto path = findPath(co, idxToCo(itemHelper.get_item_location(tag.current_component)));
+
+			if (path->failed)
+			{
+				emit(drop_item_message{ SLOT_CARRYING, e.getId().index, tag.current_component, co });
+				work.cancel_work(e);
+				return;
+			}
+
+			mov.path = path->path;
 		}
 	}
 	else if (tag.step == WorkOrderTag::DROP_COMPONENT)

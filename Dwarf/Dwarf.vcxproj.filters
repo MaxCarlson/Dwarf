@@ -206,9 +206,6 @@
     <ClInclude Include="ECS\Systems\RenderSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ECS\Components\KeyBoardComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ECS\Components\HealthComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>

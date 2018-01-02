@@ -151,7 +151,7 @@ void BuildAi::doBuild(const Entity & e)
 
 	else if (tag.step == BuilderTag::GOTO_BUILDING)
 	{
-		if (mov.progress)
+		if (mov.progress || !mov.path.empty())
 			return;
 
 		auto building = getWorld().getEntity(tag.buildingTarget.entity_id);

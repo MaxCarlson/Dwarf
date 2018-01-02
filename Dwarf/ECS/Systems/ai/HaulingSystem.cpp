@@ -79,8 +79,6 @@ void HaulingSystem::doWork(Entity e)
 
 		if (item.isValid() && !item.hasComponent<Claimed>() && item.hasComponent<PositionComponent>())
 		{
-			itemHelper.claim_item(item);
-
 			auto path = findPath(co, item.getComponent<PositionComponent>().co);
 
 			if (path->failed)
@@ -89,23 +87,25 @@ void HaulingSystem::doWork(Entity e)
 				return;
 			}
 
-			mov.path = path->path;
-			tag.step = HaulingTag::GOTO_PIKCUP;
+			itemHelper.claim_item(item);
 
+			mov.path = path->path;
+			
 			// Mark the stockpile square as taken
 			// So we don't get multiple items set to be put on it
 			designations->hauling[tag.destination] = region::stockpileId(tag.destination);
 
 			std::cout << "Hauling item " << item.getComponent<Item>().name << " - " << " to " << st.destination << "\n";
+
+			tag.step = HaulingTag::GOTO_PIKCUP;
+			storeableItems.pop_back();
+			return;
 		}
 		else
 		{
 			work.cancel_work(e);
 			return;
 		}
-
-		storeableItems.pop_back();
-		return;
 	}
 
 	else if (tag.step == HaulingTag::GOTO_PIKCUP)

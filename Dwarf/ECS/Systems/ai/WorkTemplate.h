@@ -105,6 +105,7 @@ public:
 	{
 		e.removeComponent<TAG>();
 		e.activate();
+		//engine->world.refresh();
 		// status marker for idle here?
 	}
 

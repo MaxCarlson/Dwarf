@@ -348,7 +348,6 @@
     <ClInclude Include="ECS\Components\CombatStatsComponent.h" />
     <ClInclude Include="ECS\Components\HealthComponent.h" />
     <ClInclude Include="ECS\Components\JobComponent.h" />
-    <ClInclude Include="ECS\Components\KeyBoardComponent.h" />
     <ClInclude Include="ECS\Components\LaborStatsComponent.h" />
     <ClInclude Include="ECS\Components\MovementComponent.h" />
     <ClInclude Include="ECS\EntityManager.h" />

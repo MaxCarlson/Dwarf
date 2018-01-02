@@ -4,7 +4,6 @@
 // Components
 #include "ECS\Components\PositionComponent.h"
 #include "ECS\Components\RenderComponent.h"
-#include "ECS\Components\KeyBoardComponent.h"
 #include "ECS\Components\ItemStored.h"
 #include "ECS\Components\HealthComponent.h"
 #include "ECS\Components\Item.h"
@@ -296,9 +295,8 @@ void Engine::update(double deltaTime)
 	// miningSystem->update();
 	// entityPositionCache->update();
 
-	// Should this be called before or after? Probably before?
-	// Possibly right after deliver messages, so systems can work on updated entities?
-	// Figure it out!
+	// Update all traits in entities that were killed, deactivated,
+	// or activated (when a component changes)
 	world.refresh();
 }
 

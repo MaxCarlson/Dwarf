@@ -116,7 +116,8 @@ void StockpileSystem::update()
 	);
 
 	// For all items currently being hauled, or about to be hauled
-	// don't show empty stockpile squares
+	// be sure to remove the squares they're going to be put on
+	// from the list of open squares in each stockpile
 	for (const auto& h : designations->hauling)
 	{
 		--stockpiles[h.second].freeSpots;
@@ -137,39 +138,41 @@ void StockpileSystem::update()
 				stockpiles[region::stockpileId(idx)].openTiles.erase(idx);
 				return;
 			}
-
-			// Skip claimed items
-			if (e.hasComponent<Claimed>())
-				return;
-
-			auto stock_id = getItemDef(e.getComponent<Item>().tag)->stockpileId;
-
-			// Item doesn't have stockpile type
-			if (!stock_id)
-				return;
-
-			const auto& find = stockpileTargets.find(stock_id);
-
-			// No stockpiles that can take this item
-			if (find == stockpileTargets.end())
-				return;
-
-			// Find a stockpile with storage space
-			// and add item id and free tile location to list of storeable items and their desinations
-			for (const auto id : find->second)
-			{
-				if (stockpiles[id].freeSpots > 0)
-				{
-					--stockpiles[id].freeSpots;
-					int destination = *stockpiles[id].openTiles.begin();
-
-					stockpiles[id].openTiles.erase(destination);
-					storeableItems.push_back(StoreableItem{ e.getId().index, destination });
-					return;
-				}
-			}
-
 		}
 	);
+
+	itemHelper.forEachItem([](auto& e) // Looping through all items with position components seems inefficiant, If perf issue - Loop through stockpile squares and find items with position cahce lookups
+	{
+		// Skip claimed items
+		if (e.hasComponent<Claimed>())
+			return;
+
+		auto stock_id = getItemDef(e.getComponent<Item>().tag)->stockpileId;
+
+		// Item doesn't have stockpile type
+		if (!stock_id)
+			return;
+
+		const auto& find = stockpileTargets.find(stock_id);
+
+		// No stockpiles that can take this item
+		if (find == stockpileTargets.end())
+			return;
+
+		// Find a stockpile with storage space
+		// and add item id and free tile location to list of storeable items and their destinations
+		for (const auto id : find->second)
+		{
+			if (stockpiles[id].freeSpots > 0)
+			{
+				--stockpiles[id].freeSpots;
+				int destination = *stockpiles[id].openTiles.begin();
+
+				stockpiles[id].openTiles.erase(destination);
+				storeableItems.push_back(StoreableItem{ e.getId().index, destination });
+				return;
+			}
+		}
+	});
 }
 
