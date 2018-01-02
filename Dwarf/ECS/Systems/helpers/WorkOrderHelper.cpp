@@ -22,6 +22,12 @@ std::unique_ptr<work_order_reaction> WorkOrderHelper::find_work_order_reaction(c
 
 	for (std::pair<int, std::string> & des : designations->workOrders)
 	{
+		// Skip any reaction that has less than one requested
+		// time remaining. All reactions < 1 will be cleared from designations
+		// after this loop
+		if (des.first < 1)
+			continue;
+
 		auto react = getReaction(des.second);
 
 		// Find a building that can proccess reaction
@@ -80,7 +86,6 @@ std::unique_ptr<work_order_reaction> WorkOrderHelper::find_work_order_reaction(c
 				wo_reaction = std::make_unique<work_order_reaction>( workshop_id, react->tag, components );
 				claimed_workshops.insert(workshop_id);
 				--des.first;
-				updateWorkOrders();
 			}
 			
 			// Unclaim components
@@ -91,6 +96,8 @@ std::unique_ptr<work_order_reaction> WorkOrderHelper::find_work_order_reaction(c
 			}
 		}	
 	}
+
+	updateWorkOrders();
 
 	return wo_reaction;
 }
@@ -104,7 +111,7 @@ void WorkOrderHelper::updateWorkOrders()
 {
 	designations->workOrders.erase(
 		std::remove_if(designations->workOrders.begin(), designations->workOrders.end(),
-			[](auto num) { return num.first == 0; }
+			[](auto num) { return num.first < 1; }
 		),
 		designations->workOrders.end()
 	);
