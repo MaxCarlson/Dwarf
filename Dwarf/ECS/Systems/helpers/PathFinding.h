@@ -1,8 +1,13 @@
 #pragma once
-class PathFinding
+#include "../../../Coordinates.h"
+
+struct Path
 {
-public:
-	PathFinding();
-	~PathFinding();
+	bool failed = false;
+
+	std::vector<Coordinates> path;
 };
+
+
+std::unique_ptr<Path> findPath(Coordinates start, Coordinates dest);
 

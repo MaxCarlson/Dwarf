@@ -8,6 +8,8 @@
 #include "../ECS/Systems/helpers/ItemHelper.h"
 #include "../Raws/ReadReactions.h"
 #include "../Raws/raws.h"
+#include "../ECS/Systems/helpers/PathFinding.h"
+#include "../ECS/Messages/drop_item_message.h"
 
 namespace JobsBoard
 {
@@ -86,7 +88,16 @@ void WorkOrders::work(Entity e, const double& duration)
 				}
 
 				// Set entity destination
-				mov.destination = idxToCo(cpos);
+				//mov.destination = idxToCo(cpos);
+				auto path = findPath(co, idxToCo(cpos));
+				
+				if (!path->failed)
+				{
+					mov.path = path->path;
+				}
+				else
+					continue;
+
 				tag.step = WorkOrderTag::GOTO_COMPONENT;
 				return;
 			}
@@ -97,25 +108,21 @@ void WorkOrders::work(Entity e, const double& duration)
 			tag.step = WorkOrderTag::WORK_WORKSHOP;
 			return;
 		}
+
+		work.cancel_work(e);
+		return;
 	}
 
 	else if (tag.step == WorkOrderTag::GOTO_COMPONENT)
 	{
 		// Don't interrupt movement
-		if (mov.progress)
+		if (mov.progress || !mov.path.empty())
 			return;
 
-		if (mov.path.empty() && getIdx(co) != itemHelper.get_item_location(tag.current_component))
+		if (getIdx(co) != itemHelper.get_item_location(tag.current_component))
 		{
 			mov.destination = idxToCo(itemHelper.get_item_location(tag.current_component));
 			return;
-		}
-
-
-		if (mov.cannotFindPath)
-		{
-			work.cancel_work(e);
-			mov.cannotFindPath = false;
 		}
 
 		// We're on top of the item!
@@ -124,9 +131,6 @@ void WorkOrders::work(Entity e, const double& duration)
 			tag.step = WorkOrderTag::GRAB_COMPONENT;
 			return;
 		}
-
-		if (!mov.path.empty())
-			return;
 
 		// Path didn't work out, try again. Possibly revisit this if there are issues
 		// Testing canceling work instead
@@ -141,6 +145,7 @@ void WorkOrders::work(Entity e, const double& duration)
 		emit(pickup_item_message{ InventorySlots::SLOT_CARRYING, e.getId().index, tag.current_component, 0 });
 		tag.step = WorkOrderTag::GOTO_WORKSHOP;
 	}
+
 	else if (tag.step == WorkOrderTag::GOTO_WORKSHOP)
 	{
 		if (mov.progress || !mov.path.empty())
@@ -150,15 +155,10 @@ void WorkOrders::work(Entity e, const double& duration)
 
 		auto* pos = &building.getComponent<PositionComponent>().co;
 
-		if (!pos)
+		if (!pos || co != *pos)
 		{
+			emit(drop_item_message{ SLOT_CARRYING, e.getId().index, tag.current_component, co });
 			work.cancel_work(e);
-			return;
-		}
-
-		if (co != *pos)
-		{
-			mov.destination = *pos;
 			return;
 		}
 
@@ -177,7 +177,7 @@ void WorkOrders::work(Entity e, const double& duration)
 	}
 	else if (tag.step == WorkOrderTag::DROP_COMPONENT)
 	{
-		itemHelper.unclaim_item_by_id(tag.current_component);
+		emit(drop_item_message{ SLOT_CARRYING, e.getId().index, tag.current_component, co });
 
 		tag.current_component = 0;
 		tag.step = WorkOrderTag::FIND_COMPONENT;

@@ -25,7 +25,6 @@ struct PriorityQueue
 		}
 	};
 
-	// Is this an effeciant way of doing things?
 	std::priority_queue<Element, std::vector<Element>, CompareElements> elements;
 
 	bool empty() const { return elements.empty(); }

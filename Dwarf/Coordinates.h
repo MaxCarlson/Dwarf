@@ -65,5 +65,5 @@ struct CoordinateHashEqual
 	}
 };
 
-// Probably won't ever have maps this large!!
+// 0, 0, 0 can never be reached on the map
 const static Coordinates EMPTY_COORDINATES = { 0, 0, 0 };

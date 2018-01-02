@@ -136,7 +136,7 @@ void HaulingSystem::update(const double duration)
 		else if (tag.step == HaulingTag::GOTO_STOCKPILE)
 		{
 			// Don't interrupt movement
-			if (mov.progress)
+			if (mov.progress || !mov.path.empty())
 				return;
 
 			if (mov.path.empty() && getIdx(co) != tag.destination) // Delete this? Results in infinite loop if cannot find path atm
@@ -158,10 +158,6 @@ void HaulingSystem::update(const double duration)
 				tag.step = HaulingTag::ADD_TO_STOCKPILE;
 				return;
 			}
-
-			if (!mov.path.empty())
-				return;
-
 
 			emit(drop_item_message{ SLOT_CARRYING, e.getId().index, tag.currentItem, co });
 			work.cancel_work(e); 

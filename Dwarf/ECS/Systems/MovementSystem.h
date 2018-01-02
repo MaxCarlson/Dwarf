@@ -32,11 +32,6 @@ public:
 
 private:
 
-	// Updates position of Entity.
-	// If the Entity completes movement through a square,
-	// zero their movement direction, then let MovementAI
-	// know to do more pathfinding. Could be better to hold a vector of movement squares in 
-	// movement component, and only change it if the map changes!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	void updatePos(double tStep, const Entity & e)
 	{
 		auto& mov = e.getComponent<MovementComponent>();
@@ -76,11 +71,10 @@ private:
 
 
 			// Probably don't want this to be deffered since cache would
-			// be wrong sometimes
+			// be wrong sometimes ~~ Possibly look into deleting this message, right now all it does is update the cache
 			emit(entity_moved_message{ e, co, oldCo });
 			//emit_deffered(entity_moved_message{ e, co, oldCo });
 
-			//tileManager->setProperty<Tile::OBSTRUCTED>(co);
 
 			// If this Entity has finished following it's path
 			// reset it's destination coordinates to none

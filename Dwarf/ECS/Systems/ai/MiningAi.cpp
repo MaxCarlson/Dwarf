@@ -95,7 +95,7 @@ void MiningAi::updateMiner(const Entity& e)
 
 		// If entity is already moving, 
 		// don't change it's destination
-		if (mov.progress)
+		if (mov.progress || !mov.path.empty())
 			return;
 
 		// If the mining map at our idx is zero,
@@ -159,8 +159,7 @@ void MiningAi::updateMiner(const Entity& e)
 		}
 
 		// Set movement components destination
-		mov.destination = co;
-		Coordinates & dest = mov.destination;
+		Coordinates dest = co;
 
 		switch (currentDir)
 		{
@@ -175,6 +174,9 @@ void MiningAi::updateMiner(const Entity& e)
 		case UP:      ++dest.z; break;
 		case DOWN:    --dest.z; break;
 		}
+
+		mov.path.push_back(co);
+
 		return;
 	}
 
