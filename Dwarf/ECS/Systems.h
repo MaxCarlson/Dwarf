@@ -100,6 +100,8 @@ public:
 
 	virtual ~SystemBase() {};
 
+	virtual void init() {}
+
 	// Returns a Filter object that holds two
 	// bool vectors that describe required and 
 	// excluded components

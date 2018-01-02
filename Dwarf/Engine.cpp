@@ -56,6 +56,7 @@
 #include "../cereal/types/memory.hpp"
 #include "../cereal/types/vector.hpp"
 
+#include "RunSystems.h"
 
 typedef std::chrono::milliseconds::rep TimePoint;
 inline TimePoint now() {
@@ -77,6 +78,7 @@ void Engine::newGame(int screenWidth, int screenHeight)
 	// Init misc maps and designations
 	designations = std::make_unique<Designations>();
 	defInfo = std::make_unique<DefInfo>();
+
 
 	// Init systems
 	init();
@@ -159,6 +161,8 @@ void Engine::init()
 	// Ensure component Index's match before and after
 	// serialization
 	regComponents();
+
+	//RunSystems::initSystems(); // Work on better format for the systems in the future. Also move them out of this file
 
 	// Non archived extern items
 	positionCache = std::make_unique<PositionCache>();

@@ -7,10 +7,11 @@
 #include "../../../Raws/ItemRead.h"
 #include "../../../Raws/Defs/ItemDefs.h"
 #include "../../Messages/request_new_stockpile_message.h"
+#include "../Designations.h"
 
 std::unordered_map<std::size_t, StockpileInfo> stockpiles;
 
-// Map of Stockpiles of type int
+// Map of Stockpiles id's that match stockpile type int
 std::unordered_map<int, std::vector<std::size_t>> stockpileTargets;
 
 std::vector<StoreableItem> storeableItems;
@@ -103,7 +104,6 @@ void StockpileSystem::update()
 	if (!stockpilesExist)
 		return;
 
-
 	// Build (and count) list of free tiles for each stockpile
 	region::forStockpileSquares([](const auto idx, const auto id)
 		{
@@ -115,11 +115,22 @@ void StockpileSystem::update()
 		}
 	);
 
+	// For all items currently being hauled, or about to be hauled
+	// don't show empty stockpile squares
+	for (const auto& h : designations->hauling)
+	{
+		--stockpiles[h.second].freeSpots;
+		stockpiles[h.second].openTiles.erase(h.first);
+	}
+
 	itemHelper.forEachItem([](auto& e) // Looping through all items with position components seems inefficiant, If perf issue - Loop through stockpile squares and find items with position cahce lookups
 		{
+			if (!e.hasComponent<PositionComponent>())
+				return;
+
 			const int idx = getIdx(e.getComponent<PositionComponent>().co);
 
-			// If there's an item on the stockpile square
+			// If there's an item on the stockpile square 
 			if (region::stockpileId(idx) > 0)
 			{
 				--stockpiles[region::stockpileId(idx)].freeSpots;

@@ -77,6 +77,7 @@ void EquipHandler::pickupItem(int itemSlot, std::size_t entityId, std::size_t it
 		dropItem( finditemSlot(inv, outItemEid), entityId, outItemEid, itemCo); // Item co should be the same as the out item in these cases?
 
 	item.activate();
+	getWorld().refresh();
 }
 
 // It looks like we don't need to pass the itemEid when we have entity eid since we can get it
@@ -105,6 +106,7 @@ void EquipHandler::dropItem(int itemSlot, std::size_t entityId, std::size_t item
 		item.removeComponent<Claimed>();
 
 	item.activate();
+	getWorld().refresh();
 }
 
 int EquipHandler::finditemSlot(const Inventory & einv, std::size_t item)

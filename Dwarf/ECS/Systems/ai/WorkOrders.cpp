@@ -209,7 +209,8 @@ void WorkOrders::work(Entity e, const double& duration)
 				
 			material = cent.getComponent<Item>().material;
 			materialNames += cent.getComponent<Item>().name + " ";
-			world.killEntity(cent);
+			//world.killEntity(cent);
+			itemHelper.deleteItem(comp.first);
 		}
 
 		// Produce outputs ~~ figure out how to deal with mixed outputs

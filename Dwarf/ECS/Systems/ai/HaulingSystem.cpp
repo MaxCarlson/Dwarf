@@ -7,6 +7,7 @@
 #include "../../Components/Claimed.h"
 #include "../../Components/PositionComponent.h"
 #include "../../Messages/drop_item_message.h"
+#include "../../../Designations.h"
 
 
 
@@ -58,8 +59,11 @@ void HaulingSystem::update(const double duration)
 		if (tag.step == HaulingTag::FIND_JOB)
 		{
 			if (storeableItems.empty())
+			{
 				work.cancel_work(e);
-
+				return;
+			}
+				
 			auto st = storeableItems.back();
 
 			tag.currentItem = st.itemId;
@@ -73,6 +77,10 @@ void HaulingSystem::update(const double duration)
 
 				mov.destination = item.getComponent<PositionComponent>().co;
 				tag.step = HaulingTag::GOTO_PIKCUP;
+
+				// Mark the stockpile square as taken
+				// So we don't get multiple items set to be put on it
+				designations->hauling[tag.destination] = region::stockpileId(tag.destination);
 
 				std::cout << "Hauling item " << item.getComponent<Item>().name << " - " << " to " << st.destination << "\n";
 			}
@@ -112,10 +120,8 @@ void HaulingSystem::update(const double duration)
 			if (!mov.path.empty())
 				return;
 
-			auto& item = world.getEntity(tag.currentItem);
-			item.removeComponent<Claimed>();
-			item.activate();
 
+			itemHelper.unclaim_item_by_id(tag.currentItem);
 			work.cancel_work(e); // We might need to unclaim components???
 		}
 
@@ -164,6 +170,7 @@ void HaulingSystem::update(const double duration)
 		else if (tag.step == HaulingTag::ADD_TO_STOCKPILE)
 		{
 			emit(drop_item_message{ SLOT_CARRYING, e.getId().index, tag.currentItem, co });
+			designations->hauling.erase(getIdx(co));
 
 			work.cancel_work(e);
 		}

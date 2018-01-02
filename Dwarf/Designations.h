@@ -18,10 +18,15 @@ struct Designations
 
 	std::vector<std::pair<int, std::string>> workOrders;
 
+	// Map of items by destination square that are currently claimed
+	// and or being taken to a stockpile.
+	// size_t is the stockpile id
+	std::unordered_map<int, std::size_t> hauling;
+
 	template<class Archive>
 	void serialize(Archive& archive)
 	{
-		archive(mining, buildings, workOrders);
+		archive(mining, buildings, workOrders, hauling);
 	}
 
 };

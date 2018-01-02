@@ -25,23 +25,26 @@ void ItemHelper::claim_item(Entity& item)
 {
 	item.addComponent<Claimed>();
 	item.activate();
+	getWorld().refresh();
 }
 
 void ItemHelper::unclaim_item_by_id(std::size_t id)
 {
 	getWorld().getEntity(id).removeComponent<Claimed>();
 	getWorld().getEntity(id).activate();
+	getWorld().refresh();
 }
 
 void ItemHelper::deleteItem(const std::size_t id)
 {
-	auto e = getWorld().getEntity(id);
+	auto& e = getWorld().getEntity(id);
 	auto* pos = &e.getComponent<PositionComponent>();
 
 	if(pos)
 		positionCache->removeNode({ pos->co, id });
 
 	e.kill();
+	getWorld().refresh();
 }
 
 int ItemHelper::get_item_location(std::size_t id)
