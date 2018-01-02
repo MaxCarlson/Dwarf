@@ -155,7 +155,7 @@ void WorkOrders::work(Entity e, const double& duration)
 
 		auto* pos = &building.getComponent<PositionComponent>().co;
 
-		if (!pos || co != *pos)
+		if (!pos)
 		{
 			emit(drop_item_message{ SLOT_CARRYING, e.getId().index, tag.current_component, co });
 			work.cancel_work(e);
@@ -173,6 +173,13 @@ void WorkOrders::work(Entity e, const double& duration)
 					component.second = true;
 
 			tag.step = WorkOrderTag::DROP_COMPONENT;
+			return;
+		}
+
+		if (mov.path.empty())
+		{
+			emit(drop_item_message{ SLOT_CARRYING, e.getId().index, tag.current_component, co });
+			work.cancel_work(e);
 		}
 	}
 	else if (tag.step == WorkOrderTag::DROP_COMPONENT)

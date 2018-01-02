@@ -151,7 +151,7 @@ void BuildAi::doBuild(const Entity & e)
 
 	else if (tag.step == BuilderTag::GOTO_BUILDING)
 	{
-		if (mov.progress || !mov.path.empty())
+		if (mov.progress)
 			return;
 
 		auto building = getWorld().getEntity(tag.buildingTarget.entity_id);
@@ -165,7 +165,6 @@ void BuildAi::doBuild(const Entity & e)
 			return;
 		}
 
-		
 		const auto dist = region::get_2D_distance(co, *pos);
 		const bool zeq = co.z == pos->z;
 
@@ -178,7 +177,22 @@ void BuildAi::doBuild(const Entity & e)
 
 			tag.step = BuilderTag::DROP_COMPONENT;
 			return;
-		}		
+		}	
+
+		if (mov.path.empty())
+		{
+			auto path = findPath(co, *pos);
+			
+			if (path->failed)
+			{
+				emit(drop_item_message{ SLOT_CARRYING, e.getId().index, tag.current_component, co });
+				work.cancel_work(e);
+				return;
+			}
+
+			mov.path = path->path;
+			return;
+		}
 	}
 
 	else if (tag.step == BuilderTag::DROP_COMPONENT)
