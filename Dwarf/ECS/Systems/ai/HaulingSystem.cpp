@@ -8,7 +8,7 @@
 #include "../../Components/PositionComponent.h"
 #include "../../Messages/drop_item_message.h"
 #include "../../../Designations.h"
-
+#include "../ECS/Systems/helpers/PathFinding.h"
 
 
 namespace JobsBoard
@@ -47,128 +47,138 @@ void HaulingSystem::init()
 
 void HaulingSystem::update(const double duration)
 {
+	for (auto& e : getEntities())
+		doWork(e);	
+}
+
+void HaulingSystem::doWork(Entity e)
+{
 	auto& world = getWorld();
 
-	for (auto& e : getEntities())
+	WorkTemplate<HaulingTag> work;
+	auto& co = e.getComponent<PositionComponent>().co;
+	const int idx = getIdx(co);
+
+	auto& tag = e.getComponent<HaulingTag>();
+	auto& mov = e.getComponent<MovementComponent>();
+
+	if (tag.step == HaulingTag::FIND_JOB)
 	{
-		WorkTemplate<HaulingTag> work;
-		auto& co = e.getComponent<PositionComponent>().co;
-		auto& tag = e.getComponent<HaulingTag>();
-		auto& mov = e.getComponent<MovementComponent>();
-
-		if (tag.step == HaulingTag::FIND_JOB)
+		if (storeableItems.empty())
 		{
-			if (storeableItems.empty())
-			{
-				work.cancel_work(e);
-				return;
-			}
-				
-			auto st = storeableItems.back();
-
-			tag.currentItem = st.itemId;
-			tag.destination = st.destination;
-
-			auto& item = world.getEntity(st.itemId);
-
-			if (item.isValid() && !item.hasComponent<Claimed>() && item.hasComponent<PositionComponent>())
-			{
-				itemHelper.claim_item(item);
-
-				mov.destination = item.getComponent<PositionComponent>().co;
-				tag.step = HaulingTag::GOTO_PIKCUP;
-
-				// Mark the stockpile square as taken
-				// So we don't get multiple items set to be put on it
-				designations->hauling[tag.destination] = region::stockpileId(tag.destination);
-
-				std::cout << "Hauling item " << item.getComponent<Item>().name << " - " << " to " << st.destination << "\n";
-			}
-			else
-				work.cancel_work(e);
-
-			storeableItems.pop_back();
+			work.cancel_work(e);
 			return;
 		}
 
-		else if (tag.step == HaulingTag::GOTO_PIKCUP)
+		auto st = storeableItems.back();
+
+		tag.currentItem = st.itemId;
+		tag.destination = st.destination;
+
+		auto& item = world.getEntity(st.itemId);
+
+		if (item.isValid() && !item.hasComponent<Claimed>() && item.hasComponent<PositionComponent>())
 		{
-			// Don't interrupt movement
-			if (mov.progress)
-				return;
+			itemHelper.claim_item(item);
 
-			if (mov.path.empty() && getIdx(co) != itemHelper.get_item_location(tag.currentItem))
-			{
-				mov.destination = idxToCo(itemHelper.get_item_location(tag.currentItem));
-				return;
-			}
+			auto path = findPath(co, item.getComponent<PositionComponent>().co);
 
-
-			if (mov.cannotFindPath)
+			if (path->failed)
 			{
 				work.cancel_work(e);
-				mov.cannotFindPath = false;
-			}
-
-			// We're on top of the item!
-			if (getIdx(co) == itemHelper.get_item_location(tag.currentItem))
-			{
-				tag.step = HaulingTag::PICKUP_ITEM;
 				return;
 			}
 
-			if (!mov.path.empty())
-				return;
+			mov.path = path->path;
+			tag.step = HaulingTag::GOTO_PIKCUP;
 
+			// Mark the stockpile square as taken
+			// So we don't get multiple items set to be put on it
+			designations->hauling[tag.destination] = region::stockpileId(tag.destination);
 
-			itemHelper.unclaim_item_by_id(tag.currentItem);
-			work.cancel_work(e); // We might need to unclaim components???
+			std::cout << "Hauling item " << item.getComponent<Item>().name << " - " << " to " << st.destination << "\n";
 		}
-
-		else if (tag.step == HaulingTag::PICKUP_ITEM)
+		else
 		{
-			std::cout << "Picking up item haul - " << world.getEntity(tag.currentItem).getComponent<Item>().name << " - " << tag.currentItem << "\n";
-
-			emit(pickup_item_message{ InventorySlots::SLOT_CARRYING, e.getId().index, tag.currentItem, 0 });
-			tag.step = HaulingTag::GOTO_STOCKPILE;
-		}
-
-		else if (tag.step == HaulingTag::GOTO_STOCKPILE)
-		{
-			// Don't interrupt movement
-			if (mov.progress || !mov.path.empty())
-				return;
-
-			if (mov.path.empty() && getIdx(co) != tag.destination) // Delete this? Results in infinite loop if cannot find path atm
-			{
-				mov.destination = idxToCo(tag.destination);
-				return;
-			}
-
-			if (mov.cannotFindPath)
-			{
-				emit(drop_item_message{ SLOT_CARRYING, e.getId().index, tag.currentItem, co });
-				work.cancel_work(e);
-				mov.cannotFindPath = false;
-			}
-
-			// We're on top of the item!
-			if (getIdx(co) == tag.destination)
-			{
-				tag.step = HaulingTag::ADD_TO_STOCKPILE;
-				return;
-			}
-
-			emit(drop_item_message{ SLOT_CARRYING, e.getId().index, tag.currentItem, co });
-			work.cancel_work(e); 
-		}
-
-		else if (tag.step == HaulingTag::ADD_TO_STOCKPILE)
-		{
-			emit(drop_item_message{ SLOT_CARRYING, e.getId().index, tag.currentItem, co });
-			designations->hauling.erase(getIdx(co));
-
 			work.cancel_work(e);
+			return;
+		}
+
+		storeableItems.pop_back();
+		return;
+	}
+
+	else if (tag.step == HaulingTag::GOTO_PIKCUP)
+	{
+		// Don't interrupt movement
+		if (mov.progress)
+			return;
+
+		// We're on top of the item!
+		if (idx == itemHelper.get_item_location(tag.currentItem))
+		{
+			tag.step = HaulingTag::PICKUP_ITEM;
+			return;
+		}
+
+		if (mov.path.empty())
+		{
+			auto path = findPath(co, idxToCo(itemHelper.get_item_location(tag.currentItem)));
+
+			if (path->failed)
+			{
+
+				itemHelper.unclaim_item_by_id(tag.currentItem);
+				work.cancel_work(e); // We might need to unclaim components???
+				return;
+			}
 		}
 	}
+
+	else if (tag.step == HaulingTag::PICKUP_ITEM)
+	{
+		std::cout << "Picking up item haul - " << world.getEntity(tag.currentItem).getComponent<Item>().name << " - " << tag.currentItem << "\n";
+
+		emit(pickup_item_message{ InventorySlots::SLOT_CARRYING, e.getId().index, tag.currentItem, 0 });
+		tag.step = HaulingTag::GOTO_STOCKPILE;
+	}
+
+	else if (tag.step == HaulingTag::GOTO_STOCKPILE)
+	{
+		// Don't interrupt movement
+		if (mov.progress)
+			return;
+
+		// We're on top of the item!
+		if (idx == tag.destination)
+		{
+			tag.step = HaulingTag::ADD_TO_STOCKPILE;
+			return;
+		}
+
+		if (mov.path.empty())
+		{
+			auto path = findPath(co, idxToCo(tag.destination));
+
+			if (path->failed)
+			{
+
+				emit(drop_item_message{ SLOT_CARRYING, e.getId().index, tag.currentItem, co });
+				work.cancel_work(e);
+				return;
+			}
+
+			mov.path = path->path;
+			return;
+		}
+	}
+
+	else if (tag.step == HaulingTag::ADD_TO_STOCKPILE)
+	{
+		emit(drop_item_message{ SLOT_CARRYING, e.getId().index, tag.currentItem, co });
+		designations->hauling.erase(idx);
+
+		work.cancel_work(e);
+	}
 }
+
