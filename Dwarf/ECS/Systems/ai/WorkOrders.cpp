@@ -33,7 +33,8 @@ void WorkOrders::init()
 
 void WorkOrders::update(double duration)
 {
-	for (auto& e : getEntities())
+	const auto ents = getEntities();
+	for (const auto& e : ents)
 		work(e, duration);
 }
 

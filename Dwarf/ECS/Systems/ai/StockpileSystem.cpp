@@ -52,7 +52,8 @@ void StockpileSystem::createNewStockpile(std::pair<int, int>& area, const std::b
 
 			// Don't let just any tile be designated a stockpile
 			// Wrap around spurious designations
-			if (!region::flag(pos, region::Flag::CONSTRUCTION) && !region::solid(idx) && region::flag(pos, region::Flag::CAN_STAND_HERE))
+			// No overwriting old stockpiles ~~ atleast for the moment
+			if (!region::flag(pos, region::Flag::CONSTRUCTION) && !region::solid(idx) && region::flag(pos, region::Flag::CAN_STAND_HERE) && region::stockpileId(idx) == 0)
 			{
 				region::setStockpileId(idx, sid);
 			}			
@@ -77,7 +78,7 @@ void StockpileSystem::update()
 
 	bool stockpilesExist = false;
 
-	for (auto& e : getEntities())
+	for (const auto& e : getEntities())
 	{
 		stockpilesExist = true;
 
@@ -124,6 +125,8 @@ void StockpileSystem::update()
 		stockpiles[h.second].openTiles.erase(h.first);
 	}
 
+	// Reduce the free tiles of stockpiles
+	// with items on their squares
 	itemHelper.forEachItem([](auto& e) // Looping through all items with position components seems inefficiant, If perf issue - Loop through stockpile squares and find items with position cahce lookups
 		{
 			if (!e.hasComponent<PositionComponent>())
@@ -147,12 +150,18 @@ void StockpileSystem::update()
 		if (e.hasComponent<Claimed>())
 			return;
 
-		auto stock_id = getItemDef(e.getComponent<Item>().tag)->stockpileId;
+		// Skip already stockpiled items
+		const int idx = getIdx(e.getComponent<PositionComponent>().co);
+		if (region::stockpileId(idx) > 0)
+			return;
+
+		const auto stock_id = getItemDef(e.getComponent<Item>().tag)->stockpileId;
 
 		// Item doesn't have stockpile type
 		if (!stock_id)
 			return;
 
+		// Find all stockpiles that are accepting this item type
 		const auto& find = stockpileTargets.find(stock_id);
 
 		// No stockpiles that can take this item
@@ -161,7 +170,7 @@ void StockpileSystem::update()
 
 		// Find a stockpile with storage space
 		// and add item id and free tile location to list of storeable items and their destinations
-		for (const auto id : find->second)
+		for (const auto& id : find->second)
 		{
 			if (stockpiles[id].freeSpots > 0)
 			{

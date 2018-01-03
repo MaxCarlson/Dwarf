@@ -47,13 +47,17 @@ void HaulingSystem::init()
 
 void HaulingSystem::update(const double duration)
 {
-	for (auto& e : getEntities())
+	const auto ents = getEntities();
+	for (auto& e : ents)
 		doWork(e);	
 }
 
 void HaulingSystem::doWork(Entity e)
 {
 	auto& world = getWorld();
+
+//	if (e.getId().index == 7)
+//		int a = 5;
 
 	WorkTemplate<HaulingTag> work;
 	auto& co = e.getComponent<PositionComponent>().co;
@@ -179,6 +183,7 @@ void HaulingSystem::doWork(Entity e)
 		designations->hauling.erase(idx);
 
 		work.cancel_work(e);
+		return;
 	}
 }
 

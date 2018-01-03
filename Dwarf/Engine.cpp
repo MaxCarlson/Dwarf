@@ -274,7 +274,7 @@ void Engine::update(double deltaTime)
 	world.deliver_messages();
 
 	// Update systems
-	movementAiSystem->update();
+	//movementAiSystem->update();
 	movementSystem->update(deltaTime);
 	dijkstraHandler->update();
 
@@ -289,7 +289,7 @@ void Engine::update(double deltaTime)
 	buildAi->update(deltaTime);
 
 	stockpileSystem->update(); // Update this only once a second or so?
-//	haulingSystem->update(deltaTime);
+	haulingSystem->update(deltaTime);
 
 	// Systems that don't need updates
 	// miningSystem->update();
