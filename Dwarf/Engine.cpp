@@ -40,6 +40,7 @@
 #include "ECS\Systems\ai\WorkOrders.h"
 #include "ECS\Systems\ai\StockpileSystem.h"
 #include "ECS\Systems\ai\HaulingSystem.h"
+#include "ECS\Systems\ai\AiArchitecture.h"
 
 // System Helpers
 #include "ECS\Systems\helpers\ItemHelper.h"
@@ -185,6 +186,7 @@ void Engine::init()
 	workOrders = new WorkOrders();
 	stockpileSystem = new StockpileSystem();
 	haulingSystem = new HaulingSystem();
+	aiArchitecture = new AiArchitecture();
 
 	// Non Entity or non Updating Systems
 	inputHandler = new InputHandler();
@@ -213,6 +215,7 @@ void Engine::init()
 	world.addSystem(*workOrderHelper);
 	world.addSystem(*stockpileSystem);
 	world.addSystem(*haulingSystem);
+	world.addSystem(*aiArchitecture);
 
 	// Init systems 
 	miningSystem->init();
@@ -225,7 +228,7 @@ void Engine::init()
 	workOrders->init();
 	stockpileSystem->init();
 	haulingSystem->init();
-
+	
 	world.refresh();
 
 	run();
@@ -285,12 +288,15 @@ void Engine::update(double deltaTime)
 	// Work Systems
 
 	// Assign jobs to entities
+	// TODO : Add more depth to job evaluators, relying on more
+	// than just distance such as skill level, other jobs, other entities, etc
 	aiWorkSystem->update();
 
 	// Perform assigned jobs
 	workOrders->update(deltaTime);
 	miningAi->update(deltaTime);
 	buildAi->update(deltaTime);
+	aiArchitecture->update(deltaTime);
 
 	stockpileSystem->update(); // Update this only once a second or so?
 	haulingSystem->update(deltaTime);

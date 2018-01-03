@@ -8,7 +8,8 @@
 #include "../../Raws/Buildings.h"
 #include "../../Messages/designation_message.h"
 #include "../../Messages/designate_building_message.h"
-#include "../../ECS/Messages/request_new_stockpile_message.h"
+#include "../../Messages/request_new_stockpile_message.h"
+#include "../../Messages/designate_architecture_message.h"
 #include "../../Designations.h"
 #include "../../Raws/DefInfo.h"
 #include "../../Raws/Defs/ItemDefs.h"
@@ -114,6 +115,9 @@ void InputHandler::update()
 			case TK_P:
 				guiState.state = GUI_STOCKPILES;
 				break;
+
+			case TK_A:
+				guiState.state = GUI_ARCHITECTURE;
 			}
 		}
 
@@ -174,6 +178,14 @@ void InputHandler::update()
 				guiState.state = GUI_MAIN;
 			else
 				stockpiles(key);
+		}
+
+		else if (guiState.state == GUI_ARCHITECTURE)
+		{
+			if (key == TK_ESCAPE)
+				guiState.state = GUI_MAIN;
+			else
+				architecture(key);
 		}
 	}
 }
@@ -263,5 +275,26 @@ void InputHandler::stockpiles(const int key)
 			emit(request_new_stockpile_message{ std::make_pair(designateIdx, getMouseIdx()), catagories });
 			designateIdx = 0;
 		}	
+	}
+}
+
+void InputHandler::architecture(const int key)
+{
+	handleScroll(key);
+
+	if (key == TK_ENTER || key == TK_MOUSE_LEFT)
+	{
+		// Nothing designated yet, set idx
+		if (!designateIdx)
+		{
+			designateIdx = getMouseIdx();
+		}
+		else
+		{
+			int type = guiState.itemSelected;
+
+			emit(designate_architecture_message{ type, std::make_pair(designateIdx, getMouseIdx()) });
+			designateIdx = 0;
+		}
 	}
 }

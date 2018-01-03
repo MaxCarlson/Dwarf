@@ -14,6 +14,7 @@ private:
 	void createItem(const int key);
 	void reactions(const int key);
 	void stockpiles(const int key);
+	void architecture(const int key);
 
 	int mouseX;
 	int mouseY;

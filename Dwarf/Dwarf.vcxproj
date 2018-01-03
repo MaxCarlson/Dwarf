@@ -220,6 +220,7 @@
     <ClInclude Include="ECS\Components\ItemCarried.h" />
     <ClInclude Include="ECS\Components\Stockpile.h" />
     <ClInclude Include="ECS\Components\Tags\HaulingTag.h" />
+    <ClInclude Include="ECS\Messages\designate_architecture_message.h" />
     <ClInclude Include="ECS\Messages\request_new_stockpile_message.h" />
     <ClInclude Include="ECS\Systems\ai\HaulingSystem.h" />
     <ClInclude Include="ECS\Systems\helpers\PathFinding.h" />

@@ -25,6 +25,7 @@ class WorkOrders;
 class StockpileSystem;
 class HaulingSystem;
 class GuiSystem;
+class AiArchitecture;
 
 class Engine
 {
@@ -60,6 +61,7 @@ public:
 	WorkOrders * workOrders;
 	StockpileSystem * stockpileSystem;
 	HaulingSystem * haulingSystem;
+	AiArchitecture * aiArchitecture;
 
 	// Systems that don't touch Entities
 	InputHandler * inputHandler;

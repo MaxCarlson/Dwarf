@@ -52,6 +52,10 @@ void GuiSystem::render()
 			drawBuild();
 			break;
 
+		case gui_states::GUI_ARCHITECTURE:
+			drawArchitecture();
+			break;
+
 		case gui_states::GUI_DESIGNATE:
 			drawDesignate();
 			break;
@@ -75,7 +79,6 @@ void GuiSystem::render()
 
 		printDebugTileProps();
 	}
-
 }
 
 void GuiSystem::clearAndDraw(int x, int y, int width, int height, const std::string color, int symbol)
@@ -240,6 +243,25 @@ void GuiSystem::drawStockpiles()
 	int y = 2;
 	int c = 0;
 	for (const auto& i : defInfo->stockpileNames)
+	{
+		draw::determineHighlight(c, guiState.itemSelected);
+
+		terminal_print(horizontalOffset + 1, y, i.c_str());
+		y += 2;
+		++c;
+	}
+	terminal_bkcolor("black");
+}
+
+void GuiSystem::drawArchitecture()
+{
+	static const std::vector<std::string> archNames = { "Wall", "Ramp", "Up Stairs", "Down Stairs", "Up Down Stairs", "Bridge" };
+
+	wrapInput(guiState.itemSelected, archNames.size());
+
+	int y = 2;
+	int c = 0;
+	for (const auto& i : archNames)
 	{
 		draw::determineHighlight(c, guiState.itemSelected);
 

@@ -5,6 +5,7 @@
 class AiArchitecture : public System<Requires<ArchitectTag>>
 {
 public:
+	void init();
 	void update(double duration);
 
 

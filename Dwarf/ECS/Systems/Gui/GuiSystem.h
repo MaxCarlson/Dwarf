@@ -18,6 +18,8 @@ private:
 
 	void clearAndDraw(int x, int y, int width, int height, const std::string color, int symbol);
 
+	// Move most of these functions into sepperate files
+	// once they become more complex
 	void drawEscMenu();
 	void drawMain();
 	void drawBuild();
@@ -25,6 +27,7 @@ private:
 	void drawCreateItem();
 	void drawReactions();
 	void drawStockpiles();
+	void drawArchitecture();
 	void printDebugTileProps();
 	void drawSaveScreen();
 };
