@@ -1,6 +1,5 @@
 #include "AiArchitecture.h"
 #include "JobBoard.h"
-#include "../../Components/Tags/ArchitectTag.h"
 #include "../../Messages/designate_architecture_message.h"
 
 namespace JobsBoard
@@ -18,5 +17,12 @@ void AiArchitecture::init()
 
 void AiArchitecture::update(double duration)
 {
+	const auto& ents = getEntities();
 
+	for (const auto& e : ents)
+		doWork(e);
+}
+
+void AiArchitecture::doWork(Entity e)
+{
 }

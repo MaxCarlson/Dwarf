@@ -16,6 +16,8 @@ struct Designations
 	// Buildings waiting to be built
 	std::vector<building_designation> buildings;
 
+	std::unordered_map<int, uint8_t> architecture;
+
 	std::vector<std::pair<int, std::string>> workOrders;
 
 	// Map of items by destination square that are currently claimed
@@ -26,7 +28,7 @@ struct Designations
 	template<class Archive>
 	void serialize(Archive& archive)
 	{
-		archive(mining, buildings, workOrders, hauling);
+		archive(mining, buildings, architecture, workOrders, hauling);
 	}
 
 };

@@ -4,10 +4,12 @@
 #include "../../../Map/DijkstraMap.h"
 
 extern DijkstraMap pick_map;
+extern DijkstraMap block_map;
+extern DijkstraMap architecture_map;
 
 class PickMapSystem;
 
-class DijkstraMapsHandler : public System<Requires<>, Excludes<>, Any<>> // Update any and get rid of other lower dijkstra systems?
+class DijkstraMapsHandler : public System<Requires<>, Excludes<>, Any<>> 
 {
 public:
 	DijkstraMapsHandler() = default;
@@ -22,5 +24,7 @@ private:
 
 	// bool's for updating
 	bool update_pick_map = true;
+	bool update_block_map = true;
+	bool update_architecture = true;
 };
 
