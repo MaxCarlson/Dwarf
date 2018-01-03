@@ -53,7 +53,7 @@ namespace region
 		void tilePathing(const Coordinates co);
 		void tileRecalc(const Coordinates co);
 		void tileCalcRender(Coordinates co);
-		vchar& getRenderTile(const Coordinates co);
+		vchar getRenderTile(const Coordinates co);
 
 		template<class Archive>
 		void serialize(Archive & archive)
@@ -137,7 +137,7 @@ namespace region
 		return currentRegion->renderCache[idx];
 	}
 
-	vchar & getRenderTile(const Coordinates co)
+	vchar getRenderTile(const Coordinates co)
 	{
 		return currentRegion->getRenderTile(co);
 	}
@@ -384,14 +384,13 @@ namespace region
 	void Region::tileCalcRender(Coordinates co)
 	{
 		const int idx = getIdx(co);
-		int ch;
+		int ch = 0;
 		std::string fg = "black";
 		std::string bg = "black";
 
 		switch (tileTypes[idx])
 		{
 		case TileTypes::EMPTY_SPACE:
-			ch = 0;
 			break;
 
 		case TileTypes::SOLID:
@@ -425,7 +424,7 @@ namespace region
 
 		renderCache[idx] = vchar{ ch, color_from_name(fg.c_str()), color_from_name(bg.c_str()) };
 	}
-	vchar & Region::getRenderTile(const Coordinates co)
+	vchar Region::getRenderTile(const Coordinates co)
 	{
 		// Loop through z levels until hitting ground and return first visible tile
 		for (int z = co.z; z > 0; --z)

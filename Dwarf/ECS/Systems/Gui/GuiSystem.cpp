@@ -1,25 +1,25 @@
 #include "stdafx.h"
-#include "Gui.h"
-#include "Engine.h"
-#include "Map/Map.h"
-#include "Map/MapRender.h"
-#include "Raws\Materials.h"
-#include "Raws\Defs\MaterialDef.h"
-#include "Raws\Buildings.h"
-#include "Map\Tile.h"
-#include "Raws\ItemRead.h"
-#include "Drawing\draw.h"
-#include "Raws\ReadReactions.h"
-#include "Designations.h"
-#include "Raws\DefInfo.h"
-
+#include "GuiSystem.h"
+#include "../../../Engine.h"
+#include "../../../Map/Map.h"
+#include "../../../Map/MapRender.h"
+#include "../../../Raws\Materials.h"
+#include "../../../Raws\Defs\MaterialDef.h"
+#include "../../../Raws\Buildings.h"
+#include "../../../Map\Tile.h"
+#include "../../../Raws\ItemRead.h"
+#include "../../../Drawing\draw.h"
+#include "../../../Raws\ReadReactions.h"
+#include "../../../Designations.h"
+#include "../../../Raws\DefInfo.h"
+#include "gui_states.h"
 #include <filesystem>
 using namespace region;
 namespace fs = std::experimental::filesystem;
 
 static const std::string gui_color = "#386687";
 
-inline void wrapInput(int& n, int size)
+inline void wrapInput(int& n, std::size_t size)
 {
 	if (n < 0)
 		n = size - 1;
@@ -27,16 +27,7 @@ inline void wrapInput(int& n, int size)
 		n = 0;
 }
 
-Gui::Gui() 
-{
-}
-
-
-Gui::~Gui()
-{
-}
-
-void Gui::render()
+void GuiSystem::render()
 {
 	// Grab window size data
 	panelWidth = terminal_state(TK_WIDTH);
@@ -45,42 +36,38 @@ void Gui::render()
 	horizontalOffset = panelWidth - (panelWidth / 5);
 	verticalOffset = 0;
 
-
 	if (engine->current_game_state == Engine::PLAY)
 	{
-		switch (state)
+		switch (guiState.state)
 		{
-		case Gui_State::NO_DISPLAY:
-			return;
-
-		case Gui_State::ESC_MENU:
+		case gui_states::GUI_ESC_MENU:
 			drawEscMenu();
 			break;
 
-		case Gui_State::MAIN:
+		case gui_states::GUI_MAIN:
 			drawMain();
 			break;
 
-		case Gui_State::BUILD:
+		case gui_states::GUI_BUILD:
 			drawBuild();
 			break;
 
-		case Gui_State::DESIGNATE:
+		case gui_states::GUI_DESIGNATE:
 			drawDesignate();
 			break;
 
-		case Gui_State::ORDERS:
+		case gui_states::GUI_ORDERS:
 			break;
 
-		case Gui_State::CREATE_ITEM:
+		case gui_states::GUI_CREATE_ITEM:
 			drawCreateItem();
 			break;
 
-		case Gui_State::REACTIONS:
+		case gui_states::GUI_REACTIONS:
 			drawReactions();
 			break;
 
-		case Gui_State::STOCKPILES:
+		case gui_states::GUI_STOCKPILES:
 			drawStockpiles();
 			break;
 
@@ -88,10 +75,10 @@ void Gui::render()
 
 		printDebugTileProps();
 	}
-	
+
 }
 
-void Gui::clearAndDraw(int x, int y, int width, int height, const std::string color, int symbol)
+void GuiSystem::clearAndDraw(int x, int y, int width, int height, const std::string color, int symbol)
 {
 	terminal_clear_area(x, y, width, height);
 	terminal_color(color.c_str());
@@ -101,7 +88,7 @@ void Gui::clearAndDraw(int x, int y, int width, int height, const std::string co
 			terminal_put(xx, yy, symbol);
 }
 
-void Gui::drawEscMenu()
+void GuiSystem::drawEscMenu()
 {
 	static const std::vector<std::string> escOptions = { "Return to game", "Save Game", "Quit To Main Menu" }; //
 	int selected = 0;
@@ -124,14 +111,14 @@ void Gui::drawEscMenu()
 				engine->current_game_state = Engine::TO_MAIN_MENU;
 				break;
 			}
-		}		
+		}
 	}
-	engine->gui.state = Gui_State::MAIN;
+	guiState.state = gui_states::GUI_MAIN;
 }
 
-void Gui::drawMain()
+void GuiSystem::drawMain()
 {
-	itemSelected = 0;
+	guiState.itemSelected = 0;
 
 	clearAndDraw(horizontalOffset, verticalOffset, panelWidth, panelHeight, gui_color, 0x2588);
 
@@ -147,16 +134,16 @@ void Gui::drawMain()
 	}
 }
 
-void Gui::drawBuild()
+void GuiSystem::drawBuild()
 {
 	clearAndDraw(horizontalOffset, verticalOffset, panelWidth, panelHeight, gui_color, 0x2588);
-	wrapInput(itemSelected, defInfo->buildingNames.size());
+	wrapInput(guiState.itemSelected, defInfo->buildingNames.size());
 
 	int c = 0;
 	int y = 2;
 	for (const auto& b : defInfo->buildingNames)
 	{
-		draw::determineHighlight(c, itemSelected);
+		draw::determineHighlight(c, guiState.itemSelected);
 
 		terminal_print(horizontalOffset + 1, y, b.c_str());
 		y += 2;
@@ -165,18 +152,18 @@ void Gui::drawBuild()
 	terminal_bkcolor("black");
 }
 
-void Gui::drawDesignate()
+void GuiSystem::drawDesignate()
 {
 	static std::vector<std::string> dType = { "Mining", "Channeling" };
 
 	clearAndDraw(horizontalOffset, verticalOffset, panelWidth, panelHeight, gui_color, 0x2588);
-	wrapInput(itemSelected, dType.size());
+	wrapInput(guiState.itemSelected, dType.size());
 
 	int y = 2;
 	int c = 0;
 	for (const auto& d : dType)
 	{
-		draw::determineHighlight(c, itemSelected);
+		draw::determineHighlight(c, guiState.itemSelected);
 
 		terminal_print(horizontalOffset + 1, y, d.c_str());
 		y += 2;
@@ -185,17 +172,17 @@ void Gui::drawDesignate()
 	terminal_bkcolor("black");
 }
 
-void Gui::drawCreateItem()
+void GuiSystem::drawCreateItem()
 {
 	clearAndDraw(horizontalOffset, verticalOffset, panelWidth, panelHeight, gui_color, 0x2588);
 
-	wrapInput(itemSelected, defInfo->itemTags.size());
+	wrapInput(guiState.itemSelected, defInfo->itemTags.size());
 
 	int y = 2;
 	int c = 0;
 	for (const auto& i : defInfo->itemTags)
 	{
-		draw::determineHighlight(c, itemSelected);
+		draw::determineHighlight(c, guiState.itemSelected);
 
 		terminal_print(horizontalOffset + 1, y, i.c_str());
 		y += 2;
@@ -204,11 +191,11 @@ void Gui::drawCreateItem()
 	terminal_bkcolor("black");
 }
 
-void Gui::drawReactions()
+void GuiSystem::drawReactions()
 {
 	clearAndDraw(horizontalOffset, verticalOffset, panelWidth, panelHeight, gui_color, 0x2588);
 
-	wrapInput(itemSelected, defInfo->availibleReactions.size());
+	wrapInput(guiState.itemSelected, defInfo->availibleReactions.size());
 
 	int y = 2;
 	int c = 0;
@@ -219,7 +206,7 @@ void Gui::drawReactions()
 	static std::vector<std::string> filteredReactions;
 
 	// If we're not searching for reaction by text
-	if (!typing)
+	if (!guiState.typing)
 	{
 		if (defInfo->availibleReactions.size() == 0)
 		{
@@ -228,12 +215,12 @@ void Gui::drawReactions()
 		}
 		else
 			for (const auto& p : defInfo->availibleReactions)
-			{				
-				draw::determineHighlight(c, itemSelected);
+			{
+				draw::determineHighlight(c, guiState.itemSelected);
 
 				terminal_print(horizontalOffset + 1, y, p.c_str());
 				y += 2;
-				++c;			
+				++c;
 			}
 	}
 	else
@@ -241,20 +228,20 @@ void Gui::drawReactions()
 		filteredReactions.clear();
 	}
 
-	
+
 }
 
-void Gui::drawStockpiles()
+void GuiSystem::drawStockpiles()
 {
 	clearAndDraw(horizontalOffset, verticalOffset, panelWidth, panelHeight, gui_color, 0x2588);
 
-	wrapInput(itemSelected, defInfo->stockpileNames.size());
+	wrapInput(guiState.itemSelected, defInfo->stockpileNames.size());
 
 	int y = 2;
 	int c = 0;
 	for (const auto& i : defInfo->stockpileNames)
 	{
-		draw::determineHighlight(c, itemSelected);
+		draw::determineHighlight(c, guiState.itemSelected);
 
 		terminal_print(horizontalOffset + 1, y, i.c_str());
 		y += 2;
@@ -263,7 +250,7 @@ void Gui::drawStockpiles()
 	terminal_bkcolor("black");
 }
 
-void Gui::printDebugTileProps()
+void GuiSystem::printDebugTileProps()
 {
 	int xx = terminal_state(TK_MOUSE_X);
 	int yy = terminal_state(TK_MOUSE_Y);
@@ -273,7 +260,7 @@ void Gui::printDebugTileProps()
 
 	auto matIdx = region::getTileMaterial({ xx, yy, z });
 
-	auto mat = getMaterial(matIdx); 
+	auto mat = getMaterial(matIdx);
 
 	std::string tInfo = mat->name + '\n' + mat->layer + '\n';
 	bool csth = flag({ xx, yy, z }, CAN_STAND_HERE);
@@ -316,7 +303,7 @@ void Gui::printDebugTileProps()
 	terminal_printf(xx, yy, tInfo.c_str());
 }
 
-void Gui::drawSaveScreen()
+void GuiSystem::drawSaveScreen()
 {
 	std::string fileName;
 

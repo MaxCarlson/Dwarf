@@ -91,11 +91,11 @@ void WorkOrders::work(Entity e, const double& duration)
 				// Set entity path
 				auto path = findPath(co, idxToCo(cpos));
 				
+				// Can't find this component? Find another
 				if (path->failed)
 				{
 					tag.current_component = 0;
-					continue;
-			
+					continue;		
 				}
 
 				mov.path = path->path;
@@ -231,7 +231,7 @@ void WorkOrders::work(Entity e, const double& duration)
 				
 			material = cent.getComponent<Item>().material;
 			materialNames += cent.getComponent<Item>().name + " ";
-			//world.killEntity(cent);
+
 			itemHelper.deleteItem(comp.first);
 		}
 

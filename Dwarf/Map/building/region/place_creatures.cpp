@@ -10,7 +10,7 @@ using region::getTileType;
 void placeDwarves()
 {
 	int dwarfNumber = 0;
-	int number = engine->Dwarves.size();
+	std::size_t number = engine->Dwarves.size();
 
 	for (int h = MAP_DEPTH - 1; h > 1; --h)
 		for (int i = 3; i < MAP_WIDTH - 2; ++i)

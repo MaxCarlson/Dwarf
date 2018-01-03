@@ -22,8 +22,6 @@ void PickMapSystem::update()
 		if (!item.catagory.test(TOOL_DIGGING) || e.hasComponent<Claimed>())
 			continue;
 
-		// Claimed component ?
-
 		auto& co = e.getComponent<PositionComponent>().co;
 
 		targets.emplace_back(getIdx(co));

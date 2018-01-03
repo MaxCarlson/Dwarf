@@ -9,7 +9,7 @@
 #include "ECS\Systems\MiningSystem.h"
 #include "ECS\Systems\DijkstraSystems\DijkstraMapsHandler.h"
 #include "ECS\Systems\EntityPositionCache.h"
-#include "ECS\Systems\InputHandler.h"
+#include "ECS\Systems\Gui\InputHandler.h"
 
 // Ai systems
 #include "ECS\Systems\ai\EquipHandler.h"

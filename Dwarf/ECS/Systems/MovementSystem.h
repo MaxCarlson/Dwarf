@@ -5,6 +5,7 @@
 #include "../../Engine.h"
 #include "../Map/Map.h"
 #include "../Messages/entity_moved_message.h"
+#include "Map\Tile.h"
 #include <queue>
 
 using namespace region;

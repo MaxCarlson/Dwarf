@@ -4,7 +4,6 @@
 #include "ECS\EntityManager.h"
 #include "ECS\World.h"
 #include "EntityFactory.h"
-#include "Gui.h"
 #include <unordered_map>
 #include <memory>
 
@@ -25,6 +24,7 @@ class DesignationHandler;
 class WorkOrders;
 class StockpileSystem;
 class HaulingSystem;
+class GuiSystem;
 
 class Engine
 {
@@ -49,6 +49,7 @@ public:
 
 	// Systems ~ move these into a sepperate wrapper?
 	// also probably don't need to be public if they stay here?
+	GuiSystem * guiSystem;
 	RenderSystem * renderSystem;
 	MovementSystem * movementSystem;
 	MovementAiSystem * movementAiSystem;	
@@ -78,13 +79,8 @@ public:
 	// Holds local map, 
 	std::unique_ptr<Map> map;
 
-
-	// Should these be made into systems?
-	Gui gui;
-
 	int screenWidth; // Git rid of these?
 	int screenHeight;
-
 
 	void newGame(int screenWidth, int screenHeight);
 	void loadGame(std::string filePath);

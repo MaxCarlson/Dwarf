@@ -89,7 +89,7 @@ namespace region
 
 	vchar& renderCache(const int idx);
 
-	vchar& getRenderTile(const Coordinates co);
+	vchar getRenderTile(const Coordinates co);
 
 	void setMaterial(const Coordinates co, const std::size_t mat);
 

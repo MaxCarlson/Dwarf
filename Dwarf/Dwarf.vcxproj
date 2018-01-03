@@ -79,7 +79,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\C-60\Desktop\cppPrograms\dependencies\SFML-2.4.2\include;C:\Users\C-60\Desktop\cppPrograms\dependencies\lua-5.3.4\Lua\Lua;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\cereal;C:\Users\C-60\Desktop\cppPrograms\dependencies\Dwarf\boost_1_65_1\boost_1_65_1;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf;C:\Users\C-60\Desktop\cppPrograms\dependencies\SFML-2.4.2\include;C:\Users\C-60\Desktop\cppPrograms\dependencies\lua-5.3.4\Lua\Lua;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\cereal;C:\Users\C-60\Desktop\cppPrograms\dependencies\Dwarf\boost_1_65_1\boost_1_65_1;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -97,7 +97,7 @@
       <SDLCheck>true</SDLCheck>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\C-60\Desktop\cppPrograms\dependencies\SFML-2.4.2\include;C:\Users\C-60\Desktop\cppPrograms\dependencies\lua-5.3.4\Lua\Lua;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\cereal;C:\Users\C-60\Desktop\cppPrograms\dependencies\Dwarf\boost_1_65_1\boost_1_65_1;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf;C:\Users\C-60\Desktop\cppPrograms\dependencies\SFML-2.4.2\include;C:\Users\C-60\Desktop\cppPrograms\dependencies\lua-5.3.4\Lua\Lua;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\cereal;C:\Users\C-60\Desktop\cppPrograms\dependencies\Dwarf\boost_1_65_1\boost_1_65_1;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <ForcedIncludeFiles>StdAfx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
@@ -116,10 +116,11 @@
       <SDLCheck>true</SDLCheck>
       <UndefinePreprocessorDefinitions>%(UndefinePreprocessorDefinitions)</UndefinePreprocessorDefinitions>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\C-60\Desktop\cppPrograms\dependencies\SFML-2.4.2\include;C:\Users\C-60\Desktop\cppPrograms\dependencies\lua-5.3.4\Lua\Lua;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\cereal;C:\Users\C-60\Desktop\cppPrograms\dependencies\Dwarf\boost_1_65_1\boost_1_65_1;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf;C:\Users\C-60\Desktop\cppPrograms\dependencies\SFML-2.4.2\include;C:\Users\C-60\Desktop\cppPrograms\dependencies\lua-5.3.4\Lua\Lua;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\cereal;C:\Users\C-60\Desktop\cppPrograms\dependencies\Dwarf\boost_1_65_1\boost_1_65_1;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <ForcedIncludeFiles>StdAfx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -138,9 +139,10 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <UndefinePreprocessorDefinitions>%(UndefinePreprocessorDefinitions)</UndefinePreprocessorDefinitions>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\C-60\Desktop\cppPrograms\dependencies\SFML-2.4.2\include;C:\Users\C-60\Desktop\cppPrograms\dependencies\lua-5.3.4\Lua\Lua;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\cereal;C:\Users\C-60\Desktop\cppPrograms\dependencies\Dwarf\boost_1_65_1\boost_1_65_1;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf;C:\Users\C-60\Desktop\cppPrograms\dependencies\SFML-2.4.2\include;C:\Users\C-60\Desktop\cppPrograms\dependencies\lua-5.3.4\Lua\Lua;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\cereal;C:\Users\C-60\Desktop\cppPrograms\dependencies\Dwarf\boost_1_65_1\boost_1_65_1;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <ForcedIncludeFiles>StdAfx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -152,12 +154,14 @@
   <ItemGroup>
     <ClCompile Include="ECS\Systems\ai\HaulingSystem.cpp" />
     <ClCompile Include="ECS\Systems\helpers\PathFinding.cpp" />
+    <ClCompile Include="ECS\Systems\Gui\GuiSystem.cpp" />
+    <ClCompile Include="ECS\Systems\Gui\gui_states.cpp" />
     <ClCompile Include="Raws\DefInfo.cpp" />
     <ClCompile Include="ECS\Systems\helpers\DesignationHandler.cpp" />
     <ClCompile Include="ECS\Systems\ai\BuildAi.cpp" />
     <ClCompile Include="ECS\Systems\ai\AiArchitecture.cpp" />
     <ClCompile Include="ECS\Systems\helpers\ItemHelper.cpp" />
-    <ClCompile Include="ECS\Systems\InputHandler.cpp" />
+    <ClCompile Include="ECS\Systems\Gui\InputHandler.cpp" />
     <ClCompile Include="ECS\Systems\RenderSystem.cpp" />
     <ClCompile Include="Helpers\PositionCache.cpp" />
     <ClCompile Include="Raws\Buildings.cpp" />
@@ -180,7 +184,6 @@
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="ECS\Entities.cpp" />
     <ClCompile Include="EntityFactory.cpp" />
-    <ClCompile Include="Gui.cpp" />
     <ClCompile Include="ECS\Systems\ai\JobBoard.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MainMenu.cpp" />
@@ -220,6 +223,8 @@
     <ClInclude Include="ECS\Messages\request_new_stockpile_message.h" />
     <ClInclude Include="ECS\Systems\ai\HaulingSystem.h" />
     <ClInclude Include="ECS\Systems\helpers\PathFinding.h" />
+    <ClInclude Include="ECS\Systems\Gui\GuiSystem.h" />
+    <ClInclude Include="ECS\Systems\Gui\gui_states.h" />
     <ClInclude Include="Raws\DefInfo.h" />
     <ClInclude Include="Drawing\vchar.h" />
     <ClInclude Include="ECS\Components\Building.h" />
@@ -235,7 +240,7 @@
     <ClInclude Include="ECS\Components\Tags\ArchitectTag.h" />
     <ClInclude Include="ECS\Components\Tags\WorkOrderTag.h" />
     <ClInclude Include="ECS\Systems\helpers\ItemHelper.h" />
-    <ClInclude Include="ECS\Systems\InputHandler.h" />
+    <ClInclude Include="ECS\Systems\Gui\InputHandler.h" />
     <ClInclude Include="Helpers\PositionCache.h" />
     <ClInclude Include="Raws\Buildings.h" />
     <ClInclude Include="Raws\Defs\BuildingDef.h" />
@@ -365,7 +370,6 @@
     <ClInclude Include="Engine.h" />
     <ClInclude Include="ECS\Entities.h" />
     <ClInclude Include="EntityFactory.h" />
-    <ClInclude Include="Gui.h" />
     <ClInclude Include="ECS\Systems\ai\JobBoard.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="Map\Index.h" />

@@ -102,7 +102,7 @@ void MapRender::moveCamera(const CamDirections D)
 		offsetY += 1;
 
 	// Adjust for gui size
-	else if (D == EAST && offsetX + panelWidth < MAP_WIDTH + engine->gui.horizontalOffset)
+	else if (D == EAST && offsetX + panelWidth < MAP_WIDTH)
 		offsetX += 1;
 
 	else if (D == WEST && offsetX > 0)

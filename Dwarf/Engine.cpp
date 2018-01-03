@@ -27,7 +27,10 @@
 #include "ECS\Systems\MiningSystem.h"
 #include "ECS\Systems\DijkstraSystems\DijkstraMapsHandler.h"
 #include "ECS\Systems\EntityPositionCache.h"
-#include "ECS\Systems\InputHandler.h"
+
+// Gui systems
+#include "ECS\Systems\Gui\InputHandler.h"
+#include "ECS\Systems\Gui\GuiSystem.h"
 
 // Ai systems
 #include "ECS\Systems\ai\EquipHandler.h"
@@ -172,6 +175,7 @@ void Engine::init()
 	defInfo->init();
 
 	// Add systems at init
+	guiSystem = new GuiSystem();
 	renderSystem = new RenderSystem();
 	movementSystem = new MovementSystem();
 	movementAiSystem = new MovementAiSystem();
@@ -311,7 +315,7 @@ void Engine::render()
 	// Render the gui elements last,
 	// just in case something is showing through ~~ Make this a system
 	// that shouldn't
-	gui.render();
+	guiSystem->render();
 
 	// Refresh terminal window to display
 	// render changes

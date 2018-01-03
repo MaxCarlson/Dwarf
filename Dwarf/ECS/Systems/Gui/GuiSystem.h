@@ -1,15 +1,10 @@
 #pragma once
-#include "Map/Tile.h"
-
-static const int numberOfButtons = 6;
+#include "../../Systems.h"
 
 
-class Gui
+class GuiSystem : public System<Requires<>>
 {
 public:
-	Gui();
-	~Gui();
-
 	// Render local map
 	void render();
 
@@ -17,26 +12,6 @@ public:
 	// Gui, top left coordinates
 	int horizontalOffset;
 	int verticalOffset;
-
-	enum Gui_State
-	{
-		NO_DISPLAY,
-		ESC_MENU,
-		MAIN,
-		BUILD,
-		DESIGNATE,
-		ORDERS,
-		CREATE_ITEM,
-		REACTIONS,
-		STOCKPILES,
-	};
-
-	Gui_State state = MAIN;
-
-	int itemSelected = 0;
-
-	bool typing = false;
-	std::string inputText;
 
 private:
 	int panelWidth, panelHeight;
@@ -53,4 +28,5 @@ private:
 	void printDebugTileProps();
 	void drawSaveScreen();
 };
+
 

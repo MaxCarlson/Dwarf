@@ -1,20 +1,20 @@
-#include "../stdafx.h"
+#include "../../stdafx.h"
 #include "InputHandler.h"
-#include "../Engine.h"
-#include "../Gui.h"
-#include "../Map/Tile.h"
-#include "../Raws/ItemRead.h"
-#include "../Raws/raws.h"
-#include "../Raws/Buildings.h"
-#include "../Messages/designation_message.h"
-#include "../Messages/designate_building_message.h"
-#include "../ECS/Messages/request_new_stockpile_message.h"
-#include "../Designations.h"
-#include "../Raws/DefInfo.h"
-#include "../Raws/Defs/ItemDefs.h"
+#include "../../Engine.h"
+#include "gui_states.h"
+#include "../../Map/Tile.h"
+#include "../../Raws/ItemRead.h"
+#include "../../Raws/raws.h"
+#include "../../Raws/Buildings.h"
+#include "../../Messages/designation_message.h"
+#include "../../Messages/designate_building_message.h"
+#include "../../ECS/Messages/request_new_stockpile_message.h"
+#include "../../Designations.h"
+#include "../../Raws/DefInfo.h"
+#include "../../Raws/Defs/ItemDefs.h"
 
 // temp till things are placed elsewhere
-#include "../ECS/Messages/pick_map_changed_message.h"
+#include "../../ECS/Messages/pick_map_changed_message.h"
 
 
 // Desig statics
@@ -30,11 +30,11 @@ void testEsc(const std::function<void()>& func)
 void handleScroll(const int key, int down = TK_PAGEDOWN, int up = TK_PAGEUP)
 {
 	if (key == down)
-		++engine->gui.itemSelected;
+		++guiState.itemSelected;
 
 
 	else if (key == up)
-		--engine->gui.itemSelected;
+		--guiState.itemSelected;
 }
 
 int InputHandler::getMouseIdx()
@@ -81,55 +81,55 @@ void InputHandler::update()
 			break;
 		}
 
-		if (engine->gui.state == Gui::MAIN)
+		if (guiState.state == GUI_MAIN)
 		{
 			designateIdx = 0;
 
 			switch (key)
 			{
 			case TK_ESCAPE:
-				engine->gui.state = Gui::ESC_MENU;
+				guiState.state = GUI_ESC_MENU;
 				break;
 
 			case TK_B:
-				engine->gui.state = Gui::BUILD;
+				guiState.state = GUI_BUILD;
 				break;
 
 			case TK_D:
-				engine->gui.state = Gui::DESIGNATE;
+				guiState.state = GUI_DESIGNATE;
 				break;
 
 			case TK_O:
-				engine->gui.state = Gui::ORDERS;
+				guiState.state = GUI_ORDERS;
 				break;
 
 			case TK_I:
-				engine->gui.state = Gui::CREATE_ITEM;
+				guiState.state = GUI_CREATE_ITEM;
 				break;
 
 			case TK_M:
-				engine->gui.state = Gui::REACTIONS;
+				guiState.state = GUI_REACTIONS;
 				break;
 
 			case TK_P:
-				engine->gui.state = Gui::STOCKPILES;
+				guiState.state = GUI_STOCKPILES;
 				break;
 			}
 		}
 
-		else if (engine->gui.state == Gui::BUILD)
+		else if (guiState.state == GUI_BUILD)
 		{
 			if (key == TK_ESCAPE)
-				engine->gui.state = Gui::MAIN;
+				guiState.state = GUI_MAIN;
 			else
 				buildMenu(key);
 		}
 
-		else if (engine->gui.state == Gui::DESIGNATE)
+		else if (guiState.state == GUI_DESIGNATE)
 		{
 			if (key == TK_ESCAPE)
 			{
-				engine->gui.state = Gui::MAIN;
+				guiState.state = GUI_MAIN;
 				designateState = designation_message::MINING;
 			}
 
@@ -139,39 +139,39 @@ void InputHandler::update()
 			designate(key);
 		}
 
-		else if (engine->gui.state == Gui::ORDERS)
+		else if (guiState.state == GUI_ORDERS)
 		{
 			if (key == TK_ESCAPE)
-				engine->gui.state = Gui::MAIN;
+				guiState.state = GUI_MAIN;
 		}
 
-		else if (engine->gui.state == Gui::ESC_MENU)
+		else if (guiState.state == GUI_ESC_MENU)
 		{
 			if (key == TK_ESCAPE)
-				engine->gui.state = Gui::MAIN;
+				guiState.state = GUI_MAIN;
 		}
 
-		else if (engine->gui.state == Gui::CREATE_ITEM)
+		else if (guiState.state == GUI_CREATE_ITEM)
 		{
 			if (key == TK_ESCAPE)
-				engine->gui.state = Gui::MAIN;
+				guiState.state = GUI_MAIN;
 			else
 				createItem(key);
 		}
 
-		else if (engine->gui.state == Gui::REACTIONS)
+		else if (guiState.state == GUI_REACTIONS)
 		{
 			if (key == TK_ESCAPE)
-				engine->gui.state = Gui::MAIN;
+				guiState.state = GUI_MAIN;
 
 			else
 				reactions(key);
 		}
 
-		else if (engine->gui.state == Gui::STOCKPILES)
+		else if (guiState.state == GUI_STOCKPILES)
 		{
 			if (key == TK_ESCAPE)
-				engine->gui.state = Gui::MAIN;
+				guiState.state = GUI_MAIN;
 			else
 				stockpiles(key);
 		}
@@ -203,7 +203,7 @@ void InputHandler::buildMenu(const int key)
 
 	if (key == TK_ENTER || key == TK_MOUSE_LEFT)
 	{
-		const auto tag = defInfo->buildingTags[engine->gui.itemSelected];
+		const auto tag = defInfo->buildingTags[guiState.itemSelected];
 		int clickIdx = getIdx({ mouseX, mouseY, engine->mapRenderer->currentZLevel });
 
 		emit(designate_building_message{ *getBuilding(tag), clickIdx });
@@ -216,7 +216,7 @@ void InputHandler::createItem(const int key)
 
 	if (key == TK_ENTER || key == TK_MOUSE_LEFT)
 	{
-		const auto tag = defInfo->itemTags[engine->gui.itemSelected];
+		const auto tag = defInfo->itemTags[guiState.itemSelected];
 		const Coordinates co = { mouseX, mouseY, engine->mapRenderer->currentZLevel }; // Add material choices once needed
 
 		spawnItemOnGround(tag, 1, co);
@@ -233,7 +233,7 @@ void InputHandler::reactions(const int key)
 
 	if (key == TK_ENTER)
 	{
-		const auto tag = defInfo->availibleReactions[engine->gui.itemSelected];
+		const auto tag = defInfo->availibleReactions[guiState.itemSelected];
 
 		designations->workOrders.push_back(std::make_pair(1, tag));
 	}
@@ -252,7 +252,7 @@ void InputHandler::stockpiles(const int key)
 		}
 		else
 		{
-			const auto tag = defInfo->stockpileTags[engine->gui.itemSelected];
+			const auto tag = defInfo->stockpileTags[guiState.itemSelected];
 
 			auto cata = getStockpileDef(tag);
 
