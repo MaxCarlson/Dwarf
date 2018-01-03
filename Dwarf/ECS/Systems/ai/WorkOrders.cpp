@@ -34,6 +34,7 @@ void WorkOrders::init()
 void WorkOrders::update(double duration)
 {
 	const auto ents = getEntities();
+
 	for (const auto& e : ents)
 		work(e, duration);
 }
@@ -60,7 +61,6 @@ void WorkOrders::work(Entity e, const double& duration)
 			work.cancel_work(e);
 			return;
 		}
-
 
 		tag.reaction = *job;
 		tag.step = WorkOrderTag::FIND_COMPONENT;
