@@ -116,8 +116,9 @@ void InputHandler::update()
 				guiState.state = GUI_STOCKPILES;
 				break;
 
-			case TK_A:
+			case TK_T:
 				guiState.state = GUI_ARCHITECTURE;
+				break;
 			}
 		}
 

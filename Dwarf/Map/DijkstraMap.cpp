@@ -117,6 +117,9 @@ Coordinates DijkstraMap::findDestination(const Coordinates co)
 	std::lock_guard<std::mutex> lock(mapLock);
 
 	const int idx = getIdx(co);
+
+	// Make use of sorted map to end up with
+	// the closest to our destination being first
 	std::map<int32_t, int> candidnates;
 
 	if (flag(co, CAN_GO_NORTH))

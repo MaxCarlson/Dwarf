@@ -1,17 +1,19 @@
+#include "stdafx.h"
 #include "DijkstraMapsHandler.h"
 #include "PickMapSystem.h"
 #include "Designations.h"
+#include "Map\Index.h"
 #include "../helpers/ItemHelper.h"
 #include "../../Components/Claimed.h"
 #include "../../Messages/pick_map_changed_message.h"
 #include "../../Messages/designate_architecture_message.h"
 #include "../../Messages/block_map_changed_message.h"
-#include "../../World.h"
 #include "../../../Engine.h"
 
 DijkstraMap pick_map;
 DijkstraMap block_map;
 DijkstraMap architecture_map;
+
 
 DijkstraMapsHandler::~DijkstraMapsHandler()
 {
@@ -72,6 +74,8 @@ void DijkstraMapsHandler::update()
 				}
 			}
 		);
+
+		block_map.update(targets);
 		update_block_map = false;
 	}
 

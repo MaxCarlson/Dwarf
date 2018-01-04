@@ -33,6 +33,5 @@ struct BuilderTag : public Component
 	}
 };
 
-
 CEREAL_REGISTER_TYPE(BuilderTag);
 CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, BuilderTag);

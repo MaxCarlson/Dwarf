@@ -125,7 +125,7 @@ void GuiSystem::drawMain()
 
 	clearAndDraw(horizontalOffset, verticalOffset, panelWidth, panelHeight, gui_color, 0x2588);
 
-	static const std::vector<std::string> commands = { "b = build", "i = spawn item", "d = designate", "o = order", "m - reactions" };
+	static const std::vector<std::string> commands = { "b = build", "i = spawn item", "d = designate", "o = order", "m - reactions", "p - stockpiles", "t - architecture" };
 
 	terminal_color("black");
 

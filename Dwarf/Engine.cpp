@@ -157,6 +157,7 @@ void Engine::regComponents()
 	world.registerComponent<BuilderTag>();
 	world.registerComponent<WorkOrderTag>();
 	world.registerComponent<HaulingTag>();
+	world.registerComponent<ArchitectTag>();
 }
 
 void Engine::init()
@@ -298,7 +299,7 @@ void Engine::update(double deltaTime)
 	buildAi->update(deltaTime);
 	aiArchitecture->update(deltaTime);
 
-	stockpileSystem->update(); // Update this only once a second or so?
+	stockpileSystem->update(); 
 	haulingSystem->update(deltaTime);
 
 	// Systems that don't need updates
