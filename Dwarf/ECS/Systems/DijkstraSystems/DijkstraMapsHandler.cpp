@@ -8,6 +8,7 @@
 #include "../../Messages/pick_map_changed_message.h"
 #include "../../Messages/designate_architecture_message.h"
 #include "../../Messages/block_map_changed_message.h"
+#include "../../Messages/update_all_maps_message.h"
 #include "../../../Engine.h"
 
 DijkstraMap pick_map;
@@ -34,6 +35,7 @@ void DijkstraMapsHandler::init()
 	engine->world.addSystem(*pickMapSystem);
 
 	// Subscribe to messages
+	subscribe_mbox<update_all_maps_message>();
 	subscribe_mbox<pick_map_changed_message>();
 	subscribe_mbox<block_map_changed_message>();
 	subscribe_mbox<designate_architecture_message>();
@@ -41,6 +43,12 @@ void DijkstraMapsHandler::init()
 
 void DijkstraMapsHandler::update()
 {
+	each_mbox<update_all_maps_message>([this]( const update_all_maps_message &msg)
+	{
+		update_pick_map = true;
+		update_block_map = true;
+		update_architecture = true;
+	});
 	each_mbox<pick_map_changed_message>([this](const pick_map_changed_message &msg) { update_pick_map = true; });
 	each_mbox<block_map_changed_message>([this](const block_map_changed_message & msg) { update_block_map = true; });
 	each_mbox<designate_architecture_message>([this](const designate_architecture_message & msg) { update_architecture = true; });

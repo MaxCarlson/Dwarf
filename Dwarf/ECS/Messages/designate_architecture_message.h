@@ -5,6 +5,7 @@
 enum ArchitectureType
 {
 	WALL,
+	FLOOR,
 	RAMP,
 	UP_STAIRS,
 	DOWN_STAIRS,

@@ -229,6 +229,7 @@ void Engine::init()
 	workOrders->init();
 	stockpileSystem->init();
 	haulingSystem->init();
+	aiArchitecture->init();
 	
 	world.refresh();
 

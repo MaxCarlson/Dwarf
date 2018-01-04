@@ -3,11 +3,14 @@
 #include "JobBoard.h"
 #include "Designations.h"
 #include "WorkTemplate.h"
+#include "../helpers/ItemHelper.h"
 #include "../../../Map/Tile.h"
 #include "../../../Map/Index.h"
 #include "../../Components/Claimed.h"
 #include "../EntityPositionCache.h"
 #include "../DijkstraSystems/DijkstraMapsHandler.h"
+#include "../../Messages/update_all_maps_message.h"
+#include "../../Messages/recalculate_mining_message.h"
 #include "../../Messages/drop_item_message.h"
 #include "../../Messages/pickup_item_message.h"
 #include "../../Messages/designate_architecture_message.h"
@@ -32,9 +35,63 @@ namespace JobsBoard
 	}
 }
 
+void designateArchitecture(designate_architecture_message &msg)
+{
+	auto co1 = idxToCo(msg.area.first);
+	auto co2 = idxToCo(msg.area.second);
+
+	if (co1.z != co2.z)
+		return;
+
+	// Normalize Coordinates
+	if (co1.x > co2.x)
+	{
+		int tmp = co1.x;
+		co1.x = co2.x;
+		co2.x = tmp;
+	}
+	if (co1.y > co2.y)
+	{
+		int tmp = co1.y;
+		co1.y = co2.y;
+		co2.y = tmp;
+	}
+
+	std::vector<int> desigs;
+
+	bool possible = true;
+	for(int x = co1.x; x <= co2.x; ++x)
+		for (int y = co1.y; y <= co2.y; ++y)
+		{
+			auto idx = getIdx({ x, y, co1.z });
+
+			// Eventually we'll want to be able to designate floors
+			// and bridges to be made on tiles we can't stand on.
+			// This will do for now though
+			if (region::flag({ x, y, co1.z }, region::Flag::CAN_STAND_HERE))
+			{
+				desigs.emplace_back(idx);
+			}
+			else
+			{
+				possible = false;
+				break;
+			}
+		}
+
+	if (possible)
+		for (const auto d : desigs)
+			designations->architecture.emplace(d, msg.type);
+}
+
 void AiArchitecture::init()
 {
 	JobsBoard::register_job_offer<ArchitectTag>(JobsBoard::evaluate_architecture);
+
+	subscribe<designate_architecture_message>([this](designate_architecture_message &msg)
+	{
+		designateArchitecture(msg);
+	});
 }
 
 void AiArchitecture::update(double duration)
@@ -138,7 +195,109 @@ void AiArchitecture::doWork(Entity e)
 
 	else if (tag.step == ArchitectTag::BUILD)
 	{
+		std::size_t bidx = 0;
 
+		// Are we on or adjacent to the build site?
+		if (designations->architecture.find(getIdx(co)) != designations->architecture.end())
+			bidx = getIdx(co);
+
+		else if (co.y > 0 && designations->architecture.find(getIdx(CO_NORTH)) != designations->architecture.end())
+			bidx = getIdx(CO_NORTH);
+
+		else if (co.y < MAP_HEIGHT && designations->architecture.find(getIdx(CO_SOUTH)) != designations->architecture.end())
+			bidx = getIdx(CO_SOUTH);
+
+		else if (co.x < MAP_WIDTH && designations->architecture.find(getIdx(CO_EAST)) != designations->architecture.end())
+			bidx = getIdx(CO_EAST);
+
+		else if (co.x > 0 && designations->architecture.find(getIdx(CO_WEST)) != designations->architecture.end())
+			bidx = getIdx(CO_WEST);
+
+		else if (co.x > 0 && co.y > 0 && designations->architecture.find(getIdx(CO_NORTH_W)) != designations->architecture.end())
+			bidx = getIdx(CO_NORTH_W);
+
+		else if (co.x > MAP_WIDTH && co.y > 0 && designations->architecture.find(getIdx(CO_NORTH_E)) != designations->architecture.end())
+			bidx = getIdx(CO_NORTH_E);
+
+		else if (co.x > MAP_WIDTH && co.y < MAP_HEIGHT && designations->architecture.find(getIdx(CO_SOUTH_E)) != designations->architecture.end())
+			bidx = getIdx(CO_SOUTH_E);
+
+		else if (co.x > 0 && co.y < MAP_HEIGHT && designations->architecture.find(getIdx(CO_SOUTH_W)) != designations->architecture.end())
+			bidx = getIdx(CO_SOUTH_W);
+
+
+		auto find = designations->architecture.find(bidx);
+
+		// Yay we're in the right spot
+		if (find != designations->architecture.end())
+		{
+			auto type = find->second;
+
+			std::size_t material = 0;
+
+			Entity block = getWorld().getEntity(tag.current_tool);
+
+			if (block.isValid() && block.hasComponent<Item>())
+			{
+				material = block.getComponent<Item>().material;
+			}
+
+			itemHelper.deleteItem(tag.current_tool);
+			tag.current_tool = 0;
+
+			region::setFlag(idxToCo(bidx), region::Flag::CONSTRUCTION);
+
+			if (material)
+				region::setMaterial(idxToCo(bidx), material);
+
+			if (type == ArchitectureType::WALL)
+			{
+				region::makeWall(bidx);
+			}
+			
+			else if (type == ArchitectureType::RAMP)
+			{
+				region::makeFloor(bidx);
+			}
+
+			else if (type == ArchitectureType::RAMP)
+			{
+				region::makeRamp(bidx);
+			}
+
+			else if (type == ArchitectureType::UP_STAIRS)
+			{
+				//region::makeUpStairs(bidx);
+			}
+
+			else if (type == ArchitectureType::DOWN_STAIRS)
+			{
+				//region::makeDownStairs(bidx);
+			}
+
+			else if (type == ArchitectureType::UP_DOWN_STAIRS)
+			{
+				//region::makeUpDownStairs(bidx);
+			}
+
+			else if (type == ArchitectureType::BRIDGE)
+			{
+				// TODO:
+			}
+
+			designations->architecture.erase(bidx);
+
+			emit(recalculate_mining_message{});
+			emit(update_all_maps_message{});
+		}
+
+		else
+		{
+			emit(drop_item_message{ SLOT_CARRYING, e.getId().index, tag.current_tool, co });
+		}
+
+		work.cancel_work(e);
+		return;
 	}
 
 }

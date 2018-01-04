@@ -23,6 +23,7 @@ private:
 	PickMapSystem * pickMapSystem;
 
 	// bool's for updating
+	bool update_all_maps = true;
 	bool update_pick_map = true;
 	bool update_block_map = true;
 	bool update_architecture = true;

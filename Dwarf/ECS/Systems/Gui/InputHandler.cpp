@@ -10,6 +10,7 @@
 #include "../../Messages/designate_building_message.h"
 #include "../../Messages/request_new_stockpile_message.h"
 #include "../../Messages/designate_architecture_message.h"
+#include "../../Messages/update_all_maps_message.h"
 #include "../../Designations.h"
 #include "../../Raws/DefInfo.h"
 #include "../../Raws/Defs/ItemDefs.h"
@@ -235,8 +236,7 @@ void InputHandler::createItem(const int key)
 		spawnItemOnGround(tag, 1, co);
 
 		// For the moment
-		if(tag == "pickaxe")
-			emit(pick_map_changed_message{});
+		emit(update_all_maps_message{});
 	}
 }
 
