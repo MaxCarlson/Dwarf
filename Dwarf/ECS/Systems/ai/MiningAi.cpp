@@ -175,8 +175,7 @@ void MiningAi::updateMiner(const Entity& e)
 		case DOWN:    --dest.z; break;
 		}
 
-		mov.path.push_back(co);
-
+		mov.path.push_back(dest);
 		return;
 	}
 
