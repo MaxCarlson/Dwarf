@@ -50,3 +50,12 @@ items["block"] = {
 	tcode = 2,
 	stockpile = stockpiles["block"].id
 };
+
+items["anvil"] = {
+	name = "Anvil",
+	description = "Beat your metal against this",
+	itemType = { "component" },
+	glyph = glyphs["anvil"],
+	color = "silver",
+	stockpile = stockpiles["block"].id
+};

@@ -78,9 +78,14 @@ glyphs = {
 
 
 	-- Workshop items + misc 0's at 511
+	
 	w_block = 552,
 	w_tile = 580,
 	
+	smith_top = 624,
+	smith_bottom = 640,
+	smith_mid = 640,
+
 	m_smelter = 665,
 	r_smelter = 666,
 	coal_pit = 680,
