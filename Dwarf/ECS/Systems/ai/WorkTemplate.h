@@ -23,7 +23,7 @@ public:
 	{
 		// Entities current tool
 		// ( Possibly no tool )
-		out_tool = e.getComponent<Inventory>().inventory[SLOT_TOOL];
+		//out_tool = e.getComponent<Inventory>().inventory[SLOT_TOOL];
 
 		// If entity already has the correct tool, we don't need to look
 		// for one
@@ -88,8 +88,7 @@ public:
 			else
 			{
 				const auto destination = map.findDestination(co);
-				mov.destination = destination;
-				//mov.path.push_back(destination);
+				mov.path.emplace_back(destination);
 				return;
 			}
 		}

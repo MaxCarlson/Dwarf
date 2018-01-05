@@ -3,6 +3,7 @@
 #include "ECS\Components\helpers\building_designation.h"
 #include <unordered_map>
 #include "cereal\types\unordered_map.hpp"
+#include "cereal\types\utility.hpp"
 #include <vector>
 #include <memory>
 

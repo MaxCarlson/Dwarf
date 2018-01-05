@@ -31,9 +31,6 @@ namespace region
 			stockpileSquares.reserve(100);
 		}
 
-		// 1D vector of Tiles indexed by 3D formula
-		//std::vector<Tile> tileMap; // Remove this and replace with sepperate vectors of properties
-
 		std::vector<char> solid;
 		//std::vector<char> aboveGround;
 
@@ -410,7 +407,11 @@ namespace region
 			break;
 
 		case TileTypes::WALL: // Not implemented yet
-
+		{
+			const auto& mat = getMaterial(materials[idx]);
+			ch = 205;
+			fg = mat->color;
+		}
 			break;
 
 		case TileTypes::RAMP:

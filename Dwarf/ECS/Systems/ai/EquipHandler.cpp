@@ -49,13 +49,13 @@ void EquipHandler::pickupItem(int itemSlot, std::size_t entityId, std::size_t it
 	item.removeComponent<RenderComponent>();
 
 	// Store item in entities inventory
-	auto& entity = getWorld().getEntity(entityId);
-	auto& inv = entity.getComponent<Inventory>();
+	//auto& entity = getWorld().getEntity(entityId);
+//	auto& inv = entity.getComponent<Inventory>();
 
-	if (itemSlot < MAX_INVENTORY_SLOTS)				// Get rid of this slot system!
-		inv.inventory[itemSlot] = itemEid;
-	else
-		std::cout << "Other Item Types Not Implemented Yet Error!!" << std::endl;
+	//if (itemSlot < MAX_INVENTORY_SLOTS)				// Get rid of this slot system!
+	//	inv.inventory[itemSlot] = itemEid;
+	//else
+	//	std::cout << "Other Item Types Not Implemented Yet Error!!" << std::endl;
 
 
 	// If we're picking up a stored item, flag it as not stored
@@ -74,7 +74,8 @@ void EquipHandler::pickupItem(int itemSlot, std::size_t entityId, std::size_t it
 
 
 	if (outItemEid != 0)
-		dropItem( finditemSlot(inv, outItemEid), entityId, outItemEid, itemCo); // Item co should be the same as the out item in these cases?
+		dropItem(0, entityId, outItemEid, itemCo);
+		//dropItem( finditemSlot(inv, outItemEid), entityId, outItemEid, itemCo); // Item co should be the same as the out item in these cases?
 
 	item.activate();
 	getWorld().refresh();
@@ -85,13 +86,13 @@ void EquipHandler::pickupItem(int itemSlot, std::size_t entityId, std::size_t it
 void EquipHandler::dropItem(int itemSlot, std::size_t entityId, std::size_t itemEid, Coordinates co)
 {
 	auto& item = getWorld().getEntity(itemEid);
-	auto& entity = getWorld().getEntity(entityId);
+	//auto& entity = getWorld().getEntity(entityId);
 
 	// Reset inventory slot
-	auto& inv = entity.getComponent<Inventory>();
-	inv.inventory[itemSlot] = 0;
+	//auto& inv = entity.getComponent<Inventory>();
+	//inv.inventory[itemSlot] = 0;
 
-	auto* carried = &item.getComponent<ItemCarried>(); // Make a component for item carried instead of just stored?
+	auto* carried = &item.getComponent<ItemCarried>(); 
 
 	// Restore the items render component
 	auto& rend = item.addComponent<RenderComponent>(); 

@@ -81,7 +81,9 @@ void designateArchitecture(designate_architecture_message &msg)
 
 	if (possible)
 		for (const auto d : desigs)
+		{
 			designations->architecture.emplace(d, msg.type);
+		}
 }
 
 void AiArchitecture::init()
@@ -96,7 +98,7 @@ void AiArchitecture::init()
 
 void AiArchitecture::update(double duration)
 {
-	const auto& ents = getEntities();
+	const auto ents = getEntities();
 
 	for (const auto& e : ents)
 		doWork(e);
@@ -190,7 +192,8 @@ void AiArchitecture::doWork(Entity e)
 			emit(drop_item_message{ SLOT_CARRYING, e.getId().index, tag.current_tool, co });
 			work.cancel_work(e);
 		}
-		
+
+		return;
 	}
 
 	else if (tag.step == ArchitectTag::BUILD)
@@ -216,10 +219,10 @@ void AiArchitecture::doWork(Entity e)
 		else if (co.x > 0 && co.y > 0 && designations->architecture.find(getIdx(CO_NORTH_W)) != designations->architecture.end())
 			bidx = getIdx(CO_NORTH_W);
 
-		else if (co.x > MAP_WIDTH && co.y > 0 && designations->architecture.find(getIdx(CO_NORTH_E)) != designations->architecture.end())
+		else if (co.x < MAP_WIDTH && co.y > 0 && designations->architecture.find(getIdx(CO_NORTH_E)) != designations->architecture.end())
 			bidx = getIdx(CO_NORTH_E);
 
-		else if (co.x > MAP_WIDTH && co.y < MAP_HEIGHT && designations->architecture.find(getIdx(CO_SOUTH_E)) != designations->architecture.end())
+		else if (co.x < MAP_WIDTH && co.y < MAP_HEIGHT && designations->architecture.find(getIdx(CO_SOUTH_E)) != designations->architecture.end())
 			bidx = getIdx(CO_SOUTH_E);
 
 		else if (co.x > 0 && co.y < MAP_HEIGHT && designations->architecture.find(getIdx(CO_SOUTH_W)) != designations->architecture.end())
@@ -227,6 +230,8 @@ void AiArchitecture::doWork(Entity e)
 
 
 		auto find = designations->architecture.find(bidx);
+
+		auto bco = idxToCo(bidx);
 
 		// Yay we're in the right spot
 		if (find != designations->architecture.end())
@@ -250,40 +255,42 @@ void AiArchitecture::doWork(Entity e)
 			if (material)
 				region::setMaterial(idxToCo(bidx), material);
 
-			if (type == ArchitectureType::WALL)
+			switch (type)
 			{
+			case ArchitectureType::WALL:
 				region::makeWall(bidx);
-			}
-			
-			else if (type == ArchitectureType::RAMP)
-			{
+				break;
+
+			case ArchitectureType::FLOOR:
 				region::makeFloor(bidx);
-			}
+				break;
 
-			else if (type == ArchitectureType::RAMP)
-			{
+			case ArchitectureType::RAMP:
 				region::makeRamp(bidx);
-			}
+				break;
 
-			else if (type == ArchitectureType::UP_STAIRS)
-			{
+			case ArchitectureType::UP_STAIRS:
 				//region::makeUpStairs(bidx);
-			}
+				break;
 
-			else if (type == ArchitectureType::DOWN_STAIRS)
-			{
+			case  ArchitectureType::DOWN_STAIRS:
 				//region::makeDownStairs(bidx);
-			}
+				break;
 
-			else if (type == ArchitectureType::UP_DOWN_STAIRS)
-			{
+			case ArchitectureType::UP_DOWN_STAIRS:
 				//region::makeUpDownStairs(bidx);
+				break;
+
+			case ArchitectureType::BRIDGE:
+				// TODO:
+				break;
+
+			default:
+				std::cout << "Invalid type architecture attempt!" << "\n";
 			}
 
-			else if (type == ArchitectureType::BRIDGE)
-			{
-				// TODO:
-			}
+			// Recalculate paths and render
+			region::spot_recalc_paths(idxToCo(bidx));
 
 			designations->architecture.erase(bidx);
 

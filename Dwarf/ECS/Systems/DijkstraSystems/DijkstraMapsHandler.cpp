@@ -67,7 +67,7 @@ void DijkstraMapsHandler::update()
 		itemHelper.forEachItem(
 			[&targets, &repeats](const auto& e)
 			{
-				if (e.hasComponent<Item>() && e.getComponent<Item>().tag != "block")
+				if (e.hasComponent<Item>() && e.getComponent<Item>().tag == "block")
 				{
 					if (e.hasComponent<Claimed>() || ! e.hasComponent<PositionComponent>())
 						return;
