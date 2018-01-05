@@ -50,7 +50,8 @@ void MiningAi::init()
 
 void MiningAi::update(double deltaT)
 {
-	for (auto& e : getEntities())
+	const auto ents = getEntities();
+	for (auto& e : ents)
 	{
 		updateMiner(e);
 	}
@@ -175,7 +176,7 @@ void MiningAi::updateMiner(const Entity& e)
 		case DOWN:    --dest.z; break;
 		}
 
-		mov.path.push_back(dest);
+		mov.path.emplace_back(dest);
 		return;
 	}
 

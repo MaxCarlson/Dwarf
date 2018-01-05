@@ -10,6 +10,7 @@
 #include "../Raws/raws.h"
 #include "../ECS/Systems/helpers/PathFinding.h"
 #include "../ECS/Messages/drop_item_message.h"
+#include "../ECS/Messages/block_map_changed_message.h"
 
 namespace JobsBoard
 {
@@ -243,6 +244,8 @@ void WorkOrders::work(Entity e, const double& duration)
 				std::cout << "Reaction spawning" << out.first << material << "\n";
 				spawnItemOnGround(out.first, material, co);
 			}
+
+		emit(block_map_changed_message{});
 
 		// Finish up
 		workOrderHelper->unclaim_workshop(tag.reaction.workshop_id);

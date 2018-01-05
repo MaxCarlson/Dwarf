@@ -1,6 +1,5 @@
 
 
-
 buildings["mason"] = {
 	name = "Mason",
 	description = "A building where stone is worked",
@@ -32,7 +31,7 @@ reactions = {
 		outputs = {{ item = "door", qty = 1}}
 	},
 
-	make_statue = {
+	make_stone_statue = {
 		name = "Make Statue",
 		workshop = "mason",
 		skill = "Masonry",
