@@ -5,7 +5,7 @@ glyphs = {
 	mined_gem = 4,
 	stone_boulder = 7,
 	nest_box = 8,
-	ore = 15,
+	--ore = 15,
 
 	placed_floor = 43,
 	floor1 = 47,
@@ -61,6 +61,31 @@ glyphs = {
 	metal_bars = 240,
 
 
-	block = 254
+	block = 254,
+
+	-- tools + weapons
+	whip = 312,
+	axe = 313,
+	w_small_hammer = 314,
+	sword = 315,
+	javalin = 316,
+	mace = 317,
+	crossbow = 318,
+	pickaxe = 319,
+	long_bow = 320,
+	spear = 322,
+	hatchet = 323,
+
+
+	-- Workshop items + misc 0's at 511
+	w_block = 552,
+	w_tile = 580,
+	
+	m_smelter = 665,
+	r_smelter = 666,
+	coal_pit = 680,
+	bellow = 695,
+	tongs = 696,
+	ore = 764,
 };
 

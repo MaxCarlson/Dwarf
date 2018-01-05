@@ -22,7 +22,7 @@ Entity EntityFactory::createDwarf(DwarfCreationObj dwarfConstruct)
 {
 	Entity dwarf = engine->world.createEntity();
 
-	dwarf.addComponent<RenderComponent>(1, 3, "default");
+	dwarf.addComponent<RenderComponent>(769, 3, "default");
 	dwarf.addComponent<PositionComponent>(dwarfConstruct.co);
 	dwarf.addComponent<JobComponent>();
 

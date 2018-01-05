@@ -17,10 +17,10 @@ int main()
 
 	// Move these into lua config files that don't require compiling
 	// so outside users can modify tilesets/etc
-	terminal_set("U+E200: ../Spacefox_16x16Dibujor01.png, size=16x16");
-	terminal_set("U+E300: ../dwarves.png, size=16x16");
-	terminal_set("U+E400: ../tools+weapons.png, size=16x16");
-	terminal_set("U+E500: ../dorenitems16x16.png, size=16x16");
+	terminal_set("U+E100: ../Spacefox_16x16Dibujor01.png, size=16x16");
+	terminal_set("U+E200: ../tools+weapons.png, size=16x16");
+	terminal_set("U+E300: ../dorenitems16x16.png, size=16x16");
+	terminal_set("U+E400: ../dwarves.png, size=16x16");
 
 	terminal_set("input.filter = [keyboard, mouse+]");
 	terminal_composition(true);

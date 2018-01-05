@@ -110,7 +110,10 @@ void RenderSystem::update()
 			terminal_color(rend.fg);
 			terminal_bkcolor(rend.bg);
 
-			terminal_put(X, Y, codes[rend.code] + rend.ch);
+			int calcChar = rend.ch / 255;
+
+			terminal_put(X, Y, codes[calcChar + 1] + ( rend.ch - calcChar * 256));
+			//terminal_put(X, Y, codes[rend.code] + rend.ch);
 			++Y;
 		}
 		++X;

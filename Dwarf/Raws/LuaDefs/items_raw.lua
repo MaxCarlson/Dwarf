@@ -11,6 +11,16 @@ items["ore"] = {
 	stockpile = stockpiles["ore"].id
 };
 
+items["metal_bar"] =  {
+	name = "Metal Bar",
+	description = "Forged in the fires of right over there..",
+	itemType = {"component"},
+	glyph = glyphs["metal_bars"],
+	color = "grey",
+	tcode = 2,
+	stockpile = stockpiles["bars"].id
+};
+
 items["coal"] = {
 	name = "Coal",
 	description = "Freshly mined coal",
