@@ -23,7 +23,7 @@ std::unique_ptr<work_order_reaction> WorkOrderHelper::find_work_order_reaction(c
 	for (std::pair<int, std::string> & des : designations->workOrders)
 	{
 		// Skip any reaction that has less than one requested
-		// time remaining. All reactions < 1 will be cleared from designations
+		// job remaining. All reactions < 1 will be cleared from designations
 		// after this loop
 		if (des.first < 1)
 			continue;

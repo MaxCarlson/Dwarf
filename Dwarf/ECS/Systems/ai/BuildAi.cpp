@@ -129,52 +129,7 @@ void BuildAi::doBuild(const Entity & e)
 				}
 			}
 		}
-/*
-		int count = 0;
 
-		for (auto & component : tag.buildingTarget.componentIds)
-		{
-			if (!component.second)
-			{
-				hasComps = false;
-				tag.current_component = component.first;
-
-				auto pos = itemHelper.get_item_location(component.first);
-				if (!pos)
-				{
-					// We failed to find a component for this building
-					// at first, let's try again ~~ Should we remove this code from EquipHandler and put it solely in here?
-					if (component.first == 0)
-					{						
-						const auto id = itemHelper.claim_item_by_reaction_inp(tag.buildingTarget.components[count]);
-						tag.buildingTarget.componentIds[count] = std::make_pair(id, false);
-					}
-
-					designations->buildings.push_back(tag.buildingTarget);
-					work.cancel_work(e);
-					return;
-				}
-
-				// Set destination, pathing will be done later
-				//mov.destination = idxToCo(pos);
-				auto path = findPath(co, idxToCo(pos));
-
-				if (path->failed)
-				{
-					designations->buildings.push_back(tag.buildingTarget);
-					work.cancel_work(e);
-					return;
-				}
-
-				mov.path = path->path;
-
-				component.second = true;
-				tag.step = BuilderTag::GOTO_COMPONENT;
-				return;
-			}
-			++count;
-		}
-		*/
 		if (hasComps)
 			tag.step = BuilderTag::BUILD_BUILDING;
 
@@ -216,8 +171,8 @@ void BuildAi::doBuild(const Entity & e)
 
 		if (!pos)
 		{
-			work.cancel_work(e);
 			emit(drop_item_message{ SLOT_CARRYING, e.getId().index, tag.current_component, co });
+			work.cancel_work(e);
 			return;
 		}
 
@@ -255,6 +210,10 @@ void BuildAi::doBuild(const Entity & e)
 	{
 		emit(drop_item_message{ SLOT_CARRYING, e.getId().index, tag.current_component, co });
 
+		// Stop gap measure. Keep items claimed for a building. If the building is un-designated
+		// implement unclaiming of items
+		itemHelper.claim_item(getWorld().getEntity(tag.current_component));
+
 		tag.current_component = 0;
 		tag.step = BuilderTag::FIND_COMPONENT;
 		return;
@@ -281,9 +240,9 @@ void BuildAi::doBuild(const Entity & e)
 			if (!ent.isValid() || !ent.hasComponent<Item>())
 			{
 				designations->buildings.push_back(tag.buildingTarget);
-				work.cancel_work(e);
 				std::cout << "Invalid component for building - building id: " << tag.buildingTarget.entity_id 
 					      << " componnent id:" << compId.first << "\n";
+				work.cancel_work(e);
 				return;
 			}
 		}

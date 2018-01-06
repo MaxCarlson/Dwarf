@@ -11,7 +11,7 @@ struct Reaction
 
 	std::vector<ReactionInput> inputs;
 	std::vector<std::pair<std::string, int>> outputs;
-	std::string skill;
+	std::string skill = "";
 
-	//int difficulty;
+	int difficulty = 0;
 };

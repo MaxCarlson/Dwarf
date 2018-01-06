@@ -6,6 +6,7 @@ glyphs = {
 	stone_boulder = 7,
 	nest_box = 8,
 	--ore = 15,
+	wood_logs = 22,
 
 	placed_floor = 43,
 	floor1 = 47,

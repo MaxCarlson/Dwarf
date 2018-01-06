@@ -13,12 +13,22 @@ items["ore"] = {
 
 items["metal_bar"] =  {
 	name = "Metal Bar",
-	description = "Forged in the fires of right over there..",
+	description = "Forged in the fires of.. right over there",
 	itemType = {"component"},
 	glyph = glyphs["metal_bars"],
 	color = "grey",
 	tcode = 2,
 	stockpile = stockpiles["bars"].id
+};
+
+items["wood_log"] = {
+	name = "Wood from a freshly downed tree",
+	description = "Wood has a large number of uses",
+	itemType = {"component"},
+	glyph = glyphs["wood_logs"],
+	color = "light brown",
+	tcode = 2,
+	stockpile = stockpiles["wood"].id
 };
 
 items["coal"] = {
@@ -57,5 +67,5 @@ items["anvil"] = {
 	itemType = { "component" },
 	glyph = glyphs["anvil"],
 	color = "silver",
-	stockpile = stockpiles["block"].id
+	stockpile = stockpiles["component"].id
 };

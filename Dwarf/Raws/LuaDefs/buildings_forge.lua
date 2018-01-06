@@ -14,13 +14,15 @@ buildings["smelter"] = {
 };
 
 
-reactions["make_metal_bars"] = {
-	name = "Make Metal Bars",
+reactions["smelt_ore"] = { -- Should item = metal_bar be replaced with blocks? Just change render character in game based on mat type?
+	name = "Smelt ore",
 	workshop = "smelter",
-	skill = "Smelting",
+	skill = "Furnace Operation",
 	inputs = {{ item = "ore", qty = 1 }},
-	outputs = {{ item = "metal_bar", qty = 1 }}
+	outputs = {{ item = "block", qty = 1 }},
+	difficulty = 4
 };
+
 
 buildings["smithy"] = {
 	name = "Smithy",
@@ -40,7 +42,8 @@ reactions["make_anvil"] = {
 	name = "Make an Anvil",
 	workshop = "smithy",
 	skill = "Smithing",
-	inputs = {{ item = "metal_bar", qty = 3 }},
-	outputs = {{ item = "anvil", qty = 1 }}
+	inputs = {{ item = "block", qty = 3, mat_type = metal }},
+	outputs = {{ item = "anvil", qty = 1 }},
+	difficulty = 6
 };
 
