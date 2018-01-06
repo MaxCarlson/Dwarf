@@ -62,14 +62,14 @@ void readInBuildings() noexcept
 			{ "height", [&b]() { b.height = lua_int(); } },
 			{ "structure", [&b]() { b.structure = true; } },
 			{ "components", [&b, &inp]() {
-				readLuaTable2D("components",
-					[&b, &inp](auto type1) { inp = ReactionInput{}; },
+			readLuaMultiTable("components",
+					[&inp]() { inp = ReactionInput{}; },
 					[&b, &inp](auto type2) {
 						if (type2 == "item") inp.tag = lua_str();
 						if (type2 == "qty") inp.quantity = lua_int();
-					}
+					},
+					[&b, &inp]() { 	b.components.push_back(inp); }
 				);
-				b.components.push_back(inp);
 			}},
 			{"provides", [&b]() {
 				readLuaTable2D("provides",
