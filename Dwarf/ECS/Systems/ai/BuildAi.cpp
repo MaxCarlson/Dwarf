@@ -271,13 +271,24 @@ void BuildAi::doBuild(const Entity & e)
 
 		auto& buildingEntity = getWorld().getEntity(tag.buildingTarget.entity_id);
 
-		// Just used for filtering
-		buildingEntity.addComponent<RenderComponent>();
-
 		auto & building = buildingEntity.getComponent<Building>();
 
+		// Check every component for validity
+		for (auto& compId : tag.buildingTarget.componentIds)
+		{
+			const auto ent = getWorld().getEntity(compId.first);
+
+			if (!ent.isValid() || !ent.hasComponent<Item>())
+			{
+				designations->buildings.push_back(tag.buildingTarget);
+				work.cancel_work(e);
+				std::cout << "Invalid component for building - building id: " << tag.buildingTarget.entity_id 
+					      << " componnent id:" << compId.first << "\n";
+				return;
+			}
+		}
 	
-		// Set materials for building and delete componenets
+		// Set materials for building and delete componenets 
 		for (auto& compId : tag.buildingTarget.componentIds)
 		{
 			const auto comp = getWorld().getEntity(compId.first);
@@ -291,6 +302,9 @@ void BuildAi::doBuild(const Entity & e)
 		}
 
 		building.complete = true;
+
+		// Just used for filtering
+		buildingEntity.addComponent<RenderComponent>();
 
 		buildingEntity.activate();
 
