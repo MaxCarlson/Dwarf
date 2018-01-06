@@ -79,7 +79,59 @@ void BuildAi::doBuild(const Entity & e)
 	else if (tag.step == BuilderTag::FIND_COMPONENT)
 	{
 		bool hasComps = true;
+
+		// Loop through component types
+		for (auto& ctype : tag.buildingTarget.components)
+		{
+			// Loop through quantity of components
+			for (int i = 0; i < ctype.quantity; ++i)
+			{
+				auto& component = tag.buildingTarget.componentIds[i];
+
+				// If component hasn't been placed by building yet..
+				if (!component.second)
+				{
+					hasComps = false;
+					tag.current_component = component.first;
+
+					auto pos = itemHelper.get_item_location(component.first);
+					if (!pos)
+					{
+						// We failed to find a component for this building
+						// at first, let's try again ~~ Should we remove this code from EquipHandler and put it solely in here?
+						if (component.first == 0)
+						{
+							const auto id = itemHelper.claim_item_by_reaction_inp(ctype);
+							component = std::make_pair(id, false);
+						}
+
+						designations->buildings.push_back(tag.buildingTarget);
+						work.cancel_work(e);
+						return;
+					}
+
+					// Set destination, pathing will be done later
+					//mov.destination = idxToCo(pos);
+					auto path = findPath(co, idxToCo(pos));
+
+					if (path->failed)
+					{
+						designations->buildings.push_back(tag.buildingTarget);
+						work.cancel_work(e);
+						return;
+					}
+
+					mov.path = path->path;
+
+					component.second = true;
+					tag.step = BuilderTag::GOTO_COMPONENT;
+					return;
+				}
+			}
+		}
+/*
 		int count = 0;
+
 		for (auto & component : tag.buildingTarget.componentIds)
 		{
 			if (!component.second)
@@ -116,13 +168,13 @@ void BuildAi::doBuild(const Entity & e)
 
 				mov.path = path->path;
 
+				component.second = true;
 				tag.step = BuilderTag::GOTO_COMPONENT;
-				// Possibly test for path here to avoid convaluted mov system?
 				return;
 			}
 			++count;
 		}
-
+		*/
 		if (hasComps)
 			tag.step = BuilderTag::BUILD_BUILDING;
 
