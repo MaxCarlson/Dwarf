@@ -134,11 +134,15 @@ void EquipHandler::designateBuilding(designate_building_message & msg)
 	// Find building components
 	for (const auto& comp : msg.building.components)
 	{
-		const auto compId = itemHelper.claim_item_by_reaction_inp(comp);
+		// Set correct quanitity of components needed
+		for (int i = 0; i < comp.quantity; ++i)
+		{
+			const auto compId = itemHelper.claim_item_by_reaction_inp(comp);
 
-		std::cout << "Component [" << comp.tag << "] - Id " << compId << "\n";
+			std::cout << "Component [" << comp.tag << "] - Id " << compId << "\n";
 
-		designation.componentIds.push_back(std::make_pair(compId, false));
+			designation.componentIds.push_back(std::make_pair(compId, false));
+		}
 	}
 
 	auto building = getWorld().createEntity();

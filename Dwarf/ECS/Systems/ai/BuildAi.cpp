@@ -108,9 +108,13 @@ void BuildAi::doBuild(const Entity & e)
 				auto path = findPath(co, idxToCo(pos));
 
 				if (path->failed)
+				{
+					designations->buildings.push_back(tag.buildingTarget);
 					work.cancel_work(e);
-				else
-					mov.path = path->path;
+					return;
+				}
+
+				mov.path = path->path;
 
 				tag.step = BuilderTag::GOTO_COMPONENT;
 				// Possibly test for path here to avoid convaluted mov system?
