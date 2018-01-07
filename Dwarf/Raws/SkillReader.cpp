@@ -13,6 +13,10 @@ std::vector<std::string> skills;
 // everything after just get's a minor boost in xp when performing skill
 boost::container::flat_map<std::string, std::vector<std::string>> skillAttributes;
 
+// Visually pleasing skill names indexed by skill tag
+// Entire purpose is to remove underscores. Is this needed?
+boost::container::flat_map<std::string, std::string> skillNames;
+
 
 const std::vector<std::string>& allAttributes()
 {
@@ -50,30 +54,34 @@ void readInSkills() noexcept
 		}
 	);
 
+	std::vector<std::vector<std::string>> test;
+	std::vector<std::string> keys;
+
 	// Read in skills
 	std::string tag;
 	readLuaTable("skills",
-		[&tag](const auto &key) {},
+		[&tag](const auto &key) { tag = key; },
 		[](const auto &key) {},
 		luaParser
 		{
-			{ "name", [&tag]() { 
-				tag = lua_str(); 
-				skills.emplace_back(tag); }
-			},
-			{ "s_attributes", [&tag]() {
+			{ "name", [&tag]() { skillNames[tag] = lua_str(); } },
+
+			{ "s_attributes", [&tag, &test, &keys]() {
 				readLuaMultiTable("s_attributes",
 					[]() {},
 					[&tag](auto type) {
-						if (type == "attr") skillAttributes[tag].push_back(lua_str());
+						if (type == "attr") skillAttributes[tag].emplace_back(lua_str());
 
 					},
 					[]() {}
 				);
+				keys.push_back(tag);
+				test.push_back(skillAttributes[tag]);
 				}
 			}
 		}
 	);
+	int a = 5;
 }
 
 void sanityCheckSkills() noexcept

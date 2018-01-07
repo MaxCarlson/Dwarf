@@ -16,27 +16,27 @@ attributes =
 -- secondary attributes will be minorly improved performing the skill
 skills = 
 {
-	mining = {
+	Mining = {
 		name = "Mining",
 		s_attributes = { { attr = "Strength" }, { attr = "Willpower" }, { attr = "Endurance" } }
 	},
 
-	masonry = {
+	Masonry = {
 		name = "Masonry",
 		s_attributes = {{ attr = "Agility" }, { attr = "Endurance" }}
 	}, 
 
-	constrtuction = {
+	Construction = {
 		name = "Construction",
 		s_attributes = {{ attr = "Strength" }, { attr = "Agility" } }
 	},
 
-	furnace_operation = {
+	Furnace_Operation = {
 		name = "Furnace Operation",
 		s_attributes = {{ attr = "Endurance" }, { attr = "Toughness" }}
 	}, 
 
-	blacksmithing = {
+	Blacksmithing = {
 		name = "Blacksmithing",
 		s_attributes = {{ attr = "Strength"}, { attr = "Endurance" }}
 	},
