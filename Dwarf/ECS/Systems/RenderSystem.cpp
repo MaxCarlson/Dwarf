@@ -155,7 +155,7 @@ void RenderSystem::updateRender()
 			// Don't show entities not on camera level (for the moment)
 			// Eventually want to implement lighting to show multiple z levels
 			auto* pos = &e.getComponent<PositionComponent>();
-			if (pos->co.z != zlvl)
+			if (!pos || pos->co.z != zlvl)
 				continue;
 
 			else if (!e.isValid()) // Should almost never be the case, here for debug

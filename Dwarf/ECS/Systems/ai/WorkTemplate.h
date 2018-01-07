@@ -18,6 +18,8 @@ class WorkTemplate
 {
 public:
 
+	// Used when we want to pickup a tool or item from a Dijkstra map, or just a known location
+	// without knowing the actual ID of the item
 	template<typename MSG, typename CANCEL, typename SUCCESS>
 	void pickup_tool(const Entity& e, Coordinates co, const int &catagory, std::size_t& out_tool, const CANCEL &cancel, const SUCCESS &success)
 	{

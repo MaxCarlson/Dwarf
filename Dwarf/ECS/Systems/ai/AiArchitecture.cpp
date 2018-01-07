@@ -177,7 +177,7 @@ void AiArchitecture::doWork(Entity e, const double& duration)
 			return;
 		}
 
-		if (dist < 2)
+		if (dist < 2) // Add in two D distance checking>? So we can performa architecture stuff while diagonal from designations
 		{
 			tag.step = ArchitectTag::BUILD;
 			return;
@@ -319,15 +319,16 @@ void AiArchitecture::doWork(Entity e, const double& duration)
 			// Skill roll CRITICAL_FAIL
 			else
 				progress = 0.0;
+
+			return;
 		}
 
 		else
 		{
 			emit(drop_item_message{ SLOT_CARRYING, e.getId().index, tag.current_tool, co });
+			work.cancel_work(e);
+			return;
 		}
-
-		work.cancel_work(e);
-		return;
 	}
 
 }

@@ -85,20 +85,21 @@ void EquipHandler::pickupItem(int itemSlot, std::size_t entityId, std::size_t it
 // from searching the inventory?
 void EquipHandler::dropItem(int itemSlot, std::size_t entityId, std::size_t itemEid, Coordinates co)
 {
-	auto& item = getWorld().getEntity(itemEid);
-	//auto& entity = getWorld().getEntity(entityId);
+	if ( itemEid == 0 )
+		return;
 
-	// Reset inventory slot
-	//auto& inv = entity.getComponent<Inventory>();
-	//inv.inventory[itemSlot] = 0;
+	auto& item = getWorld().getEntity(itemEid);
 
 	auto* carried = &item.getComponent<ItemCarried>(); 
 
 	// Restore the items render component
 	auto& rend = item.addComponent<RenderComponent>(); 
-	rend = carried->rend;
 
-	item.removeComponent<ItemCarried>();
+	if (carried)
+	{
+		rend = carried->rend;
+		item.removeComponent<ItemCarried>();
+	}
 
 	// Restore the items correct positon
 	item.addComponent<PositionComponent>(co);
