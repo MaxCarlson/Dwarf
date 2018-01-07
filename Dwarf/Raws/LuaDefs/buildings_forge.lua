@@ -26,7 +26,7 @@ reactions["smelt_ore"] = { -- Should item = metal_bar be replaced with blocks? J
 
 buildings["smithy"] = {
 	name = "Smithy",
-	description = "Here you can shape metal bars into things",
+	description = "Here you can shape metal into things",
 	width = 3,
 	height = 3,
 	components = {{ item = "block", qty = 7 }, { item = "anvil", qty = 1 }},

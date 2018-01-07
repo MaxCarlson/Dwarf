@@ -11,10 +11,12 @@
 #include "Defs\ItemDefs.h"
 #include "Buildings.h"
 #include "ReadReactions.h"
+#include "SkillReader.h"
 
 
 void sanityChecks()
 {
+	sanityCheckSkills();
 	sanityCheckStockpiles();
 	sanityCheckItems();
 	sanityCheckMaterials();
@@ -24,6 +26,7 @@ void sanityChecks()
 
 void loadGameTables()
 {
+	readInSkills();
 	readInStockpiles();
 	readInItems();
 	readInMaterials();

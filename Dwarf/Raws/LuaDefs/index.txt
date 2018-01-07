@@ -1,4 +1,5 @@
 render.lua
+attributes_skills.lua
 stockpiles.lua
 items.lua
 items_tools.lua
