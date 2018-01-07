@@ -3,6 +3,7 @@
 #include <string>
 
 const std::vector<std::string>& allAttributes();
+const std::vector<std::string>& allSkills();
 
 const std::vector<std::string>* attributesBySkill(const std::string & skill);
 

@@ -2,6 +2,17 @@
 #include "Stats.h"
 #include "../../../Raws/SkillReader.h"
 
+#include <random> // Once we have a planet seeded rng with determinstic behavior this will be cut
+static std::random_device rd;
+static std::mt19937 gen(rd());
+template<int lower, int upper>
+int randBound()
+{
+	static std::uniform_int_distribution<> dist(lower, upper);
+
+	return dist(gen);
+}
+
 inline int attributeModifier(int lvl)
 {
 	if (lvl == 1)
@@ -94,17 +105,18 @@ void gainSkill(Stats & stats, const std::string skilltag, int difficulty)
 
 skill_roll skillRoll(Stats & stats, const std::string skilltag, int difficulty)
 {
-	const int luck = 10;
+	const int luck = randBound<1, 25>();  // Once we have a planet seeded rng with determinstic behavior this template will be cut
+
+
 	const int attribute = getMainAttribute(stats, skilltag);
 	const int skilllvl = getSkillLvl(stats, skilltag);
-	// Roll for luck??
 
 	const int total = luck + attribute + skilllvl;
 
 	if (luck == 1)
 		return CRITICAL_FAIL;
 
-	else if (luck == 30)
+	else if (luck == 25)
 	{
 		gainSkill(stats, skilltag, difficulty);
 		return EPIC_SUCCESS;

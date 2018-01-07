@@ -13,6 +13,8 @@
 #include "ECS\Components\Sentients\Inventory.h"
 #include "ECS\Components\Sentients\Stats.h"
 
+#include "Raws\SkillReader.h"
+
 EntityFactory::EntityFactory()
 {
 }
@@ -39,9 +41,19 @@ Entity EntityFactory::createDwarf(DwarfCreationObj dwarfConstruct)
 	dwarf.addComponent<LaborStatsComponent>(laborSkillLevels, dwarfConstruct.skillPoints); // Delete this
 
 	std::unordered_map<std::string, attribute> attributes;
+
+	for (const auto& att : allAttributes())
+	{
+		attributes[att] = attribute{};
+	}
 	std::unordered_map<std::string, skill> skills;
 
-	dwarf.addComponent<Stats>();
+	for (const auto& sk : allSkills())
+	{
+		skills[sk] = skill{};
+	}
+
+	dwarf.addComponent<Stats>(attributes, skills);
 
 	// Movement speed in constructor in tiles per second
 	dwarf.addComponent<MovementComponent>(3.5);

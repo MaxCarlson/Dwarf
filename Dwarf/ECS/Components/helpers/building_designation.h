@@ -25,10 +25,13 @@ struct building_designation
 	// What do we need to make this building?
 	std::vector<ReactionInput> components;
 
+	// How complete is the building?
+	double progress = 0.0;
+
 	template<class Archive>
 	void serialize(Archive & archive)
 	{
-		archive(co, name, tag, width, height, entity_id, componentIds, components);
+		archive(co, name, tag, width, height, entity_id, componentIds, components, progress);
 	}
 };
 

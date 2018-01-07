@@ -26,6 +26,11 @@ skills =
 		s_attributes = {{ attr = "Agility" }, { attr = "Endurance" }}
 	}, 
 
+	constrtuction = {
+		name = "Construction",
+		s_attributes = {{ attr = "Strength" }, { attr = "Agility" } }
+	},
+
 	furnace_operation = {
 		name = "Furnace Operation",
 		s_attributes = {{ attr = "Endurance" }, { attr = "Toughness" }}
