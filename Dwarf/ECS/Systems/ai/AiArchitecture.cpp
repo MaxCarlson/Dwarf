@@ -8,6 +8,7 @@
 #include "../../../Map/Index.h"
 #include "../../Components/Claimed.h"
 #include "../EntityPositionCache.h"
+#include "../../Components/Sentients/Stats.h"
 #include "../DijkstraSystems/DijkstraMapsHandler.h"
 #include "../../Messages/update_all_maps_message.h"
 #include "../../Messages/recalculate_mining_message.h"
@@ -82,7 +83,7 @@ void designateArchitecture(designate_architecture_message &msg)
 	if (possible)
 		for (const auto d : desigs)
 		{
-			designations->architecture.emplace(d, msg.type);
+			designations->architecture.emplace(d, std::make_pair(msg.type, 0.0));
 		}
 }
 
@@ -96,15 +97,15 @@ void AiArchitecture::init()
 	});
 }
 
-void AiArchitecture::update(double duration)
+void AiArchitecture::update(double duration)	// Add in requesting buildings to be done in a particular material type!!!!!!!!
 {
 	const auto ents = getEntities();
 
 	for (const auto& e : ents)
-		doWork(e);
+		doWork(e, duration);
 }
 
-void AiArchitecture::doWork(Entity e)
+void AiArchitecture::doWork(Entity e, const double& duration)
 {
 	WorkTemplate<ArchitectTag> work;
 
@@ -118,16 +119,17 @@ void AiArchitecture::doWork(Entity e)
 		{
 			// On path failure
 			work.cancel_work(e);
+			return;
 
 		}, [&tag]()
 		{
 			// On top of block
 			tag.step = ArchitectTag::GRAB_BLOCK;
+			return;
 		});
-		return;
 	}
 
-	else if (tag.step == ArchitectTag::GRAB_BLOCK) // Add in requesting buildings to be done in a particular material type!!!!!!!!
+	else if (tag.step == ArchitectTag::GRAB_BLOCK) 
 	{
 		const auto& atPos = positionCache->get_location(getIdx(co));
 
@@ -229,73 +231,94 @@ void AiArchitecture::doWork(Entity e)
 			bidx = getIdx(CO_SOUTH_W);
 
 
-		auto find = designations->architecture.find(bidx);
+		auto find = designations->architecture.find(bidx); 
 
-		auto bco = idxToCo(bidx);
+		//auto bco = idxToCo(bidx);
 
 		// Yay we're in the right spot
 		if (find != designations->architecture.end())
 		{
-			auto type = find->second;
-
-			std::size_t material = 0;
-
-			Entity block = getWorld().getEntity(tag.current_tool);
-
-			if (block.isValid() && block.hasComponent<Item>())
+			// If this architecture designations progress
+			// is less than 100%
+			double& progress = find->second.second;
+			if (progress < 100.0)
 			{
-				material = block.getComponent<Item>().material;
+				doWorkTime(duration, progress, DIFFICULTY_NORMAL);
+				return;
 			}
 
-			itemHelper.deleteItem(tag.current_tool);
-			tag.current_tool = 0;
+			auto skillCheck = skillRoll(e.getComponent<Stats>(), "Construction", DIFFICULTY_NORMAL);
 
-			region::setFlag(idxToCo(bidx), region::Flag::CONSTRUCTION);
-
-			if (material)
-				region::setMaterial(idxToCo(bidx), material);
-
-			switch (type)
+			if (skillCheck >= SUCCESS)
 			{
-			case ArchitectureType::WALL:
-				region::makeWall(bidx);
-				break;
+				auto type = find->second;
 
-			case ArchitectureType::FLOOR:
-				region::makeFloor(bidx);
-				break;
+				std::size_t material = 0;
 
-			case ArchitectureType::RAMP:
-				region::makeRamp(bidx);
-				break;
+				Entity block = getWorld().getEntity(tag.current_tool);
 
-			case ArchitectureType::UP_STAIRS:
-				//region::makeUpStairs(bidx);
-				break;
+				if (block.isValid() && block.hasComponent<Item>())
+				{
+					material = block.getComponent<Item>().material;
+				}
 
-			case  ArchitectureType::DOWN_STAIRS:
-				//region::makeDownStairs(bidx);
-				break;
+				itemHelper.deleteItem(tag.current_tool);
+				tag.current_tool = 0;
 
-			case ArchitectureType::UP_DOWN_STAIRS:
-				//region::makeUpDownStairs(bidx);
-				break;
+				region::setFlag(idxToCo(bidx), region::Flag::CONSTRUCTION);
 
-			case ArchitectureType::BRIDGE:
-				// TODO:
-				break;
+				if (material)
+					region::setMaterial(idxToCo(bidx), material);
 
-			default:
-				std::cout << "Invalid type architecture attempt!" << "\n";
+				switch (type.first)
+				{
+				case ArchitectureType::WALL:
+					region::makeWall(bidx);
+					break;
+
+				case ArchitectureType::FLOOR:
+					region::makeFloor(bidx);
+					break;
+
+				case ArchitectureType::RAMP:
+					region::makeRamp(bidx);
+					break;
+
+				case ArchitectureType::UP_STAIRS:
+					//region::makeUpStairs(bidx);
+					break;
+
+				case  ArchitectureType::DOWN_STAIRS:
+					//region::makeDownStairs(bidx);
+					break;
+
+				case ArchitectureType::UP_DOWN_STAIRS:
+					//region::makeUpDownStairs(bidx);
+					break;
+
+				case ArchitectureType::BRIDGE:
+					// TODO:
+					break;
+
+				default:
+					std::cout << "Invalid type architecture attempt!" << "\n";
+				}
+
+				// Recalculate paths and render
+				region::spot_recalc_paths(idxToCo(bidx));
+
+				designations->architecture.erase(bidx);
+
+				emit(recalculate_mining_message{});
+				emit(update_all_maps_message{});
 			}
+			// Skill roll FAIL
+			else if (skillCheck == FAIL)
+				progress = 50.0;		
 
-			// Recalculate paths and render
-			region::spot_recalc_paths(idxToCo(bidx));
-
-			designations->architecture.erase(bidx);
-
-			emit(recalculate_mining_message{});
-			emit(update_all_maps_message{});
+			// Skill roll CRITICAL_FAIL
+			else
+				progress = 0.0;
 		}
 
 		else

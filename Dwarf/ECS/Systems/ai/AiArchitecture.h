@@ -10,6 +10,6 @@ public:
 
 
 private:
-	void doWork(Entity e);
+	void doWork(Entity e, const double& duration);
 };
 

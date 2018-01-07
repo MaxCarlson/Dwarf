@@ -17,7 +17,9 @@ struct Designations
 	// Buildings waiting to be built
 	std::vector<building_designation> buildings;
 
-	std::unordered_map<int, uint8_t> architecture;
+	// Map of designated architecture locations, indexed by vector idx
+	// pair.first is architecture type, pair.second is % completion 
+	std::unordered_map<int, std::pair<uint8_t, double>> architecture;
 
 	std::vector<std::pair<int, std::string>> workOrders;
 
