@@ -8,7 +8,6 @@
 #include "ECS\Components\HealthComponent.h"
 #include "ECS\Components\Item.h"
 #include "ECS\Components\LaborStatsComponent.h"
-#include "ECS\Components\Tags\BuilderTag.h"
 #include "ECS\Components\Claimed.h"
 #include "ECS\Components\Building.h"
 #include "ECS\Components\ItemCarried.h"
@@ -19,6 +18,10 @@
 #include "ECS\Components\Tags\BuilderTag.h"
 #include "ECS\Components\Tags\WorkOrderTag.h"
 #include "ECS\Components\Tags\HaulingTag.h"
+
+// Component Sentients
+#include "ECS\Components\Sentients\Stats.h"
+#include "ECS\Components\Sentients\Inventory.h"
 
 // Systems
 #include "ECS\Systems\RenderSystem.h"
@@ -142,6 +145,7 @@ void Engine::regComponents()
 	world.registerComponent<RenderComponent>();
 	world.registerComponent<LaborStatsComponent>();
 	world.registerComponent<JobComponent>(); // Delte this component perma
+	world.registerComponent<Stats>();
 	world.registerComponent<Inventory>();
 	world.registerComponent<ItemCarried>();
 	world.registerComponent<ItemStored>();

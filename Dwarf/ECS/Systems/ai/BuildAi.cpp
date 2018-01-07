@@ -1,20 +1,22 @@
 #include "BuildAi.h"
 #include "JobBoard.h"
+#include "WorkTemplate.h"
+#include "../Raws/DefInfo.h"
 #include "../Designations.h"
-#include "../../Components/PositionComponent.h"
+#include "../Raws/Buildings.h"
 #include "../../../Map/Tile.h"
+#include "../helpers/ItemHelper.h"
+#include "../helpers/PathFinding.h"
+#include "../../Components/Building.h"
+#include "../../Components/PositionComponent.h"
 #include "../../Components/Tags/BuilderTag.h"
 #include "../../Components/MovementComponent.h"
-#include "../helpers/ItemHelper.h"
-#include "WorkTemplate.h"
-#include "../Raws/Buildings.h"
-#include "../ECS/Components/Building.h"
-#include "../ECS/Messages/pickup_item_message.h"
-#include "../ECS/Components/Sentients/Inventory.h"
-#include "../Raws/DefInfo.h"
+#include "../../Components/Sentients/Stats.h"
+#include "../../Components/Sentients/Inventory.h"
+#include "../../Messages/pickup_item_message.h"
+#include "../../Messages/drop_item_message.h"
+
 #include <utility>
-#include "../ECS/Messages/drop_item_message.h"
-#include "../helpers/PathFinding.h"
 
 namespace JobsBoard
 {

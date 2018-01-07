@@ -2,23 +2,20 @@
 #include "SkillReader.h"
 #include "Lua.h"
 #include <boost\container\flat_map.hpp>
+#include <boost\container\flat_set.hpp>
 
-// Returns index of attribute
-boost::container::flat_map<std::string, int> attributes;
+// All attributes in existance
+std::vector<std::string> attributes;
 
 // Indexed by skill tag
 // vector of attributes, skills[0].second[0] is the skill that effects speed, success chance, etc
 // everything after just get's a minor boost in xp when performing skill
 boost::container::flat_map<std::string, std::vector<std::string>> skills;
 
-const int* attributeIdx(const std::string & attr)
+
+const std::vector<std::string>& allAttributes()
 {
-	auto find = attributes.find(attr);
-
-	if (find != attributes.end())
-		return &find->second;
-
-	return nullptr;
+	return attributes;
 }
 
 const std::vector<std::string>* attributesBySkill(const std::string & skill)
@@ -39,11 +36,11 @@ void readInSkills() noexcept
 
 	readLuaTable("attributes",
 		[](const auto &key) {},
-		[&id, &name](const auto &key) { attributes[name] = id; },
+		[&id, &name](const auto &key) { attributes.emplace_back(name); },
 		luaParser
 		{
 			{ "name", [&name]() { name = lua_str(); } },
-			{ "id",[&id]() { id = lua_int(); }  }
+			//{ "id",[&id]() { id = lua_int(); }  }
 		}
 	);
 

@@ -11,6 +11,7 @@
 #include "ECS\Components\MovementComponent.h"
 #include "ECS\Components\JobComponent.h"
 #include "ECS\Components\Sentients\Inventory.h"
+#include "ECS\Components\Sentients\Stats.h"
 
 EntityFactory::EntityFactory()
 {
@@ -35,7 +36,12 @@ Entity EntityFactory::createDwarf(DwarfCreationObj dwarfConstruct)
 
 		laborSkillLevels.push_back(lbsLevel);
 	}
-	dwarf.addComponent<LaborStatsComponent>(laborSkillLevels, dwarfConstruct.skillPoints);
+	dwarf.addComponent<LaborStatsComponent>(laborSkillLevels, dwarfConstruct.skillPoints); // Delete this
+
+	std::unordered_map<std::string, attribute> attributes;
+	std::unordered_map<std::string, skill> skills;
+
+	dwarf.addComponent<Stats>();
 
 	// Movement speed in constructor in tiles per second
 	dwarf.addComponent<MovementComponent>(3.5);

@@ -7,9 +7,9 @@ class Stats : public Component
 {
 public:
 	Stats() = default;
-	Stats(const std::vector<attribute>& attributes, const std::unordered_map<std::string, skill>& skills) : attributes(attributes), skills(skills) {}
+	Stats(const std::unordered_map<std::string, attribute>& attributes, const std::unordered_map<std::string, skill>& skills) : attributes(attributes), skills(skills) {}
 
-	std::vector<attribute> attributes;
+	std::unordered_map<std::string, attribute> attributes;
 	std::unordered_map<std::string, skill> skills;
 
 	template<class Archive>
@@ -19,7 +19,7 @@ public:
 	}
 };
 
-enum
+enum skill_roll
 {
 	CRITICAL_FAIL,
 	FAIL,
@@ -36,7 +36,7 @@ constexpr int DIFFICULTY_HARD      = 25;
 constexpr int DIFFICULTY_GRUELING  = 30;
 constexpr int DIFFICULTY_LEGENDARY = 40;
 
-void skillRoll(Stats & stats, const std::string skill, int difficulty);
+skill_roll skillRoll(Stats & stats, const std::string skilltag, int difficulty);
 
 CEREAL_REGISTER_TYPE(Stats);
 CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, Stats);

@@ -1,13 +1,13 @@
 
 attributes = 
 {
-	strength = { name = "Strength", id = 0 },
-	agility = { name = "Agility", id = 1 },
-	toughness = { name = "Toughness", id = 2 },
-	endurance = { name = "Endurance", id = 3 },
-	intelligence = { name = "Intelligence", id = 4 },
-	willpower = { name = "Willpower", id = 5 },
-	charisma = { name = "Charisma", id = 6 }, 
+	strength = { name = "Strength" },
+	agility = { name = "Agility" },
+	toughness = { name = "Toughness" },
+	endurance = { name = "Endurance" },
+	intelligence = { name = "Intelligence" },
+	willpower = { name = "Willpower" },
+	charisma = { name = "Charisma" }, 
 };
 
 -- Define skills and what attributes they're based on
