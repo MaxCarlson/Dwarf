@@ -1,4 +1,7 @@
 
+-- Add into lua defs phrases to describe skills based on what level the entity is.
+-- possibly add it into skills themselves and make a struct to hold names = above
+
 attributes = 
 {
 	strength = { name = "Strength" },
@@ -14,6 +17,7 @@ attributes =
 -- First attribute + the skill is where the success / fail checks will be done,
 -- along with the speed multiplier
 -- secondary attributes will be minorly improved performing the skill
+-- less improvment for each attribute farther from the first
 skills = 
 {
 	Mining = {

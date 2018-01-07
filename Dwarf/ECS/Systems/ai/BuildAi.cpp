@@ -4,6 +4,7 @@
 #include "../Raws/DefInfo.h"
 #include "../Designations.h"
 #include "../Raws/Buildings.h"
+#include "../Raws/Defs/BuildingDef.h"
 #include "../../../Map/Tile.h"
 #include "../helpers/ItemHelper.h"
 #include "../helpers/PathFinding.h"
@@ -73,6 +74,10 @@ void BuildAi::doBuild(const Entity & e, const double & duration)
 		}
 
 		tag.buildingTarget = designations->buildings.back();
+
+		// Set difficulty now so we have fast lookup later
+		tag.difficulty = getBuilding(tag.buildingTarget.tag)->skill_required.second;
+
 		designations->buildings.pop_back(); 
 		
 		tag.step = BuilderTag::FIND_COMPONENT;
@@ -225,19 +230,21 @@ void BuildAi::doBuild(const Entity & e, const double & duration)
 	{
 		if (tag.buildingTarget.progress < 100.0)
 		{
-			tag.buildingTarget.progress += duration * (1.0 / double(tag.buildingTarget.componentIds.size()));
+			doWorkTime(duration, tag.buildingTarget.progress, tag.difficulty);
 			
 			return;
 		}
 
-		auto skillCheck = skillRoll(e.getComponent<Stats>(), "Construction", DIFFICULTY_NORMAL);
+		auto target = getBuilding(tag.buildingTarget.tag);
+		if (target == nullptr)
+			throw std::runtime_error("Building tag not found!");
+
+		const int difficulty = target->skill_required.second;
+
+		auto skillCheck = skillRoll(e.getComponent<Stats>(), "Construction", difficulty);
 
 		if (skillCheck >= SUCCESS)
 		{
-			auto target = getBuilding(tag.buildingTarget.tag);
-			if (target == nullptr)
-				throw std::runtime_error("Building tag not found!");
-
 			auto& buildingEntity = getWorld().getEntity(tag.buildingTarget.entity_id);
 
 			auto & building = buildingEntity.getComponent<Building>();
@@ -286,10 +293,11 @@ void BuildAi::doBuild(const Entity & e, const double & duration)
 			work.cancel_work(e);
 			return;
 		}
-
+		// Reset some building progress for a FAIL
 		else if (skillCheck == FAIL)
 			tag.buildingTarget.progress = 50.0;
 		
+		// And even more progress for a CRITICAL_FAIL
 		else
 			tag.buildingTarget.progress = 0.0;
 

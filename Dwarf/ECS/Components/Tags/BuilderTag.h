@@ -24,12 +24,14 @@ struct BuilderTag : public Component
 
 	building_designation buildingTarget;
 
-	std::size_t current_component;
+	std::size_t current_component = 0;
+
+	int difficulty = 0;
 
 	template<class Archive>
 	void serialize(Archive & archive)
 	{
-		archive(step, buildingTarget, current_component);
+		archive(step, buildingTarget, current_component, difficulty);
 	}
 };
 

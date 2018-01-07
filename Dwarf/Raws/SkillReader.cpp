@@ -54,8 +54,8 @@ void readInSkills() noexcept
 		}
 	);
 
-	std::vector<std::vector<std::string>> test;
-	std::vector<std::string> keys;
+	//std::vector<std::vector<std::string>> test;
+	//std::vector<std::string> keys;
 
 	// Read in skills
 	std::string tag;
@@ -66,7 +66,7 @@ void readInSkills() noexcept
 		{
 			{ "name", [&tag]() { skillNames[tag] = lua_str(); } },
 
-			{ "s_attributes", [&tag, &test, &keys]() {
+			{ "s_attributes", [&tag]() {		// , &test, &keys
 				readLuaMultiTable("s_attributes",
 					[]() {},
 					[&tag](auto type) {
@@ -75,13 +75,12 @@ void readInSkills() noexcept
 					},
 					[]() {}
 				);
-				keys.push_back(tag);
-				test.push_back(skillAttributes[tag]);
+				//keys.push_back(tag);
+				//test.push_back(skillAttributes[tag]);
 				}
 			}
 		}
 	);
-	int a = 5;
 }
 
 void sanityCheckSkills() noexcept

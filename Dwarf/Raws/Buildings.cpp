@@ -96,7 +96,7 @@ void readInBuildings() noexcept
 				readLuaMultiTable("render",
 					[  ]() {},
 					[&b](auto type2) {
-						if (type2 == "glyph") b.charCodes.push_back(lua_int()); // Is this always in correct order?
+						if (type2 == "glyph") b.charCodes.push_back(lua_int()); // Is this always in correct order? // Looks like it!?
 					},
 					[]() {}
 				);

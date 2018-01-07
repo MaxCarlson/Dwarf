@@ -5,7 +5,7 @@ buildings["smelter"] = {
 	width = 3,
 	height = 3,
 	components = {{ item = "block", qty = 7 }},
-	skill = { { name = "Construction", difficulty = 1 } }, 
+	skill = { { name = "Construction", difficulty = 14 } }, 
 	render = { { glyph = glyphs["w_tile"] }, { glyph = glyphs["m_smelter"] },  { glyph = glyphs["r_smelter"] }, 
 			   { glyph = glyphs["bellow"] },    { glyph = glyphs["w_tile"] },     { glyph = glyphs["w_tile"] },
 			   { glyph = glyphs["w_tile"] },    { glyph = glyphs["w_tile"] },   { glyph = glyphs["coal_pit"] } 
@@ -20,7 +20,7 @@ reactions["smelt_ore"] = { -- Should item = metal_bar be replaced with blocks? J
 	skill = "Furnace Operation",
 	inputs = {{ item = "ore", qty = 1 }},
 	outputs = {{ item = "block", qty = 1 }},
-	difficulty = 4
+	difficulty = 10
 };
 
 
@@ -29,7 +29,7 @@ buildings["smithy"] = {
 	description = "Here you can shape metal into things",
 	width = 3,
 	height = 3,
-	components = {{ item = "block", qty = 7 }, { item = "anvil", qty = 1 }},
+	components = {{ item = "block", qty = 7 }, { item = "anvil", qty = 14 }},
 	skill = { { name = "Construction", difficulty = 1 } }, 
 	render = { { glyph = glyphs["smith_top"] }, { glyph = glyphs["smith_mid"] },  { glyph = glyphs["w_tile"] }, 
 			   { glyph = glyphs["smith_bottom"] },    { glyph = glyphs["w_tile"] },     { glyph = glyphs["w_tile"] },
@@ -44,6 +44,6 @@ reactions["make_anvil"] = {
 	skill = "Smithing",
 	inputs = {{ item = "block", qty = 3, mat_type = metal }},
 	outputs = {{ item = "anvil", qty = 1 }},
-	difficulty = 6
+	difficulty = 16
 };
 
