@@ -11,7 +11,7 @@ attributes =
 };
 
 -- Define skills and what attributes they're based on
--- First attribute is where the success / fail checks will be done,
+-- First attribute + the skill is where the success / fail checks will be done,
 -- along with the speed multiplier
 -- secondary attributes will be minorly improved performing the skill
 skills = 
@@ -30,4 +30,9 @@ skills =
 		name = "Furnace Operation",
 		s_attributes = {{ attr = "Endurance" }, { attr = "Toughness" }}
 	}, 
+
+	blacksmithing = {
+		name = "Blacksmithing",
+		s_attributes = {{ attr = "Strength"}, { attr = "Endurance" }}
+	},
 };

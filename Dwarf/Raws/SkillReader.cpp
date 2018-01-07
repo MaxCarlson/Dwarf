@@ -6,9 +6,30 @@
 // Returns index of attribute
 boost::container::flat_map<std::string, int> attributes;
 
-// Indexed by attribute tag
-// vector of skills associated with attribute
+// Indexed by skill tag
+// vector of attributes, skills[0].second[0] is the skill that effects speed, success chance, etc
+// everything after just get's a minor boost in xp when performing skill
 boost::container::flat_map<std::string, std::vector<std::string>> skills;
+
+const int* attributeIdx(const std::string & attr)
+{
+	auto find = attributes.find(attr);
+
+	if (find != attributes.end())
+		return &find->second;
+
+	return nullptr;
+}
+
+const std::vector<std::string>* attributesBySkill(const std::string & skill)
+{
+	auto find = skills.find(skill);
+
+	if (find != skills.end())
+		return &find->second;
+
+	return nullptr;
+}
 
 void readInSkills() noexcept
 {
@@ -47,8 +68,6 @@ void readInSkills() noexcept
 			}
 		}
 	);
-
-	int a = 5;
 }
 
 void sanityCheckSkills() noexcept

@@ -177,6 +177,9 @@
     <ClCompile Include="Raws\SkillReader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ECS\Components\Sentients\Stats.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -717,6 +720,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Raws\SkillReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Components\helpers\skill.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Components\Sentients\Stats.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
