@@ -202,9 +202,6 @@ void AiArchitecture::doWork(Entity e, const double& duration)
 	{
 		std::size_t bidx = 0;
 
-		if (tag.current_tool == 0)
-			int a = 5;
-
 		// Are we on or adjacent to the build site?
 		if (designations->architecture.find(getIdx(co)) != designations->architecture.end())
 			bidx = getIdx(co);
@@ -235,8 +232,6 @@ void AiArchitecture::doWork(Entity e, const double& duration)
 
 
 		auto find = designations->architecture.find(bidx); 
-
-		//auto bco = idxToCo(bidx);
 
 		// Yay we're in the right spot
 		if (find != designations->architecture.end())
@@ -314,6 +309,8 @@ void AiArchitecture::doWork(Entity e, const double& duration)
 
 				emit(recalculate_mining_message{});
 				emit(update_all_maps_message{});
+				work.cancel_work(e);
+				return;
 			}
 			// Skill roll FAIL
 			else if (skillCheck == FAIL)
