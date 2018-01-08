@@ -324,9 +324,18 @@ void AiArchitecture::doWork(Entity e, const double& duration)
 		}
 
 		else
-		{
-			emit(drop_item_message{ SLOT_CARRYING, e.getId().index, tag.current_tool, co });
-			work.cancel_work(e);
+		{			
+			//emit(drop_item_message{ SLOT_CARRYING, e.getId().index, tag.current_tool, co });
+
+			// If not current tool and we're not in the right spot,
+			// cancel work
+			if (!tag.current_tool)
+				work.cancel_work(e);
+
+			// If we have a block but we're not in the right spot, 
+			// goto a site
+			else
+				tag.step = ArchitectTag::GOTO_SITE;
 			return;
 		}
 	}

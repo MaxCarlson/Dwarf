@@ -5,12 +5,15 @@
 #include "../Map/Tile.h"
 #include "../MiningSystem.h"
 #include "../DijkstraSystems/DijkstraMapsHandler.h"
-
+#include "../../Components/Sentients/Stats.h"
 #include "../../Messages/recalculate_mining_message.h"
 #include "../../Messages/perform_mining_message.h"
 #include "../../Messages/pick_map_changed_message.h"
 #include "../../Messages/drop_item_message.h"
 #include "../../../Raws/Defs/ItemDefs.h"
+#include "../../../Raws/raws.h"
+#include "../../../Raws/Materials.h"
+#include "../../../Raws/Defs/MaterialDef.h"
 
 #include <iostream>
 
@@ -200,7 +203,59 @@ void MiningAi::updateMiner(const Entity& e)
 		if (targetMiningType > 0)
 		{
 			// Emit message to perform mining
-			emit(perform_mining_message{ e, targetIdx, targetMiningType });	
+			//emit(perform_mining_message{ e, targetIdx, targetMiningType });	
+
+			auto& mstats = e.getComponent<Stats>();
+
+			// Target tile has health left
+			if (tileHealth(targetIdx) > 0)
+			{
+				const auto dmg = ( mstats.skills["Mining"].skillLvl + 1 ) * 25;
+				
+				damageTile(targetIdx, static_cast<uint16_t>(dmg));
+				return;
+			}
+
+			// Target tile has no health left and is still designated
+			// let's destroy it and award points to miner
+			//
+			// We might need to add skill points to miners while they participate if 
+			// only giving the points to the one who damages it last getting all the points
+			// causes imbalences
+			else
+			{
+				auto skillCheck = skillRoll(mstats, "Mining", DIFFICULTY_MODERATE);
+
+				if (skillCheck >= SUCCESS)
+				{
+					// Remove the designation and change the tile
+					designations->mining.erase(targetIdx);
+
+					// Change tile to a floor, Probably don't want to do this
+					// if tile is over open space?
+					region::makeFloor(targetIdx);
+
+					// Don't really want to spawn a stone boulder for each thing being mined do we?
+					// might have to change
+					auto matIdx = getTileMaterial(idxToCo(targetIdx));
+					auto mat = getMaterial(matIdx);
+
+					// Spawn items in amount denoted by material type
+					for (int i = 0; i < mat->minesToAmount; ++i)
+						spawnItemOnGround(mat->minesToTag, matIdx, idxToCo(targetIdx));
+
+					//tileRecalcAll();
+					spot_recalc_paths(idxToCo(targetIdx));
+
+					emit(recalculate_mining_message{});
+					return;
+				}
+				//else // Add in other things. Not entirely happy with how skill check is only done once the tile has 0 HP. Look into other systems
+				//{
+				//}
+
+			}
+
 			return;
 		}
 
