@@ -4,6 +4,7 @@
 #include "../Designations.h"
 #include "../ECS/Components/PositionComponent.h"
 #include "../ECS/Components/Tags/WorkOrderTag.h"
+#include "../ECS/Components/Sentients/Stats.h"
 #include "../ECS/Systems/helpers/WorkOrderHelper.h"
 #include "../ECS/Systems/helpers/ItemHelper.h"
 #include "../Raws/ReadReactions.h"
@@ -209,46 +210,69 @@ void WorkOrders::work(Entity e, const double& duration)
 
 	else if (tag.step == WorkOrderTag::WORK_WORKSHOP)
 	{
-		// Add in skills!!! // Add in time component
+		auto* reaction = getReaction(tag.reaction.reactionTag);
 
-		auto& world = getWorld();
+		auto& stats = e.getComponent<Stats>();
 
-		auto reaction = getReaction(tag.reaction.reactionTag);
-		
-		// Delete component entities and capture data about
-		// input items
-		std::string materialNames = "";
-		std::size_t material = 0;
-
-		for (auto& comp : tag.reaction.components)
+		if (tag.progress < 100.0) // Add in skill levels affecting time taken!!
 		{
-			auto& cent = world.getEntity(comp.first);
-
-			if (!cent.isValid() || !cent.hasComponent<Item>())
-			{
-				work.cancel_work(e);
-				return;
-			}
-				
-			material = cent.getComponent<Item>().material;
-			materialNames += cent.getComponent<Item>().name + " ";
-
-			itemHelper.deleteItem(comp.first);
+			doWorkTime(duration, tag.progress, reaction->difficulty);
+			return;
 		}
 
-		// Produce outputs ~~ figure out how to deal with mixed outputs
-		// in terms of affects
-		for(auto & out : reaction->outputs)
-			for (int i = 0; i < out.second; ++i)
+		auto skillCheck = skillRoll(stats, reaction->skill, reaction->difficulty);
+	
+		if (skillCheck >= SUCCESS)
+		{
+			auto& world = getWorld();
+			// Delete component entities and capture data about
+			// input items
+			std::string materialNames = "";
+			std::size_t material = 0;
+
+			for (auto& comp : tag.reaction.components)
 			{
-				std::cout << "Reaction spawning" << out.first << material << "\n";
-				spawnItemOnGround(out.first, material, co);
+				auto& cent = world.getEntity(comp.first);
+
+				if (!cent.isValid() || !cent.hasComponent<Item>())
+				{
+					work.cancel_work(e);
+					return;
+				}
+
+				material = cent.getComponent<Item>().material;
+				materialNames += cent.getComponent<Item>().name + " ";
+
+				itemHelper.deleteItem(comp.first);
 			}
 
-		emit(block_map_changed_message{});
+			// Produce outputs ~~ figure out how to deal with mixed outputs
+			// in terms of affects
+			for (auto & out : reaction->outputs)
+				for (int i = 0; i < out.second; ++i)
+				{
+					std::cout << "Reaction spawning" << out.first << material << "\n";
+					spawnItemOnGround(out.first, material, co);
+				}
 
-		// Finish up
-		workOrderHelper->unclaim_workshop(tag.reaction.workshop_id);
-		work.cancel_work(e);
+			emit(block_map_changed_message{});
+
+			// Finish up
+			workOrderHelper->unclaim_workshop(tag.reaction.workshop_id);
+			work.cancel_work(e);
+			return;
+		}
+		// Reset some progress for a skill roll failure
+		else if (skillCheck == FAIL)
+		{
+			tag.progress = 50.0;
+			return;
+		}
+		// Reset all progress for a CRITICAL_FAILURE
+		else
+		{
+			tag.progress = 0.0;
+			return;
+		}
 	}
 }

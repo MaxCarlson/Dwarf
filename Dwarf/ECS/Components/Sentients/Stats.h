@@ -3,6 +3,13 @@
 #include "../Helpers/skill.h"
 #include <unordered_map>
 
+inline int attributeModifier(int lvl) // Implement this into skills time duration calculations
+{
+	if (lvl == 1)
+		return -5;
+	return ((lvl - 1) / 2) - 4;
+}
+
 class Stats : public Component
 {
 public:
@@ -36,7 +43,21 @@ constexpr int DIFFICULTY_HARD      = 25;
 constexpr int DIFFICULTY_GRUELING  = 30;
 constexpr int DIFFICULTY_LEGENDARY = 40;
 
+enum Difficulties
+{
+	TRIVIAL   = 100,
+	SIMPLE    = 220,
+	NORMAL    = 350,
+	MODERATE  = 450,
+	TOUGH     = 580,
+	HARD      = 700,
+	GRUELING  = 920,
+	LEGENDARY = 1200
+};
+
 skill_roll skillRoll(Stats & stats, const std::string skilltag, int difficulty);
+
+skill_roll testRoll(Stats & stats, const std::string skilltag, int difficulty);
 
 void doWorkTime(const double & tstep, double &progress, const int difficulty);
 

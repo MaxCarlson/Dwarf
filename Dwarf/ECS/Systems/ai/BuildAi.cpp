@@ -228,7 +228,7 @@ void BuildAi::doBuild(const Entity & e, const double & duration)
 
 	else if (tag.step == BuilderTag::BUILD_BUILDING)
 	{
-		if (tag.buildingTarget.progress < 100.0)
+		if (tag.buildingTarget.progress < 100.0) // Add in skill levels affecting time taken!!
 		{
 			doWorkTime(duration, tag.buildingTarget.progress, tag.difficulty);
 			

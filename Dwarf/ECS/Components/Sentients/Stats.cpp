@@ -13,13 +13,6 @@ int randBound()
 	return dist(gen);
 }
 
-inline int attributeModifier(int lvl)
-{
-	if (lvl == 1)
-		return -5;
-	return ((lvl - 1) / 2) - 4;
-}
-
 int getMainAttribute(Stats & stats, const std::string& skilltag)
 {
 	// Get main attribute associated with skill
@@ -128,6 +121,33 @@ skill_roll skillRoll(Stats & stats, const std::string skilltag, int difficulty)
 		return SUCCESS;
 	}
 		
+	return FAIL;
+}
+
+skill_roll testRoll(Stats & stats, const std::string skilltag, int difficulty)
+{
+	const int luck = randBound<1, 1250>();  // Once we have a planet seeded rng with determinstic behavior this template will be cut
+
+	const int attribute = attributeModifier( getMainAttribute(stats, skilltag) );
+	const int skilllvl  = getSkillLvl(stats, skilltag);
+
+	const int total = luck + attribute + skilllvl;
+
+	if (luck < 40)
+		return CRITICAL_FAIL;
+
+	else if (luck >= 1210)
+	{
+		gainSkill(stats, skilltag, difficulty / 100);
+		return EPIC_SUCCESS;
+	}
+
+	else if (total >= difficulty)
+	{
+		gainSkill(stats, skilltag, difficulty / 100);
+		return SUCCESS;
+	}
+
 	return FAIL;
 }
 

@@ -150,7 +150,7 @@ void MiningSystem::walkMiningMap(const Coordinates co, const int distance, const
 	}
 }
 
-void MiningSystem::performMining(Entity e, const int targetIdx, const uint8_t miningType)
+void MiningSystem::performMining(Entity e, const int targetIdx, const uint8_t miningType) // Defunct at the moment
 {
 	if (tileHealth(targetIdx) > 0)
 	{

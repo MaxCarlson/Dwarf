@@ -23,10 +23,13 @@ struct WorkOrderTag : public Component
 
 	std::size_t current_component = 0;
 
+	// How far along in the reaction are we?
+	double progress = 0.0;
+
 	template<class Archive>
 	void serialize(Archive &archive)
 	{
-		archive(step, reaction, current_component);
+		archive(step, reaction, current_component, progress);
 	}
 };
 

@@ -210,7 +210,7 @@ void MiningAi::updateMiner(const Entity& e)
 			// Target tile has health left
 			if (tileHealth(targetIdx) > 0)
 			{
-				const auto dmg = ( mstats.skills["Mining"].skillLvl + 1 ) * 25;
+				const auto dmg = ( mstats.skills["Mining"].skillLvl + 1 );
 				
 				damageTile(targetIdx, static_cast<uint16_t>(dmg));
 				return;
