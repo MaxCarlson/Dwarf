@@ -99,7 +99,7 @@ void Engine::loadGame(std::string filePath)
 
 	//std::ifstream is(dirpath); // JSON
 	//cereal::JSONInputArchive iarchive(is);
-
+	
 	// Load region then world
 	// Systems aren't loaded, just re-created
 	load_region(dirpath);

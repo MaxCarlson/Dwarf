@@ -202,6 +202,9 @@ void AiArchitecture::doWork(Entity e, const double& duration)
 	{
 		std::size_t bidx = 0;
 
+		if (tag.current_tool == 0)
+			int a = 5;
+
 		// Are we on or adjacent to the build site?
 		if (designations->architecture.find(getIdx(co)) != designations->architecture.end())
 			bidx = getIdx(co);
@@ -251,7 +254,7 @@ void AiArchitecture::doWork(Entity e, const double& duration)
 
 			if (skillCheck >= SUCCESS)
 			{
-				auto type = find->second;
+				const auto type = find->second.first;
 
 				std::size_t material = 0;
 
@@ -270,7 +273,7 @@ void AiArchitecture::doWork(Entity e, const double& duration)
 				if (material)
 					region::setMaterial(idxToCo(bidx), material);
 
-				switch (type.first)
+				switch (type)
 				{
 				case ArchitectureType::WALL:
 					region::makeWall(bidx);
