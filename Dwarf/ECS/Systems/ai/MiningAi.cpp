@@ -210,13 +210,13 @@ void MiningAi::updateMiner(const Entity& e)
 			// Target tile has health left
 			if (tileHealth(targetIdx) > 0)
 			{
-				const auto dmg = ( mstats.skills["Mining"].skillLvl + 1 );
+				const auto dmg = ( mstats.skills["mining"].skillLvl + 1 );
 				
 				damageTile(targetIdx, static_cast<uint16_t>(dmg));
 				return;
-			}
+			} 
 
-			// Target tile has no health left and is still designated
+			// Target tile has no health left and is still designated,
 			// let's destroy it and award points to miner
 			//
 			// We might need to add skill points to miners while they participate if 
@@ -224,7 +224,7 @@ void MiningAi::updateMiner(const Entity& e)
 			// causes imbalences
 			else
 			{
-				auto skillCheck = skillRoll(mstats, "Mining", DIFFICULTY_MODERATE);
+				auto skillCheck = skillRoll(mstats, "mining", DIFFICULTY_MODERATE);
 
 				if (skillCheck >= SUCCESS)
 				{

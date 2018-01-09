@@ -7,18 +7,7 @@ items["ore"] = {
 	itemType = {"component"},
 	glyph = glyphs["ore"],
 	color = "grey",  
-	tcode = 2,
 	stockpile = stockpiles["ore"].id
-};
-
-items["metal_bar"] =  {
-	name = "Metal Bar",
-	description = "Forged in the fires of.. right over there",
-	itemType = {"component"},
-	glyph = glyphs["metal_bars"],
-	color = "grey",
-	tcode = 2,
-	stockpile = stockpiles["bars"].id
 };
 
 items["wood_log"] = {
@@ -27,7 +16,6 @@ items["wood_log"] = {
 	itemType = {"component"},
 	glyph = glyphs["wood_logs"],
 	color = "light brown",
-	tcode = 2,
 	stockpile = stockpiles["wood"].id
 };
 
@@ -37,7 +25,6 @@ items["coal"] = {
 	itemType = {"component"},
 	glyph = glyphs["stone_boulder"],
 	color = "light black", 
-	tcode = 2,
 	stockpile = stockpiles["ore"].id
 };
 
@@ -47,17 +34,17 @@ items["stone_boulder"] = {
 	itemType = {"component"},
 	glyph = glyphs["stone_boulder"],
 	color = "grey", 
-	tcode = 2,
 	stockpile = stockpiles["stone"].id
 };
 
+-- Used for representing a number of things,
+-- from metal bars to proccessed stone. 
 items["block"] = {
 	name = "Block",
 	description = "This is a block",
 	itemType = {"component"},
 	glyph = glyphs["block"],
 	color = "brown",
-	tcode = 2,
 	stockpile = stockpiles["block"].id
 };
 

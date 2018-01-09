@@ -241,7 +241,7 @@ void BuildAi::doBuild(const Entity & e, const double & duration)
 
 		const int difficulty = target->skill_required.second;
 
-		auto skillCheck = skillRoll(e.getComponent<Stats>(), "Construction", difficulty);
+		auto skillCheck = skillRoll(e.getComponent<Stats>(), "construction", difficulty);
 
 		if (skillCheck >= SUCCESS)
 		{

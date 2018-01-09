@@ -95,7 +95,6 @@ void gainSkill(Stats & stats, const std::string skilltag, int difficulty)
 		stats.skills[skilltag] = skill{ 1, difficulty };
 }
 
-
 skill_roll skillRoll(Stats & stats, const std::string skilltag, int difficulty)
 {
 	const int luck = randBound<1, 25>();  // Once we have a planet seeded rng with determinstic behavior this template will be cut
@@ -121,33 +120,6 @@ skill_roll skillRoll(Stats & stats, const std::string skilltag, int difficulty)
 		return SUCCESS;
 	}
 		
-	return FAIL;
-}
-
-skill_roll testRoll(Stats & stats, const std::string skilltag, int difficulty)
-{
-	const int luck = randBound<1, 1250>();  // Once we have a planet seeded rng with determinstic behavior this template will be cut
-
-	const int attribute = attributeModifier( getMainAttribute(stats, skilltag) );
-	const int skilllvl  = getSkillLvl(stats, skilltag);
-
-	const int total = luck + attribute + skilllvl;
-
-	if (luck < 40)
-		return CRITICAL_FAIL;
-
-	else if (luck >= 1210)
-	{
-		gainSkill(stats, skilltag, difficulty / 100);
-		return EPIC_SUCCESS;
-	}
-
-	else if (total >= difficulty)
-	{
-		gainSkill(stats, skilltag, difficulty / 100);
-		return SUCCESS;
-	}
-
 	return FAIL;
 }
 

@@ -245,7 +245,7 @@ void AiArchitecture::doWork(Entity e, const double& duration)
 				return;
 			}
 
-			auto skillCheck = skillRoll(e.getComponent<Stats>(), "Construction", DIFFICULTY_NORMAL);
+			auto skillCheck = skillRoll(e.getComponent<Stats>(), "construction", DIFFICULTY_NORMAL);
 
 			if (skillCheck >= SUCCESS)
 			{

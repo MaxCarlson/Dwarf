@@ -295,7 +295,7 @@ void Engine::update(double deltaTime)
 
 	// Assign jobs to entities
 	// TODO : Add more depth to job evaluators, relying on more
-	// than just distance such as skill level, other jobs, other entities, etc
+	// than just distance things such as skill level, other jobs, other entities, etc
 	aiWorkSystem->update();
 
 	// Perform assigned jobs

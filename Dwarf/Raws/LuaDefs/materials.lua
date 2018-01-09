@@ -1,9 +1,55 @@
 
 materials = {
+	
+	-- Pure Metals
+	["copper"] = {
+		name = "Copper",
+		description = "A semi-soft metal that turns green over time",
+		color = "copper",
+		glyph = glyphs["metal_bars"],
+		floorGlyph = glyphs["placed_floor"],
+		health = 790,
+	}
+
+	["tin"] = {
+		name = "Tin",
+		description = "Very weak silvery metal",
+		color = "silver",
+		glyph = glyphs["metal_bars"],
+		floorGlyph = glyphs["placed_floor"],
+		health = 500,
+	}
+
+	["iron"] = {
+		name = "Iron",
+		description = "A hard to brittle dark colored metal",
+		color = "iron",
+		glyph = glyphs["metal_bars"],
+		floorGlyph = glyphs["placed_floor"],
+		health = 950,		
+	}
+
+	["titanium"] = {
+		name = "Titanium",
+		description = "A very hard very light metal",
+		color = "silver",
+		glyph = glyphs["metal_bars"],
+		floorGlyph = glyphs["placed_floor"],
+		health = 1600,
+	}
+
+	["gold"] = {
+		name = "Gold",
+		description = "A very soft much sought after metal",
+		color = "gold",
+		glyph = glyphs["metal_bars"],
+		floorGlyph = glyphs["placed_floor"],
+		health = 450,
+	}
 
 	-- Metal Ores prior to being mined
-	["copper_ore"] = {
-		name = "Copper Ore",
+	["native_copper"] = {
+		name = "Native copper",
 		layer = "igneous",
 		description = "An reddish orange vein with streaks of green",
 		color = "copper",
@@ -108,8 +154,6 @@ materials = {
 		mineAmt = 1,
 		matType = { "rock" }
 	};
-
-	
 
 	["native_gold"] = {
 		name = "Native Gold",

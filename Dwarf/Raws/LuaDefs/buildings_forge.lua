@@ -24,8 +24,8 @@ reactions["smelt_ore"] = { -- Should item = metal_bar be replaced with blocks? J
 };
 
 
-buildings["smithy"] = {
-	name = "Smithy",
+buildings["blacksmith"] = {
+	name = "Blacksmith",
 	description = "Here you can shape metal into things",
 	width = 3,
 	height = 3,
@@ -41,9 +41,18 @@ buildings["smithy"] = {
 reactions["make_anvil"] = {
 	name = "Make an Anvil",
 	workshop = "smithy",
-	skill = "Smithing",
+	skill = "blacksmithing",
 	inputs = {{ item = "block", qty = 3, mat_type = metal }},
 	outputs = {{ item = "anvil", qty = 1 }},
 	difficulty = 16
+};
+
+reactions["make_pickaxe"] = {
+	name = "Make Pickaxe",
+	workshop = "smithy",
+	skill = "blacksmithing",
+	inputs = {{ item = "block", qty = 2, mat_type = metal }},
+	outputs = {{ item = "pickaxe", qty = 1 }},
+	difficulty = 17
 };
 

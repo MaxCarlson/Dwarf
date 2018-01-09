@@ -16,31 +16,31 @@ attributes =
 -- Define skills and what attributes they're based on
 -- First attribute + the skill is where the success / fail checks will be done,
 -- along with the speed multiplier
--- secondary attributes will be minorly improved performing the skill
+-- secondary attributes will be minorly improved by performing the skill
 -- less improvment for each attribute farther from the first
 skills = 
 {
-	Mining = {
+	mining = {
 		name = "Mining",
 		s_attributes = { { attr = "Strength" }, { attr = "Willpower" }, { attr = "Endurance" } }
 	},
 
-	Masonry = {
+	masonry = {
 		name = "Masonry",
 		s_attributes = {{ attr = "Agility" }, { attr = "Endurance" }}
 	}, 
 
-	Construction = {
+	construction = {
 		name = "Construction",
 		s_attributes = {{ attr = "Strength" }, { attr = "Agility" } }
 	},
 
-	Furnace_Operation = {
+	furnace_operation = {
 		name = "Furnace Operation",
 		s_attributes = {{ attr = "Endurance" }, { attr = "Toughness" }}
 	}, 
 
-	Blacksmithing = {
+	blacksmithing = {
 		name = "Blacksmithing",
 		s_attributes = {{ attr = "Strength"}, { attr = "Endurance" }}
 	},

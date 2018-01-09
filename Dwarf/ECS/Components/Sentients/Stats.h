@@ -57,8 +57,6 @@ enum Difficulties
 
 skill_roll skillRoll(Stats & stats, const std::string skilltag, int difficulty);
 
-skill_roll testRoll(Stats & stats, const std::string skilltag, int difficulty);
-
 void doWorkTime(const double & tstep, double &progress, const int difficulty);
 
 CEREAL_REGISTER_TYPE(Stats);
