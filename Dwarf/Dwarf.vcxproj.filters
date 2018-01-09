@@ -180,6 +180,9 @@
     <ClCompile Include="ECS\Components\Sentients\Stats.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Map\World\Planet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -726,6 +729,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ECS\Components\Sentients\Stats.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Map\World\Planet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

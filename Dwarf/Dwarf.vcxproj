@@ -156,6 +156,7 @@
     <ClCompile Include="ECS\Systems\helpers\PathFinding.cpp" />
     <ClCompile Include="ECS\Systems\Gui\GuiSystem.cpp" />
     <ClCompile Include="ECS\Systems\Gui\gui_states.cpp" />
+    <ClCompile Include="Map\World\Planet.cpp" />
     <ClCompile Include="Raws\DefInfo.cpp" />
     <ClCompile Include="ECS\Systems\helpers\DesignationHandler.cpp" />
     <ClCompile Include="ECS\Systems\ai\BuildAi.cpp" />
@@ -231,6 +232,7 @@
     <ClInclude Include="ECS\Systems\helpers\PathFinding.h" />
     <ClInclude Include="ECS\Systems\Gui\GuiSystem.h" />
     <ClInclude Include="ECS\Systems\Gui\gui_states.h" />
+    <ClInclude Include="Map\World\Planet.h" />
     <ClInclude Include="Raws\DefInfo.h" />
     <ClInclude Include="Drawing\vchar.h" />
     <ClInclude Include="ECS\Components\Building.h" />

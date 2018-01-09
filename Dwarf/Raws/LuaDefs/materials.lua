@@ -9,7 +9,7 @@ materials = {
 		glyph = glyphs["metal_bars"],
 		floorGlyph = glyphs["placed_floor"],
 		health = 790,
-	}
+	};
 
 	["tin"] = {
 		name = "Tin",
@@ -18,7 +18,7 @@ materials = {
 		glyph = glyphs["metal_bars"],
 		floorGlyph = glyphs["placed_floor"],
 		health = 500,
-	}
+	};
 
 	["iron"] = {
 		name = "Iron",
@@ -27,7 +27,7 @@ materials = {
 		glyph = glyphs["metal_bars"],
 		floorGlyph = glyphs["placed_floor"],
 		health = 950,		
-	}
+	};
 
 	["titanium"] = {
 		name = "Titanium",
@@ -36,7 +36,7 @@ materials = {
 		glyph = glyphs["metal_bars"],
 		floorGlyph = glyphs["placed_floor"],
 		health = 1600,
-	}
+	};
 
 	["gold"] = {
 		name = "Gold",
@@ -45,7 +45,7 @@ materials = {
 		glyph = glyphs["metal_bars"],
 		floorGlyph = glyphs["placed_floor"],
 		health = 450,
-	}
+	};
 
 	-- Metal Ores prior to being mined
 	["native_copper"] = {

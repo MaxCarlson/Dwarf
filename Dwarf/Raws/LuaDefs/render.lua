@@ -5,16 +5,14 @@ glyphs = {
 	mined_gem = 4,
 	stone_boulder = 7,
 	nest_box = 8,
-	--ore = 15,
+	star = 15,
 	wood_logs = 22,
 
 	placed_floor = 43,
 	floor1 = 47,
 	floor2 = 49,
 
-
 	barrel = 111,
-
 	tools2 = 123,
 
 	stone1 = 131,
