@@ -156,7 +156,9 @@
     <ClCompile Include="ECS\Systems\helpers\PathFinding.cpp" />
     <ClCompile Include="ECS\Systems\Gui\GuiSystem.cpp" />
     <ClCompile Include="ECS\Systems\Gui\gui_states.cpp" />
+    <ClCompile Include="Helpers\pcg_basic.cpp" />
     <ClCompile Include="Map\World\Planet.cpp" />
+    <ClCompile Include="Map\building\region\plant_trees.cpp" />
     <ClCompile Include="Raws\DefInfo.cpp" />
     <ClCompile Include="ECS\Systems\helpers\DesignationHandler.cpp" />
     <ClCompile Include="ECS\Systems\ai\BuildAi.cpp" />
@@ -204,6 +206,7 @@
     <ClCompile Include="Raws\ReadReactions.cpp" />
     <ClCompile Include="ECS\Systems\helpers\WorkOrderHelper.cpp" />
     <ClCompile Include="ECS\Systems\ai\StockpileSystem.cpp" />
+    <ClCompile Include="Helpers\Rng.cpp" />
     <ClCompile Include="RunSystems.cpp" />
     <ClCompile Include="Raws\SkillReader.cpp" />
     <ClCompile Include="ECS\Components\Sentients\Stats.cpp" />
@@ -232,7 +235,9 @@
     <ClInclude Include="ECS\Systems\helpers\PathFinding.h" />
     <ClInclude Include="ECS\Systems\Gui\GuiSystem.h" />
     <ClInclude Include="ECS\Systems\Gui\gui_states.h" />
+    <ClInclude Include="Helpers\pcg_basic.h" />
     <ClInclude Include="Map\World\Planet.h" />
+    <ClInclude Include="Map\building\region\plant_trees.h" />
     <ClInclude Include="Raws\DefInfo.h" />
     <ClInclude Include="Drawing\vchar.h" />
     <ClInclude Include="ECS\Components\Building.h" />
@@ -398,6 +403,7 @@
     <ClInclude Include="Raws\ReadReactions.h" />
     <ClInclude Include="ECS\Systems\helpers\WorkOrderHelper.h" />
     <ClInclude Include="ECS\Systems\ai\StockpileSystem.h" />
+    <ClInclude Include="Helpers\Rng.h" />
     <ClInclude Include="RunSystems.h" />
     <ClInclude Include="Raws\SkillReader.h" />
     <ClInclude Include="ECS\Components\Sentients\Stats.h" />
