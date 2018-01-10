@@ -2,7 +2,7 @@
 #include <vector>
 #include <tuple>
 
-class TCODRandom;
+class Rng;
 class FastNoise;
 
 struct Strata
@@ -12,6 +12,6 @@ struct Strata
 	std::vector<std::tuple<int, int, int, int>> counts;
 };
 
-Strata buildStrata(std::vector<uint8_t> &heightMap, FastNoise &noise, TCODRandom & rng);
-void layRock(std::vector<uint8_t> heightMap, Strata & strata, TCODRandom & rng);
+Strata buildStrata(std::vector<uint8_t> &heightMap, FastNoise &noise, Rng & rng);
+void layRock(std::vector<uint8_t> heightMap, Strata & strata, Rng & rng);
 

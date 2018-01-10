@@ -156,7 +156,12 @@
     <ClCompile Include="ECS\Systems\helpers\PathFinding.cpp" />
     <ClCompile Include="ECS\Systems\Gui\GuiSystem.cpp" />
     <ClCompile Include="ECS\Systems\Gui\gui_states.cpp" />
-    <ClCompile Include="Helpers\pcg_basic.cpp" />
+    <ClCompile Include="Helpers\pcg_basic.cpp">
+      <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4146</DisableSpecificWarnings>
+      <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4146</DisableSpecificWarnings>
+      <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4146</DisableSpecificWarnings>
+      <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4146</DisableSpecificWarnings>
+    </ClCompile>
     <ClCompile Include="Map\World\Planet.cpp" />
     <ClCompile Include="Map\building\region\plant_trees.cpp" />
     <ClCompile Include="Raws\DefInfo.cpp" />
@@ -207,6 +212,7 @@
     <ClCompile Include="ECS\Systems\helpers\WorkOrderHelper.cpp" />
     <ClCompile Include="ECS\Systems\ai\StockpileSystem.cpp" />
     <ClCompile Include="Helpers\Rng.cpp" />
+    <ClCompile Include="Globals\rng_e.cpp" />
     <ClCompile Include="RunSystems.cpp" />
     <ClCompile Include="Raws\SkillReader.cpp" />
     <ClCompile Include="ECS\Components\Sentients\Stats.cpp" />
@@ -404,6 +410,7 @@
     <ClInclude Include="ECS\Systems\helpers\WorkOrderHelper.h" />
     <ClInclude Include="ECS\Systems\ai\StockpileSystem.h" />
     <ClInclude Include="Helpers\Rng.h" />
+    <ClInclude Include="Globals\rng_e.h" />
     <ClInclude Include="RunSystems.h" />
     <ClInclude Include="Raws\SkillReader.h" />
     <ClInclude Include="ECS\Components\Sentients\Stats.h" />

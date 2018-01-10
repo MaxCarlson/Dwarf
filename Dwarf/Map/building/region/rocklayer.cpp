@@ -3,13 +3,13 @@
 #include "../Raws/Materials.h"
 #include "../Raws/Defs/MaterialDef.h"
 #include "../Helpers/FastNoise.h"
-#include <libtcod.hpp>
+#include "../Globals/rng_e.h"
 #include <algorithm>
 
 
 using region::TileTypes;
 
-Strata buildStrata(std::vector<uint8_t>& heightMap, FastNoise & noise, TCODRandom & rng)
+Strata buildStrata(std::vector<uint8_t>& heightMap, FastNoise & noise, Rng & rng)
 {
 	Strata strata;
 	strata.strata_map.resize(TOTAL_MAP_TILES);
@@ -22,7 +22,7 @@ Strata buildStrata(std::vector<uint8_t>& heightMap, FastNoise & noise, TCODRando
 
 	getStrataLayers(soils, sands, igneous, sedimintaries, metamorphics);
 
-	const int numStrata = (MAP_WIDTH + MAP_HEIGHT) * 4 + rng.getInt(1, 64);
+	const int numStrata = (MAP_WIDTH + MAP_HEIGHT) * 4 + rng.range(1, 64);
 
 	strata.strata_map.resize(TOTAL_MAP_TILES);
 	strata.material_idx.resize(numStrata);
@@ -32,7 +32,7 @@ Strata buildStrata(std::vector<uint8_t>& heightMap, FastNoise & noise, TCODRando
 	std::fill(strata.counts.begin(), strata.counts.end(), std::make_tuple<int, int, int, int>(0, 0, 0, 0));
 	strata.counts.resize(numStrata);
 
-	FastNoise strataNoise(rng.getInt(1, 19999)); // Replace with planet seed once implemented
+	FastNoise strataNoise(rng.range(1, 19999)); // Replace with planet seed once implemented
 
 	strataNoise.SetNoiseType(FastNoise::Cellular);
 
@@ -77,16 +77,16 @@ Strata buildStrata(std::vector<uint8_t>& heightMap, FastNoise & noise, TCODRando
 
 			const uint8_t altitude_at_center = heightMap[(y * MAP_WIDTH) + x] + MAP_DEPTH / 2;
 			
-			if (z > altitude_at_center - (1 + rng.getInt(1, 4))) {
+			if (z > altitude_at_center - (1 + rng.range(1, 4))) {
 				// Soil
-				int roll = rng.getInt(1, 100);
+				int roll = rng.range(1, 100);
 				if (100) {						 // Replace once sands
-					const std::size_t soil_idx = rng.getInt(1, soils.size()) - 1;
+					const std::size_t soil_idx = rng.range(1, soils.size()) - 1;
 					//std::cout << material_name(soils[soil_idx]) << "\n";
 					strata.material_idx[i] = soils[soil_idx];
 				}
 				else {
-					const std::size_t sand_idx = rng.getInt(1, sands.size()) - 1;
+					const std::size_t sand_idx = rng.range(1, sands.size()) - 1;
 					//std::cout << material_name(sands[sand_idx]) << "\n";
 					strata.material_idx[i] = sands[sand_idx];
 				}
@@ -94,21 +94,21 @@ Strata buildStrata(std::vector<uint8_t>& heightMap, FastNoise & noise, TCODRando
 			else if (z > (altitude_at_center - 10) / 2)
 			{
 				// Sedimentary
-				const std::size_t sed_idx = rng.getInt(1, sedimintaries.size()) - 1;
+				const std::size_t sed_idx = rng.range(1, sedimintaries.size()) - 1;
 				//std::cout << material_name(sedimintaries[sed_idx]) << "\n";
 				strata.material_idx[i] = sedimintaries[sed_idx];
 			}
 			else if (z > (altitude_at_center - 20) / 2)
 			{
 				// Igneous
-				const std::size_t ig_idx = rng.getInt(1, igneous.size()) - 1;
+				const std::size_t ig_idx = rng.range(1, igneous.size()) - 1;
 				//std::cout << material_name(igneous[ig_idx]) << "\n";
 				strata.material_idx[i] = igneous[ig_idx];
 			}
 			else 
 			{
 				// Metamorphic
-				const std::size_t meta_idx = rng.getInt(1, metamorphics.size()) - 1;
+				const std::size_t meta_idx = rng.range(1, metamorphics.size()) - 1;
 				strata.material_idx[i] = metamorphics[meta_idx];
 			}
 		}
@@ -123,7 +123,7 @@ Strata buildStrata(std::vector<uint8_t>& heightMap, FastNoise & noise, TCODRando
 	
 }
 
-void layRock(std::vector<uint8_t> heightMap, Strata & strata, TCODRandom & rng)
+void layRock(std::vector<uint8_t> heightMap, Strata & strata, Rng & rng)
 {
 
 	for (int i = 0; i < MAP_WIDTH; ++i)
@@ -168,7 +168,7 @@ void layRock(std::vector<uint8_t> heightMap, Strata & strata, TCODRandom & rng)
 			// Set vegitation ~~ sepperate vegitation from materials
 
 			std::string tmp = "grass";
-			int rg = rng.getInt(1, 3, 3);
+			int rg = rng.range(1, 3);
 			tmp += rg + '0';
 			region::setMaterial({ i, j, z }, getMaterialIdx(tmp));
 

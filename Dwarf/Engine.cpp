@@ -55,6 +55,8 @@
 #include "Map/Map.h"
 #include "Map/MapRender.h"
 #include "Raws\DefInfo.h"
+#include "Map\building\regionBuilder.h"
+#include "Globals\rng_e.h"
 
 #include <chrono>
 #include <cereal.hpp>
@@ -78,8 +80,8 @@ void Engine::newGame(int screenWidth, int screenHeight)
 {
 	mapRenderer = std::make_unique<MapRender>();
 
-	// Create map
-	map = std::make_unique<Map>(screenWidth, screenHeight, MAX_ZLVL); // Delete this and move creat code here
+	// Add in a seed selection process
+	buildRegion({ screenWidth, screenHeight, MAX_ZLVL }, rng);
 
 	// Init misc maps and designations
 	designations = std::make_unique<Designations>();

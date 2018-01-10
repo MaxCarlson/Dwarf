@@ -7,7 +7,6 @@
 #include <unordered_map>
 #include <memory>
 
-class Map;
 class TileFactory;
 class RenderSystem;
 class MovementSystem;
@@ -77,9 +76,6 @@ public:
 	// These need to be pointers because their id's won't be up to date!!!!!!!!!!!!!!!!???????????????????
 	// Get rid of these?
 	std::vector<Entity> Dwarves;
-
-	// Holds local map, 
-	std::unique_ptr<Map> map;
 
 	int screenWidth; // Git rid of these?
 	int screenHeight;

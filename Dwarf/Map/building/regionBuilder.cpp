@@ -6,6 +6,7 @@
 #include "region\rocklayer.h"
 #include "region\place_buildings.h"
 #include "region\place_creatures.h"
+#include "../Globals/rng_e.h"
 
 
 const int noiseSize = 166; //def 88
@@ -44,14 +45,13 @@ void buildHeightMap(FastNoise & noise, std::vector<uint8_t>& heightMap)
 }
 
 
-void buildRegion(Coordinates dimensions)
+void buildRegion(Coordinates dimensions, Rng &rng)
 {
 	region::new_region(dimensions.x, dimensions.y, dimensions.z);
 
-	TCODRandom * rng = TCODRandom::getInstance();
 
 	FastNoise noise;
-	noise.SetSeed(rng->getInt(1, 10000001));
+	noise.SetSeed(rng.range(1, 10000001));
 	noise.SetNoiseType(FastNoise::NoiseType::SimplexFractal);
 	noise.SetFractalType(FastNoise::FBM);
 	noise.SetFractalOctaves(octaves);
@@ -61,8 +61,8 @@ void buildRegion(Coordinates dimensions)
 	std::vector<uint8_t> heightMap;
 	buildHeightMap(noise, heightMap);
 
-	Strata strata = buildStrata(heightMap, noise, *rng);
-	layRock(heightMap, strata, *rng);
+	Strata strata = buildStrata(heightMap, noise, rng);
+	layRock(heightMap, strata, rng);
 
 	placeRamps();
 
