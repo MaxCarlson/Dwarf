@@ -67,6 +67,8 @@ namespace region
 		FLOOR,
 		WALL,
 		RAMP,
+		TREE_TRUNK,
+		TREE_LEAF
 	};
 
 	// Create a new region, will overwrite the old region
@@ -82,6 +84,8 @@ namespace region
 	void setFlag(const Coordinates co, Flag f);
 
 	void resetFlag(const Coordinates co, Flag f);
+
+	void setSolid(const int idx);
 
 	bool solid(const int idx);
 
@@ -103,11 +107,18 @@ namespace region
 
 	uint16_t tileHealth(const int idx);
 
+
+// Stockpile stuff
 	void setStockpileId(const int idx, const std::size_t id);
 
 	std::size_t stockpileId(const int idx);
 
 	void forStockpileSquares(const std::function<void(int, std::size_t)> & func);
+
+// Tree stuff
+	int nextTreeId();
+
+	void setTreeId(const int idx, const int id);
 
 	// Recalcuate tile pathing when only one
 	// tile has changed, instead of calculating 

@@ -4,19 +4,80 @@
 #include "../../../Helpers/Rng.h"
 #include "Coordinates.h"
 
-inline void setTrunk(Coordinates co)
-{
+using region::TileTypes;
 
+inline void setTrunk(Coordinates co, const int treeId)
+{
+	if (co.x > 0 && co.y > 0 && co.z > 0 && co.x < MAP_WIDTH - 1 && co.y < MAP_HEIGHT - 1 && co.z < MAP_DEPTH - 2)
+	{
+		const int idx = getIdx(co);
+
+		region::setTileType(idx, TileTypes::TREE_TRUNK);
+		region::setTreeId(idx, treeId);
+		region::setSolid(idx);
+	}
+}
+
+inline void setFoliage(Coordinates co, const int treeId)
+{
+	if (co.x > 0 && co.y > 0 && co.z > 0 && co.x < MAP_WIDTH - 1 && co.y < MAP_HEIGHT - 1 && co.z < MAP_DEPTH - 2)
+	{
+		const int idx = getIdx(co);
+
+		region::setTileType(idx, TileTypes::TREE_LEAF);
+		region::setTreeId(idx, treeId);
+		region::setSolid(idx);
+	}
 }
 
 inline void plantDeciduous(Rng &rng, Coordinates co)
 {
+	const auto id = region::nextTreeId();
+	const int height = rng.range(2, 6);
 
+	for (int i = 0; i < height; ++i)
+	{
+		setTrunk({ co.x, co.y, co.z + i }, id);
+
+		if (i > height / 2)
+		{
+			const int radius = (height - i) + 1;
+
+			for (int x = co.x - radius; x < co.x + radius; ++x)
+				for (int y = co.y - radius; y < co.y + radius; ++y)
+				{
+					const auto dist = region::get_2D_distance({ x, y, 1 }, { co.x, co.y, 1 });
+
+					if (dist <= radius && (x != co.x || y != co.y))
+						setFoliage({ x, y, co.z + i }, id);
+				}
+		}
+	}
 }
 
 inline void plantEvergreen(Rng &rng, Coordinates co)
 {
+	const auto id = region::nextTreeId();
+	const int height = rng.range(2, 6);
 
+	for (int i = 0; i < height; ++i)
+	{
+		setTrunk({ co.x, co.y, co.z + i }, id);
+
+		if (i > 0)
+		{
+			const int radius = (height - i) / 2 + 1;
+			
+			for(int x = co.x - radius; x < co.x + radius; ++x)
+				for (int y = co.y - radius; y < co.y + radius; ++y)
+				{
+					const auto dist = region::get_2D_distance({ x, y, 1 }, { co.x, co.y, 1 });
+
+					if (dist <= radius && (x != co.x || y != co.y))
+						setFoliage({ x, y, co.z + i }, id);
+				}
+		}
+	}
 }
 
 bool isCanopy(Coordinates co)
@@ -32,8 +93,8 @@ bool isCanopy(Coordinates co)
 
 void plantTrees(Rng &rng)
 {
-	const int decChance = 500;
-	const int everChance = 500;
+	const int decChance = 100;
+	const int everChance = 100;
 
 	for (int x = 10; x < MAP_WIDTH - 10; ++x)
 		for(int y = 10; y < MAP_HEIGHT - 10; ++y)
@@ -41,7 +102,7 @@ void plantTrees(Rng &rng)
 			const int z = region::groundLevel(x, y);
 			const int idx = getIdx({ x, y, z });
 
-			if (region::getTileType(idx) == region::TileTypes::FLOOR && !isCanopy({x, y, z}))
+			if (region::getTileType(idx) == TileTypes::FLOOR && !isCanopy({x, y, z}))
 			{
 				int roll = rng.range(1, 1000);
 

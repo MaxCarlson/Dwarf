@@ -27,6 +27,7 @@ namespace region
 			tileFlags.resize(TOTAL_MAP_TILES);
 			materials.resize(TOTAL_MAP_TILES);
 			tileHealth.resize(TOTAL_MAP_TILES, 1);
+			treeIds.resize(TOTAL_MAP_TILES, 0);
 			renderCache.resize(TOTAL_MAP_TILES);
 			stockpileSquares.reserve(100);
 		}
@@ -41,9 +42,12 @@ namespace region
 		std::vector<std::size_t> materials;
 		std::vector<uint16_t> tileHealth;
 
+		std::vector<std::size_t> treeIds;
 		std::vector<vchar> renderCache;
 
 		boost::container::flat_map<int, std::size_t> stockpileSquares;
+
+		int nextTreeId = 1;
 		
 		void tileRecalcAll();
 		void spot_recalc_paths(const Coordinates co);
@@ -61,6 +65,7 @@ namespace region
 			archive(tileFlags);
 			archive(materials);
 			archive(tileHealth);
+			archive(treeIds);
 			archive(renderCache);
 			archive(stockpileSquares);
 		}
@@ -117,6 +122,11 @@ namespace region
 	void resetFlag(const Coordinates co, Flag f)
 	{
 		currentRegion->tileFlags[getIdx(co)].reset(f);
+	}
+
+	void setSolid(const int idx)
+	{
+		currentRegion->solid[idx] = true;
 	}
 
 	bool solid(const int idx)
@@ -193,6 +203,16 @@ namespace region
 		{
 			func(it->first, it->second);
 		}
+	}
+
+	int nextTreeId()
+	{
+		return currentRegion->nextTreeId++;
+	}
+
+	void setTreeId(const int idx, const int id)
+	{
+		currentRegion->treeIds[idx] = id;
 	}
 
 	void spot_recalc_paths(const Coordinates co)
@@ -430,6 +450,16 @@ namespace region
 			fg = mat->color;
 			ch = 30;
 		}
+			break;
+
+		case TileTypes::TREE_TRUNK:
+			ch = 10;
+			fg = "brown";
+			break;
+
+		case TileTypes::TREE_LEAF:
+			ch = 244;
+			fg = "green";
 			break;
 		}
 
