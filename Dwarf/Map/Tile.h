@@ -131,6 +131,8 @@ namespace region
 
 	void makeEmptySpace(const int idx);
 
+	int groundLevel(const int x, const int y);
+
 	// Get a fast estimate of the distance between two
 	// 3D points
 	double get_3D_distance(Coordinates loc, Coordinates dest);

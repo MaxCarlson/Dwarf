@@ -260,6 +260,16 @@ namespace region
 		currentRegion->tileTypes[idx] = TileTypes::EMPTY_SPACE;
 	}
 
+	int groundLevel(const int x, const int y)
+	{
+		for (int z = MAP_DEPTH - 1; z > 0; --z)
+		{
+			if (currentRegion->tileTypes[getIdx({ x, y, z })] == TileTypes::FLOOR)
+				return z;
+		}
+		return 0;
+	}
+
 	double get_3D_distance(Coordinates loc, Coordinates dest)
 	{
 		double x = dest.x - loc.x;

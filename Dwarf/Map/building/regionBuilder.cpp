@@ -6,6 +6,7 @@
 #include "region\rocklayer.h"
 #include "region\place_buildings.h"
 #include "region\place_creatures.h"
+#include "region\plant_trees.h"
 #include "../Globals/rng_e.h"
 
 
@@ -65,6 +66,8 @@ void buildRegion(Coordinates dimensions, Rng &rng)
 	layRock(heightMap, strata, rng);
 
 	placeRamps();
+
+	plantTrees(rng);
 
 	region::tile_recalc_all();
 

@@ -1,3 +1,5 @@
 #pragma once
 
-void plantTrees();
+class Rng;
+
+void plantTrees(Rng &rng);
