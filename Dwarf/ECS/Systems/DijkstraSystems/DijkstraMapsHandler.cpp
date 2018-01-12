@@ -46,8 +46,9 @@ void DijkstraMapsHandler::update()
 		update_block_map = true;
 		update_architecture = true;
 	});
-	each_mbox<pick_map_changed_message>([this](const pick_map_changed_message &msg) { update_pick_map = true; });
-	each_mbox<block_map_changed_message>([this](const block_map_changed_message & msg) { update_block_map = true; });
+	each_mbox<pick_map_changed_message>([this](const pick_map_changed_message &msg)				 { update_pick_map	   = true; });
+	each_mbox<axemap_changed_message>([this](const axemap_changed_message &msg)					 { update_axe_map      = true; });
+	each_mbox<block_map_changed_message>([this](const block_map_changed_message & msg)			 { update_block_map    = true; });
 	each_mbox<designate_architecture_message>([this](const designate_architecture_message & msg) { update_architecture = true; });
 
 	if (update_pick_map)
@@ -73,6 +74,21 @@ void DijkstraMapsHandler::update()
 
 	if (update_axe_map)
 	{
+		std::vector<int> targets;
+
+		itemHelper.forEachItem([&targets](auto& e) {
+
+			auto& item = e.getComponent<Item>();
+
+			if (!item.catagory.test(TOOL_CHOPPING) || e.hasComponent<Claimed>())
+				return; // Should these be continue's?
+
+			auto& co = e.getComponent<PositionComponent>().co;
+
+			targets.emplace_back(getIdx(co));
+		});
+
+		axe_map.update(targets);
 
 		update_axe_map = false;
 	}
