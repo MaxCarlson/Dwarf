@@ -203,7 +203,6 @@
     <ClCompile Include="ECS\Systems\MiningSystem.cpp" />
     <ClCompile Include="ECS\Systems\ai\MiningAi.cpp" />
     <ClCompile Include="Map\Tile.cpp" />
-    <ClCompile Include="ECS\Systems\DijkstraSystems\PickMapSystem.cpp" />
     <ClCompile Include="Map\Util.cpp" />
     <ClCompile Include="Map\building\regionBuilder.cpp" />
     <ClCompile Include="Map\building\region\rocklayer.cpp" />
@@ -226,6 +225,7 @@
       <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4996</DisableSpecificWarnings>
       <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4996</DisableSpecificWarnings>
     </ClCompile>
+    <ClCompile Include="ECS\Systems\ai\WoodcuttingAi.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ECS\Components\helpers\skill.h" />
@@ -233,6 +233,8 @@
     <ClInclude Include="ECS\Components\ItemCarried.h" />
     <ClInclude Include="ECS\Components\Stockpile.h" />
     <ClInclude Include="ECS\Components\Tags\HaulingTag.h" />
+    <ClInclude Include="ECS\Components\Tags\LumberjacTag.h" />
+    <ClInclude Include="ECS\Messages\axemap_changed_message.h" />
     <ClInclude Include="ECS\Messages\block_map_changed_message.h" />
     <ClInclude Include="ECS\Messages\designate_architecture_message.h" />
     <ClInclude Include="ECS\Messages\request_new_stockpile_message.h" />
@@ -398,7 +400,6 @@
     <ClInclude Include="ECS\Systems\MiningSystem.h" />
     <ClInclude Include="Map\Tile.h" />
     <ClInclude Include="ECS\World.h" />
-    <ClInclude Include="ECS\Systems\DijkstraSystems\PickMapSystem.h" />
     <ClInclude Include="Raws\Defs\ItemDefs.h" />
     <ClInclude Include="Map\Util.h" />
     <ClInclude Include="Map\building\regionBuilder.h" />
@@ -415,6 +416,7 @@
     <ClInclude Include="Raws\SkillReader.h" />
     <ClInclude Include="ECS\Components\Sentients\Stats.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="ECS\Systems\ai\WoodcuttingAi.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cereal\external\rapidxml\manual.html" />

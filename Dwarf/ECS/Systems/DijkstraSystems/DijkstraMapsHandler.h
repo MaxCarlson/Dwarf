@@ -6,6 +6,7 @@
 extern DijkstraMap pick_map;
 extern DijkstraMap block_map;
 extern DijkstraMap architecture_map;
+extern DijkstraMap axe_map;
 
 class PickMapSystem;
 
@@ -19,12 +20,11 @@ public:
 	void update();
 
 private:
-	// Dijk map system pointers
-	PickMapSystem * pickMapSystem;
 
 	// bool's for updating
 	bool update_all_maps = true;
 	bool update_pick_map = true;
+	bool update_axe_map = true;
 	bool update_block_map = true;
 	bool update_architecture = true;
 };

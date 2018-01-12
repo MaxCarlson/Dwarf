@@ -66,9 +66,6 @@
     <ClCompile Include="Map\DijkstraMap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ECS\Systems\DijkstraSystems\PickMapSystem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ECS\Systems\DijkstraSystems\DijkstraMapsHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -195,6 +192,9 @@
     <ClCompile Include="Globals\rng_e.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ECS\Systems\ai\WoodcuttingAi.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -300,9 +300,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Map\DijkstraMap.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ECS\Systems\DijkstraSystems\PickMapSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ECS\Systems\DijkstraSystems\DijkstraMapsHandler.h">
@@ -756,6 +753,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Globals\rng_e.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Systems\ai\WoodcuttingAi.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Components\Tags\LumberjacTag.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Messages\axemap_changed_message.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

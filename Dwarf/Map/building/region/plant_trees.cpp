@@ -93,8 +93,8 @@ bool isCanopy(Coordinates co)
 
 void plantTrees(Rng &rng)
 {
-	const int decChance = 100;
-	const int everChance = 100;
+	const int decChance = 15;
+	const int everChance = 30;
 
 	for (int x = 10; x < MAP_WIDTH - 10; ++x)
 		for(int y = 10; y < MAP_HEIGHT - 10; ++y)

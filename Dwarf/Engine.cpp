@@ -18,6 +18,7 @@
 #include "ECS\Components\Tags\BuilderTag.h"
 #include "ECS\Components\Tags\WorkOrderTag.h"
 #include "ECS\Components\Tags\HaulingTag.h"
+#include "ECS\Components\Tags\LumberjacTag.h"
 
 // Component Sentients
 #include "ECS\Components\Sentients\Stats.h"
@@ -44,6 +45,7 @@
 #include "ECS\Systems\ai\StockpileSystem.h"
 #include "ECS\Systems\ai\HaulingSystem.h"
 #include "ECS\Systems\ai\AiArchitecture.h"
+#include "ECS\Systems\ai\WoodcuttingAi.h"
 
 // System Helpers
 #include "ECS\Systems\helpers\ItemHelper.h"
@@ -164,6 +166,7 @@ void Engine::regComponents()
 	world.registerComponent<WorkOrderTag>();
 	world.registerComponent<HaulingTag>();
 	world.registerComponent<ArchitectTag>();
+	world.registerComponent<LumberjacTag>();
 }
 
 void Engine::init()
@@ -194,6 +197,7 @@ void Engine::init()
 	stockpileSystem = new StockpileSystem();
 	haulingSystem = new HaulingSystem();
 	aiArchitecture = new AiArchitecture();
+	woodcuttingAi = new WoodcuttingAi();
 
 	// Non Entity or non Updating Systems
 	inputHandler = new InputHandler();
@@ -223,6 +227,7 @@ void Engine::init()
 	world.addSystem(*stockpileSystem);
 	world.addSystem(*haulingSystem);
 	world.addSystem(*aiArchitecture);
+	world.addSystem(*woodcuttingAi);
 
 	// Init systems 
 	miningSystem->init();
@@ -236,6 +241,7 @@ void Engine::init()
 	stockpileSystem->init();
 	haulingSystem->init();
 	aiArchitecture->init();
+	woodcuttingAi->init();
 	
 	world.refresh();
 

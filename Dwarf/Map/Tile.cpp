@@ -47,7 +47,7 @@ namespace region
 
 		boost::container::flat_map<int, std::size_t> stockpileSquares;
 
-		int nextTreeId = 1;
+		int nextTreeId = 0;
 		
 		void tileRecalcAll();
 		void spot_recalc_paths(const Coordinates co);
@@ -207,7 +207,7 @@ namespace region
 
 	int nextTreeId()
 	{
-		return currentRegion->nextTreeId++;
+		return ++currentRegion->nextTreeId;
 	}
 
 	void setTreeId(const int idx, const int id)

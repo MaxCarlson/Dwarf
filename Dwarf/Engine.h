@@ -25,6 +25,7 @@ class StockpileSystem;
 class HaulingSystem;
 class GuiSystem;
 class AiArchitecture;
+class WoodcuttingAi;
 
 class Engine
 {
@@ -61,6 +62,7 @@ public:
 	StockpileSystem * stockpileSystem;
 	HaulingSystem * haulingSystem;
 	AiArchitecture * aiArchitecture;
+	WoodcuttingAi * woodcuttingAi;
 
 	// Systems that don't touch Entities
 	InputHandler * inputHandler;

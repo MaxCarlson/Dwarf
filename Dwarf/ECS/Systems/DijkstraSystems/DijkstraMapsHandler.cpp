@@ -1,11 +1,12 @@
 #include "stdafx.h"
 #include "DijkstraMapsHandler.h"
-#include "PickMapSystem.h"
 #include "Designations.h"
 #include "Map\Index.h"
 #include "../helpers/ItemHelper.h"
+#include "../../../Raws/Defs/ItemDefs.h"
 #include "../../Components/Claimed.h"
 #include "../../Messages/pick_map_changed_message.h"
+#include "../../Messages/axemap_changed_message.h"
 #include "../../Messages/designate_architecture_message.h"
 #include "../../Messages/block_map_changed_message.h"
 #include "../../Messages/update_all_maps_message.h"
@@ -14,26 +15,21 @@
 DijkstraMap pick_map;
 DijkstraMap block_map;
 DijkstraMap architecture_map;
+DijkstraMap axe_map;
 
 
 DijkstraMapsHandler::~DijkstraMapsHandler()
 {
-	delete pickMapSystem;
 }
 
 void DijkstraMapsHandler::init()
 {
-	// Create systems
-	pickMapSystem = new PickMapSystem;
-
 	// Init maps
 	pick_map.init();
+	axe_map.init();
 	block_map.init();
 	architecture_map.init();
-
-	// Add systems to world
-	engine->world.addSystem(*pickMapSystem);
-
+	
 	// Subscribe to messages
 	subscribe_mbox<update_all_maps_message>();
 	subscribe_mbox<pick_map_changed_message>();
@@ -46,6 +42,7 @@ void DijkstraMapsHandler::update()
 	each_mbox<update_all_maps_message>([this]( const update_all_maps_message &msg)
 	{
 		update_pick_map = true;
+		update_axe_map = true;
 		update_block_map = true;
 		update_architecture = true;
 	});
@@ -55,8 +52,29 @@ void DijkstraMapsHandler::update()
 
 	if (update_pick_map)
 	{
-		pickMapSystem->update();
+		std::vector<int> targets;
+
+		itemHelper.forEachItem([&targets](auto& e) {
+			
+			auto& item = e.getComponent<Item>();
+
+			if (!item.catagory.test(TOOL_DIGGING) || e.hasComponent<Claimed>())
+				return; // Should these be continue's?
+
+			auto& co = e.getComponent<PositionComponent>().co;
+
+			targets.emplace_back(getIdx(co));	
+		});
+
+		pick_map.update(targets);
+
 		update_pick_map = false;
+	}
+
+	if (update_axe_map)
+	{
+
+		update_axe_map = false;
 	}
 
 	if (update_block_map)
@@ -70,7 +88,7 @@ void DijkstraMapsHandler::update()
 				if (e.hasComponent<Item>() && e.getComponent<Item>().tag == "block")
 				{
 					if (e.hasComponent<Claimed>() || ! e.hasComponent<PositionComponent>())
-						return;
+						return; // Should these be continue's?
 
 					const auto idx = getIdx(e.getComponent<PositionComponent>().co);
 
