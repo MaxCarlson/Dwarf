@@ -6,6 +6,8 @@
 #include "../../../Designations.h"
 #include "../../../Map/Tile.h"
 #include "../../Components/Sentients/Stats.h"
+#include "../../Messages/axemap_changed_message.h"
+#include "../../../Raws/Defs/ItemDefs.h"
 
 namespace JobsBoard
 {
@@ -51,5 +53,34 @@ void WoodcuttingAi::update(const double duration)
 
 void WoodcuttingAi::doWork(Entity & e, const double & duration)
 {
+	WorkTemplate<LumberjacTag> work;
 
+	auto& co  = e.getComponent<PositionComponent>().co;
+	auto& mov = e.getComponent<MovementComponent>();
+	auto& tag = e.getComponent<LumberjacTag>();
+
+	if (tag.step == LumberjacTag::GET_AXE)
+	{
+		work.followMap(axe_map, e, co, [&e, &work]()
+		{
+			// On work cancel
+			work.cancel_work(e);
+			return;
+		}, [&tag, &e, &work, &co]
+		{
+			// On reaching tool
+			work.pickup_tool<axemap_changed_message>(e, co, TOOL_CHOPPING, [&work, &e]()
+			{
+				// On pickup failure
+				work.cancel_work(e);
+				return;
+			}, [&tag]
+			{
+				// On pickup success
+				tag.step = LumberjacTag::GOTO_SITE;
+				return;
+			});
+
+		});
+	}
 }
