@@ -9,7 +9,7 @@
 
 namespace JobsBoard
 {
-	void evaluate_woodcutting(JobBoard & board, const Entity & e, Coordinates co, JobEvaluatorBase * j)
+	void evaluate_woodcutting(JobBoard & board, const Entity & e, Coordinates co, JobEvaluatorBase * jt)
 	{
 		if (designations->woodcutting.empty())
 			return;
@@ -18,6 +18,21 @@ namespace JobsBoard
 
 		if (axeDist > MAX_DIJKSTRA_DISTANCE - 1)
 			return;
+
+		int i = 0;
+
+		auto treeDist = std::numeric_limits<double>().max();
+
+		// Find the closest tree to Entity
+		for (const auto& des : designations->woodcutting)
+		{
+			const auto d = region::get_3D_distance(co, des.second);
+
+			if (d < treeDist)
+				treeDist = d;		
+		}
+
+		board.insert(std::make_pair(axeDist + treeDist, jt));
 	}
 }
 

@@ -14,7 +14,8 @@ struct Designations
 	// Indexed by tiles location in tileManager's vector of tiles
 	std::unordered_map<int, uint8_t> mining;
 
-	std::unordered_set<int> woodcutting;
+	// Holds all the indicies of tree's designated for chopping
+	std::unordered_map<int, Coordinates> woodcutting;
 
 	// Buildings waiting to be built
 	std::vector<building_designation> buildings;

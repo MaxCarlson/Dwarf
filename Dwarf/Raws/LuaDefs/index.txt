@@ -6,6 +6,7 @@ items_tools.lua
 items_raw.lua
 items_furniture.lua
 materials.lua
+biomes.lua
 buildings_structures.lua
 buildings_mason.lua
 buildings_forge.lua

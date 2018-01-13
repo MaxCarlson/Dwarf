@@ -30,6 +30,11 @@ inline void setFoliage(Coordinates co, const int treeId)
 	}
 }
 
+inline void setTreeHp(const int treeId, const int height)
+{
+	region::setTreeHealth(treeId, height * 250);
+}
+
 inline void plantDeciduous(Rng &rng, Coordinates co)
 {
 	const auto id = region::nextTreeId();
@@ -53,6 +58,8 @@ inline void plantDeciduous(Rng &rng, Coordinates co)
 				}
 		}
 	}
+
+	setTreeHp(id, height);
 }
 
 inline void plantEvergreen(Rng &rng, Coordinates co)
@@ -78,6 +85,8 @@ inline void plantEvergreen(Rng &rng, Coordinates co)
 				}
 		}
 	}
+
+	setTreeHp(id, height);
 }
 
 bool isCanopy(Coordinates co)

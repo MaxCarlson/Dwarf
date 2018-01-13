@@ -42,10 +42,14 @@ namespace region
 		std::vector<std::size_t> materials;
 		std::vector<uint16_t> tileHealth;
 
-		std::vector<std::size_t> treeIds;
 		std::vector<vchar> renderCache;
 
 		boost::container::flat_map<int, std::size_t> stockpileSquares;
+
+		// This should possible be changed to an unordered map, indexed by Coordinates idx? 
+		// As is we have to search through every tile to delete a tree
+		std::vector<std::size_t> treeIds;
+		std::unordered_map<int, int> treeHps;
 
 		int nextTreeId = 0;
 		
@@ -65,9 +69,11 @@ namespace region
 			archive(tileFlags);
 			archive(materials);
 			archive(tileHealth);
-			archive(treeIds);
 			archive(renderCache);
 			archive(stockpileSquares);
+			archive(treeIds);
+			archive(treeHps);
+			archive(nextTreeId);
 		}
 	};
 
@@ -213,6 +219,28 @@ namespace region
 	void setTreeId(const int idx, const int id)
 	{
 		currentRegion->treeIds[idx] = id;
+	}
+
+	void setTreeHealth(const int id, const int hp)
+	{
+		currentRegion->treeHps[id] = hp;
+	}
+
+	void damageTree(const int id, const int dmg)
+	{
+		currentRegion->treeHps[id] -= dmg;
+
+		if (currentRegion->treeHps[id] < 0)
+			currentRegion->treeHps[id] = 0;
+	}
+
+	void deleteTree(const int id)
+	{
+		currentRegion->treeHps.erase(id);
+
+		for (auto& t : currentRegion->treeIds)
+			if (t == id)
+				t = 0;
 	}
 
 	void spot_recalc_paths(const Coordinates co)

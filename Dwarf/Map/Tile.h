@@ -78,7 +78,8 @@ namespace region
 
 	void load_region(std::string filePath);
 
-	/* Tile Flag functions, Flags are above */
+// Tile Flag functions, Flags are above 
+
 	bool flag(const Coordinates co, Flag f);
 
 	void setFlag(const Coordinates co, Flag f);
@@ -90,6 +91,8 @@ namespace region
 	bool solid(const int idx);
 
 	//bool aboveGround(const int idx);
+
+// Misc tile functions
 
 	vchar& renderCache(const int idx);
 
@@ -120,6 +123,14 @@ namespace region
 
 	void setTreeId(const int idx, const int id);
 
+	void setTreeHealth(const int id, const int hp);
+
+	void damageTree(const int id, const int dmg);
+
+	void deleteTree(const int id);
+
+// Pathing and tile calcuating 
+
 	// Recalcuate tile pathing when only one
 	// tile has changed, instead of calculating 
 	// entire map
@@ -132,6 +143,7 @@ namespace region
 	// Recalculate all pathing Flags on map
 	void tile_recalc_all();
 
+// Change tile to type
 	void makeWall(const int idx);
 
 	void makeEarth(const int idx);
@@ -143,6 +155,8 @@ namespace region
 	void makeEmptySpace(const int idx);
 
 	int groundLevel(const int x, const int y);
+
+// Move these to indices?
 
 	// Get a fast estimate of the distance between two
 	// 3D points
