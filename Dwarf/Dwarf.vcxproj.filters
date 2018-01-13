@@ -195,6 +195,9 @@
     <ClCompile Include="ECS\Systems\ai\WoodcuttingAi.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Raws\BiomeReader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -762,6 +765,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ECS\Messages\axemap_changed_message.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Raws\Defs\BiomeDef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Raws\BiomeReader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

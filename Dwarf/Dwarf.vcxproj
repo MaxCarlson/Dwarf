@@ -152,6 +152,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Raws\BiomeReader.cpp" />
     <ClCompile Include="ECS\Systems\ai\HaulingSystem.cpp" />
     <ClCompile Include="ECS\Systems\helpers\PathFinding.cpp" />
     <ClCompile Include="ECS\Systems\Gui\GuiSystem.cpp" />
@@ -228,6 +229,7 @@
     <ClCompile Include="ECS\Systems\ai\WoodcuttingAi.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Raws\BiomeReader.h" />
     <ClInclude Include="ECS\Components\helpers\skill.h" />
     <ClInclude Include="ECS\Components\helpers\work_order_reaction.h" />
     <ClInclude Include="ECS\Components\ItemCarried.h" />
@@ -264,6 +266,7 @@
     <ClInclude Include="ECS\Systems\Gui\InputHandler.h" />
     <ClInclude Include="Helpers\PositionCache.h" />
     <ClInclude Include="Raws\Buildings.h" />
+    <ClInclude Include="Raws\Defs\BiomeDef.h" />
     <ClInclude Include="Raws\Defs\BuildingDef.h" />
     <ClInclude Include="Map\building\region\place_buildings.h" />
     <ClInclude Include="cereal\access.hpp" />
