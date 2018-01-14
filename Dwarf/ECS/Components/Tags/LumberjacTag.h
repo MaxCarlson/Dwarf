@@ -11,7 +11,8 @@ struct LumberjacTag : public Component
 		GET_AXE,
 		FIND_TREE,
 		GOTO_SITE,
-		CHOP
+		CHOP,
+		DROP_AXE
 	};
 
 	ChoppingSteps step = GET_AXE;

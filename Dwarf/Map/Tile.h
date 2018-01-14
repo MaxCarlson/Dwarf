@@ -127,6 +127,8 @@ namespace region
 
 	void setTreeHealth(const int id, const int hp);
 
+	int treeHealth(const int id);
+
 	void damageTree(const int id, const int dmg);
 
 	void deleteTree(const int id);

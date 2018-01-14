@@ -49,6 +49,8 @@ namespace region
 		// This should possible be changed to an unordered map, indexed by Coordinates idx? 
 		// As is we have to search through every tile to delete a tree
 		std::vector<std::size_t> treeIds;
+
+		// Tree health indexed by tree id
 		std::unordered_map<int, int> treeHps;
 
 		int nextTreeId = 0;
@@ -229,6 +231,11 @@ namespace region
 	void setTreeHealth(const int id, const int hp)
 	{
 		currentRegion->treeHps[id] = hp;
+	}
+
+	int treeHealth(const int id)
+	{
+		return currentRegion->treeHps[id];
 	}
 
 	void damageTree(const int id, const int dmg)

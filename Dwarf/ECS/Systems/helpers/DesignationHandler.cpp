@@ -68,17 +68,45 @@ void DesignationHandler::designateMining(const int type, const Coordinates co1, 
 	emit(pick_map_changed_message{});
 }
 
-inline int isTree(const Coordinates co) 
+inline int isTreeAccessible(const Coordinates co) 
 {
+	using region::getTileType;
+	using region::TileTypes;
+
 	int id = region::treeId(getIdx(co));
 
-	// Make sure we only designate a tree tile that is ground level for that tree
-	if (id)
+	return id;
+}
+
+inline Coordinates findTreeBottom(Coordinates co, const int id)
+{
+	for (int z = co.z - 1; z > 0; --z)
 	{
-		region::ti
+		int zid = region::treeId(getIdx({ co.x, co.y, z }));
+
+		if (zid == id)
+			co = { co.x, co.y, z };
 	}
 
-	return id;
+	return co;
+
+	// Possibly incorporate this into tree bottom finding, if we encounter instances where unreachable tree parts are designated
+	// even though they are the lowest tree point
+	/*
+	// Make sure we only designate a tree tile that is ground level for that tree
+	// Is there a better way to do this?
+
+	if (   getTileType(getIdx(CO_NORTH))   == TileTypes::FLOOR
+		|| getTileType(getIdx(CO_NORTH_W)) == TileTypes::FLOOR
+		|| getTileType(getIdx(CO_NORTH_E)) == TileTypes::FLOOR
+		|| getTileType(getIdx(CO_SOUTH))   == TileTypes::FLOOR
+		|| getTileType(getIdx(CO_SOUTH_W)) == TileTypes::FLOOR
+		|| getTileType(getIdx(CO_SOUTH_E)) == TileTypes::FLOOR
+		|| getTileType(getIdx(CO_WEST))    == TileTypes::FLOOR
+		|| getTileType(getIdx(CO_EAST))    == TileTypes::FLOOR)
+	{
+	}
+	*/
 }
 
 void DesignationHandler::designateChopping(const Coordinates co1, const Coordinates co2)
@@ -86,6 +114,13 @@ void DesignationHandler::designateChopping(const Coordinates co1, const Coordina
 	for (int x = co1.x; x <= co2.x; ++x)
 		for (int y = co1.y; y <= co2.y; ++y)
 		{
+			int tid = isTreeAccessible({ x, y, co1.z });
 
+			// If there's a tree, 
+			// Find it's lowest trunk that's accessible
+			if (tid)
+			{
+				designations->woodcutting[tid] = findTreeBottom({ x, y, co1.z }, tid);
+			}
 		}
 }

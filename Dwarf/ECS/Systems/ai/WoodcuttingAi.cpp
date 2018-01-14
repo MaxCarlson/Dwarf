@@ -102,9 +102,7 @@ void WoodcuttingAi::doWork(Entity & e, const double & duration)
 	{
 		if (designations->woodcutting.empty())
 		{
-			emit(drop_item_message{ SLOT_TOOL, e.getId().index, tag.current_axe, co });
-			emit(axemap_changed_message{});
-			work.cancel_work(e);
+			tag.step = LumberjacTag::DROP_AXE;
 			return;
 		}
 
@@ -138,9 +136,7 @@ void WoodcuttingAi::doWork(Entity & e, const double & duration)
 
 		if (treeId == 0)
 		{
-			emit(drop_item_message{ SLOT_TOOL, e.getId().index, tag.current_axe, co });
-			emit(axemap_changed_message{});
-			work.cancel_work(e);
+			tag.step = LumberjacTag::DROP_AXE;
 			return;
 		}
 
@@ -174,9 +170,7 @@ void WoodcuttingAi::doWork(Entity & e, const double & duration)
 		}
 		
 		// Pathfinding to tree failed. Cancel work
-		emit(drop_item_message{ SLOT_TOOL, e.getId().index, tag.current_axe, co });
-		emit(axemap_changed_message{});
-		work.cancel_work(e);
+		tag.step = LumberjacTag::DROP_AXE;
 		return;
 	}
 
@@ -203,6 +197,85 @@ void WoodcuttingAi::doWork(Entity & e, const double & duration)
 
 	else if (tag.step = LumberjacTag::CHOP)
 	{
+		auto find = designations->woodcutting.find(tag.treeId);
 
+		if (find == designations->woodcutting.end())
+		{
+			tag.step == LumberjacTag::FIND_TREE;
+			return;
+		}
+
+		auto& stats = e.getComponent<Stats>();
+
+		int treeHp = region::treeHealth(tag.treeId);
+
+		if (treeHp > 0)
+		{
+			const auto dmg = (stats.skills["wood_cutting"].skillLvl + 1);
+
+			region::damageTree(tag.treeId, dmg);
+		}
+
+		else
+		{
+			auto skillCheck = skillRoll(stats, "wood_cutting", DIFFICULTY_HARD);
+
+			if (skillCheck >= SUCCESS)
+			{
+				Coordinates tco = tag.treeCo;
+
+				// Square coordinates so we don't go out of bounds
+				//
+				// Possibly in tree files somewhere add a max width, height, and depth to tree's
+				// so we can use constants here instead of the 12's
+				int x  = tco.x - 12 >= 0 ? tco.x - 12 : 0;
+				int xl = tco.x + 12 < MAP_WIDTH - 1 ? tco.x + 12 : MAP_WIDTH - 1;
+
+				int y  = tco.y - 12 >= 0 ? tco.y - 12 : 0;
+				int yl = tco.y + 12 < MAP_HEIGHT - 1 ? tco.y + 12 : MAP_HEIGHT - 1;
+
+				int z  = tco.z - 12 >= 0 ? tco.z - 12 : 0;
+				int zl = tco.z + 12 < MAP_DEPTH - 1 ? tco.z + 12 : MAP_DEPTH - 1;
+
+				int numLogs = 0;
+				int stumpIdx = 0;
+				int lowestZ = std::numeric_limits<int>().max;
+
+				for(x; x < xl; ++x)
+					for(y; y < yl; ++y)
+						for (z; z < zl; ++z)
+						{
+							const int idx = getIdx({ x, y, z });
+
+							if (region::treeId(idx) == tag.treeId)
+							{
+								if (z < lowestZ)
+								{
+									lowestZ = z;
+									stumpIdx = idx;
+								}
+							}
+						}
+
+
+				region::deleteTree(tag.treeId);
+
+				region::makeFloor(getIdx(tag.treeCo)); // Using this means only the lowest section of the tree can be designated
+
+				designations->woodcutting.erase(tag.treeId);
+
+
+				tag.step = LumberjacTag::DROP_AXE;
+				return;
+			}
+		}
+	}
+
+	else if (tag.step == LumberjacTag::DROP_AXE)
+	{
+		emit(drop_item_message{ SLOT_TOOL, e.getId().index, tag.current_axe, co });
+		emit(axemap_changed_message{});
+		work.cancel_work(e);
+		return;
 	}
 }

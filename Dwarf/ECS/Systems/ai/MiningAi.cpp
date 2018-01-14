@@ -221,7 +221,7 @@ void MiningAi::updateMiner(const Entity& e)
 			//
 			// We might need to add skill points to miners while they participate if 
 			// only giving the points to the one who damages it last getting all the points
-			// causes imbalences
+			// will cause imbalences
 			else
 			{
 				auto skillCheck = skillRoll(mstats, "mining", DIFFICULTY_MODERATE);
