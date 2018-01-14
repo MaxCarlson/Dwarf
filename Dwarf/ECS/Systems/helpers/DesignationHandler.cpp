@@ -12,7 +12,6 @@ void DesignationHandler::init()
 	{
 		designate(msg);
 	});
-
 }
 
 void DesignationHandler::designate(const designation_message & msg) // Add in checks to make sure improper areas aren't designated
@@ -44,9 +43,22 @@ void DesignationHandler::designate(const designation_message & msg) // Add in ch
 		co2.y = tmp;
 	}
 
+	// Handle chopping designation
+	if (msg.type == designation_message::CUT_TREES)
+	{
+		designateChopping(co1, co2);
+	}
 
-	
-	for(int x = co1.x; x <= co2.x; ++x)
+	// Handle a mining like designation
+	else
+	{
+		designateMining(type, co1, co2);
+	}
+}
+
+void DesignationHandler::designateMining(const int type, const Coordinates co1, const Coordinates co2)
+{
+	for (int x = co1.x; x <= co2.x; ++x)
 		for (int y = co1.y; y <= co2.y; ++y)
 		{
 			designations->mining[getIdx({ x, y, co1.z })] = type;
@@ -54,4 +66,26 @@ void DesignationHandler::designate(const designation_message & msg) // Add in ch
 
 	emit(recalculate_mining_message{});
 	emit(pick_map_changed_message{});
+}
+
+inline int isTree(const Coordinates co) 
+{
+	int id = region::treeId(getIdx(co));
+
+	// Make sure we only designate a tree tile that is ground level for that tree
+	if (id)
+	{
+		region::ti
+	}
+
+	return id;
+}
+
+void DesignationHandler::designateChopping(const Coordinates co1, const Coordinates co2)
+{
+	for (int x = co1.x; x <= co2.x; ++x)
+		for (int y = co1.y; y <= co2.y; ++y)
+		{
+
+		}
 }

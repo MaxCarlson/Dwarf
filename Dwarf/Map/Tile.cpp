@@ -221,6 +221,11 @@ namespace region
 		currentRegion->treeIds[idx] = id;
 	}
 
+	int treeId(const int idx)
+	{
+		return currentRegion->treeIds[idx];
+	}
+
 	void setTreeHealth(const int id, const int hp)
 	{
 		currentRegion->treeHps[id] = hp;

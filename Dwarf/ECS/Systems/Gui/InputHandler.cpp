@@ -20,7 +20,6 @@
 
 
 // Desig statics
-static uint8_t designateState = designation_message::MINING;
 static int designateIdx = 0;
 
 
@@ -134,15 +133,10 @@ void InputHandler::update()
 		else if (guiState.state == GUI_DESIGNATE)
 		{
 			if (key == TK_ESCAPE)
-			{
 				guiState.state = GUI_MAIN;
-				designateState = designation_message::MINING;
-			}
 
-			else if (key == TK_H)
-				designateState = designation_message::CHANNELING;
-
-			designate(key);
+			else
+				designate(key);
 		}
 
 		else if (guiState.state == GUI_ORDERS)
@@ -205,7 +199,9 @@ void InputHandler::designate(const int key)
 		}
 		else
 		{
-			emit(designation_message{ std::make_pair(designateIdx, clickIdx), designateState });
+			int state = guiState.itemSelected;
+
+			emit(designation_message{ std::make_pair(designateIdx, clickIdx), state });
 			designateIdx = 0;
 		}
 	}

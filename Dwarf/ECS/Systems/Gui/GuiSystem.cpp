@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "GuiSystem.h"
 #include "../../../Engine.h"
+#include "../../Messages/designation_message.h"
 #include "../../../Map/Map.h"
 #include "../../../Map/MapRender.h"
 #include "../../../Raws\Materials.h"
@@ -157,14 +158,12 @@ void GuiSystem::drawBuild()
 
 void GuiSystem::drawDesignate()
 {
-	static std::vector<std::string> dType = { "Mining", "Channeling" };
-
 	clearAndDraw(horizontalOffset, verticalOffset, panelWidth, panelHeight, gui_color, 0x2588);
-	wrapInput(guiState.itemSelected, dType.size());
+	wrapInput(guiState.itemSelected, designateNames.size());
 
 	int y = 2;
 	int c = 0;
-	for (const auto& d : dType)
+	for (const auto& d : designateNames)
 	{
 		draw::determineHighlight(c, guiState.itemSelected);
 
