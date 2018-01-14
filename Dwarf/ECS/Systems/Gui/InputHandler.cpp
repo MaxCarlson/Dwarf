@@ -201,7 +201,7 @@ void InputHandler::designate(const int key)
 		{
 			int state = guiState.itemSelected;
 
-			emit(designation_message{ std::make_pair(designateIdx, clickIdx), state });
+			emit(designation_message{ std::make_pair(designateIdx, clickIdx), static_cast<uint8_t>(state) });
 			designateIdx = 0;
 		}
 	}

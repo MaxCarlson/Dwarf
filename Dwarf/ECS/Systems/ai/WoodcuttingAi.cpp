@@ -8,7 +8,9 @@
 #include "../../Components/Sentients/Stats.h"
 #include "../../Messages/drop_item_message.h"
 #include "../../Messages/axemap_changed_message.h"
+#include "../../../Raws/raws.h"
 #include "../../../Raws/Defs/ItemDefs.h"
+#include "../../../Raws/Materials.h"
 #include "../helpers/PathFinding.h"
 
 namespace JobsBoard
@@ -239,7 +241,7 @@ void WoodcuttingAi::doWork(Entity & e, const double & duration)
 
 				int numLogs = 0;
 				int stumpIdx = 0;
-				int lowestZ = std::numeric_limits<int>().max;
+				int lowestZ = 10000;
 
 				for(x; x < xl; ++x)
 					for(y; y < yl; ++y)
@@ -254,13 +256,29 @@ void WoodcuttingAi::doWork(Entity & e, const double & duration)
 									lowestZ = z;
 									stumpIdx = idx;
 								}
+
+								region::makeEmptySpace(idx);
+								region::tile_recalc(idxToCo(idx));
+								region::spot_recalc_paths(idxToCo(idx)); // Examine this area if there are issues with pathing or render after cutting trees
+
+								++numLogs;
 							}
 						}
 
+				// Using this means only the lowest section of the tree can be designated
+				region::makeFloor(getIdx(tag.treeCo)); 
+				region::tile_recalc(tag.treeCo);
+
+				numLogs = (numLogs / 20) + 1;
+				std::cout << "spawning " << numLogs << " logs\n";
+
+				for (int i = 0; i < numLogs; ++i)
+				{
+					spawnItemOnGround("wood_log", getMaterialIdx("wood"), tag.treeCo);
+				}
+
 
 				region::deleteTree(tag.treeId);
-
-				region::makeFloor(getIdx(tag.treeCo)); // Using this means only the lowest section of the tree can be designated
 
 				designations->woodcutting.erase(tag.treeId);
 

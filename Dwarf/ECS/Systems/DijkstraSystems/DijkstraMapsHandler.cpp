@@ -33,6 +33,7 @@ void DijkstraMapsHandler::init()
 	// Subscribe to messages
 	subscribe_mbox<update_all_maps_message>();
 	subscribe_mbox<pick_map_changed_message>();
+	subscribe_mbox<axemap_changed_message>();
 	subscribe_mbox<block_map_changed_message>();
 	subscribe_mbox<designate_architecture_message>();
 }

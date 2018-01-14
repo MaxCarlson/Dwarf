@@ -6,4 +6,4 @@ class Entity;
 
 void loadRaws();
 
-Entity spawnItemOnGround(const std::string &itemTag, const std::size_t material, const Coordinates co);
+Entity spawnItemOnGround(const std::string itemTag, const std::size_t material, const Coordinates co);

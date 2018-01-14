@@ -50,7 +50,7 @@ void loadRaws()
 	sanityChecks();
 }
 
-Entity spawnItemOnGround(const std::string & itemTag, const std::size_t material, const Coordinates co)
+Entity spawnItemOnGround(const std::string itemTag, const std::size_t material, const Coordinates co)
 {
 	auto item = getItemDef(itemTag);
 

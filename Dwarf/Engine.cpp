@@ -309,6 +309,7 @@ void Engine::update(double deltaTime)
 	// Perform assigned jobs
 	workOrders->update(deltaTime);
 	miningAi->update(deltaTime);
+	woodcuttingAi->update(deltaTime);
 	buildAi->update(deltaTime);
 	aiArchitecture->update(deltaTime);
 
