@@ -64,6 +64,7 @@ void readInMaterials() noexcept
 					if (type == "soil")		 m.matType = MAT_SOIL;
 					if (type == "sand")		 m.matType = MAT_SAND;
 					if (type == "metal")     m.matType = MAT_METAL;
+					if (type == "wood")		 m.matType = MAT_WOOD;
 					if (type == "synthetic") m.matType = MAT_SYTHETIC;
 					if (type == "organic")   m.matType = MAT_ORGANIC;
 					});

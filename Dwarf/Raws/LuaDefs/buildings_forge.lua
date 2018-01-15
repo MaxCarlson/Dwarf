@@ -23,6 +23,25 @@ reactions["smelt_ore"] = { -- Should item = metal_bar be replaced with blocks? J
 	difficulty = 10
 };
 
+buildings["wood_furnace"] = {
+	name = "Wood Furnace",
+	description = "Here wood can be burnt to produce charcoal",
+	width = 3,
+	height = 3,
+	components = {{ item = "block", qty = 4 }},
+	skill = {{ name = "Construction", difficulty = 12 }},
+	render = {{ }},
+	structure
+};
+
+reactions["make_charcoal"] = {
+	name = "Make Charcoal",
+	workshop = "wood_furnace",
+	skill = "Furnace Operation",
+	inputs = {{ item = "block", qty = 1, mat_type = "organic" }},
+	outputs = {{ item = "charcoal", qty = 1 }},
+	difficulty = 12
+};
 
 buildings["blacksmith"] = {
 	name = "Blacksmith",

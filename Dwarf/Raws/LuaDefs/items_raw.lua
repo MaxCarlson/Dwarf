@@ -28,6 +28,15 @@ items["coal"] = {
 	stockpile = stockpiles["ore"].id
 };
 
+items["charcoal"] = {
+	name = "Charcoal",
+	description = "A light weight black hydrocarbon",
+	itemType = {"component"},
+	glyph = glyphs["stone_boulder"],
+	color = "light black",
+	stockpile = stockpiles["block"].id
+};
+
 items["stone_boulder"] = {
 	name = "A boulder",
 	description = "A chunk of rock",
