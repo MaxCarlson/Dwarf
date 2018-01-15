@@ -124,7 +124,8 @@ void WoodcuttingAi::doWork(Entity & e, const double & duration)
 		{
 			auto find = claimedTrees.find(des.first);
 
-			if (find != claimedTrees.end())
+			// If tree isn't claimed..
+			if (find == claimedTrees.end())
 			{
 				const auto d = region::get_3D_distance(co, des.second);
 
