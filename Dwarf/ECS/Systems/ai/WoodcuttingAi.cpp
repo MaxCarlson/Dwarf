@@ -112,8 +112,8 @@ void WoodcuttingAi::doWork(Entity & e, const double & duration)
 		std::set<std::size_t> claimedTrees;
 		for (const auto & ents : getEntities())
 		{
-			if (e != ents && e.getComponent<LumberjacTag>().treeId > 0)
-				claimedTrees.insert(e.getComponent<LumberjacTag>().treeId);
+			if (e != ents && ents.getComponent<LumberjacTag>().treeId > 0)
+				claimedTrees.insert(ents.getComponent<LumberjacTag>().treeId);
 		}
 
 		// Find the closest tree that's not already claimed
@@ -221,7 +221,7 @@ void WoodcuttingAi::doWork(Entity & e, const double & duration)
 
 		else
 		{
-			auto skillCheck = skillRoll(stats, "wood_cutting", DIFFICULTY_HARD);
+			auto skillCheck = skillRoll(stats, "wood_cutting", DIFFICULTY_MODERATE);
 
 			if (skillCheck >= SUCCESS)
 			{
@@ -231,30 +231,31 @@ void WoodcuttingAi::doWork(Entity & e, const double & duration)
 				//
 				// Possibly in tree files somewhere add a max width, height, and depth to tree's
 				// so we can use constants here instead of the 12's
-				int x  = tco.x - 12 >= 0 ? tco.x - 12 : 0;
-				int xl = tco.x + 12 < MAP_WIDTH - 1 ? tco.x + 12 : MAP_WIDTH - 1;
+				int x = tco.x - 12 >= 0 ? tco.x - 12 : 0;
+				int y = tco.y - 12 >= 0 ? tco.y - 12 : 0;
+				int z = tco.z - 12 >= 0 ? tco.z - 12 : 0;
 
-				int y  = tco.y - 12 >= 0 ? tco.y - 12 : 0;
-				int yl = tco.y + 12 < MAP_HEIGHT - 1 ? tco.y + 12 : MAP_HEIGHT - 1;
-
-				int z  = tco.z - 12 >= 0 ? tco.z - 12 : 0;
-				int zl = tco.z + 12 < MAP_DEPTH - 1 ? tco.z + 12 : MAP_DEPTH - 1;
+				int xl = tco.x + 12 < MAP_WIDTH  - 1 ? tco.x + 12 : MAP_WIDTH  - 1;	
+				int yl = tco.y + 12 < MAP_HEIGHT - 1 ? tco.y + 12 : MAP_HEIGHT - 1;			
+				int zl = tco.z + 12 < MAP_DEPTH  - 1 ? tco.z + 12 : MAP_DEPTH  - 1;
 
 				int numLogs = 0;
 				int stumpIdx = 0;
 				int lowestZ = 10000;
 
-				for(x; x < xl; ++x)
-					for(y; y < yl; ++y)
-						for (z; z < zl; ++z)
+				// Search the area around the tree and 
+				// replace it with empty space
+				for (int X = x; X < xl; ++X){
+					for (int Y = y; Y < yl; ++Y){
+						for (int Z = z; Z < zl; ++Z)
 						{
-							const int idx = getIdx({ x, y, z });
+							const int idx = getIdx({ X, Y, Z });
 
 							if (region::treeId(idx) == tag.treeId)
 							{
 								if (z < lowestZ)
 								{
-									lowestZ = z;
+									lowestZ = Z;
 									stumpIdx = idx;
 								}
 
@@ -265,6 +266,10 @@ void WoodcuttingAi::doWork(Entity & e, const double & duration)
 								++numLogs;
 							}
 						}
+					}
+				}
+
+
 
 				// Using this means only the lowest section of the tree can be designated
 				region::makeFloor(getIdx(tag.treeCo)); 
