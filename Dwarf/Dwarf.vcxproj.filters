@@ -788,6 +788,7 @@
     <None Include="Raws\LuaDefs\buildings_forge.lua" />
     <None Include="Raws\LuaDefs\attributes_skills.lua" />
     <None Include="Raws\LuaDefs\biomes.lua" />
+    <None Include="Raws\LuaDefs\buildings_woodworking.lua" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Raws\LuaDefs\index.txt" />

@@ -10,3 +10,4 @@ biomes.lua
 buildings_structures.lua
 buildings_mason.lua
 buildings_forge.lua
+buildings_woodworking.lua

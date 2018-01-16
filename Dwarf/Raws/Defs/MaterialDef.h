@@ -12,7 +12,6 @@ enum MaterialType
 	MAT_SOIL,
 	MAT_SAND,
 	MAT_METAL,
-	MAT_WOOD,
 	MAT_SYTHETIC,
 	MAT_ORGANIC
 };

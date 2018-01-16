@@ -52,9 +52,9 @@ buildings["blacksmith"] = {
 	height = 3,
 	components = {{ item = "block", qty = 7 }, { item = "anvil", qty = 14 }},
 	skill = { { name = "Construction", difficulty = 1 } }, 
-	render = { { glyph = glyphs["smith_top"] }, { glyph = glyphs["smith_mid"] },  { glyph = glyphs["w_tile"] }, 
-			   { glyph = glyphs["smith_bottom"] },    { glyph = glyphs["w_tile"] },     { glyph = glyphs["w_tile"] },
-			   { glyph = glyphs["coal_pit"] },    { glyph = glyphs["w_tile"] },   { glyph = glyphs["anvil"] } 
+	render = { { glyph = glyphs["smith_top"] },    { glyph = glyphs["smith_mid"] },  { glyph = glyphs["w_tile"] }, 
+			   { glyph = glyphs["smith_bottom"] }, { glyph = glyphs["w_tile"] },     { glyph = glyphs["w_tile"] },
+			   { glyph = glyphs["coal_pit"] },     { glyph = glyphs["w_tile"] },     { glyph = glyphs["anvil"] } 
 			 },
 	structure
 };
@@ -63,7 +63,7 @@ reactions["make_anvil"] = {
 	name = "Make an Anvil",
 	workshop = "smithy",
 	skill = "blacksmithing",
-	inputs = {{ item = "block", qty = 3, mat_type = metal }},
+	inputs = {{ item = "block", qty = 3, mat_type = "metal" }},
 	outputs = {{ item = "anvil", qty = 1 }},
 	difficulty = 16
 };
@@ -72,8 +72,16 @@ reactions["make_pickaxe"] = {
 	name = "Make Pickaxe",
 	workshop = "smithy",
 	skill = "blacksmithing",
-	inputs = {{ item = "block", qty = 2, mat_type = metal }},
+	inputs = {{ item = "block", qty = 2, mat_type = "metal" }},
 	outputs = {{ item = "pickaxe", qty = 1 }},
 	difficulty = 17
+};
+
+reactions["make_hatchet"] = {
+	name = "Make Hatchet",
+	workshop = "smithy",
+	skill = "blacksmithing",
+	inputs = {{ item = "block", qty = 1, mat_type = "metal" }}
+
 };
 
