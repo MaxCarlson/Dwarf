@@ -30,7 +30,9 @@ buildings["wood_furnace"] = {
 	height = 3,
 	components = {{ item = "block", qty = 4 }},
 	skill = {{ name = "Construction", difficulty = 12 }},
-	render = {{ }},
+	render = { { glyph = glyphs["w_tile"] },       { glyph = glyphs["m_wood_burner"] }, { glyph = glyphs["r_wood_burner"] },
+			   { glyph = glyphs["s_wood_stack"] }, { glyph = glyphs["w_tile"] },		{ glyph = glyphs["w_tile"] },
+			   { glyph = glyphs["w_tile"] },       { glyph = glyphs["w_tile"] },		{ glyph = glyphs["coal_pit"] } },
 	structure
 };
 
@@ -38,7 +40,7 @@ reactions["make_charcoal"] = {
 	name = "Make Charcoal",
 	workshop = "wood_furnace",
 	skill = "Furnace Operation",
-	inputs = {{ item = "block", qty = 1, mat_type = "organic" }},
+	inputs = {{ item = "block", qty = 1, material = "wood" }}, -- Possibly use mat_type = organic ?
 	outputs = {{ item = "charcoal", qty = 1 }},
 	difficulty = 12
 };

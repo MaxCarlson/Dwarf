@@ -34,7 +34,7 @@ items["charcoal"] = {
 	itemType = {"component"},
 	glyph = glyphs["stone_boulder"],
 	color = "light black",
-	stockpile = stockpiles["block"].id
+	stockpile = stockpiles["fuel"].id
 };
 
 items["stone_boulder"] = {

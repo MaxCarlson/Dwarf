@@ -85,8 +85,12 @@ glyphs = {
 	smith_bottom = 640,
 	smith_mid = 640,
 
+	m_wood_burner = 663,
+	r_wood_burner = 664,
+
 	m_smelter = 665,
 	r_smelter = 666,
+	s_wood_stack = 679,
 	coal_pit = 680,
 	bellow = 695,
 	tongs = 696,
