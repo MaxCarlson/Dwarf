@@ -30,18 +30,6 @@ int getMainAttribute(Stats & stats, const std::string& skilltag)
 	return 0;
 }
 
-int getSkillLvl(Stats & stats, const std::string& skilltag)
-{
-	auto find = stats.skills.find(skilltag);
-
-	if (find != stats.skills.end())
-	{
-		return find->second.skillLvl;
-	}
-
-	return 0;
-}
-
 void gainSkill(Stats & stats, const std::string skilltag, int difficulty)
 {
 	auto find = stats.skills.find(skilltag);
@@ -128,3 +116,12 @@ void doWorkTime(const double & tstep, double &progress, const int difficulty)
 {
 	progress += tstep * (1.0 / static_cast<double>(difficulty + 1) );
 }
+
+// Possible new time based def system
+void doWorkTime(Stats & stats, const std::string & skill, const double & tstep, double & progress)
+{
+	const auto sklvl = static_cast<double>(getSkillLvl(stats, skill));
+
+	progress += tstep * ( (sklvl + 1) * 0.1);
+}
+

@@ -26,12 +26,34 @@ public:
 	}
 };
 
+inline int getSkillLvl(Stats & stats, const std::string& skilltag)
+{
+	auto find = stats.skills.find(skilltag);
+
+	if (find != stats.skills.end())
+		return find->second.skillLvl;
+	
+	return 0;
+}
+
 enum skill_roll
 {
 	CRITICAL_FAIL,
 	FAIL,
 	SUCCESS,
 	EPIC_SUCCESS
+};
+
+enum QualityDef
+{
+	QUALITY_NONE,
+	AWFUL_QUALITY,
+	POOR_QUALITY,
+	NORMAL_QUALITY,
+	GOOD_QUALITY,
+	SUPERIOR_QUALITY,
+	EPIC_QUALITY,
+	LEGENDAY_QUALITY
 };
 
 constexpr int DIFFICULTY_TRIVIAL   =  0;
@@ -43,21 +65,10 @@ constexpr int DIFFICULTY_HARD      = 25;
 constexpr int DIFFICULTY_GRUELING  = 30;
 constexpr int DIFFICULTY_LEGENDARY = 40;
 
-enum Difficulties
-{
-	TRIVIAL   = 100,
-	SIMPLE    = 220,
-	NORMAL    = 350,
-	MODERATE  = 450,
-	TOUGH     = 580,
-	HARD      = 700,
-	GRUELING  = 920,
-	LEGENDARY = 1200
-};
-
 skill_roll skillRoll(Stats & stats, const std::string skilltag, int difficulty);
 
 void doWorkTime(const double & tstep, double &progress, const int difficulty);
+void doWorkTime(Stats &stats, const std::string & skill, const double &tstep, double &progress);
 
 CEREAL_REGISTER_TYPE(Stats);
 CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, Stats);

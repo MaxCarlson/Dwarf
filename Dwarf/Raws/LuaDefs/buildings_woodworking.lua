@@ -21,6 +21,7 @@ reactions["cut_wood_blocks"] = {
 	skill = "Carpentry",
 	inputs = {{ item = "wood_log", qty = 1 }},
 	outputs = {{ item = "block", qty = 3 }},
-	difficulty = 10
+	difficulty = 10,
+	time = 3
 };
 

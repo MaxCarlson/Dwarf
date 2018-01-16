@@ -1,5 +1,4 @@
 #pragma once
-
-class Rng;
+#include "../../../Helpers/Rng.h"
 
 void plantTrees(Rng &rng);

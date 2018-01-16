@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "plant_trees.h"
 #include "../../Tile.h"
-#include "../../../Helpers/Rng.h"
 #include "Coordinates.h"
 
 using region::TileTypes;

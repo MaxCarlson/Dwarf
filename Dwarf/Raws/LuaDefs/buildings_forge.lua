@@ -20,7 +20,8 @@ reactions["smelt_ore"] = { -- Should item = metal_bar be replaced with blocks? J
 	skill = "Furnace Operation",
 	inputs = {{ item = "ore", qty = 1 }},
 	outputs = {{ item = "block", qty = 1 }},
-	difficulty = 10
+	difficulty = 10,
+	time = 3
 };
 
 buildings["wood_furnace"] = {
@@ -41,8 +42,9 @@ reactions["make_charcoal"] = {
 	workshop = "wood_furnace",
 	skill = "Furnace Operation",
 	inputs = {{ item = "block", qty = 1, material = "wood" }}, -- Possibly use mat_type = organic ?
-	outputs = {{ item = "charcoal", qty = 1 }},
-	difficulty = 12
+	outputs = {{ item = "charcoal", qty = 2 }},
+	difficulty = 12,
+	time = 3
 };
 
 buildings["blacksmith"] = {
@@ -65,7 +67,8 @@ reactions["make_anvil"] = {
 	skill = "blacksmithing",
 	inputs = {{ item = "block", qty = 3, mat_type = "metal" }},
 	outputs = {{ item = "anvil", qty = 1 }},
-	difficulty = 16
+	difficulty = 16,
+	time = 10
 };
 
 reactions["make_pickaxe"] = {
@@ -74,14 +77,17 @@ reactions["make_pickaxe"] = {
 	skill = "blacksmithing",
 	inputs = {{ item = "block", qty = 2, mat_type = "metal" }},
 	outputs = {{ item = "pickaxe", qty = 1 }},
-	difficulty = 17
+	difficulty = 17,
+	time = 12
 };
 
 reactions["make_hatchet"] = {
 	name = "Make Hatchet",
 	workshop = "smithy",
 	skill = "blacksmithing",
-	inputs = {{ item = "block", qty = 1, mat_type = "metal" }}
-
+	inputs = {{ item = "block", qty = 1, mat_type = "metal" }},
+	outputs = {{ item = "hatchet", qty = 1 }},
+	difficulty = 15,
+	time = 10
 };
 

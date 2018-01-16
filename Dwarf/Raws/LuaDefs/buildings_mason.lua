@@ -21,7 +21,8 @@ reactions = {
 		skill = "Masonry",
 		inputs = {{ item = "stone_boulder", qty = 1 }},
 		outputs = {{ item = "block", qty = 3 }},
-		difficulty = 7
+		difficulty = 7,
+		time = 3
 	},
 
 	make_stone_door = {
@@ -30,7 +31,8 @@ reactions = {
 		skill = "Masonry",
 		inputs = {{ item = "stone_boulder", qty = 1 }},
 		outputs = {{ item = "door", qty = 1}},
-		difficulty = 9
+		difficulty = 9,
+		time = 10
 	},
 
 	make_stone_statue = {
@@ -39,6 +41,7 @@ reactions = {
 		skill = "Masonry",
 		inputs = {{ item = "stone_boulder", qty = 1 }},
 		outputs = {{ item = "statue", qty = 1}},
-		difficulty = 14
+		difficulty = 14,
+		time = 15
 	},
 };

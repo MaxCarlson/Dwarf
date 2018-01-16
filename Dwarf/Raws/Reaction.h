@@ -14,4 +14,5 @@ struct Reaction
 	std::string skill = "";
 
 	int difficulty = 0;
+	double time = 0.0;
 };

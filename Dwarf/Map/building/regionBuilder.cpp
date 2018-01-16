@@ -7,7 +7,7 @@
 #include "region\place_buildings.h"
 #include "region\place_creatures.h"
 #include "region\plant_trees.h"
-#include "../Globals/rng_e.h"
+#include "Helpers\Rng.h"
 
 
 const int noiseSize = 166; //def 88

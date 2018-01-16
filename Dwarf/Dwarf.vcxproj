@@ -212,7 +212,6 @@
     <ClCompile Include="ECS\Systems\helpers\WorkOrderHelper.cpp" />
     <ClCompile Include="ECS\Systems\ai\StockpileSystem.cpp" />
     <ClCompile Include="Helpers\Rng.cpp" />
-    <ClCompile Include="Globals\rng_e.cpp" />
     <ClCompile Include="RunSystems.cpp" />
     <ClCompile Include="Raws\SkillReader.cpp" />
     <ClCompile Include="ECS\Components\Sentients\Stats.cpp" />
@@ -414,7 +413,6 @@
     <ClInclude Include="ECS\Systems\helpers\WorkOrderHelper.h" />
     <ClInclude Include="ECS\Systems\ai\StockpileSystem.h" />
     <ClInclude Include="Helpers\Rng.h" />
-    <ClInclude Include="Globals\rng_e.h" />
     <ClInclude Include="RunSystems.h" />
     <ClInclude Include="Raws\SkillReader.h" />
     <ClInclude Include="ECS\Components\Sentients\Stats.h" />

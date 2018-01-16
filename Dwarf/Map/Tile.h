@@ -67,6 +67,9 @@ namespace region
 		FLOOR,
 		WALL,
 		RAMP,
+		UP_STAIRS,
+		DOWN_STAIRS,
+		UP_DOWN_STAIRS,
 		TREE_TRUNK,
 		TREE_LEAF
 	};

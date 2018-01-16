@@ -18,3 +18,5 @@ private:
 	pcg32_random_t rng;
 };
 
+extern Rng rng;
+

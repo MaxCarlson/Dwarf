@@ -89,6 +89,7 @@ void readInReactions() noexcept
 					[&r, &out]() { r.outputs.push_back(out); }
 				);
 			}},
+			{ "time", [&r]() { r.time = lua_double() * 1000.0; } },
 		}
 	);
 

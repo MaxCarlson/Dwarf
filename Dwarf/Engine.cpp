@@ -58,7 +58,8 @@
 #include "Map/MapRender.h"
 #include "Raws\DefInfo.h"
 #include "Map\building\regionBuilder.h"
-#include "Globals\rng_e.h"
+#include "Helpers\Rng.h"
+
 
 #include <chrono>
 #include <cereal.hpp>

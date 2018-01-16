@@ -15,7 +15,7 @@ attributes =
 
 -- Define skills and what attributes they're based on
 -- First attribute + the skill is where the success / fail checks will be done,
--- along with the speed multiplier
+-- the skill level itself affects the speed multiplier
 -- secondary attributes will be minorly improved by performing the skill
 -- less improvment for each attribute farther from the first
 skills = 
