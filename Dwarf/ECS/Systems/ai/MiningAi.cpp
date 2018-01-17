@@ -202,17 +202,16 @@ void MiningAi::updateMiner(const Entity& e)
 
 		if (targetMiningType > 0)
 		{
-			// Emit message to perform mining
-			//emit(perform_mining_message{ e, targetIdx, targetMiningType });	
+			static const std::string jobSkill = "mining";
 
-			auto& mstats = e.getComponent<Stats>();
+			auto& stats = e.getComponent<Stats>();
 
 			// Target tile has health left
 			if (tileHealth(targetIdx) > 0)
 			{
-				const auto dmg = ( mstats.skills["mining"].skillLvl + 1 );
+				const auto dmg = static_cast<uint16_t>(doWorkDamage(stats, jobSkill));
 				
-				damageTile(targetIdx, static_cast<uint16_t>(dmg));
+				damageTile(targetIdx, dmg);
 				return;
 			} 
 
@@ -224,39 +223,30 @@ void MiningAi::updateMiner(const Entity& e)
 			// will cause imbalences
 			else
 			{
-				auto skillCheck = skillRoll(mstats, "mining", DIFFICULTY_MODERATE);
+				giveWorkXp(stats, jobSkill, DIFFICULTY_MODERATE);
 
-				if (skillCheck >= SUCCESS)
-				{
-					// Remove the designation and change the tile
-					designations->mining.erase(targetIdx);
+				// Remove the designation and change the tile
+				designations->mining.erase(targetIdx);
 
-					// Change tile to a floor, Probably don't want to do this
-					// if tile is over open space?
-					region::makeFloor(targetIdx);
+				// Change tile to a floor, Probably don't want to do this
+				// if tile is over open space?
+				region::makeFloor(targetIdx);
 
-					// Don't really want to spawn a stone boulder for each thing being mined do we?
-					// might have to change
-					auto matIdx = getTileMaterial(idxToCo(targetIdx));
-					auto mat = getMaterial(matIdx);
+				// Don't really want to spawn a stone boulder for each thing being mined do we?
+				// might have to change
+				auto matIdx = getTileMaterial(idxToCo(targetIdx));
+				auto mat = getMaterial(matIdx);
 
-					// Spawn items in amount denoted by material type
-					for (int i = 0; i < mat->minesToAmount; ++i)
-						spawnItemOnGround(mat->minesToTag, matIdx, idxToCo(targetIdx));
+				// Spawn items in amount denoted by material type
+				for (int i = 0; i < mat->minesToAmount; ++i)
+					spawnItemOnGround(mat->minesToTag, matIdx, idxToCo(targetIdx));
 
-					//tileRecalcAll();
-					spot_recalc_paths(idxToCo(targetIdx));
+				//tileRecalcAll();
+				spot_recalc_paths(idxToCo(targetIdx));
 
-					emit(recalculate_mining_message{});
-					return;
-				}
-				//else // Add in other things. Not entirely happy with how skill check is only done once the tile has 0 HP. Look into other systems
-				//{
-				//}
-
+				emit(recalculate_mining_message{});
+				return;
 			}
-
-			return;
 		}
 
 		tag.step = MiningTag::DROP_TOOL; 

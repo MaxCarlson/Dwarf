@@ -228,9 +228,13 @@ void BuildAi::doBuild(const Entity & e, const double & duration)
 
 	else if (tag.step == BuilderTag::BUILD_BUILDING)
 	{
-		if (tag.buildingTarget.progress < 100.0) // Add in skill levels affecting time taken!!
+		static const std::string jobSkill = "construction";
+
+		auto& stats = e.getComponent<Stats>();
+
+		if (tag.buildingTarget.progress < 2000.0) // Add in skill levels affecting time taken!!
 		{
-			doWorkTime(duration, tag.buildingTarget.progress, tag.difficulty);
+			doWorkTime(stats, jobSkill, duration, tag.buildingTarget.progress);
 			
 			return;
 		}
@@ -241,66 +245,54 @@ void BuildAi::doBuild(const Entity & e, const double & duration)
 
 		const int difficulty = target->skill_required.second;
 
-		auto skillCheck = skillRoll(e.getComponent<Stats>(), "construction", difficulty);
+		giveWorkXp(stats, jobSkill, difficulty);
 
-		if (skillCheck >= SUCCESS)
+		auto& buildingEntity = getWorld().getEntity(tag.buildingTarget.entity_id);
+
+		auto& building = buildingEntity.getComponent<Building>();
+
+		// Check every component for validity
+		for (auto& compId : tag.buildingTarget.componentIds)
 		{
-			auto& buildingEntity = getWorld().getEntity(tag.buildingTarget.entity_id);
+			const auto ent = getWorld().getEntity(compId.first);
 
-			auto & building = buildingEntity.getComponent<Building>();
-
-			// Check every component for validity
-			for (auto& compId : tag.buildingTarget.componentIds)
+			if (!ent.isValid() || !ent.hasComponent<Item>())
 			{
-				const auto ent = getWorld().getEntity(compId.first);
-
-				if (!ent.isValid() || !ent.hasComponent<Item>())
-				{
-					designations->buildings.push_back(tag.buildingTarget);
-					std::cout << "Invalid component for building - building id: " << tag.buildingTarget.entity_id
-						<< " componnent id:" << compId.first << "\n";
-					work.cancel_work(e);
-					return;
-				}
+				designations->buildings.push_back(tag.buildingTarget);
+				std::cout << "Invalid component for building - building id: " << tag.buildingTarget.entity_id
+					<< " componnent id:" << compId.first << "\n";
+				work.cancel_work(e);
+				return;
 			}
-
-			// Set materials for building and delete componenets 
-			for (auto& compId : tag.buildingTarget.componentIds)
-			{
-				const auto comp = getWorld().getEntity(compId.first);
-
-				const std::string comptag = comp.getComponent<Item>().tag;
-				std::size_t material = comp.getComponent<Item>().material;
-
-				itemHelper.deleteItem(compId.first);
-
-				building.materials.push_back(std::make_pair(comptag, material));
-			}
-
-			building.complete = true;
-
-			// Just used for filtering
-			buildingEntity.addComponent<RenderComponent>();
-
-			buildingEntity.activate();
-
-			// Update availible reactions for buildings if this is a new Building type
-			defInfo->updateBuildingReactions(building.tag);
-
-			// Add code for building provides once added in 
-
-
-			work.cancel_work(e);
-			return;
 		}
-		// Reset some building progress for a FAIL
-		else if (skillCheck == FAIL)
-			tag.buildingTarget.progress = 50.0;
-		
-		// And even more progress for a CRITICAL_FAIL
-		else
-			tag.buildingTarget.progress = 0.0;
 
+		// Set materials for building and delete componenets 
+		for (auto& compId : tag.buildingTarget.componentIds)
+		{
+			const auto comp = getWorld().getEntity(compId.first);
+
+			const std::string comptag = comp.getComponent<Item>().tag;
+			std::size_t material = comp.getComponent<Item>().material;
+
+			itemHelper.deleteItem(compId.first);
+
+			building.materials.push_back(std::make_pair(comptag, material));
+		}
+
+		building.complete = true;
+
+		// Just used for filtering
+		buildingEntity.addComponent<RenderComponent>();
+
+		buildingEntity.activate();
+
+		// Update availible reactions for buildings if this is a new Building type
+		defInfo->updateBuildingReactions(building.tag);
+
+		// Add code for building provides once added in 
+
+
+		work.cancel_work(e);
 		return;
 	}
 }

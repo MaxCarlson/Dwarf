@@ -49,7 +49,8 @@ void WoodcuttingAi::init()
 
 void WoodcuttingAi::update(const double duration)
 {
-	for (auto e : getEntities())
+	auto ents = getEntities();
+	for (auto e : ents)
 	{
 		doWork(e, duration);
 	}
@@ -198,13 +199,15 @@ void WoodcuttingAi::doWork(Entity & e, const double & duration)
 		return;
 	}
 
-	else if (tag.step = LumberjacTag::CHOP)
+	else if (tag.step == LumberjacTag::CHOP)
 	{
+		static const std::string jobSkill = "wood_cutting";
+
 		auto find = designations->woodcutting.find(tag.treeId);
 
 		if (find == designations->woodcutting.end())
 		{
-			tag.step == LumberjacTag::FIND_TREE;
+			tag.step = LumberjacTag::FIND_TREE;
 			return;
 		}
 
@@ -214,84 +217,81 @@ void WoodcuttingAi::doWork(Entity & e, const double & duration)
 
 		if (treeHp > 0)
 		{
-			const auto dmg = (stats.skills["wood_cutting"].skillLvl + 1);
+			const auto dmg = doWorkDamage(stats, jobSkill);
 
 			region::damageTree(tag.treeId, dmg);
 		}
 
 		else
 		{
-			auto skillCheck = skillRoll(stats, "wood_cutting", DIFFICULTY_MODERATE);
+			giveWorkXp(stats, jobSkill, DIFFICULTY_MODERATE);
 
-			if (skillCheck >= SUCCESS)
-			{
-				Coordinates tco = tag.treeCo;
+			Coordinates tco = tag.treeCo;
 
-				// Square coordinates so we don't go out of bounds
-				//
-				// Possibly in tree files somewhere add a max width, height, and depth to tree's
-				// so we can use constants here instead of the 12's
-				int x = tco.x - 12 >= 0 ? tco.x - 12 : 0;
-				int y = tco.y - 12 >= 0 ? tco.y - 12 : 0;
-				int z = tco.z - 12 >= 0 ? tco.z - 12 : 0;
+			// Square coordinates so we don't go out of bounds
+			//
+			// Possibly in tree files somewhere add a max width, height, and depth to tree's
+			// so we can use constants here instead of the 12's
+			int x = tco.x - 12 >= 0 ? tco.x - 12 : 0;
+			int y = tco.y - 12 >= 0 ? tco.y - 12 : 0;
+			int z = tco.z - 12 >= 0 ? tco.z - 12 : 0;
 
-				int xl = tco.x + 12 < MAP_WIDTH  - 1 ? tco.x + 12 : MAP_WIDTH  - 1;	
-				int yl = tco.y + 12 < MAP_HEIGHT - 1 ? tco.y + 12 : MAP_HEIGHT - 1;			
-				int zl = tco.z + 12 < MAP_DEPTH  - 1 ? tco.z + 12 : MAP_DEPTH  - 1;
+			int xl = tco.x + 12 < MAP_WIDTH  - 1 ? tco.x + 12 : MAP_WIDTH  - 1;	
+			int yl = tco.y + 12 < MAP_HEIGHT - 1 ? tco.y + 12 : MAP_HEIGHT - 1;			
+			int zl = tco.z + 12 < MAP_DEPTH  - 1 ? tco.z + 12 : MAP_DEPTH  - 1;
 
-				int numLogs = 0;
-				int stumpIdx = 0;
-				int lowestZ = 10000;
+			int numLogs = 0;
+			int stumpIdx = 0;
+			int lowestZ = 10000;
 
-				// Search the area around the tree and 
-				// replace it with empty space
-				for (int X = x; X < xl; ++X){
-					for (int Y = y; Y < yl; ++Y){
-						for (int Z = z; Z < zl; ++Z)
+			// Search the area around the tree and 
+			// replace it with empty space
+			for (int X = x; X < xl; ++X){
+				for (int Y = y; Y < yl; ++Y){
+					for (int Z = z; Z < zl; ++Z)
+					{
+						const int idx = getIdx({ X, Y, Z });
+
+						if (region::treeId(idx) == tag.treeId)
 						{
-							const int idx = getIdx({ X, Y, Z });
-
-							if (region::treeId(idx) == tag.treeId)
+							if (z < lowestZ)
 							{
-								if (z < lowestZ)
-								{
-									lowestZ = Z;
-									stumpIdx = idx;
-								}
-
-								region::makeEmptySpace(idx);
-								region::tile_recalc(idxToCo(idx));
-								region::spot_recalc_paths(idxToCo(idx)); // Examine this area if there are issues with pathing or render after cutting trees
-
-								++numLogs;
+								lowestZ = Z;
+								stumpIdx = idx;
 							}
+
+							region::makeEmptySpace(idx);
+							region::tile_recalc(idxToCo(idx));
+							region::spot_recalc_paths(idxToCo(idx)); // Examine this area if there are issues with pathing or render after cutting trees
+
+							++numLogs;
 						}
 					}
 				}
-
-
-
-				// Using this means only the lowest section of the tree can be designated
-				region::makeFloor(getIdx(tag.treeCo)); 
-				region::tile_recalc(tag.treeCo);
-
-				numLogs = (numLogs / 20) + 1;
-				std::cout << "spawning " << numLogs << " logs\n";
-
-				for (int i = 0; i < numLogs; ++i)
-				{
-					spawnItemOnGround("wood_log", getMaterialIdx("wood"), tag.treeCo);
-				}
-
-
-				region::deleteTree(tag.treeId);
-
-				designations->woodcutting.erase(tag.treeId);
-
-
-				tag.step = LumberjacTag::DROP_AXE;
-				return;
 			}
+
+
+
+			// Using this means only the lowest section of the tree can be designated
+			region::makeFloor(getIdx(tag.treeCo)); 
+			region::tile_recalc(tag.treeCo);
+
+			numLogs = (numLogs / 20) + 1;
+			std::cout << "spawning " << numLogs << " logs\n";
+
+			for (int i = 0; i < numLogs; ++i)
+			{
+				spawnItemOnGround("wood_log", getMaterialIdx("wood"), tag.treeCo);
+			}
+
+
+			region::deleteTree(tag.treeId);
+
+			designations->woodcutting.erase(tag.treeId);
+
+
+			tag.step = LumberjacTag::DROP_AXE;
+			return;		
 		}
 	}
 

@@ -236,6 +236,8 @@ void AiArchitecture::doWork(Entity e, const double& duration)
 		// Yay we're in the right spot
 		if (find != designations->architecture.end())
 		{
+			static const std::string jobSkill = "construction";
+
 			auto& stats = e.getComponent<Stats>();
 
 			// If this architecture designations progress
@@ -243,88 +245,73 @@ void AiArchitecture::doWork(Entity e, const double& duration)
 			double& progress = find->second.second;
 			if (progress < 1000.0)
 			{
-				//doWorkTime(duration, progress, DIFFICULTY_NORMAL);
-				static const std::string jobType = "construction";
-
-				doWorkTime(stats, jobType, duration, progress);
+				doWorkTime(stats, jobSkill, duration, progress);
 				return;
 			}
 
-			auto skillCheck = skillRoll(stats, "construction", DIFFICULTY_NORMAL);
+			giveWorkXp(stats, jobSkill, DIFFICULTY_NORMAL);
 
-			if (skillCheck >= SUCCESS)
+			const auto type = find->second.first;
+
+			std::size_t material = 0;
+
+			Entity block = getWorld().getEntity(tag.current_tool);
+
+			if (block.isValid() && block.hasComponent<Item>())
 			{
-				const auto type = find->second.first;
-
-				std::size_t material = 0;
-
-				Entity block = getWorld().getEntity(tag.current_tool);
-
-				if (block.isValid() && block.hasComponent<Item>())
-				{
-					material = block.getComponent<Item>().material;
-				}
-
-				itemHelper.deleteItem(tag.current_tool);
-				tag.current_tool = 0;
-
-				region::setFlag(idxToCo(bidx), region::Flag::CONSTRUCTION);
-
-				if (material)
-					region::setMaterial(idxToCo(bidx), material);
-
-				switch (type)
-				{
-				case ArchitectureType::WALL:
-					region::makeWall(bidx);
-					break;
-
-				case ArchitectureType::FLOOR:
-					region::makeFloor(bidx);
-					break;
-
-				case ArchitectureType::RAMP:
-					region::makeRamp(bidx);
-					break;
-
-				case ArchitectureType::UP_STAIRS:
-					//region::makeUpStairs(bidx);
-					break;
-
-				case  ArchitectureType::DOWN_STAIRS:
-					//region::makeDownStairs(bidx);
-					break;
-
-				case ArchitectureType::UP_DOWN_STAIRS:
-					//region::makeUpDownStairs(bidx);
-					break;
-
-				case ArchitectureType::BRIDGE:
-					// TODO:
-					break;
-
-				default:
-					std::cout << "Invalid type architecture attempt!" << "\n";
-				}
-
-				// Recalculate paths and render
-				region::spot_recalc_paths(idxToCo(bidx));
-
-				designations->architecture.erase(bidx);
-
-				emit(recalculate_mining_message{});
-				emit(update_all_maps_message{});
-				work.cancel_work(e);
-				return;
+				material = block.getComponent<Item>().material;
 			}
-			// Skill roll FAIL
-			else if (skillCheck == FAIL)
-				progress = 50.0;		
 
-			// Skill roll CRITICAL_FAIL
-			else
-				progress = 0.0;
+			itemHelper.deleteItem(tag.current_tool);
+			tag.current_tool = 0;
 
+			region::setFlag(idxToCo(bidx), region::Flag::CONSTRUCTION);
+
+			if (material)
+				region::setMaterial(idxToCo(bidx), material);
+
+			switch (type)
+			{
+			case ArchitectureType::WALL:
+				region::makeWall(bidx);
+				break;
+
+			case ArchitectureType::FLOOR:
+				region::makeFloor(bidx);
+				break;
+
+			case ArchitectureType::RAMP:
+				region::makeRamp(bidx);
+				break;
+
+			case ArchitectureType::UP_STAIRS:
+				//region::makeUpStairs(bidx);
+				break;
+
+			case  ArchitectureType::DOWN_STAIRS:
+				//region::makeDownStairs(bidx);
+				break;
+
+			case ArchitectureType::UP_DOWN_STAIRS:
+				//region::makeUpDownStairs(bidx);
+				break;
+
+			case ArchitectureType::BRIDGE:
+				// TODO:
+				break;
+
+			default:
+				std::cout << "Invalid type architecture attempt!" << "\n";
+			}
+
+			// Recalculate paths and render
+			region::spot_recalc_paths(idxToCo(bidx));
+
+			designations->architecture.erase(bidx);
+
+			emit(recalculate_mining_message{});
+			emit(update_all_maps_message{});
+			work.cancel_work(e);
 			return;
 		}
 

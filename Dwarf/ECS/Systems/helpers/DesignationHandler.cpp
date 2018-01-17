@@ -5,6 +5,7 @@
 #include "../Designations.h"
 #include "../ECS/Messages/recalculate_mining_message.h"
 #include "../ECS/Messages/pick_map_changed_message.h"
+#include "../ECS/Messages/axemap_changed_message.h"
 
 void DesignationHandler::init()
 {
@@ -24,11 +25,6 @@ void DesignationHandler::designate(const designation_message & msg) // Add in ch
 	if (co1.z != co2.z)
 		return;
 
-	if (co1 == co2) // Is this needed?
-	{
-		designations->mining[getIdx(co1)] = type;
-		return;
-	}
 	// Flip variables if needed so we can enumerate through loop easily
 	if (co1.x > co2.x)
 	{
@@ -123,4 +119,5 @@ void DesignationHandler::designateChopping(const Coordinates co1, const Coordina
 				designations->woodcutting[tid] = findTreeBottom({ x, y, co1.z }, tid);
 			}
 		}
+	emit(axemap_changed_message{});
 }

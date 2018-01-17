@@ -44,7 +44,9 @@ void WorkOrders::update(double duration)
 void WorkOrders::work(Entity e, const double& duration)
 {
 	WorkTemplate<WorkOrderTag> work;
-	
+
+	static auto& world = getWorld();
+
 	auto& tag = e.getComponent<WorkOrderTag>();
 	auto& co = e.getComponent<PositionComponent>().co;
 	auto& mov = e.getComponent<MovementComponent>();
@@ -220,59 +222,43 @@ void WorkOrders::work(Entity e, const double& duration)
 			return;
 		}
 
-		auto skillCheck = skillRoll(stats, reaction->skill, reaction->difficulty);
-	
-		if (skillCheck >= SUCCESS)
+		giveWorkXp(stats, reaction->skill, reaction->difficulty);
+
+		// Delete component entities and capture data about
+		// input items
+		std::string materialNames = "";
+		std::size_t material = 0;
+
+		for (auto& comp : tag.reaction.components)
 		{
-			auto& world = getWorld();
-			// Delete component entities and capture data about
-			// input items
-			std::string materialNames = "";
-			std::size_t material = 0;
+			auto& cent = world.getEntity(comp.first);
 
-			for (auto& comp : tag.reaction.components)
+			if (!cent.isValid() || !cent.hasComponent<Item>())
 			{
-				auto& cent = world.getEntity(comp.first);
-
-				if (!cent.isValid() || !cent.hasComponent<Item>())
-				{
-					work.cancel_work(e);
-					return;
-				}
-
-				material = cent.getComponent<Item>().material;
-				materialNames += cent.getComponent<Item>().name + " ";
-
-				itemHelper.deleteItem(comp.first);
+				work.cancel_work(e);
+				return;
 			}
 
-			// Produce outputs ~~ figure out how to deal with mixed outputs
-			// in terms of affects
-			for (auto & out : reaction->outputs)
-				for (int i = 0; i < out.second; ++i)
-				{
-					std::cout << "Reaction spawning" << out.first << material << "\n";
-					spawnItemOnGround(out.first, material, co);
-				}
+			material = cent.getComponent<Item>().material;
+			materialNames += cent.getComponent<Item>().name + " ";
 
-			emit(block_map_changed_message{});
+			itemHelper.deleteItem(comp.first);
+		}
 
-			// Finish up
-			workOrderHelper->unclaim_workshop(tag.reaction.workshop_id);
-			work.cancel_work(e);
-			return;
-		}
-		// Reset some progress for a skill roll failure
-		else if (skillCheck == FAIL)
-		{
-			tag.progress = 50.0;
-			return;
-		}
-		// Reset all progress for a CRITICAL_FAILURE
-		else
-		{
-			tag.progress = 0.0;
-			return;
-		}
+		// Produce outputs ~~ figure out how to deal with mixed outputs
+		// in terms of affects
+		for (auto & out : reaction->outputs)
+			for (int i = 0; i < out.second; ++i)
+			{
+				std::cout << "Reaction spawning" << out.first << material << "\n";
+				spawnItemOnGround(out.first, material, co);
+			}
+
+		emit(block_map_changed_message{});
+
+		// Finish up
+		workOrderHelper->unclaim_workshop(tag.reaction.workshop_id);
+		work.cancel_work(e);
+		return;	
 	}
 }

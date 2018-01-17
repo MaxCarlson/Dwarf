@@ -99,8 +99,7 @@ void DijkstraMapsHandler::update()
 		std::unordered_set<int> repeats;
 		std::vector<int> targets;
 
-		itemHelper.forEachItem(
-			[&targets, &repeats](const auto& e)
+		itemHelper.forEachItem( [&targets, &repeats](const auto& e)
 			{
 				if (e.hasComponent<Item>() && e.getComponent<Item>().tag == "block")
 				{
