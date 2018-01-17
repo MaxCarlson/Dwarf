@@ -111,17 +111,21 @@ skill_roll skillRoll(Stats & stats, const std::string skilltag, int difficulty)
 	return FAIL;
 }
 
-// Add is a skill level + possible an attribute level component to speed of work aide from the dice rolling?
-void doWorkTime(const double & tstep, double &progress, const int difficulty)
-{
-	progress += tstep * (1.0 / static_cast<double>(difficulty + 1) );
-}
-
 // Possible new time based def system
 void doWorkTime(Stats & stats, const std::string & skill, const double & tstep, double & progress)
 {
 	const auto sklvl = static_cast<double>(getSkillLvl(stats, skill));
 
 	progress += tstep * ( (sklvl + 1) * 0.1);
+}
+
+int doWorkDamage(Stats & stats, const std::string & skill)
+{
+	return getSkillLvl(stats, skill) + 1;
+}
+
+void giveWorkXp(Stats & stats, const std::string & skill, int difficulty)
+{
+	gainSkill(stats, skill, difficulty);
 }
 

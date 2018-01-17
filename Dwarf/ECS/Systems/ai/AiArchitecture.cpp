@@ -236,16 +236,21 @@ void AiArchitecture::doWork(Entity e, const double& duration)
 		// Yay we're in the right spot
 		if (find != designations->architecture.end())
 		{
+			auto& stats = e.getComponent<Stats>();
+
 			// If this architecture designations progress
 			// is less than 100%
 			double& progress = find->second.second;
-			if (progress < 100.0)
+			if (progress < 1000.0)
 			{
-				doWorkTime(duration, progress, DIFFICULTY_NORMAL);
+				//doWorkTime(duration, progress, DIFFICULTY_NORMAL);
+				static const std::string jobType = "construction";
+
+				doWorkTime(stats, jobType, duration, progress);
 				return;
 			}
 
-			auto skillCheck = skillRoll(e.getComponent<Stats>(), "construction", DIFFICULTY_NORMAL);
+			auto skillCheck = skillRoll(stats, "construction", DIFFICULTY_NORMAL);
 
 			if (skillCheck >= SUCCESS)
 			{

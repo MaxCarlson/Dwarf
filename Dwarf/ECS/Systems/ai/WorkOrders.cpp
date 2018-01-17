@@ -214,11 +214,9 @@ void WorkOrders::work(Entity e, const double& duration)
 
 		auto& stats = e.getComponent<Stats>();
 
-		//stats.skills.find(reaction->skill);
-
-		if (tag.progress < 100.0) // Add in skill levels affecting time taken!!
+		if (tag.progress < reaction->time) 
 		{
-			doWorkTime(duration, tag.progress, reaction->difficulty);
+			doWorkTime(stats, reaction->skill, duration, tag.progress);
 			return;
 		}
 

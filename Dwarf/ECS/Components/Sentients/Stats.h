@@ -44,18 +44,6 @@ enum skill_roll
 	EPIC_SUCCESS
 };
 
-enum QualityDef
-{
-	QUALITY_NONE,
-	AWFUL_QUALITY,
-	POOR_QUALITY,
-	NORMAL_QUALITY,
-	GOOD_QUALITY,
-	SUPERIOR_QUALITY,
-	EPIC_QUALITY,
-	LEGENDAY_QUALITY
-};
-
 constexpr int DIFFICULTY_TRIVIAL   =  0;
 constexpr int DIFFICULTY_SIMPLE    =  5;
 constexpr int DIFFICULTY_NORMAL    = 10;
@@ -67,8 +55,10 @@ constexpr int DIFFICULTY_LEGENDARY = 40;
 
 skill_roll skillRoll(Stats & stats, const std::string skilltag, int difficulty);
 
-void doWorkTime(const double & tstep, double &progress, const int difficulty);
 void doWorkTime(Stats &stats, const std::string & skill, const double &tstep, double &progress);
+int  doWorkDamage(Stats &stats, const std::string & skill);
+
+void giveWorkXp(Stats &stats, const std::string & skill, int difficulty);
 
 CEREAL_REGISTER_TYPE(Stats);
 CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, Stats);
