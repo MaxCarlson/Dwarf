@@ -289,6 +289,11 @@ void GuiSystem::printDebugTileProps()
 	if (csth)
 		tInfo += "CAN_STAND_HERE \n";
 
+	csth = region::solid(matIdx);
+
+	if (csth)
+		tInfo += "SOLID \n";
+
 	csth = flag({ xx, yy, z }, CAN_GO_NORTH);
 
 	if (csth)

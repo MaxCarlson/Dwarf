@@ -134,7 +134,7 @@ namespace region
 
 	void setSolid(const int idx)
 	{
-		currentRegion->solid[idx] = true;
+		currentRegion->solid[idx] = 1;
 	}
 
 	bool solid(const int idx)

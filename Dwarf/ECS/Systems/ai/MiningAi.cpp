@@ -191,13 +191,7 @@ void MiningAi::updateMiner(const Entity& e)
 		// and find out which type of mining we'd like to do
 		const auto idx = getIdx(co);
 
-		if (miningMap[idx] > 0) // This shouldn't be neccasary, why is it?
-		{
-			tag.step = MiningTag::GOTO_SITE;
-			return;
-		}
-
-		const int targetIdx = miningTargets[idx];
+		const auto targetIdx = miningTargets[idx];
 		const auto targetMiningType = designations->mining[targetIdx];
 
 		if (targetMiningType > 0)

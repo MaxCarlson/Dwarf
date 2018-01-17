@@ -17,7 +17,7 @@ inline void setTrunk(Coordinates co, const int treeId)
 	}
 }
 
-inline void setFoliage(Coordinates co, const int treeId)
+inline void setFoliage(Coordinates co, const int treeId) // Condense these functions
 {
 	if (co.x > 0 && co.y > 0 && co.z > 0 && co.x < MAP_WIDTH - 1 && co.y < MAP_HEIGHT - 1 && co.z < MAP_DEPTH - 2)
 	{
