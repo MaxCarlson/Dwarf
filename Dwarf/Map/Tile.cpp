@@ -417,15 +417,16 @@ namespace region
 			if (co.y < MAP_HEIGHT - 1 && co.x > 0             && tileFlags[getIdx(CO_SOUTH_W)].test(CAN_STAND_HERE)) tileFlags[idx].set(CAN_GO_SOUTH_W);
 			if (co.y < MAP_HEIGHT - 1 && co.x < MAP_WIDTH - 1 && tileFlags[getIdx(CO_SOUTH_E)].test(CAN_STAND_HERE)) tileFlags[idx].set(CAN_GO_SOUTH_E);
 
-			if (co.z < MAP_DEPTH - 1 && tileFlags[getIdx(CO_UP  )].test(CAN_STAND_HERE) 
+			if (co.z < MAP_DEPTH - 2 && tileFlags[getIdx(CO_UP  )].test(CAN_STAND_HERE) 
 				&& ( tileTypes[idx] == TileTypes::RAMP 
 				|| (tileTypes[getIdx(CO_UP)] == TileTypes::DOWN_STAIRS && ( tileTypes[idx] == TileTypes::UP_STAIRS || tileTypes[idx] == TileTypes::UP_DOWN_STAIRS)))) tileFlags[idx].set(CAN_GO_UP);
 
 
-			if (co.z > 0             && tileFlags[getIdx(CO_DOWN)].test(CAN_STAND_HERE)
-				&& ( tileTypes[getIdx(CO_DOWN)] == TileTypes::RAMP 
-				||   tileTypes[getIdx(CO_DOWN)] == TileTypes::UP_STAIRS 
-				||   tileTypes[getIdx(CO_DOWN)] == TileTypes::UP_DOWN_STAIRS)) tileFlags[idx].set(CAN_GO_DOWN);
+			if (co.z > 0 
+				&&    tileFlags[getIdx(CO_DOWN)].test(CAN_STAND_HERE)
+				&& (  tileTypes[getIdx(CO_DOWN)] == TileTypes::RAMP 
+				|| (( tileTypes[getIdx(CO_DOWN)] == TileTypes::UP_STAIRS || tileTypes[getIdx(CO_DOWN)] == TileTypes::UP_DOWN_STAIRS) 
+			    && (  tileTypes[idx] == TileTypes::DOWN_STAIRS || tileTypes[idx] == TileTypes::UP_DOWN_STAIRS)))) tileFlags[idx].set(CAN_GO_DOWN);
 		}
 	}
 

@@ -17,7 +17,7 @@ void DesignationHandler::init()
 
 void DesignationHandler::designate(const designation_message & msg) // Add in checks to make sure improper areas aren't designated
 {
-	auto co1 = idxToCo(msg.desIdx.first);							// Sepperate functions for differing types of desig checking
+	auto co1 = idxToCo(msg.desIdx.first);							
 	auto co2 = idxToCo(msg.desIdx.second); 
 	const auto type = msg.type;
 
@@ -61,14 +61,11 @@ void DesignationHandler::designateMining(const int type, const Coordinates co1, 
 		}
 
 	emit(recalculate_mining_message{});
-	emit(pick_map_changed_message{});
+	emit(pick_map_changed_message{}); // Is this needed?
 }
 
 inline int isTreeAccessible(const Coordinates co) 
 {
-	using region::getTileType;
-	using region::TileTypes;
-
 	int id = region::treeId(getIdx(co));
 
 	return id;

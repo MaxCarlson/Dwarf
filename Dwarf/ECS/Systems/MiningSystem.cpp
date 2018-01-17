@@ -59,7 +59,7 @@ void MiningSystem::makeMiningMap()
 				{
 					switch (des->second)
 					{
-					case 1: // Regular digging
+					case 0: // Regular digging
 					startingPoints.push_back(std::make_tuple(x - 1, y, z, idx));
 					startingPoints.push_back(std::make_tuple(x + 1, y, z, idx));
 					startingPoints.push_back(std::make_tuple(x, y - 1, z, idx));
@@ -67,7 +67,7 @@ void MiningSystem::makeMiningMap()
 					break;
 
 					// Everything after here will not be implemented for a while
-					case 2: // Channeling
+					case 1: // Channeling
 					startingPoints.push_back(std::make_tuple(x, y, z, idx));
 					startingPoints.push_back(std::make_tuple(x, y, z - 1, idx));
 					startingPoints.push_back(std::make_tuple(x - 1, y, z, idx));
@@ -76,7 +76,7 @@ void MiningSystem::makeMiningMap()
 					startingPoints.push_back(std::make_tuple(x, y + 1, z, idx));
 					break;
 
-					case 3: // Ramping
+					case 2: // Ramping
 					startingPoints.push_back(std::make_tuple(x, y, z, idx));
 					startingPoints.push_back(std::make_tuple(x, y, z + 1, idx));
 					startingPoints.push_back(std::make_tuple(x - 1, y, z - 1, idx));
@@ -85,7 +85,7 @@ void MiningSystem::makeMiningMap()
 					startingPoints.push_back(std::make_tuple(x, y + 1, z - 1, idx));
 					break;
 
-					case 4: // Up stairs
+					case 3: // Up stairs
 					startingPoints.push_back(std::make_tuple(x, y, z, idx));
 					startingPoints.push_back(std::make_tuple(x, y, z + 1, idx));
 					startingPoints.push_back(std::make_tuple(x - 1, y, z, idx));
@@ -94,7 +94,7 @@ void MiningSystem::makeMiningMap()
 					startingPoints.push_back(std::make_tuple(x, y + 1, z, idx));
 					break;
 
-					case 5: // Down stairs
+					case 4: // Down stairs
 					startingPoints.push_back(std::make_tuple(x, y, z, idx));
 					startingPoints.push_back(std::make_tuple(x, y, z - 1, idx));
 					startingPoints.push_back(std::make_tuple(x - 1, y, z, idx));
@@ -103,7 +103,7 @@ void MiningSystem::makeMiningMap()
 					startingPoints.push_back(std::make_tuple(x, y + 1, z, idx));
 					break;
 
-					case 6: // Up down stairs
+					case 5: // Up down stairs
 					startingPoints.push_back(std::make_tuple(x, y, z, idx));
 					startingPoints.push_back(std::make_tuple(x, y, z - 1, idx));
 					startingPoints.push_back(std::make_tuple(x, y, z + 1, idx));
@@ -125,7 +125,7 @@ void MiningSystem::makeMiningMap()
 void MiningSystem::walkMiningMap(const Coordinates co, const int distance, const int idx)
 {
 	// This is too small!!?
-	if (distance > 200)
+	if (distance > 250)
 		return;
 
 	const int newIdx = getIdx(co);
