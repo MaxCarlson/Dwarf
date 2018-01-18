@@ -26,10 +26,10 @@ namespace JobsBoard
 		// These heuristic below might need to be revised as all entities will think they're going for one item, when really they're going to be going to different ones
 
 		// Distance to item
-		const auto idist = region::get_3D_distance(co, co2); 
+		const auto idist = get_3D_distance(co, co2); 
 
 		// Total distance
-		const int distance = int( idist + region::get_3D_distance(co2, e.getWorld().getEntity(storeableItems.back().itemId).getComponent<PositionComponent>().co) );
+		const int distance = int( idist + get_3D_distance(co2, e.getWorld().getEntity(storeableItems.back().itemId).getComponent<PositionComponent>().co) );
 
 
 		// Add some other prefrences aside from distance,

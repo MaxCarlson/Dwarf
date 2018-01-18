@@ -171,7 +171,7 @@ void WorkOrders::work(Entity e, const double& duration)
 			return;
 		}
 
-		const auto dist = region::get_2D_distance(co, *pos);
+		const auto dist = get_2D_distance(co, *pos);
 		const bool zeq = co.z == pos->z;
 
 		// Tell building it has the component

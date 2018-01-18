@@ -37,7 +37,7 @@ namespace JobsBoard
 		
 		if (pos)
 		{
-			auto distance = region::get_3D_distance(co, *pos);
+			auto distance = get_3D_distance(co, *pos);
 
 			board.insert(std::make_pair(distance, jt));
 		}
@@ -183,7 +183,7 @@ void BuildAi::doBuild(const Entity & e, const double & duration)
 			return;
 		}
 
-		const auto dist = region::get_2D_distance(co, *pos);
+		const auto dist = get_2D_distance(co, *pos);
 		const bool zeq = co.z == pos->z;
 
 		// Drop component and tell building it has the component

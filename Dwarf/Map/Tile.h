@@ -165,14 +165,46 @@ namespace region
 
 // Move these to indices?
 
-	// Get a fast estimate of the distance between two
-	// 3D points
-	double get_3D_distance(Coordinates loc, Coordinates dest);
-
-	double get_2D_distance(Coordinates loc, Coordinates dest);
-
 	// Checks all bounds in a coordinate to make sure
 	// it's entirely valid
 	bool boundsCheck(Coordinates co);
 }
+
+inline double get_2D_distance(const Coordinates loc, const Coordinates dest)
+{
+	const double x = static_cast<double>(loc.x - dest.x);
+	const double y = static_cast<double>(loc.y - dest.y);
+
+	return std::sqrt((x * x) + (y * y));
+}
+
+// Get a fast estimate of the distance between two 2D points
+inline double fast_2D_distance(const Coordinates loc, const Coordinates dest)
+{
+	const double x = static_cast<double>(loc.x - dest.x);
+	const double y = static_cast<double>(loc.y - dest.y);
+
+	return (x * x) + (y * y);
+}
+
+inline double get_3D_distance(const Coordinates loc, const Coordinates dest)
+{
+	const double x = static_cast<double>(loc.x - dest.x);
+	const double y = static_cast<double>(loc.y - dest.y);
+	const double z = static_cast<double>(loc.z - dest.z);
+
+	return std::sqrt((x * x) + (y * y) + (z * z));
+}
+
+// Get a fast estimate of the distance between two 3D points
+inline double fast_3D_distance(const Coordinates loc, const Coordinates dest)
+{
+	const double x = static_cast<double>(loc.x - dest.x);
+	const double y = static_cast<double>(loc.y - dest.y);
+	const double z = static_cast<double>(loc.z - dest.z);
+
+	return (x * x) + (y * y) + (z * z);
+}
+
+
 

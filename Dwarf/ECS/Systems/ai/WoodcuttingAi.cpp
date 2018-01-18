@@ -32,7 +32,7 @@ namespace JobsBoard
 		// Find the closest tree to Entity
 		for (const auto& des : designations->woodcutting)
 		{
-			const auto d = region::get_3D_distance(co, des.second);
+			const auto d = get_3D_distance(co, des.second);
 
 			if (d < treeDist)
 				treeDist = d;		
@@ -131,7 +131,7 @@ void WoodcuttingAi::doWork(Entity & e, const double & duration)
 			// If tree isn't claimed..
 			if (find == claimedTrees.end())
 			{
-				const auto d = region::get_3D_distance(co, des.second);
+				const auto d = get_3D_distance(co, des.second);
 
 				if (d < dist)
 				{
@@ -187,7 +187,7 @@ void WoodcuttingAi::doWork(Entity & e, const double & duration)
 			return;
 
 		bool z = tag.treeCo.z == co.z;
-		auto dist = region::get_2D_distance(co, tag.treeCo);
+		auto dist = get_2D_distance(co, tag.treeCo);
 
 		// We're close enough to start chopping!!
 		if (z && dist < 2)

@@ -52,7 +52,7 @@ inline void plantDeciduous(Rng &rng, Coordinates co)
 			for (int x = co.x - radius; x < co.x + radius; ++x)
 				for (int y = co.y - radius; y < co.y + radius; ++y)
 				{
-					const auto dist = region::get_2D_distance({ x, y, 1 }, { co.x, co.y, 1 });
+					const auto dist = get_2D_distance({ x, y, 1 }, { co.x, co.y, 1 });
 
 					if (dist <= radius && (x != co.x || y != co.y))
 						setFoliage({ x, y, co.z + i }, id);
@@ -79,7 +79,7 @@ inline void plantEvergreen(Rng &rng, Coordinates co)
 			for(int x = co.x - radius; x < co.x + radius; ++x)
 				for (int y = co.y - radius; y < co.y + radius; ++y)
 				{
-					const auto dist = region::get_2D_distance({ x, y, 1 }, { co.x, co.y, 1 });
+					const auto dist = get_2D_distance({ x, y, 1 }, { co.x, co.y, 1 });
 
 					if (dist <= radius && (x != co.x || y != co.y))
 						setFoliage({ x, y, co.z + i }, id);

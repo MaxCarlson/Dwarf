@@ -330,21 +330,6 @@ namespace region
 		return 0;
 	}
 
-	double get_3D_distance(Coordinates loc, Coordinates dest)
-	{
-		double x = dest.x - loc.x;
-		double y = dest.y - loc.y;
-		double z = dest.z - loc.z;
-		return (x * x + y * y + z * z);
-	}
-
-	double get_2D_distance(Coordinates loc, Coordinates dest)
-	{
-		double x = dest.x - loc.x;
-		double y = dest.y - loc.y;
-		return (x * x + y * y);
-	}
-
 	bool boundsCheck(Coordinates co)
 	{
 		return(co.x < MAP_WIDTH && co.x >= 0 && co.y < MAP_HEIGHT && co.y >= 0 && co.z < MAP_DEPTH && co.z >= 0);
