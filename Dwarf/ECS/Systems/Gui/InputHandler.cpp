@@ -80,6 +80,13 @@ void InputHandler::update()
 		case TK_LEFT:
 			engine->mapRenderer->moveCamera(MapRender::WEST);
 			break;
+
+		case TK_SPACE:
+			if (engine->current_game_state == Engine::GameStates::PAUSED)
+				engine->current_game_state = Engine::GameStates::PLAY;
+			else
+				engine->current_game_state = Engine::GameStates::PAUSED;
+			break;
 		}
 
 		if (guiState.state == GUI_MAIN)

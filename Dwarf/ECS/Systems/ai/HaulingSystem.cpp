@@ -54,7 +54,7 @@ void HaulingSystem::update(const double duration)
 
 void HaulingSystem::doWork(Entity e)
 {
-	auto& world = getWorld();
+	static auto& world = getWorld();
 
 //	if (e.getId().index == 7)
 //		int a = 5;

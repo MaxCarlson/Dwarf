@@ -51,25 +51,25 @@ inline void findNeighbors(const Coordinates co, std::vector<Coordinates> & point
 	points.clear();
 
 	if (flag(co, CAN_GO_NORTH))
-		points.push_back(CO_NORTH);
+		points.emplace_back(CO_NORTH);
 	if (flag(co, CAN_GO_SOUTH))
-		points.push_back(CO_SOUTH);
+		points.emplace_back(CO_SOUTH);
 	if (flag(co, CAN_GO_EAST))
-		points.push_back(CO_EAST);
+		points.emplace_back(CO_EAST);
 	if (flag(co, CAN_GO_WEST))
-		points.push_back(CO_WEST);
+		points.emplace_back(CO_WEST);
 	if (flag(co, CAN_GO_NORTH_W))
-		points.push_back(CO_NORTH_W);
+		points.emplace_back(CO_NORTH_W);
 	if (flag(co, CAN_GO_NORTH_E))
-		points.push_back(CO_NORTH_E);
+		points.emplace_back(CO_NORTH_E);
 	if (flag(co, CAN_GO_SOUTH_W))
-		points.push_back(CO_SOUTH_W);
+		points.emplace_back(CO_SOUTH_W);
 	if (flag(co, CAN_GO_SOUTH_E))
-		points.push_back(CO_SOUTH_E);
+		points.emplace_back(CO_SOUTH_E);
 	if (flag(co, CAN_GO_UP))
-		points.push_back(CO_UP);
+		points.emplace_back(CO_UP);
 	if (flag(co, CAN_GO_DOWN))
-		points.push_back(CO_DOWN);
+		points.emplace_back(CO_DOWN);
 }
 
 inline double cost(const Coordinates co, const Coordinates dest)
@@ -144,7 +144,7 @@ std::vector<Coordinates> reconstructPath(Coordinates start, Coordinates end, std
 	// path and ending one tile away from start
 	while (current != start)
 	{
-		path.push_back(current);
+		path.emplace_back(current);
 		current = cameFrom[current];
 	}
 
@@ -162,7 +162,8 @@ std::unique_ptr<Path> findPath(Coordinates start, Coordinates dest)
 
 	path->failed = !aStar(start, dest, pathMap);
 
-	path->path = reconstructPath(start, dest, pathMap);
+	if(!path->failed)
+		path->path = reconstructPath(start, dest, pathMap);
 
 	return path;
 }

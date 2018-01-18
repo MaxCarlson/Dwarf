@@ -250,7 +250,7 @@ namespace region
 	{
 		currentRegion->treeHps.erase(id);
 
-		for (auto& t : currentRegion->treeIds)
+		for (auto& t : currentRegion->treeIds) // Possibly change data structre or search method if this becomes a resource drain, searching through all tiles
 			if (t == id)
 				t = 0;
 	}

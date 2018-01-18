@@ -287,11 +287,9 @@ void WoodcuttingAi::doWork(Entity & e, const double & duration)
 				spawnItemOnGround("wood_log", getMaterialIdx("wood"), tag.treeCo);
 			}
 
-
 			region::deleteTree(tag.treeId);
 
 			designations->woodcutting.erase(tag.treeId);
-
 
 			tag.step = LumberjacTag::DROP_AXE;
 			return;		
