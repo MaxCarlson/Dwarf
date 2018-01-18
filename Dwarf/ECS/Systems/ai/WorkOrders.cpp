@@ -48,7 +48,7 @@ void WorkOrders::work(Entity e, const double& duration)
 	static auto& world = getWorld();
 
 	auto& tag = e.getComponent<WorkOrderTag>();
-	auto& co = e.getComponent<PositionComponent>().co;
+	auto& co  = e.getComponent<PositionComponent>().co;
 	auto& mov = e.getComponent<MovementComponent>();
 
 	if (tag.step == WorkOrderTag::FIND_WORKSHOP)

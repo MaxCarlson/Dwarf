@@ -29,3 +29,6 @@ struct LumberjacTag : public Component
 		archive(step, current_axe, treeId, treeCo);
 	}
 };
+
+CEREAL_REGISTER_TYPE(LumberjacTag);
+CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, LumberjacTag);
