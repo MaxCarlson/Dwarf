@@ -279,8 +279,8 @@ void GuiSystem::printDebugTileProps()
 	// debug print info on tile
 	const int z = engine->mapRenderer->currentZLevel;
 
+	auto idx = getIdx({ xx, yy, z });
 	auto matIdx = region::getTileMaterial({ xx, yy, z });
-
 	auto mat = getMaterial(matIdx);
 
 	std::string tInfo = mat->name + '\n' + mat->layer + '\n';
@@ -289,7 +289,7 @@ void GuiSystem::printDebugTileProps()
 	if (csth)
 		tInfo += "CAN_STAND_HERE \n";
 
-	csth = region::solid(matIdx);
+	csth = region::solid(idx);
 
 	if (csth)
 		tInfo += "SOLID \n";

@@ -83,6 +83,7 @@ void WoodcuttingAi::doWork(Entity & e, const double & duration)
 			// On work cancel
 			work.cancel_work(e);
 			return;
+
 		}, [&tag, &e, &work, &co]
 		{
 			// On reaching tool
@@ -99,6 +100,8 @@ void WoodcuttingAi::doWork(Entity & e, const double & duration)
 			});
 
 		});
+
+		return;
 	}
 
 	else if (tag.step == LumberjacTag::FIND_TREE)
@@ -113,7 +116,7 @@ void WoodcuttingAi::doWork(Entity & e, const double & duration)
 		std::set<std::size_t> claimedTrees;
 		for (const auto & ents : getEntities())
 		{
-			if (e != ents && ents.getComponent<LumberjacTag>().treeId > 0)
+			if (e != ents && ents.hasComponent<LumberjacTag>() && ents.getComponent<LumberjacTag>().treeId > 0)
 				claimedTrees.insert(ents.getComponent<LumberjacTag>().treeId);
 		}
 

@@ -14,6 +14,7 @@ inline void setTrunk(Coordinates co, const int treeId)
 		region::setTileType(idx, TileTypes::TREE_TRUNK);
 		region::setTreeId(idx, treeId);
 		region::setSolid(idx);
+		region::resetFlag(co, region::Flag::CAN_STAND_HERE);
 	}
 }
 
@@ -26,6 +27,7 @@ inline void setFoliage(Coordinates co, const int treeId) // Condense these funct
 		region::setTileType(idx, TileTypes::TREE_LEAF);
 		region::setTreeId(idx, treeId);
 		region::setSolid(idx);
+		region::resetFlag(co, region::Flag::CAN_STAND_HERE);
 	}
 }
 
