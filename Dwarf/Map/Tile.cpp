@@ -453,7 +453,7 @@ namespace region
 			aboveGround[idx] = !ug;
 		}
 		*/
-		//tilePathing(co);
+		tilePathing(co);
 	}
 
 	void Region::tileCalcRender(Coordinates co)

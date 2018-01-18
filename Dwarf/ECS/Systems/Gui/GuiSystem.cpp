@@ -287,12 +287,12 @@ void GuiSystem::printDebugTileProps()
 	bool csth = flag({ xx, yy, z }, CAN_STAND_HERE);
 
 	if (csth)
-		tInfo += "CAN_STAND_HERE \n";
+		tInfo += "CAN_STAND_HERE " + xx + ' ' + yy + ' ' + z;
 
 	csth = region::solid(idx);
 
 	if (csth)
-		tInfo += "SOLID \n";
+		tInfo += "\n SOLID \n";
 
 	csth = flag({ xx, yy, z }, CAN_GO_NORTH);
 

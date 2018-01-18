@@ -287,6 +287,12 @@ void WoodcuttingAi::doWork(Entity & e, const double & duration)
 				spawnItemOnGround("wood_log", getMaterialIdx("wood"), tag.treeCo);
 			}
 
+			// Recalcuate paths
+			for (int x = -10; x < 10; ++x)
+				for (int y = -10; y < 10; ++y)
+					for (int z = -2; z < 12; ++z)
+						region::tile_recalc({ tag.treeCo.x + x, tag.treeCo.y + y, tag.treeCo.z + z });
+
 			region::deleteTree(tag.treeId);
 
 			designations->woodcutting.erase(tag.treeId);
