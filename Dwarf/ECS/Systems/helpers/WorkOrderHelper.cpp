@@ -12,6 +12,69 @@ std::unique_ptr<WorkOrderHelper> workOrderHelper;
 std::unordered_set<std::size_t> claimed_workshops;
 
 
+void WorkOrderHelper::update(double duration)
+{
+	for (std::pair<int, std::string> & des : designations->queuedWorkOrders)
+	{
+		// Skip any reaction that has less than one requested
+		// job remaining. All reactions < 1 will be cleared from designations
+		// after this loop
+		if (des.first < 1)
+			continue;
+
+		auto react = getReaction(des.second);
+
+		// Find a building that can proccess reaction
+		bool availible = false;
+		std::size_t workshop_id = 0;
+
+		for (const auto& e : getEntities())
+		{
+			const auto& b = e.getComponent<Building>();
+
+			// Building is correct and is complete
+			if (b.tag == react->workshop && b.complete)
+			{
+				auto isBusy = claimed_workshops.find(e.getId().index);
+
+				// Workshop is not already claimed
+				if (isBusy == claimed_workshops.end())
+				{
+					workshop_id = e.getId().index;
+					availible = true;
+					break;
+				}
+
+			}
+		}
+
+		// Eventually test to make sure Entities can actually perform job
+
+		// If availible claim components and set wo_reaction
+		if (availible)
+		{
+			for (auto & in : react->inputs)
+			{
+				const int num_avail = itemHelper.num_reaction_input_items(in);
+
+				// Not enough components availible
+				if (num_avail < in.quantity)
+					availible = false;
+			}
+
+			// Push work order to completable tasks
+			// and mark work order removal from queued reactions
+			if (availible)
+			{
+				des.first = 0;
+				designations->workOrders.emplace_back(des);
+			}
+		}
+	}
+
+	updateWorkOrders(designations->queuedWorkOrders);
+}
+
 std::unique_ptr<work_order_reaction> WorkOrderHelper::find_work_order_reaction(const WorkOrderTag & tag)
 {
 	std::unique_ptr<work_order_reaction> wo_reaction;
@@ -97,7 +160,7 @@ std::unique_ptr<work_order_reaction> WorkOrderHelper::find_work_order_reaction(c
 		}	
 	}
 
-	updateWorkOrders();
+	updateWorkOrders(designations->workOrders);
 
 	return wo_reaction;
 }
@@ -107,12 +170,12 @@ void WorkOrderHelper::unclaim_workshop(const std::size_t id)
 	claimed_workshops.erase(id);
 }
 
-void WorkOrderHelper::updateWorkOrders()
+void WorkOrderHelper::updateWorkOrders(std::vector<std::pair<int, std::string>>& des)
 {
-	designations->workOrders.erase(
-		std::remove_if(designations->workOrders.begin(), designations->workOrders.end(),
+	des.erase(
+		std::remove_if(des.begin(),des.end(),
 			[](auto num) { return num.first < 1; }
 		),
-		designations->workOrders.end()
+		des.end()
 	);
 }

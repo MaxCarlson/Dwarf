@@ -11,10 +11,11 @@
 struct Designations
 {
 	// Map of all areas designated to be mined. Bit's set for what type of mining
-	// Indexed by tiles location in tileManager's vector of tiles
+	// Indexed by tiles location 
 	std::unordered_map<int, uint8_t> mining;
 
-	// Holds all the indicies of tree's designated for chopping
+	// Holds all the Coordinates of tree's designated for chopping
+	// Indexed by tree ID
 	std::unordered_map<int, Coordinates> woodcutting;
 
 	// Buildings waiting to be built
@@ -24,9 +25,15 @@ struct Designations
 	// pair.first is architecture type, pair.second is % completion 
 	std::unordered_map<int, std::pair<uint8_t, double>> architecture;
 
+	// Work orders that cannot be completed yet due to materials, not enough workshopds, etc
+	// pair<qty, reactionName>
+	std::vector<std::pair<int, std::string>> queuedWorkOrders;
+
+	// Work orders that can be completed right now
+	// pair<qty, reactionName>
 	std::vector<std::pair<int, std::string>> workOrders;
 
-	// Map of items by destination square that are currently claimed
+	// Map of items indexed by destination square that are currently claimed
 	// and or being taken to a stockpile.
 	// size_t is the stockpile id
 	std::unordered_map<int, std::size_t> hauling;

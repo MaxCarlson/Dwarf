@@ -94,7 +94,7 @@ public:
 
 	// Update systems
 	// take inputs
-	void update(double deltaTime);
+	void update(double deltaTime, bool majorTick);
 
 
 	enum GameStates

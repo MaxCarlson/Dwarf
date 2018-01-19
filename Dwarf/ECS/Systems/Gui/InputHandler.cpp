@@ -251,7 +251,7 @@ void InputHandler::reactions(const int key)
 	{
 		const auto tag = defInfo->availibleReactions[guiState.itemSelected];
 
-		designations->workOrders.push_back(std::make_pair(1, tag));
+		designations->queuedWorkOrders.push_back(std::make_pair(1, tag));
 	}
 }
 

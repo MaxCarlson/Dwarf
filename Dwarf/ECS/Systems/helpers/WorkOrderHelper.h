@@ -11,14 +11,16 @@ class WorkOrderHelper : public System<Requires<Building>>
 public:
 	WorkOrderHelper() = default;
 
-	//void update(); ~ Non updating
+	// Updated very infrequently, only to check for new reactions
+	// that may be possible
+	void update(double duration);
 
 	std::unique_ptr<work_order_reaction> find_work_order_reaction(const WorkOrderTag & tag);
 
 	void unclaim_workshop(const std::size_t id);
 
 private:
-	void updateWorkOrders();
+	void updateWorkOrders(std::vector<std::pair<int, std::string>>& des);
 };
 
 extern std::unique_ptr<WorkOrderHelper> workOrderHelper;

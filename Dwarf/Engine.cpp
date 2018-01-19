@@ -252,6 +252,9 @@ void Engine::init()
 // Game loop
 void Engine::run()
 {
+	bool majorTick = false;
+	double majorTickCounter = 0.0;
+
 	const double MS_PER_UPDATE = 15.0;
 	double previous = double(now());
 	double lag = 0.0;
@@ -270,9 +273,14 @@ void Engine::run()
 		{
 			while (lag >= MS_PER_UPDATE) // Switch this to only update in steps and not compensate for lag? Probably should...
 			{
-				update(MS_PER_UPDATE);
+				if (majorTickCounter > 250.0)
+					majorTick = true;
+
+				update(MS_PER_UPDATE, majorTick);
 				//lag -= MS_PER_UPDATE;
+				majorTickCounter += MS_PER_UPDATE;
 				lag = 0.0; // constant steps for the moment
+				majorTick = false;
 			}
 		}
 
@@ -290,10 +298,16 @@ void Engine::run()
 	}
 }
 
-void Engine::update(double deltaTime)
+void Engine::update(double deltaTime, bool majorTick)
 {
 	// Deliver any deffered messages to systems
 	world.deliver_messages();
+
+	// Operations only done every major tick
+	if (majorTick)
+	{
+		workOrderHelper->update(deltaTime);
+	}
 
 	// Update systems
 	//movementAiSystem->update();
