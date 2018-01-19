@@ -14,65 +14,90 @@ std::unordered_set<std::size_t> claimed_workshops;
 
 void WorkOrderHelper::update(double duration)
 {
-	for (std::pair<int, std::string> & des : designations->queuedWorkOrders)
+	static std::vector<std::vector<std::pair<int, std::string>>*> designationPair = { &designations->queuedWorkOrders, &designations->workOrders };
+
+	bool nonQueued = false;
+	for (auto& dwo : designationPair)
 	{
-		// Skip any reaction that has less than one requested
-		// job remaining. All reactions < 1 will be cleared from designations
-		// after this loop
-		if (des.first < 1)
-			continue;
-
-		auto react = getReaction(des.second);
-
-		// Find a building that can proccess reaction
-		bool availible = false;
-		std::size_t workshop_id = 0;
-
-		for (const auto& e : getEntities())
+		for (std::pair<int, std::string> & des : *dwo)
 		{
-			const auto& b = e.getComponent<Building>();
+			// Skip any reaction that has less than one requested
+			// job remaining. All queued work orderes that are added to workorders
+			// will be cleared for queuedWorkOrders
+			if (des.first < 1)
+				continue;
 
-			// Building is correct and is complete
-			if (b.tag == react->workshop && b.complete)
+			auto react = getReaction(des.second);
+
+			// Find a building that can proccess reaction
+			bool availible = false;
+
+			for (const auto& e : getEntities())
 			{
-				auto isBusy = claimed_workshops.find(e.getId().index);
+				const auto& b = e.getComponent<Building>();
 
-				// Workshop is not already claimed
-				if (isBusy == claimed_workshops.end())
+				// Building is correct and is complete
+				if (b.tag == react->workshop && b.complete)
 				{
-					workshop_id = e.getId().index;
-					availible = true;
-					break;
+					auto isBusy = claimed_workshops.find(e.getId().index);
+
+					// Workshop is not already claimed
+					if (isBusy == claimed_workshops.end())
+					{
+						availible = true;
+						break;
+					}
 				}
-
-			}
-		}
-
-		// Eventually test to make sure Entities can actually perform job
-
-		// If availible claim components and set wo_reaction
-		if (availible)
-		{
-			for (auto & in : react->inputs)
-			{
-				const int num_avail = itemHelper.num_reaction_input_items(in);
-
-				// Not enough components availible
-				if (num_avail < in.quantity)
-					availible = false;
 			}
 
-			// Push work order to completable tasks
-			// and mark work order removal from queued reactions
+			// Eventually test to make sure Entities can actually perform job
+
+			// If availible claim components and set wo_reaction
 			if (availible)
 			{
-				des.first = 0;
-				designations->workOrders.emplace_back(des);
+				for (auto & in : react->inputs)
+				{
+					const int num_avail = itemHelper.num_reaction_input_items(in);
+
+					// Not enough components availible
+					if (num_avail < in.quantity)
+					{
+						availible = false;
+						break;
+					}
+				}
+
+				// If a work order is no longer completable
+				// push it back into queued work orders
+				if (!availible && nonQueued)
+				{
+					designations->queuedWorkOrders.emplace_back(des);
+					des.first = 0;
+				}
+
+				// If a queued work order is completable
+				// Push work order to completable tasks
+				// and mark work order removal from queued reactions
+				if (availible && !nonQueued)
+				{
+					designations->workOrders.emplace_back(des);
+					des.first = 0;
+				}
 			}
 		}
-	}
+		if (nonQueued)
+			updateWorkOrders(designations->workOrders);
 
-	updateWorkOrders(designations->queuedWorkOrders);
+		else
+			updateWorkOrders(designations->queuedWorkOrders);
+
+		nonQueued = true;
+	}
+}
+
+int WorkOrderHelper::claimedWorkshops()
+{
+	return claimed_workshops.size();
 }
 
 std::unique_ptr<work_order_reaction> WorkOrderHelper::find_work_order_reaction(const WorkOrderTag & tag)

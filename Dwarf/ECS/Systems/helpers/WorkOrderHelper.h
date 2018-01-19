@@ -15,6 +15,8 @@ public:
 	// that may be possible
 	void update(double duration);
 
+	int claimedWorkshops();
+
 	std::unique_ptr<work_order_reaction> find_work_order_reaction(const WorkOrderTag & tag);
 
 	void unclaim_workshop(const std::size_t id);

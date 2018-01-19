@@ -17,7 +17,7 @@ namespace JobsBoard
 {
 	void evaluate_work_order(JobBoard & board, const Entity & e, Coordinates co, JobEvaluatorBase * jt)
 	{
-		if (!designations->workOrders.empty())  // TODO: instead of looking at designations, update and look at a container that only holds completable work orders!!
+		if (!designations->workOrders.empty() && workOrderHelper->claimedWorkshops() < designations->workOrders.size()) 
 		{
 			board.insert(std::make_pair(15, jt));
 			return;
