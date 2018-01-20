@@ -53,7 +53,7 @@ constexpr int DIFFICULTY_HARD      = 25;
 constexpr int DIFFICULTY_GRUELING  = 30;
 constexpr int DIFFICULTY_LEGENDARY = 40;
 
-skill_roll skillRoll(Stats & stats, const std::string skilltag, int difficulty);
+//skill_roll skillRoll(Stats & stats, const std::string skilltag, int difficulty);
 
 void doWorkTime(Stats &stats, const std::string & skill, const double &tstep, double &progress);
 int  doWorkDamage(Stats &stats, const std::string & skill);

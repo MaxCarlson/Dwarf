@@ -21,6 +21,7 @@ int main()
 	terminal_set("U+E200: ../tools+weapons.png, size=16x16");
 	terminal_set("U+E300: ../dorenitems16x16.png, size=16x16");
 	terminal_set("U+E400: ../dwarves.png, size=16x16");
+	terminal_set("U+E900: ../shadows.png, size=16x16");
 
 	terminal_set("input.filter = [keyboard, mouse+]");
 	terminal_composition(true);

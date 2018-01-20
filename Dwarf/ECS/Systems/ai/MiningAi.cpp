@@ -91,9 +91,10 @@ void MiningAi::updateMiner(const Entity& e)
 				return;
 			});
 		});
+		return;
 	}
 
-	else if (tag.step == MiningTag::GOTO_SITE)
+	else if (tag.step == MiningTag::GOTO_SITE)								// Add a claimed mining site so that dwarves won't go for same tile. Also possibly switch to system similar to woodcutting
 	{
 		auto& mov = e.getComponent<MovementComponent>();
 

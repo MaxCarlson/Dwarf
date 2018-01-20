@@ -8,10 +8,6 @@
 
 std::unique_ptr<WorkOrderHelper> workOrderHelper;
 
-// Indexed by Entity id.index
-std::unordered_set<std::size_t> claimed_workshops;
-
-
 void WorkOrderHelper::update(double duration)
 {
 	static std::vector<std::vector<std::pair<int, std::string>>*> designationPair = { &designations->queuedWorkOrders, &designations->workOrders };
@@ -49,7 +45,6 @@ void WorkOrderHelper::update(double duration)
 					}
 				}
 			}
-
 			// Eventually test to make sure Entities can actually perform job
 
 			// If availible claim components and set wo_reaction
@@ -93,11 +88,6 @@ void WorkOrderHelper::update(double duration)
 
 		nonQueued = true;
 	}
-}
-
-int WorkOrderHelper::claimedWorkshops()
-{
-	return claimed_workshops.size();
 }
 
 std::unique_ptr<work_order_reaction> WorkOrderHelper::find_work_order_reaction(const WorkOrderTag & tag)
@@ -188,6 +178,11 @@ std::unique_ptr<work_order_reaction> WorkOrderHelper::find_work_order_reaction(c
 	updateWorkOrders(designations->workOrders);
 
 	return wo_reaction;
+}
+
+int WorkOrderHelper::claimedWorkshops()
+{
+	return claimed_workshops.size();
 }
 
 void WorkOrderHelper::unclaim_workshop(const std::size_t id)

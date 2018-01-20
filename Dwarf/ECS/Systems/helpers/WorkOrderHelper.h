@@ -22,6 +22,9 @@ public:
 	void unclaim_workshop(const std::size_t id);
 
 private:
+	// Indexed by Entity id.index
+	std::unordered_set<std::size_t> claimed_workshops;
+
 	void updateWorkOrders(std::vector<std::pair<int, std::string>>& des);
 };
 

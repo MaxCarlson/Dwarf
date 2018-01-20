@@ -195,6 +195,9 @@
     <ClCompile Include="Raws\BiomeReader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Raws\ReadPlants.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -770,6 +773,12 @@
     <ClInclude Include="ECS\Components\Quality.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Raws\Defs\PlantDef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Raws\ReadPlants.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="cereal\external\rapidxml\manual.html" />
@@ -786,6 +795,7 @@
     <None Include="Raws\LuaDefs\attributes_skills.lua" />
     <None Include="Raws\LuaDefs\biomes.lua" />
     <None Include="Raws\LuaDefs\buildings_woodworking.lua" />
+    <None Include="Raws\LuaDefs\plants.lua" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Raws\LuaDefs\index.txt" />

@@ -82,7 +82,7 @@ void gainSkill(Stats & stats, const std::string skilltag, int difficulty)
 	else
 		stats.skills[skilltag] = skill{ 1, difficulty };
 }
-
+/*
 skill_roll skillRoll(Stats & stats, const std::string skilltag, int difficulty)
 {
 	const int luck = randBound<1, 25>();  // Once we have a planet seeded rng with determinstic behavior this template will be cut
@@ -110,7 +110,7 @@ skill_roll skillRoll(Stats & stats, const std::string skilltag, int difficulty)
 		
 	return FAIL;
 }
-
+*/
 // Possible new time based def system
 void doWorkTime(Stats & stats, const std::string & skill, const double & tstep, double & progress)
 {
@@ -119,7 +119,7 @@ void doWorkTime(Stats & stats, const std::string & skill, const double & tstep, 
 	progress += tstep * ( (sklvl + 1) * 0.1);
 }
 
-int doWorkDamage(Stats & stats, const std::string & skill)
+int doWorkDamage(Stats & stats, const std::string & skill) // Convert damage types for tiles et al into doubles? So work speed doesnt * 25 by max lvl
 {
 	return getSkillLvl(stats, skill) + 1;
 }

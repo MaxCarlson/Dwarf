@@ -15,11 +15,24 @@ glyphs = {
 	barrel = 111,
 	tools2 = 123,
 
+	gears = 128,
+
 	stone1 = 131,
 	stone2 = 132,
 	stone3 = 133,
 	stone4 = 134,
 
+	flyam_mush = 129,
+	root_veg = 130,
+	sprout = 147,
+	pawm_tree = 226,
+	tree_sprout = 223,
+	flower = 244,
+
+
+	grass1 = 130,
+	grass2 = 147,
+	grass3 = 244,
 	
 	coal_stone = 136,
 	flux_stone = 137,
@@ -31,9 +44,7 @@ glyphs = {
 
 	sand1 = 141,
 	soil1 = 142,
-	grass1 = 130,
-	grass2 = 147,
-	grass3 = 244,
+
 
 	door = 197,
 
@@ -43,12 +54,10 @@ glyphs = {
 
 	meat = 224,
 	leather = 225,
-	pawm_tree = 226,
 	dresser = 227,
 	saw_blade = 228,
 	anvil = 229,
 	crown = 230,
-	tree_sprout = 231,
 	traction_bench = 232,
 	bed = 233,
 	statue = 234,

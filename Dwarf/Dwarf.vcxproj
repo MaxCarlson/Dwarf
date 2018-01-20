@@ -212,6 +212,7 @@
     <ClCompile Include="ECS\Systems\helpers\WorkOrderHelper.cpp" />
     <ClCompile Include="ECS\Systems\ai\StockpileSystem.cpp" />
     <ClCompile Include="Helpers\Rng.cpp" />
+    <ClCompile Include="Raws\ReadPlants.cpp" />
     <ClCompile Include="RunSystems.cpp" />
     <ClCompile Include="Raws\SkillReader.cpp" />
     <ClCompile Include="ECS\Components\Sentients\Stats.cpp" />
@@ -361,6 +362,7 @@
     <ClInclude Include="ECS\Systems\ai\EquipHandler.h" />
     <ClInclude Include="Helpers\FastNoise.h" />
     <ClInclude Include="Map\building\region\place_creatures.h" />
+    <ClInclude Include="Raws\Defs\PlantDef.h" />
     <ClInclude Include="Raws\Materials.h" />
     <ClInclude Include="Raws\Defs\MaterialDef.h" />
     <ClInclude Include="Raws\FileReader.h" />
@@ -414,6 +416,7 @@
     <ClInclude Include="ECS\Systems\helpers\WorkOrderHelper.h" />
     <ClInclude Include="ECS\Systems\ai\StockpileSystem.h" />
     <ClInclude Include="Helpers\Rng.h" />
+    <ClInclude Include="Raws\ReadPlants.h" />
     <ClInclude Include="RunSystems.h" />
     <ClInclude Include="Raws\SkillReader.h" />
     <ClInclude Include="ECS\Components\Sentients\Stats.h" />
@@ -433,6 +436,7 @@
     <None Include="Raws\LuaDefs\items_raw.lua" />
     <None Include="Raws\LuaDefs\items_tools.lua" />
     <None Include="Raws\LuaDefs\materials.lua" />
+    <None Include="Raws\LuaDefs\plants.lua" />
     <None Include="Raws\LuaDefs\render.lua" />
     <None Include="Raws\LuaDefs\stockpiles.lua" />
   </ItemGroup>
