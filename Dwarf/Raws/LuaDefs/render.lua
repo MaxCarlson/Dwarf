@@ -22,6 +22,9 @@ glyphs = {
 	stone3 = 133,
 	stone4 = 134,
 
+	berry_bush = 18,
+	bush2 = 34,
+	grass = 39,
 	flyam_mush = 129,
 	root_veg = 130,
 	sprout = 147,
