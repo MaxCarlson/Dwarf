@@ -11,6 +11,7 @@
 #include "Defs\ItemDefs.h"
 #include "Buildings.h"
 #include "ReadReactions.h"
+#include "ReadPlants.h"
 #include "SkillReader.h"
 
 
@@ -22,6 +23,7 @@ void sanityChecks()
 	sanityCheckMaterials();
 	sanityCheckBuildings();
 	sanityCheckReactions();
+	sanityCheckPlants();
 }
 
 void loadGameTables()
@@ -32,6 +34,7 @@ void loadGameTables()
 	readInMaterials();
 	readInBuildings();
 	readInReactions();
+	readInPlants();
 }
 
 void loadRaws()

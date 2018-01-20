@@ -10,7 +10,9 @@ struct PlantDef
 	std::string name = "";
 	std::string tag = "";
 
-	std::vector<vchar> lifecycle;
+	std::vector<vchar> chars;
+	std::vector<int> lifecycle;
 
+	std::vector<std::string> harvestsTo;
 	std::bitset<2> tags;
 };

@@ -3,7 +3,7 @@
 
 struct PlantDef;
 
-PlantDef * getPlantIdx(const std::string& tag) noexcept;
+size_t getPlantIdx(const std::string& tag) noexcept;
 
 PlantDef * getPlantDef(const size_t idx) noexcept;
 

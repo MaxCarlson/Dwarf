@@ -53,6 +53,9 @@ void readLuaTable(const std::string & table, const std::function<void(std::strin
 	lua_getglobal(luaState, table.c_str());
 	lua_pushnil(luaState);
 
+	if (table == "vegetation")
+		int aa = 5;
+
 	while (lua_next(luaState, -2) != 0)
 	{
 		const std::string key = lua_tostring(luaState, -2);
