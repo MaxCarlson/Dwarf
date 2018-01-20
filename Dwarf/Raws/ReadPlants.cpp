@@ -63,8 +63,6 @@ void readInPlants() noexcept
 			}},
 		}
 	);
-
-	int a = 5;
 }
 
 void sanityCheckPlants() noexcept

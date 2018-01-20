@@ -23,7 +23,7 @@ glyphs = {
 	stone4 = 134,
 
 	berry_bush = 18,
-	bush2 = 34,
+	bush = 34,
 	grass = 39,
 	flyam_mush = 129,
 	root_veg = 130,
@@ -91,6 +91,11 @@ glyphs = {
 	-- Workshop items + misc 0's at 511
 	
 	w_block = 552,
+
+
+	tilled = 570,
+	tilled_stakes = 571,
+	tilled_growth = 572,
 	w_tile = 580,
 	
 	smith_top = 624,

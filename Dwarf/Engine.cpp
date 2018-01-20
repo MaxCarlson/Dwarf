@@ -12,6 +12,7 @@
 #include "ECS\Components\Building.h"
 #include "ECS\Components\ItemCarried.h"
 #include "ECS\Components\Stockpile.h"
+#include "ECS\Components\Calender.h"
 
 // Component Tags
 #include "ECS\Components\Tags\MiningTag.h"
@@ -60,6 +61,8 @@
 #include "Map\building\regionBuilder.h"
 #include "Helpers\Rng.h"
 
+// globals
+#include "Globals\global_calender.h"
 
 #include <chrono>
 #include <cereal.hpp>
@@ -87,6 +90,7 @@ void Engine::newGame(int screenWidth, int screenHeight)
 	buildRegion({ screenWidth, screenHeight, MAX_ZLVL }, rng);
 
 	// Init misc maps and designations
+	calender = std::make_unique<Calender>(); // Eventually give an input date based on world generation
 	designations = std::make_unique<Designations>();
 	defInfo = std::make_unique<DefInfo>();
 
@@ -111,10 +115,12 @@ void Engine::loadGame(std::string filePath)
 	world.load(iarchive);
 
 	// Init misc maps and designations
+	calender = std::make_unique<Calender>();
 	mapRenderer = std::make_unique<MapRender>(); // ~~~~ Get rid of this and combine render systems
 	defInfo = std::make_unique<DefInfo>();
 
 	// Misc archives, move somewhere else
+	iarchive(calender);
 	iarchive(designations);
 	iarchive(defInfo);
 
@@ -136,6 +142,7 @@ void Engine::saveGame(std::string filePath)
 	world.save(archive);
 
 	// Misc archives, move somewhere else
+	archive(calender);
 	archive(designations);
 	archive(defInfo);
 
@@ -149,7 +156,7 @@ void Engine::regComponents()
 	world.registerComponent<MovementComponent>();
 	world.registerComponent<RenderComponent>();
 	world.registerComponent<LaborStatsComponent>();
-	world.registerComponent<JobComponent>(); // Delte this component perma
+	world.registerComponent<JobComponent>(); // Delete this component perma
 	world.registerComponent<Stats>();
 	world.registerComponent<Inventory>();
 	world.registerComponent<ItemCarried>();
@@ -168,6 +175,9 @@ void Engine::regComponents()
 	world.registerComponent<HaulingTag>();
 	world.registerComponent<ArchitectTag>();
 	world.registerComponent<LumberjacTag>();
+
+	// Global components
+	world.registerComponent<Calender>();
 }
 
 void Engine::init()
@@ -306,6 +316,7 @@ void Engine::update(double deltaTime, bool majorTick)
 	// Operations only done every major tick
 	if (majorTick)
 	{
+		calender->nextMinute();
 		workOrderHelper->update(deltaTime);
 	}
 

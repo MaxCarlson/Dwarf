@@ -198,6 +198,12 @@
     <ClCompile Include="Raws\ReadPlants.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ECS\Components\Calender.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Globals\global_calender.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -777,6 +783,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Raws\ReadPlants.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Components\Calender.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Globals\global_calender.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
