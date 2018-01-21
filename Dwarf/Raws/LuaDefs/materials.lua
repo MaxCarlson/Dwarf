@@ -311,7 +311,7 @@ materials = {
 
 	};
 
-	-- Soils
+	-- Soils and Sands
 
 	["fertile_soil"] = {
 		name = "Fertile Soil",
@@ -324,6 +324,17 @@ materials = {
 		matType = { "soil" }	
 	};
 
+	["yellow_sand"] = {
+		name = "Yellow Sand",
+		layer = "soil",
+		description = "A fine, yellow sand.",
+		color = "yellow",
+		glyph = glyphs['sand1'],
+		floorGlyph = glyphs['floor1'],
+		health = 140,
+		matType = { "sand" }
+	};
+
 	-- Misc materials
 
 	["wood"] = {
@@ -333,32 +344,6 @@ materials = {
 		floorGlyph = glyphs["placed_floor"],
 		health = 250,
 		matType = { "synthetic" }
-	};
-
-	-- Placeholders in order to switch to new system of rendering
-
-	["grass1"] = {
-		color = "dark green",
-		glyph = glyphs['grass1'], 
-		floorGlyph = glyphs['grass1'],
-		health = 200,
-		matType = {"organic"}
-	};
-
-	["grass2"] = {
-		color = "dark green",
-		glyph = glyphs['grass2'], 
-		floorGlyph = glyphs['grass2'],
-		health = 200,
-		matType = {"organic"}
-	};
-
-	["grass3"] = {
-		color = "dark green",
-		glyph = glyphs['grass3'], 
-		floorGlyph = glyphs['grass3'], 
-		health = 200,
-		matType = {"organic"}
 	};
 }
 

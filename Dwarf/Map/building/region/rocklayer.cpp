@@ -1,21 +1,25 @@
 #include "rocklayer.h"
 #include "../../Tile.h"
+#include "Raws\Defs\PlantDef.h"
+#include "Raws\ReadPlants.h"
 #include "../Raws/Materials.h"
 #include "../Raws/Defs/MaterialDef.h"
 #include "../Helpers/FastNoise.h"
 #include "Helpers\Rng.h"
 #include <algorithm>
 
-
 using region::TileTypes;
+
+std::vector<std::size_t> soils;
+std::vector<std::size_t> sands;
 
 Strata buildStrata(std::vector<uint8_t>& heightMap, FastNoise & noise, Rng & rng)
 {
 	Strata strata;
 	strata.strata_map.resize(TOTAL_MAP_TILES);
 
-	std::vector<std::size_t> soils;
-	std::vector<std::size_t> sands;
+	soils.clear();
+	sands.clear();
 	std::vector<std::size_t> sedimintaries;
 	std::vector<std::size_t> igneous;
 	std::vector<std::size_t> metamorphics;
@@ -46,6 +50,7 @@ Strata buildStrata(std::vector<uint8_t>& heightMap, FastNoise & noise, Rng & rng
 			const float Y = (float)y*8.0F;
 			for (int x = 0; x < MAP_HEIGHT; ++x) {
 				const float X = (float)x*8.0F;
+
 				const float cell_noise = strataNoise.GetCellular(X, Y, Z);
 				const float biome_ramp = (cell_noise + 2.0F) / 4.0F;
 
@@ -70,14 +75,16 @@ Strata buildStrata(std::vector<uint8_t>& heightMap, FastNoise & noise, Rng & rng
 			std::get<2>(strata.counts[i]) /= std::get<0>(strata.counts[i]);
 			std::get<3>(strata.counts[i]) /= std::get<0>(strata.counts[i]);
 
-			auto & n = std::get<0>(strata.counts[i]);
-			auto & x = std::get<1>(strata.counts[i]);
-			auto & y = std::get<2>(strata.counts[i]);
-			auto & z = std::get<3>(strata.counts[i]);
+			//auto & n = std::get<0>(strata.counts[i]);
+			//auto & x = std::get<1>(strata.counts[i]);
+			//auto & y = std::get<2>(strata.counts[i]);
+			//auto & z = std::get<3>(strata.counts[i]);
+
+			auto&[n, x, y, z] = strata.counts[i];
 
 			const uint8_t altitude_at_center = heightMap[(y * MAP_WIDTH) + x] + MAP_DEPTH / 2;
 			
-			if (z > altitude_at_center - (1 + rng.range(1, 4))) {
+			if (z > altitude_at_center - (1 + rng.range(20, 37))) {
 				// Soil
 				int roll = rng.range(1, 100);
 				if (100) {						 // Replace once sands
@@ -133,6 +140,7 @@ void layRock(std::vector<uint8_t> heightMap, Strata & strata, Rng & rng)
 			const int cell_idx = (j * MAP_WIDTH) + i;
 			int alt = heightMap[cell_idx];
 
+
 			// Add the Rock/Ore's layer
 			while (z < std::min(alt + 12, MAP_DEPTH - 15))
 			{
@@ -165,12 +173,43 @@ void layRock(std::vector<uint8_t> heightMap, Strata & strata, Rng & rng)
 			const int idx = getIdx({ i, j, z });
 			region::makeFloor(idx);
 
+			int roll = rng.range(1, 100);
+
+			if (roll > 20) // Add in biome component here. Also need to get the strata building working better with noise
+			{
+				const size_t soilIdx = rng.range(1, soils.size()) - 1;
+				region::setMaterial({ i, j, z - 1 }, soils[soilIdx]);
+				region::setMaterial({ i, j, z }, soils[soilIdx]);
+			}
+			else
+			{
+				const size_t sandIdx = rng.range(1, sands.size()) - 1;
+				region::setMaterial({ i, j, z - 1 }, sands[sandIdx]);
+				region::setMaterial({ i, j, z }, sands[sandIdx]);
+			}
 			// Set vegitation ~~ sepperate vegitation from materials
 
-			std::string tmp = "grass";
-			int rg = rng.range(1, 3);
-			tmp += rg + '0';
-			region::setMaterial({ i, j, z }, getMaterialIdx(tmp));
+			//std::string tmp = "grass";
+			//int rg = rng.range(1, 3);
+			//tmp += rg + '0';
+			//region::setMaterial({ i, j, z }, getMaterialIdx(tmp));
+
+			// Currently we're grabbing all plants. Eventually just grab them from biome
+
+			static const auto* plants = getAllPlantDefs();
+
+			if (rng.range(1, 3) > 2)
+			{
+				int rr = rng.range(1, plants->size() - 1);
+
+				auto plant = getPlantDef(rr);
+				auto plantIdx = getPlantIdx(plant->tag);
+
+				region::setPlantType(idx, plantIdx);
+				region::setPlantHealth(idx, 10);
+				region::setPlantTicker(idx, 1);
+				region::setPlantLifecycle(idx, rng.range(1, 4) - 1);
+			}
 
 			++z;
 

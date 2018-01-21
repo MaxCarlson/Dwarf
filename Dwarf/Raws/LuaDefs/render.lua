@@ -93,9 +93,9 @@ glyphs = {
 	w_block = 552,
 
 
-	tilled = 570,
-	tilled_stakes = 571,
-	tilled_growth = 572,
+	tilled = 571,
+	tilled_stakes = 572,
+	tilled_growth = 573,
 	w_tile = 580,
 	
 	smith_top = 624,

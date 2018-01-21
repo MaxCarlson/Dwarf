@@ -1,6 +1,6 @@
 
 grass_lifecycle = { 10, 28, 90, 90, 3 };
-fast_lifecycle  = { 10, 28, 60, 60, 3 };
+fast_lifecycle  = { 10, 28, 60, 60, 3 }; ----------------------------- Add in a grown by  dwarves glyph set to sepperate out tilled soil glyphs
 slow_lifecycle  = { 28, 40, 90, 90, 0 };
 
 function build_plants(name, cycles, glyphs, harvest, tags) return { name = name, cycles = cycles, glyphs = glyphs, harvest = harvest, tags = tags; } end

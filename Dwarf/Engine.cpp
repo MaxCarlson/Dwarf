@@ -55,6 +55,7 @@
 
 // System time based
 #include "ECS\Systems\timebased\CalenderSystem.h"
+#include "ECS\Systems\timebased\PlantSystem.h"
 
 #include "Coordinates.h"
 #include "Designations.h"
@@ -221,6 +222,7 @@ void Engine::init()
 	dijkstraHandler = new DijkstraMapsHandler();
 	entityPositionCache = new EntityPositionCache();
 	equipHandler = new EquipHandler();
+	plantSystem = new PlantSystem();
 
 
 	// Introduce systems to the world ~~ These Systems no longer need to be pointers?
@@ -244,6 +246,7 @@ void Engine::init()
 	world.addSystem(*aiArchitecture);
 	world.addSystem(*woodcuttingAi);
 	world.addSystem(*calenderSystem);
+	world.addSystem(*plantSystem);
 
 	// Init systems 
 	miningSystem->init();
@@ -350,6 +353,7 @@ void Engine::update(double deltaTime, bool majorTick)
 
 	stockpileSystem->update(); 
 	haulingSystem->update(deltaTime);
+	plantSystem->update(deltaTime);
 
 	// Update all traits in entities that were killed, deactivated,
 	// or activated (when a component changes)

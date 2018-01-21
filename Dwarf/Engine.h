@@ -27,6 +27,7 @@ class GuiSystem;
 class AiArchitecture;
 class WoodcuttingAi;
 class CalenderSystem;
+class PlantSystem;
 
 class Engine
 {
@@ -72,6 +73,7 @@ public:
 	MiningSystem * miningSystem;
 	DijkstraMapsHandler * dijkstraHandler;
 	EntityPositionCache * entityPositionCache;
+	PlantSystem * plantSystem;
 
 	// Vector of dwarven Entities
 	// for fast lookup anywhere in program

@@ -10,7 +10,7 @@
 #include "Helpers\Rng.h"
 
 
-const int noiseSize = 166; //def 88
+const int NOISE_SIZE = 166; // 166
 const int R_SMOOTHNESS = 37; // Smoothness
 constexpr unsigned int octaves = 7;
 constexpr float persistence = 0.5F;
@@ -20,12 +20,12 @@ constexpr float frequency = 2.0F;
 double noiseXY(int regionX, int regionXS)
 {
 	const double x = regionX * R_SMOOTHNESS + regionXS;
-	return x / (MAP_WIDTH * R_SMOOTHNESS) * noiseSize;
+	return (x / (MAP_WIDTH * R_SMOOTHNESS)) * NOISE_SIZE;
 }
 
 inline uint8_t noiseToHeight(const double n)
 {
-	return static_cast<uint8_t>((n + 1.0f) * 103);
+	return static_cast<uint8_t>((n + 1.0f) * 123);
 }
 
 void buildHeightMap(FastNoise & noise, std::vector<uint8_t>& heightMap)
@@ -34,8 +34,8 @@ void buildHeightMap(FastNoise & noise, std::vector<uint8_t>& heightMap)
 	for(int x = 0; x < MAP_WIDTH; ++x)
 		for (int y = 0; y < MAP_HEIGHT; ++y)
 		{
-			const double nx = noiseXY(MAP_WIDTH, x);
-			const double ny = noiseXY(MAP_HEIGHT, y);
+			const double nx = noiseXY(MAP_WIDTH  / 2, x);
+			const double ny = noiseXY(MAP_HEIGHT / 2, y);
 			const double nz = noise.GetNoise(nx, ny);
 
 			auto alt = noiseToHeight(nz);

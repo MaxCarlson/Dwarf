@@ -538,8 +538,8 @@ namespace region
 	{
 		const int idx = getIdx(co);
 		int ch = 0;
-		std::string fg = "black";
-		std::string bg = "black";
+		uint32_t fg = color_from_name("black");
+		uint32_t bg = color_from_name("black");
 
 		switch (tileTypes[idx])
 		{
@@ -549,7 +549,7 @@ namespace region
 		case TileTypes::SOLID:
 		{
 			const auto& mat = getMaterial(materials[idx]); // Switch rendering to use vchars!!! Add debugging tools in here if need be
-			fg = mat->color;
+			fg = color_from_name(mat->color.c_str());
 			ch = mat->charCode;
 		}
 			break;
@@ -557,7 +557,7 @@ namespace region
 		case TileTypes::FLOOR:
 		{
 			const auto& mat = getMaterial(materials[idx]); // Switch rendering to use vchars!!! Add debugging tools in here if need be
-			fg = mat->color;
+			fg = color_from_name(mat->color.c_str());
 			ch = mat->floorCode;
 
 			if (plantType[idx] > 0)
@@ -566,7 +566,7 @@ namespace region
 				const auto lifecycle = plantLifeCycle[idx];
 
 				ch = plant->chars[lifecycle].c;
-				fg = plant->chars[lifecycle].fg;
+				fg = plant->chars[lifecycle].fg; 
 			}
 		}
 			break;
@@ -575,30 +575,30 @@ namespace region
 		{
 			const auto& mat = getMaterial(materials[idx]);
 			ch = 205;
-			fg = mat->color;
+			fg = color_from_name(mat->color.c_str());
 		}
 			break;
 
 		case TileTypes::RAMP:
 		{
 			const auto& mat = getMaterial(materials[idx]); // Switch rendering to use vchars!!! Add debugging tools in here if need be
-			fg = mat->color;
+			fg = color_from_name(mat->color.c_str());
 			ch = 30;
 		}
 			break;
 
 		case TileTypes::TREE_TRUNK:
 			ch = 10;
-			fg = "brown";
+			fg = color_from_name("brown");
 			break;
 
 		case TileTypes::TREE_LEAF:
 			ch = 244;
-			fg = "green";
+			fg = color_from_name("green");
 			break;
 		}
 
-		renderCache[idx] = vchar{ ch, color_from_name(fg.c_str()), color_from_name(bg.c_str()) };
+		renderCache[idx] = vchar{ ch, fg, bg };
 	}
 	vchar Region::getRenderTile(const Coordinates co)
 	{

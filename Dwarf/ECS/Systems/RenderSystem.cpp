@@ -60,7 +60,7 @@ const RenderItem RenderSystem::getTileRender(const Coordinates co)
 	return r;
 }
 
-const RenderItem getTR(const Coordinates co)
+const vchar getTR(const Coordinates co)
 {
 	//const vchar& v = region::getRenderTile(co); // For 3D rendering once we implement lighting
 
@@ -68,16 +68,16 @@ const RenderItem getTR(const Coordinates co)
 
 	auto rendIt = renderEntities.find((terminal_state(TK_WIDTH) * co.y) + co.x);
 
-	RenderItem r;
+	vchar r;
 
 	if (rendIt != renderEntities.end())
 	{
 		const auto& rend = rendIt->second[0]; // Add cycling through glyphs every once in a while if multiple on tile
 
-		r = { rend.ch, rend.terminalCode, color_from_name(rend.colorStr.c_str()), defaultColor };
+		r = { rend.ch, color_from_name(rend.colorStr.c_str()), defaultColor };
 	}
 	else 
-		r = { v.c, 2, v.fg, v.bg };
+		r = { v.c, v.fg, v.bg };
 
 	return r;
 }
@@ -110,10 +110,9 @@ void RenderSystem::update()
 			terminal_color(rend.fg);
 			terminal_bkcolor(rend.bg);
 
-			int calcChar = rend.ch / 255;
+			int calcChar = rend.c / 255;
 
-			terminal_put(X, Y, codes[calcChar + 1] + ( rend.ch - calcChar * 256));
-			//terminal_put(X, Y, codes[rend.code] + rend.ch);
+			terminal_put(X, Y, codes[calcChar + 1] + ( rend.c - calcChar * 256));
 			++Y;
 		}
 		++X;

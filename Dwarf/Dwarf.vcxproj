@@ -154,6 +154,7 @@
   <ItemGroup>
     <ClCompile Include="ECS\Systems\timebased\CalenderSystem.cpp" />
     <ClCompile Include="ECS\Components\Calender.cpp" />
+    <ClCompile Include="ECS\Systems\ai\FarmingAi.cpp" />
     <ClCompile Include="Globals\global_calender.cpp" />
     <ClCompile Include="ECS\Systems\timebased\PlantSystem.cpp" />
     <ClCompile Include="Raws\BiomeReader.cpp" />
@@ -236,6 +237,7 @@
     <ClInclude Include="ECS\Systems\timebased\CalenderSystem.h" />
     <ClInclude Include="ECS\Components\Calender.h" />
     <ClInclude Include="ECS\Components\Quality.h" />
+    <ClInclude Include="ECS\Systems\ai\FarmingAi.h" />
     <ClInclude Include="Globals\global_calender.h" />
     <ClInclude Include="ECS\Systems\timebased\PlantSystem.h" />
     <ClInclude Include="Raws\BiomeReader.h" />

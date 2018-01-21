@@ -25,6 +25,11 @@ PlantDef * getPlantDef(const size_t idx) noexcept
 	return &plantDefs[idx];
 }
 
+std::vector<PlantDef>* getAllPlantDefs() noexcept
+{
+	return &plantDefs;
+}
+
 void readInPlants() noexcept
 {
 	vchar v;
@@ -33,7 +38,7 @@ void readInPlants() noexcept
 
 	readLuaTable("vegetation",
 		[&p, &tag](const auto &key) { tag = key; p = PlantDef{}; p.tag = tag; },
-		[&p, &tag](const auto &key) { plantDefs.emplace_back(p); },
+		[&p, &tag](const auto &key) { plantDefs.emplace_back(p); plantDefIdx[tag] = plantDefs.size() - 1; },
 		luaParser
 		{
 			{"name", [&p]() { p.name = lua_str(); }},
