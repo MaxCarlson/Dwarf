@@ -194,16 +194,16 @@ void layRock(std::vector<uint8_t> heightMap, Strata & strata, Rng & rng)
 			//tmp += rg + '0';
 			//region::setMaterial({ i, j, z }, getMaterialIdx(tmp));
 
-			// Currently we're grabbing all plants. Eventually just grab them from biome
+			
 
-			static const auto* plants = getAllPlantDefs();
+			static const auto* plants = getAllPlantDefs(); // Currently we're grabbing all plants. Eventually just grab them from biome and biome proability
 
-			if (rng.range(1, 3) > 2)
+			if (rng.range(1, 3) > 0)
 			{
-				int rr = rng.range(1, plants->size() - 1);
-
-				auto plant = getPlantDef(rr);
-				auto plantIdx = getPlantIdx(plant->tag);
+				static const std::string ss = "grass";
+				auto plantIdx = getPlantIdx(ss);
+				auto plant = getPlantDef(plantIdx);
+				
 
 				region::setPlantType(idx, plantIdx);
 				region::setPlantHealth(idx, 10);

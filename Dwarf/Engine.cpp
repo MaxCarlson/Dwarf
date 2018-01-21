@@ -333,7 +333,7 @@ void Engine::update(double deltaTime, bool majorTick)
 	}
 
 	// Update systems
-	//movementAiSystem->update();
+	miningSystem->update();
 	movementSystem->update(deltaTime);
 	dijkstraHandler->update();
 

@@ -9,8 +9,8 @@ glyphs = {
 	wood_logs = 22,
 
 	placed_floor = 43,
-	floor1 = 47,
-	floor2 = 49,
+	floor1 = 44,
+	floor2 = 46,
 
 	barrel = 111,
 	tools2 = 123,
@@ -23,6 +23,8 @@ glyphs = {
 	stone4 = 134,
 
 	berry_bush = 18,
+	mult_mush = 28,
+	one_mush = 29,
 	bush = 34,
 	grass = 39,
 	flyam_mush = 129,

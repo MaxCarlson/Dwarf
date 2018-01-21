@@ -22,8 +22,8 @@ public:
 	
 	void makeMiningMap();	
 
-	void performMining(Entity e, const int targetIdx, const uint8_t miningType);
-
 private:
+	bool mapDirty = true;
+
 	void walkMiningMap(const Coordinates co, const int distance, const int idx);
 };

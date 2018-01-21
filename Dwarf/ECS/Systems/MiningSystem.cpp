@@ -23,12 +23,7 @@ void MiningSystem::init()
 {
 	subscribe<recalculate_mining_message>([this](recalculate_mining_message &msg)
 	{
-		makeMiningMap();
-	});
-
-	subscribe<perform_mining_message>([this](perform_mining_message &msg)
-	{
-		performMining(msg.e, msg.targetIdx, msg.opperation);
+		mapDirty = true;
 	});
 
 	miningMap.resize(MAP_WIDTH * MAP_HEIGHT * MAP_DEPTH);
@@ -38,7 +33,11 @@ void MiningSystem::init()
 
 void MiningSystem::update()
 {
-	return; 
+	if (mapDirty)
+	{
+		makeMiningMap();
+		mapDirty = false;
+	}
 }
 
 void MiningSystem::makeMiningMap()
@@ -148,45 +147,4 @@ void MiningSystem::walkMiningMap(const Coordinates co, const int distance, const
 		if (flag(co,    CAN_GO_UP)) walkMiningMap({ co.x, co.y, co.z + 1 }, distance + 1, idx);
 		if (flag(co,  CAN_GO_DOWN)) walkMiningMap({ co.x, co.y, co.z - 1 }, distance + 1, idx);
 	}
-}
-
-void MiningSystem::performMining(Entity e, const int targetIdx, const uint8_t miningType) // Defunct at the moment
-{
-	if (tileHealth(targetIdx) > 0)
-	{
-
-		auto& labor = e.getComponent<LaborStatsComponent>();
-
-		auto dmg = 4 * JobSpeedMultiplier[labor.laborLevel[int(Jobs::MINER)]];
-
-		damageTile(targetIdx, static_cast<uint16_t>(dmg));
-
-		labor.skillPoints[int(Jobs::MINER)] += 2;
-
-		return;
-	}
-
-	// Need to add in code to increase level when skill points
-	// reach critical point, Possibly in just a sepperate system?
-
-	// Remove the designation and change the tile
-	designations->mining.erase(targetIdx);
-
-	// Change tile to a floor, Probably don't want to do this
-	// if tile is over open space?
-	makeFloor(targetIdx);
-
-
-	// Don't really want to spawn a stone boulder for each thing being mined do we?
-	// might have to change
-	auto matIdx = getTileMaterial(idxToCo(targetIdx));
-	auto mat = getMaterial(matIdx);
-
-	for(int i = 0; i < mat->minesToAmount; ++i)
-		spawnItemOnGround(mat->minesToTag, matIdx, idxToCo(targetIdx));
-
-	//tileRecalcAll(); // This should be a partial recalc based on tile mined!!
-	spot_recalc_paths(idxToCo(targetIdx));
-
-	makeMiningMap();
 }

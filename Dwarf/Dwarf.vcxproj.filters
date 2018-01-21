@@ -210,9 +210,6 @@
     <ClCompile Include="ECS\Systems\timebased\PlantSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ECS\Systems\ai\FarmingAi.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -804,9 +801,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ECS\Systems\timebased\PlantSystem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ECS\Systems\ai\FarmingAi.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,6 +1,6 @@
 
 grass_lifecycle = { 10, 28, 90, 90, 3 };
-fast_lifecycle  = { 10, 28, 60, 60, 3 }; ----------------------------- Add in a grown by  dwarves glyph set to sepperate out tilled soil glyphs
+fast_lifecycle  = { 10, 28, 60, 60, 3 }; ----------------------------- Add in a grown by  dwarves glyph set to sepperate out tilled soil glyphs as well as time and difficulty?
 slow_lifecycle  = { 28, 40, 90, 90, 0 };
 
 function build_plants(name, cycles, glyphs, harvest, tags) return { name = name, cycles = cycles, glyphs = glyphs, harvest = harvest, tags = tags; } end
@@ -17,13 +17,15 @@ function veg_a(a, ac, b, bc, c, cc, d, dc) return
 } end
 
 
-grass_glyphs = veg_a('grass', "brown", 'grass', "green",  'grass', "brown", 'grass',  "brown"  );
+grass_glyphs = veg_a('grass', "light grass_green", 'grass', "dark grass_green",  'grass', "grass_green", 'grass', "dead_grass" );
 
 function flower_glyphs(color) return veg_a('grass', "brown", 'sprout', "green", 'flower', color, 'sprout', "yellow" ); end
 
 function berry_bush_glyphs(color) return veg_a('sprout', "brown", 'bush', "green", 'berry_bush', color, 'bush', "yellow" ); end
 
-function vegetable_glyphs(color) return veg_a('tilled', "brown", 'tilled_stakes', "brown", 'tilled_growth', "brown", 'tilled_growth', "brown"); end
+function root_glyphs(color) return veg_a('sprout', "brown", 'flower', "brown", 'root_veg', color, 'root_veg', "brown"); end
+
+function mushroom_glyphs(color) return veg_a('grass', "brown", 'one_mush', "brown", 'mulit_mush', color, 'mulit_mush', color); end
 
 vegetation = {
 
@@ -37,5 +39,8 @@ vegetation = {
 
 
 	-- Vegetables
-	potato = build_plants("Potato", fast_lifecycle, vegetable_glyphs('none'), harvest_normal('potato'), {''}),
+	potato = build_plants("Potato", fast_lifecycle, root_glyphs('green'), harvest_normal('potato'), {''}),
+
+	-- Mushrooms
+	devil_strand = build_plants("Devil Strand", slow_lifecycle, mushroom_glyphs("dark brown"), harvest_normal('devil_strand'), {''}),
 };
