@@ -1,6 +1,8 @@
 #include "../stdafx.h"
 #include "Tile.h"
 #include "Util.h"
+#include "Raws\ReadPlants.h"
+#include "Raws\Defs\PlantDef.h"
 #include "../Raws/Materials.h"
 #include "../Raws/Defs/MaterialDef.h"
 #include "../cereal/archives/binary.hpp"
@@ -29,7 +31,12 @@ namespace region
 			tileHealth.resize(TOTAL_MAP_TILES, 1);
 			treeIds.resize(TOTAL_MAP_TILES, 0);
 			renderCache.resize(TOTAL_MAP_TILES);
-			stockpileSquares.reserve(100);
+			stockpileSquares.reserve(200);
+
+			plantType.resize(TOTAL_MAP_TILES, 0);
+			plantHealth.resize(TOTAL_MAP_TILES, 0);
+			plantTicker.resize(TOTAL_MAP_TILES, 0);
+			plantLifeCycle.resize(TOTAL_MAP_TILES, 0);
 		}
 
 		std::vector<char> solid;
@@ -52,6 +59,12 @@ namespace region
 
 		// Tree health indexed by tree id
 		std::unordered_map<int, int> treeHps;
+
+		// plant info containers
+		std::vector<size_t>   plantType;		
+		std::vector<uint8_t>  plantHealth;
+		std::vector<uint16_t> plantTicker;
+		std::vector<uint8_t>  plantLifeCycle;
 
 		int nextTreeId = 0;
 		
@@ -76,6 +89,7 @@ namespace region
 			archive(treeIds);
 			archive(treeHps);
 			archive(nextTreeId);
+			archive(plantType, plantHealth, plantTicker, plantLifeCycle);
 		}
 	};
 
@@ -255,6 +269,56 @@ namespace region
 				t = 0;
 	}
 
+	size_t plantType(const int idx)
+	{
+		return currentRegion->plantType[idx];
+	}
+
+	uint8_t plantHealth(const int idx)
+	{
+		return currentRegion->plantHealth[idx];
+	}
+
+	uint16_t plantTicker(const int idx)
+	{
+		return currentRegion->plantTicker[idx];
+	}
+
+	uint8_t plantLifeCycle(const int idx)
+	{
+		return currentRegion->plantLifeCycle[idx];
+	}
+
+	void setPlantType(const int idx, const uint8_t type)
+	{
+		currentRegion->plantType[idx] = type;
+	}
+
+	void setPlantHealth(const int idx, const uint8_t hp)
+	{
+		currentRegion->plantHealth[idx] = hp;
+	}
+
+	void setPlantTicker(const int idx, const uint16_t tick)
+	{
+		currentRegion->plantTicker[idx] = tick;
+	}
+
+	void setPlantLifecycle(const int idx, const uint8_t lc)
+	{
+		currentRegion->plantLifeCycle[idx] = lc;
+	}
+
+	void damagePlant(const int idx, const int dmg)
+	{
+		if (currentRegion->plantHealth[idx] > dmg)
+			currentRegion->plantHealth[idx] -= dmg;
+		else
+		{
+			currentRegion->plantHealth[idx] = 0; // Should we also delete plant here or not?
+		}
+	}
+
 	void spot_recalc_paths(const Coordinates co)
 	{
 		currentRegion->spot_recalc_paths(co);
@@ -277,9 +341,11 @@ namespace region
 
 	void makeWall(const int idx) // Add material idx variable
 	{
+		currentRegion->tileFlags[idx].set(Flag::CONSTRUCTION);
 		currentRegion->tileFlags[idx].reset(CAN_STAND_HERE);
 		currentRegion->solid[idx] = true;
 		currentRegion->tileTypes[idx] = TileTypes::WALL;
+		currentRegion->plantType[idx] = 0;
 	}
 
 	void makeEarth(const int idx)
@@ -287,7 +353,7 @@ namespace region
 		currentRegion->tileFlags[idx].reset(CAN_STAND_HERE);
 		currentRegion->solid[idx] = true;
 		currentRegion->tileTypes[idx] = TileTypes::SOLID; // Change to tileType Earth?
-
+		currentRegion->plantType[idx] = 0;
 
 		const Coordinates co = idxToCo(idx);
 		if (co.z < MAP_DEPTH - 1)
@@ -299,6 +365,7 @@ namespace region
 		currentRegion->tileFlags[idx].set(CAN_STAND_HERE);
 		currentRegion->solid[idx] = false;
 		currentRegion->tileTypes[idx] = TileTypes::RAMP;
+		currentRegion->plantType[idx] = 0;
 
 		const Coordinates co = idxToCo(idx);
 		setMaterial(co, getTileMaterial(idxToCo(idx)));
@@ -306,11 +373,36 @@ namespace region
 		currentRegion->tileFlags[getIdx({ co.x, co.y, co.z + 1 })].set(CAN_STAND_HERE); // Remove this eventually?
 	}
 
+	void makeUpStair(const int idx)
+	{
+		currentRegion->tileFlags[idx].set(CAN_STAND_HERE);
+		currentRegion->solid[idx] = false;
+		currentRegion->tileTypes[idx] = TileTypes::UP_STAIRS;
+		currentRegion->plantType[idx] = 0;
+	}
+
+	void makeDownStair(const int idx)
+	{
+		currentRegion->tileFlags[idx].set(CAN_STAND_HERE);
+		currentRegion->solid[idx] = false;
+		currentRegion->tileTypes[idx] = TileTypes::DOWN_STAIRS;
+		currentRegion->plantType[idx] = 0;
+	}
+
+	void makeUpDownStair(const int idx)
+	{
+		currentRegion->tileFlags[idx].set(CAN_STAND_HERE);
+		currentRegion->solid[idx] = false;
+		currentRegion->tileTypes[idx] = TileTypes::UP_DOWN_STAIRS;
+		currentRegion->plantType[idx] = 0;
+	}
+
 	void makeFloor(const int idx)
 	{
 		currentRegion->tileFlags[idx].set(CAN_STAND_HERE);
 		currentRegion->solid[idx] = false;
 		currentRegion->tileTypes[idx] = TileTypes::FLOOR;
+		currentRegion->plantType[idx] = 0;
 	}
 
 	void makeEmptySpace(const int idx)
@@ -318,6 +410,7 @@ namespace region
 		currentRegion->tileFlags[idx].reset(CAN_STAND_HERE);
 		currentRegion->solid[idx] = false;
 		currentRegion->tileTypes[idx] = TileTypes::EMPTY_SPACE;
+		currentRegion->plantType[idx] = 0;
 	}
 
 	int groundLevel(const int x, const int y)
@@ -466,6 +559,15 @@ namespace region
 			const auto& mat = getMaterial(materials[idx]); // Switch rendering to use vchars!!! Add debugging tools in here if need be
 			fg = mat->color;
 			ch = mat->floorCode;
+
+			if (plantType[idx] > 0)
+			{
+				const auto plant = getPlantDef(plantType[idx]);
+				const auto lifecycle = plantLifeCycle[idx];
+
+				ch = plant->chars[lifecycle].c;
+				fg = plant->chars[lifecycle].fg;
+			}
 		}
 			break;
 

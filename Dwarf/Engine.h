@@ -26,6 +26,7 @@ class HaulingSystem;
 class GuiSystem;
 class AiArchitecture;
 class WoodcuttingAi;
+class CalenderSystem;
 
 class Engine
 {
@@ -65,6 +66,7 @@ public:
 	WoodcuttingAi * woodcuttingAi;
 
 	// Systems that don't touch Entities
+	CalenderSystem * calenderSystem;
 	InputHandler * inputHandler;
 	DesignationHandler * designationHandler;
 	MiningSystem * miningSystem;

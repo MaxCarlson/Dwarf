@@ -204,6 +204,12 @@
     <ClCompile Include="Globals\global_calender.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ECS\Systems\timebased\CalenderSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS\Systems\timebased\PlantSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -789,6 +795,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Globals\global_calender.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Systems\timebased\CalenderSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Systems\timebased\PlantSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

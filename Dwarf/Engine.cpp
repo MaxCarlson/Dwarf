@@ -53,6 +53,9 @@
 #include "ECS\Systems\helpers\DesignationHandler.h"
 #include "ECS\Systems\helpers\WorkOrderHelper.h"
 
+// System time based
+#include "ECS\Systems\timebased\CalenderSystem.h"
+
 #include "Coordinates.h"
 #include "Designations.h"
 #include "Map/Map.h"
@@ -211,6 +214,7 @@ void Engine::init()
 	woodcuttingAi = new WoodcuttingAi();
 
 	// Non Entity or non Updating Systems
+	calenderSystem = new CalenderSystem();
 	inputHandler = new InputHandler();
 	designationHandler = new DesignationHandler();
 	miningSystem = new MiningSystem();
@@ -239,6 +243,7 @@ void Engine::init()
 	world.addSystem(*haulingSystem);
 	world.addSystem(*aiArchitecture);
 	world.addSystem(*woodcuttingAi);
+	world.addSystem(*calenderSystem);
 
 	// Init systems 
 	miningSystem->init();
@@ -265,7 +270,7 @@ void Engine::run()
 	bool majorTick = false;
 	double majorTickCounter = 0.0;
 
-	const double MS_PER_UPDATE = 15.0;
+	const double MS_PER_UPDATE = 17.0;
 	double previous = double(now());
 	double lag = 0.0;
 
@@ -284,9 +289,13 @@ void Engine::run()
 			while (lag >= MS_PER_UPDATE) // Switch this to only update in steps and not compensate for lag? Probably should...
 			{
 				if (majorTickCounter > 250.0)
+				{
 					majorTick = true;
+					majorTickCounter = 0.0;
+				}
 
 				update(MS_PER_UPDATE, majorTick);
+
 				//lag -= MS_PER_UPDATE;
 				majorTickCounter += MS_PER_UPDATE;
 				lag = 0.0; // constant steps for the moment
@@ -316,7 +325,7 @@ void Engine::update(double deltaTime, bool majorTick)
 	// Operations only done every major tick
 	if (majorTick)
 	{
-		calender->nextMinute();
+		calenderSystem->update(deltaTime);
 		workOrderHelper->update(deltaTime);
 	}
 
@@ -341,10 +350,6 @@ void Engine::update(double deltaTime, bool majorTick)
 
 	stockpileSystem->update(); 
 	haulingSystem->update(deltaTime);
-
-	// Systems that don't need updates
-	// miningSystem->update();
-	// entityPositionCache->update();
 
 	// Update all traits in entities that were killed, deactivated,
 	// or activated (when a component changes)

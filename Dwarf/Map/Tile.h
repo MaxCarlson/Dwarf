@@ -136,6 +136,26 @@ namespace region
 
 	void deleteTree(const int id);
 
+// Plant stuff
+
+	size_t plantType(const int idx);
+
+	uint8_t plantHealth(const int idx);
+
+	uint16_t plantTicker(const int idx);
+
+	uint8_t plantLifeCycle(const int idx);
+
+	void setPlantType(const int idx, const uint8_t type);
+
+	void setPlantHealth(const int idx, const uint8_t hp);
+
+	void setPlantTicker(const int idx, const uint16_t tick);
+
+	void setPlantLifecycle(const int idx, const uint8_t lc);
+
+	void damagePlant(const int idx, const int dmg);
+
 // Pathing and tile calcuating 
 
 	// Recalcuate tile pathing when only one
@@ -156,6 +176,12 @@ namespace region
 	void makeEarth(const int idx);
 
 	void makeRamp(const int idx);
+
+	void makeUpStair(const int idx);
+
+	void makeDownStair(const int idx);
+
+	void makeUpDownStair(const int idx);
 
 	void makeFloor(const int idx);
 

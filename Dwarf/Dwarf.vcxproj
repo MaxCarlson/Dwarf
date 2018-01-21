@@ -152,8 +152,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ECS\Systems\timebased\CalenderSystem.cpp" />
     <ClCompile Include="ECS\Components\Calender.cpp" />
     <ClCompile Include="Globals\global_calender.cpp" />
+    <ClCompile Include="ECS\Systems\timebased\PlantSystem.cpp" />
     <ClCompile Include="Raws\BiomeReader.cpp" />
     <ClCompile Include="ECS\Systems\ai\HaulingSystem.cpp" />
     <ClCompile Include="ECS\Systems\helpers\PathFinding.cpp" />
@@ -231,9 +233,11 @@
     <ClCompile Include="ECS\Systems\ai\WoodcuttingAi.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ECS\Systems\timebased\CalenderSystem.h" />
     <ClInclude Include="ECS\Components\Calender.h" />
     <ClInclude Include="ECS\Components\Quality.h" />
     <ClInclude Include="Globals\global_calender.h" />
+    <ClInclude Include="ECS\Systems\timebased\PlantSystem.h" />
     <ClInclude Include="Raws\BiomeReader.h" />
     <ClInclude Include="ECS\Components\helpers\skill.h" />
     <ClInclude Include="ECS\Components\helpers\work_order_reaction.h" />

@@ -3,3 +3,5 @@
 
 
 std::unique_ptr<Calender> calender;
+bool hourPassed;
+bool dayPassed;
