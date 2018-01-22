@@ -63,7 +63,7 @@ Entity spawnItemOnGround(const std::string itemTag, const std::size_t material, 
 
 	e.addComponent<PositionComponent>(co);
 
-	e.addComponent<RenderComponent>(RenderComponent{ item->charCode, item->tilesetKey, item->color });
+	e.addComponent<RenderComponent>(RenderComponent{item->ch});
 
 	e.addComponent<Item>(Item{ item->name, item->tag, item->categories, material, item->stackSize });
 

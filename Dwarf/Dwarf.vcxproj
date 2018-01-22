@@ -154,8 +154,10 @@
   <ItemGroup>
     <ClCompile Include="ECS\Systems\timebased\CalenderSystem.cpp" />
     <ClCompile Include="ECS\Components\Calender.cpp" />
+    <ClCompile Include="ECS\Systems\ai\FarmingAi.cpp" />
     <ClCompile Include="Globals\global_calender.cpp" />
     <ClCompile Include="ECS\Systems\timebased\PlantSystem.cpp" />
+    <ClCompile Include="ECS\Systems\ai\HarvestAi.cpp" />
     <ClCompile Include="Raws\BiomeReader.cpp" />
     <ClCompile Include="ECS\Systems\ai\HaulingSystem.cpp" />
     <ClCompile Include="ECS\Systems\helpers\PathFinding.cpp" />
@@ -233,11 +235,15 @@
     <ClCompile Include="ECS\Systems\ai\WoodcuttingAi.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ECS\Components\Tags\HarvestTag.h" />
+    <ClInclude Include="ECS\Components\Tags\PlantingTag.h" />
     <ClInclude Include="ECS\Systems\timebased\CalenderSystem.h" />
     <ClInclude Include="ECS\Components\Calender.h" />
     <ClInclude Include="ECS\Components\Quality.h" />
+    <ClInclude Include="ECS\Systems\ai\FarmingAi.h" />
     <ClInclude Include="Globals\global_calender.h" />
     <ClInclude Include="ECS\Systems\timebased\PlantSystem.h" />
+    <ClInclude Include="ECS\Systems\ai\HarvestAi.h" />
     <ClInclude Include="Raws\BiomeReader.h" />
     <ClInclude Include="ECS\Components\helpers\skill.h" />
     <ClInclude Include="ECS\Components\helpers\work_order_reaction.h" />
@@ -440,6 +446,7 @@
     <None Include="Raws\LuaDefs\buildings_structures.lua" />
     <None Include="Raws\LuaDefs\buildings_woodworking.lua" />
     <None Include="Raws\LuaDefs\items.lua" />
+    <None Include="Raws\LuaDefs\items_food.lua" />
     <None Include="Raws\LuaDefs\items_furniture.lua" />
     <None Include="Raws\LuaDefs\items_raw.lua" />
     <None Include="Raws\LuaDefs\items_tools.lua" />

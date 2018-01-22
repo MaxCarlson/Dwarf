@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../Component.h"
-
+#include "Drawing\vchar.h"
 #include <string>
 
 // Holds info about character to use in render
@@ -10,25 +10,14 @@ class RenderComponent : public Component
 {
 public:
 	RenderComponent() = default;
-	RenderComponent(int ch, int terminalCode, std::string colorStr)
-		: ch(ch), terminalCode(terminalCode), colorStr(colorStr) {};
+	RenderComponent(vchar ch) : ch(ch) {};
 
-	// Character code representation
-	int ch;
-
-	// Code to use to index which image
-	// we want to draw from, is used for index in render system
-	uint8_t terminalCode;
-
-	// Possibly create a color object to house some simple color opperations?
-	// Color string for BLT renderer
-	// Will convert to const char* when actually rendering
-	std::string colorStr;
+	vchar ch;
 
 	template<class Archive>
 	void serialize(Archive& archive)
 	{
-		archive(cereal::base_class<Component>(this), ch, terminalCode, colorStr);
+		archive(ch);
 	}
 };
 

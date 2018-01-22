@@ -25,7 +25,7 @@ Entity EntityFactory::createDwarf(DwarfCreationObj dwarfConstruct)
 {
 	Entity dwarf = engine->world.createEntity();
 
-	dwarf.addComponent<RenderComponent>(769, 3, "default");
+	dwarf.addComponent<RenderComponent>(vchar{ 769, color_from_name("default"), color_from_name("default") });
 	dwarf.addComponent<PositionComponent>(dwarfConstruct.co);
 	dwarf.addComponent<JobComponent>();
 

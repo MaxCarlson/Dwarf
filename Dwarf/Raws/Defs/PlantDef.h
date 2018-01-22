@@ -15,4 +15,8 @@ struct PlantDef
 
 	std::vector<std::string> harvestsTo;
 	std::bitset<2> tags;
+
+	int difficulty = 0;
+	double time = 1.0;
+	int levelRequirement = 0;
 };

@@ -6,7 +6,8 @@ items["ore"] = {
 	description = "Unprocessed ore",
 	itemType = {"component"},
 	glyph = glyphs["ore"],
-	color = "grey",  
+	foreground = "grey",
+	background = "grey",
 	stockpile = stockpiles["ore"].id
 };
 
@@ -15,7 +16,8 @@ items["wood_log"] = {
 	description = "Wood has a large number of uses",
 	itemType = {"component"},
 	glyph = glyphs["wood_logs"],
-	color = "light brown",
+	foreground = "light brown",
+	background = "grey",
 	stockpile = stockpiles["wood"].id
 };
 
@@ -24,7 +26,8 @@ items["coal"] = {
 	description = "Freshly mined coal",
 	itemType = {"component"},
 	glyph = glyphs["stone_boulder"],
-	color = "light black", 
+	foreground = "light black",
+	background = "grey",
 	stockpile = stockpiles["ore"].id
 };
 
@@ -33,7 +36,8 @@ items["charcoal"] = {
 	description = "A light weight black hydrocarbon",
 	itemType = {"component"},
 	glyph = glyphs["stone_boulder"],
-	color = "light black",
+	foreground = "light black",
+	background = "grey",
 	stockpile = stockpiles["fuel"].id
 };
 
@@ -42,7 +46,8 @@ items["stone_boulder"] = {
 	description = "A chunk of rock",
 	itemType = {"component"},
 	glyph = glyphs["stone_boulder"],
-	color = "grey", 
+	foreground = "grey",
+	background = "grey",
 	stockpile = stockpiles["stone"].id
 };
 
@@ -53,7 +58,8 @@ items["block"] = {
 	description = "This is a block",
 	itemType = {"component"},
 	glyph = glyphs["block"],
-	color = "brown",
+	foreground = "grey",
+	background = "grey",
 	stockpile = stockpiles["block"].id
 };
 
@@ -62,6 +68,7 @@ items["anvil"] = {
 	description = "Beat your metal against this",
 	itemType = { "component" },
 	glyph = glyphs["anvil"],
-	color = "silver",
+	foreground = "silver",
+	background = "grey",
 	stockpile = stockpiles["component"].id
 };

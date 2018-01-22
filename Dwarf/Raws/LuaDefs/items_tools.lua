@@ -4,8 +4,8 @@ items["pickaxe"] = {
 	description = "You can dig with this..",
 	itemType = {"diggingTool"},
 	glyph = glyphs["pickaxe"],
-	color = "grey",
-	tcode = 4,
+	foreground = "silver",
+	background = "grey",
 	stockpile = stockpiles["tool"].id
 };
 
@@ -14,7 +14,7 @@ items["hatchet"] = {
 	description = "You can hurt trees with this..",
 	itemType = {"choppingTool"},
 	glyph = glyphs["hatchet"],
-	color = "brown",
-	tcode = 4,
+	foreground = "silver",
+	background = "grey",
 	stockpile = stockpiles["tool"].id
 };

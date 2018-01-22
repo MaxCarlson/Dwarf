@@ -26,6 +26,4 @@ public:
 private:
 
 	bool renderChanged = true;
-
-	const RenderItem getTileRender(const Coordinates co);
 };

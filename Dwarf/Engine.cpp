@@ -20,6 +20,8 @@
 #include "ECS\Components\Tags\WorkOrderTag.h"
 #include "ECS\Components\Tags\HaulingTag.h"
 #include "ECS\Components\Tags\LumberjacTag.h"
+#include "ECS\Components\Tags\HarvestTag.h"
+#include "ECS\Components\Tags\PlantingTag.h"
 
 // Component Sentients
 #include "ECS\Components\Sentients\Stats.h"
@@ -179,6 +181,8 @@ void Engine::regComponents()
 	world.registerComponent<HaulingTag>();
 	world.registerComponent<ArchitectTag>();
 	world.registerComponent<LumberjacTag>();
+	world.registerComponent<HarvestTag>();
+	world.registerComponent<PlantingTag>();
 
 	// Global components
 	world.registerComponent<Calender>();

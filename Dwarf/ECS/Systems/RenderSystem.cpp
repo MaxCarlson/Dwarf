@@ -32,34 +32,6 @@ void RenderSystem::init()
 
 const static color_t defaultColor = color_from_name("black");
 
-// Not in use
-const RenderItem RenderSystem::getTileRender(const Coordinates co)
-{
-	const int idx = getIdx(co);
-
-	const vchar& v = region::renderCache(idx);
-
-	RenderItem r = { v.c, 2, v.fg, v.bg };
-
-	auto ids = positionCache->get_location(idx);
-
-	if (ids.size() > 0)
-	{
-		for (const auto& id : ids)
-		{
-			if (getWorld().getEntity(id).hasComponent<RenderComponent>())
-			{
-				const auto& rend = getWorld().getEntity(id).getComponent<RenderComponent>();
-
-				r = { rend.ch, rend.terminalCode,  color_from_name(rend.colorStr.c_str()), defaultColor };
-				break;
-			}
-		}
-	}
-
-	return r;
-}
-
 const vchar getTR(const Coordinates co)
 {
 	//const vchar& v = region::getRenderTile(co); // For 3D rendering once we implement lighting
@@ -68,18 +40,14 @@ const vchar getTR(const Coordinates co)
 
 	auto rendIt = renderEntities.find((terminal_state(TK_WIDTH) * co.y) + co.x);
 
-	vchar r;
-
 	if (rendIt != renderEntities.end())
 	{
 		const auto& rend = rendIt->second[0]; // Add cycling through glyphs every once in a while if multiple on tile
 
-		r = { rend.ch, color_from_name(rend.colorStr.c_str()), defaultColor };
+		return rend.ch;
 	}
-	else 
-		r = { v.c, v.fg, v.bg };
 
-	return r;
+	return v;
 }
 
 void RenderSystem::update()
@@ -207,7 +175,7 @@ void RenderSystem::updateRender()
 						else
 							color = "grey";
 
-						renderEntities[idx].push_back({ glyph, 2, color });
+						renderEntities[idx].push_back(vchar{ glyph, 2, color_from_name(color.c_str()) });
 						++boffsetX;
 					}
 					boffsetX = 0;
@@ -222,7 +190,7 @@ void RenderSystem::updateRender()
 			// Non building-Entity rendering
 			if (!rendered)
 			{
-				renderEntities[idx].push_back({ rend->ch, rend->terminalCode, rend->colorStr });
+				renderEntities[idx].push_back({ rend->ch });
 
 				rendered = true;
 			}

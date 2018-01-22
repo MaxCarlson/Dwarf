@@ -4,6 +4,7 @@ stockpiles.lua
 items.lua
 items_tools.lua
 items_raw.lua
+items_food.lua
 items_furniture.lua
 materials.lua
 biomes.lua

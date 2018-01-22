@@ -3,7 +3,7 @@ grass_lifecycle = { 10, 28, 90, 90, 3 };
 fast_lifecycle  = { 10, 28, 60, 60, 3 }; ----------------------------- Add in a grown by  dwarves glyph set to sepperate out tilled soil glyphs as well as time and difficulty?
 slow_lifecycle  = { 28, 40, 90, 90, 0 };
 
-function build_plants(name, cycles, glyphs, harvest, tags) return { name = name, cycles = cycles, glyphs = glyphs, harvest = harvest, tags = tags; } end
+function build_plants(name, cycles, glyphs, harvest, tags, difficulty) return { name = name, cycles = cycles, glyphs = glyphs, harvest = harvest, tags = tags, difficulty = difficulty; } end
 
 function harvest_normal(h) return {"none", "none", h, h } end
 function harvest_bush(h) return {"none", "none", h, "none" } end
@@ -16,6 +16,10 @@ function veg_a(a, ac, b, bc, c, cc, d, dc) return
 	d = { glyph = glyphs[d], col = dc }
 } end
 
+difficulty_simple = { diff = 6,  time = 2, lvl = 0 };
+difficulty_easy   = { diff = 8,  time = 4, lvl = 3 };
+difficulty_normal = { diff = 11, time = 5, lvl = 5 };
+difficulty_hard   = { diff = 14, time = 6, lvl = 8 };
 
 grass_glyphs = veg_a('grass', "light grass_green", 'grass', "dark grass_green",  'grass', "grass_green", 'grass', "dead_grass" );
 
@@ -30,17 +34,17 @@ function mushroom_glyphs(color) return veg_a('grass', "brown", 'one_mush', "brow
 vegetation = {
 
 	-- Grass and flowers
-	grass = build_plants("Grass", grass_lifecycle, grass_glyphs, harvest_normal('none'), {'spread'}),
-	tulip = build_plants("Tulip", grass_lifecycle, flower_glyphs("purple"), harvest_normal('none'), {'spread'}),
+	grass = build_plants("Grass", grass_lifecycle, grass_glyphs, harvest_normal('hay'), {'spread'}, difficulty_simple),
+	tulip = build_plants("Tulip", grass_lifecycle, flower_glyphs("purple"), harvest_normal('none'), {'spread'}, difficulty_simple),
 
 
 	-- Bush like plants
-	black_berry = build_plants("Black Berrys", slow_lifecycle, berry_bush_glyphs("purple"), harvest_bush('black_berry'), {'annual'}),
+	blackberry = build_plants("Black Berrys", slow_lifecycle, berry_bush_glyphs("purple"), harvest_bush('blackberry'), {'annual'}, difficulty_normal),
 
 
 	-- Vegetables
-	potato = build_plants("Potato", fast_lifecycle, root_glyphs('green'), harvest_normal('potato'), {''}),
+	potato = build_plants("Potato", fast_lifecycle, root_glyphs('green'), harvest_normal('potato'), {''}, difficulty_simple),
 
 	-- Mushrooms
-	devil_strand = build_plants("Devil Strand", slow_lifecycle, mushroom_glyphs("dark brown"), harvest_normal('devil_strand'), {''}),
+	devil_strand = build_plants("Devil Strand", slow_lifecycle, mushroom_glyphs("dark brown"), harvest_normal('devil_strand'), {''}, difficulty_hard),
 };

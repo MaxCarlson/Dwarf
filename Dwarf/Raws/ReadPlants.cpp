@@ -66,6 +66,14 @@ void readInPlants() noexcept
 					if (t == "annual")  p.tags.set(PLANT_ANNUAL);
 				});
 			}},
+			{"difficulty", [&p]() {
+				readLuaInnerT("difficulty", [&p](auto d)
+				{
+					if (d == "diff") p.difficulty       = lua_int();
+					if (d == "time") p.time             = lua_double();
+					if (d == "lvl")  p.levelRequirement = lua_int();
+				});
+			}},
 		}
 	);
 }
