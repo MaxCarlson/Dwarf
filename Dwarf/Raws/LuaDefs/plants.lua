@@ -31,12 +31,19 @@ function root_glyphs(color) return veg_a('sprout', "brown", 'flower', "brown", '
 
 function mushroom_glyphs(color) return veg_a('grass', "brown", 'one_mush', "brown", 'mulit_mush', color, 'mulit_mush', color); end
 
+function grain_glyphs(color) return veg_a('sprout', "grass_green", 'sprout', "light grass_green", 'sprout', color, sprout, color); end
+
 vegetation = {
 
 	-- Grass and flowers
 	grass = build_plants("Grass", grass_lifecycle, grass_glyphs, harvest_normal('none'), {'spread'}, difficulty_simple),
 	tulip = build_plants("Tulip", grass_lifecycle, flower_glyphs("purple"), harvest_normal('none'), {'spread'}, difficulty_simple),
 
+	-- Paper / Cloth
+	--reeds = build_plants("Reeds", grass_lifecycle, grass_glyphs, harvest_normal('reeds'), {''}, difficulty_easy);
+
+	--Grains
+	--barley = build_plants("Barley", grass_lifecycle, grain_glyphs("light brown"), harvest_normal('grain'), {'spread'}, difficulty_normal),
 
 	-- Bush like plants
 	blackberry = build_plants("Black Berrys", slow_lifecycle, berry_bush_glyphs("purple"), harvest_bush('blackberry'), {'annual'}, difficulty_normal),
@@ -44,6 +51,10 @@ vegetation = {
 
 	-- Vegetables
 	potato = build_plants("Potato", fast_lifecycle, root_glyphs('green'), harvest_normal('potato'), {''}, difficulty_simple),
+	spinach = build_plants("Spinach", fast_lifecycle, flower_glyphs("dark grass_green"), harvest_normal('spinach'), {''}, difficulty_normal),
+	strawberry = build_plants("Strawberry", fast_lifecycle, flower_glyphs("dark grass_green"), harvest_normal('strawberry'), {''}, difficulty_normal),
+	turnip = build_plants("Turnip", fast_lifecycle, flower_glyphs("red"), harvest_normal('turnip'), {''}, difficulty_normal);
+	soybean = build_plants("Soy Bean", fast_lifecycle, flower_glyphs("green"), harvest_normal('soy_bean'), difficulty_simple);
 
 	-- Mushrooms
 	devil_strand = build_plants("Devil Strand", slow_lifecycle, mushroom_glyphs("dark brown"), harvest_normal('devil_strand'), {''}, difficulty_hard),
