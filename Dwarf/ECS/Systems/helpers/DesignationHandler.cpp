@@ -6,6 +6,8 @@
 #include "../ECS/Messages/recalculate_mining_message.h"
 #include "../ECS/Messages/pick_map_changed_message.h"
 #include "../ECS/Messages/axemap_changed_message.h"
+#include "Raws\ReadPlants.h"
+#include "Raws\Defs\PlantDef.h"
 
 void DesignationHandler::init()
 {
@@ -43,6 +45,11 @@ void DesignationHandler::designate(const designation_message & msg) // Add in ch
 	if (msg.type == designation_message::CUT_TREES)
 	{
 		designateChopping(co1, co2);
+	}
+
+	else if (msg.type == designation_message::HARVEST)
+	{
+		designateHarvest(co1, co2);
 	}
 
 	// Handle a mining like designation
@@ -117,4 +124,24 @@ void DesignationHandler::designateChopping(const Coordinates co1, const Coordina
 			}
 		}
 	emit(axemap_changed_message{});
+}
+
+void DesignationHandler::designateHarvest(const Coordinates co1, const Coordinates co2)
+{
+	for (int x = co1.x; x <= co2.x; ++x)
+		for (int y = co1.y; y <= co2.y; ++y)
+		{
+			const int idx = getIdx({ x, y, co1.z });
+			const int t = region::plantType(idx);
+
+			if (t > 0)
+			{
+				const auto plant = getPlantDef(t);
+
+				if (plant && plant->harvestsTo[region::plantLifeCycle(idx)] != "none")
+				{
+					designations->harvest.emplace_back(std::make_pair(true, Coordinates{ x, y, co1.z }));
+				}
+			}
+		}
 }

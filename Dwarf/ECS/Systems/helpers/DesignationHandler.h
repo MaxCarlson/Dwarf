@@ -13,5 +13,6 @@ private:
 	void designate(const designation_message &msg);
 	void designateMining(const int type, const Coordinates co1, const Coordinates co2);
 	void designateChopping(const Coordinates co1, const Coordinates co2);
+	void designateHarvest(const Coordinates co1, const Coordinates co2);
 };
 

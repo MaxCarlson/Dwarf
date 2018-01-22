@@ -34,7 +34,7 @@ function mushroom_glyphs(color) return veg_a('grass', "brown", 'one_mush', "brow
 vegetation = {
 
 	-- Grass and flowers
-	grass = build_plants("Grass", grass_lifecycle, grass_glyphs, harvest_normal('hay'), {'spread'}, difficulty_simple),
+	grass = build_plants("Grass", grass_lifecycle, grass_glyphs, harvest_normal('blackberry'), {'spread'}, difficulty_simple),
 	tulip = build_plants("Tulip", grass_lifecycle, flower_glyphs("purple"), harvest_normal('none'), {'spread'}, difficulty_simple),
 
 

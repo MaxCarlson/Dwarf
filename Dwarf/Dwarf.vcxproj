@@ -237,6 +237,7 @@
   <ItemGroup>
     <ClInclude Include="ECS\Components\Tags\HarvestTag.h" />
     <ClInclude Include="ECS\Components\Tags\PlantingTag.h" />
+    <ClInclude Include="ECS\Messages\harvest_map_changed_message.h" />
     <ClInclude Include="ECS\Systems\timebased\CalenderSystem.h" />
     <ClInclude Include="ECS\Components\Calender.h" />
     <ClInclude Include="ECS\Components\Quality.h" />

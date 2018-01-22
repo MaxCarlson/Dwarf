@@ -28,6 +28,8 @@ class AiArchitecture;
 class WoodcuttingAi;
 class CalenderSystem;
 class PlantSystem;
+class HarvestAi;
+class FarmingAi;
 
 class Engine
 {
@@ -65,6 +67,8 @@ public:
 	HaulingSystem * haulingSystem;
 	AiArchitecture * aiArchitecture;
 	WoodcuttingAi * woodcuttingAi;
+	HarvestAi * harvestAi;
+	FarmingAi * farmingAi;
 
 	// Systems that don't touch Entities
 	CalenderSystem * calenderSystem;

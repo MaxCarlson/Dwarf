@@ -5,7 +5,7 @@
 static const std::vector<std::string> designateNames =
 {
 	"Mining", "Channeling", "Ramps", "Up Stairs", "Down Stairs", "Up Down Stairs",
-	"Cut Trees"
+	"Cut Trees", "Harvest"
 };
 
 struct designation_message : public base_message_t
@@ -18,7 +18,8 @@ struct designation_message : public base_message_t
 		UP_STAIRS,
 		DOWN_STAIRS,
 		UP_DOWN_STAIRS,
-		CUT_TREES
+		CUT_TREES,
+		HARVEST
 	};
 
 	designation_message() = default;

@@ -6,7 +6,6 @@ struct HarvestTag : public Component
 	enum HarvestSteps
 	{
 		FIND_HARVEST,
-		GOTO_HARVEST,
 		HARVEST
 	};
 
@@ -14,10 +13,12 @@ struct HarvestTag : public Component
 
 	int idx = 0;
 
+	double progress = 0.0;
+
 	template<class Archive>
 	void serialize(Archive &archive)
 	{
-		archive(step, plantId, idx);
+		archive(step, plantId, idx, progress);
 	}
 };
 CEREAL_REGISTER_TYPE(HarvestTag);

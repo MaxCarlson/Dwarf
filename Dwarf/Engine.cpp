@@ -49,6 +49,8 @@
 #include "ECS\Systems\ai\HaulingSystem.h"
 #include "ECS\Systems\ai\AiArchitecture.h"
 #include "ECS\Systems\ai\WoodcuttingAi.h"
+#include "ECS\Systems\ai\HarvestAi.h"
+#include "ECS\Systems\ai\FarmingAi.h"
 
 // System Helpers
 #include "ECS\Systems\helpers\ItemHelper.h"
@@ -217,6 +219,8 @@ void Engine::init()
 	haulingSystem = new HaulingSystem();
 	aiArchitecture = new AiArchitecture();
 	woodcuttingAi = new WoodcuttingAi();
+	harvestAi = new HarvestAi();
+	farmingAi = new FarmingAi();
 
 	// Non Entity or non Updating Systems
 	calenderSystem = new CalenderSystem();
@@ -251,6 +255,8 @@ void Engine::init()
 	world.addSystem(*woodcuttingAi);
 	world.addSystem(*calenderSystem);
 	world.addSystem(*plantSystem);
+	world.addSystem(*harvestAi);
+	world.addSystem(*farmingAi);
 
 	// Init systems 
 	miningSystem->init();

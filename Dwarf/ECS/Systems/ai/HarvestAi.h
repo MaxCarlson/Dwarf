@@ -1,8 +1,16 @@
 #pragma once
-class HarvestAi
+#include "../../Systems.h"
+#include "../../Components/Tags/HarvestTag.h"
+
+class HarvestAi : public System<Requires<HarvestTag>>
 {
 public:
-	HarvestAi();
-	~HarvestAi();
+	
+	void init();
+
+	void update(const double duration);
+
+private:
+	void doHarvest(const Entity& e);
 };
 

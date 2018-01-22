@@ -345,5 +345,19 @@ materials = {
 		health = 250,
 		matType = { "synthetic" }
 	};
+
+	["organic"] = {
+		name = "Organic",
+		color = "green",
+		health = 10,
+		matType = {"organic"},
+	};
+
+	["food"] = {
+		name = "Food",
+		color = "green",
+		health = 10,
+		matType = {"food"}
+	};
 }
 

@@ -33,6 +33,8 @@ struct Designations
 	// pair<qty, reactionName>
 	std::vector<std::pair<int, std::string>> workOrders;
 
+	std::vector<std::pair<bool, Coordinates>> harvest;
+
 	// Map of items indexed by destination square that are currently claimed
 	// and or being taken to a stockpile.
 	// size_t is the stockpile id
@@ -41,7 +43,7 @@ struct Designations
 	template<class Archive>
 	void serialize(Archive& archive)
 	{
-		archive(mining, buildings, architecture, workOrders, hauling);
+		archive(mining, buildings, architecture, workOrders, hauling, harvest);
 	}
 
 };
