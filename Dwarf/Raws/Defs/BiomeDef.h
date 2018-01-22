@@ -17,6 +17,12 @@ struct BiomeDef
 	// Only going to be used in world view
 	vchar glyph;
 
+	// What terrain type does this biome pop up in?
+	std::vector<int> occurs; 
+
+	//plants and their frequency
+	std::vector<std::pair<std::string, int>> plants;
+
 	int deciduosChance = 0;
 	int evergreenChance = 0;
 };
