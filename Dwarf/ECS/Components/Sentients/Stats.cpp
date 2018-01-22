@@ -116,7 +116,7 @@ void doWorkTime(Stats & stats, const std::string & skill, const double & tstep, 
 {
 	const auto sklvl = static_cast<double>(getSkillLvl(stats, skill));
 
-	progress += tstep * ( (sklvl + 1) * 0.1);
+	progress += tstep + tstep * ( (sklvl + 1) * 0.1); // Increase speed by 10% for each level
 }
 
 int doWorkDamage(Stats & stats, const std::string & skill) // Convert damage types for tiles et al into doubles? So work speed doesnt * 25 by max lvl

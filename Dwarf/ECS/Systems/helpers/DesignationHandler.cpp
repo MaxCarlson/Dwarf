@@ -6,6 +6,7 @@
 #include "../ECS/Messages/recalculate_mining_message.h"
 #include "../ECS/Messages/pick_map_changed_message.h"
 #include "../ECS/Messages/axemap_changed_message.h"
+#include "../ECS/Messages/harvest_map_changed_message.h"
 #include "Raws\ReadPlants.h"
 #include "Raws\Defs\PlantDef.h"
 
@@ -144,4 +145,5 @@ void DesignationHandler::designateHarvest(const Coordinates co1, const Coordinat
 				}
 			}
 		}
+	emit(harvest_map_changed_message{});
 }

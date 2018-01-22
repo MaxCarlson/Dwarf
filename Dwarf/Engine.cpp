@@ -271,6 +271,7 @@ void Engine::init()
 	haulingSystem->init();
 	aiArchitecture->init();
 	woodcuttingAi->init();
+	harvestAi->init();
 	
 	world.refresh();
 
@@ -360,6 +361,7 @@ void Engine::update(double deltaTime, bool majorTick)
 	woodcuttingAi->update(deltaTime);
 	buildAi->update(deltaTime);
 	aiArchitecture->update(deltaTime);
+	harvestAi->update(deltaTime);
 
 	stockpileSystem->update(); 
 	haulingSystem->update(deltaTime);

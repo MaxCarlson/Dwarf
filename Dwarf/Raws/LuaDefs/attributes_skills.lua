@@ -44,4 +44,9 @@ skills =
 		name = "Blacksmithing",
 		s_attributes = {{ attr = "Strength"}, { attr = "Endurance" }}
 	},
+
+	farming = {
+		name = "Farming",
+		s_attributes = {{ attr = "Intelligence"}, { attr = "Endurance"}}
+	},
 };

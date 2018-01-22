@@ -19,7 +19,7 @@ function veg_a(a, ac, b, bc, c, cc, d, dc) return
 difficulty_simple = { diff = 6,  ptime = 2, htime = 3, lvl = 0 };
 difficulty_easy   = { diff = 8,  ptime = 4, htime = 5, lvl = 3 };
 difficulty_normal = { diff = 11, ptime = 5, htime = 6, lvl = 5 };
-difficulty_hard   = { diff = 14, ptime = 6, htime = 8  lvl = 8 };
+difficulty_hard   = { diff = 14, ptime = 6, htime = 8, lvl = 8 };
 
 grass_glyphs = veg_a('grass', "light grass_green", 'grass', "dark grass_green",  'grass', "grass_green", 'grass', "dead_grass" );
 

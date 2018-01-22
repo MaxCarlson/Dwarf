@@ -11,6 +11,7 @@
 #include "Raws\raws.h"
 #include "Raws\Materials.h"
 #include "../../Components/Sentients/Stats.h"
+#include "../../Messages/harvest_map_changed_message.h"
 
 namespace JobsBoard
 {
@@ -108,6 +109,16 @@ void HarvestAi::doHarvest(const Entity& e, const double& duration)
 
 			region::setPlantTicker(idx, 0);
 			region::setPlantLifecycle(idx, 0);
+			emit(harvest_map_changed_message{});
+		}
+		else
+		{
+			designations->harvest.erase(std::remove_if(
+				designations->harvest.begin(),
+				designations->harvest.end(),
+				[&idx](auto d) { return idx == getIdx(d.second);
+
+			}), designations->harvest.end());
 		}
 
 		work.cancel_work(e);

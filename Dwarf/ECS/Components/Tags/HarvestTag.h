@@ -18,7 +18,7 @@ struct HarvestTag : public Component
 	template<class Archive>
 	void serialize(Archive &archive)
 	{
-		archive(step, plantId, idx, progress);
+		archive(step, idx, progress);
 	}
 };
 CEREAL_REGISTER_TYPE(HarvestTag);

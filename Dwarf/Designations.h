@@ -43,7 +43,7 @@ struct Designations
 	template<class Archive>
 	void serialize(Archive& archive)
 	{
-		archive(mining, buildings, architecture, workOrders, hauling, harvest);
+		archive(mining, buildings, architecture, workOrders, harvest, hauling);
 	}
 
 };
