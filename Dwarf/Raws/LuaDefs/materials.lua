@@ -359,5 +359,12 @@ materials = {
 		health = 10,
 		matType = {"food"}
 	};
+
+	["seed"] = {
+		name = "Seed",
+		color = "grey",
+		health = 5,
+		matType = {"organic"}
+	};
 }
 

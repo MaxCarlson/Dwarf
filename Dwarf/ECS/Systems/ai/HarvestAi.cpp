@@ -10,6 +10,7 @@
 #include "Raws\ItemRead.h"
 #include "Raws\raws.h"
 #include "Raws\Materials.h"
+#include "Raws\Defs\MaterialDef.h"
 #include "../../Components/Sentients/Stats.h"
 #include "../../Messages/harvest_map_changed_message.h"
 
@@ -102,7 +103,10 @@ void HarvestAi::doHarvest(const Entity& e, const double& duration)
 			{
 				if (find->categories.test(ITEM_FOOD)) type = "food";
 
-				auto item = spawnItemOnGround(produce, getMaterialIdx(type), co);
+				auto item = spawnItemOnGround(produce, getMaterialIdx(type), co, SpawnColor::ITEM_COLOR);  
+
+				// Spawn seeds
+				spawnItemOnGround("seed", getMaterialIdx("organic"), co, SpawnColor::CUSTOM_COLOR, getItemDef(produce)->ch.fg);
 			}
 
 			giveWorkXp(stats, skillName, plant->difficulty);

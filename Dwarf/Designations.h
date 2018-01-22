@@ -33,6 +33,10 @@ struct Designations
 	// pair<qty, reactionName>
 	std::vector<std::pair<int, std::string>> workOrders;
 
+	// Plants manually designated to be harvested
+	// +
+	// Plants that have been planted and have reached maturity
+	// will be auto added to this vector
 	std::vector<std::pair<bool, Coordinates>> harvest;
 
 	// Map of items indexed by destination square that are currently claimed

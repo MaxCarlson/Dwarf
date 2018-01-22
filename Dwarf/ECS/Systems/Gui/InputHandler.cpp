@@ -236,7 +236,7 @@ void InputHandler::createItem(const int key)
 		const auto tag = defInfo->itemTags[guiState.itemSelected];
 		const Coordinates co = { mouseX, mouseY, engine->mapRenderer->currentZLevel }; // Add material choices once needed
 
-		spawnItemOnGround(tag, 1, co);
+		spawnItemOnGround(tag, 1, co, SpawnColor::ITEM_COLOR); // Eventually use material color once we can select material
 
 		// For the moment
 		emit(update_all_maps_message{});

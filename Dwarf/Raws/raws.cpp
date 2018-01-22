@@ -3,6 +3,7 @@
 #include "ItemRead.h"
 #include "FileReader.h"
 #include "Materials.h"
+#include "Defs\MaterialDef.h"
 #include "../Coordinates.h"
 #include "../Engine.h"
 #include "../ECS/Components/PositionComponent.h"
@@ -53,7 +54,7 @@ void loadRaws()
 	sanityChecks();
 }
 
-Entity spawnItemOnGround(const std::string itemTag, const std::size_t material, const Coordinates co)
+Entity spawnItemOnGround(const std::string itemTag, const std::size_t material, const Coordinates co, SpawnColor colorType, uint32_t col)
 {
 	auto item = getItemDef(itemTag);
 
@@ -63,9 +64,20 @@ Entity spawnItemOnGround(const std::string itemTag, const std::size_t material, 
 
 	e.addComponent<PositionComponent>(co);
 
-	e.addComponent<RenderComponent>(RenderComponent{item->ch});
+	auto& rend = e.addComponent<RenderComponent>(RenderComponent{item->ch});
 
 	e.addComponent<Item>(Item{ item->name, item->tag, item->categories, material, item->stackSize });
+
+	// SpawnColor::ITEM_COLOR is default
+
+	if (colorType == SpawnColor::CUSTOM_COLOR)
+	{
+		rend.ch.fg = col;
+	}
+	else if (colorType == SpawnColor::MATERIAL_COLOR)
+	{
+		rend.ch.fg = color_from_name(mat->color.c_str()); // Switch materials over to using vchar
+	}
 
 	e.activate();
 

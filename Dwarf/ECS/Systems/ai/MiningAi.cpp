@@ -234,7 +234,7 @@ void MiningAi::updateMiner(const Entity& e)
 
 				// Spawn items in amount denoted by material type
 				for (int i = 0; i < mat->minesToAmount; ++i)
-					spawnItemOnGround(mat->minesToTag, matIdx, idxToCo(targetIdx));
+					spawnItemOnGround(mat->minesToTag, matIdx, idxToCo(targetIdx), SpawnColor::MATERIAL_COLOR);
 
 				//tileRecalcAll();
 				spot_recalc_paths(idxToCo(targetIdx));

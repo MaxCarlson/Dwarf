@@ -34,7 +34,7 @@ glyphs = {
 	pawm_tree = 226,
 	tree_sprout = 223,
 	flower = 244,
-
+	seeds = 248,
 
 	grass1 = 130,
 	grass2 = 147,

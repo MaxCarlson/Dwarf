@@ -12,4 +12,5 @@ stockpiles = {
 	bars = { name = "Bars", id = 10 },
 	fuel = { name = "Fuel", id = 11 },
 	food = { name = "Food", id = 12 },
+	seeds = { name = "Seeds", id = 13 },
 };

@@ -251,7 +251,7 @@ void WorkOrders::work(Entity e, const double& duration)
 			for (int i = 0; i < out.second; ++i)
 			{
 				std::cout << "Reaction spawning" << out.first << material << "\n";
-				spawnItemOnGround(out.first, material, co);
+				spawnItemOnGround(out.first, material, co, SpawnColor::MATERIAL_COLOR);
 			}
 
 		emit(block_map_changed_message{});

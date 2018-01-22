@@ -9,6 +9,7 @@ constexpr int COMPONENT = 0;
 constexpr int TOOL_DIGGING = 1;
 constexpr int TOOL_CHOPPING = 2;
 constexpr int ITEM_FOOD = 3;
+constexpr int ITEM_SEED = 4;
 
 
 struct StockpileDef

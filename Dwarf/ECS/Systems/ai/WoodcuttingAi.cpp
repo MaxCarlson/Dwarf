@@ -284,7 +284,7 @@ void WoodcuttingAi::doWork(Entity & e, const double & duration)
 
 			for (int i = 0; i < numLogs; ++i)
 			{
-				spawnItemOnGround("wood_log", getMaterialIdx("wood"), tag.treeCo);
+				spawnItemOnGround("wood_log", getMaterialIdx("wood"), tag.treeCo, SpawnColor::ITEM_COLOR);
 			}
 
 			// Recalcuate paths
