@@ -10,6 +10,7 @@
 #include "Raws\ItemRead.h"
 #include "Raws\raws.h"
 #include "Raws\Materials.h"
+#include "../../Components/Sentients/Stats.h"
 
 namespace JobsBoard
 {
@@ -35,10 +36,10 @@ void HarvestAi::init()
 void HarvestAi::update(const double duration)
 {
 	for (auto& e : getEntities())
-		doHarvest(e);
+		doHarvest(e, duration);
 }
 
-void HarvestAi::doHarvest(const Entity& e)
+void HarvestAi::doHarvest(const Entity& e, const double& duration)
 {
 	WorkTemplate<HarvestTag> work;
 
@@ -78,7 +79,16 @@ void HarvestAi::doHarvest(const Entity& e)
 			return;
 		}
 
-		const auto plant   = getPlantDef(region::plantType(idx));
+		static const std::string skillName = "farming";
+
+		auto& stats = e.getComponent<Stats>();
+		const auto  plant = getPlantDef(region::plantType(idx));
+
+		doWorkTime(stats, skillName, duration, tag.progress);
+
+		if (tag.progress < plant->time.second)
+			return;
+
 		const auto produce = plant->harvestsTo[region::plantLifeCycle(idx)];
 
 		if (produce != "none")
@@ -93,6 +103,14 @@ void HarvestAi::doHarvest(const Entity& e)
 
 				auto item = spawnItemOnGround(produce, getMaterialIdx(type), co);
 			}
+
+			giveWorkXp(stats, skillName, plant->difficulty);
+
+			region::setPlantTicker(idx, 0);
+			region::setPlantLifecycle(idx, 0);
 		}
+
+		work.cancel_work(e);
+		return;
 	}
 }

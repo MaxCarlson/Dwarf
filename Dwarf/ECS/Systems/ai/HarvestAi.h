@@ -11,6 +11,6 @@ public:
 	void update(const double duration);
 
 private:
-	void doHarvest(const Entity& e);
+	void doHarvest(const Entity& e, const double& duration);
 };
 

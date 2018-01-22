@@ -69,9 +69,10 @@ void readInPlants() noexcept
 			{"difficulty", [&p]() {
 				readLuaInnerT("difficulty", [&p](auto d)
 				{
-					if (d == "diff") p.difficulty       = lua_int();
-					if (d == "time") p.time             = lua_double();
-					if (d == "lvl")  p.levelRequirement = lua_int();
+					if (d == "diff")  p.difficulty       = lua_int();
+					if (d == "ptime") p.time.first       = lua_double() * 1000;
+					if (d == "htime") p.time.second      = lua_double() * 1000;
+					if (d == "lvl")   p.levelRequirement = lua_int();
 				});
 			}},
 		}
