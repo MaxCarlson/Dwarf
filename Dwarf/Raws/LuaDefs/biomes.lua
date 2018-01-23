@@ -22,7 +22,7 @@ biomes = {
 		occurs = { biome_types["plains"], biome_types["coast"], biome_types["plateau"] },
 		soils  = { soil = 85, sand = 15 },
 		rend   = { glyph = glyphs['grass'], color = "light grass_green" },
-		plants = { grass = 25 },
+		plants = { grass = 25, strawberry = 1, potato = 1, spinach = 1 },
 		trees  = { deciduous = 30, evergreen = 5 }
 	},
 
@@ -32,7 +32,7 @@ biomes = {
 		occurs = { biome_types["hills"], biome_types["mountains"], biome_types["coast"] },
 		soils  = { soil = 95, sand = 5 },
 		rend   = { glyph = glyphs['ever_tree'], color = "forest_green" },
-		plants = { grass = 20 },
+		plants = { grass = 20, blackberry = 2, plump_helmet = 3 },
 		trees  = { deciduous = 10, evergreen = 55 }
 	},
 

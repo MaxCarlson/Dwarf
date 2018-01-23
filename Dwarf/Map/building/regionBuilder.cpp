@@ -8,20 +8,8 @@
 #include "region\place_creatures.h"
 #include "region\plant_trees.h"
 #include "Helpers\Rng.h"
-
-
-const int NOISE_SIZE = 166; // 166
-const int R_SMOOTHNESS = 37; // Smoothness
-constexpr unsigned int octaves = 7;
-constexpr float persistence = 0.5F;
-constexpr float frequency = 2.0F;
-
-
-double noiseXY(int regionX, int regionXS)
-{
-	const double x = regionX * R_SMOOTHNESS + regionXS;
-	return (x / (MAP_WIDTH * R_SMOOTHNESS)) * NOISE_SIZE;
-}
+#include "NoiseHelper.h"
+#include "../World/Planet.h"
 
 inline uint8_t noiseToHeight(const double n)
 {
@@ -34,8 +22,8 @@ void buildHeightMap(FastNoise & noise, std::vector<uint8_t>& heightMap)
 	for(int x = 0; x < MAP_WIDTH; ++x)
 		for (int y = 0; y < MAP_HEIGHT; ++y)
 		{
-			const double nx = noiseXY(MAP_WIDTH  / 2, x);
-			const double ny = noiseXY(MAP_HEIGHT / 2, y);
+			const double nx = noiseX(MAP_WIDTH  / 2, x);
+			const double ny = noiseX(MAP_HEIGHT / 2, y);
 			const double nz = noise.GetNoise(nx, ny);
 
 			auto alt = noiseToHeight(nz);

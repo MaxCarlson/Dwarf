@@ -158,6 +158,9 @@
     <ClCompile Include="Globals\global_calender.cpp" />
     <ClCompile Include="ECS\Systems\timebased\PlantSystem.cpp" />
     <ClCompile Include="ECS\Systems\ai\HarvestAi.cpp" />
+    <ClCompile Include="Map\building\NoiseHelper.cpp" />
+    <ClCompile Include="Map\building\PlanetBuilding.cpp" />
+    <ClCompile Include="Map\building\PlanetMapBuilder.cpp" />
     <ClCompile Include="Raws\BiomeReader.cpp" />
     <ClCompile Include="ECS\Systems\ai\HaulingSystem.cpp" />
     <ClCompile Include="ECS\Systems\helpers\PathFinding.cpp" />
@@ -245,6 +248,9 @@
     <ClInclude Include="Globals\global_calender.h" />
     <ClInclude Include="ECS\Systems\timebased\PlantSystem.h" />
     <ClInclude Include="ECS\Systems\ai\HarvestAi.h" />
+    <ClInclude Include="Map\building\NoiseHelper.h" />
+    <ClInclude Include="Map\building\PlanetBuilding.h" />
+    <ClInclude Include="Map\building\PlanetMapBuilder.h" />
     <ClInclude Include="Raws\BiomeReader.h" />
     <ClInclude Include="ECS\Components\helpers\skill.h" />
     <ClInclude Include="ECS\Components\helpers\work_order_reaction.h" />
