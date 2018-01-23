@@ -14,6 +14,7 @@
 #include "ReadReactions.h"
 #include "ReadPlants.h"
 #include "SkillReader.h"
+#include "BiomeReader.h"
 
 
 void sanityChecks()
@@ -25,6 +26,7 @@ void sanityChecks()
 	sanityCheckBuildings();
 	sanityCheckReactions();
 	sanityCheckPlants();
+	sanityCheckBiomes();
 }
 
 void loadGameTables()
@@ -36,6 +38,7 @@ void loadGameTables()
 	readInBuildings();
 	readInReactions();
 	readInPlants();
+	readInBiomes();
 }
 
 void loadRaws()

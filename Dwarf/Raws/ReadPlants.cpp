@@ -30,6 +30,26 @@ std::vector<PlantDef>* getAllPlantDefs() noexcept
 	return &plantDefs;
 }
 
+void readP(const std::string table, const std::function<void(std::string)>& functor)
+{
+	lua_pushstring(luaState, table.c_str());
+	lua_gettable(luaState, -2);
+
+	while (lua_next(luaState, -2))
+	{
+
+		const std::string s = lua_tostring(luaState, -2);
+		functor(s);
+
+		//lua_pushnil(luaState);
+		//lua_gettable(luaState, -2);
+
+		lua_pop(luaState, 1);
+	}
+
+	//lua_pop(luaState, 1);
+}
+
 void readInPlants() noexcept
 {
 	vchar v;
@@ -62,21 +82,22 @@ void readInPlants() noexcept
 			{"tags", [&p]() {
 				readLuaInnerT("tags", [&p](auto t)
 				{
-					if (t == "spread") p.tags.set(PLANT_SPREADS);
+					if (t == "spread")  p.tags.set(PLANT_SPREADS);
 					if (t == "annual")  p.tags.set(PLANT_ANNUAL);
 				});
 			}},
-			{"difficulty", [&p]() {
-				readLuaInnerT("difficulty", [&p](auto d)
+			{ "difficulty", [&p]() {
+				readP("difficulty", [&p](auto d)
 				{
-					if (d == "diff")  p.difficulty       = lua_int();
-					if (d == "ptime") p.time.first       = lua_double() * 1000;
-					if (d == "htime") p.time.second      = lua_double() * 1000;
+					if (d == "diff")  p.difficulty = lua_int();
+					if (d == "ptime") p.time.first = lua_double() * 1000; // Major issues getting these read?
+					if (d == "htime") p.time.second = lua_double() * 1000;
 					if (d == "lvl")   p.levelRequirement = lua_int();
 				});
 			}},
 		}
 	);
+	int a = 5;
 }
 
 void sanityCheckPlants() noexcept
