@@ -53,8 +53,8 @@ vegetation = {
 	potato = build_plants("Potato", fast_lifecycle, root_glyphs('green'), harvest_normal('potato'), {''}, difficulty_simple),
 	spinach = build_plants("Spinach", fast_lifecycle, flower_glyphs("dark grass_green"), harvest_normal('spinach'), {''}, difficulty_normal),
 	strawberry = build_plants("Strawberry", fast_lifecycle, flower_glyphs("dark grass_green"), harvest_normal('strawberry'), {''}, difficulty_normal),
-	turnip = build_plants("Turnip", fast_lifecycle, flower_glyphs("red"), harvest_normal('turnip'), {''}, difficulty_normal);
-	soybean = build_plants("Soy Bean", fast_lifecycle, flower_glyphs("green"), harvest_normal('soy_bean'), difficulty_simple);
+	turnip = build_plants("Turnip", fast_lifecycle, flower_glyphs("red"), harvest_normal('turnip'), {''}, difficulty_normal),
+	soybean = build_plants("Soy Bean", fast_lifecycle, flower_glyphs("green"), harvest_normal('soy_bean'), {''}, difficulty_simple),
 
 	-- Mushrooms
 	devil_strand = build_plants("Devil Strand", slow_lifecycle, mushroom_glyphs("dark brown"), harvest_normal('devil_strand'), {''}, difficulty_hard),

@@ -32,14 +32,14 @@ void readInBiomes() noexcept
 				});
 			}},
 			{ "soils", [&b]() {
-				readLuaInnerT("soils", [&b](auto t)
+				readLuaSepT("soils", [&b](auto t)
 				{
 					if (t == "soil") b.soil = lua_int();
 					if (t == "sand") b.sand = lua_int();
 				});
 			}},
 			{ "rend", [&b]() {
-				readLuaInnerT("rend", [&b](auto t)
+				readLuaSepT("rend", [&b](auto t)
 				{
 					if (t == "color") b.glyph.fg = color_from_name(lua_str().c_str());
 					if (t == "glyph") b.glyph.c = lua_int();
@@ -50,14 +50,15 @@ void readInBiomes() noexcept
 				{
 					b.plants.emplace_back(std::make_pair(t, lua_int()));
 				});
-			}},
+			}},			
 			{ "trees", [&b]() {
-				readLuaInnerT("trees", [&b](auto t)
+				readLuaSepT("trees", [&b](auto t)
 				{
 					if (t == "evergreen") b.evergreenChance = lua_int();
 					if (t == "deciduous") b.deciduosChance = lua_int();
 				});
 			}},
+				
 		}
 	);
 

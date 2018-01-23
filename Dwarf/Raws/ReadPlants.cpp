@@ -30,26 +30,6 @@ std::vector<PlantDef>* getAllPlantDefs() noexcept
 	return &plantDefs;
 }
 
-void readP(const std::string table, const std::function<void(std::string)>& functor)
-{
-	lua_pushstring(luaState, table.c_str());
-	lua_gettable(luaState, -2);
-
-	while (lua_next(luaState, -2))
-	{
-
-		const std::string s = lua_tostring(luaState, -2);
-		functor(s);
-
-		//lua_pushnil(luaState);
-		//lua_gettable(luaState, -2);
-
-		lua_pop(luaState, 1);
-	}
-
-	//lua_pop(luaState, 1);
-}
-
 void readInPlants() noexcept
 {
 	vchar v;
@@ -87,7 +67,7 @@ void readInPlants() noexcept
 				});
 			}},
 			{ "difficulty", [&p]() {
-				readP("difficulty", [&p](auto d)
+				readLuaSepT("difficulty", [&p](auto d)
 				{
 					if (d == "diff")  p.difficulty = lua_int();
 					if (d == "ptime") p.time.first = lua_double() * 1000; // Major issues getting these read?
@@ -97,7 +77,7 @@ void readInPlants() noexcept
 			}},
 		}
 	);
-	int a = 5;
+//	int a = 5;
 }
 
 void sanityCheckPlants() noexcept

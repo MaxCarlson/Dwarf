@@ -26,7 +26,8 @@ using luaParser = std::unordered_map<std::string, const std::function<void()>>;
 
 void loadLuaScript(std::string fileName);
 void readLuaTable(const std::string &table, const std::function<void(std::string)> &onStart, const std::function<void(std::string)> &onEnd, const luaParser & parser);
-void readLuaInnerT(const std::string &table, const std::function<void(std::string)> &functor);
+void readLuaInnerT(const std::string table, const std::function<void(std::string)> &functor);
+void readLuaSepT(const std::string table, const std::function<void(std::string)> &functor);
 
 void readLuaTable2D(const std::string &table, const std::function<void(std::string)> &functor1, const std::function<void(std::string)> &functor2);
 
