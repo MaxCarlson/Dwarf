@@ -9,6 +9,9 @@ glyphs = {
 	star = 15,
 	wood_logs = 22,
 
+	deci_tree = 23,
+	ever_tree = 24,
+
 	placed_floor = 43,
 	floor1 = 44,
 	floor2 = 46,

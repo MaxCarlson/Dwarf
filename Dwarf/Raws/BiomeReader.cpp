@@ -46,7 +46,7 @@ void readInBiomes() noexcept
 				});
 			}},
 			{ "plants", [&b]() {
-				readLuaInnerT("plants", [&b](auto t)
+				readLuaSepT("plants", [&b](auto t)
 				{
 					b.plants.emplace_back(std::make_pair(t, lua_int()));
 				});
