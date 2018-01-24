@@ -3,31 +3,36 @@
 #include <vector>
 #include <cereal/cereal.hpp>
 
-extern int WORLD_WIDTH  = 50;
-extern int WORLD_HEIGHT = 50;
+extern int WORLD_WIDTH;
+extern int WORLD_HEIGHT;
 
 enum PlanetTileType
 {
-	PLAINS = 1,
-	HILLS = 2,
-	MOUNTAINS = 3,
-	PLATEAUS = 4,
-	OCEANS = 5,
-	COASTS = 6
+	MAX_PLANET_TILE_TYPES = 7,
+	NONE = 0,
+	WATER = 1,
+	PLAINS = 2,
+	HILLS = 3,
+	MOUNTAINS = 4,
+	HIGHLANDS = 5,
+	PLATEAUS = 6,
+	COASTS = 7
 };
 
 struct tile_p
 {
-	int height;
-	int temperature;
-	int rainfall;
+	int type = 0;
+	int height = 0;
+	int variance = 0;
+	int temperature = 0;
+	int rainfall = 0;
 
-	int biomeIdx;
+	int biomeIdx = -1;
 
 	template<class Archive>
 	void serialize(Archive &archive)
 	{
-		archive(height, temperature, rainfall, biomeIdx);
+		archive(type, height, temperature, rainfall, biomeIdx);
 	}
 };
 
@@ -54,6 +59,8 @@ struct Planet
 	int noiseSeed = 1;
 
 	int waterLevel = 1;
+	int plainsHeight = 1;
+	int hillsHeight = 1;
 
 	int waterFreq = 1;
 	int plainsFreq = 1;
@@ -62,10 +69,12 @@ struct Planet
 	std::vector<Biome> biomes;
 	std::vector<tile_p> tiles;
 
+	inline int idx(int x, int y) { return y * WORLD_WIDTH + x; }
+
 	template<class Archive>
 	void serialize(Archive & archive)
 	{
-		archive(dwarvesNumber, userSeed, noiseSeed, waterLevel, waterFreq, plainsFreq, hillsFreq, biomes, tiles);
+		archive(dwarvesNumber, userSeed, noiseSeed, waterLevel, plainsHeight, hillsHeight, waterFreq, plainsFreq, hillsFreq, biomes, tiles);
 	}
 };
 

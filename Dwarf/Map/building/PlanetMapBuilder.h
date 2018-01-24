@@ -4,3 +4,5 @@
 struct Planet;
 
 FastNoise genPlanetNoiseMap(Planet &planet);
+
+void builPlanetTileTypes(Planet &planet);

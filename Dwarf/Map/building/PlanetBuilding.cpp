@@ -25,6 +25,9 @@ void buildPlanet(const std::string seed, const int pwidth, const int pheight, Co
 	planet.plainsFreq = plains;
 	planet.dwarvesNumber = numDwarves;
 
+	WORLD_WIDTH  =  pwidth;
+	WORLD_HEIGHT = pheight;
+
 	zeroPlanet();
 
 	region::new_region(mapxyz.x, mapxyz.y, mapxyz.z);

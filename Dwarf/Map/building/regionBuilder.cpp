@@ -11,11 +11,6 @@
 #include "NoiseHelper.h"
 #include "../World/Planet.h"
 
-inline uint8_t noiseToHeight(const double n)
-{
-	return static_cast<uint8_t>((n + 1.0f) * 123);
-}
-
 void buildHeightMap(FastNoise & noise, std::vector<uint8_t>& heightMap)
 {
 	heightMap.resize(MAP_HEIGHT * MAP_WIDTH, 1);
