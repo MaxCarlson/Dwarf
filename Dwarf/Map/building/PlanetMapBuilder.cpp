@@ -6,6 +6,7 @@
 #include "Helpers\Rng.h"
 #include "Raws\BiomeReader.h"
 #include "Raws\Defs\BiomeDef.h"
+#include "PlanetBuilding.h"
 
 FastNoise genPlanetNoiseMap(Planet & planet)
 {
@@ -58,6 +59,8 @@ FastNoise genPlanetNoiseMap(Planet & planet)
 
 			// Normalize temperature here
 		}
+
+		updateWorldDisplay(planet);
 	}
 
 	return noise;
@@ -128,6 +131,7 @@ void builPlanetTileTypes(Planet & planet)
 				tile.rainfall = 15;
 			}
 		}
+		updateWorldDisplay(planet);
 	}
 }
 
@@ -153,6 +157,7 @@ void drawCoastlines(Planet & planet)
 					tile.rainfall = 20;
 				}
 			}
+			updateWorldDisplay(planet);
 		}
 }
 

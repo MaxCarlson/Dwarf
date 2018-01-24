@@ -5,6 +5,7 @@
 #include "ECS\Components\JobComponent.h"
 #include "Drawing\draw.h"
 #include "Map\building\PlanetBuilding.h"
+#include "WorldGeneration.h"
 
 #include <string>
 #include <iostream>
@@ -32,7 +33,7 @@ int MainMenu::render()
 
 	while (true)
 	{
-		std::vector<std::string> menuOptions = { "Start Game" , "Create World", "Settings", "Quit" };
+		std::vector<std::string> menuOptions = { "Start Game" , "Create World", "Settings", "Quit", "Create Planet" };
 
 		int code = listHandler<std::string, false>(menuOptions, selected, TK_ALIGN_CENTER, 0, panelHeight / 2 - 15, 5, true);	
 
@@ -54,6 +55,10 @@ int MainMenu::render()
 
 			case 3:
 				return EXIT_CODE;
+
+			case 4:
+				mainBuildPlanet();
+				break;
 			}
 		}
 
@@ -336,7 +341,7 @@ int MainMenu::mainBuildPlanet()
 
 	std::vector<int> planetSizes = { 64, 128, 256 };
 
-	buildPlanet("seed", planetSizes[0], planetSizes[0], { 80, 80, 128 }, 3, 3, 7);
+	generateWorld("seed", planetSizes[0], planetSizes[0], { 80, 80, 128 }, 3, 3, 7);
 
 	return 0;
 }
