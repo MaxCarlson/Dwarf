@@ -37,4 +37,6 @@ void buildPlanet(const std::string seed, const int pwidth, const int pheight, Co
 	builPlanetTileTypes(planet);
 
 	drawCoastlines(planet);
+
+	buildPlanetBiomes(planet, rng);
 }

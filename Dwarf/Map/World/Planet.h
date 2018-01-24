@@ -38,19 +38,23 @@ struct tile_p
 
 struct Biome
 {
-	std::size_t id;
+	std::size_t type;
 	std::string name;
+
+	int centerX;
+	int centerY;
 
 	int avgAltitude;
 	int avgRainfall;
 	int avgTemperature;
+	int avgVariance;
 
 	int savagery;
 
 	template<class Archive>
 	void serialize(Archive &archive)
 	{
-		archive(id, name, avgAltitude, avgRainfall, avgTemperature, savagery);
+		archive(type, name, centerX, centerY, avgAltitude, avgRainfall, avgTemperature, avgVariance, savagery);
 	}
 };
 

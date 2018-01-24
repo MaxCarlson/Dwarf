@@ -4,6 +4,7 @@
 #include "EntityFactory.h"
 #include "ECS\Components\JobComponent.h"
 #include "Drawing\draw.h"
+#include "Map\building\PlanetBuilding.h"
 
 #include <string>
 #include <iostream>
@@ -325,6 +326,19 @@ int MainMenu::loadWorld()
 
 	
 	return IN_NOTHING; 
+}
+
+int MainMenu::mainBuildPlanet()
+{
+	static const std::vector<std::string> nplanetSize = { "Small", "Medium", "Large" };
+	static const std::vector<std::string> nregionSize = { "Small", "Medium", "Large" };
+	static const std::vector<std::string> nwaterAmount = { "None", "A little", "Lots" };
+
+	std::vector<int> planetSizes = { 64, 128, 256 };
+
+	buildPlanet("seed", planetSizes[0], planetSizes[0], { 80, 80, 128 }, 3, 3, 7);
+
+	return 0;
 }
 
 

@@ -48,6 +48,8 @@ private:
 
 	int loadWorld();
 
+	int mainBuildPlanet();
+
 	// Dwarf picking functions
 	// UI and gui Below
 	const int NumberOfDwaves = 7;

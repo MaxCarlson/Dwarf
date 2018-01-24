@@ -4,6 +4,8 @@
 #include "../Tile.h"
 #include "NoiseHelper.h"
 #include "Helpers\Rng.h"
+#include "Raws\BiomeReader.h"
+#include "Raws\Defs\BiomeDef.h"
 
 FastNoise genPlanetNoiseMap(Planet & planet)
 {
@@ -162,6 +164,100 @@ void buildPlanetRainfall(Planet & planet)
 std::unordered_map<uint8_t, double> determineBiomeConstituants(Planet &planet, const size_t bidx)
 {
 	std::unordered_map<uint8_t, double> percents;
+	std::unordered_map<uint8_t, long>   tcounts;
+
+	int numTiles = 0;
+	int totalAltitude = 0;
+	int totalRainfall = 0;
+	int totalVariance = 0;
+	int totalTemp = 0;
+	int totalX = 0;
+	int totalY = 0;
+
+
+	// Find all tiles belonging to biome 
+	// and count all details about them so we can find averages
+	// and assign them to the biome
+	for(int x = 0; x < WORLD_WIDTH; ++x)
+		for (int y = 0; y < WORLD_HEIGHT; ++y)
+		{
+			const int tidx = planet.idx(x, y);
+			const auto& tile = planet.tiles[tidx];
+
+			if (tile.biomeIdx == bidx)
+			{
+				++numTiles;
+				totalX += x;
+				totalY += y;
+				totalAltitude += tile.height;
+				totalRainfall += tile.rainfall;
+				totalTemp     += tile.temperature;
+				totalVariance += tile.variance;
+
+				auto find = tcounts.find(tile.type);
+
+				if (find == tcounts.end())
+					tcounts[tile.type] = 1L;
+				else
+					++tcounts[tile.type];
+			}
+		}
+
+	auto& biome = planet.biomes[bidx];
+
+	// Assign averages to biome
+	double count = static_cast<double>(numTiles);
+
+	biome.avgAltitude = static_cast<double>(totalAltitude) / count;
+	biome.avgRainfall = static_cast<double>(totalRainfall) / count;
+	biome.avgTemperature = static_cast<double>(totalTemp)  / count;
+	biome.avgVariance = static_cast<double>(totalVariance) / count;
+
+	biome.centerX = totalX / numTiles;
+	biome.centerY = totalY / numTiles;
+
+	// Find out how many of each tile type is contained in the biome
+	for (int i = 0; i < PlanetTileType::MAX_PLANET_TILE_TYPES; ++i)
+	{
+		auto find = tcounts.find(i);
+
+		if (find == tcounts.end())
+			percents[i] = 0.0;
+		else
+		{
+			double pct = static_cast<double>(find->second) / count;
+			percents[i] = pct;
+		}
+	}
+
+	return percents;
+}
+
+std::vector<std::pair<double, size_t>> findPossibleBiomes(std::unordered_map<uint8_t, double> &percents, const Biome &biome)
+{
+	std::vector<std::pair<double, size_t>> ret;
+
+	// Find biomes matching the generated biome 
+	size_t idx = 0;
+	forEachBiome([&biome, &idx, &percents, &ret](BiomeDef *b)
+	{
+		if (   biome.avgTemperature >= b->minTemp && biome.avgTemperature <= b->maxTemp
+			&& biome.avgRainfall    >= b->minRain && biome.avgRainfall    <= b->minRain)
+		{
+			
+			// Temp and rainfall fit, see if tiletypes are availible
+			for (const uint8_t occurs : b->occurs)
+			{
+				auto find = percents.find(occurs);
+
+				if (find != percents.end() && find->second > 0)
+					ret.emplace_back(std::make_pair(find->second * 100.0, idx));
+			}
+		}
+		++idx;
+	});
+
+	return ret;
 }
 
 void buildPlanetBiomes(Planet & planet, Rng & rng)
@@ -200,4 +296,47 @@ void buildPlanetBiomes(Planet & planet, Rng & rng)
 
 			planet.tiles[planet.idx(x, y)].biomeIdx = biomeIdx;
 		}
+
+	size_t count = 0;
+	size_t noMatch = 0;
+
+	for (auto &biome : planet.biomes)
+	{
+		// Determine info about the biome
+		auto membershipCount = determineBiomeConstituants(planet, count);
+
+		if (!membershipCount.empty())
+		{
+			// Find possible matching biomes from biome defs lua
+			auto possibleTypes = findPossibleBiomes(membershipCount, biome);
+
+			if (!possibleTypes.empty())
+			{
+				double max = 0.0;
+				for (const auto &possible : possibleTypes)
+					max += possible.first;
+
+				int roll = rng.range(1, static_cast<int>(max));
+
+				for (const auto& possible : possibleTypes)
+				{
+					roll -= static_cast<int>(possible.first);
+					if (roll < 0)
+					{
+						biome.type = possible.second;
+						break;
+					}
+				}
+
+				if (biome.type == -1)
+					biome.type = possibleTypes[possibleTypes.size() - 1].second;
+
+				// Name biomes eventually?
+			}
+			else
+				++noMatch;
+		}
+
+		++count;
+	}
 }

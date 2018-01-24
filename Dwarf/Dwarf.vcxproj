@@ -236,6 +236,7 @@
       <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4996</DisableSpecificWarnings>
     </ClCompile>
     <ClCompile Include="ECS\Systems\ai\WoodcuttingAi.cpp" />
+    <ClCompile Include="WorldGeneration.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ECS\Components\Tags\HarvestTag.h" />
@@ -443,6 +444,7 @@
     <ClInclude Include="ECS\Components\Sentients\Stats.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="ECS\Systems\ai\WoodcuttingAi.h" />
+    <ClInclude Include="WorldGeneration.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cereal\external\rapidxml\manual.html" />

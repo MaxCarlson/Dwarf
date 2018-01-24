@@ -10,6 +10,12 @@ BiomeDef * getBiomeDef(const std::size_t idx)
 	return &biomes[idx];
 }
 
+void forEachBiome(std::function<void(BiomeDef*)> func)
+{
+	for (auto& b : biomes)
+		func(&b);
+}
+
 void readInBiomes() noexcept
 {
 	BiomeDef b;
