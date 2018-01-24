@@ -45,10 +45,12 @@ struct Biome
 	int avgRainfall;
 	int avgTemperature;
 
+	int savagery;
+
 	template<class Archive>
 	void serialize(Archive &archive)
 	{
-		archive(id, name, avgAltitude, avgRainfall, avgTemperature);
+		archive(id, name, avgAltitude, avgRainfall, avgTemperature, savagery);
 	}
 };
 

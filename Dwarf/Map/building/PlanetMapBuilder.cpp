@@ -3,6 +3,7 @@
 #include "../World/Planet.h"
 #include "../Tile.h"
 #include "NoiseHelper.h"
+#include "Helpers\Rng.h"
 
 FastNoise genPlanetNoiseMap(Planet & planet)
 {
@@ -126,4 +127,77 @@ void builPlanetTileTypes(Planet & planet)
 			}
 		}
 	}
+}
+
+void drawCoastlines(Planet & planet)
+{
+	for(int x = 1; x < WORLD_WIDTH - 1; ++x)
+		for (int y = 1; y < WORLD_HEIGHT - 1; ++y)
+		{
+			auto& tile = planet.tiles[planet.idx(x, y)];
+
+			if (tile.type > PlanetTileType::WATER)
+			{
+				if (planet.tiles[planet.idx(x - 1, y)].type == PlanetTileType::WATER ||
+					planet.tiles[planet.idx(x + 1, y)].type == PlanetTileType::WATER ||
+					planet.tiles[planet.idx(x, y - 1)].type == PlanetTileType::WATER ||
+					planet.tiles[planet.idx(x, y + 1)].type == PlanetTileType::WATER ||
+					planet.tiles[planet.idx(x + 1, y - 1)].type == PlanetTileType::WATER ||
+					planet.tiles[planet.idx(x - 1, y - 1)].type == PlanetTileType::WATER ||
+					planet.tiles[planet.idx(x + 1, y + 1)].type == PlanetTileType::WATER ||
+					planet.tiles[planet.idx(x - 1, y - 1)].type == PlanetTileType::WATER )
+				{
+					tile.type = PlanetTileType::COASTS;
+					tile.rainfall = 20;
+				}
+			}
+		}
+}
+
+void buildPlanetRainfall(Planet & planet)
+{
+
+}
+
+std::unordered_map<uint8_t, double> determineBiomeConstituants(Planet &planet, const size_t bidx)
+{
+	std::unordered_map<uint8_t, double> percents;
+}
+
+void buildPlanetBiomes(Planet & planet, Rng & rng)
+{
+	const int numBiomes = WORLD_HEIGHT * WORLD_WIDTH / (32 + rng.range(1, 64));
+
+	std::vector<std::pair<int, int>> biomeIndicies;
+
+	// Randomly place biomes
+	for (int i = 0; i < numBiomes; ++i)
+	{
+		biomeIndicies.emplace_back(std::make_pair(rng.range(1, WORLD_WIDTH), rng.range(1, WORLD_HEIGHT)));
+		planet.biomes.emplace_back(Biome{});
+	}
+
+	// Asign each tile a biome identity based on closest to
+	for(int x = 0; x < WORLD_WIDTH; ++x)
+		for (int y = 0; y < WORLD_HEIGHT; ++y)
+		{
+			int tileDist = std::numeric_limits<int>::max();
+			int biomeIdx = -1;
+
+			for (int i = 0; i < numBiomes; ++i)
+			{
+				const int biomeX = biomeIndicies[i].first;
+				const int biomeY = biomeIndicies[i].second;
+
+				const int biomeDist = get_2D_distance({ biomeX, biomeY, 1 }, { x, y, 1 });
+
+				if (biomeDist < tileDist)
+				{
+					tileDist = biomeDist;
+					biomeIdx = i;
+				}
+			}
+
+			planet.tiles[planet.idx(x, y)].biomeIdx = biomeIdx;
+		}
 }

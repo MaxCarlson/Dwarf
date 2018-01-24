@@ -33,4 +33,8 @@ void buildPlanet(const std::string seed, const int pwidth, const int pheight, Co
 	region::new_region(mapxyz.x, mapxyz.y, mapxyz.z);
 
 	FastNoise pnoise = genPlanetNoiseMap(planet);
+
+	builPlanetTileTypes(planet);
+
+	drawCoastlines(planet);
 }
