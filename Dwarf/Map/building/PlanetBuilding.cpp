@@ -6,6 +6,7 @@
 #include "../World/Planet.h"
 #include "../Tile.h"
 #include "PlanetMapBuilder.h"
+#include "WorldGeneration.h"
 
 // This is the game planet
 Planet planet;
@@ -39,15 +40,15 @@ void setPlanetChar(const int idx, const int tileIdx, Planet &planet)
 		break;
 
 	case PlanetTileType::HIGHLANDS:
-		worldGenDisplay[idx] = { 24, color_from_name("forest_green"), color_from_name("forest_green") };
+		worldGenDisplay[idx] = { 24, color_from_name("lightest grass_green"), color_from_name("brown") };
 		break;
 
 	case PlanetTileType::PLATEAUS:
-		worldGenDisplay[idx] = { 24, color_from_name("forest_green"), color_from_name("forest_green") };
+		worldGenDisplay[idx] = { 24, color_from_name("light brown"), color_from_name("forest_green") };
 		break;
 
 	case PlanetTileType::COASTS:
-		worldGenDisplay[idx] = { 142, color_from_name("light yellow"), color_from_name("dark yellow") };
+		worldGenDisplay[idx] = { 142, color_from_name("lightest brown"), color_from_name("dark yellow") };
 		break;
 	}
 }
@@ -90,7 +91,9 @@ void buildPlanet(const std::string seed, const int pwidth, const int pheight, Co
 
 	builPlanetTileTypes(planet);
 
-	drawCoastlines(planet);
+	//drawCoastlines(planet);
 
 	buildPlanetBiomes(planet, rng);
+
+	worldThread->detach();
 }

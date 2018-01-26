@@ -33,7 +33,7 @@ int MainMenu::render()
 
 	while (true)
 	{
-		std::vector<std::string> menuOptions = { "Start Game" , "Create World", "Settings", "Quit", "Create Planet" };
+		std::vector<std::string> menuOptions = { "Load Game", "Create World", "Settings", "Quit" };
 
 		int code = listHandler<std::string, false>(menuOptions, selected, TK_ALIGN_CENTER, 0, panelHeight / 2 - 15, 5, true);	
 
@@ -46,7 +46,8 @@ int MainMenu::render()
 				break;
 
 			case 1:
-				code = pickDwarves();
+				//code = pickDwarves();
+				mainBuildPlanet();
 				break;
 
 			case 2:
@@ -57,7 +58,6 @@ int MainMenu::render()
 				return EXIT_CODE;
 
 			case 4:
-				mainBuildPlanet();
 				break;
 			}
 		}
@@ -294,7 +294,7 @@ void MainMenu::finalizeDwarfPicks()
 	}
 }
 
-// Loading already created world
+// Loading already created region
 
 int MainMenu::loadWorld()
 {
@@ -335,15 +335,36 @@ int MainMenu::loadWorld()
 
 int MainMenu::mainBuildPlanet()
 {
+	static const std::vector<std::string> yesno = { "Yes", "No", "Exit" };
 	static const std::vector<std::string> nplanetSize = { "Small", "Medium", "Large" };
 	static const std::vector<std::string> nregionSize = { "Small", "Medium", "Large" };
 	static const std::vector<std::string> nwaterAmount = { "None", "A little", "Lots" };
 
 	std::vector<int> planetSizes = { 64, 128, 256 };
 
-	generateWorld("seed", planetSizes[0], planetSizes[0], { 80, 80, 128 }, 3, 3, 7);
+	while (true)
+	{
+		generateWorld("seed", planetSizes[0], planetSizes[0], { 80, 80, 128 }, 3, 3, 7);
 
-	return 0;
+		terminal_print_ext(1, 5, 0, 0, TK_ALIGN_LEFT, "Is World Acceptable?");
+
+		int code = 0, selected = 0;
+
+		while (code == IN_NOTHING)
+		{
+			code = listHandler<std::string, true>(yesno, selected, TK_ALIGN_LEFT, 1, 7, 1, false);
+		}
+
+		if (code == IN_ENTER && selected == 0)
+		{
+			bool accepted = chooseEmbark();
+		}
+		else if (code == IN_ENTER && selected == 2)
+			return IN_NOTHING;
+	}
+
+
+	return IN_NOTHING;
 }
 
 

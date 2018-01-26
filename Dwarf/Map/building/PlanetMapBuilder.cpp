@@ -22,7 +22,7 @@ FastNoise genPlanetNoiseMap(Planet & planet)
 	constexpr double range = maxTemp - minTemp;
 	const double halfHeight = WORLD_HEIGHT / 2.0;
 
-	//#pragma omp parallel for
+	#pragma omp parallel for
 	for (int y = 0; y < WORLD_HEIGHT; ++y)
 	{
 		const auto distanceFromEquator = std::abs(WORLD_HEIGHT / 2 - y);
@@ -97,7 +97,7 @@ void builPlanetTileTypes(Planet & planet)
 	planet.plainsHeight = determineNumberOfTiles(planet, candidate, plainsTiles);
 	planet.hillsHeight = determineNumberOfTiles(planet, candidate, hillsTiles);
 
-	//#pragma omp parallel for
+	#pragma omp parallel for
 	for (auto i = 0; i < planet.tiles.size(); ++i)
 	{
 		auto& tile = planet.tiles.at(i);
@@ -207,6 +207,9 @@ std::unordered_map<uint8_t, double> determineBiomeConstituants(Planet &planet, c
 					++tcounts[tile.type];
 			}
 		}
+
+	if (numTiles == 0)
+		numTiles = 1;
 
 	auto& biome = planet.biomes[bidx];
 

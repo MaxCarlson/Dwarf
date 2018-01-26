@@ -25,6 +25,7 @@ public:
 		QUIT_M,
 
 		LOAD_WORLD,
+		BUILD_PLANET,
 
 		// Codes for different 
 		// actions on MainMenu::render() return

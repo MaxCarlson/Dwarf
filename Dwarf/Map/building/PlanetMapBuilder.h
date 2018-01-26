@@ -2,7 +2,7 @@
 #include "Helpers\FastNoise.h"
 
 struct Planet;
-struct Rng;
+class Rng;
 
 FastNoise genPlanetNoiseMap(Planet &planet);
 
