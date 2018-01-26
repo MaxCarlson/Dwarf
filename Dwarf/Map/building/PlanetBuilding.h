@@ -4,8 +4,9 @@
 #include <string>
 #include <vector>
 #include <mutex>
+#include "../World/Planet.h"
 
-struct Planet;
+extern Planet planet;
 
 extern std::mutex planetBuilderLock;
 extern std::vector<vchar> worldGenDisplay;

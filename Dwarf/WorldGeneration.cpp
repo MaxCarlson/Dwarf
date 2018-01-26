@@ -54,7 +54,7 @@ void generateWorld(const std::string seed, const int pwidth, const int pheight, 
 	}
 }
 
-bool handleIn(int &x, int &y)
+bool handleIn(int &x, int &y, bool &quit)
 {
 	int in = terminal_read();
 
@@ -80,21 +80,35 @@ bool handleIn(int &x, int &y)
 	if (in == TK_ENTER)
 		return true;
 
+	if (in == TK_ESCAPE)
+		quit = true;
+
 	return false;
 }
 
-bool chooseEmbark()
+bool chooseEmbark(int &px, int &py)
 {
 	using namespace draw;
 
 	int x = WORLD_WIDTH  / 2 + worldOffsetX;
 	int y = WORLD_HEIGHT / 2 + worldOffsetY;
 
-	bool notChosen = true;
-	while (notChosen)
+	bool quit = false;
+	bool chosen = false;
+	while (!chosen)
 	{
 		renderWorld(true, x, y);
-		notChosen = handleIn(x, y);
+		chosen = handleIn(x, y, quit);
+
+		if (quit)
+			return false;
+
+		if (chosen)
+		{
+			px = x;
+			py = y;
+			return true;
+		}
 	}
 
 	return false;

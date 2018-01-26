@@ -90,7 +90,7 @@ public:
 	int screenWidth; // Git rid of these?
 	int screenHeight;
 
-	void newGame(int screenWidth, int screenHeight);
+	void newGame(int px, int py, int screenWidth, int screenHeight);
 	void loadGame(std::string filePath);
 	void saveGame(std::string filePath);
 

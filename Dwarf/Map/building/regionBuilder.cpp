@@ -29,13 +29,12 @@ void buildHeightMap(FastNoise & noise, std::vector<uint8_t>& heightMap)
 }
 
 
-void buildRegion(Coordinates dimensions, Rng &rng)
+void buildRegion(Planet &planet, int px, int py, Coordinates dimensions, Rng &rng)
 {
 	region::new_region(dimensions.x, dimensions.y, dimensions.z);
 
-
 	FastNoise noise;
-	noise.SetSeed(rng.range(1, 10000001));
+	noise.SetSeed(planet.noiseSeed);
 	noise.SetNoiseType(FastNoise::NoiseType::SimplexFractal);
 	noise.SetFractalType(FastNoise::FBM);
 	noise.SetFractalOctaves(octaves);

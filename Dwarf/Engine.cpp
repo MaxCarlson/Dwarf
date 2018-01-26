@@ -68,6 +68,7 @@
 #include "Raws\DefInfo.h"
 #include "Map\building\regionBuilder.h"
 #include "Helpers\Rng.h"
+#include "Map\building\PlanetBuilding.h"
 
 // globals
 #include "Globals\global_calender.h"
@@ -90,12 +91,12 @@ Engine::~Engine()
 {
 }
 
-void Engine::newGame(int screenWidth, int screenHeight)
+void Engine::newGame(int px, int py, int screenWidth, int screenHeight)
 {
 	mapRenderer = std::make_unique<MapRender>();
 
 	// Add in a seed selection process
-	buildRegion({ screenWidth, screenHeight, MAX_ZLVL }, rng);
+	buildRegion(planet, px, py, { screenWidth, screenHeight, MAX_ZLVL }, rng);
 
 	// Init misc maps and designations
 	calender = std::make_unique<Calender>(); // Eventually give an input date based on world generation
@@ -145,7 +146,8 @@ void Engine::saveGame(std::string filePath)
 	//std::ofstream os(dirpath);  // JSON
 	//cereal::JSONOutputArchive archive(os);
 
-	// Save region then world
+	// Save Planet then region then ECS world
+	archive(planet);
 	save_region(dirpath);
 	world.save(archive);
 

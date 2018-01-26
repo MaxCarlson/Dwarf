@@ -40,8 +40,7 @@ int main()
 			break;
 
 		else if (code == MainMenu::START_CODE)
-			engine->newGame(menu.mapWidth, menu.mapHeight);
-			
+			engine->newGame(menu.px, menu.py, menu.mapWidth, menu.mapHeight);		
 
 		else if (code == MainMenu::LOAD_WORLD)
 			engine->loadGame(menu.mapPath);

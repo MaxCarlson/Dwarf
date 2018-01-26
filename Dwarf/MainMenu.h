@@ -37,6 +37,8 @@ public:
 	int mapWidth = 80;
 	int mapHeight = 80;
 
+	int px, py;
+
 	std::string mapPath;
 
 private:

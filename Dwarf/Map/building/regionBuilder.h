@@ -1,6 +1,7 @@
 #pragma once
 
+struct Planet;
 struct Coordinates;
 class Rng;
 
-void buildRegion(Coordinates dimensions, Rng &rng);
+void buildRegion(Planet &planet, int px, int py, Coordinates dimensions, Rng &rng);

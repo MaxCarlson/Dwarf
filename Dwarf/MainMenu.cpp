@@ -47,7 +47,7 @@ int MainMenu::render()
 
 			case 1:
 				//code = pickDwarves();
-				mainBuildPlanet();
+				code = mainBuildPlanet();
 				break;
 
 			case 2:
@@ -68,6 +68,7 @@ int MainMenu::render()
 		}
 		else if (code == START_CODE)
 			return START_CODE;
+
 		else if (code == LOAD_WORLD)
 			return LOAD_WORLD;
 	}
@@ -357,7 +358,10 @@ int MainMenu::mainBuildPlanet()
 
 		if (code == IN_ENTER && selected == 0)
 		{
-			bool accepted = chooseEmbark();
+			bool accepted = chooseEmbark(px, py);
+
+			if (accepted)
+				return START_CODE;
 		}
 		else if (code == IN_ENTER && selected == 2)
 			return IN_NOTHING;
