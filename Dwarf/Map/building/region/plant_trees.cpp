@@ -2,6 +2,7 @@
 #include "plant_trees.h"
 #include "../../Tile.h"
 #include "Coordinates.h"
+#include "Map\World\Planet.h"
 
 using region::TileTypes;
 
@@ -101,11 +102,8 @@ bool isCanopy(Coordinates co)
 	return false;
 }
 
-void plantTrees(Rng &rng)
+void plantTrees(int decChance, int everChance, Rng &rng)
 {
-	const int decChance = 15;
-	const int everChance = 30;
-
 	for (int x = 10; x < MAP_WIDTH - 10; ++x)
 		for(int y = 10; y < MAP_HEIGHT - 10; ++y)
 		{

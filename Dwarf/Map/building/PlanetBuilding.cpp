@@ -3,7 +3,6 @@
 #include "Helpers\FastNoise.h"
 #include "regionBuilder.h"
 #include "Helpers\Rng.h"
-#include "../World/Planet.h"
 #include "../Tile.h"
 #include "PlanetMapBuilder.h"
 #include "WorldGeneration.h"
@@ -85,7 +84,7 @@ void buildPlanet(const std::string seed, const int pwidth, const int pheight, Co
 
 	zeroPlanet();
 
-	region::new_region(mapxyz.x, mapxyz.y, mapxyz.z);
+	region::new_region(mapxyz.x, mapxyz.y, mapxyz.z, 0); // Get rid of this!!
 
 	FastNoise pnoise = genPlanetNoiseMap(planet);
 

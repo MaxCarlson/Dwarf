@@ -75,7 +75,7 @@ namespace region
 	};
 
 	// Create a new region, will overwrite the old region
-	void new_region(int width, int height, int depth);
+	void new_region(int width, int height, int depth, size_t biomeIdx);
 	
 	void save_region(std::string filePath);
 

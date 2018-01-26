@@ -6,6 +6,7 @@
 #include "../Raws/Defs/MaterialDef.h"
 #include "../Helpers/FastNoise.h"
 #include "Helpers\Rng.h"
+#include "Raws\Defs\BiomeDef.h"
 #include <algorithm>
 
 using region::TileTypes;
@@ -130,8 +131,11 @@ Strata buildStrata(std::vector<uint8_t>& heightMap, FastNoise & noise, Rng & rng
 	
 }
 
-void layRock(std::vector<uint8_t> heightMap, Strata & strata, Rng & rng)
+void layRock(std::vector<uint8_t> heightMap, BiomeDef & biome, Strata & strata, Rng & rng)
 {
+	int vegProb = 0;
+	for (const auto & veg : biome.plants)
+		vegProb += veg.second;
 
 	for (int i = 0; i < MAP_WIDTH; ++i)
 		for (int j = 0; j < MAP_HEIGHT; ++j)
@@ -194,16 +198,26 @@ void layRock(std::vector<uint8_t> heightMap, Strata & strata, Rng & rng)
 			//tmp += rg + '0';
 			//region::setMaterial({ i, j, z }, getMaterialIdx(tmp));
 
-			
+		
+			std::string vegType = "";
+			roll = rng.range(1, vegProb);
 
-			static const auto* plants = getAllPlantDefs(); // Currently we're grabbing all plants. Eventually just grab them from biome and biome proability
-
-			if (rng.range(1, 3) > 0)
+			for (const auto& veg : biome.plants)
 			{
-				static const std::string ss = "grass";
-				auto plantIdx = getPlantIdx(ss);
+				roll -= veg.second;
+				if (roll < 1)
+				{
+					vegType = veg.first;
+					break;
+				}
+			}
+
+			if (vegType == "") vegType = "none";
+
+			if (vegType != "none")
+			{
+				auto plantIdx = getPlantIdx(vegType);
 				auto plant = getPlantDef(plantIdx);
-				
 
 				region::setPlantType(idx, plantIdx);
 				region::setPlantHealth(idx, 10);

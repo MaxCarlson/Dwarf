@@ -5,6 +5,8 @@
 class Rng;
 class FastNoise;
 
+struct BiomeDef;
+
 struct Strata
 {
 	std::vector<int> strata_map;
@@ -13,5 +15,5 @@ struct Strata
 };
 
 Strata buildStrata(std::vector<uint8_t> &heightMap, FastNoise &noise, Rng & rng);
-void layRock(std::vector<uint8_t> heightMap, Strata & strata, Rng & rng);
+void layRock(std::vector<uint8_t> heightMap, BiomeDef & biome, Strata & strata, Rng & rng);
 

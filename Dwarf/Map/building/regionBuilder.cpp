@@ -10,6 +10,8 @@
 #include "Helpers\Rng.h"
 #include "NoiseHelper.h"
 #include "../World/Planet.h"
+#include "Raws\Defs\BiomeDef.h"
+#include "Raws\BiomeReader.h"
 
 void buildHeightMap(FastNoise & noise, std::vector<uint8_t>& heightMap)
 {
@@ -28,10 +30,18 @@ void buildHeightMap(FastNoise & noise, std::vector<uint8_t>& heightMap)
 		}
 }
 
+std::pair<Biome, BiomeDef> getRegionBiome(Planet &planet, int px, int py)
+{
+	const int idx = planet.idx(px, py);
+	const int biomeIdx = planet.tiles[idx].biomeIdx;
+	return std::make_pair(planet.biomes[biomeIdx], *getBiomeDef(planet.biomes[biomeIdx].type));
+}
 
 void buildRegion(Planet &planet, int px, int py, Coordinates dimensions, Rng &rng)
 {
-	region::new_region(dimensions.x, dimensions.y, dimensions.z);
+	region::new_region(dimensions.x, dimensions.y, dimensions.z, planet.tiles[planet.idx(px, py)].biomeIdx);
+
+	auto biomeInfo = getRegionBiome(planet, px, py);
 
 	FastNoise noise;
 	noise.SetSeed(planet.noiseSeed);
@@ -45,11 +55,11 @@ void buildRegion(Planet &planet, int px, int py, Coordinates dimensions, Rng &rn
 	buildHeightMap(noise, heightMap);
 
 	Strata strata = buildStrata(heightMap, noise, rng);
-	layRock(heightMap, strata, rng);
+	layRock(heightMap, biomeInfo.second, strata, rng);
 
 	placeRamps();
 
-	plantTrees(rng);
+	plantTrees(biomeInfo.second.deciduosChance, biomeInfo.second.evergreenChance, rng);
 
 	region::tile_recalc_all();
 

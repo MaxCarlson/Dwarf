@@ -1,4 +1,6 @@
 #pragma once
 #include "../../../Helpers/Rng.h"
 
-void plantTrees(Rng &rng);
+struct Planet;
+
+void plantTrees(int decChance, int everChance, Rng &rng);

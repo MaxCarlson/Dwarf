@@ -66,6 +66,7 @@ namespace region
 		std::vector<uint16_t> plantTicker;
 		std::vector<uint8_t>  plantLifeCycle;
 
+		size_t biomeIdx = 0;
 		int nextTreeId = 0;
 		
 		void tileRecalcAll();
@@ -89,6 +90,7 @@ namespace region
 			archive(treeIds);
 			archive(treeHps);
 			archive(nextTreeId);
+			archive(biomeIdx);
 			archive(plantType, plantHealth, plantTicker, plantLifeCycle);
 		}
 	};
@@ -96,7 +98,7 @@ namespace region
 
 	std::unique_ptr<Region> currentRegion;
 
-	void new_region(int width, int height, int depth)
+	void new_region(int width, int height, int depth, size_t biomeIdx)
 	{
 		MAP_WIDTH = width;
 		MAP_HEIGHT = height;
@@ -104,6 +106,7 @@ namespace region
 		TOTAL_MAP_TILES = MAP_WIDTH * MAP_HEIGHT * MAP_DEPTH;
 
 		currentRegion = std::make_unique<Region>();
+		currentRegion->biomeIdx = biomeIdx;
 	}
 
 	void save_region(std::string filePath)

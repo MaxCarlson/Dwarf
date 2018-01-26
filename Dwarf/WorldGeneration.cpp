@@ -17,7 +17,9 @@ void renderWorld(bool drawCursor = false, int cx = 0, int cy = 0)
 	int y = worldOffsetY;
 	for (const auto& v : worldGenDisplay)
 	{
-
+		//terminal_bkcolor("grey");
+		terminal_color(v.fg);
+		terminal_bkcolor(v.bg);
 		terminal_put(x, y, 0xE100 + v.c);
 
 		if (drawCursor && cx == x && cy == y)
@@ -27,8 +29,7 @@ void renderWorld(bool drawCursor = false, int cx = 0, int cy = 0)
 		}
 		else
 		{
-			terminal_color(v.fg);
-			terminal_bkcolor(v.bg);
+
 		}
 			
 
@@ -88,7 +89,7 @@ bool handleIn(int &x, int &y, bool &quit)
 
 bool chooseEmbark(int &px, int &py)
 {
-	using namespace draw;
+	//using namespace draw;
 
 	int x = WORLD_WIDTH  / 2 + worldOffsetX;
 	int y = WORLD_HEIGHT / 2 + worldOffsetY;

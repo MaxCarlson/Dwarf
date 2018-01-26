@@ -361,7 +361,10 @@ int MainMenu::mainBuildPlanet()
 			bool accepted = chooseEmbark(px, py);
 
 			if (accepted)
+			{
+				finalizeDwarfPicks();
 				return START_CODE;
+			}			
 		}
 		else if (code == IN_ENTER && selected == 2)
 			return IN_NOTHING;
