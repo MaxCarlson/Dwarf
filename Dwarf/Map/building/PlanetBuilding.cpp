@@ -6,6 +6,8 @@
 #include "../Tile.h"
 #include "PlanetMapBuilder.h"
 #include "WorldGeneration.h"
+#include "Raws\BiomeReader.h"
+#include  "Raws\Defs\BiomeDef.h"
 
 // This is the game planet
 Planet planet;
@@ -50,6 +52,14 @@ void setPlanetChar(const int idx, const int tileIdx, Planet &planet)
 		worldGenDisplay[idx] = { 142, color_from_name("lightest brown"), color_from_name("dark yellow") };
 		break;
 	}
+
+	// Override tile type display with biome char
+	const auto biomeIdx = planet.tiles[tileIdx].biomeIdx;
+	if (biomeIdx > 0 && !planet.biomes.empty() && biomeIdx < planet.biomes.size() && planet.biomes[biomeIdx].type > 0)
+	{
+		const auto* biomeDef = getBiomeDef(planet.biomes[biomeIdx].type);
+		worldGenDisplay[idx] = biomeDef->glyph;
+	}
 }
 
 void updateWorldDisplay(Planet & planet)
@@ -84,7 +94,7 @@ void buildPlanet(const std::string seed, const int pwidth, const int pheight, Co
 
 	zeroPlanet();
 
-	region::new_region(mapxyz.x, mapxyz.y, mapxyz.z, 0); // Get rid of this!!
+	region::new_region(mapxyz.x, mapxyz.y, mapxyz.z, 0); // Get rid of this!! Currently it's only used to set the MAP_WIDTH, HEIGHT, and DEPTH
 
 	FastNoise pnoise = genPlanetNoiseMap(planet);
 

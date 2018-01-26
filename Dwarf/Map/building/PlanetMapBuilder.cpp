@@ -282,7 +282,8 @@ void buildPlanetBiomes(Planet & planet, Rng & rng)
 	}
 
 	// Asign each tile a biome identity based on closest to
-	for(int x = 0; x < WORLD_WIDTH; ++x)
+	for (int x = 0; x < WORLD_WIDTH; ++x)
+	{
 		for (int y = 0; y < WORLD_HEIGHT; ++y)
 		{
 			int tileDist = std::numeric_limits<int>::max();
@@ -304,6 +305,9 @@ void buildPlanetBiomes(Planet & planet, Rng & rng)
 
 			planet.tiles[planet.idx(x, y)].biomeIdx = biomeIdx;
 		}
+		updateWorldDisplay(planet);
+	}
+
 
 	size_t count = 0;
 	size_t noMatch = 0;
@@ -344,7 +348,7 @@ void buildPlanetBiomes(Planet & planet, Rng & rng)
 			else
 				++noMatch;
 		}
-
+		updateWorldDisplay(planet);
 		++count;
 	}
 }

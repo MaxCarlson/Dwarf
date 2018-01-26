@@ -120,6 +120,7 @@ void Engine::loadGame(std::string filePath)
 	
 	// Load region then world
 	// Systems aren't loaded, just re-created
+	iarchive(planet);
 	load_region(dirpath);
 	world.load(iarchive);
 

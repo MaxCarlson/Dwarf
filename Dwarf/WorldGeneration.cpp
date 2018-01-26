@@ -27,11 +27,6 @@ void renderWorld(bool drawCursor = false, int cx = 0, int cy = 0)
 			terminal_color("grey");
 			terminal_put(x, y, 0xE100 + 88);
 		}
-		else
-		{
-
-		}
-			
 
 		++x;
 
