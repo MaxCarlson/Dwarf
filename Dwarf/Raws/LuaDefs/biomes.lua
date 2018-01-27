@@ -6,12 +6,13 @@ biome_chars = {
 }
 
 biome_types = {
-	plains = 1,
-	hills = 2,
-	mountains = 3,
-	plateau = 4,
-	oceans = 5,
-	coast = 6
+	oceans = 1,
+	plains = 2,
+	hills = 3,
+	mountains = 4,
+	highlands = 5,
+	plateau = 6,
+	coast = 7,
 }
 
 biomes = {
@@ -31,9 +32,21 @@ biomes = {
 		name = "Temperate Rainforest", minTemp = -20, maxTemp = 85, minRain = 65, maxRain = 100,
 		occurs = { biome_types["hills"], biome_types["mountains"], biome_types["coast"] },
 		soils  = { soil = 95, sand = 5 },
-		rend   = { glyph = glyphs['ever_tree'], color = "forest_green" },
-		plants = { grass = 20, blackberry = 2, plump_helmet = 3 },
+		rend   = { glyph = glyphs['ever_tree'], color = "dark forest_green" },
+		plants = { grass = 20, blackberry = 2, plump_helmet = 2 },
 		trees  = { deciduous = 10, evergreen = 55 }
 	},
 
+	-- Oceans
+	sea_ice = {
+		name = "Sea Ice", minTemp = -100, maxTemp = 5, minRain = 0, maxRain = 55,
+		occurs = { biome_types["oceans"] },
+		soils  = { soild = 0, sand = 100 },
+		rend   = { glyph = glyphs['water'], color = "dark ice" },  
+		plants = { none = 20, grass = 20 },
+		trees  = { deciduous = 0, evergreen = 1}
+	},
+
+	-- Coasts
+	
 };

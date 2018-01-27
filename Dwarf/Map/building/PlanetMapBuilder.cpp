@@ -163,7 +163,35 @@ void drawCoastlines(Planet & planet)
 
 void buildPlanetRainfall(Planet & planet)
 {
+	#pragma omp parallel for
+	for (int y = 0; y < WORLD_HEIGHT; ++y)
+	{
+		int rainAmt = 10;
+		for (int x = 0; x < WORLD_WIDTH; ++x)
+		{
+			auto& tile = planet.tiles[planet.idx(x, y)];
 
+			if (tile.type == PlanetTileType::MOUNTAINS)
+				rainAmt -= 20;
+
+			else if (tile.type == PlanetTileType::MOUNTAINS)
+				rainAmt -= 10;
+
+			else if (tile.type == PlanetTileType::MOUNTAINS)
+				rainAmt -= 5;
+
+			else
+				rainAmt += 1;
+
+			if (rainAmt < 0) rainAmt = 0;
+			if (rainAmt > 20) rainAmt = 20;
+
+			tile.rainfall += rainAmt;
+
+			if (tile.rainfall < 0)  tile.rainfall = 0;
+			if (tile.rainfall > 100) tile.rainfall = 100;
+		}
+	}
 }
 
 std::unordered_map<uint8_t, double> determineBiomeConstituants(Planet &planet, const size_t bidx)
@@ -250,7 +278,7 @@ std::vector<std::pair<double, size_t>> findPossibleBiomes(std::unordered_map<uin
 	forEachBiome([&biome, &idx, &percents, &ret](BiomeDef *b)
 	{
 		if (   biome.avgTemperature >= b->minTemp && biome.avgTemperature <= b->maxTemp
-			&& biome.avgRainfall    >= b->minRain && biome.avgRainfall    <= b->minRain)
+			&& biome.avgRainfall    >= b->minRain && biome.avgRainfall    <= b->maxRain)
 		{
 			
 			// Temp and rainfall fit, see if tiletypes are availible

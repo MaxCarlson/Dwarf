@@ -18,6 +18,7 @@ glyphs = {
 
 	barrel = 111,
 	tools2 = 123,
+	water = 126,
 
 	gears = 128,
 

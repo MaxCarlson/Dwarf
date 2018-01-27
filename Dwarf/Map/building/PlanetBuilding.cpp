@@ -102,6 +102,8 @@ void buildPlanet(const std::string seed, const int pwidth, const int pheight, Co
 
 	//drawCoastlines(planet);
 
+	buildPlanetRainfall(planet);
+
 	buildPlanetBiomes(planet, rng);
 
 	worldThread->detach();
