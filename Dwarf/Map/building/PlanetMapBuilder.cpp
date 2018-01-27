@@ -17,8 +17,8 @@ FastNoise genPlanetNoiseMap(Planet & planet)
 	noise.SetFractalGain(0.5F);
 	noise.SetFractalLacunarity(2.0F);
 
-	constexpr double maxTemp = 100.0;
-	constexpr double minTemp = -100.0;
+	constexpr double maxTemp =  56.7;
+	constexpr double minTemp = -55.2;
 	constexpr double range = maxTemp - minTemp;
 	const double halfHeight = WORLD_HEIGHT / 2.0;
 
@@ -30,21 +30,20 @@ FastNoise genPlanetNoiseMap(Planet & planet)
 		const auto tempByLatitude = (tempRange * range) + minTemp;
 
 		for (int x = 0; x < WORLD_WIDTH; ++x)
-		{
-			
-			uint8_t min = 0;
-			uint8_t max = std::numeric_limits<uint8_t>::max();
+		{		
+			uint8_t max = 0;
+			uint8_t min = std::numeric_limits<uint8_t>::max();
 			int totalHeight = 0;
 			int numTiles = 0;
 
-			for(int x1 = 0; x1 < MAP_WIDTH / MAP_FRACTION; ++x1)
-				for (int y1 = 0; y1 < MAP_HEIGHT / MAP_FRACTION; ++y1)
+			for(int x1 = 0; x1 < 4; ++x1)
+				for (int y1 = 0; y1 < 4; ++y1)
 				{
 					const auto nz = noise.GetNoise(noiseX(x, x1 * MAP_FRACTION), noiseY(y, y1 * MAP_FRACTION));
 
 					auto n = noiseToHeight(nz);
-					if (n < min) n = min;
-					if (n > max) n = max;
+					if (n < min) min = n;
+					if (n > max) max = n;
 					totalHeight += n;
 					++numTiles;
 				}
@@ -57,7 +56,8 @@ FastNoise genPlanetNoiseMap(Planet & planet)
 			const double altChange = std::abs(tile.height - planet.waterLevel) / 10.0;
 			tile.temperature = tempByLatitude - altChange;
 
-			// Normalize temperature here
+			if (tile.temperature < -55) tile.temperature = -55;
+			if (tile.temperature >  55) tile.temperature =  55;
 		}
 
 		updateWorldDisplay(planet);
@@ -298,7 +298,7 @@ std::vector<std::pair<double, size_t>> findPossibleBiomes(std::unordered_map<uin
 
 void buildPlanetBiomes(Planet & planet, Rng & rng)
 {
-	const int numBiomes = WORLD_HEIGHT * WORLD_WIDTH / (32 + rng.range(1, 64));
+	const int numBiomes = WORLD_HEIGHT * WORLD_WIDTH / (8 + rng.range(1, 8));
 
 	std::vector<std::pair<int, int>> biomeIndicies;
 
@@ -321,8 +321,10 @@ void buildPlanetBiomes(Planet & planet, Rng & rng)
 			{
 				const int biomeX = biomeIndicies[i].first;
 				const int biomeY = biomeIndicies[i].second;
+				const int dx = std::abs(biomeX - x);
+				const int dy = std::abs(biomeY - y);
 
-				const int biomeDist = get_2D_distance({ biomeX, biomeY, 1 }, { x, y, 1 });
+				const int biomeDist = (dx * dx) + (dy * dy);//get_2D_distance({ biomeX, biomeY, 1 }, { x, y, 1 });
 
 				if (biomeDist < tileDist)
 				{
@@ -342,7 +344,7 @@ void buildPlanetBiomes(Planet & planet, Rng & rng)
 
 	for (auto &biome : planet.biomes)
 	{
-		// Determine info about the biome
+		// Determine info about the biome based on tiles included in it
 		auto membershipCount = determineBiomeConstituants(planet, count);
 
 		if (!membershipCount.empty())

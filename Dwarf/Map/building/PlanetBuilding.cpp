@@ -21,7 +21,7 @@ void setPlanetChar(const int idx, const int tileIdx, Planet &planet)
 	switch (planet.tiles[tileIdx].type)
 	{
 	case PlanetTileType::NONE:
-		worldGenDisplay[idx] = { 0, 0, 0 };
+		worldGenDisplay[idx] = { 126, color_from_name("light blue"), color_from_name("dark blue") };
 		break;
 
 	case PlanetTileType::WATER:
@@ -52,14 +52,17 @@ void setPlanetChar(const int idx, const int tileIdx, Planet &planet)
 		worldGenDisplay[idx] = { 142, color_from_name("lightest brown"), color_from_name("dark yellow") };
 		break;
 	}
-
+	///*
 	// Override tile type display with biome char
 	const auto biomeIdx = planet.tiles[tileIdx].biomeIdx;
 	if (biomeIdx > 0 && !planet.biomes.empty() && biomeIdx < planet.biomes.size() && planet.biomes[biomeIdx].type > 0)
 	{
 		const auto* biomeDef = getBiomeDef(planet.biomes[biomeIdx].type);
-		worldGenDisplay[idx] = biomeDef->glyph;
+
+		if(biomeDef->glyph.c > 0)
+			worldGenDisplay[idx] = biomeDef->glyph;
 	}
+	//*/
 }
 
 void updateWorldDisplay(Planet & planet)
@@ -82,7 +85,10 @@ void zeroPlanet()
 
 void buildPlanet(const std::string seed, const int pwidth, const int pheight, Coordinates mapxyz, const int water, const int plains, const int numDwarves)
 {
-	Rng rng(seed);
+	Rng rrng;
+
+	//Rng rng(seed);
+	Rng rng(rrng.range(1, 432423));
 	planet.userSeed = rng.seed;
 	planet.noiseSeed = rng.seed;
 	planet.waterFreq = water;
