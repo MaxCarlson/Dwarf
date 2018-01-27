@@ -7,7 +7,8 @@
 #include "PlanetMapBuilder.h"
 #include "WorldGeneration.h"
 #include "Raws\BiomeReader.h"
-#include  "Raws\Defs\BiomeDef.h"
+#include "Raws\Defs\BiomeDef.h"
+#include "Map\building\BuildBiomes.h"
 
 // This is the game planet
 Planet planet;
@@ -109,6 +110,8 @@ void buildPlanet(const std::string seed, const int pwidth, const int pheight, Co
 	//drawCoastlines(planet);
 
 	buildPlanetRainfall(planet);
+
+	buildBiomes(planet, rng);
 
 	buildPlanetBiomes(planet, rng);
 

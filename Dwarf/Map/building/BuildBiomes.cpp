@@ -2,6 +2,7 @@
 #include "BuildBiomes.h"
 #include "../World/Planet.h"
 #include "Helpers\Rng.h"
+#include <boost\functional\hash.hpp>
 
 inline void findNeighbors(int x, int y, std::vector<std::pair<int, int>> &neighbors)
 {
@@ -9,29 +10,33 @@ inline void findNeighbors(int x, int y, std::vector<std::pair<int, int>> &neighb
 
 	if (x < WORLD_WIDTH - 1)
 		neighbors.emplace_back(std::make_pair(x + 1, y));
+	if (x > 0)
+		neighbors.emplace_back(std::make_pair(x - 1, y));
+	if (y < WORLD_HEIGHT - 1)
+		neighbors.emplace_back(std::make_pair(x, y + 1));
+	if (y > 0)
+		neighbors.emplace_back(std::make_pair(x, y - 1));
 }
 
-void findMatchingTiles(Planet &planet, Rng &rng, int max, int x, int y, std::vector<std::pair<int, int>> &matchingTiles)
+int findMatchingTiles(Planet &planet, Rng &rng, int max, int x, int y, std::vector<std::pair<int, int>> &matchingTiles)
 {
-	const auto& tile = planet.tiles[planet.idx(x, y)];
+	auto& tile = planet.tiles[planet.idx(x, y)];
 	const auto type = tile.type;
 
-	std::unordered_set<std::pair<int, int>> visited;
-	visited.emplace(std::make_pair(x, y));
+	std::queue<std::pair<int, int>> frontier;
+	std::unordered_set<std::pair<int, int>, boost::hash<std::pair<int, int>>> visited;
+	static std::vector<std::pair<int, int>> neighbors;
+
+	frontier.emplace(std::make_pair(x, y));
 
 	// Search outwards
 	int count = 1;
-	static std::vector<std::pair<int, int>> neighbors;
-
-	std::queue<std::pair<int, int>> frontier;
-	frontier.emplace(std::make_pair(x, y));
-
 	while (!frontier.empty() && count < max)
 	{
 		const auto t = frontier.front();
 		frontier.pop();
 
-		visited.insert(std::make_pair(t.first, t.second));
+		visited.emplace(std::make_pair(t.first, t.second));
 		findNeighbors(t.first, t.second, neighbors);
 
 		for (const auto& n : neighbors)
@@ -41,10 +46,23 @@ void findMatchingTiles(Planet &planet, Rng &rng, int max, int x, int y, std::vec
 			// If the neighbor node hasn't been visited
 			if (find == visited.end())
 			{
-				frontier.emplace(n);
+				tile = planet.tiles[planet.idx(n.first, n.second)];
+
+				// If tiles are of matching types
+				if (tile.type == type)
+				{
+					frontier.emplace(n);
+					++count;
+				}			
 			}
 		}
 	}
+	return count;
+}
+
+void findMatchingBiomes(const std::vector<std::pair<int, int>>& tiles)
+{
+
 }
 
 void buildBiomes(Planet & planet, Rng & rng)
@@ -60,7 +78,16 @@ void buildBiomes(Planet & planet, Rng & rng)
 		auto xy = std::make_pair(rng.range(1, WORLD_WIDTH), rng.range(1, WORLD_HEIGHT));
 		std::vector<std::pair<int, int>> matchingTiles;
 
-		findMatchingTiles(planet, rng, biomeSize, xy.first, xy.second, matchingTiles);
+		int count = findMatchingTiles(planet, rng, biomeSize, xy.first, xy.second, matchingTiles);
+
+		if (count > 1) // Posibbly change this number
+		{
+			filledTiles += count;
+
+			planet.biomes.emplace_back(Biome{});
+
+			
+		}
 	}
 
 }
