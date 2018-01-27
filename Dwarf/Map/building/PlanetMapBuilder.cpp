@@ -66,20 +66,22 @@ FastNoise genPlanetNoiseMap(Planet & planet)
 	return noise;
 }
 
-int determineNumberOfTiles(Planet &planet, int &tiles, int target)
+// Find the correct height for each planet.xLevel
+int determineNumberOfTiles(Planet &planet, int &height, int target)
 {
 	int count = 0;
 	while (count < target)
 	{
-		const int count = std::count_if(planet.tiles.begin(), planet.tiles.end(), [tiles](const tile_p &t)
+		const int count = std::count_if(planet.tiles.begin(), planet.tiles.end(), 
+			[height](const tile_p &t)
 		{
-			return t.height <= tiles;
+			return t.height <= height;
 		});
 
 		if (count >= target)
-			return tiles;
+			return height;
 		else
-			++tiles;
+			++height;
 	}
 	throw std::runtime_error("determineNumberOfTiles for planet Error!");
 }
@@ -93,18 +95,19 @@ void builPlanetTileTypes(Planet & planet)
 	const int plainsTiles = numTiles / planet.plainsFreq + waterTiles;
 	const int hillsTiles = numTiles / remaining + plainsTiles;
 
-	planet.waterLevel = determineNumberOfTiles(planet, candidate, waterTiles);
+	planet.waterLevel   = determineNumberOfTiles(planet, candidate, waterTiles);
 	planet.plainsHeight = determineNumberOfTiles(planet, candidate, plainsTiles);
-	planet.hillsHeight = determineNumberOfTiles(planet, candidate, hillsTiles);
+	planet.hillsHeight  = determineNumberOfTiles(planet, candidate, hillsTiles);
 
 	#pragma omp parallel for
 	for (auto i = 0; i < planet.tiles.size(); ++i)
 	{
 		auto& tile = planet.tiles.at(i);
+
 		if (tile.height < planet.waterLevel)
 		{
 			tile.type = PlanetTileType::WATER;
-			tile.rainfall = 15;
+			tile.rainfall = 10;
 		}
 		else if (tile.height <= planet.plainsHeight)
 		{
@@ -114,8 +117,8 @@ void builPlanetTileTypes(Planet & planet)
 		else if (tile.height <= planet.hillsHeight)
 		{
 			tile.type = PlanetTileType::HILLS;
-			tile.rainfall = 17;
-			if (tile.variance < 2)
+			tile.rainfall = 20;
+			if (tile.variance < 6)
 			{
 				tile.type = PlanetTileType::HIGHLANDS;
 				tile.rainfall = 10;
@@ -125,10 +128,10 @@ void builPlanetTileTypes(Planet & planet)
 		{
 			tile.type = PlanetTileType::MOUNTAINS;
 			tile.rainfall = 30;
-			if (tile.variance < 3)
+			if (tile.variance < 7)
 			{
 				tile.type = PlanetTileType::PLATEAUS;
-				tile.rainfall = 15;
+				tile.rainfall = 10;
 			}
 		}
 		updateWorldDisplay(planet);
@@ -286,7 +289,7 @@ std::vector<std::pair<double, size_t>> findPossibleBiomes(std::unordered_map<uin
 			{
 				auto find = percents.find(occurs);
 
-				if (find != percents.end() && find->second > 0)
+				if (find != percents.end() && find->second == 1.0)
 					ret.emplace_back(std::make_pair(find->second * 100.0, idx));
 			}
 		}

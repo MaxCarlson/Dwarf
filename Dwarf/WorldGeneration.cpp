@@ -14,28 +14,10 @@ constexpr int worldOffsetY = 0;
 
 inline void printBiomeInfo(const int x, const int y)
 {
-	int dx = 10000, dy = 10000;
+	const auto& tile = planet.tiles[planet.idx(x, y)]; 
 
-	double dist = 100000.0;
-
-	// Find closest biome to cursor
-	int i = 0;
-	int pbidx = 0;
-	for (const auto& b : planet.biomes)
-	{
-		double d = get_2D_distance({ x, y, 1 }, { b.centerX, b.centerY, 1 });
-		if (d < dist)
-		{
-			dist = 3;
-			pbidx = i;
-		}
-		++i;
-	}
-
-	auto bidx = planet.biomes[pbidx].type;
+	auto bidx = planet.biomes[tile.biomeIdx].type;
 	auto biomeName = getBiomeDef(bidx)->name;
-
-	const auto& tile = planet.tiles[planet.idx(x, y)];
 	
 	terminal_print_ext(worldOffsetX, WORLD_HEIGHT + worldOffsetY, 0, 0, TK_ALIGN_LEFT, biomeName.c_str());
 	terminal_print_ext(worldOffsetX, WORLD_HEIGHT + worldOffsetY + 1, 0, 0, TK_ALIGN_LEFT, (std::string("Temperature ") + std::to_string(tile.temperature)).c_str());

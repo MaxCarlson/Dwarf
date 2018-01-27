@@ -84,6 +84,7 @@
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <ForcedIncludeFiles>StdAfx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>C:\Users\C-60\Desktop\cppPrograms\dependencies\SFML-2.4.2\lib;C:\Users\C-60\Desktop\cppPrograms\dependencies\lua-5.3.4\Lua\x64\Release;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -101,6 +102,7 @@
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <ForcedIncludeFiles>StdAfx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>C:\Users\C-60\Desktop\cppPrograms\dependencies\SFML-2.4.2\lib;C:\Users\C-60\Desktop\cppPrograms\dependencies\lua-5.3.4\Lua\x64\Release;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -121,6 +123,7 @@
       <ForcedIncludeFiles>StdAfx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -143,6 +146,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <ForcedIncludeFiles>StdAfx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -152,6 +156,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Map\building\BuildBiomes.cpp" />
     <ClCompile Include="ECS\Systems\timebased\CalenderSystem.cpp" />
     <ClCompile Include="ECS\Components\Calender.cpp" />
     <ClCompile Include="ECS\Systems\ai\FarmingAi.cpp" />
@@ -239,6 +244,7 @@
     <ClCompile Include="WorldGeneration.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Map\building\BuildBiomes.h" />
     <ClInclude Include="ECS\Components\Tags\HarvestTag.h" />
     <ClInclude Include="ECS\Components\Tags\PlantingTag.h" />
     <ClInclude Include="ECS\Messages\harvest_map_changed_message.h" />

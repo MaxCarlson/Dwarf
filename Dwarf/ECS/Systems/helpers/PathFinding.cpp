@@ -114,7 +114,7 @@ bool aStar(Coordinates start, Coordinates end, std::unordered_map<Coordinates, C
 		findNeighbors(current, neighbors);
 
 		// Loop through all neighbors of currrent tile
-		for (auto& next : neighbors)//pathGraph.neighbors(current))
+		for (auto& next : neighbors)
 		{
 			double newCost = costSoFar[current] + cost(current, next);
 
