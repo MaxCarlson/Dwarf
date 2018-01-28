@@ -70,7 +70,7 @@ biomes = {
 
 	-- Oceans
 	sea_ice = {
-		name = "Sea Ice", minTemp = -100, maxTemp = 5, minRain = 0, maxRain = 55,
+		name = "Sea Ice", minTemp = -100, maxTemp = -10, minRain = 0, maxRain = 55,
 		occurs = { biome_types["oceans"] },
 		soils  = { soil = 0, sand = 100 },
 		rend   = { glyph = glyphs['water'], color = "dark ice" },  

@@ -44,10 +44,10 @@ struct Biome
 	int centerX;
 	int centerY;
 
-	int avgAltitude;
-	int avgRainfall;
-	int avgTemperature;
-	int avgVariance;
+	uint8_t avgAltitude;
+	uint8_t avgRainfall;
+	uint8_t avgTemperature;
+	uint8_t avgVariance;
 
 	int savagery;
 
@@ -75,7 +75,7 @@ struct Planet
 	std::vector<Biome> biomes;
 	std::vector<tile_p> tiles;
 
-	inline int idx(int x, int y) { return y * WORLD_WIDTH + x; }
+	inline int idx(int x, int y) const { return y * WORLD_WIDTH + x; }
 
 	template<class Archive>
 	void serialize(Archive & archive)
