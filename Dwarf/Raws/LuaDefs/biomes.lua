@@ -120,8 +120,72 @@ biomes = {
 	},
 
 	-- Highlands
+	
+	frozen_highlands = {
+		name = "Frozen Highlands", minTemp = -100, maxTemp = 3, minRain = 0, maxRain = 100,
+		occurs = { biome_types["highlands"] },
+		soils   = { soil = 75, sand = 25 },
+		plants = { grass = 3 },
+		trees  = { deciduous = 0, evergreen = 1 }
+	},
+
+	temperate_highlands = {
+		name = "Temperate Highlands", minTemp = -5, maxTemp = 5, minRain = 0, maxRain = 100,
+		occurs = { biome_types["highlands"] },
+		soils   = { soil = 75, sand = 25 },
+		plants = { grass = 8 },
+		trees  = { deciduous = 0, evergreen = 3 }
+	},
+
+	grassy_highlands = {
+		name = "Grassy Highlands", minTemp = 5, maxTemp = 25, minRain = 0, maxRain = 100,
+		occurs = { biome_types["highlands"] },
+		soils  = { soil = 75, sand = 25 },
+		plants = { grass = 12 },
+		trees  = { deciduous = 3, evergreen = 8 }
+	},
+
+	savannah_highlands = {
+		name = "Savannah Highlands", minTemp = 25, maxTemp = 55, minRain = 0, maxRain = 100,
+		occurs = { biome_types["highlands"] },
+		soils  = { soil = 75, sand = 25 },
+		plants = { grass = 11 },
+		trees  = { deciduous = 4, evergreen = 0 }
+	},
 
 	-- Plateaus
+
+	frozen_plateaus = {
+		name = "Frozen Plateaus", minTemp = -100, maxTemp = 3, minRain = 0, maxRain = 100,
+		occurs = { biome_types["plateaus"] },
+		soils   = { soil = 75, sand = 25 },
+		plants = { grass = 3 },
+		trees  = { deciduous = 0, evergreen = 1 }
+	},
+
+	temperate_plateaus = {
+		name = "Temperate Plateaus", minTemp = -5, maxTemp = 5, minRain = 0, maxRain = 100,
+		occurs = { biome_types["plateaus"] },
+		soils   = { soil = 75, sand = 25 },
+		plants = { grass = 8 },
+		trees  = { deciduous = 0, evergreen = 3 }
+	},
+
+	grassy_plateaus = {
+		name = "Grassy Plateaus", minTemp = 5, maxTemp = 25, minRain = 0, maxRain = 100,
+		occurs = { biome_types["plateaus"] },
+		soils  = { soil = 75, sand = 25 },
+		plants = { grass = 12 },
+		trees  = { deciduous = 3, evergreen = 8 }
+	},
+
+	savannah_plateaus = {
+		name = "Savannah Plateaus", minTemp = 25, maxTemp = 55, minRain = 0, maxRain = 100,
+		occurs = { biome_types["plateaus"] },
+		soils  = { soil = 75, sand = 25 },
+		plants = { grass = 11 },
+		trees  = { deciduous = 4, evergreen = 0 }
+	},
 
 	-- Oceans
 	sea_ice = {
@@ -161,18 +225,36 @@ biomes = {
 
 	-- Forests
 
-	-- Rainforests
-	temperate_rainforest = {
-		name = "Temperate Rainforest", minTemp = -10, maxTemp = 85, minRain = 25, maxRain = 100,
+	temperate_forest = {
+		name = "Temperate Forest", minTemp = -10, maxTemp = 85, minRain = 13, maxRain = 100,
 		occurs = { biome_types["hills"], biome_types["mountains"], biome_types["coasts"] },
 		soils  = { soil = 95, sand = 5 },
 		plants = { grass = 20, blackberry = 2, plump_helmet = 2 },
-		trees  = { deciduous = 10, evergreen = 55 },
+		trees  = { deciduous = 5, evergreen = 45 },
+		rend   = { glyph = glyphs['ever_tree'], color = "dark forest_green" },
+	},
+
+	tropical_forest = {
+		name = "Tropical Forest", minTemp = 30, maxTemp = 100, minRain = 14, maxRain = 100,
+		occurs = { biome_types["hills"], biome_types["mountains"], biome_types["coasts"] },
+		soils = { soil = 93, sand = 7 },
+		plants = { grass = 15, plump_helmet = 2, },
+		trees = { deciduous = 55, evergreen = 0 },
+		rend = { glyph = glyphs['deci_tree'], color = "forest_green" },
+	},
+
+	-- Rainforests
+	temperate_rainforest = {
+		name = "Temperate Rainforest", minTemp = -10, maxTemp = 85, minRain = 22, maxRain = 100,
+		occurs = { biome_types["hills"], biome_types["mountains"], biome_types["coasts"] },
+		soils  = { soil = 95, sand = 5 },
+		plants = { grass = 20, blackberry = 2, plump_helmet = 2 },
+		trees  = { deciduous = 5, evergreen = 45 },
 		rend   = { glyph = glyphs['ever_tree'], color = "dark forest_green" },
 	},
 
 	tropical_rainforest = {
-		name = "Tropical Rainforst", minTemp = 33, maxTemp = 100, minRain = 25, maxRain = 100,
+		name = "Tropical Rainforest", minTemp = 33, maxTemp = 100, minRain = 25, maxRain = 100,
 		occurs = { biome_types["hills"], biome_types["mountains"], biome_types["coasts"] },
 		soils = { soil = 93, sand = 7 },
 		plants = { grass = 15, plump_helmet = 2, },

@@ -26,7 +26,7 @@ FastNoise genPlanetNoiseMap(Planet & planet)
 	for (int y = 0; y < WORLD_HEIGHT; ++y)
 	{
 		const auto distanceFromEquator = std::abs(WORLD_HEIGHT / 2 - y);
-		const auto tempRange = 1.0 - (static_cast<double>(distanceFromEquator) / halfHeight);
+		const auto tempRange = 1.1 - (static_cast<double>(distanceFromEquator) / halfHeight);
 		const auto tempByLatitude = (tempRange * range) + minTemp;
 
 		for (int x = 0; x < WORLD_WIDTH; ++x)
@@ -118,7 +118,7 @@ void builPlanetTileTypes(Planet & planet)
 		{
 			tile.type = PlanetTileType::HILLS;
 			tile.rainfall = 20;
-			if (tile.variance < 6)
+			if (tile.variance < 12)
 			{
 				tile.type = PlanetTileType::HIGHLANDS;
 				tile.rainfall = 10;
@@ -128,7 +128,7 @@ void builPlanetTileTypes(Planet & planet)
 		{
 			tile.type = PlanetTileType::MOUNTAINS;
 			tile.rainfall = 30;
-			if (tile.variance < 7)
+			if (tile.variance < 12)
 			{
 				tile.type = PlanetTileType::PLATEAUS;
 				tile.rainfall = 10;

@@ -171,7 +171,7 @@ void buildBiomes(Planet & planet, Rng & rng)
 	size_t bidx = 0;
 	while (filledTiles < WORLD_HEIGHT * WORLD_WIDTH)
 	{
-		const int biomeSize = rng.range(35, 135);
+		const int biomeSize = rng.range(35, 55);
 		auto xy = std::make_pair(rng.range(0, WORLD_WIDTH - 1), rng.range(0, WORLD_HEIGHT - 1));
 		std::vector<std::pair<int, int>> matchingTiles;
 

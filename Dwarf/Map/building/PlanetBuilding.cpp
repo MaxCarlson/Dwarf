@@ -86,10 +86,7 @@ void zeroPlanet()
 
 void buildPlanet(const std::string seed, const int pwidth, const int pheight, Coordinates mapxyz, const int water, const int plains, const int numDwarves)
 {
-	Rng rrng;
-
-	//Rng rng(seed);
-	Rng rng(rrng.range(1, 432423));
+	Rng rng(seed);
 	planet.userSeed = rng.seed;
 	planet.noiseSeed = rng.seed;
 	planet.waterFreq = water;
