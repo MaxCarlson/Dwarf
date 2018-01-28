@@ -31,6 +31,7 @@ int findMatchingTiles(const Planet &planet, Rng &rng, int max, int x, int y, std
 
 	frontier.emplace(std::make_pair(x, y));
 	matchingTiles.emplace_back(std::make_pair(x, y));
+	visited.emplace(std::make_pair(x, y));
 
 	// Search outwards
 	int count = 1;
@@ -39,7 +40,7 @@ int findMatchingTiles(const Planet &planet, Rng &rng, int max, int x, int y, std
 		const auto t = frontier.front();
 		frontier.pop();
 
-		visited.emplace(std::make_pair(t.first, t.second));
+		//visited.emplace(std::make_pair(t.first, t.second));
 		findNeighbors(t.first, t.second, neighbors);
 
 		for (const auto& n : neighbors)
@@ -92,10 +93,10 @@ void findBiomeInfo(Planet& planet, const size_t bidx, const std::vector<std::pai
 
 	const double count = static_cast<double>(totalTiles);
 
-	biome.avgAltitude = static_cast<uint8_t>(double(totalAltitude) / count);
-	biome.avgRainfall = static_cast<uint8_t>(double(totalRainfall) / count);
-	biome.avgTemperature = static_cast<uint8_t>(double(totalTemp)  / count);
-	biome.avgVariance = static_cast<uint8_t>(double(totalVariance) / count);
+	biome.avgAltitude = static_cast<int>(double(totalAltitude) / count);
+	biome.avgRainfall = static_cast<int>(double(totalRainfall) / count);
+	biome.avgTemperature = static_cast<int>(double(totalTemp)  / count);
+	biome.avgVariance = static_cast<int>(double(totalVariance) / count);
 
 	biome.centerX = totalX / totalTiles;
 	biome.centerY = totalY / totalTiles;
@@ -103,7 +104,7 @@ void findBiomeInfo(Planet& planet, const size_t bidx, const std::vector<std::pai
 
 size_t findBestBiomeMatch(const Planet& planet, int tx, int ty, const Biome& biome)
 {
-	size_t idx = 0;
+	int idx = -1;
 	size_t bidx = 0;
 	int dist = 10000;
 
@@ -111,9 +112,10 @@ size_t findBestBiomeMatch(const Planet& planet, int tx, int ty, const Biome& bio
 
 	forEachBiome([&centerTile, &biome, &dist, &idx, &bidx](BiomeDef *b) 
 	{
+		++idx;
 		// If biome def is a possible match for our biome
 		if (biome.avgTemperature >= b->minTemp && biome.avgTemperature <= b->maxTemp
-			&& biome.avgRainfall >= b->minRain && biome.avgRainfall <= b->maxRain)
+			&& biome.avgRainfall >= b->minRain && biome.avgRainfall    <= b->maxRain)
 		{
 			bool possible = false;
 			// Temp and rainfall fit, see if this biome can be placed into this planet tile type
@@ -143,8 +145,19 @@ size_t findBestBiomeMatch(const Planet& planet, int tx, int ty, const Biome& bio
 				bidx = idx;
 			}
 		}
-		++idx;
 	});
+
+	auto b = getBiomeDef(bidx);
+
+	bool possible = false;
+	for (const auto o : b->occurs)
+	{
+		if (o == centerTile.type)
+			possible = true;
+	}
+
+	if (!possible)
+		int a = 5;
 
 	return bidx;
 }
@@ -158,7 +171,7 @@ void buildBiomes(Planet & planet, Rng & rng)
 	size_t bidx = 0;
 	while (filledTiles < WORLD_HEIGHT * WORLD_WIDTH)
 	{
-		const int biomeSize = rng.range(35, 185);
+		const int biomeSize = rng.range(35, 135);
 		auto xy = std::make_pair(rng.range(0, WORLD_WIDTH - 1), rng.range(0, WORLD_HEIGHT - 1));
 		std::vector<std::pair<int, int>> matchingTiles;
 
@@ -175,6 +188,30 @@ void buildBiomes(Planet & planet, Rng & rng)
 			size_t defIdx = findBestBiomeMatch(planet, xy.first, xy.second, planet.biomes.back());
 
 			planet.biomes.back().type = defIdx;
+
+			auto& tt = planet.tiles[planet.idx(xy.first, xy.second)];
+			for (const auto& m : matchingTiles)
+			{
+				auto& t = planet.tiles[planet.idx(m.first, m.second)];
+				auto b = getBiomeDef(planet.biomes[t.biomeIdx].type);
+
+				bool possible = false;
+				for (const auto& bt : b->occurs)
+				{
+					if (t.type == bt)
+						possible = true;
+				}
+
+				if (!possible)
+				{
+					int a = 5;
+				}
+
+				if (t.type != tt.type)
+				{
+					int a = 5;
+				}
+			}
 
 			updateWorldDisplay(planet);
 			++bidx;

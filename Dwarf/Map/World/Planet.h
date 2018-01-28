@@ -44,10 +44,10 @@ struct Biome
 	int centerX;
 	int centerY;
 
-	uint8_t avgAltitude;
-	uint8_t avgRainfall;
-	uint8_t avgTemperature;
-	uint8_t avgVariance;
+	int avgAltitude;
+	int avgRainfall;
+	int avgTemperature;
+	int avgVariance;
 
 	int savagery;
 

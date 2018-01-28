@@ -56,7 +56,7 @@ void setPlanetChar(const int idx, const int tileIdx, Planet &planet)
 	///*
 	// Override tile type display with biome char
 	const auto biomeIdx = planet.tiles[tileIdx].biomeIdx;
-	if (biomeIdx > 0 && !planet.biomes.empty() && biomeIdx < planet.biomes.size() && planet.biomes[biomeIdx].type > 0)
+	if (biomeIdx > -1 && !planet.biomes.empty() && biomeIdx < planet.biomes.size() && planet.biomes[biomeIdx].type > 0)
 	{
 		const auto* biomeDef = getBiomeDef(planet.biomes[biomeIdx].type);
 

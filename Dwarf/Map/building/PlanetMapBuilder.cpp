@@ -248,10 +248,10 @@ std::unordered_map<uint8_t, double> determineBiomeConstituants(Planet &planet, c
 	// Assign averages to biome
 	double count = static_cast<double>(numTiles);
 
-	biome.avgAltitude = static_cast<uint8_t>(static_cast<double>(totalAltitude) / count);
-	biome.avgRainfall = static_cast<uint8_t>(static_cast<double>(totalRainfall) / count);
-	biome.avgTemperature = static_cast<uint8_t>(static_cast<double>(totalTemp) / count);
-	biome.avgVariance = static_cast<uint8_t>(static_cast<double>(totalVariance) / count);
+	biome.avgAltitude = static_cast<int>(double(totalAltitude) / count);
+	biome.avgRainfall = static_cast<int>(double(totalRainfall) / count);
+	biome.avgTemperature = static_cast<int>(double(totalTemp) / count);
+	biome.avgVariance = static_cast<int>(double(totalVariance) / count);
 
 	biome.centerX = totalX / numTiles;
 	biome.centerY = totalY / numTiles;
