@@ -134,14 +134,15 @@ void builPlanetTileTypes(Planet & planet)
 				tile.rainfall = 10;
 			}
 		}
-		updateWorldDisplay(planet);
+		if (i % 6 == 0)
+			updateWorldDisplay(planet);
 	}
 }
 
 void drawCoastlines(Planet & planet)
 {
-	for(int x = 1; x < WORLD_WIDTH - 1; ++x)
-		for (int y = 1; y < WORLD_HEIGHT - 1; ++y)
+	for(int x = 0; x < WORLD_WIDTH - 1; ++x)
+		for (int y = 0; y < WORLD_HEIGHT - 1; ++y)
 		{
 			auto& tile = planet.tiles[planet.idx(x, y)];
 

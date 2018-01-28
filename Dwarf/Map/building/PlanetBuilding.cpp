@@ -113,7 +113,7 @@ void buildPlanet(const std::string seed, const int pwidth, const int pheight, Co
 
 	buildBiomes(planet, rng);
 
-	buildPlanetBiomes(planet, rng);
+	//buildPlanetBiomes(planet, rng);
 
 	worldThread->detach();
 }

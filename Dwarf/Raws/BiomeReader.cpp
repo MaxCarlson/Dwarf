@@ -68,7 +68,7 @@ void readInBiomes() noexcept
 		}
 	);
 
-	int a = 5;
+//	int a = 5;
 }
 
 void sanityCheckBiomes() noexcept

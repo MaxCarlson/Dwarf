@@ -1,9 +1,4 @@
 
-biome_chars = {
-	
-
-
-}
 
 biome_types = {
 	oceans = 1,

@@ -14,17 +14,26 @@ constexpr int worldOffsetY = 0;
 
 inline void printBiomeInfo(const int x, const int y)
 {
-	const auto& tile = planet.tiles[planet.idx(x, y)]; 
+	const auto& tile = planet.tiles[planet.idx(x - worldOffsetX, y - worldOffsetY)]; 
 
-	auto bidx = planet.biomes[tile.biomeIdx].type;
-	auto biomeName = getBiomeDef(bidx)->name;
-	
-	terminal_print_ext(worldOffsetX, WORLD_HEIGHT + worldOffsetY, 0, 0, TK_ALIGN_LEFT, biomeName.c_str());
+	terminal_print_ext(worldOffsetX, WORLD_HEIGHT + worldOffsetY + 6, 0, 0, TK_ALIGN_LEFT, (std::string("x = ") + std::to_string(x)).c_str());
+	terminal_print_ext(worldOffsetX, WORLD_HEIGHT + worldOffsetY + 7, 0, 0, TK_ALIGN_LEFT, (std::string("y = ") + std::to_string(y)).c_str());
 	terminal_print_ext(worldOffsetX, WORLD_HEIGHT + worldOffsetY + 1, 0, 0, TK_ALIGN_LEFT, (std::string("Temperature ") + std::to_string(tile.temperature)).c_str());
 	terminal_print_ext(worldOffsetX, WORLD_HEIGHT + worldOffsetY + 2, 0, 0, TK_ALIGN_LEFT, (std::string("Rainfall ") + std::to_string(tile.rainfall)).c_str());
 	terminal_print_ext(worldOffsetX, WORLD_HEIGHT + worldOffsetY + 3, 0, 0, TK_ALIGN_LEFT, (std::string("Height ") + std::to_string(tile.height)).c_str());
 	terminal_print_ext(worldOffsetX, WORLD_HEIGHT + worldOffsetY + 4, 0, 0, TK_ALIGN_LEFT, (std::string("Type ") + std::to_string(tile.type)).c_str());
 	terminal_print_ext(worldOffsetX, WORLD_HEIGHT + worldOffsetY + 5, 0, 0, TK_ALIGN_LEFT, (std::string("Variance ") + std::to_string(tile.variance)).c_str());
+
+	if (tile.biomeIdx == -1)
+	{
+		terminal_print_ext(worldOffsetX, WORLD_HEIGHT + worldOffsetY, 0, 0, TK_ALIGN_LEFT, "No Biome!");
+		return;
+	}
+
+	auto bidx = planet.biomes[tile.biomeIdx].type;
+	auto biomeName = getBiomeDef(bidx)->name;
+	
+	terminal_print_ext(worldOffsetX, WORLD_HEIGHT + worldOffsetY, 0, 0, TK_ALIGN_LEFT, biomeName.c_str());
 }
 
 void renderWorld(bool drawCursor = false, int cx = 0, int cy = 0)
