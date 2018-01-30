@@ -4,6 +4,11 @@
 #include "Engine.h"
 #include "MainMenu.h"
 #include "Raws\raws.h"
+#include <SFML\Graphics.hpp>
+#include <SFML\Window.hpp>
+#include <imgui.h>
+#include <imgui-SFML.h>
+#include <DwarfRender.h>
 
 // Numbers a screen width and height, make more 
 // dynamic eventually
@@ -25,6 +30,23 @@ int main()
 
 	terminal_set("input.filter = [keyboard, mouse+]");
 	terminal_composition(true);
+
+	dfr::config_r cf("SFML WINDOW", "DwarfTex.png", 40, 40, "font");
+	dfr::registerFont("font", "DwarfTex.png", 16, 16);
+	dfr::initInputs(16, 16);
+
+	dfr::init(cf);
+
+	ImGui::SFML::Init(*dfr::getWindow());
+	//getWindow()->resetGLStates();
+
+	dfr::terminal->setChar(0, 0, { 'b',{ 55, 55, 0 },{ 0, 0, 233 } });
+	dfr::terminal->setChar(2, 0, { 196,{ 55, 55, 0 },{ 0, 0, 233 } });
+	dfr::terminal->setChar(3, 0, { 205,{ 55, 55, 0 },{ 0, 0, 233 } });
+	dfr::terminal->setChar(25, 0, { 570,{ 255, 55, 0 },{ 233, 55, 233 } });
+
+
+	dfr::run([](double d) {});
 
 	loadRaws();
 
