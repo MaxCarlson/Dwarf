@@ -7,6 +7,8 @@
 #include "Raws\BiomeReader.h"
 #include "Raws\Defs\BiomeDef.h"
 
+#include <DwarfRender.h>
+
 std::unique_ptr<std::thread> worldThread;
 
 constexpr int worldOffsetX = 7;
@@ -75,10 +77,12 @@ void generateWorld(const std::string seed, const int pwidth, const int pheight, 
 {
 	worldThread = std::make_unique<std::thread>(buildPlanet, seed, pwidth, pheight, mapxyz, water, plains, numDwarves);
 
+	/*
 	while (worldThread->joinable())
 	{
 		renderWorld();
 	}
+	*/
 }
 
 bool handleIn(int &x, int &y, bool &quit)

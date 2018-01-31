@@ -16,6 +16,8 @@ Planet planet;
 std::mutex planetBuilderLock;
 std::vector<vchar> worldGenDisplay;
 
+std::atomic<bool> worldGenDone = false;
+
 void setPlanetChar(const int idx, const int tileIdx, Planet &planet)
 {
 
@@ -113,4 +115,5 @@ void buildPlanet(const std::string seed, const int pwidth, const int pheight, Co
 	//buildPlanetBiomes(planet, rng);
 
 	worldThread->detach();
+	worldGenDone = true;
 }

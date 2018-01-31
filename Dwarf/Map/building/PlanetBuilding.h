@@ -10,6 +10,7 @@ extern Planet planet;
 
 extern std::mutex planetBuilderLock;
 extern std::vector<vchar> worldGenDisplay;
+extern std::atomic<bool> worldGenDone;
 
 void updateWorldDisplay(Planet & planet);
 
