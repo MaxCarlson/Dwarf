@@ -46,6 +46,11 @@ void renderWorldGen()
 		if (x > dfr::terminal->width - 1)
 		{
 			++x;
+			if (x > WORLD_WIDTH - 1 + wxOffset)
+			{
+				x = wxOffset;
+				++y;
+			}
 			continue;
 		}
 
