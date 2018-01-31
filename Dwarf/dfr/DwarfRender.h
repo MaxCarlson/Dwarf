@@ -30,6 +30,6 @@ namespace dfr
 
 	void init(config_r config);
 
-	void run(std::function<void(double)> onTick);
+	void run(std::function<void(double)>& onTick);
 }
 

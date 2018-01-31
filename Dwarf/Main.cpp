@@ -10,6 +10,9 @@
 #include <imgui-SFML.h>
 #include <DwarfRender.h>
 
+#include "Globals\MainFunction.h"
+#include "MainLoops\MainMenuLoop.h"
+
 // Numbers a screen width and height, make more 
 // dynamic eventually
 std::unique_ptr<Engine> engine;
@@ -31,24 +34,27 @@ int main()
 	terminal_set("input.filter = [keyboard, mouse+]");
 	terminal_composition(true);
 
-	dfr::config_r cf("SFML WINDOW", "DwarfTex.png", 40, 40, "font");
-	dfr::registerFont("font", "DwarfTex.png", 16, 16);
+	loadRaws();
+	
+	///*
+	dfr::config_r cf("SFML WINDOW", "../DwarfTex.png", 80, 80, "font");
+	dfr::registerFont("font", "../DwarfTex.png", 16, 16);
 	dfr::initInputs(16, 16);
 
 	dfr::init(cf);
 
 	ImGui::SFML::Init(*dfr::getWindow());
-	//getWindow()->resetGLStates();
+	//dfr::getWindow()->resetGLStates();
 
-	dfr::terminal->setChar(0, 0, { 'b',{ 55, 55, 0 },{ 0, 0, 233 } });
-	dfr::terminal->setChar(2, 0, { 196,{ 55, 55, 0 },{ 0, 0, 233 } });
-	dfr::terminal->setChar(3, 0, { 205,{ 55, 55, 0 },{ 0, 0, 233 } });
-	dfr::terminal->setChar(25, 0, { 570,{ 255, 55, 0 },{ 233, 55, 233 } });
+	MainFunction = MainMenuLoop::run;
+
+	while (true)
+	{
+		dfr::run(MainFunction);
+	}
 
 
-	dfr::run([](double d) {});
-
-	loadRaws();
+	//*/
 
 	while (true)
 	{

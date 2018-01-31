@@ -37,7 +37,7 @@ namespace dfr
 		terminal->resizePix(sizePixel.x, sizePixel.y);
 	}
 
-	void run(std::function<void(double)> onTick)
+	void run(std::function<void(double)>& onTick)
 	{
 		resetMouseState();
 
@@ -89,22 +89,11 @@ namespace dfr
 						setMouseState(Button::WHEEL_DOWN, true);
 				}
 			}
-			/*
-			auto& in = readInput();
-			while (in.size())
-			{
-				auto ev = in.front();
-				in.pop();
 
-				auto mousePos = getMousePosition();
-
-				if(ev.key.code == sf::Keyboard::A)
-					terminal->setChar(mousePos.first, mousePos.second, { 'b',{ 55, 55, 0 }, { 0, 0, 233 } });
-			}
-			*/
 			ImGui::SFML::Update(*mainWindow, deltaClock.restart());
 
-			ImGui::Begin("Sample Window");
+			/*
+			ImGui::Begin("Sample Window"); // Imugi example
 
 			sf::Color bgColor;
 
@@ -131,6 +120,7 @@ namespace dfr
 
 
 			ImGui::End(); // end window
+			*/
 
 			mainWindow->clear();
 
