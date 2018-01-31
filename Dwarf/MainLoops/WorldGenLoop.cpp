@@ -124,10 +124,10 @@ void WorldGenLoop::run(const double duration)
 
 	else if (stage == Stage::CHOOSE_EMBARK)
 	{
-		if (mousePos.first > 0 + wxOffset && mousePos.first < WORLD_WIDTH + wxOffset
-			&& mousePos.first > 0 + wyOffset && mousePos.first < WORLD_HEIGHT + wyOffset)
+		if (mousePos.first >= 0 + wxOffset && mousePos.first < WORLD_WIDTH + wxOffset
+			&& mousePos.second >= 0 + wyOffset && mousePos.second < WORLD_HEIGHT + wyOffset)
 		{
-			const auto& tile = planet.tiles[planet.idx(mousePos.first, mousePos.second)];
+			const auto& tile = planet.tiles[planet.idx(mousePos.first - wxOffset, mousePos.second - wyOffset)];
 
 			std::string biomeName = "No Biome!";
 
@@ -146,6 +146,9 @@ void WorldGenLoop::run(const double duration)
 			ImGui::Text(std::string("Tile Variance " + std::to_string(tile.variance)).c_str());
 
 			ImGui::End();
+
+			//ImGui::IsMouseClicked(int{});
+			
 		}
 	}
 }
