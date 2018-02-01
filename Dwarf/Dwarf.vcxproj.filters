@@ -273,6 +273,9 @@
     <ClCompile Include="MainLoops\PlayGameLoop.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Globals\GlobalWorld.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -927,6 +930,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MainLoops\PlayGameLoop.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Globals\GlobalWorld.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

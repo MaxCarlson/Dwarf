@@ -1,5 +1,8 @@
 #include "stdafx.h"
 #include "WorldGenLoop.h"
+#include "PlayGameLoop.h"
+#include "MainMenuLoop.h"
+#include "Globals\MainFunction.h"
 #include "WorldGeneration.h"
 #include "Map\building\PlanetBuilding.h"
 #include "Raws\BiomeReader.h"
@@ -23,7 +26,8 @@ namespace Details
 	{
 		NOT_GENERATING,
 		GENERATING,
-		CHOOSE_EMBARK
+		CHOOSE_EMBARK,
+		FINALIZE_EMBARK
 	};
 
 	Stage stage = NOT_GENERATING;
@@ -127,7 +131,7 @@ void WorldGenLoop::run(const double duration)
 		ImGui::End();
 	}
 
-	else if (stage == Stage::CHOOSE_EMBARK)
+	else if (stage == Stage::CHOOSE_EMBARK || stage == Stage::FINALIZE_EMBARK)
 	{
 		if (mousePos.first >= 0 + wxOffset && mousePos.first < WORLD_WIDTH + wxOffset
 			&& mousePos.second >= 0 + wyOffset && mousePos.second < WORLD_HEIGHT + wyOffset)
@@ -151,9 +155,27 @@ void WorldGenLoop::run(const double duration)
 			ImGui::Text(std::string("Tile Variance " + std::to_string(tile.variance)).c_str());
 
 			ImGui::End();
+		}
 
-			//ImGui::IsMouseClicked(int{});
-			
+		if (ImGui::IsMouseClicked(dfr::Button::LEFT) || stage == Stage::FINALIZE_EMBARK)
+		{
+			stage = Stage::FINALIZE_EMBARK;
+
+			ImGui::SetNextWindowPosCenter();
+			ImGui::Begin("Finalize Embark", nullptr, ImVec2{ 600, 400 }, 0.7f, ImGuiWindowFlags_AlwaysAutoResize + ImGuiWindowFlags_NoCollapse);
+			ImGui::Text("Really Embark Here?");
+
+			if (ImGui::Button("Yes"))
+			{
+				MainFunction = PlayGameLoop::run;
+			}
+
+			if (ImGui::Button("No"))
+			{
+				stage = Stage::CHOOSE_EMBARK;
+			}
+
+			ImGui::End();
 		}
 	}
 }
