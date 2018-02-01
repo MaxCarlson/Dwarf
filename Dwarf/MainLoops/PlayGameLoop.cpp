@@ -12,6 +12,11 @@ namespace Details
 
 std::unordered_map<std::string, SystemBase*> systems;
 
+void newGame()
+{
+
+}
+
 void PlayGameLoop::run(const double duration)
 {
 	//using namespace Details;
@@ -20,6 +25,11 @@ void PlayGameLoop::run(const double duration)
 	{
 		RunSystems::initSystems();
 		ComponentsInit::init(); // This isn't strictly neccasary if a new game has been started before, probably won't cause issues but keep a look out!
+	}
+	
+	else if (gameState == GameState::LOAD_GAME)
+	{
+
 	}
 
 

@@ -4,6 +4,7 @@
 enum GameState
 {
 	NEW_GAME,
+	LOAD_GAME,
 	PLAYING,
 
 };

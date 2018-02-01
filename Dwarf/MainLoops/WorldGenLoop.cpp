@@ -3,6 +3,7 @@
 #include "PlayGameLoop.h"
 #include "MainMenuLoop.h"
 #include "Globals\MainFunction.h"
+#include "Globals\game_states.h"
 #include "WorldGeneration.h"
 #include "Map\building\PlanetBuilding.h"
 #include "Raws\BiomeReader.h"
@@ -168,6 +169,7 @@ void WorldGenLoop::run(const double duration)
 			if (ImGui::Button("Yes"))
 			{
 				MainFunction = PlayGameLoop::run;
+				gameState = GameState::NEW_GAME;
 			}
 
 			if (ImGui::Button("No"))
