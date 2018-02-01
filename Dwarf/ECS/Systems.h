@@ -102,6 +102,8 @@ public:
 
 	virtual void init() {}
 
+	virtual void update(const double duration) {}
+
 	// Returns a Filter object that holds two
 	// bool vectors that describe required and 
 	// excluded components

@@ -276,6 +276,12 @@
     <ClCompile Include="Globals\GlobalWorld.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Globals\game_states.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RegisterComponents.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -933,6 +939,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Globals\GlobalWorld.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Globals\game_states.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RegisterComponents.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

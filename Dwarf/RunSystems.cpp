@@ -96,10 +96,9 @@ namespace RunSystems
 		world.refresh();
 	}
 
-	template<typename T>
-	void runSystem()
+	void runSystem(const std::string &name, const double duration)
 	{
-
+		systems[name]->update(duration);
 	}
 
 	void updateSystems(const double duration)

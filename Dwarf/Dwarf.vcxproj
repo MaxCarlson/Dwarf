@@ -162,6 +162,7 @@
     <ClCompile Include="dfr\Inputs.cpp" />
     <ClCompile Include="dfr\Terminal.cpp" />
     <ClCompile Include="dfr\Textures.cpp" />
+    <ClCompile Include="Globals\game_states.cpp" />
     <ClCompile Include="Globals\GlobalWorld.cpp" />
     <ClCompile Include="imgui-SFML.cpp" />
     <ClCompile Include="imgui.cpp" />
@@ -241,6 +242,7 @@
     <ClCompile Include="ECS\Systems\ai\StockpileSystem.cpp" />
     <ClCompile Include="Helpers\Rng.cpp" />
     <ClCompile Include="Raws\ReadPlants.cpp" />
+    <ClCompile Include="RegisterComponents.cpp" />
     <ClCompile Include="RunSystems.cpp" />
     <ClCompile Include="Raws\SkillReader.cpp" />
     <ClCompile Include="ECS\Components\Sentients\Stats.cpp" />
@@ -266,6 +268,7 @@
     <ClInclude Include="dfr\Terminal.h" />
     <ClInclude Include="dfr\Textures.h" />
     <ClInclude Include="dfr\vchars.h" />
+    <ClInclude Include="Globals\game_states.h" />
     <ClInclude Include="Globals\MainFunction.h" />
     <ClInclude Include="Globals\GlobalWorld.h" />
     <ClInclude Include="MainLoops\MainMenuLoop.h" />
@@ -471,6 +474,7 @@
     <ClInclude Include="ECS\Systems\ai\StockpileSystem.h" />
     <ClInclude Include="Helpers\Rng.h" />
     <ClInclude Include="Raws\ReadPlants.h" />
+    <ClInclude Include="RegisterComponents.h" />
     <ClInclude Include="RunSystems.h" />
     <ClInclude Include="Raws\SkillReader.h" />
     <ClInclude Include="ECS\Components\Sentients\Stats.h" />
