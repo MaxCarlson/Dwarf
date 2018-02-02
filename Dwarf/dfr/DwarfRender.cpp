@@ -11,6 +11,12 @@
 #include <memory>
 #include <chrono>
 
+typedef std::chrono::milliseconds::rep TimePoint;
+inline TimePoint now() {
+	return std::chrono::duration_cast<std::chrono::milliseconds>
+		(std::chrono::steady_clock::now().time_since_epoch()).count();
+}
+
 namespace dfr
 {
 	std::unique_ptr<sf::RenderWindow> mainWindow;
@@ -90,11 +96,19 @@ namespace dfr
 				}
 			}
 
+			static double deltaT = 0.0;
+			static const double MS_PER_UPDATE = 17.0;
+
+			while (deltaT < MS_PER_UPDATE)
+			{
+				deltaT += static_cast<double>(now());
+			}
+
 			ImGui::SFML::Update(*mainWindow, deltaClock.restart());
 
 			mainWindow->clear();
 
-			onTick(double{});
+			onTick(MS_PER_UPDATE);
 
 			terminal->render(*mainWindow);
 			ImGui::SFML::Render(*mainWindow);

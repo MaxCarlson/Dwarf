@@ -99,7 +99,7 @@ void initSystems()
 	world.addSystem(*(systems[BUILD_AI] = new BuildAi));
 	world.addSystem(*(systems[ITEM_HELPER] = new ItemHelper));
 	world.addSystem(*(systems[WORK_ORDERS] = new WorkOrders));
-	world.addSystem(systems[WORK_ORDER_HELPER] = workOrderHelper.get()); // Does this work?
+	world.addSystem(*(systems[WORK_ORDER_HELPER] = workOrderHelper.get())); // Does this work?
 	world.addSystem(*(systems[STOCKPILE_SYSTEM] = new StockpileSystem));
 	world.addSystem(*(systems[HAULING_SYSTEM] = new HaulingSystem));
 	world.addSystem(*(systems[AI_ARCHITECTURE] = new AiArchitecture));
@@ -129,8 +129,8 @@ void updateSystems(const double duration)
 	static double majorTick = 0.0;
 
 	majorTick += duration;
+
 	// Operations only done every major tick
-	
 	if (majorTick > 250.0)
 	{
 		majorTick = 0.0;
@@ -140,7 +140,7 @@ void updateSystems(const double duration)
 	
 
 	// Update systems
-	runSystem(MINING_SYSTEM, duration);
+	runSystem(MINING_SYSTEM, duration); 
 	runSystem(MOVEMENT_SYSTEM, duration);
 	runSystem(DIJKSTRA_MAPS_HANDLER, duration);
 
@@ -162,13 +162,9 @@ void updateSystems(const double duration)
 	// Update all traits in entities that were killed, deactivated,
 	// or activated (when a component changes)
 	world.refresh();
-}
 
-void killSystems()
-{
-	world.removeAllSystems();
+	runSystem(RENDER_SYSTEM, duration);
 }
-
 
 
 } // End namespace

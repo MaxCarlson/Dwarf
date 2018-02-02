@@ -6,14 +6,22 @@
 #include "Globals\game_states.h"
 #include "WorldGeneration.h"
 #include "Map\building\PlanetBuilding.h"
+#include "Map\World\Planet.h"
+#include "Map\building\regionBuilder.h"
+#include "Helpers\Rng.h"
 #include "Raws\BiomeReader.h"
 #include "Raws\Defs\BiomeDef.h"
+#include "EntityFactory.h"
 #include <imgui.h>
 #include <imgui-SFML.h>
 #include <DwarfRender.h>
 
 namespace Details
 {
+	int regionX = 64;
+	int regionY = 64;
+	int regionZ = 150;
+	int numDwarves = 7;
 	int planetX = 64;
 	int planetY = 64;
 	int waterD = 3;
@@ -88,8 +96,12 @@ void WorldGenLoop::run(const double duration)
 		ImGui::Begin("Planet Building", nullptr, ImVec2{ 600, 400 }, 0.5f, ImGuiWindowFlags_AlwaysAutoResize + ImGuiWindowFlags_NoCollapse);
 		ImGui::Text("Enter the desired Planet dimensions then click 'Ready'");
 
-		ImGui::SliderInt("Planet X", &planetX, 32, 256);
-		ImGui::SliderInt("Planet Y", &planetY, 32, 256);
+		ImGui::SliderInt("Number of Dwarves", &numDwarves, 1, 10);
+		ImGui::SliderInt("Region Width", &regionX, 32, 256);
+		ImGui::SliderInt("Region Height", &regionY, 32, 256);
+		ImGui::SliderInt("Region Depth", &regionZ, 32, 256);
+		ImGui::SliderInt("Planet Width", &planetX, 32, 256);
+		ImGui::SliderInt("Planet Height", &planetY, 32, 256);
 		ImGui::SliderInt("Water Level", &waterD, 1, 4);
 		ImGui::SliderInt("Plains Level", &plainsD, 1, 4);
 
@@ -99,7 +111,7 @@ void WorldGenLoop::run(const double duration)
 
 		if (ImGui::Button("Ready"))
 		{
-			generateWorld(seed, planetX, planetY, { 80, 80, 150 }, 3, 3, 7);
+			generateWorld(seed, planetX, planetY, { regionX, regionY, regionZ }, waterD, plainsD, numDwarves);
 			stage = Stage::GENERATING;
 		}
 
@@ -168,8 +180,15 @@ void WorldGenLoop::run(const double duration)
 
 			if (ImGui::Button("Yes"))
 			{
+				// Transfer control to the Play game loop and init systems and components
 				MainFunction = PlayGameLoop::run;
 				gameState = GameState::NEW_GAME;
+
+				// Build the region
+				buildRegion(planet, mousePos.first - wxOffset, mousePos.second - wyOffset, { regionX, regionY, regionZ }, rng);
+
+				for (int i = 0; i < numDwarves; ++i) // Place this somewhere else once we have code to create dwarves with new gui
+					createDwarf({});
 			}
 
 			if (ImGui::Button("No"))

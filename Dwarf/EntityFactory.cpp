@@ -1,7 +1,8 @@
 #include "EntityFactory.h"
 
 #include "ECS\EntityManager.h"
-#include "Engine.h"
+//#include "Engine.h"
+#include "Globals\GlobalWorld.h"
 #include "ECS\World.h"
 
 #include "ECS\Components\PositionComponent.h"
@@ -21,9 +22,9 @@ EntityFactory::EntityFactory()
 
 // Need to create ui interface for starting dwarves
 // Also should probably store a vector of dwarves for qucik access
-Entity EntityFactory::createDwarf(DwarfCreationObj dwarfConstruct)
+Entity createDwarf(DwarfCreationObj dwarfConstruct)
 {
-	Entity dwarf = engine->world.createEntity();
+	Entity dwarf = world.createEntity();
 
 	dwarf.addComponent<RenderComponent>(vchar{ 769, color_from_name("default"), color_from_name("default") });
 	dwarf.addComponent<PositionComponent>(dwarfConstruct.co);
@@ -65,7 +66,7 @@ Entity EntityFactory::createDwarf(DwarfCreationObj dwarfConstruct)
 	dwarf.activate();
 
 	// Add dwarves to engine vector
-	engine->Dwarves.push_back(dwarf);
+	//engine->Dwarves.push_back(dwarf);
 
 	return dwarf;
 }

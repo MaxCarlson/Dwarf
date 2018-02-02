@@ -289,7 +289,7 @@ void MainMenu::finalizeDwarfPicks()
 
 		// Need to name dwarves here
 
-		engine->factory.createDwarf(dwarf);
+		createDwarf(dwarf);
 
 		++dwarfCounter;
 	}

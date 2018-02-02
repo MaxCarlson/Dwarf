@@ -14,8 +14,10 @@ class EntityFactory
 public:
 	EntityFactory();
 
-	Entity createDwarf(DwarfCreationObj dwarfConstruct);
+	
 };
+
+Entity createDwarf(DwarfCreationObj dwarfConstruct);
 
 struct DwarfCreationObj
 {

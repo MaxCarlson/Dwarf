@@ -162,6 +162,7 @@
     <ClCompile Include="dfr\Inputs.cpp" />
     <ClCompile Include="dfr\Terminal.cpp" />
     <ClCompile Include="dfr\Textures.cpp" />
+    <ClCompile Include="Globals\DwarfContainer.cpp" />
     <ClCompile Include="Globals\game_states.cpp" />
     <ClCompile Include="Globals\GlobalWorld.cpp" />
     <ClCompile Include="imgui-SFML.cpp" />
@@ -268,6 +269,7 @@
     <ClInclude Include="dfr\Terminal.h" />
     <ClInclude Include="dfr\Textures.h" />
     <ClInclude Include="dfr\vchars.h" />
+    <ClInclude Include="Globals\DwarfContainer.h" />
     <ClInclude Include="Globals\game_states.h" />
     <ClInclude Include="Globals\MainFunction.h" />
     <ClInclude Include="Globals\GlobalWorld.h" />
