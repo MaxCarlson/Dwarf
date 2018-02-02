@@ -191,11 +191,11 @@ void WorldGenLoop::run(const double duration)
 				MainFunction = PlayGameLoop::run;
 				gameState = GameState::NEW_GAME;
 
-				// Build the region
-				buildRegion(planet, mousePos.first - wxOffset, mousePos.second - wyOffset, { regionX, regionY, regionZ }, rng);
-
 				for (int i = 0; i < numDwarves; ++i) // Place this somewhere else once we have code to create dwarves with new gui
 					createDwarf({});
+
+				// Build the region
+				buildRegion(planet, mousePos.first - wxOffset, mousePos.second - wyOffset, { regionX, regionY, regionZ }, rng);
 			}
 
 			if (ImGui::Button("No"))

@@ -3,6 +3,7 @@
 #include "ECS\EntityManager.h"
 //#include "Engine.h"
 #include "Globals\GlobalWorld.h"
+#include "Globals\DwarfContainer.h"
 #include "ECS\World.h"
 
 #include "ECS\Components\PositionComponent.h"
@@ -64,6 +65,8 @@ Entity createDwarf(DwarfCreationObj dwarfConstruct)
 	dwarf.addComponent<Inventory>();
 
 	dwarf.activate();
+
+	dwarfContainer.dwarves.emplace_back(dwarf);
 
 	// Add dwarves to engine vector
 	//engine->Dwarves.push_back(dwarf);

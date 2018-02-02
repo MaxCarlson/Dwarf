@@ -179,7 +179,7 @@ void layRock(std::vector<uint8_t> heightMap, BiomeDef & biome, Strata & strata, 
 
 			int roll = rng.range(1, 100);
 
-			if (roll > 20) // Add in biome component here. Also need to get the strata building working better with noise
+			if (roll < biome.soil) // Add in biome component here. Also need to get the strata building working better with noise
 			{
 				const size_t soilIdx = rng.range(1, soils.size()) - 1;
 				region::setMaterial({ i, j, z - 1 }, soils[soilIdx]);

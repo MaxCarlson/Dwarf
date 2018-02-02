@@ -101,6 +101,8 @@ void RenderSystem::update(const double duration)
 
 	updateRender(); // Remove the need to always do this
 
+	region::tile_recalc_all();
+
 	int maxX = std::min(MAP_WIDTH, dfr::terminal->width);
 	int maxY = std::min(MAP_HEIGHT, dfr::terminal->height); 
 
