@@ -18,7 +18,7 @@ public:
 	~DijkstraMapsHandler();
 
 	void init();
-	void update();
+	void update(const double duration);
 
 private:
 

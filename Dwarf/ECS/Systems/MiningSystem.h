@@ -18,7 +18,7 @@ public:
 	MiningSystem() = default;
 
 	void init();
-	void update();
+	void update(const double duration);
 	
 	void makeMiningMap();	
 

@@ -111,29 +111,31 @@ void initSystems()
 	systems[CALENDER_SYSTEM] = new CalenderSystem;
 	systems[PLANT_SYSTEM] = new PlantSystem;
 
+	// Add systems to world. Cast to their derived class so world 
+	// doesn't interpret them as SystemBase's
 	world.addSystem(* static_cast<InputHandler *>(systems[INPUT_HANDLER]));
-	world.addSystem(*static_cast<DesignationHandler *>(systems[DESIGNATION_HANDLER]));
-	world.addSystem(*static_cast<RenderSystem *>(systems[RENDER_SYSTEM]));
-	world.addSystem(*static_cast<MovementSystem *>(systems[MOVEMENT_SYSTEM]));
-	world.addSystem(*static_cast<MovementAiSystem *>(systems[MOVEMENT_AI_SYSTEM]));
-	world.addSystem(*static_cast<MiningSystem *>(systems[MINING_SYSTEM]));
-	world.addSystem(*static_cast<AiWorkSystem *>(systems[AI_WORK_SYSTEM]));
-	world.addSystem(*static_cast<MiningAi *>(systems[MINING_AI]));
-	world.addSystem(*static_cast<DijkstraMapsHandler *>(systems[DIJKSTRA_MAPS_HANDLER]));
-	world.addSystem(*static_cast<EntityPositionCache *>(systems[ENTITY_POSITION_CACHE]));
-	world.addSystem(*static_cast<EquipHandler *>(systems[EQUIP_HANDLER]));
-	world.addSystem(*static_cast<BuildAi *>(systems[BUILD_AI]));
-	world.addSystem(*static_cast<ItemHelper *>(systems[ITEM_HELPER]));
-	world.addSystem(*static_cast<WorkOrders *>(systems[WORK_ORDERS]));
-	world.addSystem(*static_cast<WorkOrderHelper *>(systems[WORK_ORDER_HELPER]));
-	world.addSystem(*static_cast<StockpileSystem *>(systems[STOCKPILE_SYSTEM]));
-	world.addSystem(*static_cast<HaulingSystem *>(systems[HAULING_SYSTEM]));
-	world.addSystem(*static_cast<AiArchitecture *>(systems[AI_ARCHITECTURE]));
-	world.addSystem(*static_cast<WoodcuttingAi *>(systems[WOODCUTTING_AI]));
-	world.addSystem(*static_cast<HarvestAi *>(systems[HARVEST_AI]));
-	world.addSystem(*static_cast<FarmingAi *>(systems[FARMING_AI]));
-	world.addSystem(*static_cast<CalenderSystem *>(systems[CALENDER_SYSTEM]));
-	world.addSystem(*static_cast<PlantSystem *>(systems[PLANT_SYSTEM]));
+	world.addSystem(* static_cast<DesignationHandler *>(systems[DESIGNATION_HANDLER]));
+	world.addSystem(* static_cast<RenderSystem *>(systems[RENDER_SYSTEM]));
+	world.addSystem(* static_cast<MovementSystem *>(systems[MOVEMENT_SYSTEM]));
+	world.addSystem(* static_cast<MovementAiSystem *>(systems[MOVEMENT_AI_SYSTEM]));
+	world.addSystem(* static_cast<MiningSystem *>(systems[MINING_SYSTEM]));
+	world.addSystem(* static_cast<AiWorkSystem *>(systems[AI_WORK_SYSTEM]));
+	world.addSystem(* static_cast<MiningAi *>(systems[MINING_AI]));
+	world.addSystem(* static_cast<DijkstraMapsHandler *>(systems[DIJKSTRA_MAPS_HANDLER]));
+	world.addSystem(* static_cast<EntityPositionCache *>(systems[ENTITY_POSITION_CACHE]));
+	world.addSystem(* static_cast<EquipHandler *>(systems[EQUIP_HANDLER]));
+	world.addSystem(* static_cast<BuildAi *>(systems[BUILD_AI]));
+	world.addSystem(* static_cast<ItemHelper *>(systems[ITEM_HELPER]));
+	world.addSystem(* static_cast<WorkOrders *>(systems[WORK_ORDERS]));
+	world.addSystem(* static_cast<WorkOrderHelper *>(systems[WORK_ORDER_HELPER]));
+	world.addSystem(* static_cast<StockpileSystem *>(systems[STOCKPILE_SYSTEM]));
+	world.addSystem(* static_cast<HaulingSystem *>(systems[HAULING_SYSTEM]));
+	world.addSystem(* static_cast<AiArchitecture *>(systems[AI_ARCHITECTURE]));
+	world.addSystem(* static_cast<WoodcuttingAi *>(systems[WOODCUTTING_AI]));
+	world.addSystem(* static_cast<HarvestAi *>(systems[HARVEST_AI]));
+	world.addSystem(* static_cast<FarmingAi *>(systems[FARMING_AI]));
+	world.addSystem(* static_cast<CalenderSystem *>(systems[CALENDER_SYSTEM]));
+	world.addSystem(* static_cast<PlantSystem *>(systems[PLANT_SYSTEM]));
 
 	for (auto& sys : systems)
 		sys.second->init();

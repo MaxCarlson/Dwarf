@@ -43,7 +43,7 @@ int InputHandler::getMouseIdx()
 	return getIdx({ mouseX, mouseY, engine->mapRenderer->currentZLevel });
 }
 
-void InputHandler::update()
+void InputHandler::update(const double duration)
 {
 	int key;
 

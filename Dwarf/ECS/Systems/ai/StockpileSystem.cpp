@@ -70,7 +70,7 @@ void StockpileSystem::init()
 	});
 }
 
-void StockpileSystem::update()
+void StockpileSystem::update(const double duration)
 {
 	stockpiles.clear();
 	stockpileTargets.clear();

@@ -16,7 +16,7 @@ public:
 
 	void init();
 
-	void update(double deltaT);
+	void update(const double duration);
 
 private:
 	void updateMiner(const Entity& e);

@@ -8,7 +8,7 @@
 
 std::unique_ptr<WorkOrderHelper> workOrderHelper;
 
-void WorkOrderHelper::update(double duration)
+void WorkOrderHelper::update(const double duration)
 {
 	static std::vector<std::vector<std::pair<int, std::string>>*> designationPair = { &designations->queuedWorkOrders, &designations->workOrders };
 

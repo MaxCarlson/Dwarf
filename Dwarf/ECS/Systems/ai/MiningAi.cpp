@@ -51,7 +51,7 @@ void MiningAi::init()
 	JobsBoard::register_job_offer<MiningTag>(JobsBoard::evaluate_mining);
 }
 
-void MiningAi::update(double deltaT)
+void MiningAi::update(const double duration)
 {
 	const auto ents = getEntities();
 	for (auto& e : ents)

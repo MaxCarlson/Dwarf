@@ -41,7 +41,7 @@ void DijkstraMapsHandler::init()
 	subscribe_mbox<harvest_map_changed_message>();
 }
 
-void DijkstraMapsHandler::update()
+void DijkstraMapsHandler::update(const double duration)
 {
 	each_mbox<update_all_maps_message>([this]( const update_all_maps_message &msg)
 	{

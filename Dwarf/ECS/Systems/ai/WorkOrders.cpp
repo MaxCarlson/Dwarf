@@ -33,7 +33,7 @@ void WorkOrders::init()
 	JobsBoard::register_job_offer<WorkOrderTag>(JobsBoard::evaluate_work_order);
 }
 
-void WorkOrders::update(double duration)
+void WorkOrders::update(const double duration)
 {
 	const auto ents = getEntities();
 

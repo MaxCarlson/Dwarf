@@ -17,7 +17,7 @@ public:
 
 	void init();
 
-	void update();
+	void update(const double duration);
 
 	void updateRender();
 

@@ -4,7 +4,7 @@
 class InputHandler : public System<Requires<>>
 {
 public:
-	void update();
+	void update(const double duration);
 
 private:
 	int getMouseIdx();

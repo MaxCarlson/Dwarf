@@ -16,7 +16,7 @@ namespace JobsBoard
 	}
 }
 
-void AiWorkSystem::update()
+void AiWorkSystem::update(const double duration)
 {
 	for (Entity e : getEntities())
 	{

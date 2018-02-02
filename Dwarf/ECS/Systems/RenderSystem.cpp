@@ -50,7 +50,7 @@ const vchar getTR(const Coordinates co)
 	return v;
 }
 
-void RenderSystem::update()
+void RenderSystem::update(const double duration)
 {	
 	static const int codes[] = { 0xE000, 0xE100, 0xE200, 0xE300, 0xE400, 0xE500, 0xE600, 0xE700, 0xE800 };
 

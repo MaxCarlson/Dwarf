@@ -15,7 +15,7 @@ class MovementSystem : public System<Requires<MovementComponent, PositionCompone
 public:
 	MovementSystem() = default;
 
-	void update(double tStep)
+	void update(const double duration)
 	{
 		const auto& entities = getEntities();
 
@@ -27,7 +27,7 @@ public:
 			// Should we do safety checks here or only if map is updated?
 			// Possibly re calculate path if Entities bump into eachother??
 			if (!moveComp.path.empty())
-				updatePos(tStep, e);
+				updatePos(duration, e);
 		}
 	}
 

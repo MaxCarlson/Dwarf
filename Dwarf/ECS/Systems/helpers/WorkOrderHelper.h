@@ -13,7 +13,7 @@ public:
 
 	// Updated very infrequently, only to check for new reactions
 	// that may be possible
-	void update(double duration);
+	void update(const double duration);
 
 	int claimedWorkshops();
 

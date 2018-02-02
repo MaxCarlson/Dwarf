@@ -6,7 +6,7 @@ class BuildAi : public System<Requires<BuilderTag>>
 {
 public:
 	void init();
-	void update(double duration);
+	void update(const double duration);
 
 private:
 

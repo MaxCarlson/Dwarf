@@ -15,7 +15,7 @@ class MovementAiSystem : public System<Requires<MovementComponent>>
 public:
 	MovementAiSystem() = default;
 	
-	void update();
+	void update(const double duration);
 
 	// Search for path with A*, if there is a path return true
 	// else return false. 

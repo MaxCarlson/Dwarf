@@ -49,7 +49,7 @@ inline double heuristic(Coordinates co, Coordinates co1)
 	return std::abs(co.x - co1.x) + std::abs(co.y - co1.y) + std::abs(co.z - co1.z);
 }
 
-void MovementAiSystem::update()
+void MovementAiSystem::update(const double duration)
 {
 	const auto& entities = getEntities();
 

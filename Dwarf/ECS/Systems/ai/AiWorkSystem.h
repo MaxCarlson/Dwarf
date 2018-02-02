@@ -11,6 +11,6 @@ public:
 	AiWorkSystem() = default;
 
 
-	void update();
+	void update(const double duration);
 };
 

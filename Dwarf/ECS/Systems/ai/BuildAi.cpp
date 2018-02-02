@@ -49,7 +49,7 @@ void BuildAi::init()
 	JobsBoard::register_job_offer<BuilderTag>(JobsBoard::evaluate_building);
 }
 
-void BuildAi::update(double duration)
+void BuildAi::update(const double duration)
 {
 	for (auto e : getEntities())
 	{

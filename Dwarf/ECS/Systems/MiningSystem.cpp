@@ -31,7 +31,7 @@ void MiningSystem::init()
 	makeMiningMap();
 }
 
-void MiningSystem::update()
+void MiningSystem::update(const double duration)
 {
 	if (mapDirty)
 	{

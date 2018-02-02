@@ -97,7 +97,7 @@ void AiArchitecture::init()
 	});
 }
 
-void AiArchitecture::update(double duration)	// Add in requesting buildings to be done in a particular material type!!!!!!!!
+void AiArchitecture::update(const double duration)	// Add in requesting buildings to be done in a particular material type!!!!!!!!
 {
 	const auto ents = getEntities();
 

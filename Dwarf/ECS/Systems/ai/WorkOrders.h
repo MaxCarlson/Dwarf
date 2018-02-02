@@ -6,7 +6,7 @@ class WorkOrders : public System<Requires<WorkOrderTag>>
 {
 public:
 	void init();
-	void update(double duration);
+	void update(const double duration);
 
 private:
 	void work(Entity e, const double& duration);
