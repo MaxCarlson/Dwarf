@@ -70,7 +70,9 @@ const std::string PLANT_SYSTEM = "Plant System";
 namespace RunSystems
 {
 
-boost::container::flat_map<std::string, SystemBase*> systems;
+//boost::container::flat_map<std::string, SystemBase*> systems;
+std::unordered_map<std::string, SystemBase*> systems;
+
 
 void initSystems()
 {	
@@ -85,29 +87,53 @@ void initSystems()
 	workOrderHelper = std::make_unique<WorkOrderHelper>();
 
 	// Normal Systems
-	world.addSystem(*(systems[INPUT_HANDLER] = new InputHandler));
-	world.addSystem(*(systems[DESIGNATION_HANDLER] = new DesignationHandler));
-	world.addSystem(*(systems[RENDER_SYSTEM] = new RenderSystem));
-	world.addSystem(*(systems[MOVEMENT_SYSTEM] = new MovementSystem));
-	world.addSystem(*(systems[MOVEMENT_AI_SYSTEM] = new MovementAiSystem));
-	world.addSystem(*(systems[MINING_SYSTEM] = new MiningSystem));
-	world.addSystem(*(systems[AI_WORK_SYSTEM] = new AiWorkSystem));
-	world.addSystem(*(systems[MINING_AI] = new MiningAi));
-	world.addSystem(*(systems[DIJKSTRA_MAPS_HANDLER] = new DijkstraMapsHandler));
-	world.addSystem(*(systems[ENTITY_POSITION_CACHE] = new EntityPositionCache));
-	world.addSystem(*(systems[EQUIP_HANDLER] = new EquipHandler));
-	world.addSystem(*(systems[BUILD_AI] = new BuildAi));
-	world.addSystem(*(systems[ITEM_HELPER] = new ItemHelper));
-	world.addSystem(*(systems[WORK_ORDERS] = new WorkOrders));
-	world.addSystem(*(systems[WORK_ORDER_HELPER] = workOrderHelper.get())); // Does this work?
-	world.addSystem(*(systems[STOCKPILE_SYSTEM] = new StockpileSystem));
-	world.addSystem(*(systems[HAULING_SYSTEM] = new HaulingSystem));
-	world.addSystem(*(systems[AI_ARCHITECTURE] = new AiArchitecture));
-	world.addSystem(*(systems[WOODCUTTING_AI] = new WoodcuttingAi));
-	world.addSystem(*(systems[HARVEST_AI] = new HarvestAi));
-	world.addSystem(*(systems[FARMING_AI] = new FarmingAi));
-	world.addSystem(*(systems[CALENDER_SYSTEM] = new CalenderSystem));
-	world.addSystem(*(systems[PLANT_SYSTEM] = new PlantSystem));
+	systems[INPUT_HANDLER] = new InputHandler;
+	systems[DESIGNATION_HANDLER] = new DesignationHandler;
+	systems[RENDER_SYSTEM] = new RenderSystem;
+	systems[MOVEMENT_SYSTEM] = new MovementSystem;
+	systems[MOVEMENT_AI_SYSTEM] = new MovementAiSystem;
+	systems[MINING_SYSTEM] = new MiningSystem;
+	systems[AI_WORK_SYSTEM] = new AiWorkSystem;
+	systems[MINING_AI] = new MiningAi;
+	systems[DIJKSTRA_MAPS_HANDLER] = new DijkstraMapsHandler;
+	systems[ENTITY_POSITION_CACHE] = new EntityPositionCache;
+	systems[EQUIP_HANDLER] = new EquipHandler;
+	systems[BUILD_AI] = new BuildAi;
+	systems[ITEM_HELPER] = new ItemHelper;
+	systems[WORK_ORDERS] = new WorkOrders;
+	systems[WORK_ORDER_HELPER] = workOrderHelper.get();
+	systems[STOCKPILE_SYSTEM] = new StockpileSystem;
+	systems[HAULING_SYSTEM] = new HaulingSystem;
+	systems[AI_ARCHITECTURE] = new AiArchitecture;
+	systems[WOODCUTTING_AI] = new WoodcuttingAi;
+	systems[HARVEST_AI] = new HarvestAi;
+	systems[FARMING_AI] = new FarmingAi;
+	systems[CALENDER_SYSTEM] = new CalenderSystem;
+	systems[PLANT_SYSTEM] = new PlantSystem;
+
+	world.addSystem(* static_cast<InputHandler *>(systems[INPUT_HANDLER]));
+	world.addSystem(*static_cast<DesignationHandler *>(systems[DESIGNATION_HANDLER]));
+	world.addSystem(*static_cast<RenderSystem *>(systems[RENDER_SYSTEM]));
+	world.addSystem(*static_cast<MovementSystem *>(systems[MOVEMENT_SYSTEM]));
+	world.addSystem(*static_cast<MovementAiSystem *>(systems[MOVEMENT_AI_SYSTEM]));
+	world.addSystem(*static_cast<MiningSystem *>(systems[MINING_SYSTEM]));
+	world.addSystem(*static_cast<AiWorkSystem *>(systems[AI_WORK_SYSTEM]));
+	world.addSystem(*static_cast<MiningAi *>(systems[MINING_AI]));
+	world.addSystem(*static_cast<DijkstraMapsHandler *>(systems[DIJKSTRA_MAPS_HANDLER]));
+	world.addSystem(*static_cast<EntityPositionCache *>(systems[ENTITY_POSITION_CACHE]));
+	world.addSystem(*static_cast<EquipHandler *>(systems[EQUIP_HANDLER]));
+	world.addSystem(*static_cast<BuildAi *>(systems[BUILD_AI]));
+	world.addSystem(*static_cast<ItemHelper *>(systems[ITEM_HELPER]));
+	world.addSystem(*static_cast<WorkOrders *>(systems[WORK_ORDERS]));
+	world.addSystem(*static_cast<WorkOrderHelper *>(systems[WORK_ORDER_HELPER]));
+	world.addSystem(*static_cast<StockpileSystem *>(systems[STOCKPILE_SYSTEM]));
+	world.addSystem(*static_cast<HaulingSystem *>(systems[HAULING_SYSTEM]));
+	world.addSystem(*static_cast<AiArchitecture *>(systems[AI_ARCHITECTURE]));
+	world.addSystem(*static_cast<WoodcuttingAi *>(systems[WOODCUTTING_AI]));
+	world.addSystem(*static_cast<HarvestAi *>(systems[HARVEST_AI]));
+	world.addSystem(*static_cast<FarmingAi *>(systems[FARMING_AI]));
+	world.addSystem(*static_cast<CalenderSystem *>(systems[CALENDER_SYSTEM]));
+	world.addSystem(*static_cast<PlantSystem *>(systems[PLANT_SYSTEM]));
 
 	for (auto& sys : systems)
 		sys.second->init();
