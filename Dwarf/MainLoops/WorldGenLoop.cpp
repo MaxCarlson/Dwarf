@@ -24,6 +24,8 @@ namespace Details
 	int numDwarves = 7;
 	int planetX = 64;
 	int planetY = 64;
+	int embarkX = 0;
+	int embarkY = 0;
 	int waterD = 3;
 	int plainsD = 3;
 	std::string seed = "seed";
@@ -168,12 +170,17 @@ void WorldGenLoop::run(const double duration)
 			ImGui::Text(std::string("Tile Variance " + std::to_string(tile.variance)).c_str());
 
 			ImGui::End();
+
+			if (ImGui::IsMouseClicked(dfr::Button::LEFT))
+			{
+				embarkX = mousePos.first;
+				embarkY = mousePos.second;
+				stage = Stage::FINALIZE_EMBARK;
+			}
 		}
 
-		if (ImGui::IsMouseClicked(dfr::Button::LEFT) || stage == Stage::FINALIZE_EMBARK)
+		if (stage == Stage::FINALIZE_EMBARK)
 		{
-			stage = Stage::FINALIZE_EMBARK;
-
 			ImGui::SetNextWindowPosCenter();
 			ImGui::Begin("Finalize Embark", nullptr, ImVec2{ 600, 400 }, 0.7f, ImGuiWindowFlags_AlwaysAutoResize + ImGuiWindowFlags_NoCollapse);
 			ImGui::Text("Really Embark Here?");

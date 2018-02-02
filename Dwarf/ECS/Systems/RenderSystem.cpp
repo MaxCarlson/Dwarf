@@ -10,6 +10,11 @@
 // Add these to systems so they're not random obj's
 #include "../Engine.h"
 #include "../Map/MapRender.h"
+#include "Globals\Camera.h"
+#include "Globals\game_states.h"
+#include "dfr\DwarfRender.h"
+#include <imgui.h>
+#include <imgui-SFML.h>
 
 struct RenderItem
 {
@@ -38,7 +43,7 @@ const vchar getTR(const Coordinates co)
 
 	const vchar& v = region::renderCache(getIdx(co));
 
-	auto rendIt = renderEntities.find((terminal_state(TK_WIDTH) * co.y) + co.x);
+	auto rendIt = renderEntities.find((dfr::terminal->width * co.y) + co.x);//renderEntities.find((terminal_state(TK_WIDTH) * co.y) + co.x);
 
 	if (rendIt != renderEntities.end())
 	{
@@ -49,7 +54,7 @@ const vchar getTR(const Coordinates co)
 
 	return v;
 }
-
+/*
 void RenderSystem::update(const double duration)
 {	
 	static const int codes[] = { 0xE000, 0xE100, 0xE200, 0xE300, 0xE400, 0xE500, 0xE600, 0xE700, 0xE800 };
@@ -87,6 +92,26 @@ void RenderSystem::update(const double duration)
 	}
 	terminal_bkcolor("black");
 }
+*/
+
+void RenderSystem::update(const double duration)
+{
+	
+	int z = camera.z;
+
+	updateRender(); // Remove the need to always do this
+
+	int maxX = std::min(MAP_WIDTH, dfr::terminal->width);
+	int maxY = std::min(MAP_HEIGHT, dfr::terminal->height); 
+
+	for(int x = 0; x < maxX; ++x)
+		for (int y = 0; y < maxY; ++y)
+		{
+			auto rend = getTR({ x, y, z });
+
+			dfr::terminal->setChar(x + camera.offsetX, y + camera.offsetY, {static_cast<uint32_t>(rend.c), rend.fg, rend.bg });
+		}
+}
 
 void RenderSystem::updateRender()
 {
@@ -105,15 +130,16 @@ void RenderSystem::updateRender()
 	{
 		renderEntities.clear();
 
+		/*
 		const int terminal_width = terminal_state(TK_WIDTH);
 
 		const int minX = engine->mapRenderer->offsetX;
 		const int maxX = terminal_width + minX;
 		const int minY = engine->mapRenderer->offsetY;
 		const int maxY = terminal_state(TK_HEIGHT) + minY;
+		*/
 
-
-		const int zlvl = engine->mapRenderer->currentZLevel;
+		const int zlvl = camera.z; //engine->mapRenderer->currentZLevel;
 
 		//std::vector<std::size_t> visible = positionCache->find_by_region(minX, maxX, maxY, minY, zlvl, zlvl - 10); When we want to render more than just one zLvl
 
@@ -140,7 +166,7 @@ void RenderSystem::updateRender()
 			//	continue;
 
 			// 2D Idxing 
-			const int idx = (terminal_width * pos->co.y) + pos->co.x;
+			const int idx = (dfr::terminal->width * pos->co.y) + pos->co.x;//(terminal_width * pos->co.y) + pos->co.x;
 
 			// Render buildings code
 			if (b && pos && !rendered)
@@ -158,7 +184,7 @@ void RenderSystem::updateRender()
 				{
 					for (int x = 0; x < b->width; ++x)
 					{
-						const int idx = (terminal_width * (pos->co.y + boffsetY)) + pos->co.x + boffsetX; //getIdx({ pos->co.x + boffsetX, pos->co.y + boffsetY, pos->co.z });
+						const int idx = (dfr::terminal->width * (pos->co.y + boffsetY)) + pos->co.x + boffsetX; //getIdx({ pos->co.x + boffsetX, pos->co.y + boffsetY, pos->co.z });
 
 						int glyph = b->charCodes[glyphIdx++];
 

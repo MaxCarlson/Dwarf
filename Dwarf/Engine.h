@@ -117,7 +117,7 @@ public:
 private:
 	// Render local map 
 	// as well as Entities on it
-	void render();
+	void render(const double duration);
 };
 
 extern std::unique_ptr<Engine> engine;

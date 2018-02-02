@@ -156,6 +156,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Globals\Camera.cpp" />
     <ClCompile Include="dfr\colors.cpp" />
     <ClCompile Include="dfr\DwarfRender.cpp" />
     <ClCompile Include="dfr\FontManager.cpp" />
@@ -262,6 +263,7 @@
     <ClCompile Include="MainLoops\WorldGenLoop.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Globals\Camera.h" />
     <ClInclude Include="dfr\colors.h" />
     <ClInclude Include="dfr\DwarfRender.h" />
     <ClInclude Include="dfr\FontManager.h" />

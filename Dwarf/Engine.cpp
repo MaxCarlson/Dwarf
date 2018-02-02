@@ -297,7 +297,7 @@ void Engine::run()
 		lag += elapsed;
 
 		//input.read();
-		inputHandler->update();
+		inputHandler->update(lag);
 
 		if (current_game_state != Engine::PAUSED) 
 		{
@@ -321,7 +321,7 @@ void Engine::run()
 		else
 			lag = 0.0;
 
-		render();
+		render(lag);
 
 		if (current_game_state == Engine::TO_MAIN_MENU)
 		{
@@ -345,16 +345,16 @@ void Engine::update(double deltaTime, bool majorTick)
 	}
 
 	// Update systems
-	miningSystem->update();
+	miningSystem->update(deltaTime);
 	movementSystem->update(deltaTime);
-	dijkstraHandler->update();
+	dijkstraHandler->update(deltaTime);
 
 	// Work Systems
 
 	// Assign jobs to entities
 	// TODO : Add more depth to job evaluators, relying on more
 	// than just distance things such as skill level, other jobs, other entities, etc
-	aiWorkSystem->update();
+	aiWorkSystem->update(deltaTime);
 
 	// Perform assigned jobs
 	workOrders->update(deltaTime);
@@ -364,7 +364,7 @@ void Engine::update(double deltaTime, bool majorTick)
 	aiArchitecture->update(deltaTime);
 	harvestAi->update(deltaTime);
 
-	stockpileSystem->update(); 
+	stockpileSystem->update(deltaTime);
 	haulingSystem->update(deltaTime);
 	plantSystem->update(deltaTime);
 
@@ -373,13 +373,13 @@ void Engine::update(double deltaTime, bool majorTick)
 	world.refresh();
 }
 
-void Engine::render()
+void Engine::render(const double duration)
 {	
 	// Clear terminal before render
 	terminal_clear();
 
 	// Render Entities
-	renderSystem->update();
+	renderSystem->update(duration);
 
 	// Render the gui elements last,
 	// just in case something is showing through ~~ Make this a system

@@ -285,6 +285,9 @@
     <ClCompile Include="Globals\DwarfContainer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Globals\Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -951,6 +954,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Globals\DwarfContainer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Globals\Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

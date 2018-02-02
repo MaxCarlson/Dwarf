@@ -3,6 +3,7 @@
 #include "../Engine.h"
 #include "../ECS/Components/PositionComponent.h"
 #include "Globals\DwarfContainer.h"
+#include "Globals\Camera.h"
 
 using region::TileTypes;
 using region::getTileType;
@@ -20,8 +21,10 @@ void placeDwarves()
 				if (getTileType(getIdx({ i, j, h })) == TileTypes::FLOOR)
 				{
 					//engine->Dwarves.at(dwarfNumber).getComponent<PositionComponent>().co = { i, j, h };
+					//engine->mapRenderer->currentZLevel = h;
+
 					dwarfContainer.dwarves.at(dwarfNumber).getComponent<PositionComponent>().co = { i, j, h };
-					engine->mapRenderer->currentZLevel = h;
+					camera.z = h;
 					++dwarfNumber;
 				}
 
