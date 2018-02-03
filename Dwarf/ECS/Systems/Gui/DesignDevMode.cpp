@@ -3,80 +3,87 @@
 #include "Globals\game_states.h"
 #include "Raws\ItemRead.h"
 #include "Raws\DefInfo.h"
+#include "Raws\Materials.h"
 #include "Raws\raws.h"
+#include "Globals\Camera.h"
+#include "Coordinates.h"
 #include <imgui.h>
 #include <imgui_tabs.h>
+#include <DwarfRender.h>
 
 void DesignDevMode::init()
 {
 }
 
-void chooseLocation(const std::string& tag, const int qty)
+bool chooseLocation(const std::string& itemTag, const std::string& matTag, const int qty)
 {
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
+	{
+		auto mxy = dfr::getMousePosition();
 
+		mxy.first += camera.offsetX;
+		mxy.second += camera.offsetY;
+
+		spawnItemOnGround(itemTag, getMaterialIdx(matTag), { mxy.first, mxy.second, camera.z }, SpawnColor::MATERIAL_COLOR);
+
+		return true;
+	}
+	return false;
 }
 
 void spawnItem()
 {
+	static bool selectingSpawnLocation = false;
 	static int spawnQty = 1;
 	static std::string matTag = "";
 
+	// Pick Item spawn Quantity
+	static int qty = 1;
+	ImGui::SliderInt("Qty", &qty, 1, 100);
+
+	// Filter and list Items
 	ImGui::Text("Search Items");
 	static ImGuiTextFilter itemFilter;
 	itemFilter.Draw();
 
-	int itemDefIdx = 0;
-	static int itemIdx = 0;
+	std::vector<std::string> itemsPassedFilter;
 	for (const auto& i : defInfo->itemTags)
-	{
 		if (itemFilter.PassFilter(i.c_str()))
-		{
-			ImGui::Text(i.c_str());
-			ImGui::SameLine();
+			itemsPassedFilter.emplace_back(i);
 
-			bool selected = itemIdx == itemDefIdx;
-			if (ImGui::Checkbox("Select", &selected))
-			{
-				itemIdx = itemDefIdx;
-			}
-			ImGui::NextColumn();
-		}
-		++itemDefIdx;
-	}
+	static int itemIdx = 0;
+	ImGui::ListBox("Items##Dev", &itemIdx, itemsPassedFilter);
 
 	ImGui::Begin("Material", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 
+	// Filter and list Materials
 	ImGui::Text("Search Materials");
 
 	static ImGuiTextFilter matFilter;
 	matFilter.Draw();
 
-	int matDefIdx = 0;
-	static int matIdx = 0;
+	std::vector<std::string> matsPassedFilter;
 	for (const auto& m : defInfo->materialTags)
-	{
 		if (matFilter.PassFilter(m.c_str()))
+			matsPassedFilter.emplace_back(m);
+
+	static int matIdx = 0;
+	ImGui::ListBox("Materials##Dev", &matIdx, matsPassedFilter);
+
+	ImGui::End();
+
+	if (ImGui::Button("Select Spawn Location##Dev") || selectingSpawnLocation)
+	{
+		selectingSpawnLocation = !chooseLocation(itemsPassedFilter.at(itemIdx), matsPassedFilter.at(matIdx), qty);
+
+		if (!selectingSpawnLocation)
 		{
-			ImGui::Text(m.c_str());
-			ImGui::SameLine();
-			bool selected = matIdx == matDefIdx;
-			if (ImGui::Checkbox("Select", &selected))
-			{
-				matIdx = matDefIdx;
-			}
-
-			ImGui::NextColumn();
+			itemFilter.Clear();
+			matFilter.Clear();
+			itemIdx = 0;
+			matIdx = 0;
 		}
-		++matDefIdx;
 	}
-	ImGui::End();
-
-	ImGui::Begin("Qty", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
-
-	static int qty = 1;
-	ImGui::SliderInt("Qty", &qty, 1, 100);
-
-	ImGui::End();
 }
 
 void DesignDevMode::update(const double duration)

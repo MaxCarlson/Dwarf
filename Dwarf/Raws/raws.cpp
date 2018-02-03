@@ -5,7 +5,7 @@
 #include "Materials.h"
 #include "Defs\MaterialDef.h"
 #include "../Coordinates.h"
-#include "../Engine.h"
+#include "Globals\GlobalWorld.h"
 #include "../ECS/Components/PositionComponent.h"
 #include "../ECS/Components/RenderComponent.h"
 #include "../ECS/Components/Item.h"
@@ -63,7 +63,8 @@ Entity spawnItemOnGround(const std::string itemTag, const std::size_t material, 
 
 	auto mat = getMaterial(material);
 
-	auto e = engine->world.createEntity();
+	//auto e = engine->world.createEntity();
+	auto e = world.createEntity();
 
 	e.addComponent<PositionComponent>(co);
 
