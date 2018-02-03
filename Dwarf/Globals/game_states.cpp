@@ -4,3 +4,4 @@
 
 
 GameState gameState;
+DesignStates designState;

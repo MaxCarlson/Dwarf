@@ -288,6 +288,9 @@
     <ClCompile Include="Globals\Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ECS\Systems\Gui\MenuBar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -957,6 +960,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Globals\Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Systems\Gui\MenuBar.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

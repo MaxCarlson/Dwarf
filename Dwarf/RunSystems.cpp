@@ -13,6 +13,8 @@
 #include "ECS\Systems\Gui\InputHandler.h"
 #include "ECS\Systems\Gui\GuiSystem.h"
 
+#include "ECS\Systems\Gui\MenuBar.h"
+
 // Ai systems
 #include "ECS\Systems\ai\EquipHandler.h"
 #include "ECS\Systems\ai\AiWorkSystem.h"
@@ -65,6 +67,9 @@ const std::string FARMING_AI = "Farming Ai";
 const std::string CALENDER_SYSTEM = "Calender System";
 const std::string PLANT_SYSTEM = "Plant System";
 
+// Gui Systems
+const std::string MENU_BAR = "Menu Bar";
+
 //const std::string WORK_ORDER_HELPER = "Work Order Helper";
 
 namespace RunSystems
@@ -110,6 +115,7 @@ void initSystems()
 	systems[FARMING_AI] = new FarmingAi;
 	systems[CALENDER_SYSTEM] = new CalenderSystem;
 	systems[PLANT_SYSTEM] = new PlantSystem;
+	systems[MENU_BAR] = new MenuBar;
 
 	// Add systems to world. Cast to their derived class so world 
 	// doesn't interpret them as SystemBase's
@@ -136,6 +142,7 @@ void initSystems()
 	world.addSystem(* static_cast<FarmingAi *>(systems[FARMING_AI]));
 	world.addSystem(* static_cast<CalenderSystem *>(systems[CALENDER_SYSTEM]));
 	world.addSystem(* static_cast<PlantSystem *>(systems[PLANT_SYSTEM]));
+	world.addSystem(* static_cast<MenuBar *>(systems[MENU_BAR]));
 
 	for (auto& sys : systems)
 		sys.second->init();
@@ -192,6 +199,8 @@ void updateSystems(const double duration)
 	world.refresh();
 
 	runSystem(RENDER_SYSTEM, duration);
+
+	runSystem(MENU_BAR, duration); // Should these be before world.refresh()?
 }
 
 
