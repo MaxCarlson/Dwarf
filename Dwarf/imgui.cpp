@@ -715,6 +715,30 @@ static ImGuiContext     GImDefaultContext;
 ImGuiContext*           GImGui = &GImDefaultContext;
 #endif
 
+// User Defined Stuff
+
+namespace ImGui
+{
+
+static auto vectorOfStringGetter  = [](void *vec, int n, const char** outTxt)
+{
+  auto& v = *static_cast<std::vector<std::string>*>(vec);
+  if (n < 0 || n >= static_cast<int>(v.size()))
+    return false;
+
+  *outTxt = v.at(n).c_str();
+  return true;
+};
+
+bool ListBox(const char* label, int* currentIdx, std::vector<std::string>& vals)
+{
+  if (vals.empty())
+    return false;
+  return ImGui::ListBox(label, currentIdx, vectorOfStringGetter, static_cast<void*>(&vals), vals.size());
+}
+
+}
+
 //-----------------------------------------------------------------------------
 // User facing structures
 //-----------------------------------------------------------------------------

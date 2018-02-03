@@ -62,39 +62,46 @@ void loadGame(bool& done)
 {
 	ImGui::SetNextWindowPosCenter();
 	ImGui::Begin("Load Game", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+	if (ImGui::Button("Back"))
+	{
+		// This needs to be implemented differntly for main menu vs. in game play
+		return;
+	}
 
 	std::string dirpath = "Saves";
-	std::vector<std::string> paths;
+
+	std::vector<std::string> paths; // We want these to update as they're added
 	for (const auto &p : fs::directory_iterator(dirpath))
+		paths.emplace_back(p.path().string());
+
+	int i = 0;
+	static int selected = 0;
+	ImGui::ListBox("", &selected, paths);
+
+	if (ImGui::Button("Load"))
 	{
-		ImGui::Text(p.path().string().c_str());
+		std::string dirpath = paths.at(selected);
 
-		ImGui::SameLine();
-		if (ImGui::Button("Load"))
-		{
-			std::string dirpath = p.path().string();
+		std::ifstream is(dirpath, std::ios::binary);
+		cereal::BinaryInputArchive iarchive(is);
 
-			std::ifstream is(dirpath, std::ios::binary);
-			cereal::BinaryInputArchive iarchive(is);
+		// Load region then world
+		// Systems aren't loaded, just re-created
+		iarchive(planet);
+		region::load_region(dirpath);
+		world.load(iarchive);
 
-			// Load region then world
-			// Systems aren't loaded, just re-created
-			iarchive(planet);
-			region::load_region(dirpath);
-			world.load(iarchive);
+		// Init misc maps and designations
+		calender = std::make_unique<Calender>();
+		defInfo = std::make_unique<DefInfo>();
 
-			// Init misc maps and designations
-			calender = std::make_unique<Calender>();
-			defInfo = std::make_unique<DefInfo>();
+		// Misc archives, move somewhere else
+		iarchive(calender);
+		iarchive(designations);
+		iarchive(defInfo);
+		iarchive(camera);
 
-			// Misc archives, move somewhere else
-			iarchive(calender);
-			iarchive(designations);
-			iarchive(defInfo);
-			iarchive(camera);
-
-			done = true;
-		}
+		done = true;
 	}
 
 	ImGui::End();

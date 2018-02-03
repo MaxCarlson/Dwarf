@@ -21,39 +21,52 @@ void spawnItem()
 	static int spawnQty = 1;
 	static std::string matTag = "";
 
-	static int itemIdx = 0;
+	ImGui::Text("Search Items");
+	static ImGuiTextFilter itemFilter;
+	itemFilter.Draw();
 
 	int itemDefIdx = 0;
+	static int itemIdx = 0;
 	for (const auto& i : defInfo->itemTags)
 	{
-		ImGui::Text(i.c_str());
-		ImGui::SameLine();
-
-		bool selected = itemIdx == itemDefIdx;
-		if (ImGui::Checkbox("Select", &selected))
+		if (itemFilter.PassFilter(i.c_str()))
 		{
-			itemIdx = itemDefIdx;
+			ImGui::Text(i.c_str());
+			ImGui::SameLine();
+
+			bool selected = itemIdx == itemDefIdx;
+			if (ImGui::Checkbox("Select", &selected))
+			{
+				itemIdx = itemDefIdx;
+			}
+			ImGui::NextColumn();
 		}
-		ImGui::NextColumn();
 		++itemDefIdx;
 	}
 
 	ImGui::Begin("Material", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 
-	static int matIdx = 0;
+	ImGui::Text("Search Materials");
+
+	static ImGuiTextFilter matFilter;
+	matFilter.Draw();
 
 	int matDefIdx = 0;
+	static int matIdx = 0;
 	for (const auto& m : defInfo->materialTags)
 	{
-		ImGui::Text(m.c_str());
-		ImGui::SameLine();
-		bool selected = matIdx == matDefIdx;
-		if (ImGui::Checkbox("Select", &selected))
+		if (matFilter.PassFilter(m.c_str()))
 		{
-			matIdx = matDefIdx;
-		}
+			ImGui::Text(m.c_str());
+			ImGui::SameLine();
+			bool selected = matIdx == matDefIdx;
+			if (ImGui::Checkbox("Select", &selected))
+			{
+				matIdx = matDefIdx;
+			}
 
-		ImGui::NextColumn();
+			ImGui::NextColumn();
+		}
 		++matDefIdx;
 	}
 	ImGui::End();
