@@ -14,6 +14,7 @@ void DefInfo::init()
 	buildingTags = get_building_tags();
 	buildingNames = get_all_building_def_names();
 	itemTags = get_all_item_tags();
+	materialTags = getAllMaterialTags();
 	
 	const auto stocks = get_stockpile_names_tags();
 

@@ -13,6 +13,8 @@ public:
 
 	void nextMinute();
 
+	std::string getTime();
+
 	template<class Archive>
 	void serialize(Archive &archive)
 	{

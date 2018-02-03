@@ -1,5 +1,7 @@
 #pragma once
-class DesignBuilding
+#include "ECS\Systems.h"
+
+class DesignBuilding : public System<Requires<>>
 {
 public:
 	DesignBuilding();

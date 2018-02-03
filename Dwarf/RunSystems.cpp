@@ -2,6 +2,7 @@
 #include "RunSystems.h"
 #include "ECS\Systems.h"
 #include "Globals\GlobalWorld.h"
+#include "Globals\game_states.h"
 
 #include "ECS\Systems\RenderSystem.h"
 #include "ECS\Systems\MovementSystem.h"
@@ -15,6 +16,13 @@
 
 #include "ECS\Systems\Gui\MenuBar.h"
 #include "ECS\Systems\Gui\CameraSystem.h"
+#include "ECS\Systems\Gui\DesignArchitecture.h"
+#include "ECS\Systems\Gui\DesignBuilding.h"
+#include "ECS\Systems\Gui\DesignDevMode.h"
+#include "ECS\Systems\Gui\DesignHarvest.h"
+#include "ECS\Systems\Gui\DesignMining.h"
+#include "ECS\Systems\Gui\DesignWoodcutting.h"
+#include "ECS\Systems\Gui\DesignWorkOrders.h"
 
 // Ai systems
 #include "ECS\Systems\ai\EquipHandler.h"
@@ -50,7 +58,7 @@ const std::string MOVEMENT_AI_SYSTEM = "Movement Ai System";
 const std::string AI_WORK_SYSTEM = "Ai Work System";
 const std::string MINING_AI = "Mining Ai";
 const std::string BUILD_AI = "Build Ai";
-const std::string WORK_ORDERS = "Work Orders";
+const std::string WORK_ORDERS_SYSTEM = "Work Orders";
 const std::string WORK_ORDER_HELPER = "Work Order Helper";
 const std::string STOCKPILE_SYSTEM = "Stockpile System";
 const std::string HAULING_SYSTEM = "Hauling System";
@@ -70,6 +78,13 @@ const std::string PLANT_SYSTEM = "Plant System";
 
 // Gui Systems
 const std::string MENU_BAR = "Menu Bar";
+const std::string DESIGN_ARCHITECTURE = "Design Architecture";
+const std::string DESIGN_BUILDING = "Design Building";
+const std::string DESIGN_DEV_MODE = "Design Dev Mode";
+const std::string DESIGN_HARVEST = "Design Harvest";
+const std::string DESIGN_MINING = "Design Mining";
+const std::string DESIGN_WOODCUTTING = "Design Woodcutting";
+const std::string DESIGN_WORKORDERS = "Design Work Orders";
 const std::string CAMERA_SYSTEM = "Camera System";
 
 //const std::string WORK_ORDER_HELPER = "Work Order Helper";
@@ -107,7 +122,7 @@ void initSystems()
 	systems[EQUIP_HANDLER] = new EquipHandler;
 	systems[BUILD_AI] = new BuildAi;
 	systems[ITEM_HELPER] = new ItemHelper;
-	systems[WORK_ORDERS] = new WorkOrders;
+	systems[WORK_ORDERS_SYSTEM] = new WorkOrders;
 	systems[WORK_ORDER_HELPER] = workOrderHelper.get();
 	systems[STOCKPILE_SYSTEM] = new StockpileSystem;
 	systems[HAULING_SYSTEM] = new HaulingSystem;
@@ -121,6 +136,13 @@ void initSystems()
 	// Gui systems
 	systems[MENU_BAR] = new MenuBar;
 	systems[CAMERA_SYSTEM] = new CameraSystem;
+	systems[DESIGN_ARCHITECTURE] = new DesignArchitecture;
+	systems[DESIGN_BUILDING] = new DesignBuilding;
+	systems[DESIGN_DEV_MODE] = new DesignDevMode;
+	systems[DESIGN_HARVEST] = new DesignHarvest;
+	systems[DESIGN_MINING] = new DesignMining;
+	systems[DESIGN_WOODCUTTING] = new DesignWoodcutting;
+	systems[DESIGN_WORKORDERS] = new DesignWorkOrders;
 
 	// Add systems to world. Cast to their derived class so world 
 	// doesn't interpret them as SystemBase's
@@ -137,7 +159,7 @@ void initSystems()
 	world.addSystem(* static_cast<EquipHandler *>(systems[EQUIP_HANDLER]));
 	world.addSystem(* static_cast<BuildAi *>(systems[BUILD_AI]));
 	world.addSystem(* static_cast<ItemHelper *>(systems[ITEM_HELPER]));
-	world.addSystem(* static_cast<WorkOrders *>(systems[WORK_ORDERS]));
+	world.addSystem(* static_cast<WorkOrders *>(systems[WORK_ORDERS_SYSTEM]));
 	world.addSystem(* static_cast<WorkOrderHelper *>(systems[WORK_ORDER_HELPER]));
 	world.addSystem(* static_cast<StockpileSystem *>(systems[STOCKPILE_SYSTEM]));
 	world.addSystem(* static_cast<HaulingSystem *>(systems[HAULING_SYSTEM]));
@@ -150,7 +172,14 @@ void initSystems()
 
 	// Gui Systems
 	world.addSystem(* static_cast<MenuBar *>(systems[MENU_BAR]));
-	world.addSystem(*static_cast<CameraSystem *>(systems[CAMERA_SYSTEM]));
+	world.addSystem(* static_cast<CameraSystem *>(systems[CAMERA_SYSTEM]));
+	world.addSystem(* static_cast<DesignArchitecture *>(systems[DESIGN_ARCHITECTURE]));
+	world.addSystem(* static_cast<DesignBuilding *>(systems[DESIGN_BUILDING]));
+	world.addSystem(* static_cast<DesignDevMode *>(systems[DESIGN_DEV_MODE]));
+	world.addSystem(* static_cast<DesignHarvest *>(systems[DESIGN_HARVEST]));
+	world.addSystem(* static_cast<DesignMining *>(systems[DESIGN_MINING]));
+	world.addSystem(* static_cast<DesignWoodcutting *>(systems[DESIGN_WOODCUTTING]));
+	world.addSystem(* static_cast<DesignWorkOrders *>(systems[DESIGN_WORKORDERS]));
 
 	for (auto& sys : systems)
 		sys.second->init();
@@ -190,7 +219,7 @@ void updateSystems(const double duration)
 	runSystem(AI_WORK_SYSTEM, duration);
 
 	// Perform assigned jobs
-	runSystem(WORK_ORDERS, duration);
+	runSystem(WORK_ORDERS_SYSTEM, duration);
 	runSystem(MINING_AI, duration);
 	runSystem(WOODCUTTING_AI, duration);
 	runSystem(BUILD_AI, duration);
@@ -214,9 +243,33 @@ void updateSystems(const double duration)
 	{
 		cameraRefresh = 0.0;
 		runSystem(CAMERA_SYSTEM, duration);
-	}
+	} 
 
 	runSystem(MENU_BAR, duration); // Should these be before world.refresh()?
+
+	if (gameState == GameState::DESIGN)
+	{
+		if (designState == DesignStates::ARCHITECURE) 
+			runSystem(DESIGN_ARCHITECTURE, duration);
+
+		if (designState == DesignStates::BUILD)
+			runSystem(DESIGN_BUILDING, duration);
+
+		if (designState == DesignStates::CHOP_TREES)
+			runSystem(DESIGN_WOODCUTTING, duration);
+
+		if (designState == DesignStates::DEV_MODE)
+			runSystem(DESIGN_DEV_MODE, duration);
+
+		if (designState == DesignStates::HARVEST)
+			runSystem(DESIGN_HARVEST, duration);
+
+		if (designState == DesignStates::MINING)
+			runSystem(DESIGN_MINING, duration);
+
+		if (designState == DesignStates::WORK_ORDERS)
+			runSystem(DESIGN_WORKORDERS, duration);
+	}
 
 	// Main Rendering
 	runSystem(RENDER_SYSTEM, duration);

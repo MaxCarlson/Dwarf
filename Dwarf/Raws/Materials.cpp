@@ -36,6 +36,16 @@ const std::size_t getMaterialIdx(const std::string & tag)
 	return 0;
 }
 
+const std::vector<std::string> getAllMaterialTags()
+{
+	std::vector<std::string> mats;
+
+	for (const auto& m : materialDefs)
+		mats.emplace_back(m.tag);
+
+	return mats;
+}
+
 
 void readInMaterials() noexcept
 {

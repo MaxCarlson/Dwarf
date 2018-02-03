@@ -29,3 +29,17 @@ void Calender::nextMinute()
 		month = 0;
 	}
 }
+
+std::string Calender::getTime()
+{
+	std::string time = std::to_string(hour) + ':';
+
+	time += std::to_string(minute) + ':';
+	time += "00  ";
+
+	time += std::to_string(day + 1) + '/';
+	time += std::to_string(month + 1) + '/';
+	time += std::to_string(year) + '/';
+
+	return time;
+}

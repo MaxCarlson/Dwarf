@@ -1,5 +1,7 @@
 #pragma once
-class DesignMining
+#include "ECS\Systems.h"
+
+class DesignMining : public System<Requires<>>
 {
 public:
 	DesignMining();

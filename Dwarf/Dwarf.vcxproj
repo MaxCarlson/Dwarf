@@ -156,6 +156,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ECS\Systems\Gui\DesignHarvest.cpp" />
+    <ClCompile Include="ECS\Systems\Gui\DesignDevMode.cpp" />
     <ClCompile Include="ECS\Systems\Gui\DesignArchitecture.cpp" />
     <ClCompile Include="ECS\Systems\Gui\DesignBuilding.cpp" />
     <ClCompile Include="ECS\Systems\Gui\DesignMining.cpp" />
@@ -177,6 +179,7 @@
     <ClCompile Include="imgui_demo.cpp" />
     <ClCompile Include="imgui_draw.cpp" />
     <ClCompile Include="Globals\MainFunction.cpp" />
+    <ClCompile Include="imgui_tabs.cpp" />
     <ClCompile Include="MainLoops\MainMenuLoop.cpp" />
     <ClCompile Include="Map\building\BuildBiomes.cpp" />
     <ClCompile Include="ECS\Systems\timebased\CalenderSystem.cpp" />
@@ -270,6 +273,8 @@
     <ClCompile Include="MainLoops\WorldGenLoop.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ECS\Systems\Gui\DesignHarvest.h" />
+    <ClInclude Include="ECS\Systems\Gui\DesignDevMode.h" />
     <ClInclude Include="ECS\Systems\Gui\DesignArchitecture.h" />
     <ClInclude Include="ECS\Systems\Gui\DesignBuilding.h" />
     <ClInclude Include="ECS\Systems\Gui\DesignMining.h" />

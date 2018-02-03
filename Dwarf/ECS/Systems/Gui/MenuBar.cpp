@@ -18,6 +18,12 @@ void MenuBar::update(const double duration)
 
 	if (ImGui::BeginMenu(mainMenu.c_str()))
 	{
+		if (ImGui::MenuItem("Dev Mode"))
+		{
+			gameState = GameState::DESIGN;
+			designState = DesignStates::DEV_MODE;
+		}
+
 		if (ImGui::MenuItem("Save Game"))
 		{
 			gameState = GameState::SAVE_GAME;
@@ -77,6 +83,11 @@ void MenuBar::update(const double duration)
 
 		ImGui::EndMenu();
 	}
+
+	const std::string time = calender->getTime();
+
+	ImGui::SameLine(ImGui::GetWindowWidth() - ImGui::CalcTextSize(time.c_str()).x + 7);
+	ImGui::Text(time.c_str());
 
 	ImGui::EndMainMenuBar();
 }

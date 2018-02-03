@@ -9,6 +9,8 @@ MaterialDef * getMaterial(const std::size_t  idx);
 
 const std::size_t getMaterialIdx(const std::string &tag);
 
+const std::vector<std::string> getAllMaterialTags();
+
 void readInMaterials() noexcept;
 void sanityCheckMaterials();
 

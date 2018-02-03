@@ -1,5 +1,7 @@
 #pragma once
-class DesignWoodcutting
+#include "ECS\Systems.h"
+
+class DesignWoodcutting : public System<Requires<>>
 {
 public:
 	DesignWoodcutting();

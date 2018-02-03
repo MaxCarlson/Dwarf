@@ -20,6 +20,7 @@ struct DefInfo
 	std::vector<std::string> buildingNames;
 
 	std::vector<std::string> itemTags;
+	std::vector<std::string> materialTags;
 
 	std::vector<std::string> availibleReactions;
 	std::unordered_map<std::string, std::vector<std::string>> avReactionsByBuilding;
