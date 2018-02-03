@@ -96,13 +96,18 @@ namespace RunSystems
 std::unordered_map<std::string, SystemBase*> systems;
 
 
-void initSystems()
+void initSystems(bool fromLoad)
 {	
 	// External system like Objects that aren't Systems
 	positionCache = std::make_unique<PositionCache>();
-	calender = std::make_unique<Calender>(); // Eventually give an input date based on world generation
-	designations = std::make_unique<Designations>();
-	defInfo = std::make_unique<DefInfo>();
+
+	if (!fromLoad)
+	{
+		calender = std::make_unique<Calender>(); // Eventually give an input date based on world generation
+		designations = std::make_unique<Designations>();
+		defInfo = std::make_unique<DefInfo>();
+	}
+
 	defInfo->init();
 
 	// External systems

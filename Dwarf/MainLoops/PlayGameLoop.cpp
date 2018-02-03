@@ -10,19 +10,26 @@
 #include "Globals\global_calender.h"
 #include "Designations.h"
 #include "Raws\DefInfo.h"
+#include "Globals\Camera.h"
 //#include "Map\building\regionBuilder.h"
 //#include "Helpers\Rng.h"
 #include <imgui.h>
 #include <imgui-SFML.h>
 
 #include <filesystem>
-namespace fs = std::experimental::filesystem;
+namespace fs = std::experimental::filesystem; 
 
 
 void saveGame(bool& done)
 {
 	static std::string path = "newGame";
 	ImGui::Begin("Save Game", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+
+	if (ImGui::Button("Back"))
+	{
+		done = true;
+		return;
+	}
 
 	ImGui::Text("Enter the name of the save");
 	ImGui::InputText("File name", (char *)path.c_str(), 250);
@@ -43,6 +50,7 @@ void saveGame(bool& done)
 		archive(calender);
 		archive(designations);
 		archive(defInfo);
+		archive(camera);
 
 		done = true;
 	}
@@ -52,11 +60,12 @@ void saveGame(bool& done)
 
 void loadGame(bool& done)
 {
+	ImGui::SetNextWindowPosCenter();
 	ImGui::Begin("Load Game", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 
 	std::string dirpath = "Saves";
 	std::vector<std::string> paths;
-	for (auto & p : fs::directory_iterator(dirpath))
+	for (const auto &p : fs::directory_iterator(dirpath))
 	{
 		ImGui::Text(p.path().string().c_str());
 
@@ -67,9 +76,6 @@ void loadGame(bool& done)
 
 			std::ifstream is(dirpath, std::ios::binary);
 			cereal::BinaryInputArchive iarchive(is);
-
-			//std::ifstream is(dirpath); // JSON
-			//cereal::JSONInputArchive iarchive(is);
 
 			// Load region then world
 			// Systems aren't loaded, just re-created
@@ -85,6 +91,7 @@ void loadGame(bool& done)
 			iarchive(calender);
 			iarchive(designations);
 			iarchive(defInfo);
+			iarchive(camera);
 
 			done = true;
 		}
@@ -102,7 +109,7 @@ void PlayGameLoop::run(const double duration)
 		//ImGui::Begin("Pick Region Size", nullptr, ImVec2{ 600, 400 }, 0.7f, ImGuiWindowFlags_AlwaysAutoResize + ImGuiWindowFlags_NoCollapse);
 
 		ComponentsInit::init(); // This isn't strictly neccasary if a new game has been started before, probably won't cause issues but keep a look out!
-		RunSystems::initSystems();
+		RunSystems::initSystems(false);
 
 		gameState = GameState::PLAYING;
 	}
@@ -117,6 +124,8 @@ void PlayGameLoop::run(const double duration)
 		{
 			loaded = false;
 			gameState = GameState::PLAYING;
+			ComponentsInit::init();
+			RunSystems::initSystems(true);
 		}
 	}
 
