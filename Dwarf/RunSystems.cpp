@@ -14,6 +14,7 @@
 #include "ECS\Systems\Gui\GuiSystem.h"
 
 #include "ECS\Systems\Gui\MenuBar.h"
+#include "ECS\Systems\Gui\CameraSystem.h"
 
 // Ai systems
 #include "ECS\Systems\ai\EquipHandler.h"
@@ -69,6 +70,7 @@ const std::string PLANT_SYSTEM = "Plant System";
 
 // Gui Systems
 const std::string MENU_BAR = "Menu Bar";
+const std::string CAMERA_SYSTEM = "Camera System";
 
 //const std::string WORK_ORDER_HELPER = "Work Order Helper";
 
@@ -115,7 +117,10 @@ void initSystems()
 	systems[FARMING_AI] = new FarmingAi;
 	systems[CALENDER_SYSTEM] = new CalenderSystem;
 	systems[PLANT_SYSTEM] = new PlantSystem;
+
+	// Gui systems
 	systems[MENU_BAR] = new MenuBar;
+	systems[CAMERA_SYSTEM] = new CameraSystem;
 
 	// Add systems to world. Cast to their derived class so world 
 	// doesn't interpret them as SystemBase's
@@ -142,7 +147,10 @@ void initSystems()
 	world.addSystem(* static_cast<FarmingAi *>(systems[FARMING_AI]));
 	world.addSystem(* static_cast<CalenderSystem *>(systems[CALENDER_SYSTEM]));
 	world.addSystem(* static_cast<PlantSystem *>(systems[PLANT_SYSTEM]));
+
+	// Gui Systems
 	world.addSystem(* static_cast<MenuBar *>(systems[MENU_BAR]));
+	world.addSystem(*static_cast<CameraSystem *>(systems[CAMERA_SYSTEM]));
 
 	for (auto& sys : systems)
 		sys.second->init();
@@ -198,9 +206,20 @@ void updateSystems(const double duration)
 	// or activated (when a component changes)
 	world.refresh();
 
-	runSystem(RENDER_SYSTEM, duration);
+	static double cameraRefresh = 0.0;
+	cameraRefresh += duration;
+
+	// Gui Systems
+	if (cameraRefresh > 30.0)
+	{
+		cameraRefresh = 0.0;
+		runSystem(CAMERA_SYSTEM, duration);
+	}
 
 	runSystem(MENU_BAR, duration); // Should these be before world.refresh()?
+
+	// Main Rendering
+	runSystem(RENDER_SYSTEM, duration);
 }
 
 

@@ -156,6 +156,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ECS\Systems\Gui\DesignArchitecture.cpp" />
+    <ClCompile Include="ECS\Systems\Gui\DesignBuilding.cpp" />
+    <ClCompile Include="ECS\Systems\Gui\DesignMining.cpp" />
+    <ClCompile Include="ECS\Systems\Gui\DesignWoodcutting.cpp" />
+    <ClCompile Include="ECS\Systems\Gui\DesignWorkOrders.cpp" />
+    <ClCompile Include="ECS\Systems\Gui\CameraSystem.cpp" />
     <ClCompile Include="Globals\Camera.cpp" />
     <ClCompile Include="dfr\colors.cpp" />
     <ClCompile Include="dfr\DwarfRender.cpp" />
@@ -264,6 +270,12 @@
     <ClCompile Include="MainLoops\WorldGenLoop.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ECS\Systems\Gui\DesignArchitecture.h" />
+    <ClInclude Include="ECS\Systems\Gui\DesignBuilding.h" />
+    <ClInclude Include="ECS\Systems\Gui\DesignMining.h" />
+    <ClInclude Include="ECS\Systems\Gui\DesignWoodcutting.h" />
+    <ClInclude Include="ECS\Systems\Gui\DesignWorkOrders.h" />
+    <ClInclude Include="ECS\Systems\Gui\CameraSystem.h" />
     <ClInclude Include="Globals\Camera.h" />
     <ClInclude Include="dfr\colors.h" />
     <ClInclude Include="dfr\DwarfRender.h" />
