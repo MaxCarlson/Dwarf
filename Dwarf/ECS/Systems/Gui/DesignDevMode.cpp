@@ -22,7 +22,6 @@ void spawnItem()
 	static std::string matTag = "";
 
 	static int itemIdx = 0;
-	static int matIdx = 0;
 
 	int itemDefIdx = 0;
 	for (const auto& i : defInfo->itemTags)
@@ -33,17 +32,43 @@ void spawnItem()
 		bool selected = itemIdx == itemDefIdx;
 		if (ImGui::Checkbox("Select", &selected))
 		{
-
+			itemIdx = itemDefIdx;
 		}
-
 		ImGui::NextColumn();
 		++itemDefIdx;
 	}
+
+	ImGui::Begin("Material", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+
+	static int matIdx = 0;
+
+	int matDefIdx = 0;
+	for (const auto& m : defInfo->materialTags)
+	{
+		ImGui::Text(m.c_str());
+		ImGui::SameLine();
+		bool selected = matIdx == matDefIdx;
+		if (ImGui::Checkbox("Select", &selected))
+		{
+			matIdx = matDefIdx;
+		}
+
+		ImGui::NextColumn();
+		++matDefIdx;
+	}
+	ImGui::End();
+
+	ImGui::Begin("Qty", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+
+	static int qty = 1;
+	ImGui::SliderInt("Qty", &qty, 1, 100);
+
+	ImGui::End();
 }
 
 void DesignDevMode::update(const double duration)
 {
-	ImGui::Begin("Dev Controls", nullptr, ImGuiWindowFlags_NoCollapse);
+	ImGui::Begin("Dev Controls", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
 
 	if (ImGui::Button("Close"))
 	{

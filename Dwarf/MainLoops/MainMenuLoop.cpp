@@ -5,6 +5,8 @@
 #include "DwarfRender.h"
 #include "Globals\MainFunction.h"
 #include "WorldGenLoop.h"
+#include "Globals\game_states.h"
+#include "PlayGameLoop.h"
 
 static const std::string loadGame = "Load Game";
 static const std::string createWorld = "Create World";
@@ -32,7 +34,8 @@ void MainMenuLoop::run(const double duration)
 
 	if (ImGui::Button(loadGame.c_str()))
 	{
-		
+		gameState = GameState::LOAD_GAME;
+		MainFunction = PlayGameLoop::run;
 	}
 
 	if (ImGui::Button(createWorld.c_str()))
