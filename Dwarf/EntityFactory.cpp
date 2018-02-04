@@ -9,11 +9,12 @@
 #include "ECS\Components\PositionComponent.h"
 #include "ECS\Components\RenderComponent.h"
 #include "ECS\Components\HealthComponent.h"
-#include "ECS\Components\LaborStatsComponent.h"
 #include "ECS\Components\MovementComponent.h"
 #include "ECS\Components\JobComponent.h"
+
 #include "ECS\Components\Sentients\Inventory.h"
 #include "ECS\Components\Sentients\Stats.h"
+#include "ECS\Components\Sentients\AiWorkComponent.h"
 
 #include "Raws\SkillReader.h"
 
@@ -29,18 +30,7 @@ Entity createDwarf(DwarfCreationObj dwarfConstruct)
 
 	dwarf.addComponent<RenderComponent>(vchar{ 769, color_from_name("default"), color_from_name("default") });
 	dwarf.addComponent<PositionComponent>(dwarfConstruct.co);
-	dwarf.addComponent<JobComponent>();
-
-	// Convert LaborSkill Points into skill levels
-	std::vector<int> laborSkillLevels;
-	for (auto& skillPoints : dwarfConstruct.skillPoints)
-	{
-		// Determine labor skill Level
-		const int lbsLevel = determine_labor_skill_Lvl(skillPoints);
-
-		laborSkillLevels.push_back(lbsLevel);
-	}
-	dwarf.addComponent<LaborStatsComponent>(laborSkillLevels, dwarfConstruct.skillPoints); // Delete this
+	dwarf.addComponent<AiWorkComponent>();
 
 	std::unordered_map<std::string, attribute> attributes;
 

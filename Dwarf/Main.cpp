@@ -17,6 +17,12 @@
 // dynamic eventually
 std::unique_ptr<Engine> engine;
 
+void onResizeL1(dfr::Layer * l, int w, int h)
+{
+	l->w = w;
+	l->h = h;
+}
+
 int main()
 {
 	// BearslibTerminal Init stuff
@@ -47,6 +53,9 @@ int main()
 	//dfr::getWindow()->resetGLStates();
 
 	MainFunction = MainMenuLoop::run;
+
+	dfr::gui->addLayer(1, 0, 0, dfr::getWindow()->getSize().x, dfr::getWindow()->getSize().y, "font", onResizeL1, false); // Enum as layer terminal
+	dfr::gui->getLayer(1)->terminal->setAlpha(15);
 
 	while (true)
 	{

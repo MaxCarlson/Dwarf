@@ -16,18 +16,6 @@
 #include <imgui.h>
 #include <imgui-SFML.h>
 
-struct RenderItem
-{
-	RenderItem() = default;
-	RenderItem(int ch, uint8_t code, color_t fg, color_t bg)
-		: ch(ch), code(code), fg(fg), bg(bg) {}
-
-	int ch;
-	uint8_t code;
-	color_t fg;
-	color_t bg;
-};
-
 std::unordered_map<int, std::vector<RenderComponent>> renderEntities;
 
 void RenderSystem::init()
@@ -96,7 +84,7 @@ void RenderSystem::update(const double duration)
 
 void RenderSystem::update(const double duration)
 {
-	
+
 	int z = camera.z;
 
 	updateRender(); // Remove the need to always do this

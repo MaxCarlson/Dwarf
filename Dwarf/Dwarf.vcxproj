@@ -156,6 +156,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="dfr\DrawLayers.cpp" />
+    <ClCompile Include="dfr\Layer.cpp" />
     <ClCompile Include="ECS\Systems\Gui\DesignHarvest.cpp" />
     <ClCompile Include="ECS\Systems\Gui\DesignDevMode.cpp" />
     <ClCompile Include="ECS\Systems\Gui\DesignArchitecture.cpp" />
@@ -193,6 +195,7 @@
     <ClCompile Include="Map\building\PlanetMapBuilder.cpp" />
     <ClCompile Include="MainLoops\PlayGameLoop.cpp" />
     <ClCompile Include="ECS\Systems\Gui\MenuBar.cpp" />
+    <ClCompile Include="mouse.cpp" />
     <ClCompile Include="Raws\BiomeReader.cpp" />
     <ClCompile Include="ECS\Systems\ai\HaulingSystem.cpp" />
     <ClCompile Include="ECS\Systems\helpers\PathFinding.cpp" />
@@ -273,6 +276,9 @@
     <ClCompile Include="MainLoops\WorldGenLoop.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="dfr\DrawLayers.h" />
+    <ClInclude Include="dfr\Layer.h" />
+    <ClInclude Include="ECS\Components\Sentients\AiWorkComponent.h" />
     <ClInclude Include="ECS\Systems\Gui\DesignHarvest.h" />
     <ClInclude Include="ECS\Systems\Gui\DesignDevMode.h" />
     <ClInclude Include="ECS\Systems\Gui\DesignArchitecture.h" />
@@ -310,6 +316,7 @@
     <ClInclude Include="Map\building\PlanetMapBuilder.h" />
     <ClInclude Include="MainLoops\PlayGameLoop.h" />
     <ClInclude Include="ECS\Systems\Gui\MenuBar.h" />
+    <ClInclude Include="mouse.h" />
     <ClInclude Include="Raws\BiomeReader.h" />
     <ClInclude Include="ECS\Components\helpers\skill.h" />
     <ClInclude Include="ECS\Components\helpers\work_order_reaction.h" />
@@ -460,7 +467,6 @@
     <ClInclude Include="ECS\Components\CombatStatsComponent.h" />
     <ClInclude Include="ECS\Components\HealthComponent.h" />
     <ClInclude Include="ECS\Components\JobComponent.h" />
-    <ClInclude Include="ECS\Components\LaborStatsComponent.h" />
     <ClInclude Include="ECS\Components\MovementComponent.h" />
     <ClInclude Include="ECS\EntityManager.h" />
     <ClInclude Include="ECS\Filter.h" />

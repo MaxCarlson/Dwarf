@@ -15,5 +15,4 @@ struct vchar
 	{
 		archive(c, fg, bg);
 	}
-	// Possibly add a tileset code? Although really tilesets should just be loaded into memory and indexed from there
 };

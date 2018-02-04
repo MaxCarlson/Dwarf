@@ -27,6 +27,10 @@ namespace dfr
 
 		void print(const int x, const int y, const std::string &st, const color &fg = { 255, 255, 255 }, const color &bg = { 0, 0, 0 }) noexcept;
 
+		void setOffset(const int x, const int y) { offsetX = x; offsetY = y; }
+
+		void setAlpha(const uint8_t a) { alpha = a; }
+
 		void render(sf::RenderWindow &window);
 
 		int width;

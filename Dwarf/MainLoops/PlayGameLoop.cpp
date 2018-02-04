@@ -4,7 +4,6 @@
 #include "Globals\game_states.h"
 #include "Globals\GlobalWorld.h"
 #include "RunSystems.h"
-#include "RegisterComponents.h"
 #include "Map\building\PlanetBuilding.h"
 #include "Map\Tile.h"
 #include "Globals\global_calender.h"
@@ -74,7 +73,6 @@ void loadGame(bool& done)
 	for (const auto &p : fs::directory_iterator(dirpath))
 		paths.emplace_back(p.path().string());
 
-	int i = 0;
 	static int selected = 0;
 	ImGui::ListBox("", &selected, paths);
 
@@ -91,7 +89,7 @@ void loadGame(bool& done)
 		region::load_region(dirpath);
 		world.load(iarchive);
 
-		// Init misc maps and designations
+		// Init misc 
 		calender = std::make_unique<Calender>();
 		defInfo = std::make_unique<DefInfo>();
 
@@ -115,7 +113,6 @@ void PlayGameLoop::run(const double duration)
 		//ImGui::SetNextWindowPosCenter();
 		//ImGui::Begin("Pick Region Size", nullptr, ImVec2{ 600, 400 }, 0.7f, ImGuiWindowFlags_AlwaysAutoResize + ImGuiWindowFlags_NoCollapse);
 
-		ComponentsInit::init(); // This isn't strictly neccasary if a new game has been started before, probably won't cause issues but keep a look out!
 		RunSystems::initSystems(false);
 
 		gameState = GameState::PLAYING;
@@ -131,7 +128,6 @@ void PlayGameLoop::run(const double duration)
 		{
 			loaded = false;
 			gameState = GameState::PLAYING;
-			ComponentsInit::init();
 			RunSystems::initSystems(true);
 		}
 	}

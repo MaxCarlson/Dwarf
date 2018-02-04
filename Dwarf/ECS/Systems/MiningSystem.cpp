@@ -4,7 +4,6 @@
 #include "../Messages/recalculate_mining_message.h"
 #include "../Messages/perform_mining_message.h"
 #include "../World.h"
-#include "../Components/LaborStatsComponent.h"
 #include "../Raws/raws.h"
 #include "../Raws/Materials.h"
 #include "../Raws/Defs/MaterialDef.h"

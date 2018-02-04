@@ -4,6 +4,7 @@
 #include "Textures.h"
 #include "FontManager.h"
 #include "Inputs.h"
+#include "DrawLayers.h"
 #include <string>
 #include <memory>
 #include <functional>
@@ -28,8 +29,13 @@ namespace dfr
 
 	sf::RenderWindow * getWindow();
 
+	extern std::unique_ptr<DrawLayers> gui;
+
 	void init(config_r config);
 
 	void run(std::function<void(double)>& onTick);
+
+	inline Layer * layer(const int id) { return gui->getLayer(id); }
+	inline Terminal * term(const int id) { return gui->getLayer(id)->terminal.get(); }
 }
 

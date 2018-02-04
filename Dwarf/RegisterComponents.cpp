@@ -8,7 +8,6 @@
 #include "ECS\Components\ItemStored.h"
 #include "ECS\Components\HealthComponent.h"
 #include "ECS\Components\Item.h"
-#include "ECS\Components\LaborStatsComponent.h"
 #include "ECS\Components\Claimed.h"
 #include "ECS\Components\Building.h"
 #include "ECS\Components\ItemCarried.h"
@@ -29,16 +28,13 @@
 // Component Sentients
 #include "ECS\Components\Sentients\Stats.h"
 #include "ECS\Components\Sentients\Inventory.h"
+#include "ECS\Components\Sentients\AiWorkComponent.h"
 
 void ComponentsInit::init()
 {
 	world.registerComponent<PositionComponent>();
 	world.registerComponent<MovementComponent>();
 	world.registerComponent<RenderComponent>();
-	world.registerComponent<LaborStatsComponent>();
-	world.registerComponent<JobComponent>(); // Delete this component perma
-	world.registerComponent<Stats>();
-	world.registerComponent<Inventory>();
 	world.registerComponent<ItemCarried>();
 	world.registerComponent<ItemStored>();
 	world.registerComponent<Item>();
@@ -49,6 +45,7 @@ void ComponentsInit::init()
 	world.registerComponent<Building>();
 	world.registerComponent<Stockpile>();
 
+	// Tags
 	world.registerComponent<MiningTag>();
 	world.registerComponent<BuilderTag>();
 	world.registerComponent<WorkOrderTag>();
@@ -57,6 +54,11 @@ void ComponentsInit::init()
 	world.registerComponent<LumberjacTag>();
 	world.registerComponent<HarvestTag>();
 	world.registerComponent<PlantingTag>();
+
+	// Sentiants
+	world.registerComponent<Stats>();
+	world.registerComponent<Inventory>();
+	world.registerComponent<AiWorkComponent>();
 
 	// Global components
 	world.registerComponent<Calender>();

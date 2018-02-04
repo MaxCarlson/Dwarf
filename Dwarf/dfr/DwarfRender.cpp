@@ -21,6 +21,7 @@ namespace dfr
 {
 	std::unique_ptr<sf::RenderWindow> mainWindow;
 	std::unique_ptr<Terminal> terminal;
+	std::unique_ptr<DrawLayers> gui;
 
 	sf::RenderWindow * getWindow()
 	{
@@ -41,6 +42,8 @@ namespace dfr
 		
 		terminal = std::make_unique<Terminal>(config.fontTag, 0, 0);
 		terminal->resizePix(sizePixel.x, sizePixel.y);
+
+		gui = std::make_unique<DrawLayers>(config.width, config.height);
 	}
 
 	void run(std::function<void(double)>& onTick)
@@ -66,6 +69,9 @@ namespace dfr
 					mainWindow->setView(sf::View(sf::FloatRect(0.f, 0.f, static_cast<float>(event.size.width), static_cast<float>(event.size.height))));
 
 					terminal->resizePix(event.size.width, event.size.height);
+
+					if (gui)
+						gui->onResize(event.size.width, event.size.height);
 				}
 
 				else if (event.type == sf::Event::LostFocus)
@@ -111,6 +117,11 @@ namespace dfr
 			onTick(MS_PER_UPDATE);
 
 			terminal->render(*mainWindow);
+
+			// Render other layers if they exist
+			if (gui)
+				gui->render(*mainWindow);
+
 			ImGui::SFML::Render(*mainWindow);
 
 			mainWindow->display();

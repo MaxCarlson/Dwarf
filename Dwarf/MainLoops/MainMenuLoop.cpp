@@ -7,6 +7,7 @@
 #include "WorldGenLoop.h"
 #include "Globals\game_states.h"
 #include "PlayGameLoop.h"
+#include "RegisterComponents.h"
 
 static const std::string loadGame = "Load Game";
 static const std::string createWorld = "Create World";
@@ -18,12 +19,18 @@ float calcIndent(const float width, const float textWidth)
 	return width / 2.0 - textWidth / 2.0;
 }
 
+static bool first = true;
+
 void MainMenuLoop::run(const double duration)
 {
-	ImVec4 yellow{ 1.0f, 1.0f, 0.0f, 1.0f };
-
-	//const auto twidth = ImGui::GetWindowWidth();
-	//const auto theight = ImGui::GetWindowHeight();
+	if (first)
+	{
+		first = false;
+		// Register all used components so they stay in same order
+		// on serialization / deserialization
+		ComponentsInit::init();
+	}
+		
 
 	ImGui::SetNextWindowPosCenter();
 	ImGui::Begin("MainMenu", nullptr, ImVec2{ ImGui::CalcTextSize(createWorld.c_str()).x, 400 }, 0.0f,

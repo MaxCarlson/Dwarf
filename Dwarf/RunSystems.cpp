@@ -51,6 +51,8 @@
 #include "Globals\global_calender.h"
 #include "Designations.h"
 #include "Raws\DefInfo.h"
+#include "mouse.h"
+#include <DwarfRender.h>
 
 const std::string RENDER_SYSTEM = "Render System";
 const std::string MOVEMENT_SYSTEM = "Movement System";
@@ -87,12 +89,10 @@ const std::string DESIGN_WOODCUTTING = "Design Woodcutting";
 const std::string DESIGN_WORKORDERS = "Design Work Orders";
 const std::string CAMERA_SYSTEM = "Camera System";
 
-//const std::string WORK_ORDER_HELPER = "Work Order Helper";
 
 namespace RunSystems
 {
 
-//boost::container::flat_map<std::string, SystemBase*> systems;
 std::unordered_map<std::string, SystemBase*> systems;
 
 
@@ -202,6 +202,14 @@ void updateSystems(const double duration)
 	// Deliver any deffered messages to systems
 	world.deliver_messages();
 
+	// Read mouse in
+	mouse::readMouse();
+
+	// Clear previous iterations of rendering 
+	// from root consoles and layers manually here
+	dfr::terminal->clear();
+	if (dfr::gui)
+		dfr::gui->clearAllLayers();
 
 	static double majorTick = 0.0;
 
@@ -236,10 +244,6 @@ void updateSystems(const double duration)
 	runSystem(HAULING_SYSTEM, duration);
 	runSystem(PLANT_SYSTEM, duration);
 
-	// Update all traits in entities that were killed, deactivated,
-	// or activated (when a component changes)
-	world.refresh();
-
 	static double cameraRefresh = 0.0;
 	cameraRefresh += duration;
 
@@ -250,6 +254,10 @@ void updateSystems(const double duration)
 		runSystem(CAMERA_SYSTEM, duration);
 	} 
 
+	// Main Rendering 
+	runSystem(RENDER_SYSTEM, duration);
+
+	// Menu and gui rendering
 	runSystem(MENU_BAR, duration); // Should these be before world.refresh()?
 
 	if (gameState == GameState::DESIGN)
@@ -276,8 +284,9 @@ void updateSystems(const double duration)
 			runSystem(DESIGN_WORKORDERS, duration);
 	}
 
-	// Main Rendering
-	runSystem(RENDER_SYSTEM, duration);
+	// Update all traits in entities that were killed, deactivated,
+	// or activated (when a component changes)
+	world.refresh();
 }
 
 

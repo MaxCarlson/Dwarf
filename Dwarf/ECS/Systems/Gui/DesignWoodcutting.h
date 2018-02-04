@@ -4,7 +4,7 @@
 class DesignWoodcutting : public System<Requires<>>
 {
 public:
-	DesignWoodcutting();
-	~DesignWoodcutting();
+	void init();
+	void update(const double duration);
 };
 

@@ -17,13 +17,16 @@ void DesignDevMode::init()
 
 bool chooseLocation(const std::string& itemTag, const std::string& matTag, const int qty)
 {
+	auto mxy = dfr::getMousePosition();
+
+	mxy.first += camera.offsetX;
+	mxy.second += camera.offsetY;
+
+	std::string coor = "Coordinates: x = " + std::to_string(mxy.first) + " y = " + std::to_string(mxy.second) + " z = " + std::to_string(camera.z);
+
+	ImGui::Text(coor.c_str());
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
 	{
-		auto mxy = dfr::getMousePosition();
-
-		mxy.first += camera.offsetX;
-		mxy.second += camera.offsetY;
-
 		spawnItemOnGround(itemTag, getMaterialIdx(matTag), { mxy.first, mxy.second, camera.z }, SpawnColor::MATERIAL_COLOR);
 
 		return true;
