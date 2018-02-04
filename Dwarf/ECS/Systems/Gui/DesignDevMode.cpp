@@ -36,7 +36,7 @@ bool DesignDevMode::chooseLocation(const std::string& itemTag, const std::string
 	return false;
 }
 
-void spawnItem()
+void DesignDevMode::spawnItem()
 {
 	static bool selectingSpawnLocation = false;
 	static int spawnQty = 1;

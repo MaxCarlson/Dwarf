@@ -25,13 +25,10 @@ void DesignWoodcutting::drawCuttingArea(bool first)
 		firstClick = mousePos;
 
 	// Grab the second click. There has to be a less ugly way to do these  two clicks?
-	Coordinates click2Co = EMPTY_COORDINATES;
 	if (leftClick && !first)
 	{
-		click2Co = mousePos;
 		clicked = false;
-
-		emit(designation_message{ { getIdx(firstClick), getIdx(click2Co) }, designation_message::CUT_TREES });
+		emit(designation_message{ { getIdx(firstClick), getIdx(mousePos) }, designation_message::CUT_TREES });
 	}
 
 	// Drop out if right click
@@ -62,7 +59,7 @@ void DesignWoodcutting::drawCuttingArea(bool first)
 	}
 
 	static auto* lterminal = dfr::term(1); // Enum as layer terminal
-	lterminal->setAlpha(90);
+	lterminal->setAlpha(115);
 
 	int treeCount = 0;
 	// Draw highlighted area where chopping will be done if clicked
@@ -74,8 +71,8 @@ void DesignWoodcutting::drawCuttingArea(bool first)
 			if (region::treeId(getIdx({ x, y, mouseZ })))
 			{
 				lterminal->setAlpha(225);
-				lterminal->setChar(x, y, { 88,{ 255, 0, 0 }, { 0, 0, 0 } });
-				lterminal->setAlpha(100);
+				lterminal->setChar(x, y, { 88,{ 255, 0, 0 }, { 255, 0, 0 } });
+				lterminal->setAlpha(115);
 				++treeCount;
 			}
 		}
@@ -84,7 +81,7 @@ void DesignWoodcutting::drawCuttingArea(bool first)
 	std::stringstream ss;
 	ss << "Coordinate 1: " << x1 << "," << y1 << "," << mouseZ << " Coordinate 2: " << x2 << "," << y2 << "," << mouseZ;
 	ImGui::Text(ss.str().c_str()); 
-	ss.clear();
+	ss.str(std::string());
 	ss << "Tree Count: " << treeCount;
 	ImGui::Text(ss.str().c_str());
 

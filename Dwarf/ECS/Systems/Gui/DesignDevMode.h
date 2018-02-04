@@ -9,5 +9,6 @@ public:
 
 private:
 	bool chooseLocation(const std::string& itemTag, const std::string& matTag, const int qty);
+	void spawnItem();
 };
 
