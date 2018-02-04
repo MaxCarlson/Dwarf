@@ -54,8 +54,8 @@ int main()
 
 	MainFunction = MainMenuLoop::run;
 
-	dfr::gui->addLayer(1, 0, 0, dfr::getWindow()->getSize().x, dfr::getWindow()->getSize().y, "font", onResizeL1, false); // Enum as layer terminal
-	dfr::gui->getLayer(1)->terminal->setAlpha(15);
+	dfr::gui->addLayer(1, 0, 0, dfr::getWindow()->getSize().x, dfr::getWindow()->getSize().y, "font", onResizeL1, true); // Enum as layer terminal
+	dfr::gui->getLayer(1)->terminal->setAlpha(215);
 
 	while (true)
 	{

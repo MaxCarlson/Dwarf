@@ -2,9 +2,11 @@
 #include "DesignWoodcutting.h"
 #include "Globals\Camera.h"
 #include "Globals\game_states.h"
+#include "Map\Tile.h"
 #include "ECS\Messages\designation_message.h"
 #include "mouse.h"
 #include "Coordinates.h"
+#include "ECS\World.h"
 #include <imgui.h>
 #include <DwarfRender.h>
 
@@ -17,7 +19,7 @@ void DesignWoodcutting::init()
 static bool clicked = false;
 static Coordinates firstClick;
 
-void drawCuttingArea(bool first)
+void DesignWoodcutting::drawCuttingArea(bool first)
 {
 	if(first)
 		firstClick = mousePos;
@@ -28,6 +30,8 @@ void drawCuttingArea(bool first)
 	{
 		click2Co = mousePos;
 		clicked = false;
+
+		emit(designation_message{ { getIdx(firstClick), getIdx(click2Co) }, designation_message::CUT_TREES });
 	}
 
 	// Drop out if right click
@@ -58,31 +62,38 @@ void drawCuttingArea(bool first)
 	}
 
 	static auto* lterminal = dfr::term(1); // Enum as layer terminal
-	//lterminal->setAlpha(5);
+	lterminal->setAlpha(90);
 
+	int treeCount = 0;
 	// Draw highlighted area where chopping will be done if clicked
 	for(int x = x1; x <= x2; ++x)
 		for (int y = y1; y <= y2; ++y)
 		{
-			lterminal->setChar(x, y, { 0, { 255, 255, 0 }, { 0, 0, 0 } });
+			lterminal->setChar(x, y, { 88, { 255, 255, 0 }, { 0, 0, 0 } });
+
+			if (region::treeId(getIdx({ x, y, mouseZ })))
+			{
+				lterminal->setAlpha(225);
+				lterminal->setChar(x, y, { 88,{ 255, 0, 0 }, { 0, 0, 0 } });
+				lterminal->setAlpha(100);
+				++treeCount;
+			}
 		}
+
+	// Print out info about selected area
+	std::stringstream ss;
+	ss << "Coordinate 1: " << x1 << "," << y1 << "," << mouseZ << " Coordinate 2: " << x2 << "," << y2 << "," << mouseZ;
+	ImGui::Text(ss.str().c_str()); 
+	ss.clear();
+	ss << "Tree Count: " << treeCount;
+	ImGui::Text(ss.str().c_str());
+
 }
 
 void DesignWoodcutting::update(const double duration)
 {
 	// Show # logs in stockpiles eventually probably store item info in stockpiles globally,
 	// perhaps a unfrequent updating system
-
-	if (leftClick || clicked)
-	{
-		bool first = false;
-		if (!clicked)
-			first = true;
-
-		clicked = true;
-		
-		drawCuttingArea(first);
-	}
 
 	ImGui::Begin("Woodcutting", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 	
@@ -104,6 +115,18 @@ void DesignWoodcutting::update(const double duration)
 	if (ImGui::Button("Auto-Chop##do"))
 	{
 
+	}
+
+	// Do highlight woodcutting designations
+	if (leftClick || clicked)
+	{
+		bool first = false;
+		if (!clicked)
+			first = true;
+
+		clicked = true;
+
+		drawCuttingArea(first);
 	}
 
 	ImGui::End();

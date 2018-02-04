@@ -6,5 +6,8 @@ class DesignWoodcutting : public System<Requires<>>
 public:
 	void init();
 	void update(const double duration);
+
+private:
+	void drawCuttingArea(bool first);
 };
 

@@ -7,6 +7,7 @@
 #include "Raws\raws.h"
 #include "Globals\Camera.h"
 #include "Coordinates.h"
+#include "ECS\Messages\update_all_maps_message.h"
 #include <imgui.h>
 #include <imgui_tabs.h>
 #include <DwarfRender.h>
@@ -15,7 +16,7 @@ void DesignDevMode::init()
 {
 }
 
-bool chooseLocation(const std::string& itemTag, const std::string& matTag, const int qty)
+bool DesignDevMode::chooseLocation(const std::string& itemTag, const std::string& matTag, const int qty)
 {
 	auto mxy = dfr::getMousePosition();
 
@@ -29,6 +30,7 @@ bool chooseLocation(const std::string& itemTag, const std::string& matTag, const
 	{
 		spawnItemOnGround(itemTag, getMaterialIdx(matTag), { mxy.first, mxy.second, camera.z }, SpawnColor::MATERIAL_COLOR);
 
+		emit(update_all_maps_message{});
 		return true;
 	}
 	return false;
