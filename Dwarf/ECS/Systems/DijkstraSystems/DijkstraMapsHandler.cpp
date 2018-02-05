@@ -11,7 +11,6 @@
 #include "../../Messages/block_map_changed_message.h"
 #include "../../Messages/update_all_maps_message.h"
 #include "../../Messages/harvest_map_changed_message.h"
-#include "../../../Engine.h"
 
 DijkstraMap pick_map;
 DijkstraMap block_map;

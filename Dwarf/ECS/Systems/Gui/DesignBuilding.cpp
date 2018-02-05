@@ -5,7 +5,6 @@
 #include "Raws\DefInfo.h"
 #include "Raws\Buildings.h"
 #include "Globals\game_states.h"
-//#include "Globals\Camera.h"
 #include "ECS\Messages\designate_building_message.h"
 #include <imgui.h>
 #include <imgui_tabs.h>
@@ -19,17 +18,23 @@ void DesignBuilding::update(const double duration)
 {
 	ImGui::Begin("Building##Design", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 	ImGui::Text("Choose a building and location");
+
+	if (ImGui::Button("Back##BuildingDesignMain"))
+	{
+		gameState = GameState::PLAYING;
+	}
+
 	ImGui::BeginTabBar("Build##TabsDesign");
 	ImGui::DrawTabsBackground();
 
 	//static std::vector<std::string> workshops = sepperate buildings into workshops and other catagories once needed
 
-	if (ImGui::AddTab("Workshops##Building"))
+	if (ImGui::AddTab("Workshops"))
 	{
 		workshopTab();
 	}
 
-	if (ImGui::AddTab("OtherItems##Building"))
+	if (ImGui::AddTab("Other"))
 	{
 
 	}
@@ -96,18 +101,13 @@ void DesignBuilding::workshopTab()
 {
 	using namespace mouse;
 	ImGui::Text("Build Workshop");
-	ImGui::Text("Right click to stop designating");
 
 	static bool chooseLoc = false;
 	static int selected = 0;
 
-	ImGui::ListBox("Workshops##ListBuilding", &selected, defInfo->buildingNames);
+	ImGui::Text("Right click to stop designating");
 
-	if (ImGui::Button("Back##Buildings"))
-	{
-		chooseLoc = false;
-		gameState = GameState::PLAYING;
-	}
+	ImGui::ListBox("Workshops##ListBuilding", &selected, defInfo->buildingNames);
 
 	if (rightClick)
 	{

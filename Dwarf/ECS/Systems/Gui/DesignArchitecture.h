@@ -4,7 +4,7 @@
 class DesignArchitecture : public System<Requires<>>
 {
 public:
-	DesignArchitecture();
-	~DesignArchitecture();
+	void init();
+	void update(const double duration);
 };
 

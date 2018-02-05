@@ -11,10 +11,9 @@
 #include <memory>
 #include <chrono>
 
-typedef std::chrono::milliseconds::rep TimePoint;
-inline TimePoint now() {
-	return std::chrono::duration_cast<std::chrono::milliseconds>
-		(std::chrono::steady_clock::now().time_since_epoch()).count();
+inline double now() {
+	return static_cast<double>(std::chrono::duration_cast<std::chrono::milliseconds>
+		(std::chrono::steady_clock::now().time_since_epoch()).count());
 }
 
 namespace dfr
@@ -52,11 +51,14 @@ namespace dfr
 
 		ImGui::SFML::Init(*mainWindow);
 
+		double duration = 0.0;
 		sf::Clock deltaClock;
 		while (mainWindow->isOpen())
 		{
-			sf::Event event;
 
+			auto startTime = now();
+
+			sf::Event event;
 			while (mainWindow->pollEvent(event))
 			{
 				ImGui::SFML::ProcessEvent(event);
@@ -102,19 +104,11 @@ namespace dfr
 				}
 			}
 
-			static double deltaT = 0.0;
-			static const double MS_PER_UPDATE = 17.0;
-
-			while (deltaT < MS_PER_UPDATE)
-			{
-				deltaT += static_cast<double>(now());
-			}
-
 			ImGui::SFML::Update(*mainWindow, deltaClock.restart());
 
 			mainWindow->clear();
 
-			onTick(MS_PER_UPDATE);
+			onTick(duration);
 
 			terminal->render(*mainWindow);
 
@@ -125,6 +119,8 @@ namespace dfr
 			ImGui::SFML::Render(*mainWindow);
 
 			mainWindow->display();
+
+			duration = now() - startTime; 
 		}
 	}
 }

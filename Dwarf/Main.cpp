@@ -1,8 +1,6 @@
 #include "include/libtcod.hpp"
 #include "BearLibTerminal.h"
 #include "Map/Map.h"
-#include "Engine.h"
-#include "MainMenu.h"
 #include "Raws\raws.h"
 #include <SFML\Graphics.hpp>
 #include <SFML\Window.hpp>
@@ -12,10 +10,6 @@
 
 #include "Globals\MainFunction.h"
 #include "MainLoops\MainMenuLoop.h"
-
-// Numbers a screen width and height, make more 
-// dynamic eventually
-std::unique_ptr<Engine> engine;
 
 void onResizeL1(dfr::Layer * l, int w, int h)
 {
@@ -55,40 +49,13 @@ int main()
 	MainFunction = MainMenuLoop::run;
 
 	dfr::gui->addLayer(1, 0, 0, dfr::getWindow()->getSize().x, dfr::getWindow()->getSize().y, "font", onResizeL1, true); // Enum as layer terminal
-	dfr::gui->getLayer(1)->terminal->setAlpha(215);
+	//dfr::gui->getLayer(1)->terminal->setAlpha(215);
 
-	while (true)
-	{
-		dfr::run(MainFunction);
-	}
+	// Run the main menu function
+	// The function will change to another when the game is started
+	dfr::run(MainFunction);
+	
 
-
-	//*/
-
-	while (true)
-	{
-		engine = std::make_unique<Engine>();
-		engine->regComponents();
-
-		MainMenu menu;
-		int code = menu.render();
-
-		if (code == MainMenu::EXIT_CODE)
-			break;
-
-		else if (code == MainMenu::START_CODE)
-			engine->newGame(menu.px, menu.py, menu.mapWidth, menu.mapHeight);		
-
-		else if (code == MainMenu::LOAD_WORLD)
-			engine->loadGame(menu.mapPath);
-			
-		
-
-		
-
-		// Start the game loop.
-		engine->run();
-	}
 
 	return 0;
 }

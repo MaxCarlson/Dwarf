@@ -18,9 +18,6 @@
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Engine.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ECS\EntityManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -31,9 +28,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="EntityFactory.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MainMenu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ECS\Systems\MiningSystem.cpp">
@@ -58,9 +52,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Map\Tile.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Map\MapRender.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Map\DijkstraMap.cpp">
@@ -160,15 +151,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="RunSystems.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ECS\Systems\Gui\InputHandler.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ECS\Systems\Gui\GuiSystem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ECS\Systems\Gui\gui_states.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Raws\SkillReader.cpp">
@@ -327,11 +309,11 @@
     <ClCompile Include="mouse.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="KeyDampener.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Engine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ECS\EntityManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -386,9 +368,6 @@
     <ClInclude Include="ECS\Components\CombatStatsComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MainMenu.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ECS\Systems\MiningSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -423,9 +402,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Map\Tile.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Map\MapRender.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Map\DijkstraMap.h">
@@ -842,15 +818,6 @@
     <ClInclude Include="RunSystems.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ECS\Systems\Gui\InputHandler.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ECS\Systems\Gui\GuiSystem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ECS\Systems\Gui\gui_states.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ECS\Messages\designate_architecture_message.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -1032,6 +999,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="mouse.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyDampener.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

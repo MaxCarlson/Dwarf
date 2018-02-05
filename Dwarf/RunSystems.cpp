@@ -11,9 +11,6 @@
 #include "ECS\Systems\DijkstraSystems\DijkstraMapsHandler.h"
 
 // Gui systems
-#include "ECS\Systems\Gui\InputHandler.h"
-#include "ECS\Systems\Gui\GuiSystem.h"
-
 #include "ECS\Systems\Gui\MenuBar.h"
 #include "ECS\Systems\Gui\CameraSystem.h"
 #include "ECS\Systems\Gui\DesignArchitecture.h"
@@ -52,6 +49,8 @@
 #include "Designations.h"
 #include "Raws\DefInfo.h"
 #include "mouse.h"
+#include "KeyDampener.h"
+#include <imgui.h>
 #include <DwarfRender.h>
 
 const std::string RENDER_SYSTEM = "Render System";
@@ -93,7 +92,8 @@ const std::string CAMERA_SYSTEM = "Camera System";
 namespace RunSystems
 {
 
-std::unordered_map<std::string, SystemBase*> systems;
+boost::container::flat_map<std::string, SystemBase*> systems;
+boost::container::flat_map<std::string, std::pair<int, std::vector<float>>> runTimes;
 
 
 void initSystems(bool fromLoad)
@@ -114,7 +114,6 @@ void initSystems(bool fromLoad)
 	workOrderHelper = std::make_unique<WorkOrderHelper>();
 
 	// Normal Systems
-	systems[INPUT_HANDLER] = new InputHandler;
 	systems[DESIGNATION_HANDLER] = new DesignationHandler;
 	systems[RENDER_SYSTEM] = new RenderSystem;
 	systems[MOVEMENT_SYSTEM] = new MovementSystem;
@@ -153,7 +152,6 @@ void initSystems(bool fromLoad)
 
 	// Add systems to world. Cast to their derived class so world 
 	// doesn't interpret them as SystemBase's
-	world.addSystem(* static_cast<InputHandler *>(systems[INPUT_HANDLER]));
 	world.addSystem(* static_cast<DesignationHandler *>(systems[DESIGNATION_HANDLER]));
 	world.addSystem(* static_cast<RenderSystem *>(systems[RENDER_SYSTEM]));
 	world.addSystem(* static_cast<MovementSystem *>(systems[MOVEMENT_SYSTEM]));
@@ -200,7 +198,28 @@ void initSystems(bool fromLoad)
 
 void runSystem(const std::string &name, const double duration)
 {
+	auto stime = std::chrono::high_resolution_clock::now();
+
 	systems[name]->update(duration);
+
+	auto etime = std::chrono::high_resolution_clock::now();
+	auto rtime = std::chrono::duration_cast<std::chrono::microseconds>(etime - stime).count();
+
+	auto find = runTimes.find(name);
+	if (find != runTimes.end())
+	{
+		find->second.second[find->second.first] = static_cast<float>(rtime);
+		++find->second.first;
+
+		if (find->second.first >= 100)
+			find->second.first = 0;
+	}
+	else
+	{
+		std::vector<float> times(100, 0.0);
+		times[0] = static_cast<float>(rtime);
+		runTimes[name] = std::make_pair(1, times);
+	}
 }
 
 void updateSystems(const double duration)
@@ -208,60 +227,62 @@ void updateSystems(const double duration)
 	// Deliver any deffered messages to systems
 	world.deliver_messages();
 
-	// Read mouse in
+	keys::addTime(duration);
 	mouse::readMouse();
 
-	// Clear previous iterations of rendering 
-	// from root consoles and layers manually here
-	dfr::terminal->clear();
-	if (dfr::gui)
-		dfr::gui->clearAllLayers();
+	constexpr double MS_PER_UDPATE = 17.0;
+	constexpr double MS_PER_MAJOR_TICK = 250.0;
 
+	static double tick = 0.0;
 	static double majorTick = 0.0;
 
+	tick += duration;
 	majorTick += duration;
 
-	// Operations only done every major tick
-	if (majorTick > 250.0)
+
+	runSystem(CAMERA_SYSTEM, duration);
+
+	if (tick > MS_PER_UDPATE)
 	{
-		majorTick = 0.0;
-		runSystem(CALENDER_SYSTEM, duration);
-		runSystem(WORK_ORDER_HELPER, duration);
+		tick = 0.0;
+
+		// Clear previous iterations of rendering 
+		// from root consoles and layers manually here
+		dfr::terminal->clear();
+		if (dfr::gui)
+			dfr::gui->clearAllLayers();
+
+		// Operations only done every major tick
+		if (majorTick > MS_PER_MAJOR_TICK)
+		{
+			majorTick = 0.0;
+			runSystem(CALENDER_SYSTEM, MS_PER_MAJOR_TICK);
+			runSystem(WORK_ORDER_HELPER, MS_PER_MAJOR_TICK);
+		}
+
+		// Update systems
+		runSystem(MINING_SYSTEM, MS_PER_UDPATE);
+		runSystem(MOVEMENT_SYSTEM, MS_PER_UDPATE);
+		runSystem(DIJKSTRA_MAPS_HANDLER, MS_PER_UDPATE);
+
+		runSystem(AI_WORK_SYSTEM, MS_PER_UDPATE);
+
+		// Perform assigned jobs
+		runSystem(WORK_ORDERS_SYSTEM, MS_PER_UDPATE);
+		runSystem(MINING_AI, MS_PER_UDPATE);
+		runSystem(WOODCUTTING_AI, MS_PER_UDPATE);
+		runSystem(BUILD_AI, MS_PER_UDPATE);
+		runSystem(AI_ARCHITECTURE, MS_PER_UDPATE);
+		runSystem(HARVEST_AI, MS_PER_UDPATE);
+
+
+		runSystem(STOCKPILE_SYSTEM, MS_PER_UDPATE);
+		runSystem(HAULING_SYSTEM, MS_PER_UDPATE);
+		runSystem(PLANT_SYSTEM, MS_PER_UDPATE);
+
+		// Main Rendering 
+		runSystem(RENDER_SYSTEM, MS_PER_UDPATE);
 	}
-	
-
-	// Update systems
-	runSystem(MINING_SYSTEM, duration); 
-	runSystem(MOVEMENT_SYSTEM, duration);
-	runSystem(DIJKSTRA_MAPS_HANDLER, duration);
-
-	runSystem(AI_WORK_SYSTEM, duration);
-
-	// Perform assigned jobs
-	runSystem(WORK_ORDERS_SYSTEM, duration);
-	runSystem(MINING_AI, duration);
-	runSystem(WOODCUTTING_AI, duration);
-	runSystem(BUILD_AI, duration);
-	runSystem(AI_ARCHITECTURE, duration);
-	runSystem(HARVEST_AI, duration);
-
-
-	runSystem(STOCKPILE_SYSTEM, duration);
-	runSystem(HAULING_SYSTEM, duration);
-	runSystem(PLANT_SYSTEM, duration);
-
-	static double cameraRefresh = 0.0;
-	cameraRefresh += duration;
-
-	// Gui Systems
-	if (cameraRefresh > 30.0)
-	{
-		cameraRefresh = 0.0;
-		runSystem(CAMERA_SYSTEM, duration);
-	} 
-
-	// Main Rendering 
-	runSystem(RENDER_SYSTEM, duration);
 
 	// Menu and gui rendering
 	runSystem(MENU_BAR, duration); // Should these be before world.refresh()?
@@ -288,6 +309,24 @@ void updateSystems(const double duration)
 
 		if (designState == DesignStates::WORK_ORDERS)
 			runSystem(DESIGN_WORKORDERS, duration);
+	}
+
+	static bool profiler = false;
+
+	if (keys::isKeyDown(sf::Keyboard::Key::P))
+		profiler = !profiler;
+
+	if (profiler)
+	{
+		ImGui::Begin("Profiler");
+		ImGui::Text("Frame Time: %f", duration);
+
+		for (auto sys = runTimes.begin(); sys != runTimes.end(); ++sys)
+		{
+			ImGui::PlotLines(sys->first.c_str(), (const float *)&sys->second.second.at(0), 100);
+		}
+
+		ImGui::End();
 	}
 
 	// Update all traits in entities that were killed, deactivated,

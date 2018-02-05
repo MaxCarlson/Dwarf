@@ -1,10 +1,8 @@
 #include "AiWorkSystem.h"
 #include "JobBoard.h"
-
 #include "../../Components/PositionComponent.h"
-
 #include "../../World.h"
-#include "../../../Engine.h"
+
 
 namespace JobsBoard
 {

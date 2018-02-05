@@ -7,11 +7,11 @@
 #include "../../Components/ItemStored.h"
 #include "../../Systems/DijkstraSystems/DijkstraMapsHandler.h"
 
-#include "../../../Engine.h"
 #include "../../Components/Item.h"
 #include "../EntityPositionCache.h"
 #include "../../Messages/pickup_item_message.h"
 #include "../../Components/Sentients/Inventory.h"
+#include "Globals\GlobalWorld.h"
 
 template<typename TAG>
 class WorkTemplate
@@ -29,7 +29,7 @@ public:
 
 		// If entity already has the correct tool, we don't need to look
 		// for one
-		if (out_tool && e.getWorld().getEntity(out_tool).getComponent<Item>().catagory.test(catagory))
+		if (out_tool && world.getEntity(out_tool).getComponent<Item>().catagory.test(catagory))
 		{
 			success();
 			return;
@@ -42,7 +42,7 @@ public:
 		// For all Entities at this position
 		for (auto& i : entitiesAtPos)
 		{
-			const auto item = e.getWorld().getEntity(i);
+			const auto item = world.getEntity(i);
 
 			auto& pos = item.getComponent<PositionComponent>().co;
 			auto* tool = &item.getComponent<Item>();
@@ -57,8 +57,8 @@ public:
 			{
 				// Pickup tool if it matches catagory
 				// dump old tool in tool slot if it exists
-				e.getWorld().emit(pickup_item_message{SLOT_TOOL , e.getId().index, item.getId().index, out_tool});
-				e.getWorld().emit(MSG{});
+				world.emit(pickup_item_message{SLOT_TOOL , e.getId().index, item.getId().index, out_tool});
+				world.emit(MSG{});
 
 				// Set current tool to tool being picked up
 				out_tool = item.getId().index;

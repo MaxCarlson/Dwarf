@@ -7,9 +7,6 @@
 #include "../Raws/Defs/MaterialDef.h"
 #include "../Map/Tile.h"
 #include "../Drawing/vchar.h"
-// Add these to systems so they're not random obj's
-#include "../Engine.h"
-#include "../Map/MapRender.h"
 #include "Globals\Camera.h"
 #include "Globals\game_states.h"
 #include "dfr\DwarfRender.h"

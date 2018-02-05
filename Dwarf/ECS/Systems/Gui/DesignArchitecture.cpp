@@ -1,12 +1,10 @@
 #include "stdafx.h"
 #include "DesignArchitecture.h"
 
-
-DesignArchitecture::DesignArchitecture()
+void DesignArchitecture::init()
 {
 }
 
-
-DesignArchitecture::~DesignArchitecture()
+void DesignArchitecture::update(const double duration)
 {
 }

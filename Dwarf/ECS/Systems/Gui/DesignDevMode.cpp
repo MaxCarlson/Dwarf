@@ -8,6 +8,8 @@
 #include "Globals\Camera.h"
 #include "Coordinates.h"
 #include "ECS\Messages\update_all_maps_message.h"
+#include "KeyDampener.h"
+#include "mouse.h"
 #include <imgui.h>
 #include <imgui_tabs.h>
 #include <DwarfRender.h>
@@ -18,17 +20,19 @@ void DesignDevMode::init()
 
 bool DesignDevMode::chooseLocation(const std::string& itemTag, const std::string& matTag, const int qty)
 {
-	auto mxy = dfr::getMousePosition();
+	using namespace mouse;
+	int mx = mouseX;
+	int my = mouseY;
 
-	mxy.first += camera.offsetX;
-	mxy.second += camera.offsetY;
+	mx += camera.offsetX;
+	my += camera.offsetY;
 
-	std::string coor = "Coordinates: x = " + std::to_string(mxy.first) + " y = " + std::to_string(mxy.second) + " z = " + std::to_string(camera.z);
+	std::string coor = "Coordinates: x = " + std::to_string(mx) + " y = " + std::to_string(my) + " z = " + std::to_string(mouseZ);
 
 	ImGui::Text(coor.c_str());
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
+	if (mouse::leftClick)
 	{
-		spawnItemOnGround(itemTag, getMaterialIdx(matTag), { mxy.first, mxy.second, camera.z }, SpawnColor::MATERIAL_COLOR);
+		spawnItemOnGround(itemTag, getMaterialIdx(matTag), { mx, my, mouseZ }, SpawnColor::MATERIAL_COLOR);
 
 		emit(update_all_maps_message{});
 		return true;

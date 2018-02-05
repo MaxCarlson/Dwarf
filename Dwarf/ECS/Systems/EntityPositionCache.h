@@ -2,7 +2,6 @@
 
 #include "../Systems.h"
 #include "../Components/PositionComponent.h"
-#include "../Engine.h"
 #include "../World.h"
 #include "../Map/Tile.h"
 #include "../Helpers/PositionCache.h"

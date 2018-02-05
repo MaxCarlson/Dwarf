@@ -2,7 +2,6 @@
 #include "../Systems.h"
 #include "../Components/MovementComponent.h"
 #include "../Components/PositionComponent.h"
-#include "../../Engine.h"
 #include "../Map/Map.h"
 #include "../Messages/entity_moved_message.h"
 #include "Map\Tile.h"

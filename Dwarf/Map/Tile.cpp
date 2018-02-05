@@ -9,7 +9,6 @@
 #include "../cereal/types/memory.hpp"
 #include "../cereal/types/vector.hpp"
 #include "../Drawing/vchar.h"
-#include "../Engine.h"
 #include <cereal.hpp>
 
 // External map info

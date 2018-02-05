@@ -1,6 +1,5 @@
 #include "place_creatures.h"
 #include "../../Tile.h"
-#include "../Engine.h"
 #include "../ECS/Components/PositionComponent.h"
 #include "Globals\DwarfContainer.h"
 #include "Globals\Camera.h"
@@ -20,9 +19,6 @@ void placeDwarves()
 			{
 				if (getTileType(getIdx({ i, j, h })) == TileTypes::FLOOR)
 				{
-					//engine->Dwarves.at(dwarfNumber).getComponent<PositionComponent>().co = { i, j, h };
-					//engine->mapRenderer->currentZLevel = h;
-
 					dwarfContainer.dwarves.at(dwarfNumber).getComponent<PositionComponent>().co = { i, j, h };
 					camera.z = h;
 					++dwarfNumber;
@@ -30,7 +26,6 @@ void placeDwarves()
 
 				if (dwarfNumber >= number)
 				{
-					//engine->world.refresh();
 					return;
 				}
 			}

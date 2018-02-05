@@ -145,11 +145,8 @@ void PlayGameLoop::run(const double duration)
 		}
 	}
 
-	if(gameState == GameState::PLAYING)
+	if(gameState == GameState::PLAYING || gameState == GameState::DESIGN)
 		RunSystems::updateSystems(duration);
-
-	if (gameState == GameState::DESIGN) // Replace this eventually with a pause system
-		RunSystems::updateSystems(0.0);
 }
 
 
