@@ -11,7 +11,7 @@ struct DefInfo
 
 	void init();
 
-	// These do not change and are dependant on saves
+	// These are dependant on saves
 	// Buildings that have been built
 	std::vector<std::string> builtBuildings;
 

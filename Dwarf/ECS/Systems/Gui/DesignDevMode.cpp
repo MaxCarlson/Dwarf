@@ -108,6 +108,11 @@ void DesignDevMode::update(const double duration)
 		spawnItem();
 	}
 
+	if (ImGui::AddTab("Delete##Dev"))
+	{
+
+	}
+
 	ImGui::EndTabBar();
 	ImGui::End();
 }

@@ -126,9 +126,7 @@ void initSystems(bool fromLoad)
 	systems[ENTITY_POSITION_CACHE] = new EntityPositionCache;
 	systems[EQUIP_HANDLER] = new EquipHandler;
 	systems[BUILD_AI] = new BuildAi;
-	systems[ITEM_HELPER] = new ItemHelper;
 	systems[WORK_ORDERS_SYSTEM] = new WorkOrders;
-	systems[WORK_ORDER_HELPER] = workOrderHelper.get();
 	systems[STOCKPILE_SYSTEM] = new StockpileSystem;
 	systems[HAULING_SYSTEM] = new HaulingSystem;
 	systems[AI_ARCHITECTURE] = new AiArchitecture;
@@ -149,6 +147,10 @@ void initSystems(bool fromLoad)
 	systems[DESIGN_WOODCUTTING] = new DesignWoodcutting;
 	systems[DESIGN_WORKORDERS] = new DesignWorkOrders;
 
+	// External Systems
+	systems[ITEM_HELPER] = &itemHelper;
+	systems[WORK_ORDER_HELPER] = workOrderHelper.get();
+
 	// Add systems to world. Cast to their derived class so world 
 	// doesn't interpret them as SystemBase's
 	world.addSystem(* static_cast<InputHandler *>(systems[INPUT_HANDLER]));
@@ -163,9 +165,7 @@ void initSystems(bool fromLoad)
 	world.addSystem(* static_cast<EntityPositionCache *>(systems[ENTITY_POSITION_CACHE]));
 	world.addSystem(* static_cast<EquipHandler *>(systems[EQUIP_HANDLER]));
 	world.addSystem(* static_cast<BuildAi *>(systems[BUILD_AI]));
-	world.addSystem(* static_cast<ItemHelper *>(systems[ITEM_HELPER]));
 	world.addSystem(* static_cast<WorkOrders *>(systems[WORK_ORDERS_SYSTEM]));
-	world.addSystem(* static_cast<WorkOrderHelper *>(systems[WORK_ORDER_HELPER]));
 	world.addSystem(* static_cast<StockpileSystem *>(systems[STOCKPILE_SYSTEM]));
 	world.addSystem(* static_cast<HaulingSystem *>(systems[HAULING_SYSTEM]));
 	world.addSystem(* static_cast<AiArchitecture *>(systems[AI_ARCHITECTURE]));
@@ -185,6 +185,12 @@ void initSystems(bool fromLoad)
 	world.addSystem(* static_cast<DesignMining *>(systems[DESIGN_MINING]));
 	world.addSystem(* static_cast<DesignWoodcutting *>(systems[DESIGN_WOODCUTTING]));
 	world.addSystem(* static_cast<DesignWorkOrders *>(systems[DESIGN_WORKORDERS]));
+
+	// External Systems
+	world.addSystem(itemHelper);
+	world.addSystem(*workOrderHelper.get());
+	//world.addSystem(*static_cast<ItemHelper *>(systems[ITEM_HELPER]));
+	//world.addSystem(*static_cast<WorkOrderHelper *>(systems[WORK_ORDER_HELPER]));
 
 	for (auto& sys : systems)
 		sys.second->init();

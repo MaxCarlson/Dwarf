@@ -17,6 +17,7 @@
 #include "../../../Designations.h"
 #include "../../Components/ItemStored.h"
 
+
 void EquipHandler::init()
 {
 	subscribe<pickup_item_message>( [this] (pickup_item_message &msg)
@@ -162,7 +163,7 @@ void EquipHandler::designateBuilding(designate_building_message & msg)
 	for(int x = sx; x < sx + designation.width; ++x)
 		for (int y = sy; y < sy + designation.height; ++y)
 		{
-			const Coordinates co = { x, y, engine->mapRenderer->currentZLevel };
+			const Coordinates co = { x, y, designation.co.z };
 			region::setFlag(co, region::Flag::CONSTRUCTION);
 
 			// Id's must be manually deleted later

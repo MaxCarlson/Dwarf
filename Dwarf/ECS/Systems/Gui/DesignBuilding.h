@@ -4,7 +4,13 @@
 class DesignBuilding : public System<Requires<>>
 {
 public:
-	DesignBuilding();
-	~DesignBuilding();
+	DesignBuilding() = default;
+
+	void init();
+	void update(const double duration);
+
+private:
+	void drawPossibleBuilding(const std::string &tag);
+	void workshopTab();
 };
 
