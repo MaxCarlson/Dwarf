@@ -87,10 +87,10 @@ void DesignDevMode::spawnItem()
 
 		if (!selectingSpawnLocation)
 		{
-			itemFilter.Clear();
-			matFilter.Clear();
-			itemIdx = 0;
-			matIdx = 0;
+			//itemFilter.Clear();
+			//matFilter.Clear();
+			//itemIdx = 0;
+			//matIdx = 0;
 		}
 	}
 }

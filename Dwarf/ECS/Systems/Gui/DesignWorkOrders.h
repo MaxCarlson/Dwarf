@@ -4,7 +4,11 @@
 class DesignWorkOrders : public System<Requires<>>
 {
 public:
-	DesignWorkOrders();
-	~DesignWorkOrders();
+	void init();
+	void update(const double duration);
+
+private:
+	void giveOrder();
+	void drawJobs();
 };
 
