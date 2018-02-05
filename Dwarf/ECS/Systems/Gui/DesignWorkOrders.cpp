@@ -47,19 +47,26 @@ void DesignWorkOrders::giveOrder()
 	static ImGuiTextFilter reactFilter;
 	reactFilter.Draw();
 
+	// Draw a filtered list of reaction names
+	// and build the list of tags based off filtered 
+	// names so we can index properly. Is there a better way? std::vector<std::pair<string, string>> ListBox Vec Getter?
+	std::vector<std::string> reactPassedTags;
 	std::vector<std::string> reactPassedFilter; 
 	for (const auto& i : defInfo->availibleReactions)
 	{
 		auto rname = getReaction(i)->name;
 		if (reactFilter.PassFilter(rname.c_str()))
+		{
+			reactPassedTags.emplace_back(i);
 			reactPassedFilter.emplace_back(rname);
+		}
 	}
 
 	ImGui::ListBox("Availible Reactions", &orderIdx, reactPassedFilter); // Switch over to using the names instead of the tags!!!
 	
 	if (ImGui::Button("Give Order##WorkOrderReactions"))
 	{
-		const std::string& tag = reactPassedFilter[orderIdx];
+		const std::string& tag = reactPassedTags[orderIdx];
 
 		// Search work orders
 		for(auto& o : designations->workOrders)
