@@ -720,7 +720,7 @@ ImGuiContext*           GImGui = &GImDefaultContext;
 namespace ImGui
 {
 
-static auto vectorOfStringGetter  = [](void *vec, int n, const char** outTxt)
+static auto vectorOfStringGetter  = [](void *vec, int n, const char** outTxt) // Possible move to listBox defs
 {
   auto& v = *static_cast<std::vector<std::string>*>(vec);
   if (n < 0 || n >= static_cast<int>(v.size()))

@@ -4,6 +4,7 @@
 #include "KeyDampener.h"
 #include "Raws\DefInfo.h"
 #include "Designations.h"
+#include "Raws\ReadReactions.h"
 #include <imgui.h>
 #include <imgui_tabs.h>
 
@@ -46,12 +47,15 @@ void DesignWorkOrders::giveOrder()
 	static ImGuiTextFilter reactFilter;
 	reactFilter.Draw();
 
-	std::vector<std::string> reactPassedFilter;
+	std::vector<std::string> reactPassedFilter; 
 	for (const auto& i : defInfo->availibleReactions)
-		if (reactFilter.PassFilter(i.c_str()))
-			reactPassedFilter.emplace_back(i);
+	{
+		auto rname = getReaction(i)->name;
+		if (reactFilter.PassFilter(rname.c_str()))
+			reactPassedFilter.emplace_back(rname);
+	}
 
-	ImGui::ListBox("Availible Reactions", &orderIdx, reactPassedFilter);
+	ImGui::ListBox("Availible Reactions", &orderIdx, reactPassedFilter); // Switch over to using the names instead of the tags!!!
 	
 	if (ImGui::Button("Give Order##WorkOrderReactions"))
 	{

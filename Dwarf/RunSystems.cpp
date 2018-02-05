@@ -50,6 +50,7 @@
 #include "Raws\DefInfo.h"
 #include "mouse.h"
 #include "KeyDampener.h"
+#include <iomanip> 
 #include <imgui.h>
 #include <DwarfRender.h>
 
@@ -285,7 +286,7 @@ void updateSystems(const double duration)
 	}
 
 	// Menu and gui rendering
-	runSystem(MENU_BAR, duration); // Should these be before world.refresh()?
+	runSystem(MENU_BAR, duration); 
 
 	if (gameState == GameState::DESIGN)
 	{
@@ -319,11 +320,20 @@ void updateSystems(const double duration)
 	if (profiler)
 	{
 		ImGui::Begin("Profiler");
-		ImGui::Text("Frame Time: %f", duration);
+		ImGui::Text("Frame Time: %f", duration); 
 
+		const double frameFrac = 100.0 / duration;
 		for (auto sys = runTimes.begin(); sys != runTimes.end(); ++sys)
 		{
-			ImGui::PlotLines(sys->first.c_str(), (const float *)&sys->second.second.at(0), 100);
+			ImGui::PlotLines(sys->first.c_str(), (const float *)&sys->second.second.at(0), 100); // Make this into a % of total frame time instead of just a time double
+			
+			// Get frame time % from the micro-second 
+			// counter at current place in graph
+			ImGui::SameLine();
+			std::stringstream ss;
+			const auto framePerc = (static_cast<double>(sys->second.second[sys->second.first]) / 1000.0) * frameFrac;
+			ss << std::fixed << std::setprecision(2) << framePerc;
+			ImGui::Text(ss.str().c_str());
 		}
 
 		ImGui::End();
