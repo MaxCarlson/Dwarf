@@ -52,7 +52,7 @@ void MainMenuLoop::run(const double duration)
 
 	if (ImGui::Button(quitGame.c_str()))
 	{
-
+		dfr::getWindow()->close();
 	}
 	
 

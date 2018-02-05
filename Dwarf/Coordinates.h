@@ -66,4 +66,4 @@ struct CoordinateHashEqual
 };
 
 // 0, 0, 0 can never be reached on the map
-const static Coordinates EMPTY_COORDINATES = { 0, 0, 0 };
+constexpr Coordinates EMPTY_COORDINATES = { 0, 0, 0 };
