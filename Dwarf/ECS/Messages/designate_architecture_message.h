@@ -10,7 +10,7 @@ enum ArchitectureType
 	UP_STAIRS,
 	DOWN_STAIRS,
 	UP_DOWN_STAIRS,
-	BRIDGE
+	BRIDGE,
 };
 
 struct designate_architecture_message : base_message_t

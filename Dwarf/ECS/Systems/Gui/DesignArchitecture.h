@@ -21,5 +21,6 @@ private:
 	Coordinates click1 = EMPTY_COORDINATES;
 	int selected = 0;
 	void drawDesignation();
+	void drawErasure();
 };
 
