@@ -10,7 +10,6 @@
 #include <imgui.h>
 #include <DwarfRender.h>
 
-#define ICON_FA_TIMES u8"\uf00d"
 
 void DesignArchitecture::init()
 {
@@ -20,7 +19,7 @@ void DesignArchitecture::update(const double duration)
 {
 	ImGui::Begin("Architecture##Design", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoCollapse);
 
-	std::string close = std::string(ICON_FA_TIMES) + " Close##DesignArch";
+	std::string close = " Close##DesignArch";
 	
 	if (ImGui::Button(close.c_str()))
 	{
@@ -44,10 +43,10 @@ void DesignArchitecture::update(const double duration)
 	if (mouse::rightClick)
 		click1 = EMPTY_COORDINATES;
 
-
-	if (mouse::leftClick || click1 != EMPTY_COORDINATES)
+	// Dont allow designating through window since we use radio buttons here!
+	if ((mouse::leftClick && !ImGui::IsMouseHoveringWindow()) || click1 != EMPTY_COORDINATES)
 	{
-		if (mouse::leftClick)
+		if (mouse::leftClick && !ImGui::IsMouseHoveringWindow())
 			click1 = mouse::mousePos;
 
 		if (mode == Mode::DRAW)
@@ -60,7 +59,7 @@ void DesignArchitecture::update(const double duration)
 	ImGui::End();
 }
 
-void DesignArchitecture::drawDesignation() // Add in the ability to select from availible materials!!!
+void DesignArchitecture::drawDesignation() // Add in the ability to select from availible materials!!! Add in ability to designate multiple levels of stairs simulatiniously!!
 {
 	using namespace mouse;
 
@@ -142,7 +141,7 @@ void DesignArchitecture::drawDesignation() // Add in the ability to select from 
 				using region::Flag;
 				using region::flag;
 
-				auto flagConstruct = region::flag({ x, y, z }, Flag::CONSTRUCTION);
+				bool flagConstruct = region::flag({ x, y, z }, Flag::CONSTRUCTION);
 				auto tileType = region::getTileType(idx);
 
 				switch (selected)
@@ -185,6 +184,11 @@ void DesignArchitecture::drawDesignation() // Add in the ability to select from 
 	ss << "Coordinates: " << x1 << "," << y1 << "," << z << " : " << x2 << "," << y2 << "," << z << "\n";
 	ss << "Total Blocks Required: " << totalPossible;
 	ImGui::Text(ss.str().c_str());
+
+	if (totalPossible)
+	{
+		emit(designate_architecture_message{ selected , std::make_pair(getIdx({x1, y1, z}), getIdx({x2, y2, z})) }); // Perhaps look into 3d designating once we have a 3d view
+	}
 }
 
 void DesignArchitecture::drawErasure()
