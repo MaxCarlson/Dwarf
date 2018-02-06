@@ -84,7 +84,7 @@ namespace region
 			archive(tileFlags);
 			archive(materials);
 			archive(tileHealth);
-			archive(renderCache);
+			//archive(renderCache);
 			archive(stockpileSquares);
 			archive(treeIds);
 			archive(treeHps);
@@ -126,9 +126,9 @@ namespace region
 		std::ifstream os(regionPath, std::ios::binary);
 		cereal::BinaryInputArchive iarchive(os);
 
+		iarchive(MAP_WIDTH, MAP_HEIGHT, MAP_DEPTH, TOTAL_MAP_TILES);
 		currentRegion = std::make_unique<Region>();
 
-		iarchive(MAP_WIDTH, MAP_HEIGHT, MAP_DEPTH, TOTAL_MAP_TILES);
 		currentRegion->serialize(iarchive);
 		tile_recalc_all();
 	}

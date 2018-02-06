@@ -28,6 +28,8 @@ const vchar getTR(const Coordinates co)
 
 	const vchar& v = region::renderCache(getIdx(co));
 
+	//vchars vv = { (uint32_t)v.c, v.fg, v.bg };
+
 	auto rendIt = renderEntities.find((dfr::terminal->width * co.y) + co.x);//renderEntities.find((terminal_state(TK_WIDTH) * co.y) + co.x);
 
 	if (rendIt != renderEntities.end())

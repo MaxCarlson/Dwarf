@@ -38,7 +38,7 @@ void readInPlants() noexcept
 
 	readLuaTable("vegetation",
 		[&p, &tag](const auto &key) { tag = key; p = PlantDef{}; p.tag = tag; },
-		[&p, &tag](const auto &key) { plantDefs.emplace_back(p); plantDefIdx[tag] = plantDefs.size() - 1; },
+		[&p, &tag](const auto &key) { plantDefs.emplace_back(p); },
 		luaParser
 		{
 			{"name", [&p]() { p.name = lua_str(); }},
@@ -77,7 +77,10 @@ void readInPlants() noexcept
 			}},
 		}
 	);
-//	int a = 5;
+	
+	std::sort(plantDefs.begin(), plantDefs.end(), [](auto p1, auto p2) { return p1.tag < p2.tag; });
+	for (auto i = 0; i < plantDefs.size(); ++i)
+		plantDefIdx[plantDefs[i].tag] = i;
 }
 
 void sanityCheckPlants() noexcept

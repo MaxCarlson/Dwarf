@@ -1,7 +1,7 @@
 #pragma once
 
 // Walls
-constexpr uint32_t WALL_1_S = 1360;
+constexpr uint32_t WALL_1_S = 1360; // Load these from raws eventually so they're not totally dependant on my tileset!
 constexpr uint32_t WALL_EW = 1359;
 constexpr uint32_t WALL_NS_E = 1358;
 constexpr uint32_t WALL_EW_N = 1356;
