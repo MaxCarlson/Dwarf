@@ -4,6 +4,7 @@
 #include "ECS\Messages\designate_architecture_message.h"
 #include "mouse.h"
 #include "KeyDampener.h"
+#include "Globals\TexDefines.h"
 #include <imgui.h>
 #include <DwarfRender.h>
 
@@ -27,10 +28,10 @@ void DesignArchitecture::update(const double duration)
 	ImGui::Text("Right click when designating to stop designating");
 	ImGui::Indent();
 	ImGui::Text("Modes");
-	ImGui::RadioButton("Draw", &mode, 0); ImGui::SameLine();
+	ImGui::RadioButton("Draw", &mode, 0); ImGui::SameLine(); 
 	ImGui::RadioButton("Erase all", &mode, 1); ImGui::SameLine();
 	ImGui::RadioButton("Erase type", &mode, 2); 
-
+	
 	if (mouse::rightClick)
 		click1 = EMPTY_COORDINATES;
 
@@ -56,5 +57,21 @@ void DesignArchitecture::update(const double duration)
 
 void DesignArchitecture::drawDesignation()
 {
-	
+	int ch = 0;
+	if (mode == Mode::DRAW)
+	{
+		switch (selected)
+		{
+		case 0:
+			ch = WALL_1; break;
+		case 1:
+			ch = STAIRS_UP; break;
+		case 2:
+			ch = STAIRS_DOWN; break;
+		case 3:
+			ch = RAMP_UP; break;
+		case 4:
+			ch = FLOOR_TEX; break;
+		}
+	}
 }

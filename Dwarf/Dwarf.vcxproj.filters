@@ -1004,6 +1004,9 @@
     <ClInclude Include="KeyDampener.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Globals\TexDefines.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="cereal\external\rapidxml\manual.html" />

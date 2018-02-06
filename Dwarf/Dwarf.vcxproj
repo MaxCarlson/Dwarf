@@ -294,6 +294,7 @@
     <ClInclude Include="Globals\game_states.h" />
     <ClInclude Include="Globals\MainFunction.h" />
     <ClInclude Include="Globals\GlobalWorld.h" />
+    <ClInclude Include="Globals\TexDefines.h" />
     <ClInclude Include="KeyDampener.h" />
     <ClInclude Include="MainLoops\MainMenuLoop.h" />
     <ClInclude Include="Map\building\BuildBiomes.h" />
