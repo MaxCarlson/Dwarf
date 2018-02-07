@@ -1,5 +1,4 @@
 #pragma once
+#include <Terminal.h>
 
-struct Terminal;
-
-extern Terminal * overlayTerm;
+extern dfr::Terminal * overlayTerm;

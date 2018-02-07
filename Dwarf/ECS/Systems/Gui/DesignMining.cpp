@@ -10,7 +10,9 @@
 #include "Raws\Defs\ItemDefs.h"
 #include "Map\Tile.h"
 #include "Designations.h"
+#include "Globals\GlobalTerminals.h"
 #include "ECS\Messages\designation_message.h"
+#include "ECS\Messages\recalculate_mining_message.h"
 #include <imgui.h>
 #include <DwarfRender.h>
 
@@ -68,7 +70,7 @@ void DesignMining::update(const double duration) // Add in mining templates!
 
 inline bool outOfBounds(Coordinates co)
 {
-	if (co.x < 1 || co.x > MAP_WIDTH - 2 || co.y < 1 || co.y > MAP_HEIGHT - 2 || co.z < 2 || co.z > MAP_DEPTH - 2)
+	if (co.x < 1 || co.x >= MAP_WIDTH - 2 || co.y < 1 || co.y >= MAP_HEIGHT - 2 || co.z < 2 || co.z >= MAP_DEPTH - 2)
 		return true;
 
 	return false;
@@ -190,8 +192,6 @@ void DesignMining::drawPossibleMining()
 	Coordinates sml = click;
 	Coordinates lrg = mousePos;
 
-	static auto* lterm = dfr::term(1);
-
 	std::unordered_map<std::string, int> products;
 	
 	int totalPossible = 0;
@@ -200,7 +200,7 @@ void DesignMining::drawPossibleMining()
 		if (possible)
 		{
 			calculateMinedOre({ x, y, sml.z }, products);
-			lterm->setChar(x, y, ch);
+			overlayTerm->setChar(x, y, ch);
 			++totalPossible;
 		}
 		else
@@ -222,12 +222,61 @@ void DesignMining::drawPossibleMining()
 		ss << p.first << " x " << p.second << ".\n";
 
 	ImGui::Text(ss.str().c_str());
+
+	if (confirm)
+	{
+		designate();
+	}
 }
 
 void DesignMining::designate()
 {
+	int z = click.z;
+	int type = miningType;
+	// Designate all valid squares for mining. 
+	// Checks for validity are done int loopThroughPossilbe
+	loopThroughPossibleMining(miningType, mouse::mousePos, click, [&z, &type](bool possible, int x, int y)
+	{
+		if (possible)
+		{
+			designations->mining[getIdx({ x, y, z })] = type;
+		}
+	});
+
+	emit(recalculate_mining_message{});
 }
 
 void DesignMining::drawErasure()
 {
+	Coordinates sml = mouse::mousePos;
+	Coordinates lrg = click;
+
+	adjustCoordinatesForLoop(sml, lrg);
+
+	int z = sml.z;
+	int totalTiles = 0;
+	overlayTerm->setAlpha(180);
+	for(int x = sml.x; x <= lrg.x; ++x)
+		for (int y = sml.y; y < +lrg.y; ++y)
+		{
+			const auto idx = getIdx({ x, y, z });
+
+			auto find = designations->mining.find(idx);
+
+			if (find == designations->mining.end())
+				continue;
+
+			++totalTiles;
+			overlayTerm->setChar(x, y, { SQUARE_X_TEX, { 255, 0, 0 }, { 255, 0, 0 } });	
+
+			// Erase the tiles designations if confirmed
+			if (confirm)
+				designations->mining.erase(find);
+		}
+
+	if (confirm)
+	{
+		confirm = false;
+		click = EMPTY_COORDINATES;
+	}
 }

@@ -7,6 +7,7 @@
 #include "KeyDampener.h"
 #include "Globals\TexDefines.h"
 #include "Designations.h"
+#include "Globals\GlobalTerminals.h"
 #include <imgui.h>
 #include <DwarfRender.h>
 
@@ -155,24 +156,21 @@ void DesignArchitecture::drawDesignation() // Add in the ability to select from 
 
 	adjustCoordinatesForLoop(sml, lrg);
 
-	static auto* lterm = dfr::term(1);
-	lterm->setAlpha(180);
-
 	std::vector<std::pair<int, int>> designationTiles;
 
 	// Draw the potential designations
 	int totalPossible = 0;
-
+	overlayTerm->setAlpha(175);
 	checkTilesForValidity(sml, lrg, selected, [&totalPossible, &ch](bool possible, int x, int y)
 	{
 		if (possible)
 		{
 			++totalPossible;
-			lterm->setChar(x, y, ch);
+			overlayTerm->setChar(x, y, ch);
 		}
 		else
 		{
-			lterm->setChar(x, y, { SQUARE_X_TEX,{ 255, 0, 0 },{ 100, 0, 0 } });
+			overlayTerm->setChar(x, y, { SQUARE_X_TEX,{ 255, 0, 0 },{ 100, 0, 0 } });
 		}
 	});
 

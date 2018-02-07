@@ -2,6 +2,7 @@
 #include "BearLibTerminal.h"
 #include "Map/Map.h"
 #include "Raws\raws.h"
+#include "Globals\GlobalTerminals.h"
 #include <SFML\Graphics.hpp>
 #include <SFML\Window.hpp>
 #include <imgui.h>
@@ -49,7 +50,7 @@ int main()
 	MainFunction = MainMenuLoop::run;
 
 	dfr::gui->addLayer(1, 0, 0, dfr::getWindow()->getSize().x, dfr::getWindow()->getSize().y, "font", onResizeL1, true); // Enum as layer terminal
-	//dfr::gui->getLayer(1)->terminal->setAlpha(215);
+	overlayTerm = dfr::term(1);
 
 	// Run the main menu function
 	// The function will change to another when the game is started

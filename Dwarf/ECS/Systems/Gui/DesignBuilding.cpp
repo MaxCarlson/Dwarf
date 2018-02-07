@@ -5,6 +5,7 @@
 #include "Raws\DefInfo.h"
 #include "Raws\Buildings.h"
 #include "Globals\game_states.h"
+#include "Globals\GlobalTerminals.h"
 #include "ECS\Messages\designate_building_message.h"
 #include <imgui.h>
 #include <imgui_tabs.h>
@@ -66,12 +67,10 @@ void DesignBuilding::drawPossibleBuilding(const std::string &tag)
 	if (X + building->width > MAP_WIDTH - 1) X = MAP_WIDTH - 1 - building->width;
 	if (Y + building->height > MAP_HEIGHT - 1) Y = MAP_HEIGHT - 1 - building->height;
 
-	static auto* lterm = dfr::term(1);
-	lterm->setAlpha(200);
-
 	// Draw the building and show if it cannot be built there
 	int bidx = 0;
 	bool possible = true;
+	overlayTerm->setAlpha(200);
 	for(int x = X; x < building->width + X; ++x)
 		for (int y = Y; y < building->height + Y; ++y)
 		{
@@ -80,11 +79,11 @@ void DesignBuilding::drawPossibleBuilding(const std::string &tag)
 			if (region::solid(idx) || region::getTileType(idx) != region::TileTypes::FLOOR)
 			{
 				possible = false;
-				lterm->setChar(x, y, { 88,{ 255, 0, 0 },{ 255, 0, 0 } });
+				overlayTerm->setChar(x, y, { 88,{ 255, 0, 0 },{ 255, 0, 0 } });
 			}
 			else
 			{
-				lterm->setChar(x, y, { static_cast<uint32_t>(building->charCodes[bidx]), {55, 55, 55}, {55, 55, 55} });
+				overlayTerm->setChar(x, y, { static_cast<uint32_t>(building->charCodes[bidx]), {55, 55, 55}, {55, 55, 55} });
 			}
 
 			++bidx;

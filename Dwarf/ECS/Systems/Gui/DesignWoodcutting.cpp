@@ -2,6 +2,7 @@
 #include "DesignWoodcutting.h"
 #include "Globals\Camera.h"
 #include "Globals\game_states.h"
+#include "Globals\GlobalTerminals.h"
 #include "Map\Tile.h"
 #include "ECS\Messages\designation_message.h"
 #include "mouse.h"
@@ -58,21 +59,20 @@ void DesignWoodcutting::drawCuttingArea(bool first)
 		y2 = tmp;
 	}
 
-	static auto* lterminal = dfr::term(1); // Enum as layer terminal
-	lterminal->setAlpha(115);
-
-	int treeCount = 0;
+	
 	// Draw highlighted area where chopping will be done if clicked
+	int treeCount = 0;
+	overlayTerm->setAlpha(115);
 	for(int x = x1; x <= x2; ++x)
 		for (int y = y1; y <= y2; ++y)
 		{
-			lterminal->setChar(x, y, { 88, { 255, 255, 0 }, { 0, 0, 0 } });
+			overlayTerm->setChar(x, y, { 88, { 255, 255, 0 }, { 0, 0, 0 } });
 
 			if (region::treeId(getIdx({ x, y, mouseZ })))
 			{
-				lterminal->setAlpha(225);
-				lterminal->setChar(x, y, { 88,{ 255, 0, 0 }, { 255, 0, 0 } });
-				lterminal->setAlpha(115);
+				overlayTerm->setAlpha(225);
+				overlayTerm->setChar(x, y, { 88,{ 255, 0, 0 }, { 255, 0, 0 } });
+				overlayTerm->setAlpha(115);
 				++treeCount;
 			}
 		}
