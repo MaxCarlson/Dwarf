@@ -67,3 +67,29 @@ struct CoordinateHashEqual
 
 // 0, 0, 0 can never be reached on the map
 constexpr Coordinates EMPTY_COORDINATES = { 0, 0, 0 };
+
+// Adjust two coordinates making one smaller or == to the larger one
+// so we can loop through them using xyz++
+inline void adjustCoordinatesForLoop(Coordinates &small, Coordinates &large)
+{
+	if (small.x > large.x)
+	{
+		int x = small.x;
+		small.x = large.x;
+		large.x = x;
+	}
+
+	if (small.y > large.y)
+	{
+		int y = small.y;
+		small.y = large.y;
+		large.y = y;
+	}
+
+	if (small.z > large.z)
+	{
+		int z = small.z;
+		small.z = large.z;
+		large.z = z;
+	}
+}

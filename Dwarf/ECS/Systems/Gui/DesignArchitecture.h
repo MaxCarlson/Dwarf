@@ -16,11 +16,14 @@ private:
 		ERASE_SELECT,
 	};
 
+	bool confirm = false;
 	int mode = DRAW;
 
 	Coordinates click1 = EMPTY_COORDINATES;
 	int selected = 0;
 	void drawDesignation();
 	void drawErasure();
+
+	void designate();
 };
 

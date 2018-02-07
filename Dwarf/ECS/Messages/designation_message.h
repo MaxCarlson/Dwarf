@@ -2,12 +2,6 @@
 #include "../Systems.h"
 #include "../Coordinates.h"
 
-static const std::vector<std::string> designateNames =
-{
-	"Mining", "Channeling", "Ramps", "Up Stairs", "Down Stairs", "Up Down Stairs",
-	"Cut Trees", "Harvest"
-};
-
 struct designation_message : public base_message_t
 {
 	enum DesignationType
@@ -18,7 +12,7 @@ struct designation_message : public base_message_t
 		UP_STAIRS,
 		DOWN_STAIRS,
 		UP_DOWN_STAIRS,
-		CUT_TREES,
+		CUT_TREES, // Possible move these into their respective GUI files
 		HARVEST
 	};
 
