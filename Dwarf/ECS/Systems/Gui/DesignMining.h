@@ -25,6 +25,8 @@ private:
 	bool confirm = false;
 	int miningType = 0;
 
+	void loopThroughPossibleMining(int type, Coordinates sml, Coordinates lrg, std::function<void(bool, int, int)> onPossible);
+
 	void drawPossibleMining();
 	void designate();
 	void drawErasure();
