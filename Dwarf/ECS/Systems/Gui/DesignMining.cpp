@@ -38,12 +38,21 @@ void DesignMining::update(const double duration) // Add in mining templates!
 	ImGui::SameLine();
 	ImGui::Combo("##MiningModes", &miningType, miningModesStr);
 
+	using namespace keys;
+	if (isKeyDown(sf::Keyboard::Key::D)) miningType = MINING;
+	if (isKeyDown(sf::Keyboard::Key::C)) miningType = CHANNELING;
+	if (isKeyDown(sf::Keyboard::Key::R)) miningType = RAMPING;
+	if (isKeyDown(sf::Keyboard::Key::U)) miningType = UP_STAIRS;
+	if (isKeyDown(sf::Keyboard::Key::J)) miningType = DOWN_STAIRS;
+	if (isKeyDown(sf::Keyboard::Key::X)) miningType = UP_DOWN_STAIRS;
+	if (isKeyDown(sf::Keyboard::Key::E)) miningType = ERASE;
+
 	if (mouse::rightClick)
 	{
 		click = EMPTY_COORDINATES;
 	}
 
-	if (mouse::leftClick || click != EMPTY_COORDINATES)
+	if ((mouse::leftClick && !ImGui::IsMouseHoveringWindow()) || click != EMPTY_COORDINATES)
 	{
 		if (mouse::leftClick && click != EMPTY_COORDINATES)
 			confirm = true;
@@ -117,9 +126,23 @@ void calculateMinedOre(const Coordinates co, std::unordered_map<std::string, int
 
 	auto* mat = getMaterial(matIdx);
 
+	if (!mat)
+		return;
+
 	const auto& itag = mat->minesToTag;
 
 	auto* item = getItemDef(itag);
+
+	if (!item)
+	{
+		auto find = products.find("Unknown");
+		if (find == products.end())
+			products["Unknown"] = 1;
+		else
+			++find->second;
+
+		return;
+	}
 
 	std::string itemStr = mat->name + " " + item->name;
 
@@ -188,7 +211,16 @@ void DesignMining::drawPossibleMining()
 
 	std::stringstream ss;
 	ss << "Coordinates: " << sml.x << "," << sml.y << "," << sml.z << " : " << lrg.x << "," << lrg.y << "," << lrg.z << "\n";
-	ss << "Total Tiles to be " << miningAdjectives[miningType] << ": " << totalPossible;
+	ss << "Total Tiles to be " << miningAdjectives[miningType] << ": " << totalPossible << "\n";
+
+
+	// Draw the possible mining yields
+	// Possibly add in a sorted vector by first letter to make it easier to read
+
+	ss << "Possible Yield: \n";
+	for (const auto& p : products)
+		ss << p.first << " x " << p.second << ".\n";
+
 	ImGui::Text(ss.str().c_str());
 }
 

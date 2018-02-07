@@ -176,6 +176,7 @@
     <ClCompile Include="Globals\DwarfContainer.cpp" />
     <ClCompile Include="Globals\game_states.cpp" />
     <ClCompile Include="Globals\GlobalWorld.cpp" />
+    <ClCompile Include="Globals\GlobalTerminals.cpp" />
     <ClCompile Include="imgui-SFML.cpp" />
     <ClCompile Include="imgui.cpp" />
     <ClCompile Include="imgui_demo.cpp" />
@@ -295,6 +296,7 @@
     <ClInclude Include="Globals\MainFunction.h" />
     <ClInclude Include="Globals\GlobalWorld.h" />
     <ClInclude Include="Globals\TexDefines.h" />
+    <ClInclude Include="Globals\GlobalTerminals.h" />
     <ClInclude Include="KeyDampener.h" />
     <ClInclude Include="MainLoops\MainMenuLoop.h" />
     <ClInclude Include="Map\building\BuildBiomes.h" />

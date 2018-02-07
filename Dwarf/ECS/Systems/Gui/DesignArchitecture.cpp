@@ -214,7 +214,7 @@ void DesignArchitecture::drawErasure()
 
 			else
 			{
-
+				
 			}
 		}
 }
@@ -237,4 +237,6 @@ void DesignArchitecture::designate()
 			designations->architecture[idx] = std::make_pair(md, 100.0);
 		}
 	});
+
+	//emit(arc) NEED TO EMIT AN ARCHITECTURE CHANGED MESSAGE
 }
