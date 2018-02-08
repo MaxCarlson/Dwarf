@@ -11,20 +11,10 @@ public:
 private:
 	Coordinates click = EMPTY_COORDINATES;
 
-	enum MiningTypes
-	{
-		MINING,
-		CHANNELING,
-		RAMPING,
-		UP_STAIRS,
-		DOWN_STAIRS,
-		UP_DOWN_STAIRS,
-		ERASE
-	};
-
 	bool confirm = false;
 	int miningType = 0;
 
+	void resetGui();
 	void loopThroughPossibleMining(int type, Coordinates sml, Coordinates lrg, std::function<void(bool, int, int)> onPossible);
 
 	void drawPossibleMining();

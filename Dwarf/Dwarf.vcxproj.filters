@@ -315,6 +315,9 @@
     <ClCompile Include="Globals\GlobalTerminals.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ECS\Systems\helpers\RegionHelper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ECS\EntityManager.h">
@@ -1011,6 +1014,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Globals\GlobalTerminals.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Systems\helpers\RegionHelper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Helpers\MessageQueue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Globals\TypesOfActions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

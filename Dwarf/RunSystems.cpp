@@ -38,6 +38,7 @@
 #include "ECS\Systems\helpers\ItemHelper.h"
 #include "ECS\Systems\helpers\DesignationHandler.h"
 #include "ECS\Systems\helpers\WorkOrderHelper.h"
+#include "ECS\Systems\helpers\RegionHelper.h"
 
 // System time based
 #include "ECS\Systems\timebased\CalenderSystem.h"
@@ -77,6 +78,7 @@ const std::string HARVEST_AI = "Harvest Ai";
 const std::string FARMING_AI = "Farming Ai";
 const std::string CALENDER_SYSTEM = "Calender System";
 const std::string PLANT_SYSTEM = "Plant System";
+const std::string REGION_HELPER = "Region Helper";
 
 // Gui Systems
 const std::string MENU_BAR = "Menu Bar";
@@ -109,12 +111,16 @@ void initSystems(bool fromLoad)
 		defInfo = std::make_unique<DefInfo>();
 	}
 
+	// Grab all the info about defs we'd like
+	// to have easy access to
 	defInfo->init();
 
 	// External systems
 	workOrderHelper = std::make_unique<WorkOrderHelper>();
+	regionHelper = std::make_unique<RegionHelper>();
 
 	// Normal Systems
+	// Memory is managed from inside the World.h class! Is it?
 	systems[DESIGNATION_HANDLER] = new DesignationHandler;
 	systems[RENDER_SYSTEM] = new RenderSystem;
 	systems[MOVEMENT_SYSTEM] = new MovementSystem;
@@ -150,6 +156,7 @@ void initSystems(bool fromLoad)
 	// External Systems
 	systems[ITEM_HELPER] = &itemHelper;
 	systems[WORK_ORDER_HELPER] = workOrderHelper.get();
+	systems[REGION_HELPER] = regionHelper.get();
 
 	// Add systems to world. Cast to their derived class so world 
 	// doesn't interpret them as SystemBase's
@@ -174,6 +181,7 @@ void initSystems(bool fromLoad)
 	world.addSystem(* static_cast<CalenderSystem *>(systems[CALENDER_SYSTEM]));
 	world.addSystem(* static_cast<PlantSystem *>(systems[PLANT_SYSTEM]));
 
+
 	// Gui Systems
 	world.addSystem(* static_cast<MenuBar *>(systems[MENU_BAR]));
 	world.addSystem(* static_cast<CameraSystem *>(systems[CAMERA_SYSTEM]));
@@ -186,8 +194,9 @@ void initSystems(bool fromLoad)
 	world.addSystem(* static_cast<DesignWorkOrders *>(systems[DESIGN_WORKORDERS]));
 
 	// External Systems
-	world.addSystem(itemHelper);
+	world.addSystem( itemHelper);
 	world.addSystem(*workOrderHelper.get());
+	world.addSystem(*regionHelper.get());
 	//world.addSystem(*static_cast<ItemHelper *>(systems[ITEM_HELPER]));
 	//world.addSystem(*static_cast<WorkOrderHelper *>(systems[WORK_ORDER_HELPER]));
 
@@ -231,7 +240,7 @@ void updateSystems(const double duration)
 	keys::addTime(duration);
 	mouse::readMouse();
 
-	constexpr double MS_PER_UDPATE = 17.0;
+	constexpr double MS_PER_UPDATE = 17.0;
 	constexpr double MS_PER_MAJOR_TICK = 250.0;
 
 	static double tick = 0.0;
@@ -243,7 +252,7 @@ void updateSystems(const double duration)
 
 	runSystem(CAMERA_SYSTEM, duration);
 
-	if (tick > MS_PER_UDPATE)
+	if (tick > MS_PER_UPDATE)
 	{
 		tick = 0.0;
 
@@ -262,27 +271,29 @@ void updateSystems(const double duration)
 		}
 
 		// Update systems
-		runSystem(MINING_SYSTEM, MS_PER_UDPATE);
-		runSystem(MOVEMENT_SYSTEM, MS_PER_UDPATE);
-		runSystem(DIJKSTRA_MAPS_HANDLER, MS_PER_UDPATE);
+		runSystem(MINING_SYSTEM, MS_PER_UPDATE);
+		runSystem(MOVEMENT_SYSTEM, MS_PER_UPDATE);
+		runSystem(DIJKSTRA_MAPS_HANDLER, MS_PER_UPDATE);
 
-		runSystem(AI_WORK_SYSTEM, MS_PER_UDPATE);
+		runSystem(AI_WORK_SYSTEM, MS_PER_UPDATE);
 
 		// Perform assigned jobs
-		runSystem(WORK_ORDERS_SYSTEM, MS_PER_UDPATE);
-		runSystem(MINING_AI, MS_PER_UDPATE);
-		runSystem(WOODCUTTING_AI, MS_PER_UDPATE);
-		runSystem(BUILD_AI, MS_PER_UDPATE);
-		runSystem(AI_ARCHITECTURE, MS_PER_UDPATE);
-		runSystem(HARVEST_AI, MS_PER_UDPATE);
+		runSystem(WORK_ORDERS_SYSTEM, MS_PER_UPDATE);
+		runSystem(MINING_AI, MS_PER_UPDATE);
+		runSystem(WOODCUTTING_AI, MS_PER_UPDATE);
+		runSystem(BUILD_AI, MS_PER_UPDATE);
+		runSystem(AI_ARCHITECTURE, MS_PER_UPDATE);
+		runSystem(HARVEST_AI, MS_PER_UPDATE);
 
+		// Perfrom mining and later constructing jobs?
+		runSystem(REGION_HELPER, MS_PER_UPDATE);
 
-		runSystem(STOCKPILE_SYSTEM, MS_PER_UDPATE);
-		runSystem(HAULING_SYSTEM, MS_PER_UDPATE);
-		runSystem(PLANT_SYSTEM, MS_PER_UDPATE);
+		runSystem(STOCKPILE_SYSTEM, MS_PER_UPDATE);
+		runSystem(HAULING_SYSTEM, MS_PER_UPDATE);
+		runSystem(PLANT_SYSTEM, MS_PER_UPDATE);
 
 		// Main Rendering 
-		runSystem(RENDER_SYSTEM, MS_PER_UDPATE);
+		runSystem(RENDER_SYSTEM, MS_PER_UPDATE);
 	}
 
 	// Menu and gui rendering
@@ -320,7 +331,27 @@ void updateSystems(const double duration)
 	if (profiler)
 	{
 		ImGui::Begin("Profiler");
+
+		// Get average frame times
+		static int tidx = -1;
+		constexpr size_t framesToAvg = 100;
+		static std::vector<double> ftimes(framesToAvg, 0.0);
+
+		if (tidx < framesToAvg)
+			++tidx;
+		else
+			tidx = 0;
+
+		ftimes[tidx] = duration;
+
+		double ftotal = 0.0;
+		for (const auto& ts : ftimes)
+			ftotal += ts;
+
+		ftotal /= static_cast<double>(framesToAvg);
+
 		ImGui::Text("Frame Time: %f", duration); 
+		ImGui::Text("Avg Frame Time (100): %f", ftotal);
 
 		const double frameFrac = 100.0 / duration;
 		for (auto sys = runTimes.begin(); sys != runTimes.end(); ++sys)

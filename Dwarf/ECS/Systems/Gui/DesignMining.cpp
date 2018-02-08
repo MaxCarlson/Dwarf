@@ -11,6 +11,7 @@
 #include "Map\Tile.h"
 #include "Designations.h"
 #include "Globals\GlobalTerminals.h"
+#include "Globals\TypesOfActions.h"
 #include "ECS\Messages\designation_message.h"
 #include "ECS\Messages\recalculate_mining_message.h"
 #include <imgui.h>
@@ -74,6 +75,13 @@ inline bool outOfBounds(Coordinates co)
 		return true;
 
 	return false;
+}
+
+void DesignMining::resetGui()
+{
+	confirm = false;
+	click = EMPTY_COORDINATES;
+	emit(recalculate_mining_message{});
 }
 
 void DesignMining::loopThroughPossibleMining(int type, Coordinates sml, Coordinates lrg, std::function<void(bool, int, int)> onPossible)
@@ -223,10 +231,9 @@ void DesignMining::drawPossibleMining()
 
 	ImGui::Text(ss.str().c_str());
 
-	if (confirm)
-	{
+	if (confirm && totalPossible)
 		designate();
-	}
+	
 }
 
 void DesignMining::designate()
@@ -243,7 +250,7 @@ void DesignMining::designate()
 		}
 	});
 
-	emit(recalculate_mining_message{});
+	resetGui();
 }
 
 void DesignMining::drawErasure()
@@ -274,9 +281,12 @@ void DesignMining::drawErasure()
 				designations->mining.erase(find);
 		}
 
-	if (confirm)
-	{
-		confirm = false;
-		click = EMPTY_COORDINATES;
-	}
+	std::stringstream ss;
+	ss << "Coordinates: " << sml.x << "," << sml.y << "," << sml.z << " : " << lrg.x << "," << lrg.y << "," << lrg.z << "\n";
+	ss << "Total mining designations to be erased: " << totalTiles << "\n";
+
+	ImGui::Text(ss.str().c_str());
+
+	if (confirm && totalTiles)
+		resetGui();
 }

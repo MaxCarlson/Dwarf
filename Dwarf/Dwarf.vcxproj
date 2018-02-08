@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -253,6 +253,7 @@
     <ClCompile Include="ECS\Systems\ai\StockpileSystem.cpp" />
     <ClCompile Include="Helpers\Rng.cpp" />
     <ClCompile Include="Raws\ReadPlants.cpp" />
+    <ClCompile Include="ECS\Systems\helpers\RegionHelper.cpp" />
     <ClCompile Include="RegisterComponents.cpp" />
     <ClCompile Include="RunSystems.cpp" />
     <ClCompile Include="Raws\SkillReader.cpp" />
@@ -297,6 +298,8 @@
     <ClInclude Include="Globals\GlobalWorld.h" />
     <ClInclude Include="Globals\TexDefines.h" />
     <ClInclude Include="Globals\GlobalTerminals.h" />
+    <ClInclude Include="Globals\TypesOfActions.h" />
+    <ClInclude Include="Helpers\MessageQueue.h" />
     <ClInclude Include="KeyDampener.h" />
     <ClInclude Include="MainLoops\MainMenuLoop.h" />
     <ClInclude Include="Map\building\BuildBiomes.h" />
@@ -496,6 +499,7 @@
     <ClInclude Include="ECS\Systems\ai\StockpileSystem.h" />
     <ClInclude Include="Helpers\Rng.h" />
     <ClInclude Include="Raws\ReadPlants.h" />
+    <ClInclude Include="ECS\Systems\helpers\RegionHelper.h" />
     <ClInclude Include="RegisterComponents.h" />
     <ClInclude Include="RunSystems.h" />
     <ClInclude Include="Raws\SkillReader.h" />
