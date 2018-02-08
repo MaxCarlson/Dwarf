@@ -20,6 +20,7 @@
 #include "ECS\Systems\Gui\DesignMining.h"
 #include "ECS\Systems\Gui\DesignWoodcutting.h"
 #include "ECS\Systems\Gui\DesignWorkOrders.h"
+#include "ECS\Systems\Gui\JobPreferencesUi.h"
 
 // Ai systems
 #include "ECS\Systems\ai\EquipHandler.h"
@@ -90,6 +91,7 @@ const std::string DESIGN_MINING = "Design Mining";
 const std::string DESIGN_WOODCUTTING = "Design Woodcutting";
 const std::string DESIGN_WORKORDERS = "Design Work Orders";
 const std::string CAMERA_SYSTEM = "Camera System";
+const std::string JOB_PREFERENCES_UI = "Job Preferences UI";
 
 
 namespace RunSystems
@@ -152,6 +154,7 @@ void initSystems(bool fromLoad)
 	systems[DESIGN_MINING] = new DesignMining;
 	systems[DESIGN_WOODCUTTING] = new DesignWoodcutting;
 	systems[DESIGN_WORKORDERS] = new DesignWorkOrders;
+	systems[JOB_PREFERENCES_UI] = new JobPreferencesUi;
 
 	// External Systems
 	systems[ITEM_HELPER] = &itemHelper;
@@ -192,6 +195,7 @@ void initSystems(bool fromLoad)
 	world.addSystem(* static_cast<DesignMining *>(systems[DESIGN_MINING]));
 	world.addSystem(* static_cast<DesignWoodcutting *>(systems[DESIGN_WOODCUTTING]));
 	world.addSystem(* static_cast<DesignWorkOrders *>(systems[DESIGN_WORKORDERS]));
+	world.addSystem(* static_cast<JobPreferencesUi *>(systems[JOB_PREFERENCES_UI]));
 
 	// External Systems
 	world.addSystem( itemHelper);
@@ -321,6 +325,9 @@ void updateSystems(const double duration)
 
 		if (designState == DesignStates::WORK_ORDERS)
 			runSystem(DESIGN_WORKORDERS, duration);
+
+		if (designState == DesignStates::JOB_PREFERENCES)
+			runSystem(JOB_PREFERENCES_UI, duration);
 	}
 
 	static bool profiler = false;

@@ -20,7 +20,8 @@ enum DesignStates
 	HARVEST,
 	MINING,
 	STOCKPILES,
-	WORK_ORDERS
+	WORK_ORDERS,
+	JOB_PREFERENCES
 };
 
 extern GameState gameState;

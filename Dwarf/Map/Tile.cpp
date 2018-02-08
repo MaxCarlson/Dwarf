@@ -356,10 +356,6 @@ namespace region
 		currentRegion->solid[idx] = true;
 		currentRegion->tileTypes[idx] = TileTypes::SOLID; // Change to tileType Earth?
 		currentRegion->plantType[idx] = 0;
-
-		const Coordinates co = idxToCo(idx);
-		if (co.z < MAP_DEPTH - 1)
-			makeFloor(getIdx({ co.x, co.y, co.z + 1 }));
 	}
 
 	void makeRamp(const int idx)

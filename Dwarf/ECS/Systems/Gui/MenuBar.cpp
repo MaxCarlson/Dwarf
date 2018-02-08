@@ -7,6 +7,7 @@
 
 const std::string mainMenu = "Main Menu";
 const std::string design = "Design";
+const std::string jobs = "Jobs";
 
 void MenuBar::init()
 {
@@ -45,12 +46,6 @@ void MenuBar::update(const double duration)
 			designState = DesignStates::BUILD;
 		}
 
-		if (ImGui::MenuItem("Work Orders"))
-		{
-			gameState = GameState::DESIGN;
-			designState = DesignStates::WORK_ORDERS;
-		}
-
 		if (ImGui::MenuItem("Architecture"))
 		{
 			gameState = GameState::DESIGN;
@@ -84,9 +79,26 @@ void MenuBar::update(const double duration)
 		ImGui::EndMenu();
 	}
 
+	if (ImGui::BeginMenu(jobs.c_str()))
+	{
+		if (ImGui::MenuItem("Job Preferences"))
+		{
+			gameState = GameState::DESIGN;
+			designState = DesignStates::JOB_PREFERENCES;
+		}
+
+		if (ImGui::MenuItem("Work Orders"))
+		{
+			gameState = GameState::DESIGN;
+			designState = DesignStates::WORK_ORDERS;
+		}
+
+		ImGui::EndMenu();
+	}
+
 	const std::string time = calender->getTime();
 
-	ImGui::SameLine(ImGui::GetWindowWidth() - ImGui::CalcTextSize(time.c_str()).x + 7);
+	ImGui::SameLine(ImGui::GetWindowWidth() - ImGui::CalcTextSize(time.c_str()).x -10);
 	ImGui::Text(time.c_str());
 
 	ImGui::EndMainMenuBar();

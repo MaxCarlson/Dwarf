@@ -5,10 +5,12 @@ struct AiWorkComponent : public Component
 {
 	AiWorkComponent() = default;
 
+	std::unordered_map<std::string, int> jobPrefrences;
+
 	template<class Archive>
 	void serialize(Archive &archive)
 	{
-
+		archive(jobPrefrences);
 	}
 };
 

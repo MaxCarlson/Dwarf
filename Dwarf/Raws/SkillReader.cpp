@@ -64,7 +64,7 @@ void readInSkills() noexcept
 		[](const auto &key) {},
 		luaParser
 		{
-			{ "name", [&tag]() { skillNames[tag] = lua_str(); } },
+			{ "name", [&tag]() { skillNames[tag] = lua_str(); skills.emplace_back(skillNames[tag]); } },
 
 			{ "s_attributes", [&tag]() {		// , &test, &keys
 				readLuaMultiTable("s_attributes",
@@ -81,6 +81,14 @@ void readInSkills() noexcept
 			}
 		}
 	);
+
+	std::sort(skills.begin(), skills.end(), [](const std::string& name, const std::string &name2)
+	{
+		if (name[0] < name2[0])
+			return true;
+
+		return false;
+	});
 }
 
 void sanityCheckSkills() noexcept

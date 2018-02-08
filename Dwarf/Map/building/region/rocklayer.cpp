@@ -151,6 +151,7 @@ void layRock(std::vector<uint8_t> heightMap, BiomeDef & biome, Strata & strata, 
 				const int idx = getIdx({ i, j, z });
 				std::size_t matIdx;
 				region::setTileType(idx, TileTypes::SOLID);
+				region::setSolid(idx);
 
 				if (idx < strata.strata_map.size())
 				{

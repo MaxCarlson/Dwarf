@@ -34,6 +34,7 @@ void channeling(const perform_mining_message &msg)
 	region::makeEmptySpace(msg.targetIdx);
 
 	Coordinates co = idxToCo(msg.targetIdx);
+
 	if (region::solid(getIdx(CO_DOWN)))
 	{
 		region::makeRamp(getIdx(CO_DOWN));

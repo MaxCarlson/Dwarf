@@ -183,6 +183,7 @@
     <ClCompile Include="imgui_draw.cpp" />
     <ClCompile Include="Globals\MainFunction.cpp" />
     <ClCompile Include="imgui_tabs.cpp" />
+    <ClCompile Include="ECS\Systems\Gui\JobPreferencesUi.cpp" />
     <ClCompile Include="KeyDampener.cpp" />
     <ClCompile Include="MainLoops\MainMenuLoop.cpp" />
     <ClCompile Include="Map\building\BuildBiomes.cpp" />
@@ -300,6 +301,7 @@
     <ClInclude Include="Globals\GlobalTerminals.h" />
     <ClInclude Include="Globals\TypesOfActions.h" />
     <ClInclude Include="Helpers\MessageQueue.h" />
+    <ClInclude Include="ECS\Systems\Gui\JobPreferencesUi.h" />
     <ClInclude Include="KeyDampener.h" />
     <ClInclude Include="MainLoops\MainMenuLoop.h" />
     <ClInclude Include="Map\building\BuildBiomes.h" />

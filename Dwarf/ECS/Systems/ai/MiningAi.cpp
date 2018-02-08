@@ -223,10 +223,9 @@ void MiningAi::updateMiner(const Entity& e)
 			designations->mining.erase(targetIdx);
 
 			regionHelper->performMining(e, targetIdx, targetMiningType);
-			work.cancel_work(e);
+			tag.step = MiningTag::DROP_TOOL; // Get rid of the eventually once we've added in shift's and implemented item handling better
 			return;
-		}
-		
+		}	
 
 		tag.step = MiningTag::DROP_TOOL; 
 		return;

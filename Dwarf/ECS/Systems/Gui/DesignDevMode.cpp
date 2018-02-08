@@ -10,6 +10,7 @@
 #include "ECS\Messages\update_all_maps_message.h"
 #include "KeyDampener.h"
 #include "mouse.h"
+#include "Map\Tile.h"
 #include <imgui.h>
 #include <imgui_tabs.h>
 #include <DwarfRender.h>
@@ -95,6 +96,21 @@ void DesignDevMode::spawnItem()
 	}
 }
 
+void printTileInfo()
+{
+	using namespace region;
+	std::stringstream ss;
+	const auto co = mouse::mousePos;
+	const auto idx = getIdx(co);
+
+	ss << "Solid: " << region::solid(idx) << "\n";
+	ss << "Flags: " << "Stand: " << flag(co, Flag::CAN_STAND_HERE) << "\n"; // Eventually add in naming instead of using the number if it's worth the time
+
+	ss << "TileType: " << getTileType(idx);
+
+	ImGui::Text(ss.str().c_str());
+}
+
 void DesignDevMode::update(const double duration)
 {
 	ImGui::Begin("Dev Controls", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
@@ -115,6 +131,11 @@ void DesignDevMode::update(const double duration)
 	if (ImGui::AddTab("Delete##Dev"))
 	{
 
+	}
+
+	if(ImGui::AddTab("TileInfo##Dev"))
+	{
+		printTileInfo();
 	}
 
 	ImGui::EndTabBar();
