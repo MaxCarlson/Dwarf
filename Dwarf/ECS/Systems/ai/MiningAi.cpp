@@ -4,6 +4,7 @@
 #include "../Designations.h"
 #include "../Map/Tile.h"
 #include "../MiningSystem.h"
+#include "ECS\Systems\helpers\RegionHelper.h"
 #include "../DijkstraSystems/DijkstraMapsHandler.h"
 #include "../../Components/Sentients/Stats.h"
 #include "../../Messages/recalculate_mining_message.h"
@@ -195,54 +196,37 @@ void MiningAi::updateMiner(const Entity& e)
 		const auto targetIdx = miningTargets[idx];
 		const auto targetMiningType = designations->mining[targetIdx];
 
-		if (targetMiningType > 0)
+		static const std::string jobSkill = "mining";
+
+		auto& stats = e.getComponent<Stats>();
+
+		// Target tile has health left
+		if (tileHealth(targetIdx) > 0)
 		{
-			static const std::string jobSkill = "mining";
-
-			auto& stats = e.getComponent<Stats>();
-
-			// Target tile has health left
-			if (tileHealth(targetIdx) > 0)
-			{
-				const auto dmg = static_cast<uint16_t>(doWorkDamage(stats, jobSkill));
+			const auto dmg = static_cast<uint16_t>(doWorkDamage(stats, jobSkill));
 				
-				damageTile(targetIdx, dmg);
-				return;
-			} 
+			damageTile(targetIdx, dmg);
+			return;
+		} 
 
-			// Target tile has no health left and is still designated,
-			// let's destroy it and award points to miner
-			//
-			// We might need to add skill points to miners while they participate if 
-			// only giving the points to the one who damages it last getting all the points
-			// will cause imbalences
-			else
-			{
-				giveWorkXp(stats, jobSkill, DIFFICULTY_MODERATE);
+		// Target tile has no health left and is still designated,
+		// let's destroy it and award points to miner
+		//
+		// We might need to add skill points to miners while they participate if 
+		// only giving the points to the one who damages it last getting all the points
+		// will cause imbalences
+		else
+		{
+			giveWorkXp(stats, jobSkill, DIFFICULTY_MODERATE);
 
-				// Remove the designation and change the tile
-				designations->mining.erase(targetIdx);
+			// Remove the designation and change the tile
+			designations->mining.erase(targetIdx);
 
-				// Change tile to a floor, Probably don't want to do this
-				// if tile is over open space?
-				region::makeFloor(targetIdx);
-
-				// Don't really want to spawn a stone boulder for each thing being mined do we?
-				// might have to change
-				auto matIdx = getTileMaterial(idxToCo(targetIdx));
-				auto mat = getMaterial(matIdx);
-
-				// Spawn items in amount denoted by material type
-				for (int i = 0; i < mat->minesToAmount; ++i)
-					spawnItemOnGround(mat->minesToTag, matIdx, idxToCo(targetIdx), SpawnColor::MATERIAL_COLOR);
-
-				//tileRecalcAll();
-				spot_recalc_paths(idxToCo(targetIdx));
-
-				emit(recalculate_mining_message{});
-				return;
-			}
+			regionHelper->performMining(e, targetIdx, targetMiningType);
+			work.cancel_work(e);
+			return;
 		}
+		
 
 		tag.step = MiningTag::DROP_TOOL; 
 		return;

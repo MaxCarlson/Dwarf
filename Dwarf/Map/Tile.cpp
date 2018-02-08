@@ -370,7 +370,6 @@ namespace region
 		currentRegion->plantType[idx] = 0;
 
 		const Coordinates co = idxToCo(idx);
-		setMaterial(co, getTileMaterial(idxToCo(idx)));
 
 		currentRegion->tileFlags[getIdx({ co.x, co.y, co.z + 1 })].set(CAN_STAND_HERE); // Remove this eventually?
 	}

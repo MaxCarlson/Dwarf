@@ -21,7 +21,7 @@ void RegionHelper::init()
 
 void RegionHelper::performMining(Entity e, const int idx, const int type)
 {
-	miningMessages.emplace(perform_mining_message{ e, idx, type });
+	miningMessages.emplace(perform_mining_message{ e, idx, static_cast<uint8_t>(type) });
 }
 
 void mining(const perform_mining_message &msg)
@@ -75,7 +75,11 @@ void spawnMiningProducts(const perform_mining_message &msg)
 
 	auto* mat = getMaterial(matIdx);
 
-	spawnItemOnGround(mat->minesToTag, matIdx, co, SpawnColor::MATERIAL_COLOR);
+	if (!mat)
+		return;
+
+	for(int i = 0; i < mat->minesToAmount; ++i)
+		spawnItemOnGround(mat->minesToTag, matIdx, co, SpawnColor::MATERIAL_COLOR);
 }
 
 void recalculateArea(const perform_mining_message &msg)
@@ -98,27 +102,27 @@ void RegionHelper::update(const double duration)
 	{
 		switch (msg.opperation)
 		{
-		case MiningTypes::MINING:
+		case MiningTypes::MINING_MINING:
 			mining(msg);
 			break;
 
-		case MiningTypes::CHANNELING:
+		case MiningTypes::MINING_CHANNELING:
 			channeling(msg);
 			break;
 
-		case MiningTypes::RAMPING:
+		case MiningTypes::MINING_RAMPING:
 			ramping(msg);
 			break;
 
-		case MiningTypes::UP_STAIRS:
+		case MiningTypes::MINING_UP_STAIRS:
 			upStairs(msg);
 			break;
 
-		case MiningTypes::DOWN_STAIRS:
+		case MiningTypes::MINING_DOWN_STAIRS:
 			downStairs(msg);
 			break;
 
-		case MiningTypes::UP_DOWN_STAIRS:
+		case MiningTypes::MINING_UP_DOWN_STAIRS:
 			upDownStairs(msg);
 			break;
 		}

@@ -42,13 +42,13 @@ void DesignMining::update(const double duration) // Add in mining templates!
 	ImGui::Combo("##MiningModes", &miningType, miningModesStr);
 
 	using namespace keys;
-	if (isKeyDown(sf::Keyboard::Key::D)) miningType = MINING;
-	if (isKeyDown(sf::Keyboard::Key::C)) miningType = CHANNELING;
-	if (isKeyDown(sf::Keyboard::Key::R)) miningType = RAMPING;
-	if (isKeyDown(sf::Keyboard::Key::U)) miningType = UP_STAIRS;
-	if (isKeyDown(sf::Keyboard::Key::J)) miningType = DOWN_STAIRS;
-	if (isKeyDown(sf::Keyboard::Key::X)) miningType = UP_DOWN_STAIRS;
-	if (isKeyDown(sf::Keyboard::Key::E)) miningType = ERASE;
+	if (isKeyDown(sf::Keyboard::Key::D)) miningType = MINING_MINING;
+	if (isKeyDown(sf::Keyboard::Key::C)) miningType = MINING_CHANNELING;
+	if (isKeyDown(sf::Keyboard::Key::R)) miningType = MINING_RAMPING;
+	if (isKeyDown(sf::Keyboard::Key::U)) miningType = MINING_UP_STAIRS;
+	if (isKeyDown(sf::Keyboard::Key::J)) miningType = MINING_DOWN_STAIRS;
+	if (isKeyDown(sf::Keyboard::Key::X)) miningType = MINING_UP_DOWN_STAIRS;
+	if (isKeyDown(sf::Keyboard::Key::E)) miningType = MINING_ERASE;
 
 	if (mouse::rightClick)
 	{
@@ -106,17 +106,17 @@ void DesignMining::loopThroughPossibleMining(int type, Coordinates sml, Coordina
 
 				switch (type)
 				{
-				case MINING:
-				case RAMPING:
-				case UP_STAIRS:
-				case UP_DOWN_STAIRS:
+				case MINING_MINING:
+				case MINING_RAMPING:
+				case MINING_UP_STAIRS:
+				case MINING_UP_DOWN_STAIRS:
 					if (tileType != TileTypes::SOLID)
 						possible = false;
 
 					break;
 
-				case CHANNELING:
-				case DOWN_STAIRS:
+				case MINING_CHANNELING:
+				case MINING_DOWN_STAIRS:
 					if (tileType != TileTypes::FLOOR)
 						possible = false;
 
@@ -173,26 +173,26 @@ void DesignMining::drawPossibleMining()
 	vchars ch;
 	switch (miningType)
 	{
-	case MINING:
+	case MINING_MINING:
 		ch = { 219,{ 255, 255, 0 },{} };
 		break;
-	case CHANNELING:
+	case MINING_CHANNELING:
 		ch = { 25, {255, 255, 0}, {255, 255, 255} };
 		break;
 
-	case RAMPING:
+	case MINING_RAMPING:
 		ch = { RAMP_UP,{ 155, 155, 155 },{} };
 		break;
 
-	case UP_STAIRS:
+	case MINING_UP_STAIRS:
 		ch = { STAIRS_UP,{ 155, 155, 155 },{} };
 		break;
 
-	case DOWN_STAIRS:
+	case MINING_DOWN_STAIRS:
 		ch = { STAIRS_DOWN,{ 155, 155, 155 },{} };
 		break;
 
-	case UP_DOWN_STAIRS:
+	case MINING_UP_DOWN_STAIRS:
 		ch = { STAIRS_UD,{ 155, 155, 155 },{} };
 		break;
 	}

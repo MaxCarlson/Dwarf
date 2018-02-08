@@ -337,7 +337,7 @@ void updateSystems(const double duration)
 		constexpr size_t framesToAvg = 100;
 		static std::vector<double> ftimes(framesToAvg, 0.0);
 
-		if (tidx < framesToAvg)
+		if (tidx < framesToAvg - 1)
 			++tidx;
 		else
 			tidx = 0;
