@@ -93,7 +93,7 @@ void HarvestAi::doHarvest(const Entity& e, const double& duration)
 
 		const auto produce = plant->harvestsTo[region::plantLifeCycle(idx)];
 
-		if (produce != "none")
+		if (produce != "none") // Move this code to region helper
 		{
 			std::string type = "organic";
 
@@ -104,7 +104,7 @@ void HarvestAi::doHarvest(const Entity& e, const double& duration)
 				if (find->categories.test(ITEM_FOOD)) type = "food";
 
 				auto item = spawnItemOnGround(produce, getMaterialIdx(type), co, SpawnColor::ITEM_COLOR);  
-
+				
 				// Spawn seeds
 				spawnItemOnGround("seed", getMaterialIdx("organic"), co, SpawnColor::CUSTOM_COLOR, getItemDef(produce)->ch.fg);
 			}

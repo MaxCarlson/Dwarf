@@ -26,7 +26,7 @@ void drawJobPrefrences(const Entity &e)
 		auto find = skillPrefs.find(sk);
 
 		if (find == skillPrefs.end())
-			skillPrefs[sk] = 0;
+			skillPrefs[sk] = 10;
 		
 		std::string label = "##JobPreferences" + std::to_string(i);
 
@@ -37,9 +37,12 @@ void drawJobPrefrences(const Entity &e)
 	ImGui::End();
 }
 
-void JobPreferencesUi::update(const double duration)
+void JobPreferencesUi::update(const double duration) // These preferece changes have no effect yet!
 {
 	ImGui::Begin("Job Preferences", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoCollapse);
+	ImGui::BeginTooltip();
+	ImGui::SetTooltip("Set preference level to zero to have a dwarf never do a job type.");
+	ImGui::EndTooltip();
 
 	const auto& ents = getEntities();
 
@@ -48,7 +51,7 @@ void JobPreferencesUi::update(const double duration)
 	std::vector<std::string> names;
 	for (const auto& d : ents)
 	{
-		names.emplace_back(std::string("Dwarf" + std::to_string(i)));
+		names.emplace_back(std::string("Dwarf") + std::to_string(i));
 	}
 
 	

@@ -56,9 +56,6 @@ void HaulingSystem::doWork(Entity e)
 {
 	static auto& world = getWorld();
 
-//	if (e.getId().index == 7)
-//		int a = 5;
-
 	WorkTemplate<HaulingTag> work;
 	auto& co = e.getComponent<PositionComponent>().co;
 	const int idx = getIdx(co);
