@@ -19,7 +19,7 @@ void DesignHarvest::init()
 
 void DesignHarvest::update(const double duration)
 {
-	ImGui::Begin("Farming", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoCollapse);
+	ImGui::Begin("Farming##Design", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoCollapse);
 
 	if (ImGui::Button("Close##Harvest"))
 	{
@@ -99,14 +99,13 @@ void DesignHarvest::designHarvest()
 	ImGui::Text("reached maturity");
 
 	static int selectedType = 0;
-	ImGui::RadioButton("Harvest Productive", &selectedType, 0);
+	ImGui::RadioButton("Harvest Productive", &selectedType, 0); // Tabs are glitching with radio buttons! FIX
 	ImGui::RadioButton("Harvest All", &selectedType, 1); 
 
 
 	// Draw harvest area
 	int total = 0;
 	std::unordered_map<std::string, int> products;
-
 	
 	if (click != EMPTY_COORDINATES)
 	{
@@ -122,11 +121,11 @@ void DesignHarvest::designHarvest()
 				else
 					++find->second;
 
-				overlayTerm->setChar(x, y, { SQUARE_X_TEX,{ 0, 235, 0 },{ 0, 235, 0 } });
+				overlayTerm->setChar(x, y, { SQUARE_X_TEX,{ 0, 235, 0 }, { 0, 235, 0 } });
 				
 			}
 			else
-				overlayTerm->setChar(x, y, { SQUARE_X_TEX,{ 15, 0, 0 },{ 15, 0, 0 } });
+				overlayTerm->setChar(x, y, { SQUARE_X_TEX,{ 35, 0, 0 }, { 35, 0, 0 } });
 		});
 	}
 
