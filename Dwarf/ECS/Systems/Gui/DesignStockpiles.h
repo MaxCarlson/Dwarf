@@ -11,6 +11,14 @@ private:
 	bool confirm = false;
 	Coordinates click = EMPTY_COORDINATES;
 
+	enum StockDesignType
+	{
+		DRAW,
+		ERASE
+	};
+
+	int designType = DRAW;
+
 	void designStockpiles();
 };
 

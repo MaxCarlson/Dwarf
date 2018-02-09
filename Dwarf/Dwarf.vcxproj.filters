@@ -321,7 +321,7 @@
     <ClCompile Include="ECS\Systems\Gui\JobPreferencesUi.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DesignStockpiles.cpp">
+    <ClCompile Include="ECS\Systems\Gui\DesignStockpiles.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1034,7 +1034,7 @@
     <ClInclude Include="ECS\Systems\Gui\JobPreferencesUi.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DesignStockpiles.h">
+    <ClInclude Include="ECS\Systems\Gui\DesignStockpiles.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

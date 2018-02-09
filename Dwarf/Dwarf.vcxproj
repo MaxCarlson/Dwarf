@@ -156,7 +156,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="DesignStockpiles.cpp" />
+    <ClCompile Include="ECS\Systems\Gui\DesignStockpiles.cpp" />
     <ClCompile Include="dfr\DrawLayers.cpp" />
     <ClCompile Include="dfr\Layer.cpp" />
     <ClCompile Include="ECS\Systems\Gui\DesignHarvest.cpp" />
@@ -275,7 +275,7 @@
     <ClCompile Include="MainLoops\WorldGenLoop.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DesignStockpiles.h" />
+    <ClInclude Include="ECS\Systems\Gui\DesignStockpiles.h" />
     <ClInclude Include="dfr\DrawLayers.h" />
     <ClInclude Include="dfr\Layer.h" />
     <ClInclude Include="ECS\Components\Sentients\AiWorkComponent.h" />
