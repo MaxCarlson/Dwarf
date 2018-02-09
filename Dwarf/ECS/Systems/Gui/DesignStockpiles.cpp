@@ -82,38 +82,32 @@ void drawAndConfirm(int type, Coordinates sml, Coordinates lrg, std::function<vo
 
 void DesignStockpiles::designStockpiles()
 {
-	static int stockSelected = 0;
+	ImGui::Text("Select stockpile types");
 
-	ImGui::ListBox("List of Stockpiles", &stockSelected, defInfo->stockpileNames); 
-
-	const auto* stock = getStockpileDef(defInfo->stockpileTags[stockSelected]);
-
-	static std::vector<int> selected(defInfo->stockpileNames.size(), 0);
+	static std::vector<bool> selected(defInfo->stockpileNames.size(), 0);
 
 	int i = 0;
 	for (const auto& s : defInfo->stockpileNames)
 	{
-		ImGui::Selectable(s.c_str(), &selected[i++]);
+		if (ImGui::Selectable(s.c_str(), selected[i]))
+			selected[i] = !selected[i];
+
+		++i;
 	}
 
 	if (click != EMPTY_COORDINATES)
 	{
-		// Set the bitmask for stockpile filters
-		std::bitset<NUMBER_OF_ITEM_CATEGORIES> stockSet;
-		for (int i = 0; i < defInfo->stockpileNames.size(); ++i)
-			stockSet.set(i, selected[i]);
-
 		int tCount = 0;
 		drawAndConfirm(designType, click, mouse::mousePos, [&tCount](Coordinates xyz, bool possible)
 		{
 			if (possible)
 			{
 				++tCount;
-				overlayTerm->setChar(xyz.x, xyz.z, vchars{ SQUARE_X_TEX, {0, 235, 0}, {} });
+				overlayTerm->setChar(xyz.x, xyz.y, vchars{ SQUARE_X_TEX, {0, 235, 0}, {} });
 			}
 			else
 			{
-				overlayTerm->setChar(xyz.x, xyz.z, vchars{ SQUARE_X_TEX,{ 255, 0, 0 },{} });
+				overlayTerm->setChar(xyz.x, xyz.y, vchars{ SQUARE_X_TEX,{ 255, 0, 0 },{} });
 			}
 		});
 
@@ -123,6 +117,11 @@ void DesignStockpiles::designStockpiles()
 			// Set the stockpile squares
 			if (designType == DRAW)
 			{
+				// Set the bitmask for stockpile filters
+				std::bitset<NUMBER_OF_ITEM_CATEGORIES> stockSet;
+				for (int i = 0; i < defInfo->stockpileNames.size(); ++i)
+					stockSet.set(i, selected[i]);
+
 				auto newstock = getWorld().createEntity();
 				auto sid = newstock.getId().index;
 
@@ -154,6 +153,9 @@ void DesignStockpiles::designStockpiles()
 						region::setStockpileId(getIdx({ x, y, sml.z }), 0);
 					}
 			}
+
+			click = EMPTY_COORDINATES;
+			confirm = false;
 		}
 	}
 
