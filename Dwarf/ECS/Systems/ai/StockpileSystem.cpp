@@ -150,7 +150,7 @@ void StockpileSystem::update(const double duration)
 		if (e.hasComponent<Claimed>())
 			return;
 
-		// Skip already stockpiled items
+		// Skip already stockpiled items ~~ This will cause items in wrong stockpiles to not be moved to the correct ones!
 		const int idx = getIdx(e.getComponent<PositionComponent>().co);
 		if (region::stockpileId(idx) > 0)
 			return;

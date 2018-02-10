@@ -25,3 +25,6 @@ constexpr uint32_t FLOOR_TEX = 43;
 
 // Square with X
 constexpr uint32_t SQUARE_X_TEX = 88;
+
+// Stockpile char
+constexpr uint32_t TEX_STOCKPILE = 61;

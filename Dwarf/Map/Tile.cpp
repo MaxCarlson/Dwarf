@@ -4,6 +4,7 @@
 #include "Raws\ReadPlants.h"
 #include "Raws\Defs\PlantDef.h"
 #include "../Raws/Materials.h"
+#include "Globals\TexDefines.h"
 #include "../Raws/Defs/MaterialDef.h"
 #include "../cereal/archives/binary.hpp"
 #include "../cereal/types/memory.hpp"
@@ -557,7 +558,13 @@ namespace region
 			fg = color_from_name(mat->color.c_str());
 			ch = mat->floorCode;
 
-			if (plantType[idx] > 0)
+			if (stockpileId(idx) > 0) // Stockpiles override plants? Should they delete plants as well?
+			{
+				fg = color_from_name("dark grey"); 
+				ch = TEX_STOCKPILE;
+			}
+
+			else if (plantType[idx] > 0)
 			{
 				const auto plant = getPlantDef(plantType[idx]);
 				const auto lifecycle = plantLifeCycle[idx];

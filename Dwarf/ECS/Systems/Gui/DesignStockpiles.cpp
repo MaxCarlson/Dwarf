@@ -120,7 +120,13 @@ void DesignStockpiles::designStockpiles()
 				// Set the bitmask for stockpile filters
 				std::bitset<NUMBER_OF_ITEM_CATEGORIES> stockSet;
 				for (int i = 0; i < defInfo->stockpileNames.size(); ++i)
-					stockSet.set(i, selected[i]);
+				{
+					if (selected[i])
+					{
+						const auto set = getStockpileDef(defInfo->stockpileTags[i])->index;
+						stockSet.set(set, 1);
+					}
+				}
 
 				auto newstock = getWorld().createEntity();
 				auto sid = newstock.getId().index;
@@ -134,6 +140,7 @@ void DesignStockpiles::designStockpiles()
 					if (possible)
 					{
 						region::setStockpileId(getIdx(co), sid);
+						region::tile_calc_render(co);
 					}
 				});
 
@@ -151,6 +158,7 @@ void DesignStockpiles::designStockpiles()
 					for (int y = sml.y; y <= lrg.y; ++y)
 					{
 						region::setStockpileId(getIdx({ x, y, sml.z }), 0);
+						region::tile_calc_render({ x, y, sml.z });
 					}
 			}
 
