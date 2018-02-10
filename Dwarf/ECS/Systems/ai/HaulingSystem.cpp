@@ -9,12 +9,13 @@
 #include "../../Messages/drop_item_message.h"
 #include "../../../Designations.h"
 #include "../ECS/Systems/helpers/PathFinding.h"
+#include "ECS\Components\Sentients\AiWorkComponent.h"
 
-static const std::string jobName = "hauling";
+static const std::string jobName = "construction"; // Change this eventually!!
 
 namespace JobsBoard
 {
-	void evaluate_hauling(JobBoard & board, const Entity & e, Coordinates co, JobEvaluatorBase * jt)
+	void evaluate_hauling(JobBoard & board, const Entity & e, AiWorkComponent &prefs, const Coordinates& co, JobEvaluatorBase * jt)
 	{
 		// No items to be hauled :(
 		if (storeableItems.empty())
@@ -32,12 +33,19 @@ namespace JobsBoard
 		// Total distance
 		const int distance = int( idist + get_3D_distance(co2, e.getWorld().getEntity(storeableItems.back().itemId).getComponent<PositionComponent>().co) );
 
+		auto pfind = prefs.jobPrefrences.find(jobName);
 
-		// Add some other prefrences aside from distance,
-		// Possibly make less skilled workers prefer hauling?
-		// Low priority?
+		if (pfind->second < 1 || pfind == prefs.jobPrefrences.end())
+			return;
 
-		board.insert(std::make_pair(distance, jt));
+		auto find = board.find(pfind->second);
+
+		if (find == board.end())
+			board[pfind->second] = std::vector<JobRating>{ {distance, jt} };
+		else
+			find->second.emplace_back(JobRating{ distance, jt });
+		
+		//board.insert(std::make_pair(distance, jt));
 	}
 }
 

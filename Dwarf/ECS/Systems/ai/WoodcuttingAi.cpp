@@ -12,10 +12,13 @@
 #include "../../../Raws/Defs/ItemDefs.h"
 #include "../../../Raws/Materials.h"
 #include "../helpers/PathFinding.h"
+#include "ECS\Components\Sentients\AiWorkComponent.h"
+
+static const std::string jobSkill = "wood_cutting";
 
 namespace JobsBoard
 {
-	void evaluate_woodcutting(JobBoard & board, const Entity & e, Coordinates co, JobEvaluatorBase * jt)
+	void evaluate_woodcutting(JobBoard & board, const Entity & e, AiWorkComponent &prefs, const Coordinates& co, JobEvaluatorBase * jt)
 	{
 		if (designations->woodcutting.empty())
 			return;
@@ -38,7 +41,21 @@ namespace JobsBoard
 				treeDist = d;		
 		}
 
-		board.insert(std::make_pair(axeDist + treeDist, jt));
+		auto pfind = prefs.jobPrefrences.find(jobSkill);
+
+		if (pfind->second < 1 || pfind == prefs.jobPrefrences.end())
+			return;
+
+		auto find = board.find(pfind->second);
+
+		const int distance = static_cast<int>(treeDist + axeDist);
+
+		if (find == board.end())
+			board[pfind->second] = std::vector<JobRating>{ { distance, jt } };
+		else
+			find->second.emplace_back(JobRating{ distance, jt });
+
+		//board.insert(std::make_pair(axeDist + treeDist, jt));
 	}
 }
 
@@ -204,8 +221,6 @@ void WoodcuttingAi::doWork(Entity & e, const double & duration)
 
 	else if (tag.step == LumberjacTag::CHOP)
 	{
-		static const std::string jobSkill = "wood_cutting";
-
 		auto find = designations->woodcutting.find(tag.treeId);
 
 		if (find == designations->woodcutting.end())

@@ -12,14 +12,29 @@
 #include "../ECS/Systems/helpers/PathFinding.h"
 #include "../ECS/Messages/drop_item_message.h"
 #include "../ECS/Messages/block_map_changed_message.h"
+#include "ECS\Components\Sentients\AiWorkComponent.h"
+
 
 namespace JobsBoard
 {
-	void evaluate_work_order(JobBoard & board, const Entity & e, Coordinates co, JobEvaluatorBase * jt)
+	void evaluate_work_order(JobBoard & board, const Entity & e, AiWorkComponent &prefs, const Coordinates& co, JobEvaluatorBase * jt)
 	{
 		if (!designations->workOrders.empty() && workOrderHelper->claimedWorkshops() < designations->workOrders.size()) 
 		{
-			board.insert(std::make_pair(15, jt));
+
+			const int bestIdx = workOrderHelper->scanForBestWorkOrder(prefs);
+			
+			if (bestIdx < 1)
+				return;
+
+			auto find = board.find(bestIdx);
+
+			if (find == board.end())
+				board[pfind->second] = std::vector<JobRating>{ { distance, jt } };
+			else
+				find->second.emplace_back(JobRating{ distance, jt });
+
+			//board.insert(std::make_pair(15, jt));
 			return;
 		}
 		

@@ -100,21 +100,17 @@ void WorkOrderHelper::update(const double duration)
 
 // Scan for the best workorder for the entity based on
 // job preferences!
-int WorkOrderHelper::scanForBestWorkOrder(const Entity & e)
+int WorkOrderHelper::scanForBestWorkOrder(const AiWorkComponent & prefs)
 {
-	auto& preferences = e.getComponent<AiWorkComponent>().jobPrefrences;
-
 	int best = 0;
 	for (const auto& wo : designations->workOrders) // Only scan through active work orders
-	{
-		auto* react = getReaction(wo.second);
-		
-		const auto find = preferences.find(react->skill);
+	{	
+		const auto find = prefs.jobPrefrences.find(getReaction(wo.second)->skill);
 
 		// Job preferences indexed by skill
-		if (find != preferences.end() && preferences[find->first] > best)
+		if (find != prefs.jobPrefrences.end() && find->second > best)
 		{
-			best = preferences[find->first];
+			best = find->second;
 		}
 	}
 

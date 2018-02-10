@@ -15,6 +15,8 @@
 #include "../../../Raws/raws.h"
 #include "../../../Raws/Materials.h"
 #include "../../../Raws/Defs/MaterialDef.h"
+#include "ECS\Components\Sentients\AiWorkComponent.h"
+
 
 #include <iostream>
 
@@ -22,9 +24,11 @@
 
 using namespace region;
 
+static const std::string jobSkill = "mining";
+
 namespace JobsBoard
 {
-	void evaluate_mining(JobBoard & board, const Entity & e, Coordinates co, JobEvaluatorBase * jt)
+	void evaluate_mining(JobBoard & board, const Entity & e, AiWorkComponent &prefs, const Coordinates& co, JobEvaluatorBase * jt)
 	{
 		if (designations->mining.empty())
 			return;
@@ -43,7 +47,19 @@ namespace JobsBoard
 		// Find total distance for job
 		int distance = miningMap[getIdx(co)] + pickDistance;
 
-		board.insert(std::make_pair(distance, jt));
+		auto pfind = prefs.jobPrefrences.find(jobSkill);
+
+		if (pfind->second < 1 || pfind == prefs.jobPrefrences.end())
+			return;
+
+		auto find = board.find(pfind->second);
+
+		if (find == board.end())
+			board[pfind->second] = std::vector<JobRating>{ { distance, jt } };
+		else
+			find->second.emplace_back(JobRating{ distance, jt });
+
+		//board.insert(std::make_pair(distance, jt));
 	}
 }
 
@@ -195,8 +211,6 @@ void MiningAi::updateMiner(const Entity& e)
 
 		const auto targetIdx = miningTargets[idx];
 		const auto targetMiningType = designations->mining[targetIdx];
-
-		static const std::string jobSkill = "mining";
 
 		auto& stats = e.getComponent<Stats>();
 
