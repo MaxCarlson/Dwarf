@@ -5,11 +5,26 @@
 #include "../../World.h"
 #include <memory>
 
+
+
 namespace JobsBoard
 {
 	struct JobEvaluatorBase;
 
-	using JobBoard = std::map<int, JobEvaluatorBase *>;
+	//using JobBoard = std::map<int, JobEvaluatorBase *>;
+
+	// This is a struct instead of a pair so I can add
+	// different rating structures easily in future
+	// This is the last compirison done, job preferences are the
+	// main force in job decisions and are used to index the JobBoard map
+	struct JobRating
+	{
+		JobRating(const int distance, JobEvaluator *func) : distance(distance), func(func) {}
+		const int distance;
+		JobEvaluator * func;
+	};
+
+	using JobBoard = std::map<int, std::vector<JobRating>>;
 
 	using JobEvaluator = std::function<void(JobBoard &, const Entity &, Coordinates &, JobEvaluatorBase *)>;
 

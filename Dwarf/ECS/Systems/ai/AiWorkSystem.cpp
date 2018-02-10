@@ -16,7 +16,8 @@ namespace JobsBoard
 
 void AiWorkSystem::update(const double duration)
 {
-	for (Entity e : getEntities())
+	/*
+	for (const auto& e : getEntities())
 	{
 		if (JobsBoard::is_working(e))
 			continue;
@@ -37,4 +38,5 @@ void AiWorkSystem::update(const double duration)
 
 		jobType->set_tag(e);
 	}
+	*/
 }

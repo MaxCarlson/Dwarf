@@ -17,6 +17,7 @@ public:
 
 	int claimedWorkshops();
 
+	int scanForBestWorkOrder(const Entity& e);
 	std::unique_ptr<work_order_reaction> find_work_order_reaction(const WorkOrderTag & tag);
 
 	void unclaim_workshop(const std::size_t id);

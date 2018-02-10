@@ -3,6 +3,7 @@
 #include "../Designations.h"
 #include "../Raws/ReadReactions.h"
 #include "../ECS/Components/Tags/WorkOrderTag.h"
+#include "../ECS/Components/Sentients/AiWorkComponent.h"
 #include "ItemHelper.h"
 
 
@@ -47,7 +48,9 @@ void WorkOrderHelper::update(const double duration)
 			}
 			// Eventually test to make sure Entities can actually perform job
 
-			// If availible claim components and set wo_reaction
+			// Make sure that enough components are availible,
+			// and that the reaction can be completed. Else remove it from the active work orders
+			// or if we're searching the queued work orders and it is possible, add it to the active orders
 			if (availible)
 			{
 				for (auto & in : react->inputs)
@@ -80,14 +83,42 @@ void WorkOrderHelper::update(const double duration)
 				}
 			}
 		}
+
+		// Remove any workorders that can no longer be completed
+		// and add any that can now be completed
 		if (nonQueued)
 			updateWorkOrders(designations->workOrders);
 
+		// Add any work orders that can no longer be completed
+		// and remove those that can
 		else
 			updateWorkOrders(designations->queuedWorkOrders);
 
 		nonQueued = true;
 	}
+}
+
+// Scan for the best workorder for the entity based on
+// job preferences!
+int WorkOrderHelper::scanForBestWorkOrder(const Entity & e)
+{
+	auto& preferences = e.getComponent<AiWorkComponent>().jobPrefrences;
+
+	int best = 0;
+	for (const auto& wo : designations->workOrders) // Only scan through active work orders
+	{
+		auto* react = getReaction(wo.second);
+		
+		const auto find = preferences.find(react->skill);
+
+		// Job preferences indexed by skill
+		if (find != preferences.end() && preferences[find->first] > best)
+		{
+			best = preferences[find->first];
+		}
+	}
+
+	return best;
 }
 
 std::unique_ptr<work_order_reaction> WorkOrderHelper::find_work_order_reaction(const WorkOrderTag & tag)

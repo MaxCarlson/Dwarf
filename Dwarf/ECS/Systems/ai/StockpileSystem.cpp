@@ -6,7 +6,6 @@
 #include "../../Components/RenderComponent.h"
 #include "../../../Raws/ItemRead.h"
 #include "../../../Raws/Defs/ItemDefs.h"
-#include "../../Messages/request_new_stockpile_message.h"
 #include "../Designations.h"
 
 std::unordered_map<std::size_t, StockpileInfo> stockpiles;
@@ -16,58 +15,8 @@ std::unordered_map<int, std::vector<std::size_t>> stockpileTargets;
 
 std::vector<StoreableItem> storeableItems;
 
-void StockpileSystem::createNewStockpile(std::pair<int, int>& area, const std::bitset<64> &catagories)
-{
-	auto co1 = idxToCo(area.first);
-	auto co2 = idxToCo(area.second);
-
-	if (co1.z != co2.z)
-		return;
-
-	if (co1.x > co2.x)
-	{
-		int tmp = co1.x;
-		co1.x = co2.x;
-		co2.x = tmp;
-	}
-	if (co1.y > co2.y)
-	{
-		int tmp = co1.y;
-		co1.y = co2.y;
-		co2.y = tmp;
-	}
-
-	auto newstock = getWorld().createEntity();
-	auto sid = newstock.getId().index;
-
-	newstock.addComponent<Stockpile>(Stockpile{catagories});
-	newstock.addComponent<PositionComponent>(); // Allows rendering
-	newstock.addComponent<RenderComponent>();  // ^^
-
-	for (int x = co1.x; x <= co2.x; ++x)
-		for (int y = co1.y; y <= co2.y; ++y)
-		{
-			const Coordinates pos = { x, y, co1.z };
-			const auto idx = getIdx(pos);
-
-			// Don't let just any tile be designated a stockpile
-			// Wrap around spurious designations
-			// No overwriting old stockpiles ~~ atleast for the moment
-			if (!region::flag(pos, region::Flag::CONSTRUCTION) && !region::solid(idx) && region::flag(pos, region::Flag::CAN_STAND_HERE) && region::stockpileId(idx) == 0)
-			{
-				region::setStockpileId(idx, sid);
-			}			
-		}
-
-	newstock.activate();
-}
-
 void StockpileSystem::init()
 {
-	subscribe<request_new_stockpile_message>([this](request_new_stockpile_message &msg)
-	{
-		createNewStockpile(msg.area, msg.setCatagories);
-	});
 }
 
 void StockpileSystem::update(const double duration)
@@ -83,7 +32,7 @@ void StockpileSystem::update(const double duration)
 		stockpilesExist = true;
 
 		auto& stock = e.getComponent<Stockpile>();
-		const auto sid = e.getId().index;
+		const auto sid = static_cast<size_t>(e.getId().index);
 
 		StockpileInfo info = { sid, stock.catagory };
 		stockpiles[sid] = info;

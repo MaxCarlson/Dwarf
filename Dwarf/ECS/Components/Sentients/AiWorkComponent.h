@@ -5,6 +5,8 @@ struct AiWorkComponent : public Component
 {
 	AiWorkComponent() = default;
 
+
+	// Preferences for job skill types, indexed by skill 
 	std::unordered_map<std::string, int> jobPrefrences;
 
 	template<class Archive>

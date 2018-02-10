@@ -38,6 +38,5 @@ public:
 	void update(const double duration);
 
 private:
-	void createNewStockpile(std::pair<int, int>& area, const std::bitset<64> &catagories);
 };
 

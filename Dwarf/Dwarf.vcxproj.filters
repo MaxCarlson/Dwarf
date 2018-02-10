@@ -812,9 +812,6 @@
     <ClInclude Include="ECS\Components\ItemCarried.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ECS\Messages\request_new_stockpile_message.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>

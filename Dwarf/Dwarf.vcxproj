@@ -333,7 +333,6 @@
     <ClInclude Include="ECS\Messages\axemap_changed_message.h" />
     <ClInclude Include="ECS\Messages\block_map_changed_message.h" />
     <ClInclude Include="ECS\Messages\designate_architecture_message.h" />
-    <ClInclude Include="ECS\Messages\request_new_stockpile_message.h" />
     <ClInclude Include="ECS\Messages\update_all_maps_message.h" />
     <ClInclude Include="ECS\Systems\ai\HaulingSystem.h" />
     <ClInclude Include="ECS\Systems\helpers\PathFinding.h" />
