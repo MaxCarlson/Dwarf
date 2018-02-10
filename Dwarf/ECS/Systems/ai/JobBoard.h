@@ -3,6 +3,7 @@
 #include <functional>
 #include "../Coordinates.h"
 #include "../../World.h"
+#include "ECS\Components\Sentients\AiWorkComponent.h"
 #include <memory>
 
 
@@ -19,14 +20,14 @@ namespace JobsBoard
 	// main force in job decisions and are used to index the JobBoard map
 	struct JobRating
 	{
-		JobRating(const int distance, JobEvaluator *func) : distance(distance), func(func) {}
+		JobRating(const int distance, JobEvaluatorBase *eval) : distance(distance), eval(eval) {}
 		const int distance;
-		JobEvaluator * func;
+		JobEvaluatorBase * eval;
 	};
 
 	using JobBoard = std::map<int, std::vector<JobRating>>;
 
-	using JobEvaluator = std::function<void(JobBoard &, const Entity &, Coordinates &, JobEvaluatorBase *)>;
+	using JobEvaluator = std::function<void(JobBoard &, const Entity &, AiWorkComponent &, const Coordinates &, JobEvaluatorBase *)>;
 
 	struct JobEvaluatorBase
 	{
@@ -54,9 +55,9 @@ namespace JobsBoard
 			e.activate();
 		}
 
-		virtual void exec(JobBoard & board, const Entity e, Coordinates & co) override final
+		virtual void exec(JobBoard & board, const Entity e, AiWorkComponent &prefs, const Coordinates & co) override final
 		{
-			eval_func(board, e, co, this);
+			eval_func(board, e, prefs, co, this);
 		}
 	};
 
@@ -71,6 +72,6 @@ namespace JobsBoard
 	}
 
 	bool is_working(Entity e);
-	void evaluate(JobBoard &board, const Entity &entity, Coordinates &co);
+	void evaluate(JobBoard &board, const Entity &entity, const Coordinates &co);
 }
 

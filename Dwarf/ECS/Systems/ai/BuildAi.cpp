@@ -8,6 +8,7 @@
 #include "../../../Map/Tile.h"
 #include "../helpers/ItemHelper.h"
 #include "../helpers/PathFinding.h"
+#include "ECS\Components\Sentients\AiWorkComponent.h"
 #include "../../Components/Building.h"
 #include "../../Components/PositionComponent.h"
 #include "../../Components/Tags/BuilderTag.h"
@@ -19,9 +20,11 @@
 
 #include <utility>
 
+static const std::string jobSkill = "construction";
+
 namespace JobsBoard
 {
-	void evaluate_building(JobBoard & board, const Entity & e, Coordinates co, JobEvaluatorBase * jt)
+	void evaluate_building(JobBoard & board, const Entity & e, AiWorkComponent &prefs, const Coordinates& co, JobEvaluatorBase * jt)
 	{
 		if (designations->buildings.empty())
 			return;
@@ -33,14 +36,33 @@ namespace JobsBoard
 
 		auto* pos = &building.getComponent<PositionComponent>().co;
 
-		// Add more factors than just distance for determaning prefrence
-		
+		if (pos)
+		{
+			auto dist = static_cast<int>(get_3D_distance(co, *pos));
+
+			auto pfind = prefs.jobPrefrences.find(jobSkill);
+
+			// Skill doesn't exist or entity preference is less than one
+			if (pfind->second < 1 || pfind == prefs.jobPrefrences.end()) 
+				return;
+
+			auto find = board.find(pfind->second);
+
+			if (find == board.end())
+				board[pfind->second] = std::vector<JobRating>{ {dist, jt} };
+			else
+				find->second.emplace_back(JobRating{ dist, jt });
+		}
+
+
+		/*
 		if (pos)
 		{
 			auto distance = get_3D_distance(co, *pos);
 
 			board.insert(std::make_pair(distance, jt));
 		}
+		*/
 	}
 }
 
@@ -228,8 +250,6 @@ void BuildAi::doBuild(const Entity & e, const double & duration)
 
 	else if (tag.step == BuilderTag::BUILD_BUILDING)
 	{
-		static const std::string jobSkill = "construction";
-
 		auto& stats = e.getComponent<Stats>();
 
 		if (tag.buildingTarget.progress < 2000.0) // Add in skill levels affecting time taken!!

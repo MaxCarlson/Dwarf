@@ -10,6 +10,7 @@
 #include "../../../Designations.h"
 #include "../ECS/Systems/helpers/PathFinding.h"
 
+static const std::string jobName = "hauling";
 
 namespace JobsBoard
 {

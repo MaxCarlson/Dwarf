@@ -18,11 +18,13 @@ namespace JobsBoard
 
 	// This needs to be spruced up and take into account
 	// Entity stats on function side!!!! Or possible here?
-	void evaluate(JobBoard & board, const Entity & entity, Coordinates & co)
+	void evaluate(JobBoard & board, const Entity & entity, const Coordinates & co)
 	{
+		auto& work = entity.getComponent<AiWorkComponent>();
+
 		std::for_each(evaluators.begin(), evaluators.end(),
-			[&board, &entity, &co](const auto &j) {
-			j->exec(board, entity, co);
+			[&board, &entity, &work, &co](const auto &j) {
+			j->exec(board, entity, work, co);
 		});
 	}
 }

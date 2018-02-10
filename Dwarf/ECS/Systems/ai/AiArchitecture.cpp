@@ -8,6 +8,7 @@
 #include "../../../Map/Index.h"
 #include "../../Components/Claimed.h"
 #include "../EntityPositionCache.h"
+#include "ECS\Components\Sentients\AiWorkComponent.h"
 #include "../../Components/Sentients/Stats.h"
 #include "../DijkstraSystems/DijkstraMapsHandler.h"
 #include "../../Messages/update_all_maps_message.h"
@@ -17,12 +18,13 @@
 #include "../../Messages/designate_architecture_message.h"
 #include "../../Messages/block_map_changed_message.h"
 
+static const std::string jobSkill = "construction";
 
 namespace JobsBoard
 {
 	// Skip architecture if there are no designations
 	// or we're too far away from either the blocks or the designation
-	void evaluate_architecture(JobBoard & board, const Entity & e, Coordinates co, JobEvaluatorBase * jt)
+	void evaluate_architecture(JobBoard & board, const Entity & e, AiWorkComponent &prefs, const Coordinates& co, JobEvaluatorBase * jt)
 	{
 		const auto blockDist = block_map.get(getIdx(co));
 		if ( blockDist > MAX_DIJKSTRA_DISTANCE - 1)
@@ -31,8 +33,25 @@ namespace JobsBoard
 		const auto archDist = architecture_map.get(getIdx(co));
 		if ( archDist > MAX_DIJKSTRA_DISTANCE - 1)
 			return;
+
+		// Find the entities preference for jobs with this skill
+		auto pfind = prefs.jobPrefrences.find(jobSkill);
+
+		// If we can't find the skill or the preference is at zero skip the job
+		if (pfind->second < 1 || pfind == prefs.jobPrefrences.end())
+			return;
+
+		// Find out if this entities job board has any other 
+		// jobs with the same preference level
+		auto find = board.find(pfind->second);
 		
-		board.insert(std::make_pair(blockDist + archDist, jt));
+		if (find == board.end()) 
+			board[pfind->second] = std::vector<JobRating>{ { blockDist + archDist, jt } };
+
+		else
+			find->second.emplace_back(JobsBoard::JobRating{ blockDist + archDist, jt });
+
+		//board.insert(std::make_pair(blockDist + archDist, jt)); 
 	}
 }
 
@@ -236,8 +255,6 @@ void AiArchitecture::doWork(Entity e, const double& duration)
 		// Yay we're in the right spot
 		if (find != designations->architecture.end())
 		{
-			static const std::string jobSkill = "construction";
-
 			auto& stats = e.getComponent<Stats>();
 
 			// If this architecture designations progress

@@ -12,11 +12,16 @@
 #include "Raws\Materials.h"
 #include "Raws\Defs\MaterialDef.h"
 #include "../../Components/Sentients/Stats.h"
+#include "ECS\Components\Sentients\AiWorkComponent.h"
 #include "../../Messages/harvest_map_changed_message.h"
+
+
+
+static const std::string skillName = "farming";
 
 namespace JobsBoard
 {
-	void evaluate_harvest(JobBoard & board, const Entity & e, Coordinates co, JobEvaluatorBase * jt)
+	void evaluate_harvest(JobBoard & board, const Entity & e, AiWorkComponent &prefs, const Coordinates& co, JobEvaluatorBase * jt)
 	{
 		if (designations->harvest.empty())
 			return;
@@ -26,7 +31,21 @@ namespace JobsBoard
 		if (distance > MAX_DIJKSTRA_DISTANCE - 1)
 			return;
 
-		board.insert(std::make_pair(distance, jt));
+		// Find numerical job rating value for this type of work
+		auto pfind = prefs.jobPrefrences.find(skillName);
+
+		if (pfind->second < 1 || pfind == prefs.jobPrefrences.end())
+			return;
+
+		auto find = board.find(pfind->second);
+
+		if (find == board.end())
+			board[pfind->second] = std::vector<JobRating>{ {distance, jt} };
+
+		else
+			find->second.emplace_back(JobRating{ distance, jt });
+
+		//board.insert(std::make_pair(distance, jt));
 	}
 }
 
@@ -80,8 +99,6 @@ void HarvestAi::doHarvest(const Entity& e, const double& duration)
 			work.cancel_work(e);
 			return;
 		}
-
-		static const std::string skillName = "farming";
 
 		auto& stats = e.getComponent<Stats>();
 		const auto  plant = getPlantDef(region::plantType(idx));
