@@ -11,9 +11,12 @@
 #include "../cereal/types/vector.hpp"
 #include "../Drawing/vchar.h"
 #include <cereal.hpp>
+#include <cereal\types\unordered_set.hpp>
 
 // External map info
 int MAP_WIDTH, MAP_HEIGHT, MAP_DEPTH, TOTAL_MAP_TILES;
+
+static int farmingChars[] = { 571, 572, 573, 573 };
 
 namespace region
 {
@@ -66,6 +69,11 @@ namespace region
 		std::vector<uint16_t> plantTicker;
 		std::vector<uint8_t>  plantLifeCycle;
 
+		// Holds idx of all farm plots so we can 
+		// override their graphics with plots
+		// all other info about plants is stored as it normally would be
+		std::unordered_set<int> farmPlots;
+
 		size_t biomeIdx = 0;
 		int nextTreeId = 0;
 		
@@ -92,6 +100,7 @@ namespace region
 			archive(nextTreeId);
 			archive(biomeIdx);
 			archive(plantType, plantHealth, plantTicker, plantLifeCycle);
+			archive(farmPlots);
 		}
 	};
 
@@ -320,6 +329,16 @@ namespace region
 		{
 			currentRegion->plantHealth[idx] = 0; // Should we also delete plant here or not?
 		}
+	}
+
+	void setFarmPlot(const int idx)
+	{
+		currentRegion->farmPlots.emplace(idx);
+	}
+
+	void deleteFarmPlot(const int idx)
+	{
+		currentRegion->farmPlots.erase(idx);
 	}
 
 	void spot_recalc_paths(const Coordinates co)
@@ -564,12 +583,22 @@ namespace region
 				ch = TEX_STOCKPILE;
 			}
 
-			else if (plantType[idx] > 0)
+			else if (farmPlots.find(idx) != farmPlots.end() || plantType[idx] > 0)
 			{
 				const auto plant = getPlantDef(plantType[idx]);
 				const auto lifecycle = plantLifeCycle[idx];
 
-				ch = plant->chars[lifecycle].c;
+				if (farmPlots.find(idx) == farmPlots.end())
+					ch = plant->chars[lifecycle].c;
+				else
+				{
+					ch = farmingChars[lifecycle];
+
+					if (lifecycle > 1 && plant->harvestsTo[lifecycle] == "none")
+						ch = farmingChars[0];
+				}
+					
+
 				fg = plant->chars[lifecycle].fg; 
 			}
 		}

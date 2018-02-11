@@ -156,6 +156,10 @@ namespace region
 
 	void damagePlant(const int idx, const int dmg);
 
+	void setFarmPlot(const int idx);
+
+	void deleteFarmPlot(const int idx);
+
 // Pathing and tile calcuating 
 
 	// Recalcuate tile pathing when only one

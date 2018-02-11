@@ -10,7 +10,6 @@
 #include "Designations.h"
 #include "Raws\DefInfo.h"
 #include "Globals\Camera.h"
-#include "Globals\ItemTypeCache.h"
 //#include "Map\building\regionBuilder.h"
 //#include "Helpers\Rng.h"
 #include <imgui.h>
@@ -51,7 +50,6 @@ void saveGame(bool& done)
 		archive(designations);
 		archive(defInfo);
 		archive(camera);
-		archive(itemCache);
 
 		done = true;
 	}
@@ -100,7 +98,6 @@ void loadGame(bool& done)
 		iarchive(designations);
 		iarchive(defInfo);
 		iarchive(camera);
-		iarchive(itemCache);
 
 		done = true;
 	}

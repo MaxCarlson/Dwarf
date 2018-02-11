@@ -39,7 +39,7 @@ struct Designations
 	// will be auto added to this vector
 	std::vector<std::pair<bool, Coordinates>> harvest;
 
-	// Farming designations, indexed by idx, size_t is plantDefIdx
+	// Farming designations, indexed by idx, size_t is plantDefIdx (which will eventually be used for finding seeds!)
 	std::vector<std::pair<int, size_t>> planting;
 
 	// Map of items indexed by destination square that are currently claimed

@@ -14,7 +14,6 @@
 #include "../../Components/Sentients/Stats.h"
 #include "ECS\Components\Sentients\AiWorkComponent.h"
 #include "../../Messages/harvest_map_changed_message.h"
-#include "Globals\ItemTypeCache.h"
 #include "ECS\Components\Seed.h"
 
 
@@ -85,12 +84,17 @@ void HarvestAi::doHarvest(const Entity& e, const double& duration)
 	{
 		const int idx = getIdx(co);
 
-		designations->harvest.erase(std::remove_if(
-			designations->harvest.begin(), 
-			designations->harvest.end(),
-			[&idx](auto d) { return idx == getIdx(d.second);
+		// If it's the first time we've reached this step
+		// delete the designation
+		if (tag.progress == 0.0)
+		{
+			designations->harvest.erase(std::remove_if(
+				designations->harvest.begin(),
+				designations->harvest.end(),
+				[&idx](auto d) { return idx == getIdx(d.second);
 
-		}), designations->harvest.end());
+			}), designations->harvest.end());
+		}
 
 		if (region::plantType(idx) == 0)
 		{
@@ -99,7 +103,7 @@ void HarvestAi::doHarvest(const Entity& e, const double& duration)
 		}
 
 		auto& stats = e.getComponent<Stats>();
-		const auto  plant = getPlantDef(region::plantType(idx));
+		const auto plant = getPlantDef(region::plantType(idx));
 
 		doWorkTime(stats, skillName, duration, tag.progress);
 

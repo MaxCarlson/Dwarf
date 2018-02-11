@@ -292,6 +292,7 @@ void updateSystems(const double duration)
 		runSystem(BUILD_AI, MS_PER_UPDATE);
 		runSystem(AI_ARCHITECTURE, MS_PER_UPDATE);
 		runSystem(HARVEST_AI, MS_PER_UPDATE);
+		runSystem(FARMING_AI, MS_PER_UPDATE);
 
 		// Perfrom mining and later constructing jobs?
 		runSystem(REGION_HELPER, MS_PER_UPDATE);

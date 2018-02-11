@@ -156,24 +156,10 @@ void DijkstraMapsHandler::update(const double duration)
 		std::unordered_set<int> repeats;
 		std::vector<int> targets;
 
-		itemHelper.forEachItem([&targets, &repeats](const auto& e)
-		{
-			if (e.hasComponent<Item>() && e.getComponent<Item>().catagory.test(ITEM_SEED))
-			{
-				if (e.hasComponent<Claimed>() || !e.hasComponent<PositionComponent>())
-					return; 
+		for (const auto& p : designations->planting)
+			targets.emplace_back(p.first);
 
-				const auto idx = getIdx(e.getComponent<PositionComponent>().co);
-
-				if (repeats.find(idx) == repeats.end())
-				{
-					repeats.insert(idx);
-					targets.emplace_back(idx);
-				}
-			}
-		});
-
-		block_map.update(targets);
+		planting_map.update(targets);
 		update_planting = false;
 	}
 }

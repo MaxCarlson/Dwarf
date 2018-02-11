@@ -153,26 +153,26 @@ void DesignHarvest::designHarvest()
 	}
 }
 
+void loopThroughFarming(int type, Coordinates sml, Coordinates lrg, std::function<void(int, int, bool, std::string)> func)
+{
+	adjustCoordinatesForLoop(sml, lrg);
+
+	for (int x = sml.x; x <= lrg.x; ++x)
+		for (int y = sml.y; y <= lrg.y; ++y)
+		{
+			bool possible = true;
+		}
+}
+
 void DesignHarvest::designFarming()
 {
 	using namespace mouse;
 
-
-
-
 	// Draw farm area
 	if (click != EMPTY_COORDINATES)
 	{
-		Coordinates sml = click;
-		Coordinates lrg = mousePos;
+		//loopThroughFarming(type)
 
-		adjustCoordinatesForLoop(sml, lrg);
-
-		for (int x = sml.x; x <= lrg.x; ++x)
-			for (int y = sml.y; y <= lrg.y; ++y)
-			{
-
-			}
 	}
 
 

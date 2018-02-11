@@ -178,7 +178,6 @@
     <ClCompile Include="Globals\game_states.cpp" />
     <ClCompile Include="Globals\GlobalWorld.cpp" />
     <ClCompile Include="Globals\GlobalTerminals.cpp" />
-    <ClCompile Include="Globals\ItemTypeCache.cpp" />
     <ClCompile Include="imgui-SFML.cpp" />
     <ClCompile Include="imgui.cpp" />
     <ClCompile Include="imgui_demo.cpp" />
@@ -300,7 +299,6 @@
     <ClInclude Include="dfr\vchars.h" />
     <ClInclude Include="Globals\DwarfContainer.h" />
     <ClInclude Include="Globals\game_states.h" />
-    <ClInclude Include="Globals\ItemTypeCache.h" />
     <ClInclude Include="Globals\MainFunction.h" />
     <ClInclude Include="Globals\GlobalWorld.h" />
     <ClInclude Include="Globals\TexDefines.h" />
