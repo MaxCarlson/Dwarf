@@ -3,8 +3,9 @@
 
 struct ItemTypeCache
 {
-
-	std::unordered_map<std::string, int> seedTypes;
+	// Seed types indexed by plant tag, vector contains
+	// list of seed entity id's
+	std::unordered_map<std::string, std::vector<size_t>> seedTypes;
 
 	template<class Archive>
 	void serialize(Archive &archive)

@@ -3,8 +3,11 @@
 #include "JobBoard.h"
 #include "Map\Tile.h"
 #include "Designations.h"
+#include "Raws\ReadPlants.h"
+#include "Raws\Defs\PlantDef.h"
 #include "../DijkstraSystems/DijkstraMapsHandler.h"
 
+static const std::string jobSkill = "farming";
 
 void SeedsHelper::forAllSeeds(std::function<void(Entity)> func)
 {
@@ -19,7 +22,7 @@ namespace JobsBoard
 		if (designations->planting.empty())
 			return;
 
-
+		
 	}
 }
 

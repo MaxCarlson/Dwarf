@@ -11,14 +11,14 @@
 #include "../../Messages/block_map_changed_message.h"
 #include "../../Messages/update_all_maps_message.h"
 #include "../../Messages/harvest_map_changed_message.h"
-#include "../../Messages/seeds_map_changed_message.h"
+#include "../../Messages/planting_map_changed_message.h"
 
 DijkstraMap pick_map;
 DijkstraMap block_map;
 DijkstraMap architecture_map;
 DijkstraMap axe_map;
 DijkstraMap harvest_map;
-DijkstraMap seeds_map;
+DijkstraMap planting_map;
 
 
 DijkstraMapsHandler::~DijkstraMapsHandler()
@@ -40,7 +40,7 @@ void DijkstraMapsHandler::init()
 	subscribe_mbox<block_map_changed_message>();
 	subscribe_mbox<designate_architecture_message>();
 	subscribe_mbox<harvest_map_changed_message>();
-	subscribe_mbox<seeds_map_changed_message>();
+	subscribe_mbox<planting_map_changed_message>();
 }
 
 void DijkstraMapsHandler::update(const double duration)
@@ -52,14 +52,14 @@ void DijkstraMapsHandler::update(const double duration)
 		update_block_map = true;
 		update_architecture = true;
 		update_harvest = true;
-		update_seeds = true;
+		update_planting = true;
 	});
 	each_mbox<pick_map_changed_message>([this](const pick_map_changed_message &msg)				 { update_pick_map	   = true; });
 	each_mbox<axemap_changed_message>([this](const axemap_changed_message &msg)					 { update_axe_map      = true; });
 	each_mbox<block_map_changed_message>([this](const block_map_changed_message & msg)			 { update_block_map    = true; });
 	each_mbox<designate_architecture_message>([this](const designate_architecture_message & msg) { update_architecture = true; });
 	each_mbox<harvest_map_changed_message>([this](const harvest_map_changed_message &msg)		 { update_harvest	   = true; });
-	each_mbox<seeds_map_changed_message>([this](const seeds_map_changed_message &msg)			 { update_seeds        = true; });
+	each_mbox<planting_map_changed_message>([this](const planting_map_changed_message &msg)		 { update_planting     = true; });
 
 	if (update_pick_map)
 	{
@@ -123,8 +123,7 @@ void DijkstraMapsHandler::update(const double duration)
 						targets.emplace_back(idx);
 					}
 				}
-			}
-		);
+			});
 
 		block_map.update(targets);
 		update_block_map = false;
@@ -152,7 +151,7 @@ void DijkstraMapsHandler::update(const double duration)
 		update_harvest = false;
 	}
 
-	if (update_seeds)
+	if (update_planting)
 	{
 		std::unordered_set<int> repeats;
 		std::vector<int> targets;
@@ -172,10 +171,9 @@ void DijkstraMapsHandler::update(const double duration)
 					targets.emplace_back(idx);
 				}
 			}
-		}
-		);
+		});
 
 		block_map.update(targets);
-		update_seeds = false;
+		update_planting = false;
 	}
 }

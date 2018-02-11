@@ -277,7 +277,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ECS\Components\Seed.h" />
-    <ClInclude Include="ECS\Messages\seeds_map_changed_message.h" />
+    <ClInclude Include="ECS\Messages\planting_map_changed_message.h" />
     <ClInclude Include="ECS\Systems\Gui\DesignStockpiles.h" />
     <ClInclude Include="dfr\DrawLayers.h" />
     <ClInclude Include="dfr\Layer.h" />
