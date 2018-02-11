@@ -45,13 +45,12 @@ namespace JobsBoard
 		// jobs with the same preference level
 		auto find = board.find(pfind->second);
 		
-		if (find == board.end()) 
-			board[pfind->second] = std::vector<JobRating>{ { blockDist + archDist, jt } };
+		const int distance = archDist + blockDist;
 
-		else
-			find->second.emplace_back(JobsBoard::JobRating{ blockDist + archDist, jt });
-
-		//board.insert(std::make_pair(blockDist + archDist, jt)); 
+		// Overwrite if distance to equally prefered job is less
+		// or add if job preference doesn't exist
+		if (find->second.distance > distance || find == board.end())
+			board[pfind->second] = JobRating{ distance, jt };
 	}
 }
 

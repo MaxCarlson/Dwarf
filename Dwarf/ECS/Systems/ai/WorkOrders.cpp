@@ -29,17 +29,12 @@ namespace JobsBoard
 
 			auto find = board.find(bestIdx);
 
-			if (find == board.end())
-				board[bestIdx] = std::vector<JobRating>{ { distance, jt } };
-			else
-				find->second.emplace_back(JobRating{ distance, jt });
-
-			//board.insert(std::make_pair(15, jt));
-			return;
-		}
-		
+			// Overwrite if distance to equally prefered job is less
+			// or add if job preference doesn't exist
+			if (find->second.distance > distance || find == board.end())
+				board[bestIdx] = JobRating{ distance, jt };
+		}	
 	}
-
 }
 
 

@@ -20,12 +20,13 @@ namespace JobsBoard
 	// main force in job decisions and are used to index the JobBoard map
 	struct JobRating
 	{
-		JobRating(const int distance, JobEvaluatorBase *eval) : distance(distance), eval(eval) {}
-		const int distance;
+		JobRating() = default;
+		JobRating(int distance, JobEvaluatorBase *eval) : distance(distance), eval(eval) {}
+		int distance;
 		JobEvaluatorBase * eval;
 	};
 
-	using JobBoard = std::map<int, std::vector<JobRating>, std::greater<int>>;
+	using JobBoard = std::map<int, JobRating, std::greater<int>>;
 
 	using JobEvaluator = std::function<void(JobBoard &, const Entity &, AiWorkComponent &, const Coordinates &, JobEvaluatorBase *)>;
 

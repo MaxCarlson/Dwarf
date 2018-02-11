@@ -50,12 +50,10 @@ namespace JobsBoard
 
 		const int distance = static_cast<int>(treeDist + axeDist);
 
-		if (find == board.end())
-			board[pfind->second] = std::vector<JobRating>{ { distance, jt } };
-		else
-			find->second.emplace_back(JobRating{ distance, jt });
-
-		//board.insert(std::make_pair(axeDist + treeDist, jt));
+		// Overwrite if distance to equally prefered job is less
+		// or add if job preference doesn't exist
+		if (find->second.distance > distance || find == board.end())
+			board[pfind->second] = JobRating{ distance, jt };
 	}
 }
 
