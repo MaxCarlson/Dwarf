@@ -18,9 +18,9 @@ void drawJobPrefrences(const Entity &e)
 	auto& skillPrefs = e.getComponent<AiWorkComponent>().jobPrefrences;
 
 	int i = 0;
-	for (const auto& sk : skills)
+	for (const auto& sk : skills) 
 	{
-		ImGui::Text(sk.c_str());
+		ImGui::Text(getSkillName(sk)->c_str());
 		ImGui::SameLine();
 
 		auto find = skillPrefs.find(sk);
@@ -47,11 +47,12 @@ void JobPreferencesUi::update(const double duration) // These preferece changes 
 	const auto& ents = getEntities();
 
 	// Build list of names
-	int i = 0;
+	int i = 1;
 	std::vector<std::string> names;
 	for (const auto& d : ents)
 	{
 		names.emplace_back(std::string("Dwarf") + std::to_string(i));
+		++i;
 	}
 
 	

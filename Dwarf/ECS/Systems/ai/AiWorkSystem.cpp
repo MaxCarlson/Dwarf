@@ -33,8 +33,8 @@ void AiWorkSystem::update(const double duration)
 			continue;
 
 
-		// Last job/s has the highest job preference
-		const std::vector<JobsBoard::JobRating>& favoredJobs = availableJobs.end()->second;
+		// First job/s with highest value has the highest job preference
+		const std::vector<JobsBoard::JobRating>& favoredJobs = availableJobs.begin()->second;
 
 		// Find the closest job 
 		int i = 0;

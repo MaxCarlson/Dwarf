@@ -22,7 +22,7 @@ namespace JobsBoard
 		if (!designations->workOrders.empty() && workOrderHelper->claimedWorkshops() < designations->workOrders.size()) 
 		{
 
-			const int bestIdx = workOrderHelper->scanForBestWorkOrder(prefs);
+			const auto [bestIdx, distance] = workOrderHelper->scanForBestWorkOrder(prefs);
 			
 			if (bestIdx < 1)
 				return;
@@ -30,7 +30,7 @@ namespace JobsBoard
 			auto find = board.find(bestIdx);
 
 			if (find == board.end())
-				board[pfind->second] = std::vector<JobRating>{ { distance, jt } };
+				board[bestIdx] = std::vector<JobRating>{ { distance, jt } };
 			else
 				find->second.emplace_back(JobRating{ distance, jt });
 

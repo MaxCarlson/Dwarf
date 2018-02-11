@@ -25,7 +25,7 @@ namespace JobsBoard
 		JobEvaluatorBase * eval;
 	};
 
-	using JobBoard = std::map<int, std::vector<JobRating>>;
+	using JobBoard = std::map<int, std::vector<JobRating>, std::greater<int>>;
 
 	using JobEvaluator = std::function<void(JobBoard &, const Entity &, AiWorkComponent &, const Coordinates &, JobEvaluatorBase *)>;
 
@@ -33,7 +33,7 @@ namespace JobsBoard
 	{
 		virtual bool has_tag(Entity e) = 0;
 		virtual void set_tag(Entity e) = 0;
-		virtual void exec(JobBoard & board, const Entity e, Coordinates & co) = 0;
+		virtual void exec(JobBoard & board, const Entity& e, AiWorkComponent &prefs, const Coordinates & co) = 0;
 	};
 
 	template<typename TAG>
@@ -55,7 +55,7 @@ namespace JobsBoard
 			e.activate();
 		}
 
-		virtual void exec(JobBoard & board, const Entity e, AiWorkComponent &prefs, const Coordinates & co) override final
+		virtual void exec(JobBoard & board, const Entity& e, AiWorkComponent &prefs, const Coordinates & co) override final
 		{
 			eval_func(board, e, prefs, co, this);
 		}

@@ -100,9 +100,12 @@ void WorkOrderHelper::update(const double duration)
 
 // Scan for the best workorder for the entity based on
 // job preferences!
-int WorkOrderHelper::scanForBestWorkOrder(const AiWorkComponent & prefs)
+// Returns the value of highest rated job and the distance the complete that job
+// Right now distance does not change. Will have to evaluate later and see if it's worth calculating distance for these
+std::pair<int, int> WorkOrderHelper::scanForBestWorkOrder(const AiWorkComponent & prefs)
 {
 	int best = 0;
+	constexpr int dist = 50; 
 	for (const auto& wo : designations->workOrders) // Only scan through active work orders
 	{	
 		const auto find = prefs.jobPrefrences.find(getReaction(wo.second)->skill);
@@ -114,7 +117,7 @@ int WorkOrderHelper::scanForBestWorkOrder(const AiWorkComponent & prefs)
 		}
 	}
 
-	return best;
+	return std::make_pair(best, dist);
 }
 
 std::unique_ptr<work_order_reaction> WorkOrderHelper::find_work_order_reaction(const WorkOrderTag & tag)

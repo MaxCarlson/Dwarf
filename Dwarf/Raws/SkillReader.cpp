@@ -6,6 +6,7 @@
 
 // All attributes in existance
 std::vector<std::string> attributes;
+// All skill tags
 std::vector<std::string> skills;
 
 // Indexed by skill tag
@@ -26,6 +27,16 @@ const std::vector<std::string>& allAttributes()
 const std::vector<std::string>& allSkills()
 {
 	return skills;
+}
+
+const std::string * getSkillName(const std::string & tag)
+{
+	auto find = skillNames.find(tag);
+
+	if (find != skillNames.end())
+		return &find->second;
+
+	return nullptr;
 }
 
 const std::vector<std::string>* attributesBySkill(const std::string & skill)
@@ -64,7 +75,7 @@ void readInSkills() noexcept
 		[](const auto &key) {},
 		luaParser
 		{
-			{ "name", [&tag]() { skillNames[tag] = lua_str(); skills.emplace_back(skillNames[tag]); } },
+			{ "name", [&tag]() { skillNames[tag] = lua_str(); skills.emplace_back(tag); } },
 
 			{ "s_attributes", [&tag]() {		// , &test, &keys
 				readLuaMultiTable("s_attributes",

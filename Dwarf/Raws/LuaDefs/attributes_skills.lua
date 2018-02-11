@@ -25,6 +25,11 @@ skills =
 		s_attributes = { { attr = "Strength" }, { attr = "Willpower" }, { attr = "Endurance" } }
 	},
 
+	wood_cutting = {
+		name = "Wood Cutting",
+		s_attributes = { { attr = "Endurance"}, { attr = "Toughness" } }
+	},
+
 	masonry = {
 		name = "Masonry",
 		s_attributes = {{ attr = "Agility" }, { attr = "Endurance" }}
