@@ -11,12 +11,14 @@
 #include "../../Messages/block_map_changed_message.h"
 #include "../../Messages/update_all_maps_message.h"
 #include "../../Messages/harvest_map_changed_message.h"
+#include "../../Messages/seeds_map_changed_message.h"
 
 DijkstraMap pick_map;
 DijkstraMap block_map;
 DijkstraMap architecture_map;
 DijkstraMap axe_map;
 DijkstraMap harvest_map;
+DijkstraMap seeds_map;
 
 
 DijkstraMapsHandler::~DijkstraMapsHandler()
@@ -38,6 +40,7 @@ void DijkstraMapsHandler::init()
 	subscribe_mbox<block_map_changed_message>();
 	subscribe_mbox<designate_architecture_message>();
 	subscribe_mbox<harvest_map_changed_message>();
+	subscribe_mbox<seeds_map_changed_message>();
 }
 
 void DijkstraMapsHandler::update(const double duration)
@@ -49,12 +52,14 @@ void DijkstraMapsHandler::update(const double duration)
 		update_block_map = true;
 		update_architecture = true;
 		update_harvest = true;
+		update_seeds = true;
 	});
 	each_mbox<pick_map_changed_message>([this](const pick_map_changed_message &msg)				 { update_pick_map	   = true; });
 	each_mbox<axemap_changed_message>([this](const axemap_changed_message &msg)					 { update_axe_map      = true; });
 	each_mbox<block_map_changed_message>([this](const block_map_changed_message & msg)			 { update_block_map    = true; });
 	each_mbox<designate_architecture_message>([this](const designate_architecture_message & msg) { update_architecture = true; });
 	each_mbox<harvest_map_changed_message>([this](const harvest_map_changed_message &msg)		 { update_harvest	   = true; });
+	each_mbox<seeds_map_changed_message>([this](const seeds_map_changed_message &msg)			 { update_seeds        = true; });
 
 	if (update_pick_map)
 	{
@@ -108,7 +113,7 @@ void DijkstraMapsHandler::update(const double duration)
 				if (e.hasComponent<Item>() && e.getComponent<Item>().tag == "block")
 				{
 					if (e.hasComponent<Claimed>() || ! e.hasComponent<PositionComponent>())
-						return; // Should these be continue's?
+						return; 
 
 					const auto idx = getIdx(e.getComponent<PositionComponent>().co);
 
@@ -145,5 +150,32 @@ void DijkstraMapsHandler::update(const double duration)
 
 		harvest_map.update(targets);
 		update_harvest = false;
+	}
+
+	if (update_seeds)
+	{
+		std::unordered_set<int> repeats;
+		std::vector<int> targets;
+
+		itemHelper.forEachItem([&targets, &repeats](const auto& e)
+		{
+			if (e.hasComponent<Item>() && e.getComponent<Item>().catagory.test(ITEM_SEED))
+			{
+				if (e.hasComponent<Claimed>() || !e.hasComponent<PositionComponent>())
+					return; 
+
+				const auto idx = getIdx(e.getComponent<PositionComponent>().co);
+
+				if (repeats.find(idx) == repeats.end())
+				{
+					repeats.insert(idx);
+					targets.emplace_back(idx);
+				}
+			}
+		}
+		);
+
+		block_map.update(targets);
+		update_seeds = false;
 	}
 }

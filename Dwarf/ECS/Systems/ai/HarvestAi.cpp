@@ -14,7 +14,8 @@
 #include "../../Components/Sentients/Stats.h"
 #include "ECS\Components\Sentients\AiWorkComponent.h"
 #include "../../Messages/harvest_map_changed_message.h"
-
+#include "Globals\ItemTypeCache.h"
+#include "ECS\Components\Seed.h"
 
 
 static const std::string skillName = "farming";
@@ -120,7 +121,9 @@ void HarvestAi::doHarvest(const Entity& e, const double& duration)
 				auto item = spawnItemOnGround(produce, getMaterialIdx(type), co, SpawnColor::ITEM_COLOR);  
 				
 				// Spawn seeds
-				spawnItemOnGround("seed", getMaterialIdx("organic"), co, SpawnColor::CUSTOM_COLOR, getItemDef(produce)->ch.fg);
+				auto seed = spawnItemOnGround("seed", getMaterialIdx("organic"), co, SpawnColor::CUSTOM_COLOR, find->ch.fg);
+				seed.addComponent<Seed>(plant->tag);
+				seed.activate();
 			}
 
 			giveWorkXp(stats, skillName, plant->difficulty);

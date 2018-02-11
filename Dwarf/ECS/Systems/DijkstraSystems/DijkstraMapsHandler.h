@@ -8,6 +8,7 @@ extern DijkstraMap block_map;
 extern DijkstraMap architecture_map;
 extern DijkstraMap axe_map;
 extern DijkstraMap harvest_map;
+extern DijkstraMap seeds_map;
 
 class PickMapSystem;
 
@@ -29,5 +30,6 @@ private:
 	bool update_block_map = true;
 	bool update_architecture = true;
 	bool update_harvest = true;
+	bool update_seeds = true;
 };
 

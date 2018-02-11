@@ -35,9 +35,12 @@ struct Designations
 
 	// Plants manually designated to be harvested
 	// +
-	// Plants that have been planted and have reached maturity
+	// Farming Plants that have been planted and have reached maturity
 	// will be auto added to this vector
 	std::vector<std::pair<bool, Coordinates>> harvest;
+
+	// Farming designations, indexed by idx, size_t is plant type
+	std::vector<std::pair<int, size_t>> planting;
 
 	// Map of items indexed by destination square that are currently claimed
 	// and or being taken to a stockpile.
@@ -47,7 +50,7 @@ struct Designations
 	template<class Archive>
 	void serialize(Archive& archive)
 	{
-		archive(mining, buildings, architecture, workOrders, harvest, hauling);
+		archive(mining, buildings, architecture, workOrders, harvest, planting, hauling);
 	}
 
 };
