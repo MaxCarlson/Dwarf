@@ -29,10 +29,15 @@ float findLongestSkillName()
 void drawJobPrefrences(const Entity &e)
 {
 	ImGui::Begin("Skills", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoCollapse);
+	ImGui::Text("If you set a preference to zero \ncreature will not perform jobs of that skill type");
 
 	auto& skillPrefs = e.getComponent<AiWorkComponent>().jobPrefrences;
+	auto& stats = e.getComponent<Stats>().skills;
 
-	static const float longestText = findLongestSkillName();
+	static const float longestText = findLongestSkillName() + 2.0;
+
+	ImGui::SetCursorPosX(336.0); // Make this dynamic with resizing@!!@!
+	ImGui::Text("lvl");
 
 	int i = 0;
 	for (const auto& sk : skills) 
@@ -44,6 +49,8 @@ void drawJobPrefrences(const Entity &e)
 		ImGui::SameLine();
 		ImGui::SetCursorPosX(longestText);
 
+		// Find and print (with a slider)
+		// job preferences
 		auto find = skillPrefs.find(sk);
 
 		if (find == skillPrefs.end())
@@ -52,9 +59,22 @@ void drawJobPrefrences(const Entity &e)
 		std::string label = "##JobPreferencesSkillsx" + std::to_string(i); 
 
 		ImGui::SliderInt(label.c_str(), &skillPrefs[sk], 0, 20);
-		++i;
+		ImGui::SameLine();
+	
+		// Find and print entity skill levels
+		std::string slvl = " ";
+		auto sfind = stats.find(sk);
 		
-		//ImGui::NewLine();
+		if (sfind != stats.end())
+			slvl += std::to_string(sfind->second.skillLvl);
+		else
+		{
+			stats[sk] = skill{ 1, 0 };
+			slvl += "1";
+		}
+	
+		ImGui::Text(slvl.c_str());
+		++i;
 	}
 
 	ImGui::End();
@@ -70,7 +90,6 @@ void JobPreferencesUi::update(const double duration) // These preferece changes 
 	}
 
 	ImGui::Text("Set Skill-Based job preferences");
-	ImGui::Text("If you set a preference to zero \ncreature will not perform jobs of that skill type");
 
 	const auto& ents = getEntities();
 
