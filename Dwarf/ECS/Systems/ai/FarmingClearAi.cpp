@@ -10,6 +10,7 @@
 #include "Raws\ItemRead.h"
 #include "Raws\Defs\ItemDefs.h"
 #include "Raws\Materials.h"
+#include "Raws\Defs\MaterialDef.h"
 #include "Helpers\Rng.h"
 #include "ECS\Components\Seed.h"
 #include "ECS\Systems\helpers\PathFinding.h"
@@ -143,6 +144,16 @@ inline void clearArea(const Entity &e, const Coordinates& co, WorkTemplate<FarmC
 		// Check if we need to add soil to farm or if plot already has it
 
 		const auto tileMat = getMaterial(region::getTileMaterial(co));
+
+		if (tileMat && (tileMat->matType == MAT_SOIL || tileMat->matType == MAT_SAND))
+			ffind->second.step = FarmInfo::PLANT;
+
+		else
+			ffind->second.step = FarmInfo::ADD_SOIL;
+
+
+		// Done
+		work.cancel_work(e);
 	}
 }
 

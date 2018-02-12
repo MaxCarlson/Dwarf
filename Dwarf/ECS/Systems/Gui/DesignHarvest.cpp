@@ -10,6 +10,7 @@
 #include "Map\Tile.h"
 #include "Designations.h"
 #include "ECS\Systems\helpers\SeedsHelper.h"
+#include "ECS\Components\Seed.h"
 #include <imgui.h>
 #include <imgui_tabs.h>
 #include <DwarfRender.h>
@@ -154,7 +155,7 @@ void DesignHarvest::designHarvest()
 	}
 }
 
-void loopThroughFarming(int type, Coordinates sml, Coordinates lrg, std::function<void(int, int, bool)> func)
+void loopThroughFarming(Coordinates sml, Coordinates lrg, std::function<void(int, int, bool)> func)
 {
 	adjustCoordinatesForLoop(sml, lrg);
 
@@ -163,6 +164,11 @@ void loopThroughFarming(int type, Coordinates sml, Coordinates lrg, std::functio
 		{
 			bool possible = true;
 			const int idx = getIdx({ x, y, sml.z });
+
+			auto farmFind = designations->farming.find(idx);
+
+			if (farmFind != designations->farming.end())
+				possible = false;
 
 			if (region::solid(idx)
 				|| region::flag({ x, y, sml.z }, region::CONSTRUCTION)
@@ -176,6 +182,14 @@ void loopThroughFarming(int type, Coordinates sml, Coordinates lrg, std::functio
 void DesignHarvest::designFarming()
 {
 	using namespace mouse;
+
+	ImGui::Text("Designate a farm plot of an availble seed type");
+
+	enum { DRAW, ERASE };
+
+	static int radioEraseOrDraw = 0;
+	ImGui::RadioButton("Draw", &radioEraseOrDraw, DRAW);
+	ImGui::RadioButton("Erase", &radioEraseOrDraw, ERASE);
 
 	// Build a container of plant names that we have seeds for,
 	// as well as plant tags and how many seeds for that tag
@@ -197,17 +211,84 @@ void DesignHarvest::designFarming()
 		}
 	});
 
-	// Draw farm area
-	if (click != EMPTY_COORDINATES)
-	{
-		//loopThroughFarming(type)
+	// Add seed names to vector so we can make it filterable
+	static ImGuiTextFilter seedFilter;
+	seedFilter.Draw();
 
+	ImGui::Text("Qty:");
+
+	// Seed names that passed the filter
+	// and the map index of those that did, with identical vector idx's
+	std::vector<std::string> seedTags;
+	std::vector<std::string> seedNames;
+	for (const auto& s : availibleSeeds)
+	{
+		if (seedFilter.PassFilter(s.first.c_str()))
+		{
+			seedNames.emplace_back(std::to_string(s.second.second) + " " + s.first);
+			seedTags.emplace_back(s.first);
+		}
 	}
 
+	static int selected = 0;
+	ImGui::ListBox("Availible Seeds", &selected, seedNames);
 
+	const int selectedSeedQty = availibleSeeds[seedTags[selected]].second;
 
+	// Draw farm area
+	int totalArea = 0;
+	if (click != EMPTY_COORDINATES && availibleSeeds.size() > 0)
+	{
+		if (radioEraseOrDraw == DRAW)
+		{
+			loopThroughFarming(mouse::mousePos, click, [&totalArea, &selectedSeedQty](int x, int y, bool possible)
+			{
+				if (possible)
+				{
+					overlayTerm->setChar(x, y, { SQUARE_X_TEX, { 0, 235, 0}, {} });
+					++totalArea;
+				}
+				else
+					overlayTerm->setChar(x, y, { SQUARE_X_TEX, { 235, 0, 0}, {} });
+			});
+		}
+	}
+
+	if (totalArea > selectedSeedQty)
+		ImGui::Text("You don't have enough seeds!");
+
+	// Still allow user to designate a farm plot of
+	// a seed type if they don't have enough seeds. They only need 1
 	if (confirm)
 	{
+		const int z = click.z;
+		loopThroughFarming(mouse::mousePos, click, [&z, &seedTags](int x, int y, bool possible)
+		{
+			auto idx = getIdx({ x, y, z });
+			auto farmFind = designations->farming.find(idx);
+
+			if (farmFind == designations->farming.end())
+			{
+				size_t seedId = 0;
+				bool found = false;
+				seedsHelper.forAllUnclaimedSeeds([&found, &seedTags, &seedId](Entity e)
+				{
+					auto& tag = e.getComponent<Seed>().plantTag;
+					if (!found && tag == seedTags[selected])
+					{
+						found = true;
+						e.addComponent<Claimed>();
+					}
+				});
+
+				if (found)
+					designations->farming[idx] = FarmInfo{ FarmInfo::CLEAR, seedId, seedTags[selected] };
+			}
+
+			else if (radioEraseOrDraw == ERASE)
+				designations->farming.erase(idx);
+
+		});
 
 		confirm = false;
 		click = EMPTY_COORDINATES;
