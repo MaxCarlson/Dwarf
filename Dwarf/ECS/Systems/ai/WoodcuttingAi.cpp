@@ -41,19 +41,7 @@ namespace JobsBoard
 				treeDist = d;		
 		}
 
-		auto pfind = prefs.jobPrefrences.find(jobSkill);
-
-		if (pfind->second < 1 || pfind == prefs.jobPrefrences.end())
-			return;
-
-		auto find = board.find(pfind->second);
-
-		const int distance = static_cast<int>(treeDist + axeDist);
-
-		// Overwrite if distance to equally prefered job is less
-		// or add if job preference doesn't exist
-		if (find->second.distance > distance || find == board.end())
-			board[pfind->second] = JobRating{ distance, jt };
+		prefereceAndSubmitJob(board, prefs, jt, treeDist + axeDist);
 	}
 }
 

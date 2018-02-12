@@ -45,19 +45,9 @@ namespace JobsBoard
 		// who should do which work?
 
 		// Find total distance for job
-		int distance = miningMap[getIdx(co)] + pickDistance;
+		const int distance = miningMap[getIdx(co)] + pickDistance;
 
-		auto pfind = prefs.jobPrefrences.find(jobSkill);
-
-		if (pfind->second < 1 || pfind == prefs.jobPrefrences.end())
-			return;
-
-		auto find = board.find(pfind->second);
-
-		// Overwrite if distance to equally prefered job is less
-		// or add if job preference doesn't exist
-		if (find->second.distance > distance || find == board.end())
-			board[pfind->second] = JobRating{ distance, jt };
+		prefereceAndSubmitJob(board, prefs, jt, distance);
 	}
 }
 

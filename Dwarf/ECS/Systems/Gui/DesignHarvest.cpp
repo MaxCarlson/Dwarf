@@ -9,6 +9,7 @@
 #include "KeyDampener.h"
 #include "Map\Tile.h"
 #include "Designations.h"
+#include "ECS\Systems\helpers\SeedsHelper.h"
 #include <imgui.h>
 #include <imgui_tabs.h>
 #include <DwarfRender.h>
@@ -153,7 +154,7 @@ void DesignHarvest::designHarvest()
 	}
 }
 
-void loopThroughFarming(int type, Coordinates sml, Coordinates lrg, std::function<void(int, int, bool, std::string)> func)
+void loopThroughFarming(int type, Coordinates sml, Coordinates lrg, std::function<void(int, int, bool)> func)
 {
 	adjustCoordinatesForLoop(sml, lrg);
 
@@ -161,12 +162,40 @@ void loopThroughFarming(int type, Coordinates sml, Coordinates lrg, std::functio
 		for (int y = sml.y; y <= lrg.y; ++y)
 		{
 			bool possible = true;
+			const int idx = getIdx({ x, y, sml.z });
+
+			if (region::solid(idx)
+				|| region::flag({ x, y, sml.z }, region::CONSTRUCTION)
+				|| region::getTileType(idx) != region::TileTypes::FLOOR)
+				possible = false;
+
+			func(x, y, possible);
 		}
 }
 
 void DesignHarvest::designFarming()
 {
 	using namespace mouse;
+
+	// Build a container of plant names that we have seeds for,
+	// as well as plant tags and how many seeds for that tag
+	std::map<std::string, std::pair<std::string, int>> availibleSeeds;
+	seedsHelper.forAllUnclaimedSeeds([&availibleSeeds](Entity e)
+	{
+		auto& seed = e.getComponent<Seed>();
+		
+		auto plant = getPlantDef(getPlantIdx(seed.plantTag));
+
+		if (plant)
+		{
+			auto find = availibleSeeds.find(seed.plantTag);
+
+			if (find == availibleSeeds.end())
+				availibleSeeds[plant->name] = std::make_pair(seed.plantTag, 1);
+			else
+				++find->second.second;
+		}
+	});
 
 	// Draw farm area
 	if (click != EMPTY_COORDINATES)

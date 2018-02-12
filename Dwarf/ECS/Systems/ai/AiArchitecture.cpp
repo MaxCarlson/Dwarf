@@ -34,23 +34,7 @@ namespace JobsBoard
 		if ( archDist > MAX_DIJKSTRA_DISTANCE - 1)
 			return;
 
-		// Find the entities preference for jobs with this skill
-		auto pfind = prefs.jobPrefrences.find(jobSkill);
-
-		// If we can't find the skill or the preference is at zero skip the job
-		if (pfind->second < 1 || pfind == prefs.jobPrefrences.end())
-			return;
-
-		// Find out if this entities job board has any other 
-		// jobs with the same preference level
-		auto find = board.find(pfind->second);
-		
-		const int distance = archDist + blockDist;
-
-		// Overwrite if distance to equally prefered job is less
-		// or add if job preference doesn't exist
-		if (find->second.distance > distance || find == board.end())
-			board[pfind->second] = JobRating{ distance, jt };
+		prefereceAndSubmitJob(board, prefs, jt, blockDist + archDist);
 	}
 }
 

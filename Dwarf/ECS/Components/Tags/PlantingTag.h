@@ -6,6 +6,8 @@ struct PlantingTag : public Component
 
 	enum steps
 	{
+		FIND_SEEDS,
+		GOTO_SEEDS,
 		FIND_PLANTING,
 		PLANT,
 	};

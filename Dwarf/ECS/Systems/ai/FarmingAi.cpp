@@ -9,26 +9,16 @@
 #include "ECS\Components\Sentients\Stats.h"
 #include "../DijkstraSystems/DijkstraMapsHandler.h"
 #include "ECS\Messages\planting_map_changed_message.h"
+#include "ECS\Systems\helpers\SeedsHelper.h"
 
 static const std::string jobSkill = "farming";
 
-void SeedsHelper::forAllSeeds(std::function<void(Entity)> func)
-{
-	for (const auto& e : getEntities())
-		func(e);
-}
 
 namespace JobsBoard
 {
 	void evaluate_farming(JobBoard & board, const Entity & e, AiWorkComponent &prefs, const Coordinates& co, JobEvaluatorBase * jt)
 	{
 		if (designations->planting.empty())
-			return;
-
-		// Distance from planting location to entity
-		auto distance = planting_map.get(getIdx(co));
-
-		if (distance > MAX_DIJKSTRA_DISTANCE - 1)
 			return;
 
 		// Find numerical job rating value for this type of work
@@ -39,10 +29,17 @@ namespace JobsBoard
 
 		auto find = board.find(pfind->second);
 
-		// Overwrite if distance to equally prefered job is less
-		// or add if job preference doesn't exist
-		if (find->second.distance > distance || find == board.end())
-			board[pfind->second] = JobRating{ distance, jt };
+		for (const auto& f : designations->farming)
+		{
+			if (f.second.step == FarmInfo::PLANT)
+			{
+				auto distance = get_3D_distance(co, idxToCo(f.first));
+				// Overwrite if distance to equally prefered job is less
+				// or add if job preference doesn't exist
+				if (find->second.distance > distance || find == board.end())
+					board[pfind->second] = JobRating{ distance, jt };
+			}
+		}
 	}
 }
 
@@ -56,6 +53,14 @@ void FarmingAi::update(const double duration)
 		doWork(e, duration);
 }
 
+void findSeeds(const Coordinates& co, PlantingTag &tag)
+{
+	seedsHelper.forAllUnclaimedSeeds([&tag](Entity s)
+	{
+		
+	});
+}
+
 void FarmingAi::doWork(Entity & e, const double& duration)
 {
 	WorkTemplate<PlantingTag> work;
@@ -63,6 +68,26 @@ void FarmingAi::doWork(Entity & e, const double& duration)
 	auto& co = e.getComponent<PositionComponent>().co;
 	auto& tag = e.getComponent<PlantingTag>();
 
+	switch (tag.step)
+	{
+	case PlantingTag::FIND_SEEDS:
+		findSeeds(co, tag);
+		break;
+
+	case PlantingTag::GOTO_SEEDS:
+
+		break;
+
+	case PlantingTag::FIND_PLANTING:
+
+		break;
+
+	case PlantingTag::PLANT:
+
+		break;
+	}
+
+	/*
 	if (tag.step == PlantingTag::FIND_PLANTING)
 	{
 		work.followMap(harvest_map, e, co, [&e, &work]()
@@ -143,5 +168,6 @@ void FarmingAi::doWork(Entity & e, const double& duration)
 		work.cancel_work(e);
 		return;
 	}
+	*/
 }
 

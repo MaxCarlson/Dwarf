@@ -324,6 +324,9 @@
     <ClCompile Include="ECS\Systems\Gui\DesignStockpiles.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ECS\Systems\helpers\SeedsHelper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ECS\EntityManager.h">
@@ -1038,6 +1041,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ECS\Messages\planting_map_changed_message.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Systems\helpers\SeedsHelper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

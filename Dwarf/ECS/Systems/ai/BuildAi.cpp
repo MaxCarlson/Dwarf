@@ -38,20 +38,9 @@ namespace JobsBoard
 
 		if (pos)
 		{
-			auto dist = static_cast<int>(get_3D_distance(co, *pos));
+			auto distance = static_cast<int>(get_3D_distance(co, *pos));
 
-			auto pfind = prefs.jobPrefrences.find(jobSkill);
-
-			// Skill doesn't exist or entity preference is less than one
-			if (pfind->second < 1 || pfind == prefs.jobPrefrences.end()) 
-				return;
-
-			auto find = board.find(pfind->second);
-
-			// Overwrite if distance to equally prefered job is less
-			// or add if job preference doesn't exist
-			if (find->second.distance > dist || find == board.end())
-				board[pfind->second] = JobRating{ dist, jt };
+			prefereceAndSubmitJob(board, prefs, jt, distance);
 		}
 	}
 }

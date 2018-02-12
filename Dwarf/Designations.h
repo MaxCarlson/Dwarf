@@ -7,6 +7,29 @@
 #include <vector>
 #include <memory>
 
+struct FarmInfo // Move this to a sepperate file. Make a file for designation types?
+{
+	FarmInfo() = default;
+
+	enum Steps
+	{
+		CLEAR,
+		ADD_SOIL,
+		PLANT,
+		GROWING
+	};
+
+	Steps step = CLEAR;
+
+	size_t seedId = 0;
+	std::string seedType = "";
+
+	template<class Archive>
+	void serialize(Archive &archive)
+	{
+		archive(step, seedId, seedType);
+	}
+};
 
 struct Designations
 {
@@ -42,6 +65,8 @@ struct Designations
 	// Farming designations, indexed by idx, size_t is plantDefIdx (which will eventually be used for finding seeds!)
 	std::vector<std::pair<int, size_t>> planting;
 
+	std::map<int, FarmInfo> farming;
+
 	// Map of items indexed by destination square that are currently claimed
 	// and or being taken to a stockpile.
 	// size_t is the stockpile id
@@ -50,7 +75,7 @@ struct Designations
 	template<class Archive>
 	void serialize(Archive& archive)
 	{
-		archive(mining, buildings, architecture, workOrders, harvest, planting, hauling);
+		archive(mining, buildings, architecture, workOrders, harvest, planting, farming, hauling);
 	}
 
 };

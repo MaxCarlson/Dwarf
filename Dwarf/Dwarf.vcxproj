@@ -167,6 +167,7 @@
     <ClCompile Include="ECS\Systems\Gui\DesignWoodcutting.cpp" />
     <ClCompile Include="ECS\Systems\Gui\DesignWorkOrders.cpp" />
     <ClCompile Include="ECS\Systems\Gui\CameraSystem.cpp" />
+    <ClCompile Include="ECS\Systems\helpers\SeedsHelper.cpp" />
     <ClCompile Include="Globals\Camera.cpp" />
     <ClCompile Include="dfr\colors.cpp" />
     <ClCompile Include="dfr\DwarfRender.cpp" />
@@ -289,6 +290,7 @@
     <ClInclude Include="ECS\Systems\Gui\DesignWoodcutting.h" />
     <ClInclude Include="ECS\Systems\Gui\DesignWorkOrders.h" />
     <ClInclude Include="ECS\Systems\Gui\CameraSystem.h" />
+    <ClInclude Include="ECS\Systems\helpers\SeedsHelper.h" />
     <ClInclude Include="Globals\Camera.h" />
     <ClInclude Include="dfr\colors.h" />
     <ClInclude Include="dfr\DwarfRender.h" />

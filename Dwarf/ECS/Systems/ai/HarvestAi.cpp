@@ -31,18 +31,7 @@ namespace JobsBoard
 		if (distance > MAX_DIJKSTRA_DISTANCE - 1)
 			return;
 
-		// Find numerical job rating value for this type of work
-		auto pfind = prefs.jobPrefrences.find(skillName);
-
-		if (pfind->second < 1 || pfind == prefs.jobPrefrences.end())
-			return;
-
-		auto find = board.find(pfind->second);
-
-		// Overwrite if distance to equally prefered job is less
-		// or add if job preference doesn't exist
-		if (find->second.distance > distance || find == board.end())
-			board[pfind->second] = JobRating{ distance, jt };
+		prefereceAndSubmitJob(board, prefs, jt, distance);
 	}
 }
 
@@ -125,7 +114,7 @@ void HarvestAi::doHarvest(const Entity& e, const double& duration)
 				auto item = spawnItemOnGround(produce, getMaterialIdx(type), co, SpawnColor::ITEM_COLOR);  
 				
 				// Spawn seeds
-				auto seed = spawnItemOnGround("seed", getMaterialIdx("organic"), co, SpawnColor::CUSTOM_COLOR, find->ch.fg);
+				auto seed = spawnItemOnGround("seed", getMaterialIdx(type), co, SpawnColor::CUSTOM_COLOR, find->ch.fg);
 				seed.addComponent<Seed>(plant->tag);
 				seed.activate();
 			}

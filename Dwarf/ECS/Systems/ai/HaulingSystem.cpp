@@ -32,18 +32,8 @@ namespace JobsBoard
 
 		// Total distance
 		const int distance = int( idist + get_3D_distance(co2, e.getWorld().getEntity(storeableItems.back().itemId).getComponent<PositionComponent>().co) );
-
-		auto pfind = prefs.jobPrefrences.find(jobName);
-
-		if (pfind->second < 1 || pfind == prefs.jobPrefrences.end())
-			return;
-
-		auto find = board.find(pfind->second);
-
-		// Overwrite if distance to equally prefered job is less
-		// or add if job preference doesn't exist
-		if (find->second.distance > distance || find == board.end())
-			board[pfind->second] = JobRating{ distance, jt };
+		
+		prefereceAndSubmitJob(board, prefs, jt, distance);
 	}
 }
 

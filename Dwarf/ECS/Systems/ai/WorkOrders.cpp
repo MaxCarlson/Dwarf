@@ -29,7 +29,7 @@ namespace JobsBoard
 
 			auto find = board.find(bestIdx);
 
-			// Overwrite if distance to equally prefered job is less
+			// Overwrite if distance to equally prefered job is greater
 			// or add if job preference doesn't exist
 			if (find->second.distance > distance || find == board.end())
 				board[bestIdx] = JobRating{ distance, jt };

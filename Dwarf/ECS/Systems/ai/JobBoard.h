@@ -72,6 +72,22 @@ namespace JobsBoard
 		evaluators.emplace_back(std::move(base));
 	}
 
+	inline void prefereceAndSubmitJob(JobBoard &board, AiWorkComponent &prefs, JobEvaluatorBase * jt, const int distance)
+	{
+		// Find numerical job rating value for this type of work
+		auto pfind = prefs.jobPrefrences.find(jobSkill);
+
+		if (pfind->second < 1 || pfind == prefs.jobPrefrences.end())
+			return;
+
+		auto find = board.find(pfind->second);
+
+		// Overwrite if distance to equally prefered job is less
+		// or add if job preference doesn't exist
+		if (find->second.distance > distance || find == board.end())
+			board[pfind->second] = JobRating{ distance, jt };
+	}
+
 	bool is_working(Entity e);
 	void evaluate(JobBoard &board, const Entity &entity, const Coordinates &co);
 }
