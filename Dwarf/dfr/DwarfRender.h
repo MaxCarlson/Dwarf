@@ -37,5 +37,7 @@ namespace dfr
 
 	inline Layer * layer(const int id) { return gui->getLayer(id); }
 	inline Terminal * term(const int id) { return gui->getLayer(id)->terminal.get(); }
+
+	void takeScreenShot(std::string fileName);
 }
 

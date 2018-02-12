@@ -17,7 +17,7 @@
 #include "ECS\Components\Sentients\AiWorkComponent.h"
 
 #include "Raws\SkillReader.h"
-
+#include <SFML\Graphics\Color.hpp>
 EntityFactory::EntityFactory()
 {
 }
@@ -28,7 +28,7 @@ Entity createDwarf(DwarfCreationObj dwarfConstruct)
 {
 	Entity dwarf = world.createEntity();
 
-	dwarf.addComponent<RenderComponent>(vchar{ 769, color_from_name("default"), color_from_name("default") });
+	dwarf.addComponent<RenderComponent>(vchar{ 769, color_from_name("default"), sf::Color::Transparent.toInteger() });
 	dwarf.addComponent<PositionComponent>(dwarfConstruct.co);
 	dwarf.addComponent<AiWorkComponent>();
 

@@ -21,6 +21,8 @@ namespace dfr
 	std::unique_ptr<sf::RenderWindow> mainWindow;
 	std::unique_ptr<Terminal> terminal;
 	std::unique_ptr<DrawLayers> gui;
+	bool screenShot = false;
+	std::string screenName;
 
 	sf::RenderWindow * getWindow()
 	{
@@ -120,8 +122,21 @@ namespace dfr
 
 			mainWindow->display();
 
+			if (screenShot)
+			{
+				screenShot = false;
+				sf::Image screen = getWindow()->capture();
+				screen.saveToFile(screenName);
+				screenName = "";
+			}
+
 			duration = now() - startTime; 
 		}
+	}
+	void takeScreenShot(std::string fileName)
+	{
+		screenShot = true;
+		screenName = fileName;
 	}
 }
 
