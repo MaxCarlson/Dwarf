@@ -42,7 +42,7 @@ items["charcoal"] = {
 };
 
 items["stone_boulder"] = {
-	name = "A boulder",
+	name = "boulder",
 	description = "A chunk of rock",
 	itemType = {"component"},
 	glyph = glyphs["stone_boulder"],
@@ -50,6 +50,26 @@ items["stone_boulder"] = {
 	background = "grey",
 	stockpile = stockpiles["stone"].id
 };
+
+items["soil"] = {
+	name = "Soil",
+	description = "Has worms in it!",
+	itemType = {"soil"},
+	glyph = glyphs["bag"],
+	foreground = "brown",
+	background = "brown",
+	stockpile = stockpiles["soil"].id
+}
+
+items["sand"] = {
+	name = "Sand",
+	description = "Course and granular",
+	itemType = {"component"},
+	glyph = glyphs["bag"],
+	foreground = "yellow",
+	background = "black",
+	stockpile = stockpiles["sand"].id
+}
 
 -- Used for representing a number of things,
 -- from metal bars to proccessed stone. 

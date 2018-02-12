@@ -74,6 +74,7 @@ void readInItems() noexcept
 				readLuaInnerT("itemType", [&c](auto type) {
 					if (type == "choppingTool") c.categories.set(TOOL_CHOPPING);
 					if (type == "diggingTool")  c.categories.set(TOOL_DIGGING);
+					if (type == "farmingTool")  c.categories.set(TOOL_FARMING);
 					if (type == "food")		    c.categories.set(ITEM_FOOD);
 					if (type == "seeds")	    c.categories.set(ITEM_SEED);
 					});

@@ -156,6 +156,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ECS\Components\Seed.cpp" />
     <ClCompile Include="ECS\Systems\Gui\DesignStockpiles.cpp" />
     <ClCompile Include="dfr\DrawLayers.cpp" />
     <ClCompile Include="dfr\Layer.cpp" />
@@ -168,6 +169,8 @@
     <ClCompile Include="ECS\Systems\Gui\DesignWorkOrders.cpp" />
     <ClCompile Include="ECS\Systems\Gui\CameraSystem.cpp" />
     <ClCompile Include="ECS\Systems\helpers\SeedsHelper.cpp" />
+    <ClCompile Include="ECS\Systems\ai\FarmingClearAi.cpp" />
+    <ClCompile Include="ECS\Systems\ai\FarmingSoilAi.cpp" />
     <ClCompile Include="Globals\Camera.cpp" />
     <ClCompile Include="dfr\colors.cpp" />
     <ClCompile Include="dfr\DwarfRender.cpp" />
@@ -277,6 +280,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ECS\Components\Seed.h" />
+    <ClInclude Include="ECS\Components\Tags\FarmClearTag.h" />
+    <ClInclude Include="ECS\Components\Tags\FarmSoilTag.h" />
+    <ClInclude Include="ECS\Messages\hoe_map_changed_message.h" />
     <ClInclude Include="ECS\Messages\planting_map_changed_message.h" />
     <ClInclude Include="ECS\Systems\Gui\DesignStockpiles.h" />
     <ClInclude Include="dfr\DrawLayers.h" />
@@ -291,6 +297,8 @@
     <ClInclude Include="ECS\Systems\Gui\DesignWorkOrders.h" />
     <ClInclude Include="ECS\Systems\Gui\CameraSystem.h" />
     <ClInclude Include="ECS\Systems\helpers\SeedsHelper.h" />
+    <ClInclude Include="ECS\Systems\ai\FarmingClearAi.h" />
+    <ClInclude Include="ECS\Systems\ai\FarmingSoilAi.h" />
     <ClInclude Include="Globals\Camera.h" />
     <ClInclude Include="dfr\colors.h" />
     <ClInclude Include="dfr\DwarfRender.h" />

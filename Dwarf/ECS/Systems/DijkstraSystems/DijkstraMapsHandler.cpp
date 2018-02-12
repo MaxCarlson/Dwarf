@@ -12,14 +12,15 @@
 #include "../../Messages/update_all_maps_message.h"
 #include "../../Messages/harvest_map_changed_message.h"
 #include "../../Messages/planting_map_changed_message.h"
+#include "../../Messages/hoe_map_changed_message.h"
 
 DijkstraMap pick_map;
+DijkstraMap axe_map;
+DijkstraMap hoe_map;
 DijkstraMap block_map;
 DijkstraMap architecture_map;
-DijkstraMap axe_map;
 DijkstraMap harvest_map;
 DijkstraMap planting_map;
-
 
 DijkstraMapsHandler::~DijkstraMapsHandler()
 {
@@ -30,12 +31,16 @@ void DijkstraMapsHandler::init()
 	// Init maps
 	pick_map.init();
 	axe_map.init();
+	hoe_map.init();
 	block_map.init();
 	architecture_map.init();
+	harvest_map.init();
+	planting_map.init();
 	
 	// Subscribe to messages
 	subscribe_mbox<update_all_maps_message>();
 	subscribe_mbox<pick_map_changed_message>();
+	subscribe_mbox<hoe_map_changed_message>();
 	subscribe_mbox<axemap_changed_message>();
 	subscribe_mbox<block_map_changed_message>();
 	subscribe_mbox<designate_architecture_message>();
@@ -49,6 +54,7 @@ void DijkstraMapsHandler::update(const double duration)
 	{
 		update_pick_map = true;
 		update_axe_map = true;
+		update_hoe = true;
 		update_block_map = true;
 		update_architecture = true;
 		update_harvest = true;
@@ -56,6 +62,7 @@ void DijkstraMapsHandler::update(const double duration)
 	});
 	each_mbox<pick_map_changed_message>([this](const pick_map_changed_message &msg)				 { update_pick_map	   = true; });
 	each_mbox<axemap_changed_message>([this](const axemap_changed_message &msg)					 { update_axe_map      = true; });
+	each_mbox<hoe_map_changed_message>([this](const hoe_map_changed_message &msg) { update_hoe = true; });
 	each_mbox<block_map_changed_message>([this](const block_map_changed_message & msg)			 { update_block_map    = true; });
 	each_mbox<designate_architecture_message>([this](const designate_architecture_message & msg) { update_architecture = true; });
 	each_mbox<harvest_map_changed_message>([this](const harvest_map_changed_message &msg)		 { update_harvest	   = true; });
@@ -101,6 +108,27 @@ void DijkstraMapsHandler::update(const double duration)
 		axe_map.update(targets);
 
 		update_axe_map = false;
+	}
+
+	if (update_hoe)
+	{
+		std::vector<int> targets;
+
+		itemHelper.forEachItem([&targets](auto& e) {
+
+			auto& item = e.getComponent<Item>();
+
+			if (!item.catagory.test(TOOL_FARMING) || e.hasComponent<Claimed>())
+				return; // Should these be continue's?
+
+			auto& co = e.getComponent<PositionComponent>().co;
+
+			targets.emplace_back(getIdx(co));
+		});
+
+		hoe_map.update(targets);
+
+		update_hoe = false;
 	}
 
 	if (update_block_map)

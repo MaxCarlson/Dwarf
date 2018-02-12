@@ -124,10 +124,14 @@ namespace dfr
 
 			if (screenShot)
 			{
-				screenShot = false;
-				sf::Image screen = getWindow()->capture();
+				sf::Vector2u windowSize = mainWindow->getSize();
+				sf::Texture texture;
+				texture.create(windowSize.x, windowSize.y);
+				texture.update(*mainWindow);
+				sf::Image screen = texture.copyToImage();
 				screen.saveToFile(screenName);
 				screenName = "";
+				screenShot = false;
 			}
 
 			duration = now() - startTime; 

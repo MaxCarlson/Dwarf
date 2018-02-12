@@ -33,7 +33,7 @@ namespace JobsBoard
 		{
 			if (f.second.step == FarmInfo::PLANT)
 			{
-				auto distance = get_3D_distance(co, idxToCo(f.first));
+				const auto distance = static_cast<int>(get_3D_distance(co, idxToCo(f.first)));
 				// Overwrite if distance to equally prefered job is less
 				// or add if job preference doesn't exist
 				if (find->second.distance > distance || find == board.end())

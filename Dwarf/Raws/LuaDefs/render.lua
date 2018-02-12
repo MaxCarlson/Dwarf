@@ -5,6 +5,7 @@ glyphs = {
 	mined_gem = 4,
 	stone_boulder = 7,
 	nest_box = 8,
+	bag = 11,
 	leaf = 13,
 	star = 15,
 	wood_logs = 22,

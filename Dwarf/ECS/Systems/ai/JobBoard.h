@@ -72,7 +72,7 @@ namespace JobsBoard
 		evaluators.emplace_back(std::move(base));
 	}
 
-	inline void prefereceAndSubmitJob(JobBoard &board, AiWorkComponent &prefs, JobEvaluatorBase * jt, const int distance)
+	inline void prefereceAndSubmitJob(JobBoard &board, AiWorkComponent &prefs, JobEvaluatorBase * jt, const std::string& jobSkill, const int distance)
 	{
 		// Find numerical job rating value for this type of work
 		auto pfind = prefs.jobPrefrences.find(jobSkill);

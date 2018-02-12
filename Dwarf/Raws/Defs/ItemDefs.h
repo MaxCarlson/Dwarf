@@ -8,8 +8,9 @@ constexpr int NUMBER_OF_ITEM_CATEGORIES = 64;
 constexpr int COMPONENT = 0;
 constexpr int TOOL_DIGGING = 1;
 constexpr int TOOL_CHOPPING = 2;
-constexpr int ITEM_FOOD = 3;
-constexpr int ITEM_SEED = 4;
+constexpr int TOOL_FARMING = 3;
+constexpr int ITEM_FOOD = 4;
+constexpr int ITEM_SEED = 5;
 
 
 struct StockpileDef

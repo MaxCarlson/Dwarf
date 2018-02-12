@@ -18,3 +18,13 @@ items["hatchet"] = {
 	background = "grey",
 	stockpile = stockpiles["tool"].id
 };
+
+items["hoe"] = {
+	name = "Hoe",
+	description = "Plow the earth with this",
+	itemType = {"farmingTool"},
+	glyph = glyphs["pickaxe"],
+	foreground = "silver",
+	background = "brown",
+	stockpile = stockpiles["tool"].id
+};

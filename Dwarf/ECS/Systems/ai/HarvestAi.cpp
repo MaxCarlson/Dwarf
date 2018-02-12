@@ -31,7 +31,7 @@ namespace JobsBoard
 		if (distance > MAX_DIJKSTRA_DISTANCE - 1)
 			return;
 
-		prefereceAndSubmitJob(board, prefs, jt, distance);
+		prefereceAndSubmitJob(board, prefs, jt, skillName, distance);
 	}
 }
 

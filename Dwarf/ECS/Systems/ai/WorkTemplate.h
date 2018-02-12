@@ -13,10 +13,23 @@
 #include "../../Components/Sentients/Inventory.h"
 #include "Globals\GlobalWorld.h"
 
-template<typename TAG>
+template<typename TAG> // Should this hold a refernce to the Entity so we can stop passing it?
 class WorkTemplate
 {
 public:
+
+	inline bool hasCorrectTool(const Entity& e, const int toolType)
+	{
+		const auto& inv = e.getComponent<Inventory>();
+		const auto& tid = inv.inventory[SLOT_TOOL];
+
+		auto& tent = world.getEntity(tid);
+
+		if (!tent.hasComponent<Item>())
+			return false;
+
+		return tent.getComponent<Item>().catagory.test(toolType);
+	}
 
 	// Used when we want to pickup a tool or item from a Dijkstra map, or just a known location
 	// without knowing the actual ID of the item
@@ -97,9 +110,32 @@ public:
 	}
 
 	template<typename CANCEL, typename SUCCESS>
-	void followPath(const Entity& e, Coordinates co, Coordinates dest, const CANCEL &cancel, const SUCCESS &success)
+	void followPath(MovementComponent &mov, Coordinates co, Coordinates dest, const CANCEL &cancel, const SUCCESS &success)
 	{
+		// Don't interrupt progress
+		if (mov.progress)
+			return;
 
+		if (co == dest)
+		{
+			success();
+			return;
+		}
+
+		// Try to find path again
+		if (mov.path.empty())
+		{
+			auto path = findPath(co, dest);
+
+			if (path->failed)
+			{
+				cancel();
+				return;
+			}
+
+			mov.path = path->path; // Need to make mov.path into a unique ptr so we're not copying the paths
+			return;
+		}
 	}
 
 	inline void cancel_work(Entity e)

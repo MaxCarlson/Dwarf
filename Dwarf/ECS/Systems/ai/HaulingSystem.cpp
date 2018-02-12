@@ -33,7 +33,7 @@ namespace JobsBoard
 		// Total distance
 		const int distance = int( idist + get_3D_distance(co2, e.getWorld().getEntity(storeableItems.back().itemId).getComponent<PositionComponent>().co) );
 		
-		prefereceAndSubmitJob(board, prefs, jt, distance);
+		prefereceAndSubmitJob(board, prefs, jt, jobName, distance);
 	}
 }
 

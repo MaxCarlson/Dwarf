@@ -34,7 +34,7 @@ namespace JobsBoard
 		if ( archDist > MAX_DIJKSTRA_DISTANCE - 1)
 			return;
 
-		prefereceAndSubmitJob(board, prefs, jt, blockDist + archDist);
+		prefereceAndSubmitJob(board, prefs, jt, jobSkill, blockDist + archDist);
 	}
 }
 

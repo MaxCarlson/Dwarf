@@ -1,6 +1,8 @@
 #pragma once
 #include "ECS\Component.h"
 
+struct Coordinates;
+
 struct Seed : public Component
 {
 	Seed() = default;
@@ -15,4 +17,6 @@ struct Seed : public Component
 	}
 };
 CEREAL_REGISTER_TYPE(Seed);
-CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, Seed)
+CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, Seed);
+
+void spawnSeeds(const int num, const Coordinates& co, const std::string &plantTag);

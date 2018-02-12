@@ -40,7 +40,7 @@ namespace JobsBoard
 		{
 			auto distance = static_cast<int>(get_3D_distance(co, *pos));
 
-			prefereceAndSubmitJob(board, prefs, jt, distance);
+			prefereceAndSubmitJob(board, prefs, jt, jobSkill, distance);
 		}
 	}
 }

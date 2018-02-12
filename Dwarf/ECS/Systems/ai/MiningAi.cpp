@@ -47,7 +47,7 @@ namespace JobsBoard
 		// Find total distance for job
 		const int distance = miningMap[getIdx(co)] + pickDistance;
 
-		prefereceAndSubmitJob(board, prefs, jt, distance);
+		prefereceAndSubmitJob(board, prefs, jt, jobSkill, distance);
 	}
 }
 
