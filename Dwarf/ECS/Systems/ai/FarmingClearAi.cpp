@@ -12,11 +12,43 @@
 #include "Raws\Materials.h"
 #include "Raws\Defs\MaterialDef.h"
 #include "Helpers\Rng.h"
+#include "JobBoard.h"
 #include "ECS\Components\Seed.h"
+#include "ECS\Components\Sentients\Stats.h"
 #include "ECS\Systems\helpers\PathFinding.h"
 #include "ECS\Messages\hoe_map_changed_message.h"
 #include "ECS\Systems\DijkstraSystems\DijkstraMapsHandler.h"
 
+static const std::string jobSkill = "farming";
+
+namespace JobsBoard
+{
+	void evaluate_farm_clearing(JobBoard & board, const Entity & e, AiWorkComponent &prefs, const Coordinates& co, JobEvaluatorBase * jt)
+	{
+		if (designations->farming.empty())
+			return;
+
+		// Find numerical job rating value for this type of work
+		auto pfind = prefs.jobPrefrences.find(jobSkill);
+
+		if (pfind->second < 1 || pfind == prefs.jobPrefrences.end())
+			return;
+
+		auto find = board.find(pfind->second);
+
+		for (const auto& f : designations->farming)
+		{
+			if (f.second.step == FarmInfo::CLEAR)
+			{
+				const auto distance = static_cast<int>(get_3D_distance(co, idxToCo(f.first)));
+				// Overwrite if distance to equally prefered job is less
+				// or add if job preference doesn't exist
+				if (find->second.distance > distance || find == board.end())
+					board[pfind->second] = JobRating{ distance, jt };
+			}
+		}
+	}
+}
 
 inline void testTool(const Entity &e, FarmClearTag &tag, WorkTemplate<FarmClearTag> &work)
 {
@@ -99,8 +131,11 @@ inline void gotoFarm(const Entity &e, const Coordinates& co, WorkTemplate<FarmCl
 	});
 }
 
-inline void clearArea(const Entity &e, const Coordinates& co, WorkTemplate<FarmClearTag> &work, FarmClearTag &tag)
+inline void clearArea(const Entity &e, const Coordinates& co, WorkTemplate<FarmClearTag> &work, FarmClearTag &tag, const double& duration)
 {
+	constexpr int baseDifficulty = 10;
+	constexpr double defaultClearTime = 2400.0;
+
 	auto idx = getIdx(co);
 
 	auto ffind = designations->farming.find(idx);
@@ -112,9 +147,23 @@ inline void clearArea(const Entity &e, const Coordinates& co, WorkTemplate<FarmC
 		return;
 	}
 
-	if (region::plantType(idx) > 0)
+	auto& stats = e.getComponent<Stats>();
+
+	int plantType = region::plantType(idx);
+
+	// Either use the plant harvest time or the default
+	const double time = plantType > 0 ? getPlantDef(plantType)->time.second : defaultClearTime;
+
+	if (ffind->second.progress < time)
 	{
-		auto plant = getPlantDef(region::plantType(idx));
+		doWorkTime(stats, jobSkill, duration, ffind->second.progress);
+		return;
+	}
+
+	int difficulty = baseDifficulty;
+	if (plantType > 0)
+	{
+		auto plant = getPlantDef(plantType); 
 
 		const auto produce = plant->harvestsTo[region::plantLifeCycle(idx)];
 
@@ -130,31 +179,39 @@ inline void clearArea(const Entity &e, const Coordinates& co, WorkTemplate<FarmC
 			auto sitem = spawnItemOnGround(produce, getMaterialIdx(mat), co, SpawnColor::ITEM_COLOR);
 			sitem.getComponent<Item>().name = plant->name;
 		}
+		
+		difficulty = plant->difficulty;
 
 		// Produce seeds
 		spawnSeeds(rng.range(1, 4), co, plant->tag);
-
-
-		// Clear tile of all plants
-		region::setPlantType(idx, 0);
-		region::setPlantHealth(idx, 0);
-		region::setPlantLifecycle(idx, 0);
-		region::setPlantTicker(idx, 0);
-
-		// Check if we need to add soil to farm or if plot already has it
-
-		const auto tileMat = getMaterial(region::getTileMaterial(co));
-
-		if (tileMat && (tileMat->matType == MAT_SOIL || tileMat->matType == MAT_SAND))
-			ffind->second.step = FarmInfo::PLANT;
-
-		else
-			ffind->second.step = FarmInfo::ADD_SOIL;
-
-
-		// Done
-		work.cancel_work(e);
 	}
+
+	// Clear tile of all plants
+	region::setPlantType(idx, 0);
+	region::setPlantHealth(idx, 0);
+	region::setPlantLifecycle(idx, 0);
+	region::setPlantTicker(idx, 0);
+
+	// Check if we need to add soil to farm or if plot already has it
+
+	const auto tileMat = getMaterial(region::getTileMaterial(co));
+
+	if (tileMat && (tileMat->matType == MAT_SOIL || tileMat->matType == MAT_SAND))
+		ffind->second.step = FarmInfo::PLANT;
+
+	else
+		ffind->second.step = FarmInfo::ADD_SOIL;
+
+
+	giveWorkXp(stats, jobSkill, difficulty);
+
+	// Done
+	work.cancel_work(e);
+}
+
+void FarmingClearAi::init()
+{
+	JobsBoard::register_job_offer<FarmClearTag>(JobsBoard::evaluate_farm_clearing);
 }
 
 void FarmingClearAi::update(const double duration)
@@ -184,7 +241,7 @@ void FarmingClearAi::update(const double duration)
 			break;
 
 		case FarmClearTag::CLEAR_AREA:
-			clearArea(e, co, work, tag);
+			clearArea(e, co, work, tag, duration);
 			break;
 		}
 	}

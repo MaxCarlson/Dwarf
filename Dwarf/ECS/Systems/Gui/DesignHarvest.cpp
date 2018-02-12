@@ -230,6 +230,12 @@ void DesignHarvest::designFarming()
 		}
 	}
 
+	if (seedNames.empty())
+	{
+		ImGui::Text("No Seeds :("); // NEED TO REFACTOR, selectedSeedQty below does not allow us to enter deleting farm plots  :(
+		return;
+	}
+
 	static int selected = 0;
 	ImGui::ListBox("Availible Seeds", &selected, seedNames);
 

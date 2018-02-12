@@ -25,10 +25,14 @@ struct FarmInfo // Move this to a sepperate file. Make a file for designation ty
 	size_t seedId = 0;
 	std::string seedType = "";
 
+	// Progress that has been made
+	// of a step
+	double progress = 0.0;
+
 	template<class Archive>
 	void serialize(Archive &archive)
 	{
-		archive(step, seedId, seedType);
+		archive(step, seedId, seedType, progress);
 	}
 };
 

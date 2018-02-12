@@ -45,6 +45,7 @@ namespace JobsBoard
 
 void FarmingAi::init()
 {
+	JobsBoard::register_job_offer<PlantingTag>(JobsBoard::evaluate_farming);
 }
 
 void FarmingAi::update(const double duration)

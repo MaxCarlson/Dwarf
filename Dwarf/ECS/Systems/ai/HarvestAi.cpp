@@ -11,6 +11,7 @@
 #include "Raws\raws.h"
 #include "Raws\Materials.h"
 #include "Raws\Defs\MaterialDef.h"
+#include "Helpers\Rng.h"
 #include "../../Components/Sentients/Stats.h"
 #include "ECS\Components\Sentients\AiWorkComponent.h"
 #include "../../Messages/harvest_map_changed_message.h"
@@ -112,12 +113,9 @@ void HarvestAi::doHarvest(const Entity& e, const double& duration)
 				if (find->categories.test(ITEM_FOOD)) type = "food";
 
 				auto item = spawnItemOnGround(produce, getMaterialIdx(type), co, SpawnColor::ITEM_COLOR);  
-				
-				// Spawn seeds
-				auto seed = spawnItemOnGround("seed", getMaterialIdx(type), co, SpawnColor::CUSTOM_COLOR, find->ch.fg);
-				seed.addComponent<Seed>(plant->tag);
-				seed.activate();
 			}
+
+			spawnSeeds(rng.range(1, 3), co, plant->tag);
 
 			giveWorkXp(stats, skillName, plant->difficulty);
 

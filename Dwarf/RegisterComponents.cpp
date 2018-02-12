@@ -14,6 +14,7 @@
 #include "ECS\Components\Stockpile.h"
 #include "ECS\Components\Calender.h"
 #include "ECS\Components\MovementComponent.h"
+#include "ECS\Components\Seed.h"
 
 // Component Tags
 #include "ECS\Components\Tags\MiningTag.h"
@@ -24,6 +25,8 @@
 #include "ECS\Components\Tags\HarvestTag.h"
 #include "ECS\Components\Tags\PlantingTag.h"
 #include "ECS\Components\Tags\ArchitectTag.h"
+#include "ECS\Components\Tags\FarmClearTag.h"
+#include "ECS\Components\Tags\FarmSoilTag.h"
 
 // Component Sentients
 #include "ECS\Components\Sentients\Stats.h"
@@ -44,6 +47,7 @@ void ComponentsInit::init()
 	world.registerComponent<Claimed>();
 	world.registerComponent<Building>();
 	world.registerComponent<Stockpile>();
+	world.registerComponent<Seed>();
 
 	// Tags
 	world.registerComponent<MiningTag>();
@@ -54,6 +58,8 @@ void ComponentsInit::init()
 	world.registerComponent<LumberjacTag>();
 	world.registerComponent<HarvestTag>();
 	world.registerComponent<PlantingTag>();
+	world.registerComponent<FarmClearTag>();
+	world.registerComponent<FarmSoilTag>();
 
 	// Sentiants
 	world.registerComponent<Stats>();

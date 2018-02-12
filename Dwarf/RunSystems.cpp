@@ -35,12 +35,15 @@
 #include "ECS\Systems\ai\WoodcuttingAi.h"
 #include "ECS\Systems\ai\HarvestAi.h"
 #include "ECS\Systems\ai\FarmingAi.h"
+#include "ECS\Systems\ai\FarmingClearAi.h"
+#include "ECS\Systems\ai\FarmingSoilAi.h"
 
 // System Helpers
 #include "ECS\Systems\helpers\ItemHelper.h"
 #include "ECS\Systems\helpers\DesignationHandler.h"
 #include "ECS\Systems\helpers\WorkOrderHelper.h"
 #include "ECS\Systems\helpers\RegionHelper.h"
+#include "ECS\Systems\helpers\SeedsHelper.h"
 
 // System time based
 #include "ECS\Systems\timebased\CalenderSystem.h"
@@ -81,6 +84,9 @@ const std::string FARMING_AI = "Farming Ai";
 const std::string CALENDER_SYSTEM = "Calender System";
 const std::string PLANT_SYSTEM = "Plant System";
 const std::string REGION_HELPER = "Region Helper";
+const std::string FARM_CLEAR_AI = "Farm Clear Ai";
+const std::string FARM_SOIL_AI = "Farm Soil Ai";
+const std::string SEED_HELPER = "Seed Helper";
 
 // Gui Systems
 const std::string MENU_BAR = "Menu Bar";
@@ -145,6 +151,8 @@ void initSystems(bool fromLoad)
 	systems[FARMING_AI] = new FarmingAi;
 	systems[CALENDER_SYSTEM] = new CalenderSystem;
 	systems[PLANT_SYSTEM] = new PlantSystem;
+	systems[FARM_CLEAR_AI] = new FarmingClearAi;
+	systems[FARM_SOIL_AI] = new FarmingSoilAi;
 
 	// Gui systems
 	systems[MENU_BAR] = new MenuBar;
@@ -163,6 +171,7 @@ void initSystems(bool fromLoad)
 	systems[ITEM_HELPER] = &itemHelper;
 	systems[WORK_ORDER_HELPER] = workOrderHelper.get();
 	systems[REGION_HELPER] = regionHelper.get();
+	systems[SEED_HELPER] = &seedsHelper;
 
 	// Add systems to world. Cast to their derived class so world 
 	// doesn't interpret them as SystemBase's
@@ -186,6 +195,8 @@ void initSystems(bool fromLoad)
 	world.addSystem(* static_cast<FarmingAi *>(systems[FARMING_AI]));
 	world.addSystem(* static_cast<CalenderSystem *>(systems[CALENDER_SYSTEM]));
 	world.addSystem(* static_cast<PlantSystem *>(systems[PLANT_SYSTEM]));
+	world.addSystem(* static_cast<FarmingClearAi *>(systems[FARM_CLEAR_AI]));
+	world.addSystem(* static_cast<FarmingSoilAi *>(systems[FARM_SOIL_AI]));
 
 
 	// Gui Systems
@@ -205,8 +216,7 @@ void initSystems(bool fromLoad)
 	world.addSystem( itemHelper);
 	world.addSystem(*workOrderHelper.get());
 	world.addSystem(*regionHelper.get());
-	//world.addSystem(*static_cast<ItemHelper *>(systems[ITEM_HELPER]));
-	//world.addSystem(*static_cast<WorkOrderHelper *>(systems[WORK_ORDER_HELPER]));
+	world.addSystem( seedsHelper);
 
 	for (auto& sys : systems)
 		sys.second->init();
@@ -292,6 +302,8 @@ void updateSystems(const double duration)
 		runSystem(BUILD_AI, MS_PER_UPDATE);
 		runSystem(AI_ARCHITECTURE, MS_PER_UPDATE);
 		runSystem(HARVEST_AI, MS_PER_UPDATE);
+		runSystem(FARM_CLEAR_AI, MS_PER_UPDATE);
+		runSystem(FARM_SOIL_AI, MS_PER_UPDATE);
 		runSystem(FARMING_AI, MS_PER_UPDATE);
 
 		// Perfrom mining and later constructing jobs?
