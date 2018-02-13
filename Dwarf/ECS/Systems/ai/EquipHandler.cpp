@@ -50,13 +50,13 @@ void EquipHandler::pickupItem(int itemSlot, std::size_t entityId, std::size_t it
 	item.removeComponent<RenderComponent>();
 
 	// Store item in entities inventory
-	//auto& entity = getWorld().getEntity(entityId);
-//	auto& inv = entity.getComponent<Inventory>();
+	auto& entity = getWorld().getEntity(entityId);
+	auto& inv = entity.getComponent<Inventory>();
 
-	//if (itemSlot < MAX_INVENTORY_SLOTS)				// Get rid of this slot system!
-	//	inv.inventory[itemSlot] = itemEid;
-	//else
-	//	std::cout << "Other Item Types Not Implemented Yet Error!!" << std::endl;
+	if (itemSlot < MAX_INVENTORY_SLOTS)				// Get rid of this slot system!
+		inv.inventory[itemSlot] = itemEid;
+	else
+		std::cout << "Other Item Types Not Implemented Yet Error!!" << std::endl;
 
 
 	// If we're picking up a stored item, flag it as not stored
@@ -79,12 +79,12 @@ void EquipHandler::pickupItem(int itemSlot, std::size_t entityId, std::size_t it
 		//dropItem( finditemSlot(inv, outItemEid), entityId, outItemEid, itemCo); // Item co should be the same as the out item in these cases?
 
 	item.activate();
-	getWorld().refresh();
+	getWorld().refresh(); // Should we truly be refreshing here? Not Sure
 }
 
 // It looks like we don't need to pass the itemEid when we have entity eid since we can get it
 // from searching the inventory?
-void EquipHandler::dropItem(int itemSlot, std::size_t entityId, std::size_t itemEid, Coordinates co)
+void EquipHandler::dropItem(int itemSlot, std::size_t entityId, std::size_t itemEid, Coordinates co) // Add a template class for finding if an entity is working with a specific tool in class TAG to see if we can  take their tool away!
 {
 	if ( itemEid == 0 )
 		return;
@@ -102,6 +102,9 @@ void EquipHandler::dropItem(int itemSlot, std::size_t entityId, std::size_t item
 		item.removeComponent<ItemCarried>();
 	}
 
+	// Remove item from entities inventory
+	getWorld().getEntity(entityId).getComponent<Inventory>().inventory[itemSlot] = 0;
+
 	// Restore the items correct positon
 	item.addComponent<PositionComponent>(co);
 
@@ -109,10 +112,10 @@ void EquipHandler::dropItem(int itemSlot, std::size_t entityId, std::size_t item
 		item.removeComponent<Claimed>();
 
 	item.activate();
-	getWorld().refresh();
+	getWorld().refresh(); // Should we truly be refreshing here? Not Sure
 }
 
-int EquipHandler::finditemSlot(const Inventory & einv, std::size_t item)
+int EquipHandler::finditemSlot(const Inventory & einv, std::size_t item) // DELETE
 {
 	for (auto i = 0; i < MAX_INVENTORY_SLOTS; ++i)
 	{

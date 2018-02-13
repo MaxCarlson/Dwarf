@@ -53,7 +53,7 @@ namespace JobsBoard
 inline void testTool(const Entity &e, FarmClearTag &tag, WorkTemplate<FarmClearTag> &work)
 {
 	if (work.hasCorrectTool(e, TOOL_FARMING))
-		tag.step = FarmClearTag::GOTO_FARM;
+		tag.step = FarmClearTag::FIND_FARM;
 	else
 		tag.step = FarmClearTag::FIND_HOE;
 }
@@ -112,6 +112,7 @@ inline void findFarm(const Entity &e, const Coordinates& co, WorkTemplate<FarmCl
 
 	// On failed pathfinding
 	work.cancel_work(e);
+	return;
 }
 
 inline void gotoFarm(const Entity &e, const Coordinates& co, WorkTemplate<FarmClearTag> &work, FarmClearTag &tag)
@@ -235,6 +236,7 @@ void FarmingClearAi::update(const double duration)
 
 		case FarmClearTag::FIND_FARM:
 			findFarm(e, co, work, tag);
+			break;
 
 		case FarmClearTag::GOTO_FARM:
 			gotoFarm(e, co, work, tag);
