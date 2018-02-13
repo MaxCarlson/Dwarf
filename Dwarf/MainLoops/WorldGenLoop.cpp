@@ -195,7 +195,7 @@ void WorldGenLoop::run(const double duration)
 					createDwarf({});
 
 				// Build the region
-				buildRegion(planet, mousePos.first - wxOffset, mousePos.second - wyOffset, { regionX, regionY, regionZ }, rng);
+				buildRegion(planet, embarkX - wxOffset, embarkY- wyOffset, { regionX, regionY, regionZ }, rng);
 			}
 
 			if (ImGui::Button("No"))

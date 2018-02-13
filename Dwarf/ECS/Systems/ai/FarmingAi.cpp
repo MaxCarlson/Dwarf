@@ -36,7 +36,7 @@ namespace JobsBoard
 				const auto distance = static_cast<int>(get_3D_distance(co, idxToCo(f.first)));
 				// Overwrite if distance to equally prefered job is less
 				// or add if job preference doesn't exist
-				if (find->second.distance > distance || find == board.end())
+				if (find == board.end() || find->second.distance > distance)
 					board[pfind->second] = JobRating{ distance, jt };
 			}
 		}

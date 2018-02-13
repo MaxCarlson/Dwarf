@@ -38,7 +38,7 @@ biomes = {
 		name = "Grassy Plains", minTemp = 0, maxTemp = 25, minRain = 15, maxRain = 100,
 		occurs = { biome_types["plains"], biome_types["coasts"], biome_types["plateaus"] },
 		soils  = { soil = 99, sand = 1 },
-		plants = { grass = 25, strawberry = 1, potato = 1, spinach = 1 },
+		plants = { grass = 22, strawberry = 5, potato = 15, spinach = 1 },
 		trees  = { deciduous = 15, evergreen = 4 },
 		rend   = { glyph = glyphs['grass'], color = "light grass_green" },
 	},

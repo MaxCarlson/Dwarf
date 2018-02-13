@@ -11,6 +11,7 @@
 #include "Designations.h"
 #include "ECS\Systems\helpers\SeedsHelper.h"
 #include "ECS\Components\Seed.h"
+#include "ECS\Messages\harvest_map_changed_message.h"
 #include <imgui.h>
 #include <imgui_tabs.h>
 #include <DwarfRender.h>
@@ -44,12 +45,12 @@ void DesignHarvest::update(const double duration)
 
 	ImGui::BeginTabBar("##FarmingTabs");
 
-	if (ImGui::AddTab("Harvest##HarvestDesign"))
+	if (ImGui::AddTab("Harvest"))
 	{
 		designHarvest();
 	}
 
-	if (ImGui::AddTab("Farming##HarvestDesign"))
+	if (ImGui::AddTab("Farming"))
 	{
 		designFarming();
 	}
@@ -100,9 +101,11 @@ void DesignHarvest::designHarvest()
 	ImGui::Text("Farmed plots will be auto harvested once plants have");
 	ImGui::Text("reached maturity");
 
+	enum { PRODUCTIVE, ALL, ERASE };
 	static int selectedType = 0;
-	ImGui::RadioButton("Harvest Productive", &selectedType, 0); // Tabs are glitching with radio buttons! FIX
-	ImGui::RadioButton("Harvest All", &selectedType, 1); 
+	ImGui::RadioButton("Harvest Productive", &selectedType, PRODUCTIVE); 
+	ImGui::RadioButton("Harvest All", &selectedType, ALL); 
+	ImGui::RadioButton("Erase", &selectedType, ERASE); // Not implemented yet
 
 
 	// Draw harvest area
@@ -142,13 +145,39 @@ void DesignHarvest::designHarvest()
 	if (confirm)
 	{
 		const int z = click.z;
-		loopThroughHarvest(selectedType, mousePos, click, [&products, &total, &z](int x, int y, bool passed, std::string produce)
-		{
-			if (passed)
+		bool changed = false;
+
+		if (selectedType != ERASE)
+			loopThroughHarvest(selectedType, mousePos, click, [&products, &total, z, &changed](int x, int y, bool passed, std::string produce)
 			{
-				designations->harvest.emplace_back(std::make_pair(false, Coordinates{ x, y, z }));
-			}
-		});
+				if (passed)
+				{
+					changed = true;
+					designations->harvest.emplace_back(std::make_pair(false, Coordinates{ x, y, z }));
+				}
+			});
+		// Erase harvest designations
+		else
+			loopThroughHarvest(selectedType, mousePos, click, [z, &changed](int x, int y, bool passed, std::string p)
+			{
+				auto idx = getIdx({ x, y, z });
+				designations->harvest.erase(std::remove_if(
+					designations->harvest.begin(),
+					designations->harvest.end(),
+					[&idx, &changed](std::pair<bool, Coordinates> it)
+					{
+						if (idx == getIdx(it.second))
+						{
+							changed = true;
+							return true;
+						}
+						return false;
+					})
+				);
+			});
+				
+		if(changed)
+			emit(harvest_map_changed_message{});
 
 		confirm = false;
 		click = EMPTY_COORDINATES;

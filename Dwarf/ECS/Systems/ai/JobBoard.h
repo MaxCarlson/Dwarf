@@ -77,14 +77,14 @@ namespace JobsBoard
 		// Find numerical job rating value for this type of work
 		auto pfind = prefs.jobPrefrences.find(jobSkill);
 
-		if (pfind->second < 1 || pfind == prefs.jobPrefrences.end())
+		if (pfind == prefs.jobPrefrences.end() || pfind->second < 1)
 			return;
 
 		auto find = board.find(pfind->second);
 
 		// Overwrite if distance to equally prefered job is less
 		// or add if job preference doesn't exist
-		if (find->second.distance > distance || find == board.end())
+		if (find == board.end() || find->second.distance > distance)
 			board[pfind->second] = JobRating{ distance, jt };
 	}
 
