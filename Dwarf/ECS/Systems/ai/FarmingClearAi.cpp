@@ -31,15 +31,15 @@ namespace JobsBoard
 		// Find numerical job rating value for this type of work
 		auto pfind = prefs.jobPrefrences.find(jobSkill);
 
-		if (pfind->second < 1 || pfind == prefs.jobPrefrences.end())
+		if (pfind == prefs.jobPrefrences.end() || pfind->second < 1)
 			return;
-
-		auto find = board.find(pfind->second);
 
 		for (const auto& f : designations->farming)
 		{
 			if (f.second.step == FarmInfo::CLEAR)
 			{
+				auto find = board.find(pfind->second);
+
 				const auto distance = static_cast<int>(get_3D_distance(co, idxToCo(f.first)));
 				// Overwrite if distance to equally prefered job is less
 				// or add if job preference doesn't exist
@@ -76,7 +76,7 @@ inline void findHoe(const Entity &e, const Coordinates& co, WorkTemplate<FarmCle
 		}, [&tag]
 		{
 			// On success
-			tag.step = FarmClearTag::GOTO_FARM;
+			tag.step = FarmClearTag::FIND_FARM;
 			return;
 		});
 	});

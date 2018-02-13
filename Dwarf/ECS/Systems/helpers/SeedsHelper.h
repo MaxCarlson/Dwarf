@@ -2,10 +2,10 @@
 #include "../../Components/Seed.h"
 #include "../../Components/Claimed.h"
 
-class SeedsHelper : public System<Requires<Seed>, Excludes<Claimed>>
+class SeedsHelper : public System<Requires<Seed>>
 {
 public:
-	void forAllUnclaimedSeeds(std::function<void(Entity)> func);
+	void forAllSeeds(std::function<void(Entity)> func);
 };
 
 extern SeedsHelper seedsHelper;

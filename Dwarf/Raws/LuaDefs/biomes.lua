@@ -115,7 +115,7 @@ biomes = {
 		name = "Savannah Mountains", minTemp = 25, maxTemp = 55, minRain = 0, maxRain = 100,
 		occurs = { biome_types["mountains"] },
 		soils  = { soil = 75, sand = 25 },
-		plants = { grass = 12 },
+		plants = { grass = 12, strawberry = 5, potato = 15, spinach = 1 },
 		trees  = { deciduous = 4, evergreen = 2 }
 	},
 

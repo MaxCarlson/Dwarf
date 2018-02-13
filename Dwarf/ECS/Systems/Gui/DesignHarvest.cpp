@@ -223,15 +223,18 @@ void DesignHarvest::designFarming()
 	// Build a container of plant names that we have seeds for,
 	// as well as plant tags and how many seeds for that tag
 	std::map<std::string, std::pair<std::string, int>> availibleSeeds;
-	seedsHelper.forAllUnclaimedSeeds([&availibleSeeds](Entity e)
+	seedsHelper.forAllSeeds([&availibleSeeds](Entity e)
 	{
+		if (e.hasComponent<Claimed>())
+			return;
+
 		auto& seed = e.getComponent<Seed>();
 		
 		auto plant = getPlantDef(getPlantIdx(seed.plantTag));
 
 		if (plant)
 		{
-			auto find = availibleSeeds.find(seed.plantTag);
+			auto find = availibleSeeds.find(plant->name);
 
 			if (find == availibleSeeds.end())
 				availibleSeeds[plant->name] = std::make_pair(seed.plantTag, 1);
@@ -255,7 +258,7 @@ void DesignHarvest::designFarming()
 		if (seedFilter.PassFilter(s.first.c_str()))
 		{
 			seedNames.emplace_back(std::to_string(s.second.second) + " " + s.first);
-			seedTags.emplace_back(s.first);
+			seedTags.emplace_back(s.second.first);
 		}
 	}
 
@@ -268,7 +271,7 @@ void DesignHarvest::designFarming()
 	static int selected = 0;
 	ImGui::ListBox("Availible Seeds", &selected, seedNames);
 
-	const int selectedSeedQty = availibleSeeds[seedTags[selected]].second;
+	const int selectedSeedQty = availibleSeeds[seedNames[selected]].second;
 
 	// Draw farm area
 	int totalArea = 0;
@@ -296,8 +299,9 @@ void DesignHarvest::designFarming()
 	// a seed type if they don't have enough seeds. They only need 1
 	if (confirm)
 	{
+		int totalSeedLoss = 0;
 		const int z = click.z;
-		loopThroughFarming(mouse::mousePos, click, [&z, &seedTags](int x, int y, bool possible)
+		loopThroughFarming(mouse::mousePos, click, [&z, &seedTags, &totalSeedLoss](int x, int y, bool possible)
 		{
 			auto idx = getIdx({ x, y, z });
 			auto farmFind = designations->farming.find(idx);
@@ -306,13 +310,19 @@ void DesignHarvest::designFarming()
 			{
 				size_t seedId = 0;
 				bool found = false;
-				seedsHelper.forAllUnclaimedSeeds([&found, &seedTags, &seedId](Entity e)
+				seedsHelper.forAllSeeds([&found, &seedTags, &seedId, &totalSeedLoss](Entity e)
 				{
+					if (e.hasComponent<Claimed>())
+						return;
+
 					auto& tag = e.getComponent<Seed>().plantTag;
 					if (!found && tag == seedTags[selected])
 					{
 						found = true;
+						++totalSeedLoss;
+						seedId = e.getId().index;
 						e.addComponent<Claimed>();
+						e.activate();
 					}
 				});
 
@@ -324,6 +334,12 @@ void DesignHarvest::designFarming()
 				designations->farming.erase(idx);
 
 		});
+
+		// Need to reset index of selected if we use up all seeds of a type
+		// don't want to give ListBox and invalid idx
+		if (selectedSeedQty == totalSeedLoss)
+			selected = selected > 0 ? selected - 1 : 0;
+		
 
 		confirm = false;
 		click = EMPTY_COORDINATES;

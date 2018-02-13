@@ -54,11 +54,13 @@ void FarmingAi::update(const double duration)
 		doWork(e, duration);
 }
 
-void findSeeds(const Coordinates& co, PlantingTag &tag)
+void findSeeds(const Entity& e, const Coordinates& co, PlantingTag &tag)
 {
-	seedsHelper.forAllUnclaimedSeeds([&tag](Entity s)
+	seedsHelper.forAllSeeds([&tag, &e](Entity s)
 	{
-		
+		if (e.hasComponent<Claimed>())
+			return;
+
 	});
 }
 
@@ -72,7 +74,7 @@ void FarmingAi::doWork(Entity & e, const double& duration)
 	switch (tag.step)
 	{
 	case PlantingTag::FIND_SEEDS:
-		findSeeds(co, tag);
+		findSeeds(e, co, tag);
 		break;
 
 	case PlantingTag::GOTO_SEEDS:

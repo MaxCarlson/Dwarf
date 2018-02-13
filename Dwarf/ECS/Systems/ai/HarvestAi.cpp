@@ -84,6 +84,7 @@ void HarvestAi::doHarvest(const Entity& e, const double& duration)
 				[&idx](auto d) { return idx == getIdx(d.second);
 
 			}), designations->harvest.end());
+			emit(harvest_map_changed_message{});
 		}
 
 		if (region::plantType(idx) == 0)
