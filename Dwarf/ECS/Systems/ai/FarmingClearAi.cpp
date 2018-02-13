@@ -88,7 +88,8 @@ inline void findFarm(const Entity &e, const Coordinates& co, WorkTemplate<FarmCl
 	std::map<int, Coordinates> targets;
 	for (const auto& f : designations->farming)
 	{
-		if (f.second.step == FarmInfo::CLEAR)
+		// Farm is in clearing stage and is not currently being worked
+		if (f.second.step == FarmInfo::CLEAR && f.second.progress == 0.0)
 		{
 			auto farmCo = idxToCo(f.first);
 			auto dist = get_3D_distance(co, farmCo);
@@ -97,6 +98,7 @@ inline void findFarm(const Entity &e, const Coordinates& co, WorkTemplate<FarmCl
 		}
 	}
 
+	// Find closest possible path to a farm that needs clearing
 	for (const auto& t : targets)
 	{
 		auto path = findPath(co, t.second);
@@ -179,12 +181,13 @@ inline void clearArea(const Entity &e, const Coordinates& co, WorkTemplate<FarmC
 			}
 			auto sitem = spawnItemOnGround(produce, getMaterialIdx(mat), co, SpawnColor::ITEM_COLOR);
 			sitem.getComponent<Item>().name = plant->name;
+
+			// Produce seeds
+			// Only if plant produces something at this growth stage
+			spawnSeeds(rng.range(1, 4), co, plant->tag);
 		}
 		
 		difficulty = plant->difficulty;
-
-		// Produce seeds
-		spawnSeeds(rng.range(1, 4), co, plant->tag);
 	}
 
 	// Clear tile of all plants
@@ -203,6 +206,8 @@ inline void clearArea(const Entity &e, const Coordinates& co, WorkTemplate<FarmC
 	else
 		ffind->second.step = FarmInfo::ADD_SOIL;
 
+	// Farm plot is no longer being worked
+	ffind->second.progress = 0.0;
 
 	giveWorkXp(stats, jobSkill, difficulty);
 
