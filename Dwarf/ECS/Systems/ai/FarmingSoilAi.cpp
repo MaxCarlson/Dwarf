@@ -4,9 +4,12 @@
 #include "WorkTemplate.h"
 #include "Designations.h"
 #include "Raws\Defs\ItemDefs.h"
+#include "Raws\Materials.h"
+#include "Raws\Defs\MaterialDef.h"
 #include "ECS\Systems\helpers\PathFinding.h"
 #include "ECS\Systems\helpers\ItemHelper.h"
 #include "ECS\Components\Sentients\Inventory.h"
+#include "ECS\Components\Sentients\Stats.h"
 #include "ECS\Messages\drop_item_message.h"
 
 static const std::string jobSkill = "farming";
@@ -49,7 +52,7 @@ void findSoil(const Entity& e, MovementComponent &mov, const Coordinates& co, Wo
 void gotoSoil(const Entity& e, MovementComponent &mov, const Coordinates& co, WorkTemplate<FarmSoilTag> &work, FarmSoilTag &tag);
 void findFarm(const Entity& e, MovementComponent &mov, const Coordinates& co, WorkTemplate<FarmSoilTag> &work, FarmSoilTag &tag);
 void gotoFarm(const Entity& e, MovementComponent &mov, const Coordinates& co, WorkTemplate<FarmSoilTag> &work, FarmSoilTag &tag);
-void spreadSoil(const Entity& e, const Coordinates& co, WorkTemplate<FarmSoilTag> &work, FarmSoilTag &tag);
+void spreadSoil(const Entity& e, const double& duration, MovementComponent &mov, const Coordinates& co, WorkTemplate<FarmSoilTag> &work, FarmSoilTag &tag);
 
 void FarmingSoilAi::update(const double duration)
 {
@@ -77,6 +80,10 @@ void FarmingSoilAi::update(const double duration)
 
 		case FarmSoilTag::GOTO_FARM:
 			gotoFarm(e, mov, co, work, tag);
+			break;
+
+		case FarmSoilTag::SPREAD_SOIL:
+			spreadSoil(e, duration, mov, co, work, tag);
 			break;
 		}
 	}
@@ -146,12 +153,15 @@ void findFarm(const Entity & e, MovementComponent &mov, const Coordinates & co, 
 		if (!path->failed)
 		{
 			mov.path = path->path;
+			tag.farmCo = idxToCo(f.second);
 			tag.step = FarmSoilTag::GOTO_FARM;
 			return;
 		}
 	}
 
-	// No path found
+	// No path found ( or no farms )
+	// OR slim chance there are identically distant farms with a path,
+	// and some without a path
 	work.cancel_work(e);
 	world.emit(drop_item_message{ SLOT_CARRYING, e.getId().index, tag.soilId, co });
 	return;
@@ -159,9 +169,52 @@ void findFarm(const Entity & e, MovementComponent &mov, const Coordinates & co, 
 
 void gotoFarm(const Entity & e, MovementComponent &mov, const Coordinates & co, WorkTemplate<FarmSoilTag>& work, FarmSoilTag & tag)
 {
-	work.followPath(mov, co, )
+	work.followPath(mov, co, tag.farmCo, [&work, &e]()
+	{
+		// On path failure
+		work.cancel_work(e);
+		return;
+	}, [&tag]
+	{
+		// On reaching the farm
+		tag.step = FarmSoilTag::SPREAD_SOIL;
+		return;
+	});
 }
 
-void spreadSoil(const Entity & e, const Coordinates & co, WorkTemplate<FarmSoilTag>& work, FarmSoilTag & tag)
+void spreadSoil(const Entity & e, const double& duration, MovementComponent &mov, const Coordinates & co, WorkTemplate<FarmSoilTag>& work, FarmSoilTag & tag)
 {
+	constexpr double baseTime = 6000.0;
+
+	auto farmFind = designations->farming.find(getIdx(co));
+
+	if (farmFind == designations->farming.end())
+	{
+		world.emit(drop_item_message{ SLOT_CARRYING, e.getId().index, tag.soilId, co });
+		work.cancel_work(e);
+		return;
+	}
+
+	auto& stats = e.getComponent<Stats>();
+
+	// Let's do the work 
+	if (farmFind->second.progress < baseTime)
+	{
+		doWorkTime(stats, jobSkill, duration, farmFind->second.progress);
+		return;
+	}
+
+	// Work time is all done!
+
+	auto& soilE = world.getEntity(tag.soilId);
+	auto& soilI = soilE.getComponent<Item>();
+
+	region::setMaterial(co, soilI.material);
+
+	soilE.kill(); 
+
+	farmFind->second.step = FarmInfo::PLANT;
+
+	work.cancel_work(e);
+	return;
 }

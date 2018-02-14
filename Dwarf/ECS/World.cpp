@@ -147,7 +147,7 @@ void World::refresh() // Split this into three different functions for activated
 		auto& attribute = entityAttributes.attributes[entity.getId().index];
 		attribute.activated = false;
 
-		// Loop through every system in this world
+		// Loop through every system in this world and removes the entity from them
 		for (auto& sys : systems)
 		{
 			auto systemIdx = sys.first;
