@@ -3,7 +3,6 @@
 #include "../Map/Tile.h"
 #include "../Raws/Defs/ItemDefs.h"
 #include "../Raws/ReactionInput.h"
-#include "../ECS/Components/Claimed.h"
 #include "../ECS/Components/ItemStored.h"
 #include "../Raws/Materials.h"
 #include "../Raws/Defs/MaterialDef.h"
@@ -69,6 +68,29 @@ int ItemHelper::get_item_location(std::size_t id)
 	
 
 	return 0;
+}
+
+size_t ItemHelper::findClosestItemTypeClaimIt(const Entity & e, const int type, const Coordinates & co)
+{
+	std::map<double, size_t> distanceMap = { {1000.0, 0} };
+
+	for (const auto& i : getEntities())
+	{
+		if (i.hasComponent<Claimed>() || !i.getComponent<Item>().catagory.test(type))
+			continue;
+
+		distanceMap.insert(std::make_pair(get_3D_distance(i.getComponent<PositionComponent>().co, co), i.getId().index));
+	}
+
+	const auto& id = distanceMap.begin()->second;
+
+	if (id > 0)
+	{
+		getWorld().getEntity(id).addComponent<Claimed>(e.getId().index);
+		getWorld().getEntity(id).activate();
+	}
+
+	return id;
 }
 
 int ItemHelper::num_reaction_input_items(const ReactionInput & react)

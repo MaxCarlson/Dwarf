@@ -16,23 +16,39 @@
 #include "../../Components/Claimed.h"
 #include "../../../Designations.h"
 #include "../../Components/ItemStored.h"
+#include "Helpers\MessageQueue.h"
 
+MessageQueue<pickup_item_message> pickups;
+MessageQueue<drop_item_message> dropOffs;
 
 void EquipHandler::init()
 {
-	subscribe<pickup_item_message>( [this] (pickup_item_message &msg)
+	subscribe<pickup_item_message>([this](pickup_item_message &msg)
 	{
-		pickupItem(msg.itemSlot, msg.entityId, msg.itemEid, msg.outItem);
+		pickups.emplace(pickup_item_message{ msg.itemSlot, msg.entityId, msg.itemEid, msg.outItem });
 	});
 
-	subscribe<drop_item_message>( [this] (drop_item_message &msg)
+	subscribe<drop_item_message>([this](drop_item_message &msg)
 	{
-		dropItem(msg.itemSlot, msg.entityId, msg.itemEid, msg.co);
+		dropOffs.emplace(drop_item_message{ msg.itemSlot, msg.entityId, msg.itemEid, msg.co });
 	});
 
 	subscribe<designate_building_message>([this](designate_building_message & msg)
 	{
 		designateBuilding(msg);
+	});
+}
+
+void EquipHandler::update(const double duration)
+{
+	pickups.processAll([this](pickup_item_message &msg)
+	{
+		pickupItem(msg.itemSlot, msg.entityId, msg.itemEid, msg.outItem);
+	});
+
+	dropOffs.processAll([this](drop_item_message &msg)
+	{
+		dropItem(msg.itemSlot, msg.entityId, msg.itemEid, msg.co);
 	});
 }
 
@@ -52,6 +68,9 @@ void EquipHandler::pickupItem(int itemSlot, std::size_t entityId, std::size_t it
 	// Store item in entities inventory
 	auto& entity = getWorld().getEntity(entityId);
 	auto& inv = entity.getComponent<Inventory>();
+
+	if (outItemEid == 0)
+		outItemEid = inv.inventory[itemSlot];
 
 	if (itemSlot < MAX_INVENTORY_SLOTS)				// Get rid of this slot system!
 		inv.inventory[itemSlot] = itemEid;
@@ -75,11 +94,10 @@ void EquipHandler::pickupItem(int itemSlot, std::size_t entityId, std::size_t it
 
 
 	if (outItemEid != 0)
-		dropItem(0, entityId, outItemEid, itemCo);
-		//dropItem( finditemSlot(inv, outItemEid), entityId, outItemEid, itemCo); // Item co should be the same as the out item in these cases?
+		dropItem(itemSlot, entityId, outItemEid, itemCo);
 
 	item.activate();
-	getWorld().refresh(); // Should we truly be refreshing here? Not Sure
+	//getWorld().refresh(); // Should we truly be refreshing here? Not Sure
 }
 
 // It looks like we don't need to pass the itemEid when we have entity eid since we can get it
@@ -112,16 +130,7 @@ void EquipHandler::dropItem(int itemSlot, std::size_t entityId, std::size_t item
 		item.removeComponent<Claimed>();
 
 	item.activate();
-	getWorld().refresh(); // Should we truly be refreshing here? Not Sure
-}
-
-int EquipHandler::finditemSlot(const Inventory & einv, std::size_t item) // DELETE
-{
-	for (auto i = 0; i < MAX_INVENTORY_SLOTS; ++i)
-	{
-		if (einv.inventory[i] == item)
-			return i;
-	}
+	//getWorld().refresh(); // Should we truly be refreshing here? Not Sure
 }
 
 void EquipHandler::designateBuilding(designate_building_message & msg)

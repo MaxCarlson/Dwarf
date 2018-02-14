@@ -313,6 +313,9 @@ void updateSystems(const double duration)
 		runSystem(HAULING_SYSTEM, MS_PER_UPDATE);
 		runSystem(PLANT_SYSTEM, MS_PER_UPDATE);
 
+		// Pickup and drop all items requested
+		runSystem(EQUIP_HANDLER, MS_PER_UPDATE);
+
 		// Main Rendering 
 		runSystem(RENDER_SYSTEM, MS_PER_UPDATE);
 	}

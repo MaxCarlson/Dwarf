@@ -11,6 +11,7 @@ constexpr int TOOL_CHOPPING = 2;
 constexpr int TOOL_FARMING = 3;
 constexpr int ITEM_FOOD = 4;
 constexpr int ITEM_SEED = 5;
+constexpr int ITEM_SOIL = 6;
 
 
 struct StockpileDef

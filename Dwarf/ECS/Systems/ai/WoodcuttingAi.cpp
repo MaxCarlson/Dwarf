@@ -41,7 +41,7 @@ namespace JobsBoard
 				treeDist = d;		
 		}
 
-		prefereceAndSubmitJob(board, prefs, jt, jobSkill, treeDist + axeDist);
+		prefereceAndSubmitJob(board, prefs, jt, jobSkill, static_cast<int>(treeDist) + axeDist);
 	}
 }
 

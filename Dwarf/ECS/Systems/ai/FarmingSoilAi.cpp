@@ -3,7 +3,11 @@
 #include "JobBoard.h"
 #include "WorkTemplate.h"
 #include "Designations.h"
+#include "Raws\Defs\ItemDefs.h"
+#include "ECS\Systems\helpers\PathFinding.h"
 #include "ECS\Systems\helpers\ItemHelper.h"
+#include "ECS\Components\Sentients\Inventory.h"
+#include "ECS\Messages\drop_item_message.h"
 
 static const std::string jobSkill = "farming";
 
@@ -41,10 +45,123 @@ void FarmingSoilAi::init()
 	JobsBoard::register_job_offer<FarmSoilTag>(JobsBoard::evaluate_farm_soil);
 }
 
+void findSoil(const Entity& e, MovementComponent &mov, const Coordinates& co, WorkTemplate<FarmSoilTag> &work, FarmSoilTag &tag);
+void gotoSoil(const Entity& e, MovementComponent &mov, const Coordinates& co, WorkTemplate<FarmSoilTag> &work, FarmSoilTag &tag);
+void findFarm(const Entity& e, MovementComponent &mov, const Coordinates& co, WorkTemplate<FarmSoilTag> &work, FarmSoilTag &tag);
+void gotoFarm(const Entity& e, MovementComponent &mov, const Coordinates& co, WorkTemplate<FarmSoilTag> &work, FarmSoilTag &tag);
+void spreadSoil(const Entity& e, const Coordinates& co, WorkTemplate<FarmSoilTag> &work, FarmSoilTag &tag);
+
 void FarmingSoilAi::update(const double duration)
 {
 	for (const auto& e : getEntities())
 	{
+		WorkTemplate<FarmSoilTag> work;
+		auto& co = e.getComponent<PositionComponent>().co;
+		auto& tag = e.getComponent<FarmSoilTag>();
+		auto& mov = e.getComponent<MovementComponent>();
 
+
+		switch (tag.step)
+		{
+		case FarmSoilTag::FIND_SOIL:
+			findSoil(e, mov, co, work, tag);
+			break;
+
+		case FarmSoilTag::GOTO_SOIL:
+			gotoSoil(e, mov, co, work, tag);
+			break;
+
+		case FarmSoilTag::FIND_FARM:
+			findFarm(e, mov, co, work, tag);
+			break;
+
+		case FarmSoilTag::GOTO_FARM:
+			gotoFarm(e, mov, co, work, tag);
+			break;
+		}
 	}
+}
+
+void findSoil(const Entity & e, MovementComponent &mov, const Coordinates & co, WorkTemplate<FarmSoilTag>& work, FarmSoilTag & tag)
+{
+	if (!itemHelper.isItemCatagoryAvailible<ITEM_SOIL>())
+	{
+		// Item type does not exist
+		work.cancel_work(e);
+		return;
+	}
+
+	// Let's claimed item
+	tag.soilId = itemHelper.findClosestItemTypeClaimIt(e, ITEM_SOIL, co);
+	tag.soilCo = world.getEntity(tag.soilId).getComponent<PositionComponent>().co;
+
+	auto path = findPath(co, tag.soilCo);
+
+	if (path->failed) 
+	{
+		work.cancel_work(e);
+		itemHelper.unclaim_item_by_id(tag.soilId);
+		return;
+	}
+
+	mov.path = path->path;
+	tag.step = FarmSoilTag::GOTO_SOIL;
+}
+
+void gotoSoil(const Entity & e, MovementComponent &mov, const Coordinates & co, WorkTemplate<FarmSoilTag>& work, FarmSoilTag & tag)
+{
+	work.followPath(mov, co, tag.soilCo, [&e, &work]()
+	{
+		// On failed pathing
+		work.cancel_work(e);
+		return;
+	}, [&e, &work, &tag]
+	{
+		world.emit(pickup_item_message{ SLOT_CARRYING, e.getId().index, tag.soilId, 0 });
+		tag.step = FarmSoilTag::FIND_FARM;
+		return;
+	});
+}
+
+void findFarm(const Entity & e, MovementComponent &mov, const Coordinates & co, WorkTemplate<FarmSoilTag>& work, FarmSoilTag & tag)
+{
+	// Find closest farm tiles that need soil
+	std::map<int, int> farmsDist;
+	for (const auto& f : designations->farming)
+	{
+		if (f.second.step != FarmInfo::ADD_SOIL)
+			continue;
+
+		auto dist = get_3D_distance(co, idxToCo(f.first));
+
+		farmsDist.insert(std::make_pair(static_cast<int>(dist), f.first));
+	}
+
+	// Loop through closest destinations first
+	// attempting to find a path
+	for (const auto& f : farmsDist)
+	{
+		auto path = findPath(co, idxToCo(f.second));
+
+		if (!path->failed)
+		{
+			mov.path = path->path;
+			tag.step = FarmSoilTag::GOTO_FARM;
+			return;
+		}
+	}
+
+	// No path found
+	work.cancel_work(e);
+	world.emit(drop_item_message{ SLOT_CARRYING, e.getId().index, tag.soilId, co });
+	return;
+}
+
+void gotoFarm(const Entity & e, MovementComponent &mov, const Coordinates & co, WorkTemplate<FarmSoilTag>& work, FarmSoilTag & tag)
+{
+	work.followPath(mov, co, )
+}
+
+void spreadSoil(const Entity & e, const Coordinates & co, WorkTemplate<FarmSoilTag>& work, FarmSoilTag & tag)
+{
 }

@@ -1,27 +1,28 @@
 #pragma once
 #include "ECS\Component.h"
+#include "Coordinates.h"
 
-class FarmSoilTag : public Component
+struct FarmSoilTag : public Component
 {
 	enum Steps
 	{
-		TEST_TOOL,
-		FIND_FARM,
-		FIND_HOE,
-		GOTO_HOE,
 		FIND_SOIL,
 		GOTO_SOIL,
+		FIND_FARM,
+		GOTO_FARM,
 		SPREAD_SOIL
 	};
 
-	int step = TEST_TOOL;
+	int step = FIND_SOIL;
 
-	int farmIdx = 0;
+	size_t soilId = 0;
+	Coordinates soilCo;
+	Coordinates farmCo;
 
 	template<class Archive>
 	void serialize(Archive &archive)
 	{
-		archive(step, farmIdx);
+		archive(step, soilId, soilCo, farmCo);
 	}
 };
 CEREAL_REGISTER_TYPE(FarmSoilTag);
