@@ -9,6 +9,5 @@ public:
 	void update(const double duration);
 
 private:
-	void doWork(Entity& e, const double& duration);
 };
 

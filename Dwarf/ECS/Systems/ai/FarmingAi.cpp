@@ -10,6 +10,9 @@
 #include "../DijkstraSystems/DijkstraMapsHandler.h"
 #include "ECS\Messages\planting_map_changed_message.h"
 #include "ECS\Systems\helpers\SeedsHelper.h"
+#include "ECS\Systems\helpers\PathFinding.h"
+#include "ECS\Systems\helpers\ItemHelper.h"
+#include "Raws\Defs\ItemDefs.h"
 
 static const std::string jobSkill = "farming";
 
@@ -48,129 +51,164 @@ void FarmingAi::init()
 	JobsBoard::register_job_offer<PlantingTag>(JobsBoard::evaluate_farming);
 }
 
+void findHoe(const Entity& e, MovementComponent &mov, WorkTemplate<PlantingTag> &work, const Coordinates& co, PlantingTag &tag);
+void pickupHoe(const Entity& e, MovementComponent &mov, WorkTemplate<PlantingTag> &work, const Coordinates& co, PlantingTag &tag);
+void findSeeds(const Entity& e, MovementComponent &mov, WorkTemplate<PlantingTag> &work, const Coordinates& co, PlantingTag &tag);
+void gotoSeeds(const Entity& e, MovementComponent &mov, WorkTemplate<PlantingTag> &work, const Coordinates &co, PlantingTag &tag);
+
 void FarmingAi::update(const double duration)
 {
-	for (auto e : getEntities())
-		doWork(e, duration);
+	for (const auto& e : getEntities())
+	{
+		WorkTemplate<PlantingTag> work;
+
+		auto& co  = e.getComponent<PositionComponent>().co;
+		auto& tag = e.getComponent<PlantingTag>();
+		auto& mov = e.getComponent<MovementComponent>();
+
+		switch (tag.step)
+		{
+		case PlantingTag::FIND_HOE:
+			findHoe(e, mov, work, co, tag);
+			break;
+
+		case PlantingTag::PICKUP_HOE:
+			pickupHoe(e, mov, work, co, tag);
+			break;
+
+		case PlantingTag::FIND_SEEDS:
+			findSeeds(e, mov, work, co, tag);
+			break;
+
+		case PlantingTag::GOTO_SEEDS:
+			gotoSeeds(e, mov, work, co, tag);
+			break;
+
+		case PlantingTag::FIND_PLANTING:
+
+			break;
+
+		case PlantingTag::PLANT:
+
+			break;
+		}
+	}
 }
 
-void findSeeds(const Entity& e, const Coordinates& co, PlantingTag &tag)
+
+void findHoe(const Entity & e, MovementComponent & mov, WorkTemplate<PlantingTag>& work, const Coordinates & co, PlantingTag & tag)
 {
-	seedsHelper.forAllSeeds([&tag, &e](Entity s)
+	work.findTool(e, co, mov, TOOL_FARMING, [&work, &tag, &e]()
 	{
-		if (e.hasComponent<Claimed>())
-			return;
+		// On failure
+		work.cancel_work(e);
+
+	}, [&tag]
+	{
+		// On holding item already
+		tag.step = PlantingTag::FIND_SEEDS;
+	
+	}, [&tag, &co](size_t id)
+	{
+		// On needing to go grab item
+
+		tag.itemId = id;
+		tag.targetCo = world.getEntity(id).getComponent<PositionComponent>().co;
+		tag.step = PlantingTag::PICKUP_HOE;
+	});
+}
+
+void pickupHoe(const Entity & e, MovementComponent & mov, WorkTemplate<PlantingTag>& work, const Coordinates & co, PlantingTag & tag)
+{
+	work.followPath(mov, co, tag.targetCo, [&tag]()
+	{
+		// On path failure
+
+	}, []
+	{
 
 	});
 }
 
-void FarmingAi::doWork(Entity & e, const double& duration)
+void findSeeds(const Entity & e, MovementComponent &mov, WorkTemplate<PlantingTag> &work, const Coordinates & co, PlantingTag & tag)
 {
-	WorkTemplate<PlantingTag> work;
-
-	auto& co = e.getComponent<PositionComponent>().co;
-	auto& tag = e.getComponent<PlantingTag>();
-
-	switch (tag.step)
+	std::map<int, std::pair<FarmInfo, Coordinates>> farms;
+	for (const auto& f : designations->farming)
 	{
-	case PlantingTag::FIND_SEEDS:
-		findSeeds(e, co, tag);
-		break;
+		if (f.second.step == FarmInfo::PLANT && f.second.progress == 0.0)
+		{
+			auto dist = get_3D_distance(co, idxToCo(f.first));
 
-	case PlantingTag::GOTO_SEEDS:
-
-		break;
-
-	case PlantingTag::FIND_PLANTING:
-
-		break;
-
-	case PlantingTag::PLANT:
-
-		break;
+			farms[dist] = std::make_pair(f.second, idxToCo(f.first));
+		}
 	}
 
-	/*
-	if (tag.step == PlantingTag::FIND_PLANTING)
+	// Find seeds 
+	for (const auto& s : farms)
 	{
-		work.followMap(harvest_map, e, co, [&e, &work]()
-		{
-			// On Failure
-			work.cancel_work(e);
-			return;
-		}, [&e, &co, &tag]
-		{
-			// On finding harvest location
-			tag.step = PlantingTag::PLANT;
-			return;
-		});
-		return;
-	}
+		const auto sId = s.second.first.seedId;
 
-	else if (tag.step == PlantingTag::PLANT)
-	{
-		const int idx = getIdx(co);
-
-		// If this is the first time we've reached this step
-		// Remove the planting designation we are on top of
-		//
-		// Also capture the plant def idx and store it so we 
-		// know which type of plant we're planting
-		if (tag.progress == 0.0)
+		// Farm designation already has a seed claimed
+		if (sId > 0)
 		{
-			bool found = false;
-			designations->planting.erase(std::remove_if(
-				designations->planting.begin(),
-				designations->planting.end(),
-				[&idx, &tag, &found](std::pair<int, size_t> pdes)
+			auto seed = world.getEntity(sId);
+			const auto& seedCo = seed.getComponent<PositionComponent>().co;
+
+			auto path = findPath(co, seedCo);
+
+			if (!path->failed)
 			{
-				if (idx == pdes.first)
-				{
-					tag.plantDefIdx = pdes.second;
-					found = true;
-					return true;
-				}
-				return false;
-			}),
-				designations->planting.end());
-
-			if (found)
-				emit(planting_map_changed_message{});
-
-			// Designation not found
-			else
-			{
-				tag.step = PlantingTag::FIND_PLANTING;
+				mov.path = path->path;
+				tag.targetCo = seedCo;
+				tag.step = PlantingTag::GOTO_SEEDS;
 				return;
 			}
 		}
 
-		auto& stats = e.getComponent<Stats>();
+		// Farming designation has no seed claimed
+		// find one and claim it
+		else
+		{
+			seedsHelper.forAllSeeds([&co, &tag, &mov, &s](Entity e)
+			{
+				if (e.hasComponent<Claimed>() || !e.hasComponent<PositionComponent>())
+					return;
 
-		const auto plant = getPlantDef(tag.plantDefIdx);
+				const auto& seedCo = e.getComponent<PositionComponent>().co;
 
-		// Add time progress based on skill in farming and step duration
-		doWorkTime(stats, jobSkill, duration, tag.progress);
+				if (e.getComponent<Seed>().plantTag != s.second.first.seedType)
+					return;
 
-		// Check progress against set time it takes to plant the plant
-		if (tag.progress < plant->time.first)
-			return;
+				auto path = findPath(co, seedCo);
 
-		// Finalize planting
-
-		giveWorkXp(stats, jobSkill, plant->difficulty);
-		region::setFarmPlot(idx);
-		region::setPlantType(idx, getPlantIdx(plant->tag));
-		region::setPlantHealth(idx, 10);
-		region::setPlantLifecycle(idx, 0);
-		region::setPlantTicker(idx, 0);
-		region::setFlag(co, region::Flag::CONSTRUCTION);
-
-		region::tile_recalc(co);
-
-		work.cancel_work(e);
-		return;
+				if (!path->failed)
+				{
+					mov.path = path->path;
+					tag.targetCo = seedCo;
+					tag.step = PlantingTag::GOTO_SEEDS;
+					itemHelper.claim_item(e);
+					return;
+				}
+			});
+		}
 	}
-	*/
+
+	// Failed finding seed or path
+	work.cancel_work(e);
 }
 
+void gotoSeeds(const Entity & e, MovementComponent & mov, WorkTemplate<PlantingTag> &work, const Coordinates &co, PlantingTag & tag)
+{
+	work.followPath(mov, co, tag.targetCo, [&tag]()
+	{
+		// On pathing failure
+		tag.step = PlantingTag::FIND_SEEDS;
+		return;
+	}, [&tag, &e]
+	{
+		// Found seed!
+		tag.step = PlantingTag::
+		world.emit(pickup_item_message{ SLOT_CARRYING, e.getId().index, tag.itemId, 0 });
+		return;
+	});
+}

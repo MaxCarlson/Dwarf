@@ -211,6 +211,7 @@ void spreadSoil(const Entity & e, const double& duration, MovementComponent &mov
 
 	region::setMaterial(co, soilI.material);
 
+	auto& inv = e.getComponent<Inventory>().inventory[SLOT_CARRYING] = 0; 
 	soilE.kill(); 
 
 	farmFind->second.step = FarmInfo::PLANT;

@@ -70,7 +70,7 @@ int ItemHelper::get_item_location(std::size_t id)
 	return 0;
 }
 
-size_t ItemHelper::findClosestItemTypeClaimIt(const Entity & e, const int type, const Coordinates & co)
+size_t ItemHelper::findClosestItemTypeClaimIt(const Entity & e, const int type, const Coordinates & co, bool CLAIM_IT)
 {
 	std::map<double, size_t> distanceMap = { {1000.0, 0} };
 
@@ -84,7 +84,7 @@ size_t ItemHelper::findClosestItemTypeClaimIt(const Entity & e, const int type, 
 
 	const auto& id = distanceMap.begin()->second;
 
-	if (id > 0)
+	if (id > 0 && CLAIM_IT)
 	{
 		getWorld().getEntity(id).addComponent<Claimed>(e.getId().index);
 		getWorld().getEntity(id).activate();

@@ -32,7 +32,7 @@ public:
 		return false;
 	}
 
-	size_t findClosestItemTypeClaimIt(const Entity& e, const int type, const Coordinates& co);
+	size_t findClosestItemTypeClaimIt(const Entity& e, const int type, const Coordinates& co, bool CLAIM_IT = true);
 
 	int num_reaction_input_items(const ReactionInput& react);
 	std::size_t claim_item_by_reaction_inp(const ReactionInput& react);

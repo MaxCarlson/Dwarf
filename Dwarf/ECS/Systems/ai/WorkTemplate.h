@@ -31,6 +31,58 @@ public:
 		return tent.getComponent<Item>().catagory.test(toolType);
 	}
 
+	// Find out if we're holding the tool
+	// If not find the closest tools and try to path to them
+	// if path is not found run CANCEL llambda
+	// else run NEED_TO_GRAB llambda
+	template<typename CANCEL, typename SUCCESS, typename NEED_TO_GRAB>
+	void findTool(const Entity& e, const Coordinates& co, MovementComponent &mov, const int catagory, const CANCEL &cancel, const SUCCESS &success, const NEED_TO_GRAB &grab)
+	{
+		if (hasCorrectTool(e, catagory))
+		{
+			success();
+			return;
+		}
+
+		// Create a sorted map of closest items so we can 
+		// try pathing to multiple items before giving up
+		// if one path doesn't work out
+		std::map<double, size_t> distanceMap = { { 1000.0, 0 } };
+
+		itemHelper.forEachItem([&distanceMap, &co, &catagory](const Entity& i)
+		{
+			if (i.hasComponent<Claimed>() || !i.getComponent<Item>().catagory.test(catagory))
+				continue;
+
+			distanceMap.insert(std::make_pair(get_3D_distance(i.getComponent<PositionComponent>().co, co), i.getId().index));
+		});
+
+		const auto& id = distanceMap.begin()->second;
+
+		bool found = false;
+		for (const auto& i : distanceMap)
+		{
+			auto itemCo = world.getEntity(i.second).getComponent<PositionComponent>().co;
+
+			auto path = findPath(co, itemCo);
+
+			if (path->failed)
+				continue;
+
+			found = true;
+			mov.path = path->path;
+			break;
+		}
+
+		if (!found)
+		{
+			cancel();
+			return;
+		}
+
+		grab(item);
+	}
+
 	// Used when we want to pickup a tool or item from a Dijkstra map, or just a known location
 	// without knowing the actual ID of the item
 	template<typename MSG, typename CANCEL, typename SUCCESS>
