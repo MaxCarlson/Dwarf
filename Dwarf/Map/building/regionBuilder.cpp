@@ -13,14 +13,14 @@
 #include "Raws\Defs\BiomeDef.h"
 #include "Raws\BiomeReader.h"
 
-void buildHeightMap(FastNoise & noise, std::vector<uint8_t>& heightMap)
+void buildHeightMap(FastNoise & noise, int px, int py, std::vector<uint8_t>& heightMap)
 {
 	heightMap.resize(MAP_HEIGHT * MAP_WIDTH, 1);
 	for(int x = 0; x < MAP_WIDTH; ++x)
 		for (int y = 0; y < MAP_HEIGHT; ++y)
 		{
-			const double nx = noiseX(MAP_WIDTH  / 2, x);
-			const double ny = noiseX(MAP_HEIGHT / 2, y);
+			const double nx = noiseX(px, x);
+			const double ny = noiseY(py, y);
 			const double nz = noise.GetNoise(nx, ny);
 
 			auto alt = noiseToHeight(nz);
@@ -52,7 +52,7 @@ void buildRegion(Planet &planet, int px, int py, Coordinates dimensions, Rng &rn
 	noise.SetFractalLacunarity(frequency);
 
 	std::vector<uint8_t> heightMap;
-	buildHeightMap(noise, heightMap);
+	buildHeightMap(noise, px, py, heightMap);
 
 	Strata strata = buildStrata(heightMap, noise, rng);
 	layRock(heightMap, biomeInfo.second, strata, rng);

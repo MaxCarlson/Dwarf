@@ -12,6 +12,7 @@
 #include "Raws\BiomeReader.h"
 #include "Raws\Defs\BiomeDef.h"
 #include "EntityFactory.h"
+#include "mouse.h"
 #include <imgui.h>
 #include <imgui-SFML.h>
 #include <DwarfRender.h>
@@ -44,13 +45,13 @@ namespace Details
 	Stage stage = NOT_GENERATING;
 
 	bool showMouse = false;
-	std::pair<int, int> mousePos;
 }
 
 using namespace Details;
 
 void renderWorldGen()
 {
+	using namespace mouse;
 	int x = wxOffset;
 	int y = wyOffset;
 
@@ -76,7 +77,7 @@ void renderWorldGen()
 			terminal_color("grey");
 			terminal_put(x, y, 0xE100 + 88);
 
-			dfr::terminal->setChar(dfr::terminal->at(mousePos.first, mousePos.second), { static_cast<uint32_t>(88), {255, 205, 0}, { 0, 0, 0 } });
+			dfr::terminal->setChar(dfr::terminal->at(mousePos.x, mousePos.y), { static_cast<uint32_t>(88), {255, 205, 0}, { 0, 0, 0 } });
 		}
 
 		++x;
@@ -90,7 +91,8 @@ void renderWorldGen()
 
 void WorldGenLoop::run(const double duration)
 {
-	mousePos = dfr::getMousePosition();
+	using namespace mouse;
+	readMouse();
 
 	if (stage == Stage::NOT_GENERATING)
 	{
@@ -148,10 +150,10 @@ void WorldGenLoop::run(const double duration)
 
 	else if (stage == Stage::CHOOSE_EMBARK || stage == Stage::FINALIZE_EMBARK)
 	{
-		if (mousePos.first >= 0 + wxOffset && mousePos.first < WORLD_WIDTH + wxOffset
-			&& mousePos.second >= 0 + wyOffset && mousePos.second < WORLD_HEIGHT + wyOffset)
+		if (mousePos.x >= 0 + wxOffset && mousePos.x < WORLD_WIDTH + wxOffset
+			&& mousePos.y >= 0 + wyOffset && mousePos.y < WORLD_HEIGHT + wyOffset)
 		{
-			const auto& tile = planet.tiles[planet.idx(mousePos.first - wxOffset, mousePos.second - wyOffset)];
+			const auto& tile = planet.tiles[planet.idx(mousePos.x - wxOffset, mousePos.y - wyOffset)];
 
 			std::string biomeName = "No Biome!";
 
@@ -171,11 +173,12 @@ void WorldGenLoop::run(const double duration)
 
 			ImGui::End();
 
-			if (ImGui::IsMouseClicked(dfr::Button::LEFT))
+			if (ImGui::IsMouseClicked(dfr::Button::LEFT) && stage != Stage::FINALIZE_EMBARK)
 			{
-				embarkX = mousePos.first;
-				embarkY = mousePos.second;
+				embarkX = mousePos.x;
+				embarkY = mousePos.y;
 				stage = Stage::FINALIZE_EMBARK;
+				showMouse = false;
 			}
 		}
 
@@ -190,17 +193,19 @@ void WorldGenLoop::run(const double duration)
 				// Transfer control to the Play game loop and init systems and components
 				MainFunction = PlayGameLoop::run;
 				gameState = GameState::NEW_GAME;
+				showMouse = true;
 
 				for (int i = 0; i < numDwarves; ++i) // Place this somewhere else once we have code to create dwarves with new gui
 					createDwarf({});
 
 				// Build the region
-				buildRegion(planet, embarkX - wxOffset, embarkY- wyOffset, { regionX, regionY, regionZ }, rng);
+				buildRegion(planet, embarkX - wxOffset, embarkY - wyOffset, { regionX, regionY, regionZ }, rng);
 			}
 
 			if (ImGui::Button("No"))
 			{
 				stage = Stage::CHOOSE_EMBARK;
+				showMouse = true;
 			}
 
 			ImGui::End();

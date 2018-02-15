@@ -77,6 +77,7 @@ void readInItems() noexcept
 					if (type == "farmingTool")  c.categories.set(TOOL_FARMING);
 					if (type == "food")		    c.categories.set(ITEM_FOOD);
 					if (type == "seeds")	    c.categories.set(ITEM_SEED);
+					if (type == "soil")			c.categories.set(ITEM_SOIL);
 					});
 				}},
 				{ "stockpile", [&c]() { c.stockpileId = lua_int(); } },

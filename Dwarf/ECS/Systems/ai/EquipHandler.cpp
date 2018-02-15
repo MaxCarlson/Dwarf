@@ -23,6 +23,7 @@ MessageQueue<drop_item_message> dropOffs;
 
 void EquipHandler::init()
 {
+	/*
 	subscribe<pickup_item_message>([this](pickup_item_message &msg)
 	{
 		pickups.emplace(pickup_item_message{ msg.itemSlot, msg.entityId, msg.itemEid, msg.outItem });
@@ -31,6 +32,16 @@ void EquipHandler::init()
 	subscribe<drop_item_message>([this](drop_item_message &msg)
 	{
 		dropOffs.emplace(drop_item_message{ msg.itemSlot, msg.entityId, msg.itemEid, msg.co });
+	});
+	*/
+	subscribe<pickup_item_message>([this](pickup_item_message &msg)
+	{
+		pickupItem(msg.itemSlot, msg.entityId, msg.itemEid, msg.outItem );
+	});
+
+	subscribe<drop_item_message>([this](drop_item_message &msg)
+	{
+		dropItem( msg.itemSlot, msg.entityId, msg.itemEid, msg.co );
 	});
 
 	subscribe<designate_building_message>([this](designate_building_message & msg)
@@ -41,6 +52,7 @@ void EquipHandler::init()
 
 void EquipHandler::update(const double duration)
 {
+	/*
 	pickups.processAll([this](pickup_item_message &msg)
 	{
 		pickupItem(msg.itemSlot, msg.entityId, msg.itemEid, msg.outItem);
@@ -50,6 +62,7 @@ void EquipHandler::update(const double duration)
 	{
 		dropItem(msg.itemSlot, msg.entityId, msg.itemEid, msg.co);
 	});
+	*/
 }
 
 // Need to add in an inventory component for Entities while holding things!~!~!~!~

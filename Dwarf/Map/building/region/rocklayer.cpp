@@ -178,6 +178,7 @@ void layRock(std::vector<uint8_t> heightMap, BiomeDef & biome, Strata & strata, 
 			const int idx = getIdx({ i, j, z });
 			region::makeFloor(idx);
 
+			/*
 			int roll = rng.range(1, 100);
 
 			if (roll < biome.soil) // Add in biome component here. Also need to get the strata building working better with noise
@@ -192,6 +193,7 @@ void layRock(std::vector<uint8_t> heightMap, BiomeDef & biome, Strata & strata, 
 				region::setMaterial({ i, j, z - 1 }, sands[sandIdx]);
 				region::setMaterial({ i, j, z }, sands[sandIdx]);
 			}
+			*/
 			// Set vegitation ~~ sepperate vegitation from materials
 
 			//std::string tmp = "grass";
@@ -201,7 +203,7 @@ void layRock(std::vector<uint8_t> heightMap, BiomeDef & biome, Strata & strata, 
 
 		
 			std::string vegType = "";
-			roll = rng.range(1, vegProb);
+			int roll = rng.range(1, vegProb);
 
 			for (const auto& veg : biome.plants)
 			{
