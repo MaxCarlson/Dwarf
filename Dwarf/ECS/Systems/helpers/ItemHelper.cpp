@@ -24,14 +24,14 @@ void ItemHelper::claim_item(Entity& item)
 {
 	item.addComponent<Claimed>();
 	item.activate();
-	getWorld().refresh();
+	//getWorld().refresh();
 }
 
-void ItemHelper::unclaim_item_by_id(std::size_t id)
+void ItemHelper::unclaim_item_by_id(std::size_t id) // Probably should not be refreshing world here!
 {
 	getWorld().getEntity(id).removeComponent<Claimed>();
 	getWorld().getEntity(id).activate();
-	getWorld().refresh();
+	//getWorld().refresh();
 }
 
 void ItemHelper::deleteItem(const std::size_t id)
@@ -43,7 +43,7 @@ void ItemHelper::deleteItem(const std::size_t id)
 		positionCache->removeNode({ pos->co, id });
 
 	e.kill();
-	getWorld().refresh();
+	//getWorld().refresh();
 }
 
 int ItemHelper::get_item_location(std::size_t id)

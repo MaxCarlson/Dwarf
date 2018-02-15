@@ -29,10 +29,12 @@ struct FarmInfo // Move this to a sepperate file. Make a file for designation ty
 	// of a step
 	double progress = 0.0;
 
+	bool beingWorked = false;
+
 	template<class Archive>
 	void serialize(Archive &archive)
 	{
-		archive(step, seedId, seedType, progress);
+		archive(step, seedId, seedType, progress, beingWorked);
 	}
 };
 

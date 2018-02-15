@@ -69,7 +69,9 @@ public:
 			if (path->failed)
 				continue;
 
+			// path found, claim item at set path
 			found = true;
+			itemHelper.claim_item(world.getEntity(i.second));
 			mov.path = path->path;
 			break;
 		}

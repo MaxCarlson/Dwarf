@@ -55,6 +55,9 @@ void findHoe(const Entity& e, MovementComponent &mov, WorkTemplate<PlantingTag> 
 void pickupHoe(const Entity& e, MovementComponent &mov, WorkTemplate<PlantingTag> &work, const Coordinates& co, PlantingTag &tag);
 void findSeeds(const Entity& e, MovementComponent &mov, WorkTemplate<PlantingTag> &work, const Coordinates& co, PlantingTag &tag);
 void gotoSeeds(const Entity& e, MovementComponent &mov, WorkTemplate<PlantingTag> &work, const Coordinates &co, PlantingTag &tag);
+void findFarm(const Entity& e, MovementComponent &mov, WorkTemplate<PlantingTag> &work, const Coordinates &co, PlantingTag &tag);
+void gotoFarm(const Entity& e, MovementComponent &mov, WorkTemplate<PlantingTag> &work, const Coordinates &co, PlantingTag &tag);
+void doPlanting(const Entity& e, MovementComponent &mov, WorkTemplate<PlantingTag> &work, const Coordinates &co, PlantingTag &tag);
 
 void FarmingAi::update(const double duration)
 {
@@ -84,12 +87,15 @@ void FarmingAi::update(const double duration)
 			gotoSeeds(e, mov, work, co, tag);
 			break;
 
-		case PlantingTag::FIND_PLANTING:
+		case PlantingTag::FIND_FARM:
 
+
+		case PlantingTag::GOTO_FARM:
+			gotoFarm(e, mov, work, co, tag);
 			break;
 
 		case PlantingTag::PLANT:
-
+			doPlanting(e, mov, work, co, tag);
 			break;
 		}
 	}
@@ -123,19 +129,21 @@ void pickupHoe(const Entity & e, MovementComponent & mov, WorkTemplate<PlantingT
 	work.followPath(mov, co, tag.targetCo, [&tag]()
 	{
 		// On path failure
-
-	}, []
+		tag.step = PlantingTag::FIND_HOE;
+	}, [&e, &tag]
 	{
-
+		tag.step = PlantingTag::FIND_SEEDS;
+		world.emit(pickup_item_message{ SLOT_TOOL, e.getId().index, tag.itemId, 0 });
 	});
 }
 
 void findSeeds(const Entity & e, MovementComponent &mov, WorkTemplate<PlantingTag> &work, const Coordinates & co, PlantingTag & tag)
 {
+	// Build a map of closest farms that match planting status and aren't being worked
 	std::map<int, std::pair<FarmInfo, Coordinates>> farms;
 	for (const auto& f : designations->farming)
 	{
-		if (f.second.step == FarmInfo::PLANT && f.second.progress == 0.0)
+		if (f.second.step == FarmInfo::PLANT && !f.second.beingWorked)
 		{
 			auto dist = get_3D_distance(co, idxToCo(f.first));
 
@@ -144,6 +152,7 @@ void findSeeds(const Entity & e, MovementComponent &mov, WorkTemplate<PlantingTa
 	}
 
 	// Find seeds 
+	// and try to find a path to them
 	for (const auto& s : farms)
 	{
 		const auto sId = s.second.first.seedId;
@@ -160,6 +169,11 @@ void findSeeds(const Entity & e, MovementComponent &mov, WorkTemplate<PlantingTa
 			{
 				mov.path = path->path;
 				tag.targetCo = seedCo;
+				tag.farmCo = s.second.second;
+
+				// Mark farm as unavailible to other workers
+				designations->farming[getIdx(tag.farmCo)].beingWorked = true;
+
 				tag.step = PlantingTag::GOTO_SEEDS;
 				return;
 			}
@@ -185,6 +199,11 @@ void findSeeds(const Entity & e, MovementComponent &mov, WorkTemplate<PlantingTa
 				{
 					mov.path = path->path;
 					tag.targetCo = seedCo;
+					tag.farmCo = s.second.second;
+
+					// Mark farm as unavailible to other workers
+					designations->farming[getIdx(tag.farmCo)].beingWorked = true;
+
 					tag.step = PlantingTag::GOTO_SEEDS;
 					itemHelper.claim_item(e);
 					return;
@@ -199,16 +218,49 @@ void findSeeds(const Entity & e, MovementComponent &mov, WorkTemplate<PlantingTa
 
 void gotoSeeds(const Entity & e, MovementComponent & mov, WorkTemplate<PlantingTag> &work, const Coordinates &co, PlantingTag & tag)
 {
-	work.followPath(mov, co, tag.targetCo, [&tag]()
+	bool fail = false;
+	work.followPath(mov, co, tag.targetCo, [&tag, &fail]()
 	{
 		// On pathing failure
-		tag.step = PlantingTag::FIND_SEEDS;
-		return;
-	}, [&tag, &e]
+		fail = true;
+
+	}, [&co, &tag, &e, &mov, &fail]
 	{
-		// Found seed!
-		tag.step = PlantingTag::
+		auto path = findPath(co, tag.farmCo);
+
+		if (path->failed)
+		{
+			fail = true;
+			return;
+		}
+
+		mov.path = path->path;
+		tag.step = PlantingTag::GOTO_FARM;
 		world.emit(pickup_item_message{ SLOT_CARRYING, e.getId().index, tag.itemId, 0 });
-		return;
 	});
+
+	if (fail)
+	{
+		tag.step = PlantingTag::FIND_SEEDS;
+
+		auto find = designations->farming.find(getIdx(tag.farmCo));
+		if (find != designations->farming.end())
+			find->second.beingWorked = false;
+	}
+}
+
+void gotoFarm(const Entity & e, MovementComponent & mov, WorkTemplate<PlantingTag>& work, const Coordinates & co, PlantingTag & tag)
+{
+	work.followPath(mov, co, tag.farmCo, [&tag]()
+	{
+
+	}, []
+	{
+
+	});
+}
+
+void doPlanting(const Entity & e, MovementComponent & mov, WorkTemplate<PlantingTag>& work, const Coordinates & co, PlantingTag & tag)
+{
+
 }

@@ -11,7 +11,8 @@ struct PlantingTag : public Component
 		PICKUP_HOE,
 		FIND_SEEDS,
 		GOTO_SEEDS,
-		FIND_PLANTING,
+		FIND_FARM,
+		GOTO_FARM,
 		PLANT,
 	};
 
@@ -20,11 +21,12 @@ struct PlantingTag : public Component
 	size_t itemId = 0;
 
 	Coordinates targetCo;
+	Coordinates farmCo;
 
 	template<class Archive>
 	void serialize(Archive &archive)
 	{
-		archive(step, itemId, progress, targetCo);
+		archive(step, itemId, progress, targetCo, farmCo);
 	}
 };
 
