@@ -18,31 +18,41 @@
 #include <filesystem>
 namespace fs = std::experimental::filesystem; 
 
+static const std::string savePath = "Saves";
 
 void saveGame(bool& done)
 {
-	static std::string path = "newGame";
+	static std::string path = "";
 	ImGui::Begin("Save Game", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 
 	if (ImGui::Button("Back"))
 	{
 		done = true;
-		return;
 	}
 
-	ImGui::Text("Enter the name of the save");
+	ImGui::Text("Enter the name of the save or click a save to overwrite");
 	ImGui::InputText("File name", (char *)path.c_str(), 250);
 
-	if (ImGui::Button("Save"))
-	{
-		std::string dirpath = "Saves/" + path;
+	std::vector<std::string> paths; // We want these to update as they're added
+	for (const auto &p : fs::directory_iterator(savePath))
+		paths.emplace_back(p.path().string());
 
-		std::ofstream os(dirpath, std::ios::binary);
+	static int selected = 0;
+	ImGui::ListBox("", &selected, paths);
+
+	if (ImGui::Button("Save") && !done)
+	{
+		path = "Saves/" + path;
+		if (path == "Saves/")
+			path = paths[selected];
+
+
+		std::ofstream os(path, std::ios::binary);
 		cereal::BinaryOutputArchive archive(os);
 
 		// Save Planet then region then ECS world
 		archive(planet);
-		region::save_region(dirpath);
+		region::save_region(path);
 		world.save(archive);
 
 		// Misc archives, move somewhere else
@@ -57,20 +67,18 @@ void saveGame(bool& done)
 	ImGui::End();
 }
 
-void loadGame(bool& done)
+void loadGame(bool& done, bool &back)
 {
 	ImGui::SetNextWindowPosCenter();
 	ImGui::Begin("Load Game", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 	if (ImGui::Button("Back"))
 	{
 		// This needs to be implemented differntly for main menu vs. in game play
-		
+		back = true;
 	}
 
-	std::string dirpath = "Saves";
-
 	std::vector<std::string> paths; // We want these to update as they're added
-	for (const auto &p : fs::directory_iterator(dirpath))
+	for (const auto &p : fs::directory_iterator(savePath))
 		paths.emplace_back(p.path().string());
 
 	static int selected = 0;
@@ -120,15 +128,20 @@ void PlayGameLoop::run(const double duration)
 	
 	else if (gameState == GameState::LOAD_GAME)
 	{
+		bool back = false;
 		static bool loaded = false;
 
-		loadGame(loaded);
+		loadGame(loaded, back);
 
 		if (loaded)
 		{
 			loaded = false;
 			gameState = GameState::PLAYING;
 			RunSystems::initSystems(true);
+		}
+		if (back)
+		{
+			gameState = GameState::PLAYING;
 		}
 	}
 

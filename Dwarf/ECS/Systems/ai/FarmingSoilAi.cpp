@@ -214,6 +214,7 @@ void spreadSoil(const Entity & e, const double& duration, MovementComponent &mov
 	soilE.kill(); 
 
 	farmFind->second.step = FarmInfo::PLANT;
+	farmFind->second.progress = 0.0;
 
 	work.cancel_work(e);
 	return;
