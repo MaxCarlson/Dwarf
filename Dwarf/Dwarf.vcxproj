@@ -183,6 +183,7 @@
     <ClCompile Include="Globals\game_states.cpp" />
     <ClCompile Include="Globals\GlobalWorld.cpp" />
     <ClCompile Include="Globals\GlobalTerminals.cpp" />
+    <ClCompile Include="HappinessSystem.cpp" />
     <ClCompile Include="imgui-SFML.cpp" />
     <ClCompile Include="imgui.cpp" />
     <ClCompile Include="imgui_demo.cpp" />
@@ -261,7 +262,6 @@
     <ClCompile Include="Helpers\Rng.cpp" />
     <ClCompile Include="Raws\ReadPlants.cpp" />
     <ClCompile Include="ECS\Systems\helpers\RegionHelper.cpp" />
-    <ClCompile Include="Raws\ReadNeeds.cpp" />
     <ClCompile Include="RegisterComponents.cpp" />
     <ClCompile Include="RunSystems.cpp" />
     <ClCompile Include="Raws\SkillReader.cpp" />
@@ -318,6 +318,7 @@
     <ClInclude Include="Globals\TexDefines.h" />
     <ClInclude Include="Globals\GlobalTerminals.h" />
     <ClInclude Include="Globals\TypesOfActions.h" />
+    <ClInclude Include="HappinessSystem.h" />
     <ClInclude Include="Helpers\MessageQueue.h" />
     <ClInclude Include="ECS\Systems\Gui\JobPreferencesUi.h" />
     <ClInclude Include="KeyDampener.h" />
@@ -520,7 +521,6 @@
     <ClInclude Include="Helpers\Rng.h" />
     <ClInclude Include="Raws\ReadPlants.h" />
     <ClInclude Include="ECS\Systems\helpers\RegionHelper.h" />
-    <ClInclude Include="Raws\ReadNeeds.h" />
     <ClInclude Include="RegisterComponents.h" />
     <ClInclude Include="RunSystems.h" />
     <ClInclude Include="Raws\SkillReader.h" />
@@ -544,7 +544,6 @@
     <None Include="Raws\LuaDefs\items_raw.lua" />
     <None Include="Raws\LuaDefs\items_tools.lua" />
     <None Include="Raws\LuaDefs\materials.lua" />
-    <None Include="Raws\LuaDefs\needs.lua" />
     <None Include="Raws\LuaDefs\plants.lua" />
     <None Include="Raws\LuaDefs\render.lua" />
     <None Include="Raws\LuaDefs\stockpiles.lua" />

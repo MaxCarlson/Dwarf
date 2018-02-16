@@ -339,7 +339,7 @@
     <ClCompile Include="ECS\Components\Sentients\Inventory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Raws\ReadNeeds.cpp">
+    <ClCompile Include="HappinessSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1082,10 +1082,10 @@
     <ClInclude Include="ECS\Components\Sentients\Needs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Raws\ReadNeeds.h">
+    <ClInclude Include="Raws\Defs\NeedDef.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Raws\Defs\NeedDef.h">
+    <ClInclude Include="HappinessSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -1106,7 +1106,6 @@
     <None Include="Raws\LuaDefs\buildings_woodworking.lua" />
     <None Include="Raws\LuaDefs\plants.lua" />
     <None Include="Raws\LuaDefs\items_food.lua" />
-    <None Include="Raws\LuaDefs\needs.lua" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Raws\LuaDefs\index.txt" />

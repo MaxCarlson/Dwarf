@@ -7,24 +7,30 @@ constexpr double MAX_NEED_FULFILMENT = 1000.0;
 struct Need
 {
 	Need() = default;
-	Need(double lvl, double declineModifier, double declineRate)
-		: lvl(lvl), declineModifier(declineModifier), declineRate(declineRate) {}
+	Need(double lvl, double bonus, double declineRate)
+		: lvl(lvl), bonus(bonus), declineRate(declineRate) {}
 
 	double lvl = 500.0;
-	double declineModifier = 1.0;
+	double bonus = 500.0;
 	const double declineRate = 1.0;
 
 	template<class Archive>
 	void serialize(Archive &archive)
 	{
-		archive(lvl, declineModifier, declineRate);
+		archive(lvl, bonus, declineRate);
 	}
 };
+
+const Need Hunger(500.0, 400.0, 1.0);
+const Need Thirst(500.0, 600.0, 1.2);
+const Need Sleep(500.0,  350.0, 0.6);
+
+enum class NeedIdx { THRIST, HUNGER, SLEEP };
 
 struct Needs : public Component
 {
 
-	std::unordered_map<std::string, Need> needs;
+	std::vector<Need> needs = { Thirst, Hunger, Sleep };
 
 	template<class Archive>
 	void serialize(Archive &archive)
