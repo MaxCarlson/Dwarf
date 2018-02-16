@@ -127,7 +127,7 @@ void HaulingSystem::doWork(Entity e)
 			{
 
 				itemHelper.unclaim_item_by_id(tag.currentItem);
-				work.cancel_work(e); // We might need to unclaim components???
+				work.cancel_work(e); 
 				return;
 			}
 		}

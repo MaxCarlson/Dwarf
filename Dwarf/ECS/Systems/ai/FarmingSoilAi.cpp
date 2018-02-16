@@ -221,6 +221,7 @@ void spreadSoil(const Entity & e, const double& duration, MovementComponent &mov
 	auto& soilI = soilE.getComponent<Item>();
 
 	region::setMaterial(co, soilI.material);
+	region::tile_recalc(co);
 
 	auto& inv = e.getComponent<Inventory>().inventory[SLOT_CARRYING] = 0; 
 	soilE.kill(); 

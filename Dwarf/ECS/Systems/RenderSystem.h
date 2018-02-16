@@ -21,9 +21,9 @@ public:
 
 	void updateRender();
 
-
-
 private:
+
+	void renderDesignations();
 
 	bool renderChanged = true;
 };

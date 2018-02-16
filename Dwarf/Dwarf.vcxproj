@@ -281,6 +281,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ECS\Components\Seed.h" />
+    <ClInclude Include="ECS\Components\Sentients\Happiness.h" />
+    <ClInclude Include="ECS\Components\Sentients\Needs.h" />
     <ClInclude Include="ECS\Components\Tags\FarmClearTag.h" />
     <ClInclude Include="ECS\Components\Tags\FarmSoilTag.h" />
     <ClInclude Include="ECS\Messages\hoe_map_changed_message.h" />

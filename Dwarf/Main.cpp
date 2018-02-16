@@ -20,9 +20,10 @@ void onResizeL1(dfr::Layer * l, int w, int h)
 
 int main()
 {
+	///*
 	// BearslibTerminal Init stuff
 	terminal_open();
-	terminal_set("window.title='Dwarf'; window.size=80x80; window.cellsize=16x16"); // ~~ Make lua config file
+	//terminal_set("window.title='Dwarf'; window.size=80x80; window.cellsize=16x16"); // ~~ Make lua config file
 
 	// Move these into lua config files that don't require compiling
 	// so outside users can modify tilesets/etc
@@ -32,8 +33,9 @@ int main()
 	terminal_set("U+E400: ../dwarves.png, size=16x16");
 	terminal_set("U+E900: ../shadows.png, size=16x16");
 
-	terminal_set("input.filter = [keyboard, mouse+]");
+	terminal_set("input.filter = []");
 	terminal_composition(true);
+	//*/
 
 	loadRaws();
 	
@@ -45,7 +47,6 @@ int main()
 	dfr::init(cf);
 
 	ImGui::SFML::Init(*dfr::getWindow());
-	//dfr::getWindow()->resetGLStates();
 
 	MainFunction = MainMenuLoop::run;
 
@@ -53,7 +54,8 @@ int main()
 	overlayTerm = dfr::term(1);
 
 	// Run the main menu function
-	// The function will change to another when the game is started
+	// The function will change throught game depending
+	// on main loop 
 	dfr::run(MainFunction);
 	
 

@@ -204,6 +204,7 @@ inline void clearArea(const Entity &e, const Coordinates& co, WorkTemplate<FarmC
 	region::setPlantHealth(idx, 0);
 	region::setPlantLifecycle(idx, 0);
 	region::setPlantTicker(idx, 0);
+	region::tile_recalc(idxToCo(idx));
 
 	// Check if we need to add soil to farm or if plot already has it
 

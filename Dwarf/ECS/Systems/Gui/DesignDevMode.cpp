@@ -19,7 +19,7 @@ void DesignDevMode::init()
 {
 }
 
-bool DesignDevMode::chooseLocation(const std::string& itemTag, const std::string& matTag, const int qty)
+void DesignDevMode::chooseLocation(const std::string& itemTag, const std::string& matTag, const int qty)
 {
 	using namespace mouse;
 	int mx = mouseX;
@@ -36,9 +36,7 @@ bool DesignDevMode::chooseLocation(const std::string& itemTag, const std::string
 		spawnItemOnGround(itemTag, getMaterialIdx(matTag), { mx, my, mouseZ }, SpawnColor::MATERIAL_COLOR);
 
 		emit(update_all_maps_message{});
-		return true;
 	}
-	return false;
 }
 
 void DesignDevMode::spawnItem()
@@ -46,6 +44,8 @@ void DesignDevMode::spawnItem()
 	static bool selectingSpawnLocation = false;
 	static int spawnQty = 1;
 	static std::string matTag = "";
+
+	ImGui::Text("Right click to stop spawning an item");
 
 	// Pick Item spawn Quantity
 	static int qty = 1;
@@ -84,14 +84,11 @@ void DesignDevMode::spawnItem()
 
 	if (ImGui::Button("Select Spawn Location##Dev") || selectingSpawnLocation)
 	{
-		selectingSpawnLocation = !chooseLocation(itemsPassedFilter.at(itemIdx), matsPassedFilter.at(matIdx), qty);
+		chooseLocation(itemsPassedFilter.at(itemIdx), matsPassedFilter.at(matIdx), qty);
 
-		if (!selectingSpawnLocation)
+		if (!mouse::rightClick)
 		{
-			//itemFilter.Clear();
-			//matFilter.Clear();
-			//itemIdx = 0;
-			//matIdx = 0;
+			selectingSpawnLocation = false;
 		}
 	}
 }

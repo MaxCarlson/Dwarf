@@ -191,9 +191,6 @@ void findSeeds(const Entity & e, MovementComponent &mov, WorkTemplate<PlantingTa
 				if (e.hasComponent<Claimed>() || !e.hasComponent<PositionComponent>())
 					return;
 
-				if (!e.hasComponent<PositionComponent>())
-					return;
-
 				const auto& seedCo = e.getComponent<PositionComponent>().co;
 
 				if (e.getComponent<Seed>().plantTag != s.second.first.seedType)

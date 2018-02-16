@@ -10,6 +10,7 @@
 #include "Globals\Camera.h"
 #include "Globals\game_states.h"
 #include "dfr\DwarfRender.h"
+#include "Designations.h"
 #include <imgui.h>
 #include <imgui-SFML.h>
 
@@ -27,8 +28,6 @@ const vchar getTR(const Coordinates co)
 	//const vchar& v = region::getRenderTile(co); // For 3D rendering once we implement lighting
 
 	const vchar& v = region::renderCache(getIdx(co));
-
-	//vchars vv = { (uint32_t)v.c, v.fg, v.bg };
 
 	auto rendIt = renderEntities.find((dfr::terminal->width * co.y) + co.x);//renderEntities.find((terminal_state(TK_WIDTH) * co.y) + co.x);
 
@@ -209,4 +208,9 @@ void RenderSystem::updateRender()
 			}
 		}
 	}
+}
+
+void RenderSystem::renderDesignations()
+{
+	
 }
