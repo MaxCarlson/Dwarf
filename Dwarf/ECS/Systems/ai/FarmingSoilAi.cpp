@@ -29,7 +29,7 @@ namespace JobsBoard
 
 		for (const auto& f : designations->farming)
 		{
-			if (f.second.step == FarmInfo::ADD_SOIL)
+			if (f.second.step == FarmInfo::ADD_SOIL && !f.second.beingWorked)
 			{
 				auto find = board.find(pfind->second);
 
@@ -136,12 +136,12 @@ void findFarm(const Entity & e, MovementComponent &mov, const Coordinates & co, 
 	std::map<int, int> farmsDist;
 	for (const auto& f : designations->farming)
 	{
-		if (f.second.step != FarmInfo::ADD_SOIL)
-			continue;
+		if (f.second.step == FarmInfo::ADD_SOIL && !f.second.beingWorked)
+		{
+			auto dist = get_3D_distance(co, idxToCo(f.first));
 
-		auto dist = get_3D_distance(co, idxToCo(f.first));
-
-		farmsDist.insert(std::make_pair(static_cast<int>(dist), f.first));
+			farmsDist.insert(std::make_pair(static_cast<int>(dist), f.first));
+		}
 	}
 
 	// Loop through closest destinations first
@@ -154,6 +154,7 @@ void findFarm(const Entity & e, MovementComponent &mov, const Coordinates & co, 
 		{
 			mov.path = path->path;
 			tag.farmCo = idxToCo(f.second);
+			designations->farming[f.second].beingWorked = true;
 			tag.step = FarmSoilTag::GOTO_FARM;
 			return;
 		}
@@ -162,17 +163,23 @@ void findFarm(const Entity & e, MovementComponent &mov, const Coordinates & co, 
 	// No path found ( or no farms )
 	// OR slim chance there are identically distant farms with a path,
 	// and some without a path
-	work.cancel_work(e);
 	world.emit(drop_item_message{ SLOT_CARRYING, e.getId().index, tag.soilId, co });
+	work.cancel_work(e);
 	return;
 }
 
 void gotoFarm(const Entity & e, MovementComponent &mov, const Coordinates & co, WorkTemplate<FarmSoilTag>& work, FarmSoilTag & tag)
 {
-	work.followPath(mov, co, tag.farmCo, [&work, &e]()
+	work.followPath(mov, co, tag.farmCo, [&tag]()
 	{
 		// On path failure
-		work.cancel_work(e);
+		tag.step = FarmSoilTag::FIND_FARM;
+
+		auto failFind = designations->farming.find(getIdx(tag.farmCo));
+
+		if (failFind != designations->farming.end())
+			failFind->second.beingWorked = false;
+
 		return;
 	}, [&tag]
 	{
@@ -190,8 +197,12 @@ void spreadSoil(const Entity & e, const double& duration, MovementComponent &mov
 
 	if (farmFind == designations->farming.end())
 	{
-		world.emit(drop_item_message{ SLOT_CARRYING, e.getId().index, tag.soilId, co });
-		work.cancel_work(e);
+		tag.step = FarmSoilTag::FIND_FARM;
+
+		auto failFind = designations->farming.find(getIdx(tag.farmCo));
+
+		if (failFind != designations->farming.end())
+			failFind->second.beingWorked = false;
 		return;
 	}
 
@@ -216,6 +227,7 @@ void spreadSoil(const Entity & e, const double& duration, MovementComponent &mov
 
 	farmFind->second.step = FarmInfo::PLANT;
 	farmFind->second.progress = 0.0;
+	farmFind->second.beingWorked = false;
 
 	work.cancel_work(e);
 	return;

@@ -9,6 +9,7 @@
 #include "ECS\Components\Sentients\Stats.h"
 #include "../DijkstraSystems/DijkstraMapsHandler.h"
 #include "ECS\Messages\planting_map_changed_message.h"
+#include "ECS\Messages\drop_item_message.h"
 #include "ECS\Systems\helpers\SeedsHelper.h"
 #include "ECS\Systems\helpers\PathFinding.h"
 #include "ECS\Systems\helpers\ItemHelper.h"
@@ -21,7 +22,7 @@ namespace JobsBoard
 {
 	void evaluate_farming(JobBoard & board, const Entity & e, AiWorkComponent &prefs, const Coordinates& co, JobEvaluatorBase * jt)
 	{
-		if (designations->planting.empty())
+		if (designations->farming.empty())
 			return;
 
 		// Find numerical job rating value for this type of work
@@ -34,7 +35,7 @@ namespace JobsBoard
 
 		for (const auto& f : designations->farming)
 		{
-			if (f.second.step == FarmInfo::PLANT)
+			if (f.second.step == FarmInfo::PLANT && !f.second.beingWorked)
 			{
 				const auto distance = static_cast<int>(get_3D_distance(co, idxToCo(f.first)));
 				// Overwrite if distance to equally prefered job is less
@@ -55,9 +56,9 @@ void findHoe(const Entity& e, MovementComponent &mov, WorkTemplate<PlantingTag> 
 void pickupHoe(const Entity& e, MovementComponent &mov, WorkTemplate<PlantingTag> &work, const Coordinates& co, PlantingTag &tag);
 void findSeeds(const Entity& e, MovementComponent &mov, WorkTemplate<PlantingTag> &work, const Coordinates& co, PlantingTag &tag);
 void gotoSeeds(const Entity& e, MovementComponent &mov, WorkTemplate<PlantingTag> &work, const Coordinates &co, PlantingTag &tag);
-void findFarm(const Entity& e, MovementComponent &mov, WorkTemplate<PlantingTag> &work, const Coordinates &co, PlantingTag &tag);
+//void findFarm(const Entity& e, MovementComponent &mov, WorkTemplate<PlantingTag> &work, const Coordinates &co, PlantingTag &tag);
 void gotoFarm(const Entity& e, MovementComponent &mov, WorkTemplate<PlantingTag> &work, const Coordinates &co, PlantingTag &tag);
-void doPlanting(const Entity& e, MovementComponent &mov, WorkTemplate<PlantingTag> &work, const Coordinates &co, PlantingTag &tag);
+void doPlanting(const Entity& e, MovementComponent &mov, WorkTemplate<PlantingTag> &work, const Coordinates &co, PlantingTag &tag, const double& duration);
 
 void FarmingAi::update(const double duration)
 {
@@ -87,15 +88,12 @@ void FarmingAi::update(const double duration)
 			gotoSeeds(e, mov, work, co, tag);
 			break;
 
-		case PlantingTag::FIND_FARM:
-
-
 		case PlantingTag::GOTO_FARM:
 			gotoFarm(e, mov, work, co, tag);
 			break;
 
 		case PlantingTag::PLANT:
-			doPlanting(e, mov, work, co, tag);
+			doPlanting(e, mov, work, co, tag, duration);
 			break;
 		}
 	}
@@ -161,6 +159,10 @@ void findSeeds(const Entity & e, MovementComponent &mov, WorkTemplate<PlantingTa
 		if (sId > 0)
 		{
 			auto seed = world.getEntity(sId);
+
+			if (!seed.hasComponent<PositionComponent>())
+				continue;
+
 			const auto& seedCo = seed.getComponent<PositionComponent>().co;
 
 			auto path = findPath(co, seedCo);
@@ -170,6 +172,7 @@ void findSeeds(const Entity & e, MovementComponent &mov, WorkTemplate<PlantingTa
 				mov.path = path->path;
 				tag.targetCo = seedCo;
 				tag.farmCo = s.second.second;
+				tag.itemId = sId;
 
 				// Mark farm as unavailible to other workers
 				designations->farming[getIdx(tag.farmCo)].beingWorked = true;
@@ -183,9 +186,12 @@ void findSeeds(const Entity & e, MovementComponent &mov, WorkTemplate<PlantingTa
 		// find one and claim it
 		else
 		{
-			seedsHelper.forAllSeeds([&co, &tag, &mov, &s](Entity e)
+			seedsHelper.forAllSeeds([&co, &tag, &mov, &s, &sId](Entity e)
 			{
 				if (e.hasComponent<Claimed>() || !e.hasComponent<PositionComponent>())
+					return;
+
+				if (!e.hasComponent<PositionComponent>())
 					return;
 
 				const auto& seedCo = e.getComponent<PositionComponent>().co;
@@ -200,6 +206,7 @@ void findSeeds(const Entity & e, MovementComponent &mov, WorkTemplate<PlantingTa
 					mov.path = path->path;
 					tag.targetCo = seedCo;
 					tag.farmCo = s.second.second;
+					tag.itemId = sId;
 
 					// Mark farm as unavailible to other workers
 					designations->farming[getIdx(tag.farmCo)].beingWorked = true;
@@ -251,16 +258,87 @@ void gotoSeeds(const Entity & e, MovementComponent & mov, WorkTemplate<PlantingT
 
 void gotoFarm(const Entity & e, MovementComponent & mov, WorkTemplate<PlantingTag>& work, const Coordinates & co, PlantingTag & tag)
 {
-	work.followPath(mov, co, tag.farmCo, [&tag]()
+	work.followPath(mov, co, tag.farmCo, [&tag, &co, &mov, &e]()
 	{
+		auto failFind = designations->farming.find(getIdx(tag.farmCo));
 
-	}, []
+		if (failFind != designations->farming.end())
+			failFind->second.beingWorked = false;
+
+		// On pathing failure
+		// Find a farm that can take the seeds we hold
+		std::map<double, Coordinates> fMap;
+		const auto& seedTag = world.getEntity(tag.itemId).getComponent<Seed>().plantTag;
+		for (const auto& f : designations->farming)
+		{
+			if (f.second.step == FarmInfo::PLANT && !f.second.beingWorked && f.second.seedType == seedTag)
+			{
+				fMap.insert(std::make_pair(get_3D_distance(co, idxToCo(f.first)), idxToCo(f.first)));
+			}
+		}
+
+		for (const auto& d : fMap)
+		{
+			auto path = findPath(co, d.second);
+
+			if (!path->failed)
+			{
+				mov.path = path->path;
+				tag.farmCo = d.second;
+				return;
+			}
+		}
+
+		// Cannot find path or cannot find farm to take our seeds
+		// Drop seeds and find different ones
+		tag.step = PlantingTag::FIND_SEEDS;
+		tag.farmCo = EMPTY_COORDINATES;
+		
+		world.emit(drop_item_message{ SLOT_CARRYING, e.getId().index, tag.itemId, co });
+
+	}, [&tag]
 	{
-
+		// On reaching farm
+		tag.step = PlantingTag::PLANT;
 	});
 }
 
-void doPlanting(const Entity & e, MovementComponent & mov, WorkTemplate<PlantingTag>& work, const Coordinates & co, PlantingTag & tag)
+void doPlanting(const Entity & e, MovementComponent & mov, WorkTemplate<PlantingTag>& work, const Coordinates & co, PlantingTag & tag, const double& duration)
 {
+	const auto idx = getIdx(co);
+	auto farmFind = designations->farming.find(idx);
 
+	if (farmFind == designations->farming.end())
+	{
+		tag.step = PlantingTag::GOTO_FARM; // This will also drop and find different seeds if it cannot find the farm
+		return;
+	}
+
+	const auto plant = getPlantDef(getPlantIdx(farmFind->second.seedType));
+	auto& stats = e.getComponent<Stats>();
+
+	if (farmFind->second.progress < plant->time.first)
+	{
+		doWorkTime(stats, jobSkill, duration, farmFind->second.progress);
+	}
+
+	// Done with work time!
+
+	deleteItemFromInventory(e, e.getComponent<Inventory>(), SLOT_CARRYING); // Make Entities be able to hold more than one seed!
+
+	// Set plant into tile
+	region::setFarmPlot(idx);
+	region::setPlantHealth(idx, 10);
+	region::setPlantLifecycle(idx, 0);
+	region::setPlantTicker(idx, 0);
+	region::setPlantType(idx, getPlantIdx(farmFind->second.seedType));
+	region::tile_recalc(idxToCo(idx));
+
+	farmFind->second.progress = 0.0;
+	farmFind->second.beingWorked = false;
+	farmFind->second.step = FarmInfo::GROWING;
+
+	giveWorkXp(stats, jobSkill, plant->difficulty);
+	
+	work.cancel_work(e);
 }

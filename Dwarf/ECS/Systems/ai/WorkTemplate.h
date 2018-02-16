@@ -47,18 +47,17 @@ public:
 		// Create a sorted map of closest items so we can 
 		// try pathing to multiple items before giving up
 		// if one path doesn't work out
-		std::map<double, size_t> distanceMap = { { 1000.0, 0 } };
+		std::map<double, size_t> distanceMap;
 
 		itemHelper.forEachItem([&distanceMap, &co, &catagory](const Entity& i)
 		{
 			if (i.hasComponent<Claimed>() || !i.getComponent<Item>().catagory.test(catagory))
-				continue;
+				return;
 
 			distanceMap.insert(std::make_pair(get_3D_distance(i.getComponent<PositionComponent>().co, co), i.getId().index));
 		});
 
-		const auto& id = distanceMap.begin()->second;
-
+		size_t item = 0;
 		bool found = false;
 		for (const auto& i : distanceMap)
 		{
@@ -71,6 +70,7 @@ public:
 
 			// path found, claim item at set path
 			found = true;
+			item = i.second;
 			itemHelper.claim_item(world.getEntity(i.second));
 			mov.path = path->path;
 			break;

@@ -62,6 +62,7 @@ void saveGame(bool& done)
 		archive(camera);
 
 		done = true;
+		path = "";
 	}
 
 	ImGui::End();

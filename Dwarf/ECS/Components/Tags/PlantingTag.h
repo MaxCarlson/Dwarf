@@ -11,7 +11,6 @@ struct PlantingTag : public Component
 		PICKUP_HOE,
 		FIND_SEEDS,
 		GOTO_SEEDS,
-		FIND_FARM,
 		GOTO_FARM,
 		PLANT,
 	};
@@ -26,7 +25,7 @@ struct PlantingTag : public Component
 	template<class Archive>
 	void serialize(Archive &archive)
 	{
-		archive(step, itemId, progress, targetCo, farmCo);
+		archive(step, itemId, targetCo, farmCo);
 	}
 };
 

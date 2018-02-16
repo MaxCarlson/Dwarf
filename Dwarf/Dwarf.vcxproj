@@ -157,6 +157,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ECS\Components\Seed.cpp" />
+    <ClCompile Include="ECS\Components\Sentients\Inventory.cpp" />
     <ClCompile Include="ECS\Systems\Gui\DesignStockpiles.cpp" />
     <ClCompile Include="dfr\DrawLayers.cpp" />
     <ClCompile Include="dfr\Layer.cpp" />

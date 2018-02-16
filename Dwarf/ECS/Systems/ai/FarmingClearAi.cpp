@@ -36,7 +36,7 @@ namespace JobsBoard
 
 		for (const auto& f : designations->farming)
 		{
-			if (f.second.step == FarmInfo::CLEAR)
+			if (f.second.step == FarmInfo::CLEAR && !f.second.beingWorked)
 			{
 				auto find = board.find(pfind->second);
 
@@ -107,6 +107,8 @@ inline void findFarm(const Entity &e, const Coordinates& co, WorkTemplate<FarmCl
 		{
 			tag.dest = getIdx(t.second);
 			tag.step = FarmClearTag::GOTO_FARM;
+
+			designations->farming[tag.dest].beingWorked = true;
 			e.getComponent<MovementComponent>().path = path->path; // Need to make movement path into a unique ptr so that we're not copying the entire path!
 			return;
 		}
@@ -124,7 +126,8 @@ inline void gotoFarm(const Entity &e, const Coordinates& co, WorkTemplate<FarmCl
 	work.followPath(mov, co, idxToCo(tag.dest), [&work, &tag, &e]()
 	{
 		// On not finding a path
-		work.cancel_work(e);
+		designations->farming[tag.dest].beingWorked = false;
+		tag.step = FarmClearTag::FIND_FARM;
 		return;
 	}, [&tag]
 	{
@@ -146,7 +149,13 @@ inline void clearArea(const Entity &e, const Coordinates& co, WorkTemplate<FarmC
 	// Invalid designation spot
 	if (ffind == designations->farming.end())
 	{
-		work.cancel_work(e);
+		tag.step = FarmClearTag::FIND_FARM;
+
+		auto failFind = designations->farming.find(tag.dest);
+
+		if(failFind != designations->farming.end())
+			failFind->second.beingWorked = false;
+
 		return;
 	}
 
@@ -208,6 +217,7 @@ inline void clearArea(const Entity &e, const Coordinates& co, WorkTemplate<FarmC
 
 	// Farm plot is no longer being worked
 	ffind->second.progress = 0.0;
+	ffind->second.beingWorked = false;
 
 	giveWorkXp(stats, jobSkill, difficulty);
 

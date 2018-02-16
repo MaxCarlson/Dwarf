@@ -32,5 +32,7 @@ public:
 	}
 };
 
+void deleteItemFromInventory(const Entity& e, Inventory &inv, const int ITEM_SLOT);
+
 CEREAL_REGISTER_TYPE(Inventory);
 CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, Inventory);
