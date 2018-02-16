@@ -32,6 +32,8 @@
 #include "ECS\Components\Sentients\Stats.h"
 #include "ECS\Components\Sentients\Inventory.h"
 #include "ECS\Components\Sentients\AiWorkComponent.h"
+#include "ECS\Components\Sentients\Needs.h"
+#include "ECS\Components\Sentients\Happiness.h"
 
 void ComponentsInit::init()
 {
@@ -65,6 +67,8 @@ void ComponentsInit::init()
 	world.registerComponent<Stats>();
 	world.registerComponent<Inventory>();
 	world.registerComponent<AiWorkComponent>();
+	world.registerComponent<Needs>();
+	world.registerComponent<Happiness>();
 
 	// Global components
 	world.registerComponent<Calender>();

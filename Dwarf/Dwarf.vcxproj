@@ -261,6 +261,7 @@
     <ClCompile Include="Helpers\Rng.cpp" />
     <ClCompile Include="Raws\ReadPlants.cpp" />
     <ClCompile Include="ECS\Systems\helpers\RegionHelper.cpp" />
+    <ClCompile Include="Raws\ReadNeeds.cpp" />
     <ClCompile Include="RegisterComponents.cpp" />
     <ClCompile Include="RunSystems.cpp" />
     <ClCompile Include="Raws\SkillReader.cpp" />
@@ -466,6 +467,7 @@
     <ClInclude Include="ECS\Systems\ai\EquipHandler.h" />
     <ClInclude Include="Helpers\FastNoise.h" />
     <ClInclude Include="Map\building\region\place_creatures.h" />
+    <ClInclude Include="Raws\Defs\NeedDef.h" />
     <ClInclude Include="Raws\Defs\PlantDef.h" />
     <ClInclude Include="Raws\Materials.h" />
     <ClInclude Include="Raws\Defs\MaterialDef.h" />
@@ -518,6 +520,7 @@
     <ClInclude Include="Helpers\Rng.h" />
     <ClInclude Include="Raws\ReadPlants.h" />
     <ClInclude Include="ECS\Systems\helpers\RegionHelper.h" />
+    <ClInclude Include="Raws\ReadNeeds.h" />
     <ClInclude Include="RegisterComponents.h" />
     <ClInclude Include="RunSystems.h" />
     <ClInclude Include="Raws\SkillReader.h" />
@@ -541,6 +544,7 @@
     <None Include="Raws\LuaDefs\items_raw.lua" />
     <None Include="Raws\LuaDefs\items_tools.lua" />
     <None Include="Raws\LuaDefs\materials.lua" />
+    <None Include="Raws\LuaDefs\needs.lua" />
     <None Include="Raws\LuaDefs\plants.lua" />
     <None Include="Raws\LuaDefs\render.lua" />
     <None Include="Raws\LuaDefs\stockpiles.lua" />

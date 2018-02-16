@@ -339,6 +339,9 @@
     <ClCompile Include="ECS\Components\Sentients\Inventory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Raws\ReadNeeds.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ECS\EntityManager.h">
@@ -1079,6 +1082,12 @@
     <ClInclude Include="ECS\Components\Sentients\Needs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Raws\ReadNeeds.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Raws\Defs\NeedDef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="cereal\external\rapidxml\manual.html" />
@@ -1097,6 +1106,7 @@
     <None Include="Raws\LuaDefs\buildings_woodworking.lua" />
     <None Include="Raws\LuaDefs\plants.lua" />
     <None Include="Raws\LuaDefs\items_food.lua" />
+    <None Include="Raws\LuaDefs\needs.lua" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Raws\LuaDefs\index.txt" />

@@ -1,12 +1,13 @@
 #pragma once
 #include "ECS\Component.h"
+#include <cereal\types\functional.hpp>
 
 constexpr double MAX_NEED_FULFILMENT = 1000.0;
 
 struct Need
 {
 	Need() = default;
-	Need(double lvl, double declineModifier, double declineRate) 
+	Need(double lvl, double declineModifier, double declineRate)
 		: lvl(lvl), declineModifier(declineModifier), declineRate(declineRate) {}
 
 	double lvl = 500.0;
@@ -16,7 +17,7 @@ struct Need
 	template<class Archive>
 	void serialize(Archive &archive)
 	{
-		archive(lvl, declineRate);
+		archive(lvl, declineModifier, declineRate);
 	}
 };
 
