@@ -89,8 +89,10 @@ inline void findBed(const Entity &e, WorkTemplate<SleepTag>& work, MovementCompo
 
 		if (!path->failed)
 		{
+			tag.bedId = myBed->first;
 			tag.bedCo = myBed->second;
 			tag.step = SleepTag::GOTO_BED;
+			tag.bedStatus = SleepTag::OWN_BED;
 			mov.path = path->path;
 			return;
 		}
@@ -109,8 +111,41 @@ inline void findBed(const Entity &e, WorkTemplate<SleepTag>& work, MovementCompo
 		bedDist.emplace(std::make_pair(dist, b.getId().index));
 	});
 
+	// Find path to closest unclaimed bed
+	for (const auto& beds : bedDist)
+	{
+		auto bed = world.getEntity(beds.second);
+		auto& bedCo = bed.getComponent<PositionComponent>().co;
+		auto path = findPath(co, bedCo);
+
+		if (!path->failed)
+		{
+			tag.bedCo = bedCo;
+			tag.bedId = beds.second;
+			tag.step = SleepTag::GOTO_BED;
+			tag.bedStatus = SleepTag::CLAIMED_BED;
+			mov.path = path->path;
+			bed.addComponent<Claimed>(e.getId().index);
+			bed.activate();
+			return;
+		}
+	}
 
 	// If exhausted find a floor to sleep on
+
+
+	work.cancel_work(e);
+}
+
+inline void unclaimBed(SleepTag &tag)
+{
+	auto bed = world.getEntity(tag.bedId);
+
+	if (bed.isValid() && bed.hasComponent<Claimed>())
+	{
+		bed.removeComponent<Claimed>();
+		bed.activate();
+	}
 }
 
 inline void gotoBed(const Entity &e, WorkTemplate<SleepTag>& work, MovementComponent &mov, SleepTag & tag, const Coordinates & co)
@@ -119,6 +154,10 @@ inline void gotoBed(const Entity &e, WorkTemplate<SleepTag>& work, MovementCompo
 	{
 		// On path failure
 		tag.step = SleepTag::FIND_BED;
+
+		// Unclaim bed we cannot reach
+		if (tag.step == SleepTag::CLAIMED_BED)
+			unclaimBed(tag);
 
 	}, [&tag]
 	{
@@ -143,8 +182,15 @@ inline void doSleep(const Entity &e, WorkTemplate<SleepTag>& work, const double&
 
 	sleep.lvl += duration / 1000;
 
+	if (sleep.lvl > 1000.0)
+		sleep.lvl = 1000.0;
+
 	if (sleep.lvl == 1000.0)
 	{
+		if (tag.bedStatus == SleepTag::CLAIMED_BED)
+			unclaimBed(tag);
+
+
 		work.cancel_work(e);
 		return;
 	}

@@ -11,14 +11,24 @@ struct SleepTag : public Component
 		SLEEP
 	};
 
+	enum BedStatus
+	{
+		OWN_BED,
+		CLAIMED_BED,
+		NO_BED
+	};
+
 	int step = FIND_BED;
 
 	Coordinates bedCo;
 
+	size_t bedId = 0;
+	BedStatus bedStatus = OWN_BED;
+
 	template<class Archive>
 	void serialize(Archive &archive)
 	{
-		archive(step, bedCo);
+		archive(step, bedCo, bedId, bedStatus);
 	}
 };
 

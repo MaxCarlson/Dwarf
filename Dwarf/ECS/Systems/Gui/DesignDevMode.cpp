@@ -78,15 +78,19 @@ void DesignDevMode::spawnItem()
 			matsPassedFilter.emplace_back(m);
 
 	static int matIdx = 0;
+	if (matIdx > matsPassedFilter.size() - 1)
+		matIdx = matsPassedFilter.size() - 1;
+
 	ImGui::ListBox("Materials##Dev", &matIdx, matsPassedFilter);
 
 	ImGui::End();
 
 	if (ImGui::Button("Select Spawn Location##Dev") || selectingSpawnLocation)
 	{
+		selectingSpawnLocation = true;
 		chooseLocation(itemsPassedFilter.at(itemIdx), matsPassedFilter.at(matIdx), qty);
 
-		if (!mouse::rightClick)
+		if (mouse::rightClick)
 		{
 			selectingSpawnLocation = false;
 		}

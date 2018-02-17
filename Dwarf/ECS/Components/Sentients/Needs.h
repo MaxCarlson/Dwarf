@@ -20,9 +20,9 @@ struct Need
 	}
 };
 
-const Need Hunger(500.0, 1.0);
-const Need Thirst(500.0, 1.2);
-const Need Sleep(500.0,  0.6);
+const Need Hunger(750.0, 1.0);
+const Need Thirst(750.0, 1.2);
+const Need Sleep(1000.0,  0.6);
 const Need Comfort(750.0, 0.45);
 const Need Joy(750.0, 0.45);
 
