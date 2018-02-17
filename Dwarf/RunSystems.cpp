@@ -37,6 +37,10 @@
 #include "ECS\Systems\ai\FarmingAi.h"
 #include "ECS\Systems\ai\FarmingClearAi.h"
 #include "ECS\Systems\ai\FarmingSoilAi.h"
+#include "ECS\Systems\ai\SleepSystem.h"
+
+// Passive systems
+#include "ECS\Systems\ai\Passives\NeedsSystem.h"
 
 // System Helpers
 #include "ECS\Systems\helpers\ItemHelper.h"
@@ -87,6 +91,10 @@ const std::string REGION_HELPER = "Region Helper";
 const std::string FARM_CLEAR_AI = "Farm Clear Ai";
 const std::string FARM_SOIL_AI = "Farm Soil Ai";
 const std::string SEED_HELPER = "Seed Helper";
+
+// Needs and passive
+const std::string NEEDS_SYSTEM = "Needs System";
+const std::string SLEEP_SYSTEM = "Sleep System";
 
 // Gui Systems
 const std::string MENU_BAR = "Menu Bar";
@@ -154,6 +162,10 @@ void initSystems(bool fromLoad)
 	systems[FARM_CLEAR_AI] = new FarmingClearAi;
 	systems[FARM_SOIL_AI] = new FarmingSoilAi;
 
+	// Needs and passives
+	systems[NEEDS_SYSTEM] = new NeedsSystem;
+	systems[SLEEP_SYSTEM] = new SleepSystem;
+
 	// Gui systems
 	systems[MENU_BAR] = new MenuBar;
 	systems[CAMERA_SYSTEM] = new CameraSystem;
@@ -198,6 +210,9 @@ void initSystems(bool fromLoad)
 	world.addSystem(* static_cast<FarmingClearAi *>(systems[FARM_CLEAR_AI]));
 	world.addSystem(* static_cast<FarmingSoilAi *>(systems[FARM_SOIL_AI]));
 
+	// Needs and passives
+	world.addSystem(* static_cast<NeedsSystem *>(systems[NEEDS_SYSTEM]));
+	world.addSystem(* static_cast<SleepSystem *>(systems[SLEEP_SYSTEM]));
 
 	// Gui Systems
 	world.addSystem(* static_cast<MenuBar *>(systems[MENU_BAR]));
@@ -286,14 +301,17 @@ void updateSystems(const double duration)
 			majorTick = 0.0;
 			runSystem(CALENDER_SYSTEM, MS_PER_MAJOR_TICK);
 			runSystem(WORK_ORDER_HELPER, MS_PER_MAJOR_TICK);
+			runSystem(NEEDS_SYSTEM, MS_PER_MAJOR_TICK);
 		}
 
-		// Update systems
+		// Assign jobs to entities
+		runSystem(AI_WORK_SYSTEM, MS_PER_UPDATE);
+
+		// These sytems just update things
 		runSystem(MINING_SYSTEM, MS_PER_UPDATE);
 		runSystem(MOVEMENT_SYSTEM, MS_PER_UPDATE);
 		runSystem(DIJKSTRA_MAPS_HANDLER, MS_PER_UPDATE);
-
-		runSystem(AI_WORK_SYSTEM, MS_PER_UPDATE);
+		runSystem(STOCKPILE_SYSTEM, MS_PER_UPDATE);
 
 		// Perform assigned jobs
 		runSystem(WORK_ORDERS_SYSTEM, MS_PER_UPDATE);
@@ -305,13 +323,12 @@ void updateSystems(const double duration)
 		runSystem(FARM_CLEAR_AI, MS_PER_UPDATE);
 		runSystem(FARM_SOIL_AI, MS_PER_UPDATE);
 		runSystem(FARMING_AI, MS_PER_UPDATE);
+		runSystem(HAULING_SYSTEM, MS_PER_UPDATE);
+		runSystem(PLANT_SYSTEM, MS_PER_UPDATE);
+		runSystem(SLEEP_SYSTEM, MS_PER_UPDATE);
 
 		// Perfrom mining and later constructing jobs?
 		runSystem(REGION_HELPER, MS_PER_UPDATE);
-
-		runSystem(STOCKPILE_SYSTEM, MS_PER_UPDATE);
-		runSystem(HAULING_SYSTEM, MS_PER_UPDATE);
-		runSystem(PLANT_SYSTEM, MS_PER_UPDATE);
 
 		// Pickup and drop all items requested
 		runSystem(EQUIP_HANDLER, MS_PER_UPDATE);

@@ -342,6 +342,12 @@
     <ClCompile Include="HappinessSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ECS\Systems\ai\Passives\NeedsSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS\Systems\ai\SleepSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ECS\EntityManager.h">
@@ -1086,6 +1092,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="HappinessSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Systems\ai\Passives\NeedsSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Components\Tags\SleepTag.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Components\Tags\EatTag.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Systems\ai\SleepSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

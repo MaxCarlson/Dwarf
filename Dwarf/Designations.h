@@ -69,9 +69,7 @@ struct Designations
 	// will be auto added to this vector
 	std::vector<std::pair<bool, Coordinates>> harvest;
 
-	// Farming designations, indexed by idx, size_t is plantDefIdx (which will eventually be used for finding seeds!)
-	std::vector<std::pair<int, size_t>> planting;
-
+	// All farms are in this map
 	std::map<int, FarmInfo> farming;
 
 	// Map of items indexed by destination square that are currently claimed
@@ -79,10 +77,14 @@ struct Designations
 	// size_t is the stockpile id
 	std::unordered_map<int, std::size_t> hauling;
 
+	// All beds that have a designated owner
+	// Indexed by entitity Id
+	std::unordered_map<size_t, Coordinates> beds;
+
 	template<class Archive>
 	void serialize(Archive& archive)
 	{
-		archive(mining, buildings, architecture, workOrders, harvest, planting, farming, hauling);
+		archive(mining, buildings, architecture, workOrders, harvest, planting, farming, hauling, beds);
 	}
 
 };

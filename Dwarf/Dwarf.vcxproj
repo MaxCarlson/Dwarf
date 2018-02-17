@@ -206,6 +206,7 @@
     <ClCompile Include="MainLoops\PlayGameLoop.cpp" />
     <ClCompile Include="ECS\Systems\Gui\MenuBar.cpp" />
     <ClCompile Include="mouse.cpp" />
+    <ClCompile Include="ECS\Systems\ai\Passives\NeedsSystem.cpp" />
     <ClCompile Include="Raws\BiomeReader.cpp" />
     <ClCompile Include="ECS\Systems\ai\HaulingSystem.cpp" />
     <ClCompile Include="ECS\Systems\helpers\PathFinding.cpp" />
@@ -266,6 +267,7 @@
     <ClCompile Include="RunSystems.cpp" />
     <ClCompile Include="Raws\SkillReader.cpp" />
     <ClCompile Include="ECS\Components\Sentients\Stats.cpp" />
+    <ClCompile Include="ECS\Systems\ai\SleepSystem.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -284,8 +286,10 @@
     <ClInclude Include="ECS\Components\Seed.h" />
     <ClInclude Include="ECS\Components\Sentients\Happiness.h" />
     <ClInclude Include="ECS\Components\Sentients\Needs.h" />
+    <ClInclude Include="ECS\Components\Tags\EatTag.h" />
     <ClInclude Include="ECS\Components\Tags\FarmClearTag.h" />
     <ClInclude Include="ECS\Components\Tags\FarmSoilTag.h" />
+    <ClInclude Include="ECS\Components\Tags\SleepTag.h" />
     <ClInclude Include="ECS\Messages\hoe_map_changed_message.h" />
     <ClInclude Include="ECS\Messages\planting_map_changed_message.h" />
     <ClInclude Include="ECS\Systems\Gui\DesignStockpiles.h" />
@@ -340,6 +344,7 @@
     <ClInclude Include="MainLoops\PlayGameLoop.h" />
     <ClInclude Include="ECS\Systems\Gui\MenuBar.h" />
     <ClInclude Include="mouse.h" />
+    <ClInclude Include="ECS\Systems\ai\Passives\NeedsSystem.h" />
     <ClInclude Include="Raws\BiomeReader.h" />
     <ClInclude Include="ECS\Components\helpers\skill.h" />
     <ClInclude Include="ECS\Components\helpers\work_order_reaction.h" />
@@ -525,6 +530,7 @@
     <ClInclude Include="RunSystems.h" />
     <ClInclude Include="Raws\SkillReader.h" />
     <ClInclude Include="ECS\Components\Sentients\Stats.h" />
+    <ClInclude Include="ECS\Systems\ai\SleepSystem.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="ECS\Systems\ai\WoodcuttingAi.h" />
     <ClInclude Include="WorldGeneration.h" />

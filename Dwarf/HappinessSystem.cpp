@@ -4,7 +4,7 @@
 void HappinessSystem::init()
 {
 }
-
+/*
 inline void decreaseNeeds(const double& duration, Needs &needs)
 {
 	for (auto& n : needs.needs)
@@ -15,9 +15,11 @@ inline void decreaseNeeds(const double& duration, Needs &needs)
 
 inline void adjustHappiness(Happiness &happiness, Needs &needs)
 {
+	
 	happiness.total = 0.0;
 	for (const auto& n : needs.needs)
 		happiness.total += n.bonus / (MAX_NEED_FULFILMENT / n.lvl);
+	
 }
 
 void HappinessSystem::update(const double duration)
@@ -31,3 +33,4 @@ void HappinessSystem::update(const double duration)
 		adjustHappiness(hap, needs);
 	}
 }
+*/

@@ -27,6 +27,7 @@
 #include "ECS\Components\Tags\ArchitectTag.h"
 #include "ECS\Components\Tags\FarmClearTag.h"
 #include "ECS\Components\Tags\FarmSoilTag.h"
+#include "ECS\Components\Tags\SleepTag.h"
 
 // Component Sentients
 #include "ECS\Components\Sentients\Stats.h"
@@ -62,6 +63,7 @@ void ComponentsInit::init()
 	world.registerComponent<PlantingTag>();
 	world.registerComponent<FarmClearTag>();
 	world.registerComponent<FarmSoilTag>();
+	world.registerComponent<SleepTag>();
 
 	// Sentiants
 	world.registerComponent<Stats>();

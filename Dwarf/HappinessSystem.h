@@ -6,7 +6,7 @@
 class HappinessSystem : public System<Requires<Happiness, Needs>>
 {
 public:
-	void init();
-	void update(const double duration);
+	//void init();
+	//void update(const double duration);
 };
 
