@@ -175,7 +175,7 @@ void EquipHandler::designateBuilding(designate_building_message & msg)
 	auto building = getWorld().createEntity();
 
 	building.addComponent<PositionComponent>(designation.co);
-	building.addComponent<Building>( Building{ designation.tag, designation.width, designation.height, false, msg.building.charCodes });
+	building.addComponent<Building>( Building{ designation.tag, designation.width, designation.height, false, msg.building.provides, msg.building.charCodes });
 
 	designation.entity_id = building.getId().index;
 

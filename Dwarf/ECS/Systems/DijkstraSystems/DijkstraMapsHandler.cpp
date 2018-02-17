@@ -20,7 +20,7 @@ DijkstraMap hoe_map;
 DijkstraMap block_map;
 DijkstraMap architecture_map;
 DijkstraMap harvest_map;
-DijkstraMap planting_map;
+DijkstraMap planting_map; // Defunct ~ Remove
 
 DijkstraMapsHandler::~DijkstraMapsHandler()
 {
@@ -45,7 +45,7 @@ void DijkstraMapsHandler::init()
 	subscribe_mbox<block_map_changed_message>();
 	subscribe_mbox<designate_architecture_message>();
 	subscribe_mbox<harvest_map_changed_message>();
-	subscribe_mbox<planting_map_changed_message>();
+	//subscribe_mbox<planting_map_changed_message>();
 }
 
 void DijkstraMapsHandler::update(const double duration)
@@ -66,7 +66,7 @@ void DijkstraMapsHandler::update(const double duration)
 	each_mbox<block_map_changed_message>([this](const block_map_changed_message & msg)			 { update_block_map    = true; });
 	each_mbox<designate_architecture_message>([this](const designate_architecture_message & msg) { update_architecture = true; });
 	each_mbox<harvest_map_changed_message>([this](const harvest_map_changed_message &msg)		 { update_harvest	   = true; });
-	each_mbox<planting_map_changed_message>([this](const planting_map_changed_message &msg)		 { update_planting     = true; });
+	//each_mbox<planting_map_changed_message>([this](const planting_map_changed_message &msg)		 { update_planting     = true; });
 
 	if (update_pick_map)
 	{
@@ -177,17 +177,5 @@ void DijkstraMapsHandler::update(const double duration)
 
 		harvest_map.update(targets);
 		update_harvest = false;
-	}
-
-	if (update_planting)
-	{
-		std::unordered_set<int> repeats;
-		std::vector<int> targets;
-
-		for (const auto& p : designations->planting)
-			targets.emplace_back(p.first);
-
-		planting_map.update(targets);
-		update_planting = false;
 	}
 }

@@ -1,10 +1,11 @@
 #include "stdafx.h"
 #include "HappinessSystem.h"
 
+/*
 void HappinessSystem::init()
 {
 }
-/*
+
 inline void decreaseNeeds(const double& duration, Needs &needs)
 {
 	for (auto& n : needs.needs)

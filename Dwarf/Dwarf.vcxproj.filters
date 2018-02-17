@@ -348,6 +348,9 @@
     <ClCompile Include="ECS\Systems\ai\SleepSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ECS\Systems\helpers\BuildingHelper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ECS\EntityManager.h">
@@ -1104,6 +1107,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ECS\Systems\ai\SleepSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Systems\helpers\BuildingHelper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

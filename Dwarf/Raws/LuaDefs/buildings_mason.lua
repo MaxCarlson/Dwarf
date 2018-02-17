@@ -8,7 +8,8 @@ buildings["mason"] = {
 	components = { { item = "stone_boulder", qty = 3 } },
 	skill = { { name = "Construction", difficulty = 10 } }, 
 	render = { { glyph = glyphs["barrel"] }, { glyph = glyphs["tools2"] }, { glyph = glyphs["nest_box"] }, { glyph = glyphs["placed_floor"] } },
-	structure
+	structure,
+	provides = {{ workshop }}
 };
 
 
@@ -36,12 +37,22 @@ reactions = {
 	},
 
 	make_stone_statue = {
-		name = "Make Statue",
+		name = "Make Stone Statue",
 		workshop = "mason",
 		skill = "Masonry",
 		inputs = {{ item = "stone_boulder", qty = 1 }},
 		outputs = {{ item = "statue", qty = 1}},
 		difficulty = 14,
 		time = 15
+	},
+
+	make_stone_bed = {
+		name = "Make Stone Bed",
+		workshop = "mason",
+		skill = "Masonry",
+		inputs = {{ item = "stone_boulder", qty = 1 }},
+		outputs = {{ item = "bed", qty = 1}},
+		difficulty = 10,
+		time = 10		
 	},
 };

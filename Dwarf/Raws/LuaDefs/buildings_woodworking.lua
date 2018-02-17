@@ -10,7 +10,8 @@ buildings["sawmill"] = {
 			   { glyph = glyphs["saw_blade"] },    { glyph = glyphs["hor_ballista_bolt"] },     { glyph = glyphs["hor_ballista_bolt"] },
 			   { glyph = glyphs["w_tile"] },    { glyph = glyphs["w_tile"] },   { glyph = glyphs["coiled_rope"] } 
 			 },
-	structure
+	structure,
+	provides = {{ workshop }}
 };
 
 -- Sawmill reactions

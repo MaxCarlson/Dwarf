@@ -5,9 +5,15 @@
 
 enum b_provides_enum
 {
-	provides_floor,
-	provides_wall,
-	provides_ramp,
+	PROVIDES_WORKSHOP,
+	PROVIDES_FLOOR,
+	PROVIDES_WALL,
+	PROVIDES_RAMP,
+	PROVIDES_UP_STAIRS,
+	PROVIDES_DOWN_STAIRS,
+	PROVIDES_UP_DOWN_STAIRS,
+	PROVIDES_SLEEP,
+	MAX_BUILDING_PROVIDES
 };
 
 struct BuildingProvides
@@ -33,8 +39,8 @@ struct BuildingDef
 	// What do we need to make this building?
 	std::vector<ReactionInput> components;
 
-	// What does this building do?
-	std::vector<BuildingProvides> provides;
+	// Any special building attributes?
+	std::bitset<MAX_BUILDING_PROVIDES> provides;
 
 	std::pair<std::string, int> skill_required;
 
@@ -42,6 +48,8 @@ struct BuildingDef
 	// needed starting from the top left
 	// to bottom right ~~ possibly make a struct that holds char info as well as forground + background colors?
 	std::vector<int> charCodes;
+
+	double buildTime = 1000.0;
 
 	bool structure = false;
 };

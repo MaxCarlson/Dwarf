@@ -10,7 +10,8 @@ buildings["smelter"] = {
 			   { glyph = glyphs["bellow"] },    { glyph = glyphs["w_tile"] },     { glyph = glyphs["w_tile"] },
 			   { glyph = glyphs["w_tile"] },    { glyph = glyphs["w_tile"] },   { glyph = glyphs["coal_pit"] } 
 			 },
-	structure
+	structure,
+	provides = {{ workshop }}
 };
 
 
@@ -34,7 +35,8 @@ buildings["wood_furnace"] = {
 	render = { { glyph = glyphs["w_tile"] },       { glyph = glyphs["m_wood_burner"] }, { glyph = glyphs["r_wood_burner"] },
 			   { glyph = glyphs["s_wood_stack"] }, { glyph = glyphs["w_tile"] },		{ glyph = glyphs["w_tile"] },
 			   { glyph = glyphs["w_tile"] },       { glyph = glyphs["w_tile"] },		{ glyph = glyphs["coal_pit"] } },
-	structure
+	structure,
+	provides = {{ workshop }}
 };
 
 reactions["make_charcoal"] = {
@@ -58,7 +60,8 @@ buildings["blacksmith"] = {
 			   { glyph = glyphs["smith_bottom"] }, { glyph = glyphs["w_tile"] },     { glyph = glyphs["w_tile"] },
 			   { glyph = glyphs["coal_pit"] },     { glyph = glyphs["w_tile"] },     { glyph = glyphs["anvil"] } 
 			 },
-	structure
+	structure,
+	provides = {{ workshop }}
 };
 
 reactions["make_anvil"] = {

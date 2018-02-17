@@ -11,12 +11,12 @@ struct Need
 		: lvl(lvl), declineRate(declineRate) {}
 
 	double lvl = 500.0;
-	const double declineRate = 1.0;
+	double declineRate = 1.0;
 
 	template<class Archive>
 	void serialize(Archive &archive)
 	{
-		archive(lvl, bonus, declineRate);
+		archive(lvl, declineRate);
 	}
 };
 

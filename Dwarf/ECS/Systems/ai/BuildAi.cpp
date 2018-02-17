@@ -278,6 +278,7 @@ void BuildAi::doBuild(const Entity & e, const double & duration)
 			building.materials.push_back(std::make_pair(comptag, material));
 		}
 
+
 		building.complete = true;
 
 		// Just used for filtering

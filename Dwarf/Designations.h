@@ -84,7 +84,7 @@ struct Designations
 	template<class Archive>
 	void serialize(Archive& archive)
 	{
-		archive(mining, buildings, architecture, workOrders, harvest, planting, farming, hauling, beds);
+		archive(mining, buildings, architecture, workOrders, harvest, farming, hauling, beds);
 	}
 
 };

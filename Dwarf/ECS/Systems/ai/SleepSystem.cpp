@@ -5,6 +5,8 @@
 #include "Designations.h"
 #include "ECS\Components\Sentients\Needs.h"
 #include "ECS\Systems\helpers\PathFinding.h"
+#include "ECS\Systems\helpers\BuildingHelper.h"
+#include "ECS\Components\Claimed.h"
 
 namespace JobsBoard
 {
@@ -94,7 +96,18 @@ inline void findBed(const Entity &e, WorkTemplate<SleepTag>& work, MovementCompo
 		}
 	}
 
-	// Find an unclaimed bed
+	// Find closest unclaimed bed
+	std::map<int, size_t> bedDist;
+	buildingHelper.forEachBuildingOfType<PROVIDES_SLEEP>([&bedDist, &co](const Entity &b)
+	{
+		if (b.hasComponent<Claimed>() || !b.hasComponent<PositionComponent>())
+			return;
+
+		auto& bedCo = b.getComponent<PositionComponent>().co;
+		const auto dist = static_cast<int>(get_3D_distance(co, bedCo));
+
+		bedDist.emplace(std::make_pair(dist, b.getId().index));
+	});
 
 
 	// If exhausted find a floor to sleep on
@@ -125,6 +138,8 @@ inline void doSleep(const Entity &e, WorkTemplate<SleepTag>& work, const double&
 	// Multiply recovery by quality of bed
 	// Add in bad thoughts for loud noises
 	// Bonuses thoughts for very high quality beds
+
+	// If I do not own the bed unclaim it upon wake up
 
 	sleep.lvl += duration / 1000;
 

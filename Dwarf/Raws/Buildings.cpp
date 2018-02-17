@@ -75,14 +75,19 @@ void readInBuildings() noexcept
 				readLuaTable2D("provides",
 					[  ](auto type1) {},
 					[&b](auto type2) {
-						if (type2 == "wall")  b.provides.push_back(BuildingProvides{  provides_wall  });
-						if (type2 == "floor") b.provides.push_back(BuildingProvides{  provides_floor });
-						if (type2 == "ramp")  b.provides.push_back(BuildingProvides{  provides_ramp  });
+						if (type2 == "workshop")	 b.provides.set(PROVIDES_WORKSHOP);
+						if (type2 == "wall")		 b.provides.set(PROVIDES_WALL);
+						if (type2 == "floor")		 b.provides.set(PROVIDES_FLOOR);
+						if (type2 == "ramp")		 b.provides.set(PROVIDES_RAMP);
+						if (type2 == "upStaits")	 b.provides.set(PROVIDES_UP_STAIRS);
+						if (type2 == "downStairs")   b.provides.set(PROVIDES_DOWN_STAIRS);
+						if (type2 == "upDownStairs") b.provides.set(PROVIDES_UP_DOWN_STAIRS);
+						if (type2 == "sleep")        b.provides.set(PROVIDES_SLEEP);
 					} 
 				);
 				}		
 			},	
-			{"skill", [&b]() { // Not implemented yet
+			{"skill", [&b]() { 
 				readLuaTable2D("skill",
 					[&b](auto type1) {},
 					[&b](auto type2) {
