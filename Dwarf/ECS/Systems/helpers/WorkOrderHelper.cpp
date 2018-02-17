@@ -108,7 +108,8 @@ std::pair<int, int> WorkOrderHelper::scanForBestWorkOrder(const AiWorkComponent 
 	constexpr int dist = 50; 
 	for (const auto& wo : designations->workOrders) // Only scan through active work orders
 	{	
-		const auto find = prefs.jobPrefrences.find(getReaction(wo.second)->skill);
+		const auto& skill = getReaction(wo.second)->skill;
+		const auto find = prefs.jobPrefrences.find(skill);
 
 		// Job preferences indexed by skill
 		if (find != prefs.jobPrefrences.end() && find->second > best)

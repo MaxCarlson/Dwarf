@@ -30,6 +30,11 @@ skills =
 		s_attributes = { { attr = "Endurance"}, { attr = "Toughness" } }
 	},
 
+	carpentry = {
+		name = "Carpentry",
+		s_attributes = { { attr = "Willpower" }, { attr = "Intelligence" } }
+	},
+
 	masonry = {
 		name = "Masonry",
 		s_attributes = {{ attr = "Agility" }, { attr = "Endurance" }}

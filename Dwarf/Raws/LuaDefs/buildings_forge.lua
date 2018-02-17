@@ -5,7 +5,7 @@ buildings["smelter"] = {
 	width = 3,
 	height = 3,
 	components = {{ item = "block", qty = 7 }},
-	skill = { { name = "Construction", difficulty = 14 } }, 
+	skill = { { name = "construction", difficulty = 14 } }, 
 	render = { { glyph = glyphs["w_tile"] }, { glyph = glyphs["m_smelter"] },  { glyph = glyphs["r_smelter"] }, 
 			   { glyph = glyphs["bellow"] },    { glyph = glyphs["w_tile"] },     { glyph = glyphs["w_tile"] },
 			   { glyph = glyphs["w_tile"] },    { glyph = glyphs["w_tile"] },   { glyph = glyphs["coal_pit"] } 
@@ -18,7 +18,7 @@ buildings["smelter"] = {
 reactions["smelt_ore"] = { -- Should item = metal_bar be replaced with blocks? Just change render character in game based on mat type?
 	name = "Smelt ore",
 	workshop = "smelter",
-	skill = "Furnace Operation",
+	skill = "furnace_operation",
 	inputs = {{ item = "ore", qty = 1 }},
 	outputs = {{ item = "block", qty = 1 }},
 	difficulty = 10,
@@ -31,7 +31,7 @@ buildings["wood_furnace"] = {
 	width = 3,
 	height = 3,
 	components = {{ item = "block", qty = 4 }},
-	skill = {{ name = "Construction", difficulty = 12 }},
+	skill = {{ name = "construction", difficulty = 12 }},
 	render = { { glyph = glyphs["w_tile"] },       { glyph = glyphs["m_wood_burner"] }, { glyph = glyphs["r_wood_burner"] },
 			   { glyph = glyphs["s_wood_stack"] }, { glyph = glyphs["w_tile"] },		{ glyph = glyphs["w_tile"] },
 			   { glyph = glyphs["w_tile"] },       { glyph = glyphs["w_tile"] },		{ glyph = glyphs["coal_pit"] } },
@@ -42,7 +42,7 @@ buildings["wood_furnace"] = {
 reactions["make_charcoal"] = {
 	name = "Make Charcoal",
 	workshop = "wood_furnace",
-	skill = "Furnace Operation",
+	skill = "furnace_operation",
 	inputs = {{ item = "block", qty = 1, material = "wood" }}, -- Possibly use mat_type = organic ?
 	outputs = {{ item = "charcoal", qty = 2 }},
 	difficulty = 12,
@@ -55,7 +55,7 @@ buildings["blacksmith"] = {
 	width = 3,
 	height = 3,
 	components = {{ item = "block", qty = 7 }, { item = "anvil", qty = 14 }},
-	skill = { { name = "Construction", difficulty = 1 } }, 
+	skill = { { name = "construction", difficulty = 1 } }, 
 	render = { { glyph = glyphs["smith_top"] },    { glyph = glyphs["smith_mid"] },  { glyph = glyphs["w_tile"] }, 
 			   { glyph = glyphs["smith_bottom"] }, { glyph = glyphs["w_tile"] },     { glyph = glyphs["w_tile"] },
 			   { glyph = glyphs["coal_pit"] },     { glyph = glyphs["w_tile"] },     { glyph = glyphs["anvil"] } 

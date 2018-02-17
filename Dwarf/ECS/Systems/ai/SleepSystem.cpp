@@ -180,6 +180,9 @@ inline void doSleep(const Entity &e, WorkTemplate<SleepTag>& work, const double&
 
 	// If I do not own the bed unclaim it upon wake up
 
+	//TESTING
+	sleep.lvl = 1000.0;
+
 	sleep.lvl += duration / 1000;
 
 	if (sleep.lvl > 1000.0)

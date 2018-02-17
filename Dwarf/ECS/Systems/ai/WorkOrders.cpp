@@ -31,7 +31,7 @@ namespace JobsBoard
 
 			// Overwrite if distance to equally prefered job is greater
 			// or add if job preference doesn't exist
-			if (find->second.distance > distance || find == board.end())
+			if (find == board.end() || find->second.distance > distance)
 				board[bestIdx] = JobRating{ distance, jt };
 		}	
 	}
