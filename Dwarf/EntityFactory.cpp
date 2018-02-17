@@ -15,6 +15,8 @@
 #include "ECS\Components\Sentients\Inventory.h"
 #include "ECS\Components\Sentients\Stats.h"
 #include "ECS\Components\Sentients\AiWorkComponent.h"
+#include "ECS\Components\Sentients\Needs.h"
+
 
 #include "Raws\SkillReader.h"
 #include <SFML\Graphics\Color.hpp>
@@ -30,7 +32,7 @@ Entity createDwarf(DwarfCreationObj dwarfConstruct)
 
 	dwarf.addComponent<RenderComponent>(vchar{ 769, color_from_name("default"), sf::Color::Transparent.toInteger() });
 	dwarf.addComponent<PositionComponent>(dwarfConstruct.co);
-	dwarf.addComponent<AiWorkComponent>();
+	auto& work = dwarf.addComponent<AiWorkComponent>();
 
 	std::unordered_map<std::string, attribute> attributes;
 
@@ -40,9 +42,11 @@ Entity createDwarf(DwarfCreationObj dwarfConstruct)
 	}
 	std::unordered_map<std::string, skill> skills;
 
+
 	for (const auto& sk : allSkills())
 	{
 		skills[sk] = skill{};
+		work.jobPrefrences[sk] = 10;
 	}
 
 	dwarf.addComponent<Stats>(attributes, skills);
@@ -53,6 +57,7 @@ Entity createDwarf(DwarfCreationObj dwarfConstruct)
 	//dwarf.addComponent<HealthComponent>(1000, 1000, 1);
 
 	dwarf.addComponent<Inventory>();
+	dwarf.addComponent<Needs>();
 
 	dwarf.activate();
 

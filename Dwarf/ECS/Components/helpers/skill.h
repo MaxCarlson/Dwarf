@@ -21,7 +21,7 @@ struct skill
 	skill() = default;
 	skill(int skillLvl, int experience) : skillLvl(skillLvl), experience(experience) {}
 
-	int skillLvl = 0;
+	int skillLvl = 1;
 	int experience = 0;
 
 	template<class Archive>
