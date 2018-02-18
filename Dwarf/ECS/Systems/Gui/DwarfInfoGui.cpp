@@ -62,70 +62,66 @@ void DwarfInfoGui::update(const double duration)
 	ImGui::End();
 }
 
+inline void determineNeedColor(const float need, ImVec4 &needCol)
+{
+	if (need <= 0.10f)
+		needCol = ImColor(IM_COL32(204, 110, 0, 255));
+
+	else if (need < 0.20f)
+		needCol = ImColor(IM_COL32(204, 0, 0, 255));
+
+	else if (need < 0.35f)
+		needCol = ImColor(IM_COL32(204, 110, 0, 255));
+
+	else if (need < 0.50f)
+		needCol = ImColor(IM_COL32(235, 235, 0, 255));
+}
+
+inline void drawNeedProgress(const std::string& title, const float need)
+{
+	static const ImVec4 greenBar = ImColor(IM_COL32(0, 154, 0, 255));
+	ImVec4 col = greenBar;
+
+	determineNeedColor(need, col);
+	ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_PlotHistogram, col);
+
+	ImGui::Text(title.c_str()); ImGui::SameLine();
+	ImGui::ProgressBar(need);
+	ImGui::PopStyleColor();
+}
+
 void DwarfInfoGui::drawNeeds(std::vector<Needs>& needs, std::vector<std::string> names)
 {
 	ImGui::Begin("DwarfStats##DwarfInfo", nullptr);
 
+	static const std::string thirstTitle = "Thrist:   ";
 	static const std::string hungerTitle  = "Hunger:  ";
 	static const std::string sleepTitle   = "Sleep:   ";
-	static const std::string thirstTitle  = "Thrist:  ";
 	static const std::string comfortTitle = "Comfort: ";
 	static const std::string joyTitle     = "Joy:     ";
 
-
+	static const std::vector<std::string> needNames = { thirstTitle, hungerTitle, sleepTitle, comfortTitle, joyTitle };
 
 	ImGui::Text("Needs");
 	for (int i = 0; i < numberShown; ++i)
 	{
 		ImGui::Text(names[i].c_str());
 		
-		ImGui::PushStyleColor(ImGuiCol_FrameBg, (ImVec4)ImColor::HSV(i / 7.0f, 0.5f, 0.5f));
+		ImGui::PushStyleColor(ImGuiCol_FrameBg, (ImVec4)ImColor::HSV(7.0f, 0.5f, 0.5f));
 		ImGui::PushStyleColor(ImGuiCol_FrameBgHovered, (ImVec4)ImColor::HSV(i / 7.0f, 0.6f, 0.5f));
 		ImGui::PushStyleColor(ImGuiCol_FrameBgActive, (ImVec4)ImColor::HSV(i / 7.0f, 0.7f, 0.5f));
 		ImGui::PushStyleColor(ImGuiCol_SliderGrab, (ImVec4)ImColor::HSV(i / 7.0f, 0.9f, 0.9f));
 
+		// Draw need bars
+		int nIdx = 0;
+		for (auto& n : needs[i].needs)
+		{
+			auto needLvl = static_cast<float>(n.lvl) / 1000.0f;
+			drawNeedProgress(needNames[nIdx], needLvl);
+			++nIdx;
+		}
 
-
-		auto& n = needs[i].needs;
-		float sleep   = static_cast<float>(n[static_cast<int>(NeedIdx::SLEEP)].lvl)   / 1000.0f;
-		float hunger  = static_cast<float>(n[static_cast<int>(NeedIdx::HUNGER)].lvl)  / 1000.0f;
-		float thirst  = static_cast<float>(n[static_cast<int>(NeedIdx::THRIST)].lvl)  / 1000.0f;
-		float comfort = static_cast<float>(n[static_cast<int>(NeedIdx::COMFORT)].lvl) / 1000.0f;
-		float joy     = static_cast<float>(n[static_cast<int>(NeedIdx::JOY)].lvl)	  / 1000.0f;
-
-		ImVec4 sleepCol = ImColor(IM_COL32(0, 154, 0, 255));
-
-		if (sleep < SleepThreshold::SLEEPY / 1000.0)
-			sleepCol = ImColor(IM_COL32(235, 235, 0, 255));
-
-		else if (sleep < SleepThreshold::TIRED / 1000.0)
-			sleepCol = ImColor(IM_COL32(204, 110, 0, 255));
-
-		else if (sleep < SleepThreshold::VERY_TIRED / 1000.0)
-			sleepCol = ImColor(IM_COL32(204, 0, 0, 255));
-
-		else if (sleep <= SleepThreshold::EXHAUSTED);
-			sleepCol = ImColor(IM_COL32(204, 110, 0, 255));
-		
-		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_PlotHistogram, sleepCol);
-
-		ImGui::Text(sleepTitle.c_str()); ImGui::SameLine();
-		ImGui::ProgressBar(sleep);
-
-		ImGui::Text(hungerTitle.c_str()); ImGui::SameLine();
-		ImGui::ProgressBar(hunger);
-
-		ImGui::Text(thirstTitle.c_str()); ImGui::SameLine();
-		ImGui::ProgressBar(thirst);
-
-		ImGui::Text(joyTitle.c_str()); ImGui::SameLine();
-		ImGui::ProgressBar(joy);
-
-		ImGui::Text(comfortTitle.c_str()); ImGui::SameLine();
-		ImGui::ProgressBar(comfort);
-	
-
-		ImGui::PopStyleColor(5);
+		ImGui::PopStyleColor(4);
 	}
 
 	ImGui::End();
