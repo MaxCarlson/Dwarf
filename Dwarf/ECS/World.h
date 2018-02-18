@@ -35,6 +35,10 @@ public:
 	template<typename TSystem>
 	void addSystem(TSystem & system);
 
+	// System is auto added when variadic template each X
+	// is instatiated for the first time
+	void addVariadicSystem(SystemBase &sys);
+
 	// Removes system of type TSystem
 	template<typename TSystem>
 	void removeSystem();

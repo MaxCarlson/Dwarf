@@ -31,6 +31,11 @@ World::World(std::size_t entityPoolSize) : entityIdPool(entityPoolSize), entityA
 	pubsub_holder.resize(10);
 }
 
+void World::addVariadicSystem(SystemBase & sys)
+{
+	addSystem(sys, ClassTypeId<SystemBase>::autoTypeId());
+}
+
 void World::removeAllSystems()
 {
 	systems.clear();

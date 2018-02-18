@@ -8,6 +8,27 @@
 #include <imgui.h>
 #include <imgui_tabs.h>
 
+#include "Globals\GlobalWorld.h"
+
+// Loop through entities that have Args... Components
+// You'll want to instatiate the system along with your other systems
+// at world startup with a short llamabda: eachWith<Component1, ComponentN...>([](auto e){}); 
+template<typename... Args>
+void eachWith(std::function<void(const Entity&)>&& func)
+{
+	static bool first = true;
+	static SystemBase* sys = new System<Requires<Args ...>>;
+	
+	if (first)
+	{
+		first = false;
+		world.addVariadicSystem(*sys);
+	}
+
+	for (const auto& e : sys->getEntities())
+		func(e);
+}
+
 void DwarfInfoGui::init()
 {
 }
@@ -15,6 +36,18 @@ void DwarfInfoGui::init()
 void DwarfInfoGui::update(const double duration)
 {
 	ImGui::Begin("Dwarf Info", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+
+	eachWith<Needs, Stats>([](auto e) {});
+
+	eachWith<Stats>([](auto e) {});
+
+	eachWith<Stats>([](auto e)
+	{
+		if (e.getId().index > 5)
+			return;
+	});
+
+	eachWith<Needs, Stats>([](auto e) {});
 
 	if (ImGui::Button("Close##DwarfInfo"))
 	{
@@ -94,7 +127,7 @@ void DwarfInfoGui::drawNeeds(std::vector<Needs>& needs, std::vector<std::string>
 {
 	ImGui::Begin("DwarfStats##DwarfInfo", nullptr);
 
-	static const std::string thirstTitle = "Thrist:   ";
+	static const std::string thirstTitle  = "Thrist:  ";
 	static const std::string hungerTitle  = "Hunger:  ";
 	static const std::string sleepTitle   = "Sleep:   ";
 	static const std::string comfortTitle = "Comfort: ";

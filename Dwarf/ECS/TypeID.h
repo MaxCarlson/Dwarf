@@ -14,11 +14,21 @@ template<typename BaseClass>
 class ClassTypeId
 {
 public:
+
+	// Used for written out classes
 	template<typename BaseClass>
 	static TypeId getTypeId()
 	{
 		static const TypeId id = nextTypeId++;
 		return id;
+	}
+
+	// Used for Variadic each template systems
+	// Must never instantiate a variadic each out of order
+	// Will cause entity system beloning to be possibly messed up
+	static TypeId autoTypeId()
+	{
+		return nextTypeId++;
 	}
 
 private:
