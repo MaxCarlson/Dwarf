@@ -156,6 +156,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ECS\Systems\Gui\DwarfInfoGui.cpp" />
     <ClCompile Include="ECS\Systems\helpers\BuildingHelper.cpp" />
     <ClCompile Include="ECS\Components\Seed.cpp" />
     <ClCompile Include="ECS\Components\Sentients\Inventory.cpp" />
@@ -284,6 +285,7 @@
     <ClCompile Include="MainLoops\WorldGenLoop.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ECS\Systems\Gui\DwarfInfoGui.h" />
     <ClInclude Include="ECS\Systems\helpers\BuildingHelper.h" />
     <ClInclude Include="ECS\Components\Seed.h" />
     <ClInclude Include="ECS\Components\Sentients\Happiness.h" />

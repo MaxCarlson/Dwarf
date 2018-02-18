@@ -8,6 +8,7 @@
 const std::string mainMenu = "Main Menu";
 const std::string design = "Design";
 const std::string jobs = "Jobs";
+const std::string dwarvesTitle = "Dwarves";
 
 void MenuBar::init()
 {
@@ -33,6 +34,16 @@ void MenuBar::update(const double duration)
 		if (ImGui::MenuItem("Quite Game"))
 		{
 			gameState = GameState::QUIT_GAME;
+		}
+
+		ImGui::EndMenu();
+	}
+
+	if (ImGui::BeginMenu(dwarvesTitle.c_str()))
+	{
+		if (ImGui::MenuItem("Info"))
+		{
+			designState = DesignStates::DWARF_INFO;
 		}
 
 		ImGui::EndMenu();

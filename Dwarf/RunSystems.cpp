@@ -22,6 +22,7 @@
 #include "ECS\Systems\Gui\DesignWorkOrders.h"
 #include "ECS\Systems\Gui\JobPreferencesUi.h"
 #include "ECS\Systems\Gui\DesignStockpiles.h"
+#include "ECS\Systems\Gui\DwarfInfoGui.h"
 
 // Ai systems
 #include "ECS\Systems\ai\EquipHandler.h"
@@ -110,6 +111,7 @@ const std::string DESIGN_WORKORDERS = "Design Work Orders";
 const std::string DESIGN_STOCKPILES = "Design Stockpiles";
 const std::string CAMERA_SYSTEM = "Camera System";
 const std::string JOB_PREFERENCES_UI = "Job Preferences UI";
+const std::string DWARF_INFO_GUI = "Dwarf Info Gui";
 
 
 namespace RunSystems
@@ -180,6 +182,7 @@ void initSystems(bool fromLoad)
 	systems[DESIGN_WORKORDERS] = new DesignWorkOrders;
 	systems[DESIGN_STOCKPILES] = new DesignStockpiles;
 	systems[JOB_PREFERENCES_UI] = new JobPreferencesUi;
+	systems[DWARF_INFO_GUI] = new DwarfInfoGui;
 
 	// External Systems
 	systems[ITEM_HELPER] = &itemHelper;
@@ -229,6 +232,7 @@ void initSystems(bool fromLoad)
 	world.addSystem(* static_cast<DesignWorkOrders *>(systems[DESIGN_WORKORDERS]));
 	world.addSystem(* static_cast<DesignStockpiles *>(systems[DESIGN_STOCKPILES]));
 	world.addSystem(* static_cast<JobPreferencesUi *>(systems[JOB_PREFERENCES_UI]));
+	world.addSystem(* static_cast<DwarfInfoGui *>(systems[DWARF_INFO_GUI]));
 
 	// External Systems
 	world.addSystem( itemHelper);
@@ -373,6 +377,10 @@ void updateSystems(const double duration)
 		if (designState == DesignStates::JOB_PREFERENCES)
 			runSystem(JOB_PREFERENCES_UI, duration);
 	}
+
+	// Gui systems that do not auto pause
+	if (designState == DesignStates::DWARF_INFO)
+		runSystem(DWARF_INFO_GUI, duration);
 
 	static bool profiler = false;
 

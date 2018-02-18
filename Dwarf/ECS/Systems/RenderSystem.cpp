@@ -187,7 +187,7 @@ void RenderSystem::updateRender()
 						else
 							color = "grey";
 
-						renderEntities[idx].push_back(vchar{ glyph, 2, color_from_name(color.c_str()) });
+						renderEntities[idx].push_back(vchar{ glyph, color_from_name(color.c_str()), color_from_name("black") });
 						++boffsetX;
 					}
 					boffsetX = 0;

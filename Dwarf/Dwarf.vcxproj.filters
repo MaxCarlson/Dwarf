@@ -351,6 +351,9 @@
     <ClCompile Include="ECS\Systems\helpers\BuildingHelper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ECS\Systems\Gui\DwarfInfoGui.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ECS\EntityManager.h">
@@ -1110,6 +1113,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ECS\Systems\helpers\BuildingHelper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Systems\Gui\DwarfInfoGui.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

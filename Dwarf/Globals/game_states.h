@@ -21,7 +21,8 @@ enum DesignStates
 	MINING,
 	STOCKPILES,
 	WORK_ORDERS,
-	JOB_PREFERENCES
+	JOB_PREFERENCES,
+	DWARF_INFO
 };
 
 extern GameState gameState;

@@ -142,7 +142,14 @@ inline void findBed(const Entity &e, WorkTemplate<SleepTag>& work, MovementCompo
 	}
 
 	// If exhausted find a floor to sleep on
+	auto& sleep = e.getComponent<Needs>().needs[static_cast<int>(NeedIdx::SLEEP)];
 
+	if (sleep.lvl <= SleepThreshold::EXHAUSTED)
+	{
+		tag.step = SleepTag::SLEEP;
+		tag.bedStatus = SleepTag::NO_BED;
+		return;
+	}
 
 	work.cancel_work(e);
 }
@@ -176,6 +183,17 @@ inline void gotoBed(const Entity &e, WorkTemplate<SleepTag>& work, MovementCompo
 	});
 }
 
+inline const double calculateSleep(SleepTag &tag, const double& time)
+{
+
+	double st = time / 1000.0;
+
+	if (tag.bedStatus == SleepTag::NO_BED)
+		st *= 0.80;
+
+	return st;
+}
+
 inline void doSleep(const Entity &e, WorkTemplate<SleepTag>& work, const double& duration, SleepTag & tag, const Coordinates & co)
 {
 	constexpr int sleepIdx = static_cast<int>(NeedIdx::SLEEP);
@@ -185,21 +203,20 @@ inline void doSleep(const Entity &e, WorkTemplate<SleepTag>& work, const double&
 	// TODO:
 	// Multiply recovery fraction by material sleep bonus
 	// Multiply recovery by quality of bed
+	// Very bad rate for no bed
 	// Add in bad thoughts for loud noises
+	// Bad thoughts for no bed
 	// Bonuses thoughts for very high quality beds
 
-	// If I do not own the bed unclaim it upon wake up
 
-	//TESTING
-	sleep.lvl = 1000.0;
-
-	sleep.lvl += duration / 1000;
+	sleep.lvl += calculateSleep(tag, duration);
 
 	if (sleep.lvl > 1000.0)
 		sleep.lvl = 1000.0;
 
-	if (sleep.lvl == 1000.0)
+	if (sleep.lvl == 1000.0 || (tag.bedStatus == SleepTag::NO_BED && sleep.lvl > SleepThreshold::SLEEPY + 250.0))
 	{
+		// If I do not own the bed unclaim it upon wake up
 		if (tag.bedStatus == SleepTag::CLAIMED_BED)
 			unclaimBed(tag);
 

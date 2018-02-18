@@ -31,6 +31,9 @@ inline void processSleep(Need &sleep) // Add in negative thoughts!
 inline void decreaseNeed(Need &need, const double& duration)
 {
 	need.lvl -= (duration * need.declineRate) / 1000.0;
+
+	if (need.lvl < 0.0)
+		need.lvl = 0.0;
 }
 
 void NeedsSystem::update(const double duration)
