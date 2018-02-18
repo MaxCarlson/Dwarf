@@ -189,6 +189,8 @@ void World::clear()
 	entityCache.clear();
 
 	entityIdPool.clear();
+
+	ClassTypeId<SystemBase>::resetTypeIdForVariadics();
 }
 
 std::size_t World::getEntityCount() const

@@ -10,24 +10,6 @@
 
 #include "Globals\GlobalWorld.h"
 
-// Loop through entities that have Args... Components
-// You'll want to instatiate the system along with your other systems
-// at world startup with a short llamabda: eachWith<Component1, ComponentN...>([](auto e){}); 
-template<typename... Args>
-void eachWith(std::function<void(const Entity&)>&& func)
-{
-	static bool first = true;
-	static SystemBase* sys = new System<Requires<Args ...>>;
-	
-	if (first)
-	{
-		first = false;
-		world.addVariadicSystem(*sys);
-	}
-
-	for (const auto& e : sys->getEntities())
-		func(e);
-}
 
 void DwarfInfoGui::init()
 {
@@ -37,17 +19,17 @@ void DwarfInfoGui::update(const double duration)
 {
 	ImGui::Begin("Dwarf Info", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 
-	eachWith<Needs, Stats>([](auto e) {});
+	eachWith<Requires<Needs, Stats>>([](auto e) {});
 
-	eachWith<Stats>([](auto e) {});
+	eachWith<Requires<Stats>>([](auto e) {});
 
-	eachWith<Stats>([](auto e)
-	{
-		if (e.getId().index > 5)
-			return;
-	});
+	eachWith<Requires<Needs, Stats>>([](auto e) {});
 
-	eachWith<Needs, Stats>([](auto e) {});
+	eachWith<Requires<Needs, Stats>>([](auto e) {}, true);
+	eachWith<Requires<Stats>>([](auto e) {}, true);
+
+
+	getWorld().clear();
 
 	if (ImGui::Button("Close##DwarfInfo"))
 	{

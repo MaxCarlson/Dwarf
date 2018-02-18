@@ -28,12 +28,26 @@ public:
 	// Will cause entity system beloning to be possibly messed up
 	static TypeId autoTypeId()
 	{
+		static const TypeId firstVariadicTypeId = (startOfVariadics = nextTypeId);
 		return nextTypeId++;
 	}
 
+	static void resetTypeIdForVariadics()
+	{
+		nextTypeId = startOfVariadics;
+	}
+
 private:
+	// Index of first variadic sytem registered.
+	// This is here so we can fall back to the correct typeId index
+	// when restarting game while still inside the process
+	static TypeId startOfVariadics;
+
 	static std::atomic<TypeId> nextTypeId;
 };
 
 template <typename BaseClass>
 std::atomic<TypeId> ClassTypeId<BaseClass>::nextTypeId{ 0 };
+
+template <typename BaseClass>
+TypeId ClassTypeId<BaseClass>::startOfVariadics{ 0 };

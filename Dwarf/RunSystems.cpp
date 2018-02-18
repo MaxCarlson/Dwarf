@@ -121,6 +121,14 @@ boost::container::flat_map<std::string, SystemBase*> systems;
 boost::container::flat_map<std::string, std::pair<int, std::vector<float>>> runTimes;
 
 
+void cleanSystems()
+{
+	// Clean up variadic systems
+
+	// Delete all systems and all entities
+	world.clear();
+}
+
 void initSystems(bool fromLoad)
 {	
 	// External system like Objects that aren't Systems

@@ -7,6 +7,8 @@
 #include "Map\building\PlanetBuilding.h"
 #include "Map\Tile.h"
 #include "Globals\global_calender.h"
+#include "Globals\MainFunction.h"
+#include "MainMenuLoop.h"
 #include "Designations.h"
 #include "Raws\DefInfo.h"
 #include "Globals\Camera.h"
@@ -119,9 +121,6 @@ void PlayGameLoop::run(const double duration)
 
 	if (gameState == GameState::NEW_GAME)
 	{
-		//ImGui::SetNextWindowPosCenter();
-		//ImGui::Begin("Pick Region Size", nullptr, ImVec2{ 600, 400 }, 0.7f, ImGuiWindowFlags_AlwaysAutoResize + ImGuiWindowFlags_NoCollapse);
-
 		RunSystems::initSystems(false);
 
 		gameState = GameState::PLAYING;
@@ -157,6 +156,28 @@ void PlayGameLoop::run(const double duration)
 			saving = false;
 			gameState = GameState::PLAYING;
 		}
+	}
+
+	else if (gameState == GameState::QUIT_GAME)
+	{
+		ImGui::Begin("Quit to Main Menu", nullptr, ImVec2{ 600, 400 }, 0.7f, ImGuiWindowFlags_AlwaysAutoResize + ImGuiWindowFlags_NoCollapse);
+
+		if (ImGui::Button("Back##QuitToMainMenu"))
+		{
+			gameState = GameState::PLAYING;
+		}
+
+		// TODO: Save and Quit to Main
+		// TODO: Quit to Desktop?
+
+		if (ImGui::Button("Quit##QuitToMainMenu"))
+		{
+			RunSystems::cleanSystems();
+			
+			MainFunction = MainMenuLoop::run;
+		}
+
+		ImGui::End();
 	}
 
 	if(gameState == GameState::PLAYING || gameState == GameState::DESIGN)
