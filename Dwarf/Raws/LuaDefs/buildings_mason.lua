@@ -9,7 +9,7 @@ buildings["mason"] = {
 	skill = { { name = "Construction", difficulty = 10 } }, 
 	render = { { glyph = glyphs["barrel"] }, { glyph = glyphs["tools2"] }, { glyph = glyphs["nest_box"] }, { glyph = glyphs["placed_floor"] } },
 	structure,
-	provides = {{ workshop }}
+	provides = {{ workshop = true }}
 };
 
 

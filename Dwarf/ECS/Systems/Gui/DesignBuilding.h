@@ -12,5 +12,7 @@ public:
 private:
 	void drawPossibleBuilding(const std::string &tag);
 	void workshopTab();
+
+	void designateBuilding(const std::string& tag, const int idx);
 };
 

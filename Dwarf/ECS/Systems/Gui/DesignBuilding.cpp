@@ -7,6 +7,7 @@
 #include "Globals\game_states.h"
 #include "Globals\GlobalTerminals.h"
 #include "ECS\Messages\designate_building_message.h"
+#include "Designations.h"
 #include <imgui.h>
 #include <imgui_tabs.h>
 #include <DwarfRender.h>
@@ -58,7 +59,7 @@ void DesignBuilding::drawPossibleBuilding(const std::string &tag)
 
 	int X = mouseX;
 	int Y = mouseY;
-
+	
 	if (building->width == 3) X -= 1;
 	if (building->height == 3) Y -= 1;
 
@@ -74,9 +75,23 @@ void DesignBuilding::drawPossibleBuilding(const std::string &tag)
 	for(int x = X; x < building->width + X; ++x)
 		for (int y = Y; y < building->height + Y; ++y)
 		{
-			const int idx = getIdx({ x, y, mouseZ}); // Will have to redo mouse Z once mouse can be on diffrent z layersr
+			const Coordinates cox = { x, y, mouseZ };
+			const int idx = getIdx(cox); // Will have to redo mouse Z once mouse can be on diffrent z layers?
+			
+			bool squareDesignated = false;
 
-			if (region::solid(idx) || region::getTileType(idx) != region::TileTypes::FLOOR)
+			std::for_each(designations->buildings.begin(), designations->buildings.end(), // Should building designations be a map?
+				[&cox, &squareDesignated](const building_designation& bd)
+			{
+				if (bd.co.z == cox.z 
+					&& (bd.co.x >= cox.x && bd.co.x < cox.x + bd.width)
+					&& (bd.co.y >= cox.y && bd.co.y < cox.y + bd.height))
+				{
+					squareDesignated = true;
+				}
+			});
+
+			if (squareDesignated || region::solid(idx) || region::getTileType(idx) != region::TileTypes::FLOOR || region::flag(cox, region::Flag::CONSTRUCTION))
 			{
 				possible = false;
 				overlayTerm->setChar(x, y, { 88,{ 255, 0, 0 },{ 255, 0, 0 } });
@@ -92,7 +107,7 @@ void DesignBuilding::drawPossibleBuilding(const std::string &tag)
 	if (possible && leftClick)
 	{
 		const int clickIdx = getIdx({ mouseX, mouseY, mouseZ });
-		emit(designate_building_message{ *building, clickIdx });
+		designateBuilding(tag, clickIdx);
 	}
 }
 
@@ -106,7 +121,7 @@ void DesignBuilding::workshopTab()
 
 	ImGui::Text("Right click to stop designating");
 
-	ImGui::ListBox("Workshops##ListBuilding", &selected, defInfo->buildingNames);
+	ImGui::ListBox("Workshops##ListBuilding", &selected, defInfo->buildingNames); // Break buildings into catagories and create another bitset to manage their gui
 
 	if (rightClick)
 	{
@@ -118,4 +133,68 @@ void DesignBuilding::workshopTab()
 		chooseLoc = true;
 		drawPossibleBuilding(defInfo->buildingTags[selected]);
 	}
+}
+
+#include "ECS\Components\PositionComponent.h"
+#include "ECS\Systems\helpers\ItemHelper.h"
+#include "ECS\Components\Building.h"
+#include "ECS\Systems\EntityPositionCache.h"
+
+void DesignBuilding::designateBuilding(const std::string & tag, const int idx)
+{
+	building_designation designation;
+
+	auto buildingDef = getBuilding(tag);
+
+	if (buildingDef == nullptr)
+		return;
+
+	designation.tag = tag;
+	designation.name = buildingDef->name;
+	designation.co = idxToCo(idx);
+	designation.width = buildingDef->width;
+	designation.height = buildingDef->height;
+	designation.components = buildingDef->components;
+
+
+	// Find building components
+	for (const auto& comp : buildingDef->components)
+	{
+		// Set correct quanitity of components needed
+		for (int i = 0; i < comp.quantity; ++i)
+		{
+			const auto compId = itemHelper.claim_item_by_reaction_inp(comp);
+
+			std::cout << "Component [" << comp.tag << "] - Id " << compId << "\n";
+
+			designation.componentIds.push_back(std::make_pair(compId, false));
+		}
+	}
+
+	auto building = getWorld().createEntity();
+
+	building.addComponent<PositionComponent>(designation.co);
+	building.addComponent<Building>(Building{ tag, buildingDef->width, buildingDef->height, false, buildingDef->provides, buildingDef->charCodes });
+
+	auto& bbb = building.getComponent<Building>();
+
+	designation.entity_id = building.getId().index;
+
+	// Adjust center for 3 tile buildings
+	int sx = designation.co.x;
+	int sy = designation.co.y;
+	if (designation.width == 3) --sx;
+	if (designation.height == 3) --sy;
+
+	for (int x = sx; x < sx + designation.width; ++x)
+		for (int y = sy; y < sy + designation.height; ++y)
+		{
+			const Coordinates co = { x, y, designation.co.z };
+			region::setFlag(co, region::Flag::CONSTRUCTION);
+
+			// Id's must be manually deleted later
+			positionCache->addNode({ co, designation.entity_id });
+		}
+
+	designations->buildings.push_back(designation);
 }

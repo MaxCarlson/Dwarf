@@ -2,7 +2,7 @@
 
 #include "Component.h"
 
-
+#include <tuple>
 #include <cstdint>
 
 class World;
@@ -100,6 +100,10 @@ public:
 	template<typename T>
 	T& getComponent() const;
 
+	template <typename... Args>
+	std::tuple<Args&...> getComponents() const;
+
+
 	// Returns true if entity has 
 	// Component of type T
 	template<typename T>
@@ -130,6 +134,7 @@ private:
 	World * world;
 };
 
+
 template<typename T, typename ...Args>
 inline T & Entity::addComponent(Args && ...args)
 {
@@ -141,13 +146,19 @@ inline T & Entity::addComponent(Args && ...args)
 template<typename T>
 inline void Entity::removeComponent()
 {
-	removeComponent(ComponentTypeId<T>());
+	removeComponent(ComponentTypeId<T>()); 
 }
 
 template<typename T>
 T& Entity::getComponent() const
 {
 	return static_cast<T&>(getComponent(ComponentTypeId<T>()));
+}
+
+template<typename ...Args>
+inline std::tuple<Args&...> Entity::getComponents() const
+{
+	return std::forward_as_tuple(getComponent<Args>() ...); 
 }
 
 template<typename T>

@@ -8,6 +8,17 @@
 #include "ECS\Systems\helpers\BuildingHelper.h"
 #include "ECS\Components\Claimed.h"
 
+template <typename T> T& read(const Entity& e)
+{
+	return e.getComponent<T>();
+}
+
+template <typename... Args>
+std::tuple<Args&...> parse(const Entity& e)
+{
+	return std::forward_as_tuple(read<Args>(e)...);
+}
+
 namespace JobsBoard
 {
 	void evaluateSleep(JobBoard & board, const Entity & e, AiWorkComponent &prefs, const Coordinates& co, JobEvaluatorBase * jt)
@@ -57,9 +68,8 @@ void SleepSystem::update(const double duration)
 		WorkTemplate<SleepTag> work;
 
 		const auto& co = e.getComponent<PositionComponent>().co;
-		auto& tag = e.getComponent<SleepTag>();
-		auto& mov = e.getComponent<MovementComponent>();
 
+		auto& [tag, mov] = e.getComponents<SleepTag, MovementComponent>();
 
 		switch (tag.step)
 		{

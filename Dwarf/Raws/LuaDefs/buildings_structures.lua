@@ -11,7 +11,7 @@ buildings = {
 		skill = { { name = "Construction", difficulty = 10 } }, 
 		render = { { glyph = glyphs["bed"] } },
 		structure,
-		provides = {{ sleep }}
+		provides = {{ sleep = 1 }}
 	},
 
 
