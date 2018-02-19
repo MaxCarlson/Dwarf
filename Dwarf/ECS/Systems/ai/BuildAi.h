@@ -10,6 +10,6 @@ public:
 
 private:
 
-	void doBuild(const Entity & e, const double & duration);
+	//void doBuild(const Entity & e, const double & duration);
 };
 

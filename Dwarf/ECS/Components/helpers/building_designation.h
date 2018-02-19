@@ -15,8 +15,6 @@ struct building_designation
 	int width;
 	int height;
 
-	bool beingWorked = false;
-
 	// Id of this building
 	std::size_t entity_id;
 
@@ -33,7 +31,7 @@ struct building_designation
 	template<class Archive>
 	void serialize(Archive & archive)
 	{
-		archive(co, name, tag, width, height, beingWorked, entity_id, componentIds, components, progress);
+		archive(co, name, tag, width, height, entity_id, componentIds, components, progress);
 	}
 };
 

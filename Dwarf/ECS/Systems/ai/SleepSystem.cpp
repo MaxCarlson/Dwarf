@@ -186,7 +186,7 @@ inline void gotoBed(const Entity &e, WorkTemplate<SleepTag>& work, MovementCompo
 inline const double calculateSleep(SleepTag &tag, const double& time)
 {
 
-	double st = time / 1000.0;
+	double st = time / 50.0; // TODO: Add in some constexpr values representing day fractions!
 
 	if (tag.bedStatus == SleepTag::NO_BED)
 		st *= 0.80;

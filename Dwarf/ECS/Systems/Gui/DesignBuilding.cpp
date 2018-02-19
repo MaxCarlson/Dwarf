@@ -8,6 +8,10 @@
 #include "Globals\GlobalTerminals.h"
 #include "ECS\Messages\designate_building_message.h"
 #include "Designations.h"
+#include "ECS\Components\PositionComponent.h"
+#include "ECS\Systems\helpers\ItemHelper.h"
+#include "ECS\Components\Building.h"
+#include "ECS\Systems\EntityPositionCache.h"
 #include <imgui.h>
 #include <imgui_tabs.h>
 #include <DwarfRender.h>
@@ -78,20 +82,9 @@ void DesignBuilding::drawPossibleBuilding(const std::string &tag)
 			const Coordinates cox = { x, y, mouseZ };
 			const int idx = getIdx(cox); // Will have to redo mouse Z once mouse can be on diffrent z layers?
 			
-			bool squareDesignated = false;
-
-			std::for_each(designations->buildings.begin(), designations->buildings.end(), // Should building designations be a map?
-				[&cox, &squareDesignated](const building_designation& bd)
-			{
-				if (bd.co.z == cox.z 
-					&& (bd.co.x >= cox.x && bd.co.x < cox.x + bd.width)
-					&& (bd.co.y >= cox.y && bd.co.y < cox.y + bd.height))
-				{
-					squareDesignated = true;
-				}
-			});
-
-			if (squareDesignated || region::solid(idx) || region::getTileType(idx) != region::TileTypes::FLOOR || region::flag(cox, region::Flag::CONSTRUCTION))
+			// Building tiles are marked as construction at designation
+			// so we don't need to search designations!
+			if (region::solid(idx) || region::getTileType(idx) != region::TileTypes::FLOOR || region::flag(cox, region::Flag::CONSTRUCTION))
 			{
 				possible = false;
 				overlayTerm->setChar(x, y, { 88,{ 255, 0, 0 },{ 255, 0, 0 } });
@@ -135,11 +128,6 @@ void DesignBuilding::workshopTab()
 	}
 }
 
-#include "ECS\Components\PositionComponent.h"
-#include "ECS\Systems\helpers\ItemHelper.h"
-#include "ECS\Components\Building.h"
-#include "ECS\Systems\EntityPositionCache.h"
-
 void DesignBuilding::designateBuilding(const std::string & tag, const int idx)
 {
 	building_designation designation;
@@ -167,7 +155,8 @@ void DesignBuilding::designateBuilding(const std::string & tag, const int idx)
 
 			std::cout << "Component [" << comp.tag << "] - Id " << compId << "\n";
 
-			designation.componentIds.push_back(std::make_pair(compId, false));
+			// If component cannot be found it'll be dealt with later
+			designation.componentIds.emplace_back(std::make_pair(compId, false));
 		}
 	}
 
@@ -196,5 +185,5 @@ void DesignBuilding::designateBuilding(const std::string & tag, const int idx)
 			positionCache->addNode({ co, designation.entity_id });
 		}
 
-	designations->buildings.push_back(designation);
+	designations->queuedBuildings.emplace(getIdx(designation.co), designation);
 }

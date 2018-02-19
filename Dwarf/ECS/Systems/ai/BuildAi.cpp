@@ -50,10 +50,38 @@ namespace JobsBoard
 // Also claim all components neccsary for building to function
 void scanForPossibleBuildings()
 {
-	for (const auto& b : designations->queuedBuildings)
+	for (auto b = designations->queuedBuildings.begin(); b != designations->queuedBuildings.end(); )
 	{
-		bool readyToBuild = false;
+		bool readyToBuild = true;
+
+		int reactIdx = 0; 
+		for (auto& comp : b->second.components)
+		{
+			for (int i = 0; i < comp.quantity; ++i)
+			{
+				auto& compPair = b->second.componentIds[reactIdx++];
+
+				if (compPair.first) // Component already claimed
+					continue;
+
+				compPair.first = itemHelper.claim_item_by_reaction_inp(comp);
+
+				if (!compPair.first)
+					readyToBuild = false;
+			}
+		}
+
+		// If building is ready add it too buildings to be built
+		// and erase if from queued buildings
+		if (readyToBuild)
+		{
+			designations->buildings.emplace(b->first, b->second);
+			b = designations->queuedBuildings.erase(b);
+		}
+		else
+			++b;
 	}
+
 }
 
 void BuildAi::init()
@@ -117,14 +145,18 @@ void BuildAi::update(const double duration)
 inline void findBuilding(const Entity &e, const Coordinates &co, WorkTemplate<BuilderTag> &work, BuilderTag &tag, MovementComponent &mov)
 {
 	// Find closest builing that doesn't have an entity working it
-	int bidx = 0;
 	std::map<int, int> buildingsDist;
 	for (const auto& b : designations->buildings)
 	{
 		auto dist = static_cast<int>(get_3D_distance(co, b.second.co));
 
-		buildingsDist.emplace(dist, bidx);
-		++bidx;
+		buildingsDist.emplace(dist, b.first);
+	}
+
+	if (buildingsDist.empty())
+	{
+		work.cancel_work(e);
+		return;
 	}
 
 	auto dFind = designations->buildings.find(buildingsDist.begin()->second);
@@ -148,12 +180,13 @@ inline void findComponent(const Entity & e, const Coordinates & co, WorkTemplate
 	bool hasComps = true;
 
 	// Loop through component types
+	int compIdx = 0;
 	for (auto& ctype : tag.buildingTarget.components)
 	{
 		// Loop through quantity of components
-		for (int i = 0; i < ctype.quantity; ++i)
+		for (int i = 0; i < ctype.quantity; ++i, ++compIdx)
 		{
-			auto& component = tag.buildingTarget.componentIds[i];
+			auto& component = tag.buildingTarget.componentIds[compIdx];
 
 			// If component hasn't been placed near/in building yet..
 			if (!component.second)
@@ -250,7 +283,6 @@ inline void buildBuilding(const Entity & e, const Coordinates & co, WorkTemplate
 	if (tag.buildingTarget.progress < tag.difficulty * 375.0) // Add in building times
 	{
 		doWorkTime(stats, jobSkill, duration, tag.buildingTarget.progress);
-
 		return;
 	}
 
@@ -273,7 +305,10 @@ inline void buildBuilding(const Entity & e, const Coordinates & co, WorkTemplate
 
 		if (!ent.isValid() || !ent.hasComponent<Item>())
 		{
-			designations->buildings.push_back(tag.buildingTarget);
+			compId.first = 0;
+			compId.second = false;
+			designations->queuedBuildings.emplace(getIdx(tag.buildingTarget.co), tag.buildingTarget);
+
 			std::cout << "Invalid component for building - building id: " << tag.buildingTarget.entity_id
 				<< " componnent id:" << compId.first << "\n";
 			work.cancel_work(e);
@@ -304,13 +339,12 @@ inline void buildBuilding(const Entity & e, const Coordinates & co, WorkTemplate
 	// Update availible reactions for buildings if this is a new Building type
 	defInfo->updateBuildingReactions(building.tag);
 
-	// Add code for building provides once added in 
-
 
 	work.cancel_work(e);
 	return;
 }
 
+/*
 void BuildAi::doBuild(const Entity & e, const double & duration)
 {
 	WorkTemplate<BuilderTag> work;
@@ -547,3 +581,4 @@ void BuildAi::doBuild(const Entity & e, const double & duration)
 		return;
 	}
 }
+*/
