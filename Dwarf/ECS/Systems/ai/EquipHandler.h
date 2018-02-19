@@ -18,7 +18,5 @@ private:
 	void pickupItem(int itemType, std::size_t entityId, std::size_t itemEid, std::size_t outItemEid);
 
 	void dropItem(int itemType, std::size_t entityId, std::size_t itemEid, Coordinates co);
-
-	void designateBuilding(designate_building_message & msg);
 };
 

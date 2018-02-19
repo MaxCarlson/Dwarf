@@ -123,7 +123,7 @@ boost::container::flat_map<std::string, std::pair<int, std::vector<float>>> runT
 
 void cleanSystems()
 {
-	// Clean up variadic systems
+	// Vardiadic systems are cleared in RegComponents as we need the componets to clear them
 
 	// Delete all systems and all entities
 	world.clear();

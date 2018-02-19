@@ -39,7 +39,7 @@ void gainSkill(Stats & stats, const std::string skilltag, int difficulty)
 		// Dwarf gains experience
 		find->second.experience += difficulty;
 
-		const int gainLvlAt = (find->second.skillLvl + 1) * 150;
+		const int gainLvlAt = skillLvlXpCap(find->second.skillLvl);
 
 		// Dwarf gains a level in skill
 		if (find->second.experience > gainLvlAt)
@@ -65,7 +65,7 @@ void gainSkill(Stats & stats, const std::string skilltag, int difficulty)
 					// and less to the more peripheral ones
 					findAttribute->second.experience += difficulty / count;
 
-					const int lvlUpAt = (findAttribute->second.attributeLvl + 1) * 200;
+					const int lvlUpAt = attrLvlXpCap(findAttribute->second.attributeLvl);
 
 					// Attribute is above experinece threshold to lvl up
 					if (findAttribute->second.experience > lvlUpAt)

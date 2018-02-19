@@ -23,17 +23,6 @@ MessageQueue<drop_item_message> dropOffs;
 
 void EquipHandler::init()
 {
-	/*
-	subscribe<pickup_item_message>([this](pickup_item_message &msg)
-	{
-		pickups.emplace(pickup_item_message{ msg.itemSlot, msg.entityId, msg.itemEid, msg.outItem });
-	});
-
-	subscribe<drop_item_message>([this](drop_item_message &msg)
-	{
-		dropOffs.emplace(drop_item_message{ msg.itemSlot, msg.entityId, msg.itemEid, msg.co });
-	});
-	*/
 	subscribe<pickup_item_message>([this](pickup_item_message &msg)
 	{
 		pickupItem(msg.itemSlot, msg.entityId, msg.itemEid, msg.outItem );
@@ -43,26 +32,10 @@ void EquipHandler::init()
 	{
 		dropItem( msg.itemSlot, msg.entityId, msg.itemEid, msg.co );
 	});
-
-	subscribe<designate_building_message>([this](designate_building_message & msg)
-	{
-		designateBuilding(msg);
-	});
 }
 
 void EquipHandler::update(const double duration)
 {
-	/*
-	pickups.processAll([this](pickup_item_message &msg)
-	{
-		pickupItem(msg.itemSlot, msg.entityId, msg.itemEid, msg.outItem);
-	});
-
-	dropOffs.processAll([this](drop_item_message &msg)
-	{
-		dropItem(msg.itemSlot, msg.entityId, msg.itemEid, msg.co);
-	});
-	*/
 }
 
 // Need to add in an inventory component for Entities while holding things!~!~!~!~
@@ -144,56 +117,4 @@ void EquipHandler::dropItem(int itemSlot, std::size_t entityId, std::size_t item
 
 	item.activate();
 	//getWorld().refresh(); // Should we truly be refreshing here? Not Sure
-}
-
-void EquipHandler::designateBuilding(designate_building_message & msg)
-{
-	building_designation designation;
-
-	designation.tag = msg.building.tag;
-	designation.name = msg.building.name;
-	designation.co = idxToCo(msg.idx);
-	designation.width = msg.building.width;
-	designation.height = msg.building.height;
-	designation.components = msg.building.components;
-	
-
-	// Find building components
-	for (const auto& comp : msg.building.components)
-	{
-		// Set correct quanitity of components needed
-		for (int i = 0; i < comp.quantity; ++i)
-		{
-			const auto compId = itemHelper.claim_item_by_reaction_inp(comp);
-
-			std::cout << "Component [" << comp.tag << "] - Id " << compId << "\n";
-
-			designation.componentIds.push_back(std::make_pair(compId, false));
-		}
-	}
-
-	auto building = getWorld().createEntity();
-
-	building.addComponent<PositionComponent>(designation.co);
-	building.addComponent<Building>( Building{ designation.tag, designation.width, designation.height, false, msg.building.provides, msg.building.charCodes });
-
-	designation.entity_id = building.getId().index;
-
-	// Adjust center for 3 tile buildings
-	int sx = designation.co.x;
-	int sy = designation.co.y;
-	if (designation.width == 3) --sx;
-	if (designation.height == 3) --sy;
-
-	for(int x = sx; x < sx + designation.width; ++x)
-		for (int y = sy; y < sy + designation.height; ++y)
-		{
-			const Coordinates co = { x, y, designation.co.z };
-			region::setFlag(co, region::Flag::CONSTRUCTION);
-
-			// Id's must be manually deleted later
-			positionCache->addNode({ co, designation.entity_id });
-		}
-
-	designations->buildings.push_back(designation);
 }

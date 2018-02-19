@@ -10,6 +10,16 @@ inline int attributeModifier(int lvl) // Implement this into skills time duratio
 	return ((lvl - 1) / 2) - 4;
 }
 
+inline int skillLvlXpCap(const int lvl)
+{
+	return (lvl + 1) * 150;
+}
+
+inline int attrLvlXpCap(const int attrLvl)
+{
+	return (attrLvl + 1) * 200;
+}
+
 class Stats : public Component
 {
 public:

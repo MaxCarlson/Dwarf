@@ -10,8 +10,9 @@ public:
 	void init();
 	void update(const double duration);
 
-	int numberShown = 10;
-
+	int dwarfSelected = 0;
 private:
-	void drawNeeds(std::vector<Needs>& needs, std::vector<std::string> names);
+	void drawNeeds(const std::string &Name, const Entity& e);
+	void drawStats(const Entity &e);
+	void drawInventory(const Entity &e);
 };

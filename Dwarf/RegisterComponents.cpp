@@ -36,6 +36,16 @@
 #include "ECS\Components\Sentients\Needs.h"
 #include "ECS\Components\Sentients\Happiness.h"
 
+// This enables us to reset each of the variadic eachWith functions to it's
+// initial state.
+// It's needed because with world.clear() all systems are removed from the world.
+// If we want to reload the game, the variadic eachWith's used must be reset and the systems 
+// added in the same order, avoiding typeId errors (and Entities belonging to systems they shouldn't)
+void ComponentsInit::resetVardiadicEach()
+{
+	
+}
+
 void ComponentsInit::init()
 {
 	world.registerComponent<PositionComponent>();

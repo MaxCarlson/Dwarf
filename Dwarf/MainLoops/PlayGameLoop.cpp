@@ -8,6 +8,7 @@
 #include "Map\Tile.h"
 #include "Globals\global_calender.h"
 #include "Globals\MainFunction.h"
+#include "RegisterComponents.h"
 #include "MainMenuLoop.h"
 #include "Designations.h"
 #include "Raws\DefInfo.h"
@@ -172,8 +173,9 @@ void PlayGameLoop::run(const double duration)
 
 		if (ImGui::Button("Quit##QuitToMainMenu"))
 		{
+			ComponentsInit::resetVardiadicEach();
 			RunSystems::cleanSystems();
-			
+	
 			MainFunction = MainMenuLoop::run;
 		}
 

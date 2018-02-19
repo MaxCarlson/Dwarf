@@ -45,6 +45,14 @@ namespace JobsBoard
 	}
 }
 
+// Look for buildings that were not possible to build, 
+// but now are. Add them to the designations->buildings.
+// Also look for buildings that are not possible and move them to queued buildings
+void scanForPossibleBuildings()
+{
+
+}
+
 void BuildAi::init()
 {
 	JobsBoard::register_job_offer<BuilderTag>(JobsBoard::evaluate_building);
@@ -52,6 +60,16 @@ void BuildAi::init()
 
 void BuildAi::update(const double duration)
 {
+	constexpr double timeTillBuildingScan = 1000.0;
+	static double time = 0.0;
+	time += duration;
+
+	if (time > timeTillBuildingScan)
+	{
+		time = 0.0;
+		scanForPossibleBuildings();
+	}
+
 	for (auto e : getEntities())
 	{
 		doBuild(e, duration);
