@@ -29,10 +29,10 @@ namespace JobsBoard
 		if (designations->buildings.empty())
 			return;
 
-		auto building_d = designations->buildings.back();
+		auto building_d = designations->buildings.begin()->second;
 		auto id = building_d.entity_id; 
 
-		auto building = e.getWorld().getEntity(id);
+		auto building = world.getEntity(id);
 
 		auto* pos = &building.getComponent<PositionComponent>().co;
 
@@ -47,16 +47,25 @@ namespace JobsBoard
 
 // Look for buildings that were not possible to build, 
 // but now are. Add them to the designations->buildings.
-// Also look for buildings that are not possible and move them to queued buildings
+// Also claim all components neccsary for building to function
 void scanForPossibleBuildings()
 {
-
+	for (const auto& b : designations->queuedBuildings)
+	{
+		bool readyToBuild = false;
+	}
 }
 
 void BuildAi::init()
 {
 	JobsBoard::register_job_offer<BuilderTag>(JobsBoard::evaluate_building);
 }
+
+inline void findBuilding(const Entity &e, const Coordinates &co, WorkTemplate<BuilderTag> &work, BuilderTag &tag, MovementComponent &mov);
+inline void findComponent(const Entity &e, const Coordinates &co, WorkTemplate<BuilderTag> &work, BuilderTag &tag, MovementComponent &mov);
+inline void gotoComponent(const Entity &e, const Coordinates &co, WorkTemplate<BuilderTag> &work, BuilderTag &tag, MovementComponent &mov);
+inline void gotoBuilding(const Entity &e, const Coordinates &co, WorkTemplate<BuilderTag> &work, BuilderTag &tag, MovementComponent &mov);
+inline void buildBuilding(const Entity &e, const Coordinates &co, WorkTemplate<BuilderTag> &work, BuilderTag &tag, MovementComponent &mov, const double &duration);
 
 void BuildAi::update(const double duration)
 {
@@ -72,8 +81,234 @@ void BuildAi::update(const double duration)
 
 	for (auto e : getEntities())
 	{
-		doBuild(e, duration);
+		//doBuild(e, duration);
+
+		WorkTemplate<BuilderTag> work;
+		auto& tag = e.getComponent<BuilderTag>();
+		auto& co = e.getComponent<PositionComponent>().co;
+		auto& mov = e.getComponent<MovementComponent>();
+
+		switch (tag.step)
+		{
+		case BuilderTag::FIND_BUILDING:
+			findBuilding(e, co, work, tag, mov);
+			break;
+
+		case BuilderTag::FIND_COMPONENT:
+			findComponent(e, co, work, tag, mov);
+			break;
+
+		case BuilderTag::GOTO_COMPONENT:
+			gotoComponent(e, co, work, tag, mov);
+			break;
+
+		case BuilderTag::GOTO_BUILDING:
+			gotoBuilding(e, co, work, tag, mov);
+			break;
+
+		case BuilderTag::BUILD_BUILDING:
+			buildBuilding(e, co, work, tag, mov, duration);
+			break;
+		}
+
 	}
+}
+
+inline void findBuilding(const Entity &e, const Coordinates &co, WorkTemplate<BuilderTag> &work, BuilderTag &tag, MovementComponent &mov)
+{
+	// Find closest builing that doesn't have an entity working it
+	int bidx = 0;
+	std::map<int, int> buildingsDist;
+	for (const auto& b : designations->buildings)
+	{
+		auto dist = static_cast<int>(get_3D_distance(co, b.second.co));
+
+		buildingsDist.emplace(dist, bidx);
+		++bidx;
+	}
+
+	auto dFind = designations->buildings.find(buildingsDist.begin()->second);
+
+	if (dFind == designations->buildings.end())
+	{
+		work.cancel_work(e);
+		return;
+	}
+
+	tag.step = BuilderTag::FIND_COMPONENT;
+	tag.buildingTarget = dFind->second;
+	tag.difficulty = getBuilding(tag.buildingTarget.tag)->skill_required.second;
+
+	designations->buildings.erase(dFind);
+	return;
+}
+
+inline void findComponent(const Entity & e, const Coordinates & co, WorkTemplate<BuilderTag>& work, BuilderTag & tag, MovementComponent & mov)
+{
+	bool hasComps = true;
+
+	// Loop through component types
+	for (auto& ctype : tag.buildingTarget.components)
+	{
+		// Loop through quantity of components
+		for (int i = 0; i < ctype.quantity; ++i)
+		{
+			auto& component = tag.buildingTarget.componentIds[i];
+
+			// If component hasn't been placed near/in building yet..
+			if (!component.second)
+			{
+				hasComps = false;
+				tag.current_component = component.first;
+
+				auto pos = itemHelper.get_item_location(component.first);
+				if (pos == 0)
+				{
+					designations->queuedBuildings.emplace(getIdx(tag.buildingTarget.co), tag.buildingTarget);
+					work.cancel_work(e);
+					return;
+				}
+
+				auto path = findPath(co, idxToCo(pos));
+
+				if (path->failed)
+				{
+					designations->queuedBuildings.emplace(getIdx(tag.buildingTarget.co), tag.buildingTarget);
+					work.cancel_work(e);
+					return;
+				}
+
+				mov.path = path->path;
+				//component.second = true; Component should only be set to true once we've dropped it?
+				tag.compLocation = idxToCo(pos);
+				tag.step = BuilderTag::GOTO_COMPONENT;
+				return;
+			}
+		}
+	}
+
+	if (hasComps)
+		tag.step = BuilderTag::BUILD_BUILDING;
+}
+
+inline void gotoComponent(const Entity & e, const Coordinates & co, WorkTemplate<BuilderTag>& work, BuilderTag & tag, MovementComponent & mov)
+{
+	work.followPath(mov, co, tag.compLocation, [&tag]()
+	{
+		// On path failure
+		tag.step = BuilderTag::FIND_COMPONENT;
+		return;
+	}, [&]
+	{
+		// On reaching component, pick it up
+		auto path = findPath(co, tag.buildingTarget.co);
+
+		if (path->failed)
+		{
+			designations->queuedBuildings.emplace(getIdx(tag.buildingTarget.co), tag.buildingTarget);
+			work.cancel_work(e);
+			return;
+		}
+
+		tag.step = BuilderTag::GOTO_BUILDING;
+		mov.path = path->path;
+		world.emit(pickup_item_message { SLOT_CARRYING, e.getId().index, tag.current_component, 0 });
+		return;
+	});
+}
+
+inline void gotoBuilding(const Entity & e, const Coordinates & co, WorkTemplate<BuilderTag>& work, BuilderTag & tag, MovementComponent & mov)
+{
+	work.followPath(mov, co, tag.buildingTarget.co, [&]()
+	{
+		// On pathing failure
+		world.emit(drop_item_message { SLOT_CARRYING, e.getId().index, tag.current_component, co });
+		designations->queuedBuildings.emplace(getIdx(tag.buildingTarget.co), tag.buildingTarget);
+		work.cancel_work(e);
+		return;
+	}, [&]
+	{
+		// Mark component as added
+		for (auto& comp : tag.buildingTarget.componentIds)
+			if (comp.first == tag.current_component)
+			{
+				comp.second = true;
+				break;
+			}
+
+			// On reaching building
+		world.emit(drop_item_message { SLOT_CARRYING, e.getId().index, tag.current_component, co, false }); // Drop and do not unclaim
+		tag.step = BuilderTag::FIND_COMPONENT;
+		tag.current_component = 0;
+	});
+}
+
+inline void buildBuilding(const Entity & e, const Coordinates & co, WorkTemplate<BuilderTag>& work, BuilderTag & tag, MovementComponent & mov, const double &duration)
+{
+	auto& stats = e.getComponent<Stats>();
+
+	if (tag.buildingTarget.progress < tag.difficulty * 375.0) // Add in building times
+	{
+		doWorkTime(stats, jobSkill, duration, tag.buildingTarget.progress);
+
+		return;
+	}
+
+	auto target = getBuilding(tag.buildingTarget.tag);
+	if (target == nullptr)
+		throw std::runtime_error("Building tag not found!");
+
+	const int difficulty = target->skill_required.second;
+
+	giveWorkXp(stats, jobSkill, difficulty);
+
+	auto& buildingEntity = world.getEntity(tag.buildingTarget.entity_id);
+
+	auto& building = buildingEntity.getComponent<Building>();
+
+	// Check every component for validity
+	for (auto& compId : tag.buildingTarget.componentIds)
+	{
+		const auto ent = world.getEntity(compId.first);
+
+		if (!ent.isValid() || !ent.hasComponent<Item>())
+		{
+			designations->buildings.push_back(tag.buildingTarget);
+			std::cout << "Invalid component for building - building id: " << tag.buildingTarget.entity_id
+				<< " componnent id:" << compId.first << "\n";
+			work.cancel_work(e);
+			return;
+		}
+	}
+
+	// Set materials for building and delete componenets 
+	for (auto& compId : tag.buildingTarget.componentIds)
+	{
+		const auto comp = world.getEntity(compId.first);
+
+		const std::string comptag = comp.getComponent<Item>().tag;
+		std::size_t material = comp.getComponent<Item>().material;
+
+		itemHelper.deleteItem(compId.first);
+
+		building.materials.push_back(std::make_pair(comptag, material));
+	}
+
+	building.complete = true;
+
+	// Just used for filtering
+	buildingEntity.addComponent<RenderComponent>();
+
+	buildingEntity.activate();
+
+	// Update availible reactions for buildings if this is a new Building type
+	defInfo->updateBuildingReactions(building.tag);
+
+	// Add code for building provides once added in 
+
+
+	work.cancel_work(e);
+	return;
 }
 
 void BuildAi::doBuild(const Entity & e, const double & duration)
@@ -124,7 +359,6 @@ void BuildAi::doBuild(const Entity & e, const double & duration)
 					if (!pos)
 					{
 						// We failed to find a component for this building
-						// at first, let's try again ~~ Should we remove this code from EquipHandler and put it solely in here?
 						if (component.first == 0)
 						{
 							const auto id = itemHelper.claim_item_by_reaction_inp(ctype);

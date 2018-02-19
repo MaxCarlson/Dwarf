@@ -29,12 +29,10 @@ struct FarmInfo // Move this to a sepperate file. Make a file for designation ty
 	// of a step
 	double progress = 0.0;
 
-	bool beingWorked = false;
-
 	template<class Archive>
 	void serialize(Archive &archive)
 	{
-		archive(step, seedId, seedType, progress, beingWorked);
+		archive(step, seedId, seedType, progress);
 	}
 };
 
@@ -48,9 +46,10 @@ struct Designations
 	// Indexed by tree ID
 	std::unordered_map<int, Coordinates> woodcutting;
 
-	// Buildings waiting to be built
-	std::vector<building_designation> buildings;
+	// Buildings waiting to be built that are possible to build
+	std::unordered_map<int, building_designation> buildings;
 
+	// Buildings that are not yet possible to build but are designated
 	std::unordered_map<int, building_designation> queuedBuildings;
 
 	// Map of designated architecture locations, indexed by vector idx
@@ -86,7 +85,7 @@ struct Designations
 	template<class Archive>
 	void serialize(Archive& archive)
 	{
-		archive(mining, buildings, architecture, workOrders, harvest, farming, hauling, beds);
+		archive(mining, buildings, queuedBuildings, architecture, workOrders, harvest, farming, hauling, beds);
 	}
 
 };

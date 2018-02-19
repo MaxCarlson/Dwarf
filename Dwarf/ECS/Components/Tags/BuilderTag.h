@@ -24,6 +24,7 @@ struct BuilderTag : public Component
 
 	building_designation buildingTarget;
 
+	Coordinates compLocation;
 	std::size_t current_component = 0;
 
 	int difficulty = 0;
@@ -31,7 +32,7 @@ struct BuilderTag : public Component
 	template<class Archive>
 	void serialize(Archive & archive)
 	{
-		archive(step, buildingTarget, current_component, difficulty);
+		archive(step, buildingTarget, compLocation, current_component, difficulty);
 	}
 };
 
