@@ -5,7 +5,7 @@ class Calender : public Component
 {
 public:
 
-	int minute = 0;
+	double minute = 0.0;
 	int hour = 0;
 	int day = 0;
 	int month = 0;

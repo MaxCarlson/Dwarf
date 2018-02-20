@@ -2,8 +2,12 @@
 #include "DwarfInfoGui.h"
 #include "mouse.h"
 #include "KeyDampener.h"
+#include "ECS\Components\Item.h"
 #include "ECS\Components\Sentients\Needs.h"
 #include "ECS\Components\Sentients\Stats.h"
+#include "ECS\Components\Sentients\Inventory.h"
+#include "Raws\Materials.h"
+#include "Raws\Defs\MaterialDef.h"
 #include "Globals\game_states.h"
 #include "Raws\SkillReader.h"
 #include <imgui.h>
@@ -197,7 +201,55 @@ void DwarfInfoGui::drawStats(const Entity & e) // TODO: Add in coloring based on
 	}
 }
 
-void DwarfInfoGui::drawInventory(const Entity & e)
+// TODO: Add colors and backgound highlights for items of higher quality. Color code the WOW style
+// TODO: Add tooltips or expandable windows on items to give more info about the item
+void DwarfInfoGui::drawInventory(const Entity & e) 
 {
+	static const std::vector<std::string> slotNames = 
+	{  
+	    "Tool:     ", 
+	    "Carrying: ", 
+	    "Food:     ", 
+        "Drink:    ",
+		"Head:     ",
+		"Torso:    ",
+		"Hands:    ",
+		"Feet:     "
+	};
+	const auto& inv = e.getComponent<Inventory>();
 
+	int i = 0;
+	for (const auto& s : slotNames)
+	{
+		auto id = inv.inventory[i];
+
+		ImGui::Text(s.c_str()); 
+
+		if (!id)
+		{
+			++i;
+			continue;
+		}
+
+		ImGui::SameLine();
+
+		auto& itemEnt = getWorld().getEntity(id);
+
+		auto* item = &itemEnt.getComponent<Item>();
+
+		std::string iName = "Unknown";
+		std::string matName = "Unknown";
+		if (item)
+		{
+			iName = item->name;
+			auto mat = getMaterial(item->material); 
+			if (mat)
+				matName = mat->name;
+		}
+
+		ImGui::Text(matName.c_str()); ImGui::SameLine();
+		ImGui::Text(iName.c_str());
+
+		++i;
+	}
 }

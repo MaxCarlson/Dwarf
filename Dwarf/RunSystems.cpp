@@ -38,10 +38,11 @@
 #include "ECS\Systems\ai\FarmingAi.h"
 #include "ECS\Systems\ai\FarmingClearAi.h"
 #include "ECS\Systems\ai\FarmingSoilAi.h"
-#include "ECS\Systems\ai\SleepSystem.h"
 
-// Passive systems
-#include "ECS\Systems\ai\Passives\NeedsSystem.h"
+// Needs systems
+#include "ECS\Systems\ai\Needs\NeedsSystem.h"
+#include "ECS\Systems\ai\Needs\SleepSystem.h"
+#include "ECS\Systems\ai\Needs\EatFoodSystem.h"
 
 // System Helpers
 #include "ECS\Systems\helpers\ItemHelper.h"
@@ -98,6 +99,7 @@ const std::string BUILDING_HELPER = "Building Helper";
 // Needs and passive
 const std::string NEEDS_SYSTEM = "Needs System";
 const std::string SLEEP_SYSTEM = "Sleep System";
+const std::string EAT_FOOD_SYSTEM = "Eat Food System";
 
 // Gui Systems
 const std::string MENU_BAR = "Menu Bar";
@@ -174,9 +176,10 @@ void initSystems(bool fromLoad)
 	systems[FARM_CLEAR_AI] = new FarmingClearAi;
 	systems[FARM_SOIL_AI] = new FarmingSoilAi;
 
-	// Needs and passives
+	// Needs 
 	systems[NEEDS_SYSTEM] = new NeedsSystem;
 	systems[SLEEP_SYSTEM] = new SleepSystem;
+	systems[EAT_FOOD_SYSTEM] = new EatFoodSystem;
 
 	// Gui systems
 	systems[MENU_BAR] = new MenuBar;
@@ -224,9 +227,10 @@ void initSystems(bool fromLoad)
 	world.addSystem(* static_cast<FarmingClearAi *>(systems[FARM_CLEAR_AI]));
 	world.addSystem(* static_cast<FarmingSoilAi *>(systems[FARM_SOIL_AI]));
 
-	// Needs and passives
+	// Needs 
 	world.addSystem(* static_cast<NeedsSystem *>(systems[NEEDS_SYSTEM]));
 	world.addSystem(* static_cast<SleepSystem *>(systems[SLEEP_SYSTEM]));
+	world.addSystem(* static_cast<EatFoodSystem *>(systems[EAT_FOOD_SYSTEM]));
 
 	// Gui Systems
 	world.addSystem(* static_cast<MenuBar *>(systems[MENU_BAR]));
@@ -315,10 +319,12 @@ void updateSystems(const double duration)
 		if (majorTick > MS_PER_MAJOR_TICK)
 		{
 			majorTick = 0.0;
-			runSystem(CALENDER_SYSTEM, MS_PER_MAJOR_TICK);
 			runSystem(WORK_ORDER_HELPER, MS_PER_MAJOR_TICK);
-			runSystem(NEEDS_SYSTEM, MS_PER_MAJOR_TICK);
 		}
+
+		runSystem(NEEDS_SYSTEM, MS_PER_UPDATE); // These two systems should probably be set to run in major ticks
+		runSystem(CALENDER_SYSTEM, MS_PER_UPDATE);
+
 
 		// Assign jobs to entities
 		runSystem(AI_WORK_SYSTEM, MS_PER_UPDATE);
@@ -341,7 +347,11 @@ void updateSystems(const double duration)
 		runSystem(FARMING_AI, MS_PER_UPDATE);
 		runSystem(HAULING_SYSTEM, MS_PER_UPDATE);
 		runSystem(PLANT_SYSTEM, MS_PER_UPDATE);
+
+		// Need systems are also run as varying priority jobs
+		// based on how low the particular need is priority increases
 		runSystem(SLEEP_SYSTEM, MS_PER_UPDATE);
+		runSystem(EAT_FOOD_SYSTEM, MS_PER_UPDATE);
 
 		// Perfrom mining and later constructing jobs?
 		runSystem(REGION_HELPER, MS_PER_UPDATE);
