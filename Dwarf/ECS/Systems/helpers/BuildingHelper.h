@@ -14,9 +14,7 @@ public:
 		{
 			auto b = e.getComponent<Building>();
 
-			bool tt = b.provides.test(type);
-
-			if (!e.getComponent<Building>().provides.test(type))
+			if (! (e.getComponent<Building>().provides & type))
 				return;
 
 			func(e);

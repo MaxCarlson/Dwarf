@@ -1,5 +1,6 @@
 #pragma once
 #include "ECS\Component.h"
+#include "Coordinates.h"
 
 struct EatFoodTag : public Component
 {
@@ -12,14 +13,27 @@ struct EatFoodTag : public Component
 		EAT_FOOD
 	};
 
+	enum TableChairStatus
+	{
+		BOTH,
+		TABLE,
+		CHAIR,
+		NONE
+	};
+
 	size_t foodId = 0;
+	size_t tableId = 0;
+
+	Coordinates targetCo;
 
 	int step = FIND_FOOD;
+
+	TableChairStatus tableStatus = NONE;
 
 	template<class Archive>
 	void serialize(Archive &archive)
 	{
-		archive(foodId, step);
+		archive(foodId, tableId, targetCo, step, tableStatus);
 	}
 };
 

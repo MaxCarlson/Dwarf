@@ -83,6 +83,9 @@ void readInBuildings() noexcept
 						if (type2 == "downStairs")   b.provides.set(PROVIDES_DOWN_STAIRS);
 						if (type2 == "upDownStairs") b.provides.set(PROVIDES_UP_DOWN_STAIRS);
 						if (type2 == "sleep")        b.provides.set(PROVIDES_SLEEP);
+						if (type2 == "table")		 b.provides.set(PROVIDES_TABLE);
+						if (type2 == "chair")		 b.provides.set(PROVIDES_CHAIR);
+						if (type2 == "joy")			 b.provides.set(PROVIDES_JOY);
 					} 
 				);
 				}		

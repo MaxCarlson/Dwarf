@@ -19,3 +19,23 @@ items["door"] = {
 	background = "grey",
 	stockpile = stockpiles["furniture"].id
 };
+
+items["table"] = {
+	name = "Uninstalled Table",
+	description = "Place this somewhere!",
+	itemType = {"component"},
+	glyph = glyphs["table"],
+	foreground = "grey",
+	background = "grey",
+	stockpile = stockpiles["furniture"].id
+};
+
+items["chair"] = {
+	name = "Uninstalled Chair",
+	description = "Place this somewhere!",
+	itemType = {"component"},
+	glyph = glyphs["chair"],
+	foreground = "grey",
+	background = "grey",
+	stockpile = stockpiles["furniture"].i
+};
