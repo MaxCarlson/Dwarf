@@ -30,10 +30,12 @@ struct EatFoodTag : public Component
 
 	TableChairStatus tableStatus = NONE;
 
+	double time = 0.0;
+
 	template<class Archive>
 	void serialize(Archive &archive)
 	{
-		archive(foodId, tableId, targetCo, step, tableStatus);
+		archive(foodId, tableId, targetCo, step, tableStatus, time);
 	}
 };
 

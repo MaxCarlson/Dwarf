@@ -341,6 +341,12 @@ namespace region
 		currentRegion->farmPlots.erase(idx);
 	}
 
+	void forFarmPlots(std::function<void(const int)> func)
+	{
+		for (const int plot : currentRegion->farmPlots)
+			func(plot);
+	}
+
 	void spot_recalc_paths(const Coordinates co)
 	{
 		currentRegion->spot_recalc_paths(co);

@@ -95,7 +95,7 @@ items["devil_strand"] = {
 	stockpile = stockpiles["component"].id
 };
 
-items["reeds"] = {
+items["reeds"] = { -- Move elsewhere
 	name = "Reeds",
 	description = "A thin, pliable tube",
 	itemType = {"component"},

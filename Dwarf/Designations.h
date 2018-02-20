@@ -70,7 +70,7 @@ struct Designations
 	// +
 	// Farming Plants that have been planted and have reached maturity
 	// will be auto added to this vector
-	std::vector<std::pair<bool, Coordinates>> harvest;
+	std::unordered_set<int> harvest;
 
 	// All farms are in this map
 	std::map<int, FarmInfo> farming;

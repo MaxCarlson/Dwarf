@@ -160,6 +160,8 @@ namespace region
 
 	void deleteFarmPlot(const int idx);
 
+	void forFarmPlots(std::function<void(const int)> func);
+
 // Pathing and tile calcuating 
 
 	// Recalcuate tile pathing when only one

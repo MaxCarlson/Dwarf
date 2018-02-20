@@ -8,7 +8,7 @@
 #include "Raws\Defs\PlantDef.h"
 #include "ECS\Components\Sentients\Stats.h"
 #include "../DijkstraSystems/DijkstraMapsHandler.h"
-#include "ECS\Messages\planting_map_changed_message.h"
+#include "ECS\Messages\harvest_map_changed_message.h"
 #include "ECS\Messages\drop_item_message.h"
 #include "ECS\Systems\helpers\SeedsHelper.h"
 #include "ECS\Systems\helpers\PathFinding.h"
@@ -60,8 +60,45 @@ void gotoSeeds(const Entity& e, MovementComponent &mov, WorkTemplate<PlantingTag
 void gotoFarm(const Entity& e, MovementComponent &mov, WorkTemplate<PlantingTag> &work, const Coordinates &co, PlantingTag &tag);
 void doPlanting(const Entity& e, MovementComponent &mov, WorkTemplate<PlantingTag> &work, const Coordinates &co, PlantingTag &tag, const double& duration);
 
+
+inline void updateHarvest()
+{
+	bool changed = false;
+	region::forFarmPlots([&changed](const int idx)
+	{
+		auto plantT = region::plantType(idx);
+		auto lfc = region::plantLifeCycle(idx);
+
+		auto* plant = getPlantDef(plantT);
+
+		if (plant == nullptr || !plantT)
+			return;
+
+		if (plant->harvestsTo[lfc] != "none")
+		{
+			changed = true;
+			designations->harvest.emplace(idx);
+		}
+	});
+
+	if (changed)
+		world.emit(harvest_map_changed_message {});
+}
+
 void FarmingAi::update(const double duration)
 {
+	constexpr double harvestUpdateSpeed = 2000.0;
+	static double harvestTimer = 0.0;
+	harvestTimer += duration;
+
+	// Auto add any farm plots that are ready to harvest 
+	// to the harvest designations
+	if (harvestTimer > harvestUpdateSpeed)
+	{
+		updateHarvest();
+		harvestTimer = 0.0;
+	}
+
 	for (const auto& e : getEntities())
 	{
 		WorkTemplate<PlantingTag> work;

@@ -71,9 +71,11 @@ void loopThroughHarvest(int type, Coordinates sml, Coordinates lrg, std::functio
 			const auto plantLfc = region::plantLifeCycle(idx);
 			const auto plantIdx = region::plantType(idx);
 
+			auto find = designations->harvest.find(idx);
+
 			bool passed = false;
 			std::string product = "none";
-			if (plantIdx > 0)
+			if (plantIdx > 0 && find == designations->harvest.end())
 			{
 				// And plant products to map
 				const auto* plant = getPlantDef(plantIdx);
@@ -153,7 +155,7 @@ void DesignHarvest::designHarvest()
 				if (passed)
 				{
 					changed = true;
-					designations->harvest.emplace_back(std::make_pair(false, Coordinates{ x, y, z }));
+					designations->harvest.emplace(getIdx({x, y, z}));
 				}
 			});
 		// Erase harvest designations

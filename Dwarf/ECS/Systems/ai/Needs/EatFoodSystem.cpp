@@ -24,7 +24,7 @@ inline void findFood(const Entity &e, const Coordinates& co, EatFoodTag &tag, Wo
 inline void gotoFood(const Entity &e, const Coordinates& co, EatFoodTag &tag, WorkTemplate<EatFoodTag> &work, MovementComponent &mov);
 inline void findTable (const Entity &e, const Coordinates& co, EatFoodTag &tag, WorkTemplate<EatFoodTag> &work, MovementComponent &mov);
 inline void gotoTable(const Entity &e, const Coordinates& co, EatFoodTag &tag, WorkTemplate<EatFoodTag> &work, MovementComponent &mov);
-inline void eatFood(const Entity &e, const Coordinates& co, EatFoodTag &tag, WorkTemplate<EatFoodTag> &work, MovementComponent &mov);
+inline void eatFood(const Entity &e, const Coordinates& co, EatFoodTag &tag, WorkTemplate<EatFoodTag> &work, MovementComponent &mov, const double& duration);
 
 
 void EatFoodSystem::update(const double duration)
@@ -56,7 +56,7 @@ void EatFoodSystem::update(const double duration)
 			break;
 
 		case EatFoodTag::EAT_FOOD:
-			eatFood(e, co, tag, work, mov);
+			eatFood(e, co, tag, work, mov, duration);
 			break;
 		}
 	}
@@ -114,7 +114,7 @@ inline void gotoFood(const Entity & e, const Coordinates & co, EatFoodTag & tag,
 
 inline void findTable(const Entity & e, const Coordinates & co, EatFoodTag & tag, WorkTemplate<EatFoodTag>& work, MovementComponent & mov)
 {
-	// Try and find a table with a chair adjacent
+	// TODO: Try and find a table with a chair adjacent
 	// TODO: Cache these when they're built in an unordered_map
 
 	// If not try to find a chair or a table ~ Minor unhappy thoughts
@@ -145,7 +145,12 @@ inline void findTable(const Entity & e, const Coordinates & co, EatFoodTag & tag
 
 		if (!path->failed)
 		{
+			bool chair = building.getComponent<Building>().provides.test(PROVIDES_CHAIR);
+
+			tag.tableStatus = chair ? EatFoodTag::CHAIR : EatFoodTag::TABLE;
 			tag.step = EatFoodTag::GOTO_TABLE;
+			building.addComponent<Claimed>(e.getId().index);
+			building.activate();
 			tag.tableId = d.second;
 			tag.targetCo = bco;
 			return;
@@ -155,8 +160,34 @@ inline void findTable(const Entity & e, const Coordinates & co, EatFoodTag & tag
 
 inline void gotoTable(const Entity & e, const Coordinates & co, EatFoodTag & tag, WorkTemplate<EatFoodTag>& work, MovementComponent & mov)
 {
+	work.followPath(mov, co, tag.targetCo, [&tag]()
+	{
+		tag.step = EatFoodTag::FIND_TABLE;
+		world.getEntity(tag.tableId).removeComponent<Claimed>();
+		world.getEntity(tag.tableId).activate();
+	}, [&tag]
+	{
+		tag.step = EatFoodTag::EAT_FOOD;
+	});
 }
 
-inline void eatFood(const Entity & e, const Coordinates & co, EatFoodTag & tag, WorkTemplate<EatFoodTag>& work, MovementComponent & mov)
+inline void eatFood(const Entity & e, const Coordinates & co, EatFoodTag & tag, WorkTemplate<EatFoodTag>& work, MovementComponent & mov, const double& duration)
 {
+	auto& hunger = e.getComponent<Needs>().needs[static_cast<int>(NeedIdx::HUNGER)];
+
+	// TODO: Improve satiation rate from higher quality foods!
+
+	constexpr double EAT_TIME = 15000.0;
+	constexpr double GIVE_650_SATIATION_IN_15 = 153.8935;
+
+	hunger.lvl += duration / GIVE_650_SATIATION_IN_15;
+	tag.time += duration;
+
+	if (tag.time > EAT_TIME)
+	{
+		world.getEntity(tag.foodId).kill();
+		e.getComponent<Inventory>().inventory[SLOT_FOOD] = 0;
+		work.cancel_work(e);
+		return;
+	}
 }

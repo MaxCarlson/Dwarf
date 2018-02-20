@@ -78,12 +78,16 @@ void HarvestAi::doHarvest(const Entity& e, const double& duration)
 		// delete the designation
 		if (tag.progress == 0.0)
 		{
-			designations->harvest.erase(std::remove_if(
-				designations->harvest.begin(),
-				designations->harvest.end(),
-				[&idx](auto d) { return idx == getIdx(d.second);
+			auto find = designations->harvest.find(idx);
 
-			}), designations->harvest.end());
+			if (find != designations->harvest.end())
+				designations->harvest.erase(find);
+			else
+			{
+				work.cancel_work(e);
+				return;
+			}
+
 			emit(harvest_map_changed_message{});
 		}
 
