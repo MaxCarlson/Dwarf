@@ -117,7 +117,9 @@ void HarvestAi::doHarvest(const Entity& e, const double& duration)
 			{
 				if (find->categories.test(ITEM_FOOD)) type = "food";
 
-				auto item = spawnItemOnGround(produce, getMaterialIdx(type), co, SpawnColor::ITEM_COLOR);  
+				const auto quality = calculateQuality(stats, skillName, plant->difficulty);
+
+				auto item = spawnItemOnGround(produce, getMaterialIdx(type), co, SpawnColor::ITEM_COLOR, quality);  
 			}
 
 			spawnSeeds(rng.range(1, 3), co, plant->tag);

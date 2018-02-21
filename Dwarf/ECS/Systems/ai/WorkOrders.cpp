@@ -13,7 +13,7 @@
 #include "../ECS/Messages/drop_item_message.h"
 #include "../ECS/Messages/block_map_changed_message.h"
 #include "ECS\Components\Sentients\AiWorkComponent.h"
-
+#include "ECS\Components\Quality.h"
 
 namespace JobsBoard
 {
@@ -257,11 +257,13 @@ void WorkOrders::work(Entity e, const double& duration)
 
 		// Produce outputs ~~ figure out how to deal with mixed outputs
 		// in terms of affects
-		for (auto & out : reaction->outputs)
+		for (auto & out : reaction->outputs) // TODO: Once stacking is enabled just create a stack of reaction items as one entity
 			for (int i = 0; i < out.second; ++i)
 			{
+				auto quality = calculateQuality(stats, reaction->skill, reaction->difficulty);
+
 				std::cout << "Reaction spawning" << out.first << material << "\n";
-				spawnItemOnGround(out.first, material, co, SpawnColor::MATERIAL_COLOR);
+				spawnItemOnGround(out.first, material, co, SpawnColor::MATERIAL_COLOR, quality);
 			}
 
 		emit(block_map_changed_message{});

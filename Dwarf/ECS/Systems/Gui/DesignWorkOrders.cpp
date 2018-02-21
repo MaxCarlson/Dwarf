@@ -13,7 +13,7 @@ void DesignWorkOrders::init()
 
 }
 
-void DesignWorkOrders::update(const double duration)
+void DesignWorkOrders::update(const double duration) // TODO: Sort by workshop; Sort by skill type; etc
 {
 
 	ImGui::Begin("WorkOrders", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoCollapse);
@@ -62,7 +62,7 @@ void DesignWorkOrders::giveOrder()
 		}
 	}
 
-	ImGui::ListBox("Availible Reactions", &orderIdx, reactPassedFilter); // Switch over to using the names instead of the tags!!!
+	ImGui::ListBox("Availible Reactions", &orderIdx, reactPassedFilter); 
 	
 	if (ImGui::Button("Give Order##WorkOrderReactions"))
 	{

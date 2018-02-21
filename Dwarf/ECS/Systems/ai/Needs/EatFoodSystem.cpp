@@ -11,10 +11,11 @@ namespace JobsBoard
 {
 	void evaluate_eating(JobBoard & board, const Entity & e, AiWorkComponent &prefs, const Coordinates& co, JobEvaluatorBase * jt)
 	{
-		const auto& hunger = e.getComponent<Needs>().needs[static_cast<int>(NeedIdx::HUNGER)].lvl;
-
 		if (!itemHelper.isItemCatagoryAvailible<ITEM_FOOD>()) // TODO: Make this check in entities inventory, And possibly in others inventories if need is bad enough?
 			return;
+
+		const auto& hunger = e.getComponent<Needs>().needs[static_cast<int>(NeedIdx::HUNGER)].lvl;
+		const auto& thirst = e.getComponent<Needs>().needs[static_cast<int>(NeedIdx::THIRST)].lvl;
 
 		int priority = 0;
 
@@ -32,6 +33,10 @@ namespace JobsBoard
 		else
 			priority = HungerPriority::STARVING;
 
+		if (thirst < ThirstThreshold::VERY_THRISTY) // Try and get some water out of food!
+			priority = ThirstPriority::DEHYDRATED;
+
+		// Don't eat when full
 		if (priority == HungerPriority::FULL)
 			return;
 
@@ -140,7 +145,7 @@ inline void gotoFood(const Entity & e, const Coordinates & co, EatFoodTag & tag,
 
 inline void findTable(const Entity & e, const Coordinates & co, EatFoodTag & tag, WorkTemplate<EatFoodTag>& work, MovementComponent & mov)
 {
-	// TODO: Try and find a table with a chair adjacent
+	// TODO: Try and find a table with a chair adjacent and make entities prefer this!
 	// TODO: Cache these when they're built in an unordered_map
 
 	// If not try to find a chair or a table ~ Minor unhappy thoughts
@@ -202,6 +207,7 @@ inline void gotoTable(const Entity & e, const Coordinates & co, EatFoodTag & tag
 inline void eatFood(const Entity & e, const Coordinates & co, EatFoodTag & tag, WorkTemplate<EatFoodTag>& work, MovementComponent & mov, const double& duration)
 {
 	auto& hunger = e.getComponent<Needs>().needs[static_cast<int>(NeedIdx::HUNGER)];
+	auto& thirst = e.getComponent<Needs>().needs[static_cast<int>(NeedIdx::THIRST)];
 
 	// TODO: Improve satiation rate from higher quality foods!
 
@@ -209,6 +215,8 @@ inline void eatFood(const Entity & e, const Coordinates & co, EatFoodTag & tag, 
 	constexpr double GIVE_650_SATIATION_IN_15 = 153.8935;
 
 	hunger.lvl += duration / GIVE_650_SATIATION_IN_15;
+	thirst.lvl += duration / (GIVE_650_SATIATION_IN_15 * 8); // Improve thirst slightly
+
 	tag.time += duration;
 
 	if (tag.time > EAT_TIME || hunger.lvl > 1000.0)

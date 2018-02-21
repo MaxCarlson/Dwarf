@@ -33,7 +33,7 @@ void DesignDevMode::chooseLocation(const std::string& itemTag, const std::string
 	ImGui::Text(coor.c_str());
 	if (mouse::leftClick)
 	{
-		spawnItemOnGround(itemTag, getMaterialIdx(matTag), { mx, my, mouseZ }, SpawnColor::MATERIAL_COLOR);
+		spawnItemOnGround(itemTag, getMaterialIdx(matTag), { mx, my, mouseZ }, SpawnColor::MATERIAL_COLOR); // TODO: add in quality
 
 		emit(update_all_maps_message{});
 	}

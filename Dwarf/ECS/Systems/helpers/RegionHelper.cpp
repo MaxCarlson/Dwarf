@@ -80,7 +80,7 @@ void spawnMiningProducts(const perform_mining_message &msg)
 		return;
 
 	for(int i = 0; i < mat->minesToAmount; ++i)
-		spawnItemOnGround(mat->minesToTag, matIdx, co, SpawnColor::MATERIAL_COLOR);
+		spawnItemOnGround(mat->minesToTag, matIdx, co, SpawnColor::MATERIAL_COLOR, NORMAL_QUALITY);
 }
 
 void recalculateArea(const perform_mining_message &msg)

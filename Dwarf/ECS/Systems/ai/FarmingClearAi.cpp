@@ -188,7 +188,10 @@ inline void clearArea(const Entity &e, const Coordinates& co, WorkTemplate<FarmC
 			{
 				if (item->categories.test(ITEM_FOOD)) mat = "food";
 			}
-			auto sitem = spawnItemOnGround(produce, getMaterialIdx(mat), co, SpawnColor::ITEM_COLOR);
+
+			auto quality = calculateQuality(stats, jobSkill, difficulty);
+
+			auto sitem = spawnItemOnGround(produce, getMaterialIdx(mat), co, SpawnColor::ITEM_COLOR, quality);
 			sitem.getComponent<Item>().name = plant->name;
 
 			// Produce seeds

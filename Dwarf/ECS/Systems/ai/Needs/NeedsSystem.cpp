@@ -7,16 +7,16 @@ void NeedsSystem::init()
 
 inline void processThirst(Need &thirst)
 {
-	if (thirst.lvl > ThristThreshold::THIRSTY)
+	if (thirst.lvl > ThirstThreshold::THIRSTY)
 	{
 		thirst.lvl -= NeedDeclines::thirst;
 	}
-	else if (thirst.lvl > ThristThreshold::PARCHED)
+	else if (thirst.lvl > ThirstThreshold::PARCHED)
 	{
 		thirst.lvl -= NeedDeclines::thirst / 2;
 	}
 
-	else if (thirst.lvl > ThristThreshold::VERY_THRISTY)
+	else if (thirst.lvl > ThirstThreshold::VERY_THRISTY)
 	{
 		thirst.lvl -= NeedDeclines::thirst / 4;
 	}
@@ -80,7 +80,7 @@ inline void processComfort(Need &comfort)
 	comfort.lvl -= NeedDeclines::comfort;
 }
 
-inline void processJoy(Need &joy)
+inline void processJoy(Need &joy) // TODO: Possibly condense these into one function using a vector of stored decline values and a vector of thresholds?
 {
 	joy.lvl -= NeedDeclines::joy;
 }
@@ -96,7 +96,7 @@ void NeedsSystem::update(const double duration)
 		{
 			switch (static_cast<NeedIdx>(i))
 			{
-			case NeedIdx::THRIST:
+			case NeedIdx::THIRST:
 				processThirst(n);
 				break;
 

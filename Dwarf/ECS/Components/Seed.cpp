@@ -14,9 +14,9 @@ void spawnSeeds(const int num, const Coordinates& co, const std::string & plantT
 
 	const auto& name = getPlantDef(getPlantIdx(plantTag))->name;
 
-	for (int i = 0; i < num; ++i)
+	for (int i = 0; i < num; ++i) // TODO: just inc spawn qty once stacking is enabled
 	{
-		auto seed = spawnItemOnGround(seedName, mat, co, SpawnColor::ITEM_COLOR);
+		auto seed = spawnItemOnGround(seedName, mat, co, SpawnColor::ITEM_COLOR, NORMAL_QUALITY);
 		seed.getComponent<Item>().name = name + " Seed";
 		seed.addComponent<Seed>(plantTag);
 		seed.activate();

@@ -57,7 +57,7 @@ void loadRaws()
 	sanityChecks();
 }
 
-Entity spawnItemOnGround(const std::string itemTag, const std::size_t material, const Coordinates co, SpawnColor colorType, uint32_t col)
+Entity spawnItemOnGround(const std::string itemTag, const std::size_t material, const Coordinates co, SpawnColor colorType, int quality)
 {
 	auto item = getItemDef(itemTag);
 
@@ -71,14 +71,11 @@ Entity spawnItemOnGround(const std::string itemTag, const std::size_t material, 
 	auto& rend = e.addComponent<RenderComponent>(RenderComponent{item->ch});
 
 	e.addComponent<Item>(Item{ item->name, item->tag, item->categories, material, item->stackSize });
+	e.addComponent<Quality>(quality);
 
 	// SpawnColor::ITEM_COLOR is default
 
-	if (colorType == SpawnColor::CUSTOM_COLOR)
-	{
-		rend.ch.fg = col;
-	}
-	else if (colorType == SpawnColor::MATERIAL_COLOR)
+    if (colorType == SpawnColor::MATERIAL_COLOR)
 	{
 		rend.ch.fg = color_from_name(mat->color.c_str()); // Switch materials over to using vchar
 	}

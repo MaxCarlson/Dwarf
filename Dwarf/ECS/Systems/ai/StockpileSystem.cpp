@@ -92,7 +92,8 @@ void StockpileSystem::update(const double duration)
 			}
 		}
 	);
-
+	// TODO: Make these variadic systems that 
+	// filter for exactly what is needed if perf issue
 	itemHelper.forEachItem([](auto& e) // Looping through all items with position components seems inefficiant, If perf issue - Loop through stockpile squares and find items with position cahce lookups
 	{
 		// Skip claimed items

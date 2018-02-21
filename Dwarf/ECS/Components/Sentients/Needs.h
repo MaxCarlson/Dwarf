@@ -25,7 +25,7 @@ const Need Sleep(1000.0);
 const Need Comfort(750.0);
 const Need Joy(750.0);
 
-enum class NeedIdx { THRIST, HUNGER, SLEEP, COMFORT, JOY };
+enum class NeedIdx { THIRST, HUNGER, SLEEP, COMFORT, JOY };
 
 // Base decline rates for needs
 namespace NeedDeclines
@@ -38,7 +38,7 @@ namespace NeedDeclines
 }
 
 // Need thresholds for thoughts
-namespace ThristThreshold
+namespace ThirstThreshold
 {
 	constexpr double THIRSTY = 400.0;
 	constexpr double PARCHED = 250.0;

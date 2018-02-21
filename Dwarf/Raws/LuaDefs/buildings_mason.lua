@@ -17,7 +17,7 @@ buildings["mason"] = {
 reactions = {
 
 	make_stone_blocks = {
-		name = "Make Stone Blocks",
+		name = "Stone Blocks",
 		workshop = "mason",
 		skill = "masonry",
 		inputs = {{ item = "stone_boulder", qty = 1 }},
@@ -27,7 +27,7 @@ reactions = {
 	},
 
 	make_stone_door = {
-		name = "Make Stone Door",
+		name = "Stone Door",
 		workshop = "mason",
 		skill = "masonry",
 		inputs = {{ item = "stone_boulder", qty = 1 }},
@@ -37,7 +37,7 @@ reactions = {
 	},
 
 	make_stone_statue = {
-		name = "Make Stone Statue",
+		name = "Stone Statue",
 		workshop = "mason",
 		skill = "masonry",
 		inputs = {{ item = "stone_boulder", qty = 1 }},
@@ -47,12 +47,32 @@ reactions = {
 	},
 
 	make_stone_bed = {
-		name = "Make Stone Bed",
+		name = "Stone Bed",
 		workshop = "mason",
 		skill = "masonry",
 		inputs = {{ item = "stone_boulder", qty = 1 }},
 		outputs = {{ item = "bed", qty = 1}},
 		difficulty = 10,
 		time = 10		
+	},
+
+	make_stone_chair = {
+		name = "Stone Chair",
+		workshop = "mason",
+		skill = "masonry",
+		inputs = {{ item = "stone_boulder", qty = 1 }},
+		outputs = {{ item = "chair", qty = 1}},
+		difficulty = 10,
+		time = 10	
+	},
+
+	make_stone_table = {
+		name = "Stone Table",
+		workshop = "mason",
+		skill = "masonry",
+		inputs = {{ item = "stone_boulder", qty = 1 }},
+		outputs = {{ item = "table", qty = 1}},
+		difficulty = 10,
+		time = 10	
 	},
 };

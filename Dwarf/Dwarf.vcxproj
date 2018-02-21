@@ -156,6 +156,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ECS\Components\Quality.cpp" />
     <ClCompile Include="ECS\Systems\ai\Needs\EatFoodSystem.cpp" />
     <ClCompile Include="ECS\Systems\Gui\DwarfInfoGui.cpp" />
     <ClCompile Include="ECS\Systems\helpers\BuildingHelper.cpp" />
@@ -194,6 +195,7 @@
     <ClCompile Include="Globals\MainFunction.cpp" />
     <ClCompile Include="imgui_tabs.cpp" />
     <ClCompile Include="ECS\Systems\Gui\JobPreferencesUi.cpp" />
+    <ClCompile Include="ECS\Systems\ai\Needs\JoySystem.cpp" />
     <ClCompile Include="KeyDampener.cpp" />
     <ClCompile Include="MainLoops\MainMenuLoop.cpp" />
     <ClCompile Include="Map\building\BuildBiomes.cpp" />
@@ -287,7 +289,9 @@
     <ClCompile Include="MainLoops\WorldGenLoop.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ECS\Components\Sentients\Thoughts.h" />
     <ClInclude Include="ECS\Components\Tags\EatFoodTag.h" />
+    <ClInclude Include="ECS\Components\Tags\JoyTag.h" />
     <ClInclude Include="ECS\Systems\ai\Needs\EatFoodSystem.h" />
     <ClInclude Include="ECS\Systems\Gui\DwarfInfoGui.h" />
     <ClInclude Include="ECS\Systems\helpers\BuildingHelper.h" />
@@ -333,6 +337,7 @@
     <ClInclude Include="HappinessSystem.h" />
     <ClInclude Include="Helpers\MessageQueue.h" />
     <ClInclude Include="ECS\Systems\Gui\JobPreferencesUi.h" />
+    <ClInclude Include="ECS\Systems\ai\Needs\JoySystem.h" />
     <ClInclude Include="KeyDampener.h" />
     <ClInclude Include="MainLoops\MainMenuLoop.h" />
     <ClInclude Include="Map\building\BuildBiomes.h" />

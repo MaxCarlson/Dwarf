@@ -360,6 +360,12 @@
     <ClCompile Include="MainLoops\PickDwarvesLoop.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ECS\Components\Quality.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS\Systems\ai\Needs\JoySystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ECS\EntityManager.h">
@@ -1131,6 +1137,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MainLoops\PickDwarvesLoop.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Components\Sentients\Thoughts.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Systems\ai\Needs\JoySystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Components\Tags\JoyTag.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

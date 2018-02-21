@@ -43,6 +43,7 @@
 #include "ECS\Systems\ai\Needs\NeedsSystem.h"
 #include "ECS\Systems\ai\Needs\SleepSystem.h"
 #include "ECS\Systems\ai\Needs\EatFoodSystem.h"
+#include "ECS\Systems\ai\Needs\JoySystem.h"
 
 // System Helpers
 #include "ECS\Systems\helpers\ItemHelper.h"
@@ -98,6 +99,7 @@ const std::string SEED_HELPER = "Seed Helper";
 const std::string NEEDS_SYSTEM = "Needs System";
 const std::string SLEEP_SYSTEM = "Sleep System";
 const std::string EAT_FOOD_SYSTEM = "Eat Food System";
+const std::string JOY_SYSTEM = "Joy System";
 
 // Gui Systems
 const std::string MENU_BAR = "Menu Bar";
@@ -178,6 +180,7 @@ void initSystems(bool fromLoad)
 	systems[NEEDS_SYSTEM] = new NeedsSystem;
 	systems[SLEEP_SYSTEM] = new SleepSystem;
 	systems[EAT_FOOD_SYSTEM] = new EatFoodSystem;
+	systems[JOY_SYSTEM] = new JoySystem;
 
 	// Gui systems
 	systems[MENU_BAR] = new MenuBar;
@@ -228,6 +231,7 @@ void initSystems(bool fromLoad)
 	world.addSystem(* static_cast<NeedsSystem *>(systems[NEEDS_SYSTEM]));
 	world.addSystem(* static_cast<SleepSystem *>(systems[SLEEP_SYSTEM]));
 	world.addSystem(* static_cast<EatFoodSystem *>(systems[EAT_FOOD_SYSTEM]));
+	world.addSystem(* static_cast<JoySystem *>(systems[JOY_SYSTEM]));
 
 	// Gui Systems
 	world.addSystem(* static_cast<MenuBar *>(systems[MENU_BAR]));
@@ -348,6 +352,7 @@ void updateSystems(const double duration)
 		// based on how low the particular need is priority increases
 		runSystem(SLEEP_SYSTEM, MS_PER_UPDATE);
 		runSystem(EAT_FOOD_SYSTEM, MS_PER_UPDATE);
+		runSystem(JOY_SYSTEM, MS_PER_UPDATE);
 
 		// Perfrom mining and later constructing jobs?
 		runSystem(REGION_HELPER, MS_PER_UPDATE);
