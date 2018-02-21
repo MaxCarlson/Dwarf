@@ -6,6 +6,7 @@
 #include "Raws\Defs\ItemDefs.h"
 #include "ECS\Systems\helpers\PathFinding.h"
 #include "ECS\Systems\helpers\BuildingHelper.h"
+#include "ECS\Components\Quality.h"
 
 namespace JobsBoard
 {
@@ -13,7 +14,7 @@ namespace JobsBoard
 	{
 		if (!itemHelper.isItemCatagoryAvailible<ITEM_FOOD>()) // TODO: Make this check in entities inventory, And possibly in others inventories if need is bad enough?
 			return;
-
+	
 		const auto& hunger = e.getComponent<Needs>().needs[static_cast<int>(NeedIdx::HUNGER)].lvl;
 		const auto& thirst = e.getComponent<Needs>().needs[static_cast<int>(NeedIdx::THIRST)].lvl;
 
@@ -204,18 +205,47 @@ inline void gotoTable(const Entity & e, const Coordinates & co, EatFoodTag & tag
 	});
 }
 
+inline double foodQualityBenifit(const EatFoodTag &tag)
+{
+	const auto& foodItem = world.getEntity(tag.foodId);
+	const auto* qual = &foodItem.getComponent<Quality>();
+
+	if (qual == nullptr)
+		return 1.0;
+
+	switch (qual->quality)
+	{
+	case QualityDef::AWFUL_QUALITY:
+		return 0.70;
+	case QualityDef::POOR_QUALITY:
+		return 0.85;
+	case QualityDef::NORMAL_QUALITY:
+		return 1.0;
+	case QualityDef::GOOD_QUALITY:
+		return 1.1;
+	case QualityDef::SUPERIOR_QUALITY:
+		return 1.2;
+	case QualityDef::EPIC_QUALITY:
+		return 1.3;
+	case QualityDef::LEGENDAY_QUALITY:
+		return 1.45;
+	}
+}
+
 inline void eatFood(const Entity & e, const Coordinates & co, EatFoodTag & tag, WorkTemplate<EatFoodTag>& work, MovementComponent & mov, const double& duration)
 {
 	auto& hunger = e.getComponent<Needs>().needs[static_cast<int>(NeedIdx::HUNGER)];
 	auto& thirst = e.getComponent<Needs>().needs[static_cast<int>(NeedIdx::THIRST)];
 
-	// TODO: Improve satiation rate from higher quality foods!
+	// Improve satiation rate from higher quality foods
+	if (tag.qualityMultiplier == 0.0)
+		tag.qualityMultiplier = foodQualityBenifit(tag);
 
 	constexpr double EAT_TIME = 15000.0;
 	constexpr double GIVE_650_SATIATION_IN_15 = 153.8935;
 
-	hunger.lvl += duration / GIVE_650_SATIATION_IN_15;
-	thirst.lvl += duration / (GIVE_650_SATIATION_IN_15 * 8); // Improve thirst slightly
+	hunger.lvl += (duration /  GIVE_650_SATIATION_IN_15     ) * tag.qualityMultiplier;
+	thirst.lvl += (duration / (GIVE_650_SATIATION_IN_15 * 8)) * tag.qualityMultiplier; // Improve thirst slightly
 
 	tag.time += duration;
 

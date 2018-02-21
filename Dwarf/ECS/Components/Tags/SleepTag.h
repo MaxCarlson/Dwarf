@@ -25,10 +25,12 @@ struct SleepTag : public Component
 	size_t bedId = 0;
 	BedStatus bedStatus = OWN_BED;
 
+	double qualityBenifit = 0.0;
+
 	template<class Archive>
 	void serialize(Archive &archive)
 	{
-		archive(step, bedCo, bedId, bedStatus);
+		archive(step, bedCo, bedId, bedStatus, qualityBenifit);
 	}
 };
 

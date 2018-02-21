@@ -32,10 +32,12 @@ struct EatFoodTag : public Component
 
 	double time = 0.0;
 
+	double qualityMultiplier = 0.0;
+
 	template<class Archive>
 	void serialize(Archive &archive)
 	{
-		archive(foodId, tableId, targetCo, step, tableStatus, time);
+		archive(foodId, tableId, targetCo, step, tableStatus, time, qualityMultiplier);
 	}
 };
 

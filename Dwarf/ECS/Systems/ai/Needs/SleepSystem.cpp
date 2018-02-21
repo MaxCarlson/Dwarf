@@ -187,16 +187,51 @@ inline void gotoBed(const Entity &e, WorkTemplate<SleepTag>& work, MovementCompo
 	});
 }
 
+#include "ECS\Components\Quality.h"
+
+inline double sleepQualityBenifit(const SleepTag &tag)
+{
+	const auto& foodItem = world.getEntity(tag.bedId);
+	const auto* qual = &foodItem.getComponent<Quality>();
+
+	if (qual == nullptr)
+		return 1.0;
+
+	switch (qual->quality)
+	{
+	case QualityDef::AWFUL_QUALITY:
+		return 0.70;
+	case QualityDef::POOR_QUALITY:
+		return 0.85;
+	case QualityDef::NORMAL_QUALITY:
+		return 1.0;
+	case QualityDef::GOOD_QUALITY:
+		return 1.1;
+	case QualityDef::SUPERIOR_QUALITY:
+		return 1.2;
+	case QualityDef::EPIC_QUALITY:
+		return 1.3;
+	case QualityDef::LEGENDAY_QUALITY:
+		return 1.45;
+	}
+}
+
 inline const double calculateSleep(SleepTag &tag, const double& time)
 {
+	if (tag.qualityBenifit == 0.0)
+		tag.qualityBenifit = sleepQualityBenifit(tag);
 
-	double st = time / 50.0; // TODO: Add in some constexpr values representing day fractions!
+	//constexpr double baseRate = 0.0125;
+	constexpr double baseFraction = 0.208333; // Tick / baseFraction = 0.0125
+
+	double st = (time / baseFraction) * tag.qualityBenifit; // TODO: Add in some constexpr values representing day fractions!
 
 	if (tag.bedStatus == SleepTag::NO_BED)
 		st *= 0.80;
 
 	return st;
 }
+
 
 inline void doSleep(const Entity &e, WorkTemplate<SleepTag>& work, const double& duration, SleepTag & tag, const Coordinates & co)
 {
@@ -205,13 +240,11 @@ inline void doSleep(const Entity &e, WorkTemplate<SleepTag>& work, const double&
 	auto& sleep = e.getComponent<Needs>().needs[sleepIdx];
 
 	// TODO:
-	// Multiply recovery fraction by material sleep bonus
-	// Multiply recovery by quality of bed
-	// Very bad rate for no bed
+	// Multiply recovery fraction by material quality bonus
+	// Add in Max sleep time!
 	// Add in bad thoughts for loud noises
 	// Bad thoughts for no bed
 	// Bonuses thoughts for very high quality beds
-
 
 	sleep.lvl += calculateSleep(tag, duration);
 
