@@ -357,6 +357,9 @@
     <ClCompile Include="ECS\Systems\ai\Needs\EatFoodSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MainLoops\PickDwarvesLoop.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ECS\EntityManager.h">
@@ -1125,6 +1128,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ECS\Systems\ai\Needs\EatFoodSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MainLoops\PickDwarvesLoop.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

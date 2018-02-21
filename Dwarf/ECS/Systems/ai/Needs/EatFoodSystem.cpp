@@ -11,7 +11,33 @@ namespace JobsBoard
 {
 	void evaluate_eating(JobBoard & board, const Entity & e, AiWorkComponent &prefs, const Coordinates& co, JobEvaluatorBase * jt)
 	{
-		const auto& hunger = e.getComponent<Needs>().needs[static_cast<int>(NeedIdx::HUNGER)];
+		const auto& hunger = e.getComponent<Needs>().needs[static_cast<int>(NeedIdx::HUNGER)].lvl;
+
+		if (!itemHelper.isItemCatagoryAvailible<ITEM_FOOD>()) // TODO: Make this check in entities inventory, And possibly in others inventories if need is bad enough?
+			return;
+
+		int priority = 0;
+
+		if (hunger > HungerThreshold::HUNGRY)
+			priority = HungerPriority::FULL;
+
+		else if (hunger > HungerThreshold::FAMISHED)
+			priority = HungerPriority::HUNGRY;
+
+		else if (hunger > HungerThreshold::URGENTLY)
+			priority = HungerPriority::FAMISHED;
+
+		else if (hunger > HungerThreshold::STARVING)
+			priority = HungerPriority::URGENTLY_HUNGRY;
+		else
+			priority = HungerPriority::STARVING;
+
+		if (priority == HungerPriority::FULL)
+			return;
+
+		// TODO: Add in closest food? Probably not really needed?
+		int distance = 0;
+		board.emplace(std::make_pair(priority, JobsBoard::JobRating { distance, jt }));
 	}
 }
 
@@ -119,14 +145,16 @@ inline void findTable(const Entity & e, const Coordinates & co, EatFoodTag & tag
 
 	// If not try to find a chair or a table ~ Minor unhappy thoughts
 	std::map<int, size_t> distance;
-	buildingHelper.forEachBuildingOfType<PROVIDES_CHAIR | PROVIDES_TABLE>([&tag, &co, &distance](const Entity &b)
+	eachWith<Requires<Building>, Excludes<Claimed>>([&tag, &co, &distance](const Entity &b)
 	{
-		if (!b.hasComponent<PositionComponent>())
-			return;
+		const auto& build = b.getComponent<Building>();
 
-		auto dist = static_cast<int>(get_3D_distance(co, b.getComponent<PositionComponent>().co)); 
+		if (build.provides.test(PROVIDES_CHAIR) || build.provides.test(PROVIDES_TABLE))
+		{
+			auto dist = static_cast<int>(get_3D_distance(co, b.getComponent<PositionComponent>().co));
 
-		distance.emplace(dist, b.getId());
+			distance.emplace(dist, b.getId().index);
+		}
 	});
 
 	if (distance.empty())
@@ -183,7 +211,7 @@ inline void eatFood(const Entity & e, const Coordinates & co, EatFoodTag & tag, 
 	hunger.lvl += duration / GIVE_650_SATIATION_IN_15;
 	tag.time += duration;
 
-	if (tag.time > EAT_TIME)
+	if (tag.time > EAT_TIME || hunger.lvl > 1000.0)
 	{
 		world.getEntity(tag.foodId).kill();
 		e.getComponent<Inventory>().inventory[SLOT_FOOD] = 0;

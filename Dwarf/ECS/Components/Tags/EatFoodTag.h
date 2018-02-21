@@ -28,7 +28,7 @@ struct EatFoodTag : public Component
 
 	int step = FIND_FOOD;
 
-	TableChairStatus tableStatus = NONE;
+	int tableStatus = NONE;
 
 	double time = 0.0;
 

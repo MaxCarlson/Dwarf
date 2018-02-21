@@ -162,20 +162,13 @@ void DesignHarvest::designHarvest()
 		else
 			loopThroughHarvest(selectedType, mousePos, click, [z, &changed](int x, int y, bool passed, std::string p)
 			{
-				auto idx = getIdx({ x, y, z });
-				designations->harvest.erase(std::remove_if(
-					designations->harvest.begin(),
-					designations->harvest.end(),
-					[&idx, &changed](std::pair<bool, Coordinates> it)
-					{
-						if (idx == getIdx(it.second))
-						{
-							changed = true;
-							return true;
-						}
-						return false;
-					})
-				);
+				auto find = designations->harvest.find(getIdx({ x, y, z }));
+
+				if (find != designations->harvest.end())
+				{
+					changed = true;
+					designations->harvest.erase(find);
+				}
 			});
 				
 		if(changed)

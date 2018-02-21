@@ -2,7 +2,7 @@
 
 namespace ComponentsInit
 {
-	void resetVardiadicEach();
+	void registerOrResetVardiadicEach(bool reset);
 	void init();
 }
 

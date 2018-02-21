@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include "cereal\types\unordered_map.hpp"
 #include "cereal\types\utility.hpp"
+#include "cereal\types\unordered_set.hpp"
 #include <vector>
 #include <memory>
 
@@ -82,7 +83,8 @@ struct Designations
 
 	// All beds that have a designated owner
 	// Indexed by entitity Id
-	std::unordered_map<size_t, Coordinates> beds;
+	// pair is bed entity ID and bed location
+	std::unordered_map<size_t, std::pair<size_t, Coordinates>> beds;
 
 	template<class Archive>
 	void serialize(Archive& archive)

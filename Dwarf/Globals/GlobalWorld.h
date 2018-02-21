@@ -14,9 +14,8 @@ extern World world;
 // Reset is used when you would like to clean world of all systems
 // and possibly restart game
 template<class Requires, class Excludes = Excludes<>, class Any = Any<>>
-void eachWith(std::function<void(const Entity&)>&& func, bool reset = false)
+void eachWith(std::function<void(const Entity&)>&& func, bool reset = false, bool first = false)
 {
-	static bool first = true;
 	static SystemBase* sys;
 
 	// Instantiate system if first time function with params is called

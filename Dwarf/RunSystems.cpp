@@ -50,7 +50,6 @@
 #include "ECS\Systems\helpers\WorkOrderHelper.h"
 #include "ECS\Systems\helpers\RegionHelper.h"
 #include "ECS\Systems\helpers\SeedsHelper.h"
-#include "ECS\Systems\helpers\BuildingHelper.h"
 
 // System time based
 #include "ECS\Systems\timebased\CalenderSystem.h"
@@ -94,7 +93,6 @@ const std::string REGION_HELPER = "Region Helper";
 const std::string FARM_CLEAR_AI = "Farm Clear Ai";
 const std::string FARM_SOIL_AI = "Farm Soil Ai";
 const std::string SEED_HELPER = "Seed Helper";
-const std::string BUILDING_HELPER = "Building Helper";
 
 // Needs and passive
 const std::string NEEDS_SYSTEM = "Needs System";
@@ -200,7 +198,6 @@ void initSystems(bool fromLoad)
 	systems[WORK_ORDER_HELPER] = workOrderHelper.get();
 	systems[REGION_HELPER] = regionHelper.get();
 	systems[SEED_HELPER] = &seedsHelper;
-	systems[BUILDING_HELPER] = &buildingHelper;
 
 	// Add systems to world. Cast to their derived class so world 
 	// doesn't interpret them as SystemBase's
@@ -251,7 +248,6 @@ void initSystems(bool fromLoad)
 	world.addSystem(*workOrderHelper.get());
 	world.addSystem(*regionHelper.get());
 	world.addSystem( seedsHelper);
-	world.addSystem( buildingHelper);
 
 	for (auto& sys : systems)
 		sys.second->init();

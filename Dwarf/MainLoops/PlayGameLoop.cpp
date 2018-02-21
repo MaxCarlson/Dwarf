@@ -71,6 +71,15 @@ void saveGame(bool& done)
 	ImGui::End();
 }
 
+// Clean up systems, entities, components,
+// world, and variadic systems
+inline void cleanUp()
+{
+	constexpr bool reset = true;
+	ComponentsInit::registerOrResetVardiadicEach(reset);
+	RunSystems::cleanSystems();
+}
+
 void loadGame(bool& done, bool &back)
 {
 	ImGui::SetNextWindowPosCenter();
@@ -90,6 +99,8 @@ void loadGame(bool& done, bool &back)
 
 	if (ImGui::Button("Load"))
 	{
+		cleanUp();
+
 		std::string dirpath = paths.at(selected);
 
 		std::ifstream is(dirpath, std::ios::binary);
@@ -123,6 +134,7 @@ void PlayGameLoop::run(const double duration)
 	if (gameState == GameState::NEW_GAME)
 	{
 		RunSystems::initSystems(false);
+		ComponentsInit::registerOrResetVardiadicEach(false);
 
 		gameState = GameState::PLAYING;
 	}
@@ -139,6 +151,7 @@ void PlayGameLoop::run(const double duration)
 			loaded = false;
 			gameState = GameState::PLAYING;
 			RunSystems::initSystems(true);
+			ComponentsInit::registerOrResetVardiadicEach(false);
 		}
 		if (back)
 		{
@@ -173,9 +186,7 @@ void PlayGameLoop::run(const double duration)
 
 		if (ImGui::Button("Quit##QuitToMainMenu"))
 		{
-			ComponentsInit::resetVardiadicEach();
-			RunSystems::cleanSystems();
-	
+			cleanUp();
 			MainFunction = MainMenuLoop::run;
 		}
 

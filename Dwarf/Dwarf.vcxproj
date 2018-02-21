@@ -210,6 +210,7 @@
     <ClCompile Include="ECS\Systems\Gui\MenuBar.cpp" />
     <ClCompile Include="mouse.cpp" />
     <ClCompile Include="ECS\Systems\ai\Needs\NeedsSystem.cpp" />
+    <ClCompile Include="MainLoops\PickDwarvesLoop.cpp" />
     <ClCompile Include="Raws\BiomeReader.cpp" />
     <ClCompile Include="ECS\Systems\ai\HaulingSystem.cpp" />
     <ClCompile Include="ECS\Systems\helpers\PathFinding.cpp" />
@@ -352,6 +353,7 @@
     <ClInclude Include="ECS\Systems\Gui\MenuBar.h" />
     <ClInclude Include="mouse.h" />
     <ClInclude Include="ECS\Systems\ai\Needs\NeedsSystem.h" />
+    <ClInclude Include="MainLoops\PickDwarvesLoop.h" />
     <ClInclude Include="Raws\BiomeReader.h" />
     <ClInclude Include="ECS\Components\helpers\skill.h" />
     <ClInclude Include="ECS\Components\helpers\work_order_reaction.h" />

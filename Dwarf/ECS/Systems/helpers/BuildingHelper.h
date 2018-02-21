@@ -1,13 +1,13 @@
 #pragma once
 #include "ECS\Systems.h"
 #include "ECS\Components\Building.h"
-
+/*
 class BuildingHelper : public System<Requires<Building>>
 {
 public:
 	void forEachBuilding(std::function<void(const Entity&)> func);
 	
-	template<int type>
+	template<int type> // MAJOR ISSUE WITH THIS - REPLACE WITH A VARIADIC EACH
 	void forEachBuildingOfType(std::function<void(const Entity&)> func)
 	{
 		forEachBuilding([&func](const Entity& e)
@@ -23,3 +23,4 @@ public:
 };
 
 extern BuildingHelper buildingHelper;
+*/

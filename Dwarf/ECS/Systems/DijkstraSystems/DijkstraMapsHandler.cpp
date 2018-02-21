@@ -172,8 +172,8 @@ void DijkstraMapsHandler::update(const double duration)
 	{
 		std::vector<int> targets;
 
-		for (const auto& h : designations->harvest)
-			targets.emplace_back(getIdx(h.second));
+		for (const int h : designations->harvest)
+			targets.emplace_back(h);
 
 		harvest_map.update(targets);
 		update_harvest = false;

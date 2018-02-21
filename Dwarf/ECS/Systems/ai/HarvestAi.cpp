@@ -128,15 +128,6 @@ void HarvestAi::doHarvest(const Entity& e, const double& duration)
 			region::setPlantLifecycle(idx, 0);
 			emit(harvest_map_changed_message{});
 		}
-		else
-		{
-			designations->harvest.erase(std::remove_if(
-				designations->harvest.begin(),
-				designations->harvest.end(),
-				[&idx](auto d) { return idx == getIdx(d.second);
-
-			}), designations->harvest.end());
-		}
 
 		work.cancel_work(e);
 		return;

@@ -44,6 +44,9 @@ namespace JobsBoard
 		else
 			priority = SleepPriority::EXHAUSTED;
 
+		if (priority == SleepPriority::RESTED)
+			return;
+
 		int distance = 0;
 
 		board.emplace(std::make_pair(priority, JobsBoard::JobRating{ distance, jt }));
@@ -95,12 +98,12 @@ inline void findBed(const Entity &e, WorkTemplate<SleepTag>& work, MovementCompo
 	// I have a designated bed and found a path
 	if (myBed != designations->beds.end())
 	{
-		auto path = findPath(co, myBed->second);
+		auto path = findPath(co, myBed->second.second);
 
 		if (!path->failed)
 		{
-			tag.bedId = myBed->first;
-			tag.bedCo = myBed->second;
+			tag.bedId = myBed->second.first;
+			tag.bedCo = myBed->second.second;
 			tag.step = SleepTag::GOTO_BED;
 			tag.bedStatus = SleepTag::OWN_BED;
 			mov.path = path->path;
@@ -110,15 +113,16 @@ inline void findBed(const Entity &e, WorkTemplate<SleepTag>& work, MovementCompo
 
 	// Find closest unclaimed bed
 	std::map<int, size_t> bedDist;
-	buildingHelper.forEachBuildingOfType<PROVIDES_SLEEP>([&bedDist, &co](const Entity &b)
+	eachWith<Requires<Building>, Excludes<Claimed>>([&tag, &co, &bedDist](const Entity &b)
 	{
-		if (b.hasComponent<Claimed>() || !b.hasComponent<PositionComponent>())
-			return;
+		const auto& build = b.getComponent<Building>();
 
-		auto& bedCo = b.getComponent<PositionComponent>().co;
-		const auto dist = static_cast<int>(get_3D_distance(co, bedCo));
+		if (build.provides.test(PROVIDES_SLEEP))
+		{
+			auto dist = static_cast<int>(get_3D_distance(co, b.getComponent<PositionComponent>().co));
 
-		bedDist.emplace(std::make_pair(dist, b.getId().index));
+			bedDist.emplace(std::make_pair(dist, b.getId().index));
+		}
 	});
 
 	// Find path to closest unclaimed bed

@@ -41,10 +41,13 @@
 // It's needed because with world.clear() all systems are removed from the world.
 // If we want to reload the game, the variadic eachWith's used must be reset and the systems 
 // added in the same order, avoiding typeId errors (and Entities belonging to systems they shouldn't)
-void ComponentsInit::resetVardiadicEach()
+void ComponentsInit::registerOrResetVardiadicEach(bool reset)
 {
-	
+	bool first = !reset;
+
+	eachWith<Requires<Building>, Excludes<Claimed>>([](auto e) {}, reset, first);
 }
+
 
 void ComponentsInit::init()
 {
