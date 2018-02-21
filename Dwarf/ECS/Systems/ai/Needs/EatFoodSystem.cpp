@@ -229,6 +229,8 @@ inline double foodQualityBenifit(const EatFoodTag &tag)
 		return 1.3;
 	case QualityDef::LEGENDAY_QUALITY:
 		return 1.45;
+	default:
+		return 1.0;
 	}
 }
 

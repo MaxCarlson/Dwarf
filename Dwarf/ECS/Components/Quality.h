@@ -1,7 +1,7 @@
 #pragma once
 #include "../Component.h"
 
-struct Stats;
+class Stats;
 
 enum QualityDef
 {
@@ -30,9 +30,9 @@ struct Quality : public Component
 };
 
 
-inline QualityDef calculateQuality(Stats &stats, const std::string& skill, const int difficulty); // TODO: Balance this!
+QualityDef calculateQuality(Stats &stats, const std::string& skill, const int difficulty); // TODO: Balance this!
 
-inline const std::string& getQualityName(const int quality);
+const std::string& getQualityName(const int quality);
 
 
 CEREAL_REGISTER_TYPE(Quality);

@@ -17,6 +17,10 @@
 //#include "Helpers\Rng.h"
 #include <imgui.h>
 #include <imgui-SFML.h>
+#include "KeyDampener.h"
+#include <SFML\Window.hpp>
+#include <DwarfRender.h>
+
 
 #include <filesystem>
 namespace fs = std::experimental::filesystem; 
@@ -193,8 +197,17 @@ void PlayGameLoop::run(const double duration)
 		ImGui::End();
 	}
 
-	if(gameState == GameState::PLAYING || gameState == GameState::DESIGN)
+	if (gameState == GameState::PLAYING || gameState == GameState::DESIGN)
+	{
 		RunSystems::updateSystems(duration);
+
+		if (keys::isKeyDown(sf::Keyboard::F12, true))
+		{
+			static int i = 0; // Add a gui for this, and make it auto not overwrite existing files
+			static const std::string ss = "ScreenShot ";
+			dfr::takeScreenShot(ss + std::to_string(++i));
+		}
+	}
 }
 
 

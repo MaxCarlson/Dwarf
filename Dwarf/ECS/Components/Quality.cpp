@@ -6,7 +6,7 @@
 static const std::vector<std::string> qualityNames = { "None", "Awful", "Poor", "Normal", "Good", "Superior", "Epic", "Legendary" };
 
 
-inline QualityDef calculateQuality(Stats &stats, const std::string &skill, const int difficulty) // TODO: Better method
+QualityDef calculateQuality(Stats &stats, const std::string &skill, const int difficulty) // TODO: Better method
 {
 	int stat = 1;
 	auto sfind = stats.skills.find(skill);
@@ -38,7 +38,7 @@ inline QualityDef calculateQuality(Stats &stats, const std::string &skill, const
 		return LEGENDAY_QUALITY;
 }
 
-inline const std::string & getQualityName(const int quality)
+const std::string & getQualityName(const int quality)
 {
 	switch (quality)
 	{

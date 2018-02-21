@@ -213,6 +213,8 @@ inline double sleepQualityBenifit(const SleepTag &tag)
 		return 1.3;
 	case QualityDef::LEGENDAY_QUALITY:
 		return 1.45;
+	default:
+		return 1.0;
 	}
 }
 
@@ -222,11 +224,12 @@ inline const double calculateSleep(SleepTag &tag, const double& time)
 		tag.qualityBenifit = sleepQualityBenifit(tag);
 
 	//constexpr double baseRate = 0.0125;
-	constexpr double baseFraction = 0.208333; // Tick / baseFraction = 0.0125
+	constexpr double baseFraction = 1333.336; // (Standard_Tick(16.667ms) / baseFraction) = 0.0125
 
 	double st = (time / baseFraction) * tag.qualityBenifit; // TODO: Add in some constexpr values representing day fractions!
 
 	if (tag.bedStatus == SleepTag::NO_BED)
+
 		st *= 0.80;
 
 	return st;
