@@ -309,6 +309,8 @@ void updateSystems(const double duration)
 	{
 		tick = 0.0;
 
+		double updateTime = ( gameState == GameState::PAUSED ) ? 0.0 : MS_PER_UPDATE;
+
 		// Clear previous iterations of rendering 
 		// from root consoles and layers manually here
 		dfr::terminal->clear();
@@ -322,43 +324,43 @@ void updateSystems(const double duration)
 			runSystem(WORK_ORDER_HELPER, MS_PER_MAJOR_TICK);
 		}
 
-		runSystem(NEEDS_SYSTEM, MS_PER_UPDATE); // These two systems should probably be set to run in major ticks
-		runSystem(CALENDER_SYSTEM, MS_PER_UPDATE);
+		runSystem(NEEDS_SYSTEM, updateTime); // These two systems should probably be set to run in major ticks
+		runSystem(CALENDER_SYSTEM, updateTime);
 
 
 		// Assign jobs to entities
-		runSystem(AI_WORK_SYSTEM, MS_PER_UPDATE);
+		runSystem(AI_WORK_SYSTEM, updateTime);
 
 		// These sytems just update things
-		runSystem(MINING_SYSTEM, MS_PER_UPDATE);
-		runSystem(MOVEMENT_SYSTEM, MS_PER_UPDATE);
-		runSystem(DIJKSTRA_MAPS_HANDLER, MS_PER_UPDATE);
-		runSystem(STOCKPILE_SYSTEM, MS_PER_UPDATE);
+		runSystem(MINING_SYSTEM, updateTime);
+		runSystem(MOVEMENT_SYSTEM, updateTime);
+		runSystem(DIJKSTRA_MAPS_HANDLER, updateTime);
+		runSystem(STOCKPILE_SYSTEM, updateTime);
 
 		// Perform assigned jobs
-		runSystem(WORK_ORDERS_SYSTEM, MS_PER_UPDATE);
-		runSystem(MINING_AI, MS_PER_UPDATE);
-		runSystem(WOODCUTTING_AI, MS_PER_UPDATE);
-		runSystem(BUILD_AI, MS_PER_UPDATE);
-		runSystem(AI_ARCHITECTURE, MS_PER_UPDATE);
-		runSystem(HARVEST_AI, MS_PER_UPDATE);
-		runSystem(FARM_CLEAR_AI, MS_PER_UPDATE);
-		runSystem(FARM_SOIL_AI, MS_PER_UPDATE);
-		runSystem(FARMING_AI, MS_PER_UPDATE);
-		runSystem(HAULING_SYSTEM, MS_PER_UPDATE);
-		runSystem(PLANT_SYSTEM, MS_PER_UPDATE);
+		runSystem(WORK_ORDERS_SYSTEM, updateTime);
+		runSystem(MINING_AI, updateTime);
+		runSystem(WOODCUTTING_AI, updateTime);
+		runSystem(BUILD_AI, updateTime);
+		runSystem(AI_ARCHITECTURE, updateTime);
+		runSystem(HARVEST_AI, updateTime);
+		runSystem(FARM_CLEAR_AI, updateTime);
+		runSystem(FARM_SOIL_AI, updateTime);
+		runSystem(FARMING_AI, updateTime);
+		runSystem(HAULING_SYSTEM, updateTime);
+		runSystem(PLANT_SYSTEM, updateTime);
 
 		// Need systems are also run as varying priority jobs
 		// based on how low the particular need is priority increases
-		runSystem(SLEEP_SYSTEM, MS_PER_UPDATE);
-		runSystem(EAT_FOOD_SYSTEM, MS_PER_UPDATE);
-		runSystem(JOY_SYSTEM, MS_PER_UPDATE);
+		runSystem(SLEEP_SYSTEM, updateTime);
+		runSystem(EAT_FOOD_SYSTEM, updateTime);
+		runSystem(JOY_SYSTEM, updateTime);
 
 		// Perfrom mining and later constructing jobs?
-		runSystem(REGION_HELPER, MS_PER_UPDATE);
+		runSystem(REGION_HELPER, updateTime);
 
 		// Pickup and drop all items requested
-		runSystem(EQUIP_HANDLER, MS_PER_UPDATE);
+		runSystem(EQUIP_HANDLER, updateTime);
 
 		// Main Rendering 
 		runSystem(RENDER_SYSTEM, MS_PER_UPDATE);

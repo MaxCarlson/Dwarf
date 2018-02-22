@@ -298,7 +298,6 @@
     <ClInclude Include="ECS\Components\Seed.h" />
     <ClInclude Include="ECS\Components\Sentients\Happiness.h" />
     <ClInclude Include="ECS\Components\Sentients\Needs.h" />
-    <ClInclude Include="ECS\Components\Tags\EatTag.h" />
     <ClInclude Include="ECS\Components\Tags\FarmClearTag.h" />
     <ClInclude Include="ECS\Components\Tags\FarmSoilTag.h" />
     <ClInclude Include="ECS\Components\Tags\SleepTag.h" />

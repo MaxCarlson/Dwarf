@@ -9,6 +9,7 @@ enum GameState
 	QUIT_GAME,
 	PLAYING,
 	DESIGN,
+	PAUSED
 };
 
 enum DesignStates

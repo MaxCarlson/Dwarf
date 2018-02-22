@@ -114,7 +114,7 @@ void DesignBuilding::workshopTab()
 
 	ImGui::Text("Right click to stop designating");
 
-	ImGui::ListBox("Workshops##ListBuilding", &selected, defInfo->buildingNames); // Break buildings into catagories and create another bitset to manage their gui
+	ImGui::ListBox("Workshops##ListBuilding", &selected, defInfo->buildingNames); // TODO: Break buildings into catagories and create another bitset to manage their gui catagories
 
 	if (rightClick)
 	{

@@ -9,7 +9,7 @@ static const std::vector<std::string> qualityNames = { "None", "Awful", "Poor", 
 
 std::default_random_engine gen;
 
-int calculateQuality(Stats &stats, const std::string &skill, const int difficulty) // TODO: Factor in attributes ? 
+int calculateQuality(Stats &stats, const std::string &skill, const int difficulty) // TODO: Factor in attributes ? // TODO: Use rng class!
 {
 	int stat = 0;
 	auto sfind = stats.skills.find(skill);

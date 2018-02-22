@@ -197,7 +197,7 @@ void PlayGameLoop::run(const double duration)
 		ImGui::End();
 	}
 
-	if (gameState == GameState::PLAYING || gameState == GameState::DESIGN)
+	if (gameState == GameState::PLAYING || gameState == GameState::DESIGN || gameState == GameState::PAUSED)
 	{
 		RunSystems::updateSystems(duration);
 
@@ -207,6 +207,11 @@ void PlayGameLoop::run(const double duration)
 			static const std::string ss = "ScreenShot ";
 			dfr::takeScreenShot(ss + std::to_string(++i));
 		}
+	}
+
+	if (keys::isKeyDown(sf::Keyboard::Space, true))
+	{
+		gameState = (gameState == GameState::PAUSED) ? GameState::PLAYING : GameState::PAUSED;
 	}
 }
 

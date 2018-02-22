@@ -1115,9 +1115,6 @@
     <ClInclude Include="ECS\Components\Tags\SleepTag.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ECS\Components\Tags\EatTag.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ECS\Systems\helpers\BuildingHelper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
