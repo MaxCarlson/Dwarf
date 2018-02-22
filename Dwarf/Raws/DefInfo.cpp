@@ -4,7 +4,6 @@
 #include "../Raws\Materials.h"
 #include "../Raws\Defs\MaterialDef.h"
 #include "../Raws\Buildings.h"
-#include "../Designations.h"
 
 
 std::unique_ptr<DefInfo> defInfo;

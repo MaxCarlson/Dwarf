@@ -2,7 +2,7 @@
 #include "DesignationHandler.h"
 #include "../../Messages/designation_message.h"
 #include "../Map/Tile.h"
-#include "../Designations.h"
+#include "Designations\Designations.h"
 #include "../ECS/Messages/recalculate_mining_message.h"
 #include "../ECS/Messages/pick_map_changed_message.h"
 #include "../ECS/Messages/axemap_changed_message.h"

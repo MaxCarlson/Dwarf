@@ -2,7 +2,7 @@
 #include "DesignStockpiles.h"
 #include "Globals\game_states.h"
 #include "Globals\GlobalTerminals.h"
-#include "Designations.h"
+#include "Designations\Designations.h"
 #include "Raws\ItemRead.h"
 #include "Raws\DefInfo.h"
 #include "mouse.h"

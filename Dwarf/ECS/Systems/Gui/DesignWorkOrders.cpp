@@ -3,7 +3,7 @@
 #include "mouse.h"
 #include "KeyDampener.h"
 #include "Raws\DefInfo.h"
-#include "Designations\Designations.h"
+#include "Designations\WorkOrderDesignation.h"
 #include "Raws\ReadReactions.h"
 #include <imgui.h>
 #include <imgui_tabs.h>
@@ -69,23 +69,23 @@ void DesignWorkOrders::giveOrder()
 		const std::string& tag = reactPassedTags[orderIdx];
 
 		// Search work orders
-		for(auto& o : designations->workOrders)
-			if (o.second == tag)
+		for(auto& o : workOrders.active)
+			if (o.tag == tag)
 			{
-				o.first += orderQty;
+				o.count += orderQty;
 				return;
 			}
 		// Search Queued work orders
-		for (auto& q : designations->queuedWorkOrders)
-			if (q.second == tag)
+		for (auto& q : workOrders.queued)
+			if (q.tag == tag)
 			{
-				q.first += orderQty;
+				q.count += orderQty;
 				return;
 			}
 
 		// Not found so let's add it to queued
 
-		designations->queuedWorkOrders.emplace_back(std::make_pair(orderQty, tag));
+		workOrders.queued.emplace_back(std::make_pair(orderQty, tag));
 	}
 }
 
@@ -97,14 +97,14 @@ void DesignWorkOrders::drawJobs()
 
 	std::vector<std::string> currWos;
 
-	for (const auto& j : designations->workOrders)
-		currWos.emplace_back(j.second);
+	for (const auto& j : workOrders.active)
+		currWos.emplace_back(j.tag);
 
 	ImGui::ListBox("Current Jobs", &selectedWo, currWos);
 
 	std::vector<std::string> currQWos;
-	for (const auto& j : designations->queuedWorkOrders)
-		currQWos.emplace_back(j.second);
+	for (const auto& j : workOrders.queued)
+		currQWos.emplace_back(j.tag);
 
 	ImGui::ListBox("Queued Jobs:", &selectedQWo, currQWos);
 }

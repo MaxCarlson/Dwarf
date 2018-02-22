@@ -14,7 +14,6 @@
 #include "../../Components/Building.h"
 #include "../EntityPositionCache.h"
 #include "../../Components/Claimed.h"
-#include "../../../Designations.h"
 #include "../../Components/ItemStored.h"
 #include "Helpers\MessageQueue.h"
 

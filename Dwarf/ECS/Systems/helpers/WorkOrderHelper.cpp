@@ -227,7 +227,7 @@ void WorkOrderHelper::updateWorkOrders(std::vector<WorkOrderDesignation> &des)
 {
 	des.erase(
 		std::remove_if(des.begin(),des.end(),
-			[](auto num) { return num.first < 1; }
+			[](WorkOrderDesignation w) { return w.count < 1; }
 		),
 		des.end()
 	);

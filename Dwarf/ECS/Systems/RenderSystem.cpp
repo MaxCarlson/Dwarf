@@ -10,7 +10,6 @@
 #include "Globals\Camera.h"
 #include "Globals\game_states.h"
 #include "dfr\DwarfRender.h"
-#include "Designations.h"
 #include <imgui.h>
 #include <imgui-SFML.h>
 
