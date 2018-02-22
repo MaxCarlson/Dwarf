@@ -17,7 +17,7 @@ void onResizeL1(dfr::Layer * l, int w, int h)
 	l->w = w;
 	l->h = h;
 }
-
+#include <random>
 int main()
 {
 	///*
@@ -38,6 +38,24 @@ int main()
 	//*/
 
 	loadRaws();
+
+	int i = 0;
+	for (i; i < 100000; ++i)
+	{
+		const auto output = static_cast<int>(distri(gen));
+
+		auto find = counter.find(output);
+
+		if (find == counter.end())
+			counter[output] = 1;
+		else
+			++find->second;
+	}
+
+	for (const auto c : counter)
+	{
+		std::cout << c.first << " = " << c.second << "\n";
+	}
 	
 	///*
 	dfr::config_r cf("SFML WINDOW", "../DwarfTex.png", 80, 80, "font");

@@ -3,50 +3,32 @@
 #include "Sentients\Stats.h"
 #include "helpers\Rng.h"
 
+#include <random>
+
 static const std::vector<std::string> qualityNames = { "None", "Awful", "Poor", "Normal", "Good", "Superior", "Epic", "Legendary" };
 
-enum QualityDef
-{
-	QUALITY_NONE,
-	AWFUL_QUALITY = 5,
-	POOR_QUALITY = 10,
-	NORMAL_QUALITY = 15,
-	GOOD_QUALITY = 27,
-	SUPERIOR_QUALITY = 38,
-	EPIC_QUALITY = 47,
-	LEGENDAY_QUALITY = 50
-};
+std::default_random_engine gen;
 
-int calculateQuality(Stats &stats, const std::string &skill, const int difficulty) // TODO: Better method
+int calculateQuality(Stats &stats, const std::string &skill, const int difficulty) // TODO: Factor in attributes ? 
 {
-	int stat = 1;
+	int stat = 0;
 	auto sfind = stats.skills.find(skill);
 
 	if (sfind != stats.skills.end())
-		stat = sfind->second.skillLvl + 1;
+		stat = sfind->second.skillLvl;
 
-	auto roll = rng.range(1, stat * 4);
+	// Average of one quality level increase per 3 skill levels
+	double mean = static_cast<double>(stat) / 3.0;
+	std::normal_distribution<double> distri(mean, 1.25);
 
-	roll -= difficulty;
+	int roll = static_cast<int>(distri(gen));
 
-	const auto luck = rng.range(1, stat / 2);
-
-	roll += luck;
-
-	if (roll <= AWFUL_QUALITY)
-		return AWFUL_QUALITY;
-	else if (roll <= POOR_QUALITY)
-		return POOR_QUALITY;
-	else if (roll <= NORMAL_QUALITY)
-		return NORMAL_QUALITY;
-	else if (roll <= GOOD_QUALITY)
-		return GOOD_QUALITY;
-	else if (roll <= SUPERIOR_QUALITY)
-		return SUPERIOR_QUALITY;
-	else if (roll <= EPIC_QUALITY)
-		return EPIC_QUALITY;
-	else
-		return LEGENDAY_QUALITY;
+	if (roll < AWFUL_QUALITY)
+		roll = AWFUL_QUALITY;
+	else if (roll > LEGENDAY_QUALITY)
+		roll = LEGENDAY_QUALITY;
+	
+	return roll;
 }
 
 const std::string & getQualityName(const Entity &e)

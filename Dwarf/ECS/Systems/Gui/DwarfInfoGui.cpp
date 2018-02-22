@@ -10,6 +10,7 @@
 #include "Raws\Defs\MaterialDef.h"
 #include "Globals\game_states.h"
 #include "Raws\SkillReader.h"
+#include "ECS\Components\Quality.h"
 #include <imgui.h>
 #include <imgui_tabs.h>
 
@@ -200,8 +201,8 @@ void DwarfInfoGui::drawStats(const Entity & e) // TODO: Add in coloring based on
 		drawStatProgress(fixedName, skillProgress, s.second.skillLvl);
 	}
 }
-#include "ECS\Components\Quality.h"
-// TODO: Add colors and backgound highlights for items of higher quality. Color code the WOW style
+
+// TODO: Add colors and backgound highlights for items of higher quality. Color code them WOW style
 // TODO: Add tooltips or expandable windows on items to give more info about the item
 void DwarfInfoGui::drawInventory(const Entity & e) 
 {
@@ -248,7 +249,7 @@ void DwarfInfoGui::drawInventory(const Entity & e)
 				matName = mat->name;
 		}
 
-		std::string qName = getQualityName(itemEnt);
+		auto& qName = getQualityName(itemEnt);
 
 		ImGui::Text(qName.c_str()); ImGui::SameLine();
 		ImGui::Text(matName.c_str()); ImGui::SameLine();

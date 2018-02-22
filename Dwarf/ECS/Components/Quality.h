@@ -3,6 +3,19 @@
 
 class Stats;
 
+enum QualityDef
+{
+	QUALITY_NONE = -1,
+	AWFUL_QUALITY,
+	POOR_QUALITY,
+	NORMAL_QUALITY,
+	GOOD_QUALITY,
+	SUPERIOR_QUALITY,
+	EPIC_QUALITY,
+	LEGENDAY_QUALITY
+};
+
+
 struct Quality : public Component
 {
 	Quality() = default;
