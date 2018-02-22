@@ -200,7 +200,7 @@ void DwarfInfoGui::drawStats(const Entity & e) // TODO: Add in coloring based on
 		drawStatProgress(fixedName, skillProgress, s.second.skillLvl);
 	}
 }
-
+#include "ECS\Components\Quality.h"
 // TODO: Add colors and backgound highlights for items of higher quality. Color code the WOW style
 // TODO: Add tooltips or expandable windows on items to give more info about the item
 void DwarfInfoGui::drawInventory(const Entity & e) 
@@ -237,9 +237,10 @@ void DwarfInfoGui::drawInventory(const Entity & e)
 
 		auto* item = &itemEnt.getComponent<Item>();
 
+
 		std::string iName = "Unknown";
 		std::string matName = "Unknown";
-		if (item)
+		if (item != nullptr)
 		{
 			iName = item->name;
 			auto mat = getMaterial(item->material); 
@@ -247,6 +248,9 @@ void DwarfInfoGui::drawInventory(const Entity & e)
 				matName = mat->name;
 		}
 
+		std::string qName = getQualityName(itemEnt);
+
+		ImGui::Text(qName.c_str()); ImGui::SameLine();
 		ImGui::Text(matName.c_str()); ImGui::SameLine();
 		ImGui::Text(iName.c_str());
 

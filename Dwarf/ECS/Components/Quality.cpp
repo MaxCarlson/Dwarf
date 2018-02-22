@@ -5,8 +5,19 @@
 
 static const std::vector<std::string> qualityNames = { "None", "Awful", "Poor", "Normal", "Good", "Superior", "Epic", "Legendary" };
 
+enum QualityDef
+{
+	QUALITY_NONE,
+	AWFUL_QUALITY = 5,
+	POOR_QUALITY = 10,
+	NORMAL_QUALITY = 15,
+	GOOD_QUALITY = 27,
+	SUPERIOR_QUALITY = 38,
+	EPIC_QUALITY = 47,
+	LEGENDAY_QUALITY = 50
+};
 
-QualityDef calculateQuality(Stats &stats, const std::string &skill, const int difficulty) // TODO: Better method
+int calculateQuality(Stats &stats, const std::string &skill, const int difficulty) // TODO: Better method
 {
 	int stat = 1;
 	auto sfind = stats.skills.find(skill);
@@ -38,8 +49,13 @@ QualityDef calculateQuality(Stats &stats, const std::string &skill, const int di
 		return LEGENDAY_QUALITY;
 }
 
-const std::string & getQualityName(const int quality)
+const std::string & getQualityName(const Entity &e)
 {
+	if (!e.hasComponent<Quality>())
+		return qualityNames[0];
+
+	const int quality = e.getComponent<Quality>().quality;
+
 	switch (quality)
 	{
 	case QUALITY_NONE:
