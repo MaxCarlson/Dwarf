@@ -39,6 +39,9 @@
 #include "ECS\Components\Sentients\Needs.h"
 #include "ECS\Components\Sentients\Happiness.h"
 
+// Weapons and fighting
+#include "ECS\Components\Fighting\MeleeWeapon.h"
+
 // This enables us to reset each of the variadic eachWith functions to it's
 // initial state.
 // It's needed because with world.clear() all systems are removed from the world.
@@ -93,4 +96,7 @@ void ComponentsInit::init()
 
 	// Global components
 	world.registerComponent<Calender>();
+
+	// Weapons and fighting
+	world.registerComponent<MeleeWeapon>();
 }

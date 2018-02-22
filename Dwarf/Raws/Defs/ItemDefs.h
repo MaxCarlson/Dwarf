@@ -12,7 +12,8 @@ constexpr int TOOL_FARMING = 3;
 constexpr int ITEM_FOOD = 4;
 constexpr int ITEM_SEED = 5;
 constexpr int ITEM_SOIL = 6;
-
+constexpr int ITEM_MELEE_WEAPON = 7;
+constexpr int ITEM_RANGED_WEAPON = 8;
 
 struct StockpileDef
 {
@@ -32,4 +33,8 @@ struct ItemDef
 	
 	int stackSize = 1;
 	int stockpileId = 0;
+
+	bool twoHanded = false;
+	double baseDmg = 0.0;
+	double baseSpeed = 0.0;
 };

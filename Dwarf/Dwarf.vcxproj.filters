@@ -1145,6 +1145,9 @@
     <ClInclude Include="ECS\Components\Tags\JoyTag.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ECS\Components\Fighting\MeleeWeapon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="cereal\external\rapidxml\manual.html" />
@@ -1163,6 +1166,7 @@
     <None Include="Raws\LuaDefs\buildings_woodworking.lua" />
     <None Include="Raws\LuaDefs\plants.lua" />
     <None Include="Raws\LuaDefs\items_food.lua" />
+    <None Include="Raws\LuaDefs\items_weapons.lua" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Raws\LuaDefs\index.txt" />

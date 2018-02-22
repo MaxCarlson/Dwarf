@@ -289,6 +289,7 @@
     <ClCompile Include="MainLoops\WorldGenLoop.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ECS\Components\Fighting\MeleeWeapon.h" />
     <ClInclude Include="ECS\Components\Sentients\Thoughts.h" />
     <ClInclude Include="ECS\Components\Tags\EatFoodTag.h" />
     <ClInclude Include="ECS\Components\Tags\JoyTag.h" />
@@ -562,6 +563,7 @@
     <None Include="Raws\LuaDefs\items_furniture.lua" />
     <None Include="Raws\LuaDefs\items_raw.lua" />
     <None Include="Raws\LuaDefs\items_tools.lua" />
+    <None Include="Raws\LuaDefs\items_weapons.lua" />
     <None Include="Raws\LuaDefs\materials.lua" />
     <None Include="Raws\LuaDefs\plants.lua" />
     <None Include="Raws\LuaDefs\render.lua" />

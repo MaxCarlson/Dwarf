@@ -84,11 +84,11 @@ glyphs = {
 
 	block = 254,
 
-	-- tools + weapons
+	-- tools + weapons Starting at 256
 	whip = 312,
 	axe = 313,
-	w_small_hammer = 314,
-	sword = 315,
+	small_hammer = 314,
+	short_sword = 315,
 	javalin = 316,
 	mace = 317,
 	crossbow = 318,
@@ -96,7 +96,15 @@ glyphs = {
 	long_bow = 320,
 	spear = 322,
 	hatchet = 323,
-
+	long_sword = 324,
+	sword = 325
+	large_hammer = 326,
+	large_axe = 327,
+	dagger = 328,
+	whip2 = 329,
+	flail = 330,
+	morning_star = 331,
+	scimitar = 332,
 
 	-- Workshop items + misc 0's at 511
 	

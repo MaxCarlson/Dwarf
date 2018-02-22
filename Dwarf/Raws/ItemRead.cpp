@@ -78,9 +78,14 @@ void readInItems() noexcept
 					if (type == "food")		    c.categories.set(ITEM_FOOD);
 					if (type == "seeds")	    c.categories.set(ITEM_SEED);
 					if (type == "soil")			c.categories.set(ITEM_SOIL);
+					if (type == "melee")		c.categories.set(ITEM_MELEE_WEAPON);
+					if (type == "ranged")		c.categories.set(ITEM_RANGED_WEAPON);
 					});
 				}},
 				{ "stockpile", [&c]() { c.stockpileId = lua_int(); } },
+				{ "baseDmg", [&c]() { c.baseDmg = lua_double(); }},
+				{ "baseSpeed", [&c]() { c.baseSpeed = lua_double(); }},
+				{ "twoHanded", [&c]() { c.twoHanded = true; }}
 		}
 	);
 }

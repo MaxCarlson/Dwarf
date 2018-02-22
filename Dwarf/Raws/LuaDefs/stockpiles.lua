@@ -13,4 +13,5 @@ stockpiles = {
 	fuel = { name = "Fuel", id = 11 },
 	food = { name = "Food", id = 12 },
 	seeds = { name = "Seeds", id = 13 },
+	weapons = { name = "Weapons", id = 14}, -- Should this be split into melee vs ranged?
 };
