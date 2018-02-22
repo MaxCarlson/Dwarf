@@ -20,6 +20,22 @@ attributes =
 -- less improvment for each attribute farther from the first
 skills = 
 {
+	-- Fighting skills
+	-- TODO: Armor + shield skills
+
+	melee = {
+		name = "Melee",
+		s_attributes = {{ attr = "Strength"}, { attr = "Agility" }}
+	},
+
+	ranged = {
+		name = "Ranged",
+		s_attributes = {{ attr = "Agility" }, { attr = "Intelligence"}}
+	}, 
+
+
+	-- Job related skills
+
 	mining = {
 		name = "Mining",
 		s_attributes = { { attr = "Strength" }, { attr = "Willpower" }, { attr = "Endurance" } }

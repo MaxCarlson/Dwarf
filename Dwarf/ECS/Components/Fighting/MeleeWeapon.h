@@ -6,12 +6,14 @@ struct MeleeWeapon : public Component
 
 	// This is calculated on creation by item quality,
 	// material dmg multiplier
-	double dmg;
+	// Combined with other stats to get true damage
+	double dmg = 1.0; // TODO: Change damage types for different weapons!
 
 	// Calculated on creation by material weight
 	// and base weapon speed
-	// Speed in seconds
-	double speed;
+	// How often the weapon attacks in seconds,
+	// combined with other stats to get true speed
+	double speed = 1.0;
 
 	bool twoHand = false;
 

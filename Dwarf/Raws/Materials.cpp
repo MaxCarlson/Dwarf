@@ -77,7 +77,10 @@ void readInMaterials() noexcept
 					if (type == "synthetic") m.matType = MAT_SYTHETIC;
 					if (type == "organic")   m.matType = MAT_ORGANIC;
 					});
-				}}
+				}},
+				{ "speed", [&m]() { m.speedMultiplier = lua_double(); }},
+				{ "damage", [&m]() { m.dmgMultiplier = lua_double(); }},
+				{ "armour", [&m]() { m.armourBonus = lua_double(); }}
 		}
 	);
 

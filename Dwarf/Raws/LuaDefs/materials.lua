@@ -2,6 +2,18 @@
 materials = {
 	
 	-- Pure Metals
+	
+	["gold"] = {
+		name = "Gold",
+		description = "A very soft much sought after metal",
+		color = "gold",
+		glyph = glyphs["metal_bars"],
+		floorGlyph = glyphs["placed_floor"],
+		health = 450,
+		damage = 0.40,
+		speed = 0.60
+	};
+
 	["copper"] = {
 		name = "Copper",
 		description = "A semi-soft metal that turns green over time",
@@ -9,6 +21,8 @@ materials = {
 		glyph = glyphs["metal_bars"],
 		floorGlyph = glyphs["placed_floor"],
 		health = 790,
+		damage = 0.85,
+		speed = 1.1
 	};
 
 	["tin"] = {
@@ -18,6 +32,8 @@ materials = {
 		glyph = glyphs["metal_bars"],
 		floorGlyph = glyphs["placed_floor"],
 		health = 500,
+		damage = 0.70,
+		speed = 1.2
 	};
 
 	["iron"] = {
@@ -27,6 +43,19 @@ materials = {
 		glyph = glyphs["metal_bars"],
 		floorGlyph = glyphs["placed_floor"],
 		health = 950,		
+		damage = 1.20,
+		speed = 0.95
+	};
+
+	["steel"] = {
+		name = "Steel",
+		description = "A maleable durable metal",
+		color = "silver",
+		glyph = glyphs["metal_bars"],
+		floorGlyph = glyphs["placed_floor"],
+		health = 1200,
+		damage = 1.50,
+		speed = 1.0
 	};
 
 	["titanium"] = {
@@ -36,16 +65,21 @@ materials = {
 		glyph = glyphs["metal_bars"],
 		floorGlyph = glyphs["placed_floor"],
 		health = 1600,
+		damage = 1.70,
+		speed = 1.35
 	};
 
-	["gold"] = {
-		name = "Gold",
-		description = "A very soft much sought after metal",
-		color = "gold",
+	["plasteel"] = {
+		name = "Plasteel",
+		description = "A metal from the heavens",
+		color = "light blue",
 		glyph = glyphs["metal_bars"],
 		floorGlyph = glyphs["placed_floor"],
-		health = 450,
+		health = 1800,
+		damage = 1.6,
+		speed = 1.45
 	};
+
 
 	-- Metal Ores prior to being mined
 	["native_copper"] = {

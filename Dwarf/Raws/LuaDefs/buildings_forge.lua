@@ -94,3 +94,55 @@ reactions["make_hatchet"] = {
 	time = 10
 };
 
+-- Weapons
+
+reactions["make_short_sword"] = {
+	name = "Make Short Sword",
+	workshop = "smithy",
+	skill = "blacksmithing",
+	inputs = {{ item = "block", qty = 2, mat_type = "metal" }},
+	outputs = {{ item = "short_sword", qty = 1 }},
+	difficulty = 14,
+	time = 10
+};
+
+reactions["make_bastard_sword"] = {
+	name = "Make Bastard Sword",
+	workshop = "smithy",
+	skill = "blacksmithing",
+	inputs = {{ item = "block", qty = 3, mat_type = "metal" }},
+	outputs = {{ item = "bastard_sword", qty = 1 }},
+	difficulty = 15,
+	time = 12
+};
+
+reactions["make_axe"] = {
+	name = "Make Axe",
+	workshop = "smithy",
+	skill = "blacksmithing",
+	inputs = {{ item = "block", qty = 4, mat_type = "metal" }},
+	outputs = {{ item = "axe", qty = 1 }},
+	difficulty = 15,
+	time = 13
+};
+
+-- 2 Handed weapons
+reactions["make_long_sword"] = {
+	name = "Make Long Sword",
+	workshop = "smithy",
+	skill = "blacksmithing",
+	inputs = {{ item = "block", qty = 6, mat_type = "metal" }},
+	outputs = {{ item = "long_sword", qty = 1 }},
+	difficulty = 18,
+	time = 19
+};
+
+reactions["make_battle_axe"] = {
+	name = "Make Battle Axe",
+	workshop = "smithy",
+	skill = "blacksmithing",
+	inputs = {{ item = "block", qty = 7, mat_type = "metal" }},
+	outputs = {{ item = "axe", qty = 1 }},
+	difficulty = 18,
+	time = 20
+};

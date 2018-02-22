@@ -22,8 +22,8 @@ struct MaterialDef
 	std::string tag = "";
 	std::string description = "";
 
-	std::string color;
-	uint16_t charCode;
+	std::string color; // TODO: switch block to vchars
+	uint16_t charCode; 
 	uint16_t floorCode;
 	int tilesetKey;
 
@@ -33,8 +33,10 @@ struct MaterialDef
 	MaterialType matType;
 	int health = 1;
 	std::string minesToTag = "";
-	//std::vector<std::string> ores;
 	std::string oreProduct; // Want to add multiple at some point?
+	int minesToAmount = 0; // Get rid of this?
 
-	int minesToAmount = 0;
+	double dmgMultiplier = 1.0; // TODO: Change damage types for different weapons 
+	double speedMultiplier = 1.0;
+	double armourBonus = 1.0; // TODO: Make armour for different kinds of attacks
 };

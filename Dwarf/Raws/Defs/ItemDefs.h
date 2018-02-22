@@ -35,6 +35,6 @@ struct ItemDef
 	int stockpileId = 0;
 
 	bool twoHanded = false;
-	double baseDmg = 0.0;
+	double baseDmg = 0.0; // TODO: Change damage types for different weapons
 	double baseSpeed = 0.0;
 };
