@@ -6,7 +6,7 @@
 #include "Map\Tile.h"
 #include "KeyDampener.h"
 #include "Globals\TexDefines.h"
-#include "Designations.h"
+#include "Designations\Designations.h"
 #include "Globals\GlobalTerminals.h"
 #include <imgui.h>
 #include <DwarfRender.h>

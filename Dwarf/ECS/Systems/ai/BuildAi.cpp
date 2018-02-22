@@ -2,7 +2,7 @@
 #include "JobBoard.h"
 #include "WorkTemplate.h"
 #include "../Raws/DefInfo.h"
-#include "../Designations.h"
+#include "Designations\Designations.h"
 #include "../Raws/Buildings.h"
 #include "../Raws/Defs/BuildingDef.h"
 #include "../../../Map/Tile.h"

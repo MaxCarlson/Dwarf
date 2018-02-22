@@ -9,7 +9,7 @@
 #include "Raws\ItemRead.h"
 #include "Raws\Defs\ItemDefs.h"
 #include "Map\Tile.h"
-#include "Designations.h"
+#include "Designations\Designations.h"
 #include "Globals\GlobalTerminals.h"
 #include "Globals\TypesOfActions.h"
 #include "ECS\Messages\designation_message.h"

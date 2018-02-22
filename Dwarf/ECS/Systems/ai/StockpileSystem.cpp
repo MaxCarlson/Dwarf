@@ -6,7 +6,7 @@
 #include "../../Components/RenderComponent.h"
 #include "../../../Raws/ItemRead.h"
 #include "../../../Raws/Defs/ItemDefs.h"
-#include "../Designations.h"
+#include "Designations\Designations.h"
 
 std::unordered_map<std::size_t, StockpileInfo> stockpiles;
 

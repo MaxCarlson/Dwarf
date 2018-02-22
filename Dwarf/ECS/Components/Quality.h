@@ -15,6 +15,31 @@ enum QualityDef
 	LEGENDAY_QUALITY
 };
 
+inline double qualityMeleeMultiplier(int quality)
+{
+	switch (quality)
+	{
+	case QUALITY_NONE:
+		return 1.0;
+	case AWFUL_QUALITY:
+		return 0.4;
+	case POOR_QUALITY:
+		return 0.7;
+	case NORMAL_QUALITY:
+		return 0.95;
+	case GOOD_QUALITY:
+		return 1.1;
+	case SUPERIOR_QUALITY:
+		return 1.2;
+	case EPIC_QUALITY:
+		return 1.35;
+	case LEGENDAY_QUALITY:
+		return 1.55;
+	default:
+		return 1.0;
+	}
+}
+
 
 struct Quality : public Component
 {

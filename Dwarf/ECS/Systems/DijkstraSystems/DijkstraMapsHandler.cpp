@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "DijkstraMapsHandler.h"
-#include "Designations.h"
+#include "Designations\Designations.h"
 #include "Map\Index.h"
 #include "../helpers/ItemHelper.h"
 #include "../../../Raws/Defs/ItemDefs.h"

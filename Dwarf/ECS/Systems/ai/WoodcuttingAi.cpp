@@ -3,7 +3,7 @@
 #include "JobBoard.h"
 #include "WorkTemplate.h"
 #include "../helpers/ItemHelper.h"
-#include "../../../Designations.h"
+#include "Designations\Designations.h"
 #include "../../../Map/Tile.h"
 #include "../../Components/Sentients/Stats.h"
 #include "../../Messages/drop_item_message.h"

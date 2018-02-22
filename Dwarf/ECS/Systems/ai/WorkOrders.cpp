@@ -1,7 +1,7 @@
 #include "WorkOrders.h"
 #include "JobBoard.h"
 #include "WorkTemplate.h"
-#include "../Designations.h"
+#include "Designations\WorkOrderDesignation.h"
 #include "../ECS/Components/PositionComponent.h"
 #include "../ECS/Components/Tags/WorkOrderTag.h"
 #include "../ECS/Components/Sentients/Stats.h"
@@ -19,7 +19,7 @@ namespace JobsBoard
 {
 	void evaluate_work_order(JobBoard & board, const Entity & e, AiWorkComponent &prefs, const Coordinates& co, JobEvaluatorBase * jt)
 	{
-		if (!designations->workOrders.empty() && workOrderHelper->claimedWorkshops() < designations->workOrders.size()) 
+		if (!workOrders.active.empty() && workOrderHelper->claimedWorkshops() < workOrders.active.size()) 
 		{
 
 			const auto [bestIdx, distance] = workOrderHelper->scanForBestWorkOrder(prefs);
@@ -43,14 +43,209 @@ void WorkOrders::init()
 	JobsBoard::register_job_offer<WorkOrderTag>(JobsBoard::evaluate_work_order);
 }
 
+void findWorkshop(const Entity &e, const Coordinates &co, WorkOrderTag &tag, WorkTemplate<WorkOrderTag> &work, MovementComponent &mov);
+void findComponent(const Entity &e, const Coordinates &co, WorkOrderTag &tag, WorkTemplate<WorkOrderTag> &work, MovementComponent &mov);
+inline void gotoComponent(const Entity &e, const Coordinates &co, WorkOrderTag &tag, WorkTemplate<WorkOrderTag> &work, MovementComponent &mov);
+inline void gotoWorkshop(const Entity &e, const Coordinates &co, WorkOrderTag &tag, WorkTemplate<WorkOrderTag> &work, MovementComponent &mov);
+void workWorkshop(const Entity &e, const Coordinates &co, WorkOrderTag &tag, WorkTemplate<WorkOrderTag> &work, MovementComponent &mov, const double &duration);
+
+
 void WorkOrders::update(const double duration)
 {
-	const auto ents = getEntities();
+	for (const auto& e : getEntities())
+	{
+		WorkTemplate<WorkOrderTag> work;
+		auto& tag = e.getComponent<WorkOrderTag>();
+		auto& mov = e.getComponent<MovementComponent>();
+		const auto& co = e.getComponent<PositionComponent>().co;
 
-	for (const auto& e : ents)
-		work(e, duration);
+		switch (tag.step)
+		{
+		case WorkOrderTag::FIND_WORKSHOP:
+			findWorkshop(e, co, tag, work, mov);
+			break;
+
+		case WorkOrderTag::FIND_COMPONENT:
+			findComponent(e, co, tag, work, mov);
+			break;
+
+		case WorkOrderTag::GOTO_COMPONENT:
+			gotoComponent(e, co, tag, work, mov);
+			break;
+
+		case WorkOrderTag::GOTO_WORKSHOP:
+			gotoWorkshop(e, co, tag, work, mov);
+			break;
+
+		case WorkOrderTag::WORK_WORKSHOP:
+			workWorkshop(e, co, tag, work, mov, duration);
+			break;
+		}
+	}
 }
 
+
+void findWorkshop(const Entity & e, const Coordinates & co, WorkOrderTag & tag, WorkTemplate<WorkOrderTag>& work, MovementComponent & mov)
+{
+	std::unique_ptr<work_order_reaction> job;
+
+	if (!workOrders.active.empty())
+	{
+		job = workOrderHelper->find_work_order_reaction(tag);
+	}
+
+	if (!job)
+	{
+		work.cancel_work(e);
+		return;
+	}
+
+	tag.reaction = *job;
+	tag.step = WorkOrderTag::FIND_COMPONENT;
+	return;
+}
+
+inline void unclaimComponentsAndWorkshop(WorkOrderTag &tag) // TODO:
+{
+
+}
+
+void findComponent(const Entity & e, const Coordinates & co, WorkOrderTag & tag, WorkTemplate<WorkOrderTag>& work, MovementComponent & mov)
+{
+	std::vector<std::pair<std::size_t, bool>> components;
+
+	bool hasComponents = true;
+	for (auto & comp : tag.reaction.components)
+	{
+		// If the workshop doesn't have all components
+		if (!comp.second)
+		{
+			hasComponents = false;
+			tag.current_component = comp.first;
+
+			auto cpos = itemHelper.get_item_location(comp.first);
+
+			if (!cpos)
+			{
+				work.cancel_work(e);
+				return;
+			}
+
+			// Set entity path
+			auto path = findPath(co, idxToCo(cpos));
+
+			// Can't find this component? Find another
+			if (path->failed)
+			{
+				tag.current_component = 0;
+				continue;
+			}
+
+			mov.path = path->path;
+			tag.compCo = idxToCo(cpos);
+			tag.step = WorkOrderTag::GOTO_COMPONENT;
+			return;
+		}
+	}
+
+	if (hasComponents)
+	{
+		tag.step = WorkOrderTag::WORK_WORKSHOP;
+		return;
+	}
+
+	work.cancel_work(e);
+	return;
+}
+
+inline void gotoComponent(const Entity & e, const Coordinates & co, WorkOrderTag & tag, WorkTemplate<WorkOrderTag>& work, MovementComponent & mov)
+{
+	work.followPath(mov, co, tag.compCo, [&e, &work]()
+	{
+		work.cancel_work(e); // TODO: Need to unclaim all components and workshop!
+	}, [&]
+	{
+		auto path = findPath(co, tag.reaction.workshopCo);
+
+		if (path->failed)
+		{
+			work.cancel_work(e); // TODO: Need to unclaim all components and workshop!
+			return;
+		}
+
+		mov.path = path->path;
+		world.emit(pickup_item_message { InventorySlots::SLOT_CARRYING, e.getId().index, tag.current_component, 0 });
+		tag.step = WorkOrderTag::GOTO_WORKSHOP;
+	});
+}
+
+inline void gotoWorkshop(const Entity & e, const Coordinates & co, WorkOrderTag & tag, WorkTemplate<WorkOrderTag>& work, MovementComponent & mov)
+{
+	work.followPath(mov, co, tag.reaction.workshopCo, [&work, &e]()
+	{
+		work.cancel_work(e); // TODO: Need to unclaim + drop all components and workshop!
+	}, [&]
+	{
+		tag.step = WorkOrderTag::FIND_COMPONENT;
+		world.emit(drop_item_message { SLOT_CARRYING, e.getId().index, tag.current_component, co, false });
+	});
+}
+
+void workWorkshop(const Entity & e, const Coordinates & co, WorkOrderTag & tag, WorkTemplate<WorkOrderTag>& work, MovementComponent & mov, const double &duration)
+{
+	auto* reaction = getReaction(tag.reaction.reactionTag);
+
+	auto& stats = e.getComponent<Stats>();
+
+	if (tag.progress < reaction->time)
+	{
+		doWorkTime(stats, reaction->skill, duration, tag.progress);
+		return;
+	}
+
+	giveWorkXp(stats, reaction->skill, reaction->difficulty);
+
+	// Delete component entities and capture data about
+	// input items
+	std::string materialNames = "";
+	std::size_t material = 0;
+
+	for (auto& comp : tag.reaction.components)
+	{
+		auto& cent = world.getEntity(comp.first);
+
+		if (!cent.isValid() || !cent.hasComponent<Item>())
+		{
+			work.cancel_work(e);
+			return;
+		}
+
+		material = cent.getComponent<Item>().material;
+		materialNames += cent.getComponent<Item>().name + " ";
+
+		itemHelper.deleteItem(comp.first);
+	}
+
+	// Produce outputs ~~ figure out how to deal with mixed outputs
+	// in terms of affects
+	for (auto & out : reaction->outputs) // TODO: Once stacking is enabled just create a stack of reaction items as one entity
+		for (int i = 0; i < out.second; ++i)
+		{
+			auto quality = calculateQuality(stats, reaction->skill, reaction->difficulty);
+
+			std::cout << "Reaction spawning" << out.first << material << "\n";
+			spawnItemOnGround(out.first, material, co, SpawnColor::MATERIAL_COLOR, quality);
+		}
+
+	world.emit(block_map_changed_message {});
+
+	// Finish up
+	workOrderHelper->unclaim_workshop(tag.reaction.workshop_id);
+	work.cancel_work(e);
+	return;
+}
+
+/*
 void WorkOrders::work(Entity e, const double& duration)
 {
 	WorkTemplate<WorkOrderTag> work;
@@ -274,3 +469,4 @@ void WorkOrders::work(Entity e, const double& duration)
 		return;	
 	}
 }
+*/

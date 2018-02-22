@@ -1,7 +1,7 @@
 #include "MiningAi.h"
 #include "WorkTemplate.h"
 #include "JobBoard.h"
-#include "../Designations.h"
+#include "Designations\Designations.h"
 #include "../Map/Tile.h"
 #include "../MiningSystem.h"
 #include "ECS\Systems\helpers\RegionHelper.h"

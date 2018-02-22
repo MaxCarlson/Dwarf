@@ -156,6 +156,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Designations\WorkOrderDesignation.cpp" />
     <ClCompile Include="ECS\Components\Quality.cpp" />
     <ClCompile Include="ECS\Systems\ai\Needs\EatFoodSystem.cpp" />
     <ClCompile Include="ECS\Systems\Gui\DwarfInfoGui.cpp" />
@@ -246,7 +247,7 @@
     <ClCompile Include="Raws\Lua.cpp" />
     <ClCompile Include="Map\DijkstraMap.cpp" />
     <ClCompile Include="ECS\Systems\ai\AiWorkSystem.cpp" />
-    <ClCompile Include="Designations.cpp" />
+    <ClCompile Include="Designations\Designations.cpp" />
     <ClCompile Include="ECS\EntityManager.cpp" />
     <ClCompile Include="ECS\Entities.cpp" />
     <ClCompile Include="EntityFactory.cpp" />
@@ -289,6 +290,8 @@
     <ClCompile Include="MainLoops\WorldGenLoop.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Designations\FarmDesignation.h" />
+    <ClInclude Include="Designations\WorkOrderDesignation.h" />
     <ClInclude Include="ECS\Components\Fighting\MeleeWeapon.h" />
     <ClInclude Include="ECS\Components\Sentients\Thoughts.h" />
     <ClInclude Include="ECS\Components\Tags\EatFoodTag.h" />
@@ -500,7 +503,7 @@
     <ClInclude Include="ECS\Messages\recalculate_mining_message.h" />
     <ClInclude Include="ECS\Systems\ai\AiWorkSystem.h" />
     <ClInclude Include="BearLibTerminal.h" />
-    <ClInclude Include="Designations.h" />
+    <ClInclude Include="Designations\Designations.h" />
     <ClInclude Include="ECS\Component.h" />
     <ClInclude Include="Coordinates.h" />
     <ClInclude Include="ECS\Components\CombatStatsComponent.h" />

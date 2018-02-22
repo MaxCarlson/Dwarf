@@ -2,7 +2,7 @@
 #include "SleepSystem.h"
 #include "..\WorkTemplate.h"
 #include "..\JobBoard.h"
-#include "Designations.h"
+#include "Designations\Designations.h"
 #include "ECS\Components\Sentients\Needs.h"
 #include "ECS\Systems\helpers\PathFinding.h"
 #include "ECS\Systems\helpers\BuildingHelper.h"

@@ -1,6 +1,7 @@
 #pragma once
 #include "Coordinates.h"
 #include "ECS\Components\helpers\building_designation.h"
+#include "Designations\FarmDesignation.h"
 #include <unordered_map>
 #include "cereal\types\unordered_map.hpp"
 #include "cereal\types\utility.hpp"
@@ -8,38 +9,9 @@
 #include <vector>
 #include <memory>
 
-struct FarmInfo // Move this to a sepperate file. Make a file for designation types?
-{
-	FarmInfo() = default;
-	FarmInfo(const int step, const size_t seedId, const std::string& seedType) : step(step), seedId(seedId), seedType(seedType) {}
 
-	enum Steps
-	{
-		CLEAR,
-		ADD_SOIL,
-		PLANT,
-		GROWING
-	};
 
-	int step = CLEAR;
-
-	size_t seedId = 0;
-	std::string seedType = "";
-
-	// Progress that has been made
-	// of a step
-	double progress = 0.0;
-
-	bool beingWorked = false;
-
-	template<class Archive>
-	void serialize(Archive &archive)
-	{
-		archive(step, seedId, seedType, progress, beingWorked);
-	}
-};
-
-struct Designations
+struct Designations // TODO: Split these into sepperate files for better compile time?
 {
 	// Map of all areas designated to be mined. Bit's set for what type of mining
 	// Indexed by tiles location 
@@ -61,11 +33,11 @@ struct Designations
 
 	// Work orders that cannot be completed yet due to materials, not enough workshopds, etc
 	// pair<qty, reactionName>
-	std::vector<std::pair<int, std::string>> queuedWorkOrders;
+	//std::vector<std::pair<int, std::string>> queuedWorkOrders;
 
 	// Work orders that can be completed right now
 	// pair<qty, reactionName>
-	std::vector<std::pair<int, std::string>> workOrders;
+	//std::vector<std::pair<int, std::string>> workOrders;
 
 	// Plants manually designated to be harvested
 	// +
@@ -89,7 +61,7 @@ struct Designations
 	template<class Archive>
 	void serialize(Archive& archive)
 	{
-		archive(mining, buildings, queuedBuildings, architecture, workOrders, harvest, farming, hauling, beds);
+		archive(mining, buildings, queuedBuildings, architecture, harvest, farming, hauling, beds);
 	}
 
 };

@@ -7,7 +7,7 @@
 #include "Globals\game_states.h"
 #include "Globals\GlobalTerminals.h"
 #include "ECS\Messages\designate_building_message.h"
-#include "Designations.h"
+#include "Designations\Designations.h"
 #include "ECS\Components\PositionComponent.h"
 #include "ECS\Systems\helpers\ItemHelper.h"
 #include "ECS\Components\Building.h"

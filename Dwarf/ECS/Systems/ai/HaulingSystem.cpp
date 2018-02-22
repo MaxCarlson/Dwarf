@@ -7,7 +7,7 @@
 #include "../../Components/Claimed.h"
 #include "../../Components/PositionComponent.h"
 #include "../../Messages/drop_item_message.h"
-#include "../../../Designations.h"
+#include "Designations\Designations.h"
 #include "../ECS/Systems/helpers/PathFinding.h"
 #include "ECS\Components\Sentients\AiWorkComponent.h"
 

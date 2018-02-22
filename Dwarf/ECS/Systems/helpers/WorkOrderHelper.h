@@ -6,6 +6,7 @@
 struct AiWorkComponent;
 struct work_order_reaction;
 struct WorkOrderTag;
+struct WorkOrderDesignation;
 
 class WorkOrderHelper : public System<Requires<Building>>
 {
@@ -27,7 +28,7 @@ private:
 	// Indexed by Entity id.index
 	std::unordered_set<std::size_t> claimed_workshops;
 
-	void updateWorkOrders(std::vector<std::pair<int, std::string>>& des);
+	void updateWorkOrders(std::vector<WorkOrderDesignation> &des);
 };
 
 extern std::unique_ptr<WorkOrderHelper> workOrderHelper;

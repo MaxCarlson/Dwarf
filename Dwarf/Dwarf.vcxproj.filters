@@ -33,9 +33,6 @@
     <ClCompile Include="ECS\Systems\MiningSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Designations.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ECS\Systems\ai\MovementAiSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -366,6 +363,12 @@
     <ClCompile Include="ECS\Systems\ai\Needs\JoySystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Designations\Designations.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Designations\WorkOrderDesignation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ECS\EntityManager.h">
@@ -423,9 +426,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ECS\Systems\MiningSystem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Designations.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ECS\Systems\ai\MovementAiSystem.h">
@@ -1146,6 +1146,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ECS\Components\Fighting\MeleeWeapon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Designations\Designations.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Designations\WorkOrderDesignation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Designations\FarmDesignation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -3,7 +3,7 @@
 #include "JobBoard.h"
 #include "Map\Tile.h"
 #include "WorkTemplate.h"
-#include "Designations.h"
+#include "Designations\Designations.h"
 #include "Raws\ReadPlants.h"
 #include "Raws\Defs\PlantDef.h"
 #include "ECS\Components\Sentients\Stats.h"

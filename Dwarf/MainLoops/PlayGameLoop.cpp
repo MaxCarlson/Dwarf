@@ -10,7 +10,7 @@
 #include "Globals\MainFunction.h"
 #include "RegisterComponents.h"
 #include "MainMenuLoop.h"
-#include "Designations.h"
+#include "Designations\Designations.h"
 #include "Raws\DefInfo.h"
 #include "Globals\Camera.h"
 //#include "Map\building\regionBuilder.h"

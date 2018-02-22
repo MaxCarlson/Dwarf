@@ -1,6 +1,6 @@
 #include "../stdafx.h"
 #include "WorkOrderHelper.h"
-#include "../Designations.h"
+#include "Designations\WorkOrderDesignation.h"
 #include "../Raws/ReadReactions.h"
 #include "../ECS/Components/Tags/WorkOrderTag.h"
 #include "../ECS/Components/Sentients/AiWorkComponent.h"
@@ -11,20 +11,20 @@ std::unique_ptr<WorkOrderHelper> workOrderHelper;
 
 void WorkOrderHelper::update(const double duration)
 {
-	static std::vector<std::vector<std::pair<int, std::string>>*> designationPair = { &designations->queuedWorkOrders, &designations->workOrders };
+	static std::vector<std::vector<WorkOrderDesignation>*> designationPair = { &workOrders.queued, &workOrders.active };
 
 	bool nonQueued = false;
 	for (auto& dwo : designationPair)
 	{
-		for (std::pair<int, std::string> & des : *dwo)
+		for (auto& des : *dwo)
 		{
 			// Skip any reaction that has less than one requested
 			// job remaining. All queued work orderes that are added to workorders
 			// will be cleared for queuedWorkOrders
-			if (des.first < 1)
+			if (des.count < 1)
 				continue;
 
-			auto react = getReaction(des.second);
+			auto react = getReaction(des.tag);
 
 			// Find a building that can proccess reaction
 			bool availible = false;
@@ -69,8 +69,8 @@ void WorkOrderHelper::update(const double duration)
 				// push it back into queued work orders
 				if (!availible && nonQueued)
 				{
-					designations->queuedWorkOrders.emplace_back(des);
-					des.first = 0;
+					workOrders.queued.emplace_back(des);
+					des.count = 0;
 				}
 
 				// If a queued work order is completable
@@ -78,8 +78,8 @@ void WorkOrderHelper::update(const double duration)
 				// and mark work order removal from queued reactions
 				if (availible && !nonQueued)
 				{
-					designations->workOrders.emplace_back(des);
-					des.first = 0;
+					workOrders.active.emplace_back(des);
+					des.count = 0;
 				}
 			}
 		}
@@ -87,12 +87,12 @@ void WorkOrderHelper::update(const double duration)
 		// Remove any workorders that can no longer be completed
 		// and add any that can now be completed
 		if (nonQueued)
-			updateWorkOrders(designations->workOrders);
+			updateWorkOrders(workOrders.active);
 
 		// Add any work orders that can no longer be completed
 		// and remove those that can
 		else
-			updateWorkOrders(designations->queuedWorkOrders);
+			updateWorkOrders(workOrders.queued);
 
 		nonQueued = true;
 	}
@@ -106,9 +106,9 @@ std::pair<int, int> WorkOrderHelper::scanForBestWorkOrder(const AiWorkComponent 
 {
 	int best = 0;
 	constexpr int dist = 50; 
-	for (const auto& wo : designations->workOrders) // Only scan through active work orders
+	for (const auto& wo : workOrders.active) // Only scan through active work orders
 	{	
-		const auto& skill = getReaction(wo.second)->skill;
+		const auto& skill = getReaction(wo.tag)->skill;
 		const auto find = prefs.jobPrefrences.find(skill);
 
 		// Job preferences indexed by skill
@@ -125,19 +125,19 @@ std::unique_ptr<work_order_reaction> WorkOrderHelper::find_work_order_reaction(c
 {
 	std::unique_ptr<work_order_reaction> wo_reaction;
 
-	if (designations->workOrders.empty())
+	if (workOrders.active.empty())
 		return wo_reaction;
 
 
-	for (std::pair<int, std::string> & des : designations->workOrders)
+	for (auto& des : workOrders.active)
 	{
 		// Skip any reaction that has less than one requested
 		// job remaining. All reactions < 1 will be cleared from designations
 		// after this loop
-		if (des.first < 1)
+		if (des.count < 1)
 			continue;
 
-		auto react = getReaction(des.second);
+		auto react = getReaction(des.tag);
 
 		// Find a building that can proccess reaction
 		bool availible = false;
@@ -192,9 +192,11 @@ std::unique_ptr<work_order_reaction> WorkOrderHelper::find_work_order_reaction(c
 			// Reduce number of queued work order jobs
 			if (availible)
 			{
-				wo_reaction = std::make_unique<work_order_reaction>( workshop_id, react->tag, components );
+				const auto& woCo = getWorld().getEntity(workshop_id).getComponent<PositionComponent>().co;
+				wo_reaction = std::make_unique<work_order_reaction>( workshop_id, woCo, react->tag, components );
 				claimed_workshops.insert(workshop_id);
-				--des.first;
+				--des.count;
+				break;
 			}
 			
 			// Unclaim components
@@ -206,7 +208,7 @@ std::unique_ptr<work_order_reaction> WorkOrderHelper::find_work_order_reaction(c
 		}	
 	}
 
-	updateWorkOrders(designations->workOrders);
+	updateWorkOrders(workOrders.active);
 
 	return wo_reaction;
 }
@@ -221,7 +223,7 @@ void WorkOrderHelper::unclaim_workshop(const std::size_t id)
 	claimed_workshops.erase(id);
 }
 
-void WorkOrderHelper::updateWorkOrders(std::vector<std::pair<int, std::string>>& des)
+void WorkOrderHelper::updateWorkOrders(std::vector<WorkOrderDesignation> &des)
 {
 	des.erase(
 		std::remove_if(des.begin(),des.end(),

@@ -1,6 +1,7 @@
 #pragma once
 #include "../../Component.h"
 #include "../helpers/work_order_reaction.h"
+#include "Coordinates.h"
 
 struct WorkOrderTag : public Component
 {
@@ -11,9 +12,7 @@ struct WorkOrderTag : public Component
 		FIND_WORKSHOP,
 		FIND_COMPONENT,
 		GOTO_COMPONENT,
-		GRAB_COMPONENT,
 		GOTO_WORKSHOP,
-		DROP_COMPONENT,
 		WORK_WORKSHOP
 	};
 
@@ -23,13 +22,15 @@ struct WorkOrderTag : public Component
 
 	std::size_t current_component = 0;
 
+	Coordinates compCo;
+
 	// How far along in the reaction are we?
 	double progress = 0.0;
 
 	template<class Archive>
 	void serialize(Archive &archive)
 	{
-		archive(step, reaction, current_component, progress);
+		archive(step, reaction, current_component, compCo, progress);
 	}
 };
 

@@ -1,6 +1,6 @@
 #include "MiningSystem.h"
 #include "../Map/Tile.h"
-#include "../Designations.h"
+#include "Designations\Designations.h"
 #include "../Messages/recalculate_mining_message.h"
 #include "../Messages/perform_mining_message.h"
 #include "../World.h"

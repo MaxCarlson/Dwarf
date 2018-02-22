@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "AiArchitecture.h"
 #include "JobBoard.h"
-#include "Designations.h"
+#include "Designations\Designations.h"
 #include "WorkTemplate.h"
 #include "../helpers/ItemHelper.h"
 #include "../../../Map/Tile.h"
