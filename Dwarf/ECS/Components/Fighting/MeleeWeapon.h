@@ -24,5 +24,9 @@ struct MeleeWeapon : public Component
 	}
 };
 
+struct Item;
+
+void calcualteMeleeWeaponStats(MeleeWeapon &melee, Item &item, size_t material, int quality);
+
 CEREAL_REGISTER_TYPE(MeleeWeapon);
 CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, MeleeWeapon);

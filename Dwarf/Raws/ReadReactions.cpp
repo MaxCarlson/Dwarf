@@ -90,6 +90,7 @@ void readInReactions() noexcept
 				);
 			}},
 			{ "time", [&r]() { r.time = lua_double() * 1000.0; } },
+			{ "noCustom", [&r]() { r.specifyMaterial = false; } },
 		}
 	);
 

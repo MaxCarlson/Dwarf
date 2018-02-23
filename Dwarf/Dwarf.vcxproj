@@ -5,6 +5,14 @@
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="FasterDebug|Win32">
+      <Configuration>FasterDebug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="FasterDebug|x64">
+      <Configuration>FasterDebug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
       <Configuration>Release</Configuration>
       <Platform>Win32</Platform>
@@ -51,6 +59,12 @@
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='FasterDebug|Win32'">
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='FasterDebug|x64'">
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
@@ -89,6 +103,7 @@
     <Link>
       <AdditionalLibraryDirectories>C:\Users\C-60\Desktop\cppPrograms\dependencies\SFML-2.4.2\lib;C:\Users\C-60\Desktop\cppPrograms\dependencies\lua-5.3.4\Lua\x64\Release;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;sfml-system-d.lib;sfml-window-d.lib;sfml-graphics-d.lib;BearLibTerminal.lib;libtcod.lib;Lua.lib</AdditionalDependencies>
+      <LinkTimeCodeGeneration>UseFastLinkTimeCodeGeneration</LinkTimeCodeGeneration>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -107,6 +122,7 @@
     <Link>
       <AdditionalLibraryDirectories>C:\Users\C-60\Desktop\cppPrograms\dependencies\SFML-2.4.2\lib;C:\Users\C-60\Desktop\cppPrograms\dependencies\lua-5.3.4\Lua\x64\Release;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;sfml-system-d.lib;sfml-window-d.lib;sfml-graphics-d.lib;BearLibTerminal.lib;libtcod.lib;Lua.lib</AdditionalDependencies>
+      <LinkTimeCodeGeneration>UseFastLinkTimeCodeGeneration</LinkTimeCodeGeneration>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -155,8 +171,43 @@
       <AdditionalDependencies>opengl32.lib;sfml-system.lib;sfml-window.lib;sfml-graphics.lib;BearLibTerminal.lib;libtcod.lib;Lua.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='FasterDebug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <OpenMPSupport>true</OpenMPSupport>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <ForcedIncludeFiles>StdAfx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <AdditionalIncludeDirectories>C:\Users\C-60\Desktop\cppPrograms\dependencies\cereal-1.2.2\include;C:\Users\C-60\Desktop\cppPrograms\dependencies\SFML-2.4.2\include;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\dfr;C:\Users\C-60\Desktop\cppPrograms\dependencies\imgui-sfml-master;C:\Users\C-60\Desktop\cppPrograms\dependencies\imgui-master\imgui-master;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\lib;C:\Users\C-60\Desktop\cppPrograms\dependencies\SFML-2.4.2\lib;C:\Users\C-60\Desktop\cppPrograms\dependencies\lua-5.3.4\Lua\x64\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;sfml-system-d.lib;sfml-window-d.lib;sfml-graphics-d.lib;BearLibTerminal.lib;libtcod.lib;Lua.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
+      <LinkTimeCodeGeneration>UseFastLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='FasterDebug|x64'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <OpenMPSupport>true</OpenMPSupport>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <ForcedIncludeFiles>StdAfx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <AdditionalIncludeDirectories>C:\Users\C-60\Desktop\cppPrograms\dependencies\cereal-1.2.2\include;C:\Users\C-60\Desktop\cppPrograms\dependencies\SFML-2.4.2\include;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\dfr;C:\Users\C-60\Desktop\cppPrograms\dependencies\imgui-sfml-master;C:\Users\C-60\Desktop\cppPrograms\dependencies\imgui-master\imgui-master;C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>C:\Users\C-60\Desktop\cppPrograms\Dwarf\Dwarf\lib;C:\Users\C-60\Desktop\cppPrograms\dependencies\SFML-2.4.2\lib;C:\Users\C-60\Desktop\cppPrograms\dependencies\lua-5.3.4\Lua\x64\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;sfml-system-d.lib;sfml-window-d.lib;sfml-graphics-d.lib;BearLibTerminal.lib;libtcod.lib;Lua.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
+      <LinkTimeCodeGeneration>UseFastLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+    </Link>
+  </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Designations\WorkOrderDesignation.cpp" />
+    <ClCompile Include="ECS\Components\Fighting\MeleeWeapon.cpp" />
     <ClCompile Include="ECS\Components\Quality.cpp" />
     <ClCompile Include="ECS\Systems\ai\Needs\EatFoodSystem.cpp" />
     <ClCompile Include="ECS\Systems\Gui\DwarfInfoGui.cpp" />

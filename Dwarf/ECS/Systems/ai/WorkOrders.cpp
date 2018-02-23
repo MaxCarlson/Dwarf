@@ -21,7 +21,6 @@ namespace JobsBoard
 	{
 		if (!workOrders.active.empty() && workOrderHelper->claimedWorkshops() < workOrders.active.size()) 
 		{
-
 			const auto [bestIdx, distance] = workOrderHelper->scanForBestWorkOrder(prefs);
 			
 			if (bestIdx < 1)
@@ -105,11 +104,6 @@ void findWorkshop(const Entity & e, const Coordinates & co, WorkOrderTag & tag, 
 	return;
 }
 
-inline void unclaimComponentsAndWorkshop(WorkOrderTag &tag) // TODO:
-{
-
-}
-
 void findComponent(const Entity & e, const Coordinates & co, WorkOrderTag & tag, WorkTemplate<WorkOrderTag>& work, MovementComponent & mov)
 {
 	std::vector<std::pair<std::size_t, bool>> components;
@@ -154,22 +148,24 @@ void findComponent(const Entity & e, const Coordinates & co, WorkOrderTag & tag,
 		return;
 	}
 
+	workOrderHelper->unclaim_workshop(tag.reaction.workshop_id);
 	work.cancel_work(e);
 	return;
 }
 
 inline void gotoComponent(const Entity & e, const Coordinates & co, WorkOrderTag & tag, WorkTemplate<WorkOrderTag>& work, MovementComponent & mov)
 {
-	work.followPath(mov, co, tag.compCo, [&e, &work]()
+	work.followPath(mov, co, tag.compCo, [&e, &work, &tag]()
 	{
-		work.cancel_work(e); // TODO: Need to unclaim all components and workshop!
+		workOrderHelper->unclaim_workshop(tag.reaction.workshop_id);
+		work.cancel_work(e);
 	}, [&]
 	{
 		auto path = findPath(co, tag.reaction.workshopCo);
 
 		if (path->failed)
 		{
-			work.cancel_work(e); // TODO: Need to unclaim all components and workshop!
+			work.cancel_work(e); 
 			return;
 		}
 
@@ -181,8 +177,9 @@ inline void gotoComponent(const Entity & e, const Coordinates & co, WorkOrderTag
 
 inline void gotoWorkshop(const Entity & e, const Coordinates & co, WorkOrderTag & tag, WorkTemplate<WorkOrderTag>& work, MovementComponent & mov)
 {
-	work.followPath(mov, co, tag.reaction.workshopCo, [&work, &e]()
+	work.followPath(mov, co, tag.reaction.workshopCo, [&work, &e, &tag]()
 	{
+		workOrderHelper->unclaim_workshop(tag.reaction.workshop_id);
 		work.cancel_work(e); // TODO: Need to unclaim + drop all components and workshop!
 	}, [&]
 	{
@@ -195,7 +192,8 @@ inline void gotoWorkshop(const Entity & e, const Coordinates & co, WorkOrderTag 
 		world.emit(drop_item_message { SLOT_CARRYING, e.getId().index, tag.current_component, co, false });
 	});
 }
-
+#include "Raws\Defs\ItemDefs.h"
+#include "ECS\Components\Fighting\MeleeWeapon.h"
 void workWorkshop(const Entity & e, const Coordinates & co, WorkOrderTag & tag, WorkTemplate<WorkOrderTag>& work, MovementComponent & mov, const double &duration)
 {
 	auto* reaction = getReaction(tag.reaction.reactionTag);
@@ -245,10 +243,18 @@ void workWorkshop(const Entity & e, const Coordinates & co, WorkOrderTag & tag, 
 			auto quality = calculateQuality(stats, reaction->skill, reaction->difficulty);
 			
 			std::cout << "Reaction spawning: " << out.first << "MatIdx: " << material << "Quality: " << getQualityName(quality) << "\n";
-			spawnItemOnGround(out.first, material, co, SpawnColor::MATERIAL_COLOR, quality);
+			auto itemE = spawnItemOnGround(out.first, material, co, SpawnColor::MATERIAL_COLOR, quality);
+
+			auto& item = itemE.getComponent<Item>();
+
+			if (item.catagory.test(ITEM_MELEE_WEAPON))
+			{
+				auto& melee = itemE.addComponent<MeleeWeapon>();
+				calcualteMeleeWeaponStats(melee, , material, quality);
+			}
 		}
 
-	world.emit(block_map_changed_message {});
+	world.emit(block_map_changed_message {}); // TODO: Get rid of this, with specifying materials of buildings / architecture this will be useless
 
 	// Finish up
 	workOrderHelper->unclaim_workshop(tag.reaction.workshop_id);
