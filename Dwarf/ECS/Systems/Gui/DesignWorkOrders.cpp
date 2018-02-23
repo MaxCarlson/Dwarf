@@ -85,7 +85,7 @@ void DesignWorkOrders::giveOrder()
 
 		// Not found so let's add it to queued
 
-		workOrders.queued.emplace_back(std::make_pair(orderQty, tag));
+		workOrders.queued.emplace_back(WorkOrderDesignation{tag, orderQty, 0, 0, 0});
 	}
 }
 

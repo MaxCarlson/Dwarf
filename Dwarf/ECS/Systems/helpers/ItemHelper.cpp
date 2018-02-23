@@ -8,6 +8,7 @@
 #include "../Raws/Defs/MaterialDef.h"
 #include "../Helpers/PositionCache.h"
 #include "../ECS/Systems/EntityPositionCache.h"
+#include "Designations\WorkOrderDesignation.h"
 
 ItemHelper itemHelper;
 
@@ -156,5 +157,46 @@ std::size_t ItemHelper::claim_item_by_reaction_inp(const ReactionInput & react)
 
 	return 0;
 }
+
+bool ItemHelper::enoughItemsForWorkOrder(const ReactionInput & react, const WorkOrderDesignation & wod, const int needed, std::vector<std::pair<std::size_t, bool>> &components)
+{
+	int number = 0;
+	for (auto e : getEntities())
+	{
+		const auto& item = e.getComponent<Item>();
+
+		// Make sure the item tag is the same as the reaction wants
+		// If a material is specified by the player than also check and make sure
+		// the item matches that
+		if (item.tag == react.tag && (item.material == wod.material || wod.material == 0))
+		{
+			if (!e.hasComponent<Claimed>())
+			{
+				bool count = true;
+
+				// If the required materials don't match..
+				if (react.req_material != 0)
+					if (react.req_material != item.material)
+						count = false;
+
+				if (react.req_material_type != spawn_type_none)
+					if (getMaterial(item.material)->matType != react.req_material_type)
+						count = false;
+
+				if (count)
+				{
+					++number;
+					components.emplace_back(e.getId().index, false);
+				}
+
+				if (number >= needed)
+					return true;
+			}
+		}
+	}
+
+	return false;
+}
+
 
 

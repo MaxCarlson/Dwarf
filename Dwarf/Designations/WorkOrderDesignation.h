@@ -4,6 +4,10 @@
 
 struct WorkOrderDesignation
 {
+	WorkOrderDesignation() = default;
+	WorkOrderDesignation(const std::string &tag, int count, size_t material, size_t workerId = 0, int minSkillLevel = 0)
+		: tag(tag), count(count), material(material), workerId(workerId), minSkillLevel(minSkillLevel) {}
+
 	// Reaction tag
 	std::string tag;
 
@@ -33,6 +37,8 @@ struct WorkOrderDesignation
 
 struct AQWorkOrders
 {
+	AQWorkOrders() = default;
+
 	std::vector<WorkOrderDesignation> active;
 	std::vector<WorkOrderDesignation> queued;
 
