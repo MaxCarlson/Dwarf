@@ -8,6 +8,7 @@
 
 enum MaterialType
 {
+	MAT_NONE,
 	MAT_ROCK,
 	MAT_SOIL,
 	MAT_SAND,

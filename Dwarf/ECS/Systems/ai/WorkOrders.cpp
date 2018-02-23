@@ -186,6 +186,11 @@ inline void gotoWorkshop(const Entity & e, const Coordinates & co, WorkOrderTag 
 		work.cancel_work(e); // TODO: Need to unclaim + drop all components and workshop!
 	}, [&]
 	{
+		// Mark component as placed by workshop
+		for (auto& c : tag.reaction.components)
+			if (c.first == tag.current_component)
+				c.second = true;
+
 		tag.step = WorkOrderTag::FIND_COMPONENT;
 		world.emit(drop_item_message { SLOT_CARRYING, e.getId().index, tag.current_component, co, false });
 	});
@@ -239,7 +244,7 @@ void workWorkshop(const Entity & e, const Coordinates & co, WorkOrderTag & tag, 
 		{
 			auto quality = calculateQuality(stats, reaction->skill, reaction->difficulty);
 			
-			std::cout << "Reaction spawning" << out.first << material << "\n";
+			std::cout << "Reaction spawning: " << out.first << "MatIdx: " << material << "Quality: " << getQualityName(quality) << "\n";
 			spawnItemOnGround(out.first, material, co, SpawnColor::MATERIAL_COLOR, quality);
 		}
 

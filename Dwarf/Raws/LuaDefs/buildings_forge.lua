@@ -54,7 +54,7 @@ buildings["blacksmith"] = {
 	description = "Here you can shape metal into things",
 	width = 3,
 	height = 3,
-	components = {{ item = "block", qty = 7 }, { item = "anvil", qty = 14 }},
+	components = {{ item = "block", qty = 7 }, { item = "anvil", qty = 1 }},
 	skill = { { name = "construction", difficulty = 1 } }, 
 	render = { { glyph = glyphs["smith_top"] },    { glyph = glyphs["smith_mid"] },  { glyph = glyphs["w_tile"] }, 
 			   { glyph = glyphs["smith_bottom"] }, { glyph = glyphs["w_tile"] },     { glyph = glyphs["w_tile"] },
@@ -66,7 +66,7 @@ buildings["blacksmith"] = {
 
 reactions["make_anvil"] = {
 	name = "Make an Anvil",
-	workshop = "smithy",
+	workshop = "blacksmith",
 	skill = "blacksmithing",
 	inputs = {{ item = "block", qty = 3, mat_type = "metal" }},
 	outputs = {{ item = "anvil", qty = 1 }},
@@ -76,7 +76,7 @@ reactions["make_anvil"] = {
 
 reactions["make_pickaxe"] = {
 	name = "Make Pickaxe",
-	workshop = "smithy",
+	workshop = "blacksmith",
 	skill = "blacksmithing",
 	inputs = {{ item = "block", qty = 2, mat_type = "metal" }},
 	outputs = {{ item = "pickaxe", qty = 1 }},
@@ -86,7 +86,7 @@ reactions["make_pickaxe"] = {
 
 reactions["make_hatchet"] = {
 	name = "Make Hatchet",
-	workshop = "smithy",
+	workshop = "blacksmith",
 	skill = "blacksmithing",
 	inputs = {{ item = "block", qty = 1, mat_type = "metal" }},
 	outputs = {{ item = "hatchet", qty = 1 }},
@@ -98,7 +98,7 @@ reactions["make_hatchet"] = {
 
 reactions["make_short_sword"] = {
 	name = "Make Short Sword",
-	workshop = "smithy",
+	workshop = "blacksmith",
 	skill = "blacksmithing",
 	inputs = {{ item = "block", qty = 2, mat_type = "metal" }},
 	outputs = {{ item = "short_sword", qty = 1 }},
@@ -108,7 +108,7 @@ reactions["make_short_sword"] = {
 
 reactions["make_bastard_sword"] = {
 	name = "Make Bastard Sword",
-	workshop = "smithy",
+	workshop = "blacksmith",
 	skill = "blacksmithing",
 	inputs = {{ item = "block", qty = 3, mat_type = "metal" }},
 	outputs = {{ item = "bastard_sword", qty = 1 }},
@@ -118,7 +118,7 @@ reactions["make_bastard_sword"] = {
 
 reactions["make_axe"] = {
 	name = "Make Axe",
-	workshop = "smithy",
+	workshop = "blacksmith",
 	skill = "blacksmithing",
 	inputs = {{ item = "block", qty = 4, mat_type = "metal" }},
 	outputs = {{ item = "axe", qty = 1 }},
@@ -129,7 +129,7 @@ reactions["make_axe"] = {
 -- 2 Handed weapons
 reactions["make_long_sword"] = {
 	name = "Make Long Sword",
-	workshop = "smithy",
+	workshop = "blacksmith",
 	skill = "blacksmithing",
 	inputs = {{ item = "block", qty = 6, mat_type = "metal" }},
 	outputs = {{ item = "long_sword", qty = 1 }},
@@ -139,7 +139,7 @@ reactions["make_long_sword"] = {
 
 reactions["make_battle_axe"] = {
 	name = "Make Battle Axe",
-	workshop = "smithy",
+	workshop = "blacksmith",
 	skill = "blacksmithing",
 	inputs = {{ item = "block", qty = 7, mat_type = "metal" }},
 	outputs = {{ item = "axe", qty = 1 }},

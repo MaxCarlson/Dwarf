@@ -58,6 +58,7 @@ struct Quality : public Component
 
 int calculateQuality(Stats &stats, const std::string& skill, const int difficulty); // TODO: Balance this!
 
+const std::string& getQualityName(const int quality);
 const std::string& getQualityName(const Entity &e);
 
 

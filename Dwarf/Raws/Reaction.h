@@ -15,4 +15,6 @@ struct Reaction
 
 	int difficulty = 0;
 	double time = 0.0;
+
+	bool specifyMaterial = true;
 };

@@ -31,13 +31,8 @@ int calculateQuality(Stats &stats, const std::string &skill, const int difficult
 	return roll;
 }
 
-const std::string & getQualityName(const Entity &e)
+const std::string & getQualityName(const int quality)
 {
-	if (!e.hasComponent<Quality>())
-		return qualityNames[0];
-
-	const int quality = e.getComponent<Quality>().quality;
-
 	switch (quality)
 	{
 	case QUALITY_NONE:
@@ -59,5 +54,15 @@ const std::string & getQualityName(const Entity &e)
 	default:
 		return qualityNames[0];
 	}
+}
+
+const std::string & getQualityName(const Entity &e)
+{
+	if (!e.hasComponent<Quality>())
+		return qualityNames[0];
+
+	const int quality = e.getComponent<Quality>().quality;
+
+	return getQualityName(quality);
 }
 

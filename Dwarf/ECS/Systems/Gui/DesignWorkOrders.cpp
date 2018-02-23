@@ -5,6 +5,8 @@
 #include "Raws\DefInfo.h"
 #include "Designations\WorkOrderDesignation.h"
 #include "Raws\ReadReactions.h"
+#include "Raws\Materials.h"
+#include "Raws\Defs\MaterialDef.h"
 #include <imgui.h>
 #include <imgui_tabs.h>
 
@@ -31,6 +33,44 @@ void DesignWorkOrders::update(const double duration) // TODO: Sort by workshop; 
 	}
 
 	ImGui::EndTabBar();
+	ImGui::End();
+}
+
+void specifyMaterial(size_t &mat, const Reaction *react) // TODO: Use a list of already encountered materials only
+{
+	ImGui::Begin("SpecifyMaterial##WorkOrderDesign");
+
+	ImGui::Text("Search For Material: ");
+	static ImGuiTextFilter matFilter;
+	matFilter.Draw();
+
+	std::vector<std::string> matTags = { "Any" };
+	std::vector<std::string> matNames = { "Any" };
+	for (const auto& t : defInfo->materialTags)
+	{
+		const auto* mat = getMaterial(t);
+
+		if (mat && matFilter.PassFilter(mat->name.c_str()) && mat->matType == react->inputs[0].req_material_type)
+		{
+			matNames.emplace_back(mat->name);
+			matTags.emplace_back(t);
+		}
+	}
+
+	static int selected = 0;
+
+	if (selected > matNames.size() - 1)
+		selected = matNames.size() - 1;
+
+	ImGui::ListBox("Materials", &selected, matNames);
+
+	if (selected > 0)
+	{
+		mat = getMaterialIdx(matTags[selected]);
+	}
+	else
+		mat = 0;
+
 	ImGui::End();
 }
 
@@ -63,29 +103,50 @@ void DesignWorkOrders::giveOrder()
 	}
 
 	ImGui::ListBox("Availible Reactions", &orderIdx, reactPassedFilter); 
-	
+
+	static size_t specifiedMaterial = 0;
+
+	if (reactPassedFilter.size() <= 0)
+		return;
+
+	const std::string& tag = reactPassedTags[orderIdx];
+
+	const auto* reaction = getReaction(tag);
+
+	if (reaction->specifyMaterial)
+	{
+		specifyMaterial(specifiedMaterial, reaction);
+	}
+
 	if (ImGui::Button("Give Order##WorkOrderReactions"))
 	{
-		const std::string& tag = reactPassedTags[orderIdx];
+		if (!reaction->specifyMaterial)
+			specifiedMaterial = 0;
+
+		auto inputs = reaction->inputs;
+
+		// Create reaction inputs using required material
+		if (specifiedMaterial)
+			for (auto& i : inputs)
+				i.req_material = specifiedMaterial;
 
 		// Search work orders
 		for(auto& o : workOrders.active)
-			if (o.tag == tag)
+			if (o.tag == tag && o.material == specifiedMaterial)
 			{
 				o.count += orderQty;
 				return;
 			}
 		// Search Queued work orders
 		for (auto& q : workOrders.queued)
-			if (q.tag == tag)
+			if (q.tag == tag && q.material == specifiedMaterial)
 			{
 				q.count += orderQty;
 				return;
 			}
 
 		// Not found so let's add it to queued
-
-		workOrders.queued.emplace_back(WorkOrderDesignation{tag, orderQty, 0, 0, 0});
+		workOrders.queued.emplace_back(WorkOrderDesignation{tag, orderQty, specifiedMaterial, inputs, 0, 0});
 	}
 }
 
