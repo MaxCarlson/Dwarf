@@ -20,7 +20,7 @@ public:
 	int claimedWorkshops();
 
 	std::pair<int, int> scanForBestWorkOrder(const AiWorkComponent& work);
-	std::unique_ptr<work_order_reaction> find_work_order_reaction(const WorkOrderTag & tag);
+	//std::unique_ptr<work_order_reaction> find_work_order_reaction(const WorkOrderTag & tag);
 	std::unique_ptr<work_order_reaction> findWorkOrderReaction(const WorkOrderTag &tag);
 
 	void unclaim_workshop(const std::size_t id);

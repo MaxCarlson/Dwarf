@@ -91,7 +91,7 @@ void findWorkshop(const Entity & e, const Coordinates & co, WorkOrderTag & tag, 
 
 	if (!workOrders.active.empty())
 	{
-		job = workOrderHelper->find_work_order_reaction(tag);
+		job = workOrderHelper->findWorkOrderReaction(tag);
 	}
 
 	if (!job)
@@ -226,13 +226,19 @@ void workWorkshop(const Entity & e, const Coordinates & co, WorkOrderTag & tag, 
 		itemHelper.deleteItem(comp.first);
 	}
 
+	// If the output material was customized by player be sure to produce that
+	// type of material. Material will only be customizable where it makes sense,
+	// like with single output items.
+	if (tag.reaction.outputMaterial != 0)
+		material = tag.reaction.outputMaterial;
+
 	// Produce outputs ~~ figure out how to deal with mixed outputs
 	// in terms of affects
 	for (auto & out : reaction->outputs) // TODO: Once stacking is enabled just create a stack of reaction items as one entity
 		for (int i = 0; i < out.second; ++i)
 		{
 			auto quality = calculateQuality(stats, reaction->skill, reaction->difficulty);
-
+			
 			std::cout << "Reaction spawning" << out.first << material << "\n";
 			spawnItemOnGround(out.first, material, co, SpawnColor::MATERIAL_COLOR, quality);
 		}

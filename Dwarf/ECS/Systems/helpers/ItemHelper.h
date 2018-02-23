@@ -38,7 +38,7 @@ public:
 	int num_reaction_input_items(const ReactionInput& react);
 	std::size_t claim_item_by_reaction_inp(const ReactionInput& react);
 
-	bool enoughItemsForWorkOrder(const ReactionInput &react, const WorkOrderDesignation &wod, const int needed, std::vector<std::pair<std::size_t, bool>> &components);
+	bool enoughItemsForWorkOrder(const ReactionInput &react, std::vector<std::pair<std::size_t, bool>> &components);
 };
 
 extern ItemHelper itemHelper;

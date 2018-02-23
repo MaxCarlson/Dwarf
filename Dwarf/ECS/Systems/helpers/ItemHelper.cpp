@@ -158,17 +158,14 @@ std::size_t ItemHelper::claim_item_by_reaction_inp(const ReactionInput & react)
 	return 0;
 }
 
-bool ItemHelper::enoughItemsForWorkOrder(const ReactionInput & react, const WorkOrderDesignation & wod, const int needed, std::vector<std::pair<std::size_t, bool>> &components)
+bool ItemHelper::enoughItemsForWorkOrder(const ReactionInput & react, std::vector<std::pair<std::size_t, bool>> &components)
 {
 	int number = 0;
 	for (auto e : getEntities())
 	{
 		const auto& item = e.getComponent<Item>();
 
-		// Make sure the item tag is the same as the reaction wants
-		// If a material is specified by the player than also check and make sure
-		// the item matches that
-		if (item.tag == react.tag && (item.material == wod.material || wod.material == 0))
+		if (item.tag == react.tag)
 		{
 			if (!e.hasComponent<Claimed>())
 			{
@@ -189,7 +186,7 @@ bool ItemHelper::enoughItemsForWorkOrder(const ReactionInput & react, const Work
 					components.emplace_back(e.getId().index, false);
 				}
 
-				if (number >= needed)
+				if (number >= react.quantity)
 					return true;
 			}
 		}

@@ -15,7 +15,7 @@ struct WorkOrderDesignation
 	int count = 1;
 
 	// What material should we make it out of?
-	// 0 is does not matter
+	// 0 is does not matter. This is used for customizing the material of the major output
 	size_t material = 0;
 
 	// Is there a particular worker we'd like to 
@@ -28,10 +28,14 @@ struct WorkOrderDesignation
 
 	// TODO: Worth it to add a max skill level?
 
+	// This is for customizing material inputs
+	// within reason, IE make a titanium sword, etc
+	std::vector<ReactionInput> inputs;
+
 	template<class Archive>
 	void serialize(Archive &archive)
 	{
-		archive(tag, count, material, workerId, minSkillLevel);
+		archive(tag, count, material, workerId, minSkillLevel, inputs);
 	}
 };
 

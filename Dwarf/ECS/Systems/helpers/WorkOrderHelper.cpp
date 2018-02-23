@@ -48,7 +48,9 @@ void WorkOrderHelper::loopThroughQueuedAndNon(std::vector<WorkOrderDesignation> 
 		// or if we're searching the queued work orders and it is possible, add it to the active orders
 		if (availible)
 		{
-			for (auto & in : react->inputs)
+			// Look through the workOrderDesignation inputs instead of reaction inputs
+			// as there may be a specified material
+			for (auto & in : des.inputs)
 			{
 				const int num_avail = itemHelper.num_reaction_input_items(in);
 
@@ -119,98 +121,6 @@ std::pair<int, int> WorkOrderHelper::scanForBestWorkOrder(const AiWorkComponent 
 	return std::make_pair(best, dist);
 }
 
-std::unique_ptr<work_order_reaction> WorkOrderHelper::find_work_order_reaction(const WorkOrderTag & tag) // TODO: Possibly add a workshop component to workshop buildings for faster processing!
-{
-	std::unique_ptr<work_order_reaction> wo_reaction;
-
-	if (workOrders.active.empty())
-		return wo_reaction;
-
-
-	for (auto& des : workOrders.active)
-	{
-		// Skip any reaction that has less than one requested
-		// job remaining. All reactions < 1 will be cleared from designations
-		// after this loop
-		if (des.count < 1)
-			continue;
-
-		auto react = getReaction(des.tag);
-
-		// Find a building that can proccess reaction
-		bool availible = false;
-		std::size_t workshop_id = 0;
-
-		for (const auto& e : getEntities())
-		{
-			const auto& b = e.getComponent<Building>();
-
-			// Building is correct and is complete
-			if (b.tag == react->workshop && b.complete)
-			{
-				auto isBusy = claimed_workshops.find(e.getId().index);
-
-				// Workshop is not already claimed
-				if (isBusy == claimed_workshops.end())
-				{
-					workshop_id = e.getId().index;
-					availible = true;
-					break;
-				}
-
-			}
-		}
-
-		// Eventually test to make sure Entities can actually perform job
-
-		// If availible claim components and set wo_reaction
-		if (availible)
-		{
-			std::vector<std::pair<std::size_t, bool>> components;
-			for (auto & in : react->inputs)
-			{
-				const int num_avail = itemHelper.num_reaction_input_items(in);
-
-				// Not enough components availible
-				// Items that are later claimed will be unclaimed
-				// momentarily
-				if (num_avail < in.quantity)
-					availible = false;
-				
-				// Claim the item
-				else
-				{
-					std::size_t item = itemHelper.claim_item_by_reaction_inp(in);
-					components.push_back(std::make_pair(item, false));
-				}
-					
-			}
-
-			// Set work_order_reaction
-			// Reduce number of queued work order jobs
-			if (availible)
-			{
-				const auto& woCo = getWorld().getEntity(workshop_id).getComponent<PositionComponent>().co;
-				wo_reaction = std::make_unique<work_order_reaction>( workshop_id, woCo, react->tag, components );
-				claimed_workshops.insert(workshop_id);
-				--des.count;
-				break;
-			}
-			
-			// Unclaim components
-			else
-			{
-				for (auto & comp : components)
-					itemHelper.unclaim_item_by_id(comp.first);
-			}
-		}	
-	}
-
-	updateWorkOrders(workOrders.active);
-
-	return wo_reaction;
-}
-
 std::unique_ptr<work_order_reaction> WorkOrderHelper::findWorkOrderReaction(const WorkOrderTag & tag)
 {
 	std::unique_ptr<work_order_reaction> wo_reaction;
@@ -259,10 +169,10 @@ std::unique_ptr<work_order_reaction> WorkOrderHelper::findWorkOrderReaction(cons
 		if (availible)
 		{
 			std::vector<std::pair<std::size_t, bool>> components;
-			for (auto & in : react->inputs)
+			for (auto & in : des.inputs)
 			{
 				std::vector<std::pair<std::size_t, bool>> tmpComponents;
-				const bool enoughItems = itemHelper.enoughItemsForWorkOrder(in, des, in.quantity, tmpComponents);
+				const bool enoughItems = itemHelper.enoughItemsForWorkOrder(in, tmpComponents);
 
 				// Not enough components availible
 				if (!enoughItems)
@@ -284,7 +194,7 @@ std::unique_ptr<work_order_reaction> WorkOrderHelper::findWorkOrderReaction(cons
 					itemHelper.claim_item(getWorld().getEntity(c.first));
 
 				const auto& woCo = getWorld().getEntity(workshop_id).getComponent<PositionComponent>().co;
-				wo_reaction = std::make_unique<work_order_reaction>(workshop_id, woCo, react->tag, components);
+				wo_reaction = std::make_unique<work_order_reaction>(workshop_id, woCo, react->tag, components, des.material);
 				claimed_workshops.insert(workshop_id);
 				--des.count;
 				break;
@@ -316,3 +226,96 @@ void WorkOrderHelper::updateWorkOrders(std::vector<WorkOrderDesignation> &des)
 		des.end()
 	);
 }
+/*
+std::unique_ptr<work_order_reaction> WorkOrderHelper::find_work_order_reaction(const WorkOrderTag & tag) // TODO: Possibly add a workshop component to workshop buildings for faster processing!
+{
+std::unique_ptr<work_order_reaction> wo_reaction;
+
+if (workOrders.active.empty())
+return wo_reaction;
+
+
+for (auto& des : workOrders.active)
+{
+// Skip any reaction that has less than one requested
+// job remaining. All reactions < 1 will be cleared from designations
+// after this loop
+if (des.count < 1)
+continue;
+
+auto react = getReaction(des.tag);
+
+// Find a building that can proccess reaction
+bool availible = false;
+std::size_t workshop_id = 0;
+
+for (const auto& e : getEntities())
+{
+const auto& b = e.getComponent<Building>();
+
+// Building is correct and is complete
+if (b.tag == react->workshop && b.complete)
+{
+auto isBusy = claimed_workshops.find(e.getId().index);
+
+// Workshop is not already claimed
+if (isBusy == claimed_workshops.end())
+{
+workshop_id = e.getId().index;
+availible = true;
+break;
+}
+
+}
+}
+
+// Eventually test to make sure Entities can actually perform job
+
+// If availible claim components and set wo_reaction
+if (availible)
+{
+std::vector<std::pair<std::size_t, bool>> components;
+for (auto & in : react->inputs)
+{
+const int num_avail = itemHelper.num_reaction_input_items(in);
+
+// Not enough components availible
+// Items that are later claimed will be unclaimed
+// momentarily
+if (num_avail < in.quantity)
+availible = false;
+
+// Claim the item
+else
+{
+std::size_t item = itemHelper.claim_item_by_reaction_inp(in);
+components.push_back(std::make_pair(item, false));
+}
+
+}
+
+// Set work_order_reaction
+// Reduce number of queued work order jobs
+if (availible)
+{
+const auto& woCo = getWorld().getEntity(workshop_id).getComponent<PositionComponent>().co;
+wo_reaction = std::make_unique<work_order_reaction>( workshop_id, woCo, react->tag, components );
+claimed_workshops.insert(workshop_id);
+--des.count;
+break;
+}
+
+// Unclaim components
+else
+{
+for (auto & comp : components)
+itemHelper.unclaim_item_by_id(comp.first);
+}
+}
+}
+
+updateWorkOrders(workOrders.active);
+
+return wo_reaction;
+}
+*/
