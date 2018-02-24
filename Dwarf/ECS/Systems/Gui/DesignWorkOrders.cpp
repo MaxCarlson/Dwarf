@@ -183,6 +183,18 @@ inline void loopBothWorkOrderSets(std::function<void(const WorkOrderDesignation 
 		func(i, true);
 }
 
+inline WorkOrderDesignation& findWorkOrderFromIdx(int idx)
+{
+	if (idx < workOrders.active.size() && workOrders.active.size())
+	{
+		return workOrders.active[idx];
+	}
+
+	idx -= workOrders.active.size();
+
+	return workOrders.queued[idx];
+}
+
 inline void drawWorkOrderNames()
 {
 	ImGui::Text("WorkOrder Names");
@@ -190,13 +202,22 @@ inline void drawWorkOrderNames()
 	static std::vector<bool> bools;
 
 	if (bools.size() < workOrders.active.size() + workOrders.queued.size())
-		bools.resize(workOrders.active.size() + workOrders.queued.size(), false);
+		bools.resize(workOrders.active.size() + workOrders.queued.size(), true);
 
 	int i = 0;
 	loopBothWorkOrderSets([&](const WorkOrderDesignation &d, bool q)
 	{
 		auto * reaction = getReaction(d.tag);
-		ImGui::Selectable(reaction->name.c_str(), &bools[i]); // TODO: ERROR PRONE
+		
+		std::string cancelName = "Cancel##Wos" + std::to_string(i);
+		if (ImGui::Button(cancelName.c_str()))
+		{
+			auto &wocancel = findWorkOrderFromIdx(i);
+			wocancel.count = 0;
+		}
+		ImGui::SameLine();
+		
+		ImGui::Text(reaction->name.c_str());
 
 		++i;
 	});

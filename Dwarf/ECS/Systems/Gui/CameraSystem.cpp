@@ -13,7 +13,6 @@ void CameraSystem::init()
 void CameraSystem::update(const double duration)
 {
 	using namespace keys;
-	ImGuiIO& io = ImGui::GetIO();
 
 	if (isKeyDown(sf::Keyboard::Right, true))
 	{

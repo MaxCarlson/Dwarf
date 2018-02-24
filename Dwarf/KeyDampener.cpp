@@ -21,7 +21,8 @@ namespace keys
 
 	bool isKeyDown(const int key, bool damp)
 	{
-		if (damp && !readyForPress()) return false;
+		if (damp && !readyForPress()) 
+			return false;
 
 		if (ImGui::IsKeyDown(key))
 		{
