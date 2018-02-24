@@ -10,6 +10,9 @@ With an emphasis on modern features such as mouse support, multi-threading, modd
 
 Psuedo-3D world represented in planes of 2D tiles.
 
+Uses [ImGui](https://github.com/ocornut/imgui) for gui elements
+![Dwarf Info Screen](https://i.imgur.com/SETRuGX.png)
+
 ### Notes
 
 Uses a slightly modified version of [Anax](https://github.com/miguelmartin75/anax) 
