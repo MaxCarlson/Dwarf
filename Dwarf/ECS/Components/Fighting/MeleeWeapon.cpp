@@ -3,10 +3,9 @@
 #include "Raws\ItemRead.h"
 #include "ECS\Components\Quality.h"
 #include "Raws\Materials.h"
-#include "ECS\Components\Item.h"
 #include "Raws\Defs\MaterialDef.h"
 
-void calcualteMeleeWeaponStats(MeleeWeapon & melee, Item & item, size_t material, int quality)
+void createMeleeWeapon(Entity &e, const std::string &itemTag, size_t material, int quality)
 {
 	auto* mat = getMaterial(material);
 
@@ -23,7 +22,7 @@ void calcualteMeleeWeaponStats(MeleeWeapon & melee, Item & item, size_t material
 	double baseSpeed = 1.0;
 	bool twoHanded = true;
 
-	auto* itemDef = getItemDef(item.tag);
+	auto* itemDef = getItemDef(itemTag);
 
 	if (itemDef != nullptr)
 	{
@@ -32,7 +31,11 @@ void calcualteMeleeWeaponStats(MeleeWeapon & melee, Item & item, size_t material
 		twoHanded = itemDef->twoHanded;
 	}
 
+	auto& melee = e.addComponent<MeleeWeapon>();
+
 	melee.dmg = qualityMeleeMultiplier(quality) * baseDmg * matDmg;
-	melee.speed = baseSpeed * matSpeed;
+	melee.speed = baseSpeed * matSpeed; // TODO: Add slight qulity speed bonus?
 	melee.twoHand = twoHanded;
+
+	e.activate();
 }

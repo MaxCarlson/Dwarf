@@ -14,6 +14,8 @@
 #include "../ECS/Messages/block_map_changed_message.h"
 #include "ECS\Components\Sentients\AiWorkComponent.h"
 #include "ECS\Components\Quality.h"
+#include "ECS\Components\Fighting\MeleeWeapon.h"
+#include "Raws\Defs\ItemDefs.h"
 
 namespace JobsBoard
 {
@@ -165,6 +167,7 @@ inline void gotoComponent(const Entity & e, const Coordinates & co, WorkOrderTag
 
 		if (path->failed)
 		{
+			workOrderHelper->unclaim_workshop(tag.reaction.workshop_id);
 			work.cancel_work(e); 
 			return;
 		}
@@ -177,13 +180,14 @@ inline void gotoComponent(const Entity & e, const Coordinates & co, WorkOrderTag
 
 inline void gotoWorkshop(const Entity & e, const Coordinates & co, WorkOrderTag & tag, WorkTemplate<WorkOrderTag>& work, MovementComponent & mov)
 {
-	work.followPath(mov, co, tag.reaction.workshopCo, [&work, &e, &tag]()
+	work.followPath(mov, co, tag.reaction.workshopCo, [&work, &e, &tag, &co]()
 	{
 		workOrderHelper->unclaim_workshop(tag.reaction.workshop_id);
-		work.cancel_work(e); // TODO: Need to unclaim + drop all components and workshop!
+		world.emit(drop_item_message { SLOT_CARRYING, e.getId().index, tag.current_component, co, false }); // Drop but do not unclaim item
+		work.cancel_work(e); 
 	}, [&]
 	{
-		// Mark component as placed by workshop
+		// Mark component as placed at workshop
 		for (auto& c : tag.reaction.components)
 			if (c.first == tag.current_component)
 				c.second = true;
@@ -192,8 +196,7 @@ inline void gotoWorkshop(const Entity & e, const Coordinates & co, WorkOrderTag 
 		world.emit(drop_item_message { SLOT_CARRYING, e.getId().index, tag.current_component, co, false });
 	});
 }
-#include "Raws\Defs\ItemDefs.h"
-#include "ECS\Components\Fighting\MeleeWeapon.h"
+
 void workWorkshop(const Entity & e, const Coordinates & co, WorkOrderTag & tag, WorkTemplate<WorkOrderTag>& work, MovementComponent & mov, const double &duration)
 {
 	auto* reaction = getReaction(tag.reaction.reactionTag);
@@ -210,21 +213,19 @@ void workWorkshop(const Entity & e, const Coordinates & co, WorkOrderTag & tag, 
 
 	// Delete component entities and capture data about
 	// input items
-	std::string materialNames = "";
 	std::size_t material = 0;
-
 	for (auto& comp : tag.reaction.components)
 	{
 		auto& cent = world.getEntity(comp.first);
 
-		if (!cent.isValid() || !cent.hasComponent<Item>())
+		if (!cent.isValid() || !cent.hasComponent<Item>()) // Very Unlikely
 		{
+			workOrderHelper->unclaim_workshop(tag.reaction.workshop_id);
 			work.cancel_work(e);
 			return;
 		}
 
 		material = cent.getComponent<Item>().material;
-		materialNames += cent.getComponent<Item>().name + " ";
 
 		itemHelper.deleteItem(comp.first);
 	}
@@ -235,7 +236,7 @@ void workWorkshop(const Entity & e, const Coordinates & co, WorkOrderTag & tag, 
 	if (tag.reaction.outputMaterial != 0)
 		material = tag.reaction.outputMaterial;
 
-	// Produce outputs ~~ figure out how to deal with mixed outputs
+	// Produce outputs						TODO: figure out how to deal with mixed outputs with specifying material being possible
 	// in terms of affects
 	for (auto & out : reaction->outputs) // TODO: Once stacking is enabled just create a stack of reaction items as one entity
 		for (int i = 0; i < out.second; ++i)
@@ -249,8 +250,12 @@ void workWorkshop(const Entity & e, const Coordinates & co, WorkOrderTag & tag, 
 
 			if (item.catagory.test(ITEM_MELEE_WEAPON))
 			{
-				auto& melee = itemE.addComponent<MeleeWeapon>();
-				calcualteMeleeWeaponStats(melee, , material, quality);
+				createMeleeWeapon(itemE, item.tag, material, quality);
+			}
+
+			else if (item.catagory.test(ITEM_RANGED_WEAPON))
+			{
+				// TODO:
 			}
 		}
 

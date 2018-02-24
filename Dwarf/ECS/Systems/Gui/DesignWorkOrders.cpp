@@ -18,7 +18,7 @@ void DesignWorkOrders::init()
 void DesignWorkOrders::update(const double duration) // TODO: Sort by workshop; Sort by skill type; etc
 {
 
-	ImGui::Begin("WorkOrders", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoCollapse);
+	ImGui::Begin("WorkOrders", nullptr); // ImGuiWindowFlags_AlwaysAutoResize
 
 	ImGui::BeginTabBar("Tabs##WorkOrders");
 
@@ -150,22 +150,118 @@ void DesignWorkOrders::giveOrder()
 	}
 }
 
+inline void formatWorkOrders(std::vector<std::string> &in, std::vector<WorkOrderDesignation> &wod)
+{
+	for (const auto& j : wod)
+	{
+		auto* reaction = getReaction(j.tag);
+
+		std::stringstream ss;
+
+		ss << "Reaction: " << reaction->name << " #: " << j.count;
+
+		ss << " Material: ";
+		if (j.material != 0)
+		{
+			ss << getMaterial(j.material)->name; // TODO: FIX, Error prone. 
+		}
+		else
+			ss << "N/A";
+
+		ss << "\n";
+
+		
+		ImGui::Text(ss.str().c_str());
+	}
+}
+
+inline void loopBothWorkOrderSets(std::function<void(const WorkOrderDesignation &d, bool queued)> func)
+{
+	for (const auto& i : workOrders.active)
+		func(i, false);
+	for (const auto& i : workOrders.queued)
+		func(i, true);
+}
+
+inline void drawWorkOrderNames()
+{
+	ImGui::Text("WorkOrder Names");
+
+	static std::vector<bool> bools;
+
+	if (bools.size() < workOrders.active.size() + workOrders.queued.size())
+		bools.resize(workOrders.active.size() + workOrders.queued.size(), false);
+
+	int i = 0;
+	loopBothWorkOrderSets([&](const WorkOrderDesignation &d, bool q)
+	{
+		auto * reaction = getReaction(d.tag);
+		ImGui::Selectable(reaction->name.c_str(), &bools[i]); // TODO: ERROR PRONE
+
+		++i;
+	});
+}
+
+inline void drawWorkOrderMaterial()
+{
+	ImGui::Text("Materials");
+
+	loopBothWorkOrderSets([&](const WorkOrderDesignation &d, bool q)
+	{
+		std::stringstream ss;
+
+		if (d.material)
+		{
+			const auto& matName = getMaterial(d.material)->name;
+			ss << matName;
+		}
+		else
+			ss << "Not Specified";
+
+		ImGui::Text(ss.str().c_str());
+	});
+}
+
+inline void drawWorkOrderQty()
+{
+	ImGui::Text("Qty | Active(A)");
+	loopBothWorkOrderSets([](const WorkOrderDesignation &d, bool q)
+	{
+		std::stringstream ss;
+
+		ss << d.count << "   " << (q ? 'Q' : 'A');
+
+		ImGui::Text(ss.str().c_str());
+	});
+}
+
 void DesignWorkOrders::drawJobs()
 {
 	static int selectedWo = 0;
 	static int selectedQWo = 0;
 	ImGui::Text("Work Orders");
 
-	std::vector<std::string> currWos;
+	ImGui::Columns(3);
+	ImGui::Separator();
 
-	for (const auto& j : workOrders.active)
-		currWos.emplace_back(j.tag);
+	drawWorkOrderNames();
 
-	ImGui::ListBox("Current Jobs", &selectedWo, currWos);
+	ImGui::NextColumn();
 
-	std::vector<std::string> currQWos;
-	for (const auto& j : workOrders.queued)
-		currQWos.emplace_back(j.tag);
+	drawWorkOrderMaterial();
 
-	ImGui::ListBox("Queued Jobs:", &selectedQWo, currQWos);
+	ImGui::NextColumn();
+
+	drawWorkOrderQty();
+
+	ImGui::NextColumn();
+
+
+	//std::vector<std::string> workOrderNames;
+	//formatWorkOrders(workOrderNames, workOrders.active);
+	//ImGui::ListBox("Current Jobs", &selectedWo, workOrderNames);
+
+	//std::vector<std::string> qWorkOrderNames;
+	//formatWorkOrders(qWorkOrderNames, workOrders.queued);
+	//ImGui::ListBox("Queued Jobs:", &selectedQWo, qWorkOrderNames);
 }

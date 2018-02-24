@@ -343,6 +343,7 @@
   <ItemGroup>
     <ClInclude Include="Designations\FarmDesignation.h" />
     <ClInclude Include="Designations\WorkOrderDesignation.h" />
+    <ClInclude Include="ECS\Components\Fighting\Drafted.h" />
     <ClInclude Include="ECS\Components\Fighting\MeleeWeapon.h" />
     <ClInclude Include="ECS\Components\Sentients\Thoughts.h" />
     <ClInclude Include="ECS\Components\Tags\EatFoodTag.h" />
