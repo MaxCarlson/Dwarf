@@ -6,21 +6,27 @@ struct Drafted : public Component
 {
 	enum Steps
 	{
-		STAND,
+		DEFEND,
 		GOTO_DEST,
+		GOTO_TARGET,
 		ATTACK
 	};
 
-	int step = STAND;
+	int step = DEFEND;
 
-	Coordinates dest;
+	// This is stored here so we know when we have moved a tile
+	// in order to update pathing to target
+	Coordinates myCo;
+	// Likewise stored so we can update path if focused 
+	// on moving target when necassary
+	Coordinates targetCo;
 
 	size_t targetId;
 
 	template<class Archive>
 	void serialize(Archive &archive)
 	{
-		archive(step, dest, targetId);
+		archive(myCo, targetCo, targetId);
 	}
 };
 

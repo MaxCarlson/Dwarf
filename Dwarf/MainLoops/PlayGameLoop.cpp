@@ -203,8 +203,8 @@ void PlayGameLoop::run(const double duration)
 
 		if (keys::isKeyDown(sf::Keyboard::F10, true))
 		{
-			static int i = 0; // Add a gui for this, and make it auto not overwrite existing files
-			static const std::string ss = "ScreenShot "; // TODO: Not Working!!
+			static int i = 0; // TODO: Add a gui for this, and make it auto not overwrite existing files
+			static const std::string ss = "ScreenShot "; 
 			dfr::takeScreenShot(ss + std::to_string(++i) + ".png");
 		}
 	}

@@ -372,6 +372,9 @@
     <ClCompile Include="ECS\Components\Fighting\MeleeWeapon.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ECS\Systems\ai\Combat\DraftedSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ECS\EntityManager.h">
@@ -1161,6 +1164,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ECS\Components\Fighting\Drafted.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Systems\ai\Combat\DraftedSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Systems\ai\Combat\CombatTemplate.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
