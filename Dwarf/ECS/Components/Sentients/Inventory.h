@@ -13,21 +13,23 @@ enum InventorySlots
 	SLOT_LEGS,
 	SLOT_HANDS,
 	SLOT_FEET,
+	SLOT_WEAPON,
+	SLOT_SHIELD
 };
 
-static const int MAX_INVENTORY_SLOTS = 9;
+static const int MAX_INVENTORY_SLOTS = 11;
 
 class Inventory : public Component
 {
 public:
 	// Array holding entity indicies of 
 	// equipped items
-	std::size_t inventory[MAX_INVENTORY_SLOTS];
+	size_t inventory[MAX_INVENTORY_SLOTS];
 
 	template<class Archive>
 	void serialize(Archive& archive)
 	{
-		archive(cereal::base_class<Component>(this), inventory);
+		archive(inventory);
 	}
 };
 

@@ -40,7 +40,9 @@
 #include "ECS\Components\Sentients\Happiness.h"
 
 // Weapons and fighting
+#include "ECS\Components\Fighting\CombatBase.h"
 #include "ECS\Components\Fighting\MeleeWeapon.h"
+#include "ECS\Components\Fighting\Drafted.h"
 
 // This enables us to reset each of the variadic eachWith functions to it's
 // initial state.
@@ -60,12 +62,10 @@ void ComponentsInit::init()
 	world.registerComponent<PositionComponent>();
 	world.registerComponent<MovementComponent>();
 	world.registerComponent<RenderComponent>();
-	world.registerComponent<ItemCarried>();
-	world.registerComponent<ItemStored>();
+	world.registerComponent<ItemCarried>(); // This isn't really in use
+	world.registerComponent<ItemStored>(); // Not implemented
 	world.registerComponent<Item>();
-	world.registerComponent<HealthComponent>();
-	world.registerComponent<MiningTag>();
-	world.registerComponent<BuilderTag>();
+	world.registerComponent<HealthComponent>(); 
 	world.registerComponent<Claimed>();
 	world.registerComponent<Building>();
 	world.registerComponent<Stockpile>();
@@ -98,5 +98,7 @@ void ComponentsInit::init()
 	world.registerComponent<Calender>();
 
 	// Weapons and fighting
+	world.registerComponent<CombatBase>();
 	world.registerComponent<MeleeWeapon>();
+	world.registerComponent<Drafted>();
 }

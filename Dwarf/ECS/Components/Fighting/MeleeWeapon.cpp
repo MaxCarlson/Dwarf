@@ -4,6 +4,7 @@
 #include "ECS\Components\Quality.h"
 #include "Raws\Materials.h"
 #include "Raws\Defs\MaterialDef.h"
+#include "ECS\Components\Sentients\Inventory.h"
 
 void createMeleeWeapon(Entity &e, const std::string &itemTag, size_t material, int quality)
 {
@@ -38,4 +39,19 @@ void createMeleeWeapon(Entity &e, const std::string &itemTag, size_t material, i
 	melee.twoHand = twoHanded;
 
 	e.activate();
+}
+
+MeleeWeapon * getMeleeWeapon(const Entity & e)
+{
+	if (!e.hasComponent<Inventory>())
+		return nullptr;
+
+	size_t wepId = e.getComponent<Inventory>().inventory[SLOT_WEAPON];
+
+	const auto& wepEnt = e.getWorld().getEntity(wepId);
+
+	if(!wepEnt.isValid() || !wepEnt.hasComponent<MeleeWeapon>())
+		return nullptr;
+
+	return &wepEnt.getComponent<MeleeWeapon>();
 }

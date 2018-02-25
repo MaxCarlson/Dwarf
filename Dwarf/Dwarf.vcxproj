@@ -344,6 +344,7 @@
   <ItemGroup>
     <ClInclude Include="Designations\FarmDesignation.h" />
     <ClInclude Include="Designations\WorkOrderDesignation.h" />
+    <ClInclude Include="ECS\Components\Fighting\CombatBase.h" />
     <ClInclude Include="ECS\Components\Fighting\Drafted.h" />
     <ClInclude Include="ECS\Components\Fighting\MeleeWeapon.h" />
     <ClInclude Include="ECS\Components\Sentients\Thoughts.h" />
@@ -561,7 +562,6 @@
     <ClInclude Include="Designations\Designations.h" />
     <ClInclude Include="ECS\Component.h" />
     <ClInclude Include="Coordinates.h" />
-    <ClInclude Include="ECS\Components\CombatStatsComponent.h" />
     <ClInclude Include="ECS\Components\HealthComponent.h" />
     <ClInclude Include="ECS\Components\JobComponent.h" />
     <ClInclude Include="ECS\Components\MovementComponent.h" />

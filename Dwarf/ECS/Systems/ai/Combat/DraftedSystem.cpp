@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "DraftedSystem.h"
 #include "CombatTemplate.h"
+#include "ECS\Systems\ai\WorkTemplate.h"
 
 void DraftedSystem::init()
 {
@@ -9,14 +10,14 @@ void DraftedSystem::init()
 inline void defendArea(const Entity &e, const Coordinates &co, Drafted &tag, CombatTemplate<Drafted> &combat, MovementComponent &mov);
 inline void gotoDest(const Entity &e, const Coordinates &co, Drafted &tag, CombatTemplate<Drafted> &combat, MovementComponent &mov);
 inline void gotoTarget(const Entity &e, const Coordinates &co, Drafted &tag, CombatTemplate<Drafted> &combat, MovementComponent &mov);
-inline void attackTarget(const Entity &e, const Coordinates &co, Drafted &tag, CombatTemplate<Drafted> &combat, MovementComponent &mov);
+inline void attackTarget(const Entity &e, const Coordinates &co, Drafted &tag, CombatTemplate<Drafted> &combat, MovementComponent &mov, const double &duration);
 
 
 void DraftedSystem::update(const double duration)
 {
 	for (const auto& e : getEntities())
 	{
-		CombatTemplate<Drafted> combat;
+		CombatTemplate<Drafted> combat; 
 
 		Drafted &tag = e.getComponent<Drafted>();
 		const Coordinates &co = e.getComponent<PositionComponent>().co;
@@ -34,7 +35,7 @@ void DraftedSystem::update(const double duration)
 			gotoTarget(e, co, tag, combat, mov);
 			break;
 		case Drafted::ATTACK:
-			attackTarget(e, co, tag, combat, mov);
+			attackTarget(e, co, tag, combat, mov, duration);
 			break;
 		}
 	}
@@ -46,7 +47,7 @@ inline void defendArea(const Entity & e, const Coordinates & co, Drafted & tag, 
 	// TODO: Add in return to area after combat.
 	// TODO:
 }
-#include "ECS\Systems\ai\WorkTemplate.h"
+
 inline void gotoDest(const Entity & e, const Coordinates & co, Drafted & tag, CombatTemplate<Drafted>& combat, MovementComponent & mov)
 {
 	WorkTemplate<Drafted> work;
@@ -62,8 +63,59 @@ inline void gotoDest(const Entity & e, const Coordinates & co, Drafted & tag, Co
 
 inline void gotoTarget(const Entity & e, const Coordinates & co, Drafted & tag, CombatTemplate<Drafted>& combat, MovementComponent & mov)
 {
+	constexpr double distance = 1.44;
+
+	// TODO: Change distance for Entities with ranged weapons
+
+	combat.getCloseToMovingThing(e, mov, co, tag.targetId, distance, [&tag]()
+	{
+		// On pathing or id failure
+		tag.step = Drafted::DEFEND;
+
+	}, [&tag]
+	{
+		const auto& target = world.getEntity(tag.targetId);
+
+		if (!target.isValid() || !target.hasComponent<PositionComponent>())
+		{
+			tag.step = Drafted::DEFEND;
+			return;
+		}
+
+		tag.step = Drafted::ATTACK;
+		// Store position component of target
+		// so we know if target moves
+		tag.targetCo = target.getComponent<PositionComponent>().co;
+	});
 }
 
-inline void attackTarget(const Entity & e, const Coordinates & co, Drafted & tag, CombatTemplate<Drafted>& combat, MovementComponent & mov)
+#include "ECS\Components\Fighting\MeleeWeapon.h"
+
+inline void attackTarget(const Entity & e, const Coordinates & co, Drafted & tag, CombatTemplate<Drafted>& combat, MovementComponent & mov, const double &duration)
 {
+	const auto& target = world.getEntity(tag.targetId); // Reading from id may be problematic if entity is killed an instantly recreated as something else ~~ May cause issues
+
+	if (!target.isValid() || !target.hasComponent<PositionComponent>()) 
+	{
+		tag.step = Drafted::DEFEND;
+		return;
+	}
+
+	auto& cBase = e.getComponent<CombatBase>(); 
+
+	// Add time in seconds to attack
+	cBase.timeIntoAttack += duration / 1000.0;
+
+	const auto& targetCo = target.getComponent<PositionComponent>().co;
+
+	if (cBase.weaponType == CombatBase::MELEE || cBase.weaponType == CombatBase::NO_WEAPON)
+	{
+		auto* wep = getMeleeWeapon(e);
+
+		// Entity hasn't moved so it's still close enough to us.
+		if (targetCo == tag.targetCo)
+		{
+
+		}
+	}
 }

@@ -7,9 +7,10 @@
 #include "ECS\Components\PositionComponent.h"
 #include "Globals\GlobalWorld.h"
 
-template<class C>
+template<typename Tag>
 class CombatTemplate
 {
+public:
 
 	template<typename SUCCESS, typename CANCEL>
 	void getCloseToMovingThing(const Entity &e, MovementComponent &mov, const Coordinates &co, size_t followId, double distance, const SUCCESS &success, const CANCEL &cancel)
@@ -54,7 +55,7 @@ class CombatTemplate
 
 	void cancelCombat(const Entity &e)
 	{
-		e.removeComponent<C>();
+		e.removeComponent<Tag>();
 		e.activate();
 	}
 };

@@ -26,5 +26,7 @@ struct MeleeWeapon : public Component
 
 void createMeleeWeapon(Entity &e, const std::string &itemTag, size_t material, int quality);
 
+MeleeWeapon * getMeleeWeapon(const Entity &e);
+
 CEREAL_REGISTER_TYPE(MeleeWeapon);
 CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, MeleeWeapon);
