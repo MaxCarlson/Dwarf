@@ -1,6 +1,8 @@
 #pragma once
 #include "ECS\Component.h"
 
+struct CombatBase;
+
 struct MeleeWeapon : public Component
 {
 
@@ -27,6 +29,8 @@ struct MeleeWeapon : public Component
 void createMeleeWeapon(Entity &e, const std::string &itemTag, size_t material, int quality);
 
 MeleeWeapon * getMeleeWeapon(const Entity &e);
+
+double rollForMeleeDmg(const Entity &e, const CombatBase &base, const Entity &target, const MeleeWeapon &wep);
 
 CEREAL_REGISTER_TYPE(MeleeWeapon);
 CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, MeleeWeapon);

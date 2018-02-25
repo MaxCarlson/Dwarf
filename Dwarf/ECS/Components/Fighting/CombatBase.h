@@ -28,12 +28,26 @@ struct CombatBase : public Component
 	// without their attack yet triggering
 	double timeIntoAttack = 0.0;
 
+	// This is a combined speed using entity stats
+	// as well as weapon speed to determine it.
+	// Any time a weapon is dropped or picked up,
+	// or and entity levels a speed skill 
+	// this will be updated
+	double attackSpeed = 1.0; 
+
+	// This is also calculated any time 
+	// and entity picks up / drop a weapon
+	// or levels up
+	double baseDmg = 1.0;
+
 	template<class Archive>
 	void serialize(Archive &archive)
 	{
-		archive(onEnemyContact, weaponType, timeIntoAttack);
+		archive(onEnemyContact, weaponType, timeIntoAttack, attackSpeed, baseDmg);
 	}
 };
+
+void calculateCombatBase(const Entity &e, const size_t wep); // TODO: Add in armour values
 
 static const std::vector<std::string> CombatDecisionNames = { "Flee", "Defend", "Attack" };
 

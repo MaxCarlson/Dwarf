@@ -375,6 +375,9 @@
     <ClCompile Include="ECS\Systems\ai\Combat\DraftedSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ECS\Components\Fighting\CombatBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ECS\EntityManager.h">
@@ -1170,6 +1173,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ECS\Components\Fighting\CombatBase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Messages\damage_entity_message.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -103,19 +103,7 @@ inline void attackTarget(const Entity & e, const Coordinates & co, Drafted & tag
 
 	auto& cBase = e.getComponent<CombatBase>(); 
 
-	// Add time in seconds to attack
-	cBase.timeIntoAttack += duration / 1000.0;
-
 	const auto& targetCo = target.getComponent<PositionComponent>().co;
 
-	if (cBase.weaponType == CombatBase::MELEE || cBase.weaponType == CombatBase::NO_WEAPON)
-	{
-		auto* wep = getMeleeWeapon(e);
 
-		// Entity hasn't moved so it's still close enough to us.
-		if (targetCo == tag.targetCo)
-		{
-
-		}
-	}
 }

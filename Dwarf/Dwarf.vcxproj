@@ -207,6 +207,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Designations\WorkOrderDesignation.cpp" />
+    <ClCompile Include="ECS\Components\Fighting\CombatBase.cpp" />
     <ClCompile Include="ECS\Components\Fighting\MeleeWeapon.cpp" />
     <ClCompile Include="ECS\Components\Quality.cpp" />
     <ClCompile Include="ECS\Systems\ai\Combat\DraftedSystem.cpp" />
@@ -350,6 +351,7 @@
     <ClInclude Include="ECS\Components\Sentients\Thoughts.h" />
     <ClInclude Include="ECS\Components\Tags\EatFoodTag.h" />
     <ClInclude Include="ECS\Components\Tags\JoyTag.h" />
+    <ClInclude Include="ECS\Messages\damage_entity_message.h" />
     <ClInclude Include="ECS\Systems\ai\Combat\CombatTemplate.h" />
     <ClInclude Include="ECS\Systems\ai\Combat\DraftedSystem.h" />
     <ClInclude Include="ECS\Systems\ai\Needs\EatFoodSystem.h" />

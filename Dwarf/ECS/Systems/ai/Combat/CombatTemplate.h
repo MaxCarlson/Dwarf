@@ -6,6 +6,7 @@
 #include "ECS\Systems\helpers\PathFinding.h"
 #include "ECS\Components\PositionComponent.h"
 #include "Globals\GlobalWorld.h"
+#include "ECS\Messages\damage_entity_message.h"
 
 template<typename Tag>
 class CombatTemplate
@@ -52,6 +53,52 @@ public:
 		}
 	}
 
+	bool isTargetCloseEnough(const int maxDistance, const Coordinates &co, const Coordinates &co2) // TODO: Add in max distance finding based on CombatBase - RangedWeapon vs. MeleeWeapon
+	{
+		return (get_3D_distance(co, co2) < maxDistance);
+	}
+
+	template<typename TOO_FAR, typename DEAD>
+	void attackEntity(const Entity& e, CombatBase &base, const Entity &target, const TOO_FAR &tooFar)
+	{
+		// Add time in seconds to attack
+		base.timeIntoAttack += duration / 1000.0;
+
+		// Finally able to attack!
+		if (base.attackSpeed > base.timeIntoAttack)
+		{
+			if (base.weaponType == CombatBase::MELEE)
+			{
+				constexpr double maxDist = 1.45;
+				auto* wep = getMeleeWeapon(e);
+
+				// Entity hasn't moved so it's still close enough to us.
+				if (wep && (targetCo == tag.targetCo || combat.isTargetCloseEnough(maxDist, co, targetCo)))
+				{
+					double dmg = rollForMeleeDmg(e, target, *wep);
+				}
+				else if (wep == nullptr)
+					base.weaponType = CombatBase::NO_WEAPON;
+				else
+				{
+					tooFar();
+					return;
+				}
+			}
+
+			else if (base.weaponType == CombatBase::NO_WEAPON)
+			{
+
+			}
+
+			else if (base.weaponType == CombatBase::RANGED)
+			{
+
+			}
+
+			base.timeIntoAttack = 0.0;
+		}
+	}
 
 	void cancelCombat(const Entity &e)
 	{
