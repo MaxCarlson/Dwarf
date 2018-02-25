@@ -58,24 +58,27 @@ public:
 		return (get_3D_distance(co, co2) < maxDistance);
 	}
 
-	template<typename TOO_FAR, typename DEAD>
-	void attackEntity(const Entity& e, CombatBase &base, const Entity &target, const TOO_FAR &tooFar)
+	template<typename TOO_FAR>
+	void attackEntity(const double &duration, const Entity& e, CombatBase &base, const Entity &target, const TOO_FAR &tooFar)
 	{
 		// Add time in seconds to attack
 		base.timeIntoAttack += duration / 1000.0;
 
 		// Finally able to attack!
-		if (base.attackSpeed > base.timeIntoAttack)
+		if (base.timeIntoAttack > base.attackSpeed)
 		{
+			auto& targetCo = target.getComponent<PositionComponent>().co;
+
 			if (base.weaponType == CombatBase::MELEE)
 			{
-				constexpr double maxDist = 1.45;
 				auto* wep = getMeleeWeapon(e);
 
-				// Entity hasn't moved so it's still close enough to us.
-				if (wep && (targetCo == tag.targetCo || combat.isTargetCloseEnough(maxDist, co, targetCo)))
+				// Entity hasn't moved or it's still close enough
+				if (wep && combat.isTargetCloseEnough(base.maxDistance, co, targetCo)))
 				{
 					double dmg = rollForMeleeDmg(e, target, *wep);
+
+					world.emit(damage_entity_message { dmg, e.getId().index, target.getId().index });
 				}
 				else if (wep == nullptr)
 					base.weaponType = CombatBase::NO_WEAPON;

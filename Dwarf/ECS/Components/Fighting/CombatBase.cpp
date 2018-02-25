@@ -10,6 +10,7 @@ static const std::string strength = "strength";
 static const std::string agility = "agility";
 static const std::string meleeStatsStr = "melee";
 static const std::string rangedStatsStr = "ranged";
+constexpr double MAX_MELEE_DIST = 1.45;
 
 void calculateCombatBase(const Entity & e, const size_t wep)
 {
@@ -21,8 +22,8 @@ void calculateCombatBase(const Entity & e, const size_t wep)
 
 	auto wepEnt = world.getEntity(wep);
 
-	auto strLvl = static_cast<double>(getSkillLvl(stats, strength)) + 1.0;
-	auto agLvl = static_cast<double>(getSkillLvl(stats, agility)) + 1.0;
+	auto strLvl = static_cast<double>(getSkillLvl(stats, strength) + 1);
+	auto agiLvl = static_cast<double>(getSkillLvl(stats,  agility) + 1);
 
 	// Weapon
 	if (wepEnt.isValid())
@@ -35,6 +36,7 @@ void calculateCombatBase(const Entity & e, const size_t wep)
 
 			base.baseDmg = wep.dmg + wep.dmg * (meleeLvl * 0.1); // 10% increased damage per melee skill level
 			base.attackSpeed = wep.speed + wep.speed * (meleeLvl * 0.03); // 3% speed per melee skill level
+			base.maxDistance = MAX_MELEE_DIST;
 
 			// TODO: Add damage for strength
 			// TODO: Add speed for agility
@@ -50,6 +52,7 @@ void calculateCombatBase(const Entity & e, const size_t wep)
 		constexpr double baseSpeed = 0.9; // TODO: Race  or agility dependant?
 
 		base.baseDmg = baseDmg + baseDmg * (strLvl * 0.06);
-		base.attackSpeed = baseSpeed + baseSpeed * (agLvl * 0.04);
+		base.attackSpeed = baseSpeed + baseSpeed * (agiLvl * 0.04);
+		base.maxDistance = MAX_MELEE_DIST;
 	}
 }

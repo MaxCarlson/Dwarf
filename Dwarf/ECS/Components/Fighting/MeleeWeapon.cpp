@@ -6,6 +6,7 @@
 #include "Raws\Defs\MaterialDef.h"
 #include "ECS\Components\Sentients\Inventory.h"
 #include "ECS\Components\Sentients\Stats.h"
+#include "ECS\Components\Fighting\CombatBase.h"
 
 void createMeleeWeapon(Entity &e, const std::string &itemTag, size_t material, int quality)
 {
@@ -60,7 +61,7 @@ MeleeWeapon * getMeleeWeapon(const Entity & e)
 double rollForMeleeDmg(const Entity & e, const CombatBase &base, const Entity &target, const MeleeWeapon & wep)
 {
 
-
+	
 
 	return 0.0;
 }

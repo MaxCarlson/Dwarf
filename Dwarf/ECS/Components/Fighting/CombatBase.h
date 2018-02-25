@@ -40,10 +40,15 @@ struct CombatBase : public Component
 	// or levels up
 	double baseDmg = 1.0;
 
+	// Max distance at which we can attack
+	double maxDistance = 1.45;
+
+	// TODO: Min Distance
+
 	template<class Archive>
 	void serialize(Archive &archive)
 	{
-		archive(onEnemyContact, weaponType, timeIntoAttack, attackSpeed, baseDmg);
+		archive(onEnemyContact, weaponType, timeIntoAttack, attackSpeed, baseDmg, maxDistance);
 	}
 };
 

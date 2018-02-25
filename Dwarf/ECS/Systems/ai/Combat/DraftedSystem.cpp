@@ -89,8 +89,6 @@ inline void gotoTarget(const Entity & e, const Coordinates & co, Drafted & tag, 
 	});
 }
 
-#include "ECS\Components\Fighting\MeleeWeapon.h"
-
 inline void attackTarget(const Entity & e, const Coordinates & co, Drafted & tag, CombatTemplate<Drafted>& combat, MovementComponent & mov, const double &duration)
 {
 	const auto& target = world.getEntity(tag.targetId); // Reading from id may be problematic if entity is killed an instantly recreated as something else ~~ May cause issues
@@ -105,5 +103,9 @@ inline void attackTarget(const Entity & e, const Coordinates & co, Drafted & tag
 
 	const auto& targetCo = target.getComponent<PositionComponent>().co;
 
-
+	combat.attackEntity(duration, e, cBase, target, [&tag]()
+	{
+		// No longer close enough to attack
+		tag.step = Drafted::GOTO_TARGET;
+	});
 }
