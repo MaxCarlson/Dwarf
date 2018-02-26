@@ -16,6 +16,8 @@
 #include "../../Components/Claimed.h"
 #include "../../Components/ItemStored.h"
 #include "Helpers\MessageQueue.h"
+#include "ECS\Components\Fighting\MeleeWeapon.h"
+#include "ECS\Components\Fighting\CombatBase.h"
 
 MessageQueue<pickup_item_message> pickups;
 MessageQueue<drop_item_message> dropOffs;
@@ -37,8 +39,7 @@ void EquipHandler::update(const double duration)
 {
 }
 
-// Need to add in an inventory component for Entities while holding things!~!~!~!~
-void EquipHandler::pickupItem(int itemSlot, std::size_t entityId, std::size_t itemEid, std::size_t outItemEid) // Remove the carry slot and just use the ItemCarried Component
+void EquipHandler::pickupItem(int itemSlot, std::size_t entityId, std::size_t itemEid, std::size_t outItemEid) 
 {
 	auto& item = getWorld().getEntity(itemEid);
 
@@ -57,15 +58,21 @@ void EquipHandler::pickupItem(int itemSlot, std::size_t entityId, std::size_t it
 	if (outItemEid == 0)
 		outItemEid = inv.inventory[itemSlot];
 
-	if (itemSlot < MAX_INVENTORY_SLOTS)				// Get rid of this slot system!
+	if (itemSlot < MAX_INVENTORY_SLOTS)				
 		inv.inventory[itemSlot] = itemEid;
 	else
-		std::cout << "Other Item Types Not Implemented Yet Error!!" << std::endl;
+		std::cout << "Inventory Index Error!" << std::endl;
 
 
 	// If we're picking up a stored item, flag it as not stored
 	if (item.hasComponent<ItemStored>())
 		item.removeComponent<ItemStored>();
+
+	if (entity.hasComponent<CombatBase>() && item.hasComponent<MeleeWeapon>()) // || RangedWeapon .. etc
+	{
+		// Calculate our new combat base with this item if it's a weapon
+		calculateCombatBase(entity, itemEid);
+	}
 
 	// Remove item position component
 	// Must first remove from cache
@@ -82,12 +89,9 @@ void EquipHandler::pickupItem(int itemSlot, std::size_t entityId, std::size_t it
 		dropItem(itemSlot, entityId, outItemEid, itemCo);
 
 	item.activate();
-	//getWorld().refresh(); // Should we truly be refreshing here? Not Sure
 }
 
-// It looks like we don't need to pass the itemEid when we have entity eid since we can get it
-// from searching the inventory?
-void EquipHandler::dropItem(int itemSlot, std::size_t entityId, std::size_t itemEid, Coordinates co) // Add a template class for finding if an entity is working with a specific tool in class TAG to see if we can  take their tool away!
+void EquipHandler::dropItem(int itemSlot, std::size_t entityId, std::size_t itemEid, Coordinates co) 
 {
 	if ( itemEid == 0 )
 		return;
@@ -105,8 +109,15 @@ void EquipHandler::dropItem(int itemSlot, std::size_t entityId, std::size_t item
 		item.removeComponent<ItemCarried>();
 	}
 
+	auto entity = getWorld().getEntity(entityId);
+	if (entity.hasComponent<CombatBase>() && item.hasComponent<MeleeWeapon>()) // || RangedWeapon .. etc
+	{
+		// Calculate our new combat base once we've dropped this weapon
+		calculateCombatBase(entity, 0);
+	}
+
 	// Remove item from entities inventory
-	getWorld().getEntity(entityId).getComponent<Inventory>().inventory[itemSlot] = 0;
+	entity.getComponent<Inventory>().inventory[itemSlot] = 0;
 
 	// Restore the items correct positon
 	item.addComponent<PositionComponent>(co);
@@ -115,5 +126,4 @@ void EquipHandler::dropItem(int itemSlot, std::size_t entityId, std::size_t item
 		item.removeComponent<Claimed>();
 
 	item.activate();
-	//getWorld().refresh(); // Should we truly be refreshing here? Not Sure
 }

@@ -20,7 +20,7 @@ public:
 	template<class Archive>
 	void serialize(Archive& archive)
 	{
-		archive(cereal::base_class<Component>(this), health, maxHealth, recoverRate);
+		archive(health, maxHealth, recoverRate);
 	}
 };
 

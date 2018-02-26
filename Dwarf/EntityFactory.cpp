@@ -17,6 +17,7 @@
 #include "ECS\Components\Sentients\AiWorkComponent.h"
 #include "ECS\Components\Sentients\Needs.h"
 
+#include "ECS\Components\Fighting\CombatBase.h"
 
 #include "Raws\SkillReader.h"
 #include <SFML\Graphics\Color.hpp>
@@ -54,10 +55,13 @@ Entity createDwarf(DwarfCreationObj dwarfConstruct)
 	// Movement speed in constructor in tiles per second
 	dwarf.addComponent<MovementComponent>(3.5);
 
-	//dwarf.addComponent<HealthComponent>(1000, 1000, 1);
+	dwarf.addComponent<HealthComponent>(100, 100, 1);
 
 	dwarf.addComponent<Inventory>();
 	dwarf.addComponent<Needs>();
+	dwarf.addComponent<CombatBase>();
+
+	calculateCombatBase(dwarf, 0);
 
 	dwarf.activate();
 

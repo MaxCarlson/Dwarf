@@ -76,7 +76,7 @@ public:
 				// Entity hasn't moved or it's still close enough
 				if (wep && combat.isTargetCloseEnough(base.maxDistance, co, targetCo)))
 				{
-					double dmg = rollForMeleeDmg(e, target, *wep);
+					int dmg = rollForMeleeDmg(e, target, *wep);
 
 					world.emit(damage_entity_message { dmg, e.getId().index, target.getId().index });
 				}

@@ -56,6 +56,11 @@
 #include "ECS\Systems\timebased\CalenderSystem.h"
 #include "ECS\Systems\timebased\PlantSystem.h"
 
+// Combat systems
+#include "ECS\Systems\ai\Combat\DeathSystem.h"
+#include "ECS\Systems\ai\Combat\ProcessAttacks.h"
+#include "ECS\Systems\ai\Combat\DraftedSystem.h"
+
 // Non systems
 #include "ECS\Systems\EntityPositionCache.h"
 #include "Globals\global_calender.h"
@@ -115,6 +120,10 @@ const std::string CAMERA_SYSTEM = "Camera System";
 const std::string JOB_PREFERENCES_UI = "Job Preferences UI";
 const std::string DWARF_INFO_GUI = "Dwarf Info Gui";
 
+// Combat
+const std::string DEATH_SYSTEM = "Death System";
+const std::string PROCESS_ATTACKS = "Process Attacks";
+const std::string DRAFTED_SYSTEM = "Drafted System";
 
 namespace RunSystems
 {
@@ -196,6 +205,11 @@ void initSystems(bool fromLoad)
 	systems[JOB_PREFERENCES_UI] = new JobPreferencesUi;
 	systems[DWARF_INFO_GUI] = new DwarfInfoGui;
 
+	// Combat
+	systems[DEATH_SYSTEM] = new DeathSystem;
+	systems[PROCESS_ATTACKS] = new ProcessAttacks;
+	systems[DRAFTED_SYSTEM] = new DraftedSystem;
+
 	// External Systems
 	systems[ITEM_HELPER] = &itemHelper;
 	systems[WORK_ORDER_HELPER] = workOrderHelper.get();
@@ -246,6 +260,11 @@ void initSystems(bool fromLoad)
 	world.addSystem(* static_cast<DesignStockpiles *>(systems[DESIGN_STOCKPILES]));
 	world.addSystem(* static_cast<JobPreferencesUi *>(systems[JOB_PREFERENCES_UI]));
 	world.addSystem(* static_cast<DwarfInfoGui *>(systems[DWARF_INFO_GUI]));
+
+	// Combat
+	world.addSystem(* static_cast<DeathSystem *>(systems[DEATH_SYSTEM]));
+	world.addSystem(* static_cast<ProcessAttacks *>(systems[PROCESS_ATTACKS]));
+	world.addSystem(* static_cast<DraftedSystem *>(systems[DRAFTED_SYSTEM]));
 
 	// External Systems
 	world.addSystem( itemHelper);

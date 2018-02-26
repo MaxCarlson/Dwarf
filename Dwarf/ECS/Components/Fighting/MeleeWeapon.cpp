@@ -7,6 +7,7 @@
 #include "ECS\Components\Sentients\Inventory.h"
 #include "ECS\Components\Sentients\Stats.h"
 #include "ECS\Components\Fighting\CombatBase.h"
+#include "Helpers\Rng.h"
 
 void createMeleeWeapon(Entity &e, const std::string &itemTag, size_t material, int quality)
 {
@@ -58,10 +59,12 @@ MeleeWeapon * getMeleeWeapon(const Entity & e)
 	return &wepEnt.getComponent<MeleeWeapon>();
 }
 
-double rollForMeleeDmg(const Entity & e, const CombatBase &base, const Entity &target, const MeleeWeapon & wep)
+int rollForMeleeDmg(const Entity & e, const CombatBase &base, const Entity &target, const MeleeWeapon & wep)
 {
 
-	
+	auto min = static_cast<int>(base.baseDmg / 2.0); // TODO: Better system.
+	auto max = static_cast<int>(base.baseDmg * 2.0); // TODO: Involve armour
+	const auto dmg = rng.range(min, max);
 
-	return 0.0;
+	return dmg;
 }

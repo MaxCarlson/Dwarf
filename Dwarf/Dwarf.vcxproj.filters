@@ -378,6 +378,12 @@
     <ClCompile Include="ECS\Components\Fighting\CombatBase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ECS\Systems\ai\Combat\ProcessAttacks.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS\Systems\ai\Combat\DeathSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ECS\EntityManager.h">
@@ -1176,6 +1182,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ECS\Messages\damage_entity_message.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Systems\ai\Combat\ProcessAttacks.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Messages\something_died_message.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Systems\ai\Combat\DeathSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

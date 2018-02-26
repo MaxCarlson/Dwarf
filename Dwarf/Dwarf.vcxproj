@@ -210,7 +210,9 @@
     <ClCompile Include="ECS\Components\Fighting\CombatBase.cpp" />
     <ClCompile Include="ECS\Components\Fighting\MeleeWeapon.cpp" />
     <ClCompile Include="ECS\Components\Quality.cpp" />
+    <ClCompile Include="ECS\Systems\ai\Combat\DeathSystem.cpp" />
     <ClCompile Include="ECS\Systems\ai\Combat\DraftedSystem.cpp" />
+    <ClCompile Include="ECS\Systems\ai\Combat\ProcessAttacks.cpp" />
     <ClCompile Include="ECS\Systems\ai\Needs\EatFoodSystem.cpp" />
     <ClCompile Include="ECS\Systems\Gui\DwarfInfoGui.cpp" />
     <ClCompile Include="ECS\Systems\helpers\BuildingHelper.cpp" />
@@ -352,8 +354,11 @@
     <ClInclude Include="ECS\Components\Tags\EatFoodTag.h" />
     <ClInclude Include="ECS\Components\Tags\JoyTag.h" />
     <ClInclude Include="ECS\Messages\damage_entity_message.h" />
+    <ClInclude Include="ECS\Messages\something_died_message.h" />
     <ClInclude Include="ECS\Systems\ai\Combat\CombatTemplate.h" />
+    <ClInclude Include="ECS\Systems\ai\Combat\DeathSystem.h" />
     <ClInclude Include="ECS\Systems\ai\Combat\DraftedSystem.h" />
+    <ClInclude Include="ECS\Systems\ai\Combat\ProcessAttacks.h" />
     <ClInclude Include="ECS\Systems\ai\Needs\EatFoodSystem.h" />
     <ClInclude Include="ECS\Systems\Gui\DwarfInfoGui.h" />
     <ClInclude Include="ECS\Systems\helpers\BuildingHelper.h" />
