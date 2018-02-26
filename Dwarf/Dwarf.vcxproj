@@ -214,6 +214,7 @@
     <ClCompile Include="ECS\Systems\ai\Combat\DraftedSystem.cpp" />
     <ClCompile Include="ECS\Systems\ai\Combat\ProcessAttacks.cpp" />
     <ClCompile Include="ECS\Systems\ai\Needs\EatFoodSystem.cpp" />
+    <ClCompile Include="ECS\Systems\ai\ViewSystem.cpp" />
     <ClCompile Include="ECS\Systems\Gui\ClickSystemGui.cpp" />
     <ClCompile Include="ECS\Systems\Gui\DwarfInfoGui.cpp" />
     <ClCompile Include="ECS\Systems\helpers\BuildingHelper.cpp" />
@@ -348,6 +349,7 @@
   <ItemGroup>
     <ClInclude Include="Designations\FarmDesignation.h" />
     <ClInclude Include="Designations\WorkOrderDesignation.h" />
+    <ClInclude Include="ECS\Components\ai\View.h" />
     <ClInclude Include="ECS\Components\Fighting\CombatBase.h" />
     <ClInclude Include="ECS\Components\Fighting\Drafted.h" />
     <ClInclude Include="ECS\Components\Fighting\MeleeWeapon.h" />
@@ -361,6 +363,7 @@
     <ClInclude Include="ECS\Systems\ai\Combat\DraftedSystem.h" />
     <ClInclude Include="ECS\Systems\ai\Combat\ProcessAttacks.h" />
     <ClInclude Include="ECS\Systems\ai\Needs\EatFoodSystem.h" />
+    <ClInclude Include="ECS\Systems\ai\ViewSystem.h" />
     <ClInclude Include="ECS\Systems\Gui\ClickSystemGui.h" />
     <ClInclude Include="ECS\Systems\Gui\DwarfInfoGui.h" />
     <ClInclude Include="ECS\Systems\helpers\BuildingHelper.h" />

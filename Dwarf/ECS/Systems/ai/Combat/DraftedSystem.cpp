@@ -13,7 +13,7 @@ inline void gotoTarget(const Entity &e, const Coordinates &co, Drafted &tag, Com
 inline void attackTarget(const Entity &e, const Coordinates &co, Drafted &tag, CombatTemplate<Drafted> &combat, MovementComponent &mov, const double &duration);
 
 
-void DraftedSystem::update(const double duration)
+void DraftedSystem::update(const double duration) // TODO: Messages when drafted pawns are reaching low happiness / needs!
 {
 	for (const auto& e : getEntities())
 	{
