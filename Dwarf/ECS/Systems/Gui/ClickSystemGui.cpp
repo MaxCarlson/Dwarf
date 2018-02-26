@@ -81,6 +81,8 @@ void handlePawn(Entity &e)
 
 	if(e.hasComponent<Drafted>())
 		handleDraft(e);
+
+
 }
 
 void ClickSystem::update(const double duration)

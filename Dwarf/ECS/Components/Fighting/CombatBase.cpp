@@ -48,8 +48,8 @@ void calculateCombatBase(const Entity & e, const size_t wep)
 	// No Weapon
 	else
 	{
-		constexpr double baseDmg = 0.8; // TODO: Make this Str or race dependant?
-		constexpr double baseSpeed = 0.9; // TODO: Race  or agility dependant?
+		constexpr double baseDmg = 4.5; // TODO: Make this Str or race dependant?
+		constexpr double baseSpeed = 0.85; // TODO: Race  or agility dependant?
 
 		base.baseDmg = baseDmg + baseDmg * (strLvl * 0.06);
 		base.attackSpeed = baseSpeed + baseSpeed * (agiLvl * 0.04);

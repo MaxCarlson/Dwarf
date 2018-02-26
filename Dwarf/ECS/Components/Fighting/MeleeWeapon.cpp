@@ -59,7 +59,7 @@ MeleeWeapon * getMeleeWeapon(const Entity & e)
 	return &wepEnt.getComponent<MeleeWeapon>();
 }
 
-int rollForMeleeDmg(const Entity & e, const CombatBase &base, const Entity &target, const MeleeWeapon & wep)
+int rollForMeleeDmg(const Entity & e, const CombatBase &base, const Entity &target)
 {
 
 	auto min = static_cast<int>(base.baseDmg / 2.0); // TODO: Better system.

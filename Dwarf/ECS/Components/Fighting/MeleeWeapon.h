@@ -30,7 +30,7 @@ void createMeleeWeapon(Entity &e, const std::string &itemTag, size_t material, i
 
 MeleeWeapon * getMeleeWeapon(const Entity &e);
 
-int rollForMeleeDmg(const Entity &e, const CombatBase &base, const Entity &target, const MeleeWeapon &wep);
+int rollForMeleeDmg(const Entity &e, const CombatBase &base, const Entity &target);
 
 CEREAL_REGISTER_TYPE(MeleeWeapon);
 CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, MeleeWeapon);

@@ -30,9 +30,11 @@ public:
 
 		const auto& fCo = fid.getComponent<PositionComponent>().co;
 
-		// If we're close enough to the entity we're following to do success
+		// If we're close enough to the entity we're following
+		// stop moving and do whatever is specified in SUCCESS
 		if (get_3D_distance(co, fCo) < distance)
 		{
+			mov.path.clear();
 			success();
 			return;
 		}
@@ -54,46 +56,49 @@ public:
 		}
 	}
 
-	bool isTargetCloseEnough(const int maxDistance, const Coordinates &co, const Coordinates &co2) // TODO: Add in max distance finding based on CombatBase - RangedWeapon vs. MeleeWeapon
+	bool isTargetCloseEnough(const double maxDistance, const Coordinates &co, const Coordinates &co2) // TODO: Add in max distance finding based on CombatBase - RangedWeapon vs. MeleeWeapon
 	{
 		return (get_3D_distance(co, co2) < maxDistance);
 	}
 
 	template<typename TOO_FAR>
-	void attackEntity(const double &duration, const Entity& e, CombatBase &base, const Entity &target, const TOO_FAR &tooFar)
+	void attackEntity(const double &duration, const Entity& e, CombatBase &base, const Entity &target, const TOO_FAR &tooFar) // TODO: Add in a BeingAttacked Component which will alert entities that they have to react. And have a reasponce system
 	{
 		// Add time in seconds to attack
 		base.timeIntoAttack += duration / 1000.0;
 
+		auto& co = e.getComponent<PositionComponent>().co;
+		auto& targetCo = target.getComponent<PositionComponent>().co;
+
+		if (!isTargetCloseEnough(base.maxDistance, co, targetCo))
+		{
+			tooFar();
+			return;
+		}
+
 		// Finally able to attack!
 		if (base.timeIntoAttack > base.attackSpeed)
 		{
-			auto& co = e.getComponent<PositionComponent>().co;
-			auto& targetCo = target.getComponent<PositionComponent>().co;
-
 			if (base.weaponType == CombatBase::MELEE)
 			{
 				auto* wep = getMeleeWeapon(e);
 
 				// Entity hasn't moved or it's still close enough
-				if (wep && isTargetCloseEnough(base.maxDistance, co, targetCo))
+				if (wep)
 				{
-					int dmg = rollForMeleeDmg(e, base, target, *wep);
+					int dmg = rollForMeleeDmg(e, base, target);
 
 					world.emit(damage_entity_message { dmg, e.getId().index, target.getId().index });
 				}
 				else if (wep == nullptr)
 					base.weaponType = CombatBase::NO_WEAPON;
-				else
-				{
-					tooFar();
-					return;
-				}
 			}
 
 			else if (base.weaponType == CombatBase::NO_WEAPON)
 			{
+				int dmg = rollForMeleeDmg(e, base, target);
 
+				world.emit(damage_entity_message { dmg, e.getId().index, target.getId().index });
 			}
 
 			else if (base.weaponType == CombatBase::RANGED)
