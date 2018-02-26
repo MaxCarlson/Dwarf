@@ -92,8 +92,8 @@ void updateView(const Entity &e, const Coordinates &co, View &v) // TODO: This s
 	v.visibleCache.clear();
 
 	for (int z = 0 - v.radius; z < v.radius; ++z)
-		for (int i = 0 - v.radius; i < v.radius; ++i)
-		{
+		for (int i = 0 - v.radius; i < v.radius; ++i) // TODO: Excessive by about 2x - 4x needed tile hits. 
+		{											  // Getting 6 - 10k tiles with 10 raidus on perfectly flat surface
 			calculateView(co, v, i, 0 - v.radius, z);
 			calculateView(co, v, i,     v.radius, z);
 			calculateView(co, v, 0 - v.radius, i, z);

@@ -1,5 +1,6 @@
 #pragma once
 #include "ECS\Component.h"
+#include <cereal\types\unordered_set.hpp>
 
 struct View : public Component
 {

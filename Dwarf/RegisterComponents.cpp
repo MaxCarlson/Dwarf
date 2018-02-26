@@ -17,6 +17,9 @@
 #include "ECS\Components\Seed.h"
 #include "ECS\Components\Quality.h"
 
+// Ai, some things need to be moved around folder wise
+#include "ECS\Components\ai\View.h"
+
 // Component Tags
 #include "ECS\Components\Tags\MiningTag.h"
 #include "ECS\Components\Tags\BuilderTag.h"
@@ -71,6 +74,9 @@ void ComponentsInit::init()
 	world.registerComponent<Stockpile>();
 	world.registerComponent<Seed>();
 	world.registerComponent<Quality>();
+
+	// Ai
+	world.registerComponent<View>();
 
 	// Tags
 	world.registerComponent<MiningTag>();
