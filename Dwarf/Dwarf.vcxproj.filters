@@ -384,6 +384,9 @@
     <ClCompile Include="ECS\Systems\ai\Combat\DeathSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ECS\Systems\Gui\ClickSystemGui.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ECS\EntityManager.h">
@@ -1191,6 +1194,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ECS\Systems\ai\Combat\DeathSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Systems\Gui\ClickSystemGui.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

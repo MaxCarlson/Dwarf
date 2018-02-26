@@ -5,6 +5,7 @@
 #include "ECS\Messages\entity_moved_message.h"
 #include "ECS\Systems\helpers\PathFinding.h"
 #include "ECS\Components\PositionComponent.h"
+#include "ECS\Components\Fighting\MeleeWeapon.h"
 #include "Globals\GlobalWorld.h"
 #include "ECS\Messages\damage_entity_message.h"
 
@@ -13,8 +14,8 @@ class CombatTemplate
 {
 public:
 
-	template<typename SUCCESS, typename CANCEL>
-	void getCloseToMovingThing(const Entity &e, MovementComponent &mov, const Coordinates &co, size_t followId, double distance, const SUCCESS &success, const CANCEL &cancel)
+	template<typename CANCEL, typename SUCCESS>
+	void getCloseToMovingThing(const Entity &e, MovementComponent &mov, const Coordinates &co, size_t followId, double distance, const CANCEL &cancel, const SUCCESS &success)
 	{
 		if (mov.progress)
 			return;
@@ -37,7 +38,7 @@ public:
 		}
 
 		// If the Entity we're trying to get close to is not at where out path ends
-		if (mov.path.begin() != fCo)
+		if (mov.path.empty() || mov.path.front() != fCo)
 		{
 			auto path = findPath(co, fCo);
 
@@ -67,6 +68,7 @@ public:
 		// Finally able to attack!
 		if (base.timeIntoAttack > base.attackSpeed)
 		{
+			auto& co = e.getComponent<PositionComponent>().co;
 			auto& targetCo = target.getComponent<PositionComponent>().co;
 
 			if (base.weaponType == CombatBase::MELEE)
@@ -74,9 +76,9 @@ public:
 				auto* wep = getMeleeWeapon(e);
 
 				// Entity hasn't moved or it's still close enough
-				if (wep && combat.isTargetCloseEnough(base.maxDistance, co, targetCo)))
+				if (wep && isTargetCloseEnough(base.maxDistance, co, targetCo))
 				{
-					int dmg = rollForMeleeDmg(e, target, *wep);
+					int dmg = rollForMeleeDmg(e, base, target, *wep);
 
 					world.emit(damage_entity_message { dmg, e.getId().index, target.getId().index });
 				}
@@ -103,7 +105,7 @@ public:
 		}
 	}
 
-	void cancelCombat(const Entity &e)
+	void cancelCombat(Entity e)
 	{
 		e.removeComponent<Tag>();
 		e.activate();

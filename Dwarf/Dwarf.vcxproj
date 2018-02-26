@@ -214,6 +214,7 @@
     <ClCompile Include="ECS\Systems\ai\Combat\DraftedSystem.cpp" />
     <ClCompile Include="ECS\Systems\ai\Combat\ProcessAttacks.cpp" />
     <ClCompile Include="ECS\Systems\ai\Needs\EatFoodSystem.cpp" />
+    <ClCompile Include="ECS\Systems\Gui\ClickSystemGui.cpp" />
     <ClCompile Include="ECS\Systems\Gui\DwarfInfoGui.cpp" />
     <ClCompile Include="ECS\Systems\helpers\BuildingHelper.cpp" />
     <ClCompile Include="ECS\Components\Seed.cpp" />
@@ -360,6 +361,7 @@
     <ClInclude Include="ECS\Systems\ai\Combat\DraftedSystem.h" />
     <ClInclude Include="ECS\Systems\ai\Combat\ProcessAttacks.h" />
     <ClInclude Include="ECS\Systems\ai\Needs\EatFoodSystem.h" />
+    <ClInclude Include="ECS\Systems\Gui\ClickSystemGui.h" />
     <ClInclude Include="ECS\Systems\Gui\DwarfInfoGui.h" />
     <ClInclude Include="ECS\Systems\helpers\BuildingHelper.h" />
     <ClInclude Include="ECS\Components\Seed.h" />

@@ -19,8 +19,8 @@
 #include "ECS\Components\Fighting\MeleeWeapon.h"
 #include "ECS\Components\Fighting\CombatBase.h"
 
-MessageQueue<pickup_item_message> pickups;
-MessageQueue<drop_item_message> dropOffs;
+//MessageQueue<pickup_item_message> pickups;
+//MessageQueue<drop_item_message> dropOffs;
 
 void EquipHandler::init()
 {

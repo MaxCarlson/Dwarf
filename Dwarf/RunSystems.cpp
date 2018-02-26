@@ -18,11 +18,12 @@
 #include "ECS\Systems\Gui\DesignDevMode.h"
 #include "ECS\Systems\Gui\DesignHarvest.h"
 #include "ECS\Systems\Gui\DesignMining.h"
-#include "ECS\Systems\Gui\DesignWoodcutting.h"
+#include "ECS\Systems\Gui\DesignWoodcutting.h" // TODO: Convert all these gui "Systems" To non classes that are not systems if they do not filter entities
 #include "ECS\Systems\Gui\DesignWorkOrders.h"
 #include "ECS\Systems\Gui\JobPreferencesUi.h"
 #include "ECS\Systems\Gui\DesignStockpiles.h"
 #include "ECS\Systems\Gui\DwarfInfoGui.h"
+#include "ECS\Systems\Gui\ClickSystemGui.h"
 
 // Ai systems
 #include "ECS\Systems\ai\EquipHandler.h"
@@ -108,7 +109,7 @@ const std::string JOY_SYSTEM = "Joy System";
 
 // Gui Systems
 const std::string MENU_BAR = "Menu Bar";
-const std::string DESIGN_ARCHITECTURE = "Design Architecture";
+const std::string DESIGN_ARCHITECTURE = "Design Architecture"; // TODO: Convert all these gui "Systems" To non classes that are not systems if they do not filter entities
 const std::string DESIGN_BUILDING = "Design Building";
 const std::string DESIGN_DEV_MODE = "Design Dev Mode";
 const std::string DESIGN_HARVEST = "Design Harvest";
@@ -119,6 +120,7 @@ const std::string DESIGN_STOCKPILES = "Design Stockpiles";
 const std::string CAMERA_SYSTEM = "Camera System";
 const std::string JOB_PREFERENCES_UI = "Job Preferences UI";
 const std::string DWARF_INFO_GUI = "Dwarf Info Gui";
+
 
 // Combat
 const std::string DEATH_SYSTEM = "Death System";
@@ -346,6 +348,8 @@ void updateSystems(const double duration)
 		runSystem(NEEDS_SYSTEM, updateTime); // These two systems should probably be set to run in major ticks
 		runSystem(CALENDER_SYSTEM, updateTime);
 
+		// Systems of higher priority than work
+		runSystem(DRAFTED_SYSTEM, updateTime);
 
 		// Assign jobs to entities
 		runSystem(AI_WORK_SYSTEM, updateTime);
@@ -381,16 +385,21 @@ void updateSystems(const double duration)
 		// Pickup and drop all items requested
 		runSystem(EQUIP_HANDLER, updateTime);
 
+		// Belated combat systems
+		runSystem(PROCESS_ATTACKS, updateTime);
+		runSystem(DEATH_SYSTEM, updateTime);
+
 		// Main Rendering 
 		runSystem(RENDER_SYSTEM, MS_PER_UPDATE);
 	}
 
 	// Menu and gui rendering
 	runSystem(MENU_BAR, duration); 
+	ClickSystem::update(duration);
 
 	if (gameState == GameState::DESIGN)
 	{
-		if (designState == DesignStates::ARCHITECURE) 
+		if (designState == DesignStates::ARCHITECURE) // TODO: Convert all these gui "Systems" To non classes that are not systems if they do not filter entities
 			runSystem(DESIGN_ARCHITECTURE, duration);
 
 		if (designState == DesignStates::BUILD)

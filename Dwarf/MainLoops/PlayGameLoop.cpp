@@ -209,7 +209,7 @@ void PlayGameLoop::run(const double duration)
 		}
 	}
 
-	if (keys::isKeyDown(sf::Keyboard::Space, true))
+	if (keys::isKeyDown(sf::Keyboard::Space, true)) // TODO: Need to redo pausing as currently any design un-pauses game. TODO: Make pause state into sepperate obj
 	{
 		gameState = (gameState == GameState::PAUSED) ? GameState::PLAYING : GameState::PAUSED;
 	}
