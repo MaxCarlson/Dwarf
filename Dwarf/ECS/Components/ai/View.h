@@ -3,6 +3,9 @@
 
 struct View : public Component
 {
+	View() = default;
+	View(int radius) : radius(radius) {}
+
 	// How large is this entities sight radius
 	int radius = 1;
 

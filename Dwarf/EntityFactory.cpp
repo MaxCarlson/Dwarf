@@ -18,6 +18,7 @@
 #include "ECS\Components\Sentients\Needs.h"
 
 #include "ECS\Components\Fighting\CombatBase.h"
+#include "ECS\Components\ai\View.h"
 
 #include "Raws\SkillReader.h"
 #include <SFML\Graphics\Color.hpp>
@@ -60,6 +61,7 @@ Entity createDwarf(DwarfCreationObj dwarfConstruct)
 	dwarf.addComponent<Inventory>();
 	dwarf.addComponent<Needs>();
 	dwarf.addComponent<CombatBase>();
+	dwarf.addComponent<View>(10);
 
 	calculateCombatBase(dwarf, 0);
 

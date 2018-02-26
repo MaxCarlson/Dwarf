@@ -39,6 +39,7 @@
 #include "ECS\Systems\ai\FarmingAi.h"
 #include "ECS\Systems\ai\FarmingClearAi.h"
 #include "ECS\Systems\ai\FarmingSoilAi.h"
+#include "ECS\Systems\ai\ViewSystem.h"
 
 // Needs systems
 #include "ECS\Systems\ai\Needs\NeedsSystem.h"
@@ -100,6 +101,7 @@ const std::string REGION_HELPER = "Region Helper";
 const std::string FARM_CLEAR_AI = "Farm Clear Ai";
 const std::string FARM_SOIL_AI = "Farm Soil Ai";
 const std::string SEED_HELPER = "Seed Helper";
+const std::string VIEW_SYSTEM = "View System";
 
 // Needs and passive
 const std::string NEEDS_SYSTEM = "Needs System";
@@ -186,6 +188,7 @@ void initSystems(bool fromLoad)
 	systems[PLANT_SYSTEM] = new PlantSystem;
 	systems[FARM_CLEAR_AI] = new FarmingClearAi;
 	systems[FARM_SOIL_AI] = new FarmingSoilAi;
+	systems[VIEW_SYSTEM] = new ViewSystem;
 
 	// Needs 
 	systems[NEEDS_SYSTEM] = new NeedsSystem;
@@ -242,6 +245,8 @@ void initSystems(bool fromLoad)
 	world.addSystem(* static_cast<PlantSystem *>(systems[PLANT_SYSTEM]));
 	world.addSystem(* static_cast<FarmingClearAi *>(systems[FARM_CLEAR_AI]));
 	world.addSystem(* static_cast<FarmingSoilAi *>(systems[FARM_SOIL_AI]));
+	world.addSystem(* static_cast<ViewSystem *>(systems[VIEW_SYSTEM]));
+
 
 	// Needs 
 	world.addSystem(* static_cast<NeedsSystem *>(systems[NEEDS_SYSTEM]));
@@ -344,6 +349,7 @@ void updateSystems(const double duration)
 			majorTick = 0.0;
 			runSystem(WORK_ORDER_HELPER, MS_PER_MAJOR_TICK);
 		}
+		runSystem(VIEW_SYSTEM, updateTime); // TODO: Where shouuld this be placed? Leaning toward near end so comp changes are in effect asap?
 
 		runSystem(NEEDS_SYSTEM, updateTime); // These two systems should probably be set to run in major ticks
 		runSystem(CALENDER_SYSTEM, updateTime);
