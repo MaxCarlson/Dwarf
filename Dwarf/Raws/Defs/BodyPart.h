@@ -35,6 +35,8 @@ struct BodyPartGroup
 
 struct BodyDef
 {
+	std::string tag = "";
+
 	// TODO: Figure out a way to assign a % hit chance to each part!
 	double maxChance = 0.0;
 

@@ -562,6 +562,7 @@
     <ClInclude Include="Map\building\region\place_creatures.h" />
     <ClInclude Include="Raws\Defs\NeedDef.h" />
     <ClInclude Include="Raws\Defs\PlantDef.h" />
+    <ClInclude Include="Raws\Defs\SpeciesDef.h" />
     <ClInclude Include="Raws\ReadBodyParts.h" />
     <ClInclude Include="Raws\Materials.h" />
     <ClInclude Include="Raws\Defs\MaterialDef.h" />
@@ -627,6 +628,7 @@
     <None Include="cereal\external\rapidxml\manual.html" />
     <None Include="Raws\LuaDefs\attributes_skills.lua" />
     <None Include="Raws\LuaDefs\biomes.lua" />
+    <None Include="Raws\LuaDefs\body_defs.lua" />
     <None Include="Raws\LuaDefs\body_parts.lua" />
     <None Include="Raws\LuaDefs\buildings_forge.lua" />
     <None Include="Raws\LuaDefs\buildings_mason.lua" />
