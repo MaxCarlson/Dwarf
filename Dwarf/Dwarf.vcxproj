@@ -297,6 +297,7 @@
     <ClCompile Include="ECS\Systems\ai\EquipHandler.cpp" />
     <ClCompile Include="Helpers\FastNoise.cpp" />
     <ClCompile Include="Map\building\region\place_creatures.cpp" />
+    <ClCompile Include="Raws\ReadBodyParts.cpp" />
     <ClCompile Include="Raws\Materials.cpp" />
     <ClCompile Include="Raws\FileReader.cpp" />
     <ClCompile Include="Raws\raws.cpp" />
@@ -464,6 +465,7 @@
     <ClInclude Include="Helpers\PositionCache.h" />
     <ClInclude Include="Raws\Buildings.h" />
     <ClInclude Include="Raws\Defs\BiomeDef.h" />
+    <ClInclude Include="Raws\Defs\BodyPart.h" />
     <ClInclude Include="Raws\Defs\BuildingDef.h" />
     <ClInclude Include="Map\building\region\place_buildings.h" />
     <ClInclude Include="cereal\access.hpp" />
@@ -560,6 +562,7 @@
     <ClInclude Include="Map\building\region\place_creatures.h" />
     <ClInclude Include="Raws\Defs\NeedDef.h" />
     <ClInclude Include="Raws\Defs\PlantDef.h" />
+    <ClInclude Include="Raws\ReadBodyParts.h" />
     <ClInclude Include="Raws\Materials.h" />
     <ClInclude Include="Raws\Defs\MaterialDef.h" />
     <ClInclude Include="Raws\FileReader.h" />
