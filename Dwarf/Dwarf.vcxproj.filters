@@ -1227,6 +1227,8 @@
     <None Include="Raws\LuaDefs\plants.lua" />
     <None Include="Raws\LuaDefs\items_food.lua" />
     <None Include="Raws\LuaDefs\items_weapons.lua" />
+    <None Include="Raws\LuaDefs\species.lua" />
+    <None Include="Raws\LuaDefs\body_parts.lua" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Raws\LuaDefs\index.txt" />

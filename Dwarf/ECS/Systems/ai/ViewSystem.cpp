@@ -103,7 +103,7 @@ void updateView(const Entity &e, const Coordinates &co, View &v) // TODO: This s
 
 void ViewSystem::update(const double duration) 
 {
-	if (dirtyEnts.empty())
+	if (dirtyEnts.empty() && !first)
 		return;
 
 	for (const auto& e : getEntities()) 
@@ -121,6 +121,9 @@ void ViewSystem::update(const double duration)
 
 		// TODO: Reveal map that hasn't been revealed yet!
 
+		// TODO: For enemy visibility if this becomes cumbersome perhaps it would do to 
+		// brehsein line between all entities (Pawns / Enemies) close enough together iinstead of this 8K vector stuff done here
+
 		// Loop through all visible tiles
 		for (const auto& idx : view.visibleCache)
 		{
@@ -134,5 +137,6 @@ void ViewSystem::update(const double duration)
 		}
 	}
 
+	first = false;
 	dirtyEnts.clear();
 }
