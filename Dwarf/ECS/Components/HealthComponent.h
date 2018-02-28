@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Component.h"
+#include "Raws\Defs\BodyPart.h"
 
 // Main health component, probably going 
 // to be used for filtering in systems
@@ -10,17 +11,19 @@ class HealthComponent : public Component
 {
 public:
 	HealthComponent() = default;
-	HealthComponent(int health, int maxHealth, int recoverRate) 
-		: health(health), maxHealth(maxHealth), recoverRate(recoverRate) {};
+	HealthComponent(int health, int maxHealth, int recoverRate, const std::vector<BodyPart>& bodyParts)
+		: health(health), maxHealth(maxHealth), recoverRate(recoverRate), bodyParts(bodyParts) {};
 
 	int health;
 	int maxHealth;
 	int recoverRate;
 
+	std::vector<BodyPart> bodyParts;
+
 	template<class Archive>
 	void serialize(Archive& archive)
 	{
-		archive(health, maxHealth, recoverRate);
+		archive(health, maxHealth, recoverRate, bodyParts);
 	}
 };
 

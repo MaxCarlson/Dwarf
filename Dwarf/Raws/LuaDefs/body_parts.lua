@@ -6,24 +6,36 @@
 -- TODO: Add in sizes e.g. if head is hit skull should have greater chance to be hit than eye, and also greater than brain!
 	-- Should they be dynamic? That will make definining species a bit of a pain
 
+pEffects = {
+	kill = "kill", -- Kill entity if all parts of this type are gone
+	damage_mobility = "damage_mobility",				
+}				   
+
+-- TODO: Add in criple mobility
+-- TODO: Add in criple workspeed
+-- TODO: Add in criple sight
+
 body_parts = {
 
 	head = {
 		name = "Head",
 		description = "",
-		health = 35
+		health = 35,
+		effects = { pEffects["kill"], },
 	},
 
 		skull = {
 			name = "Skull",
 			description = "",
 			health = 35,
+			effects = { pEffects["kill"], },
 		},
 
 		brain = {
 			name = "Brain",
 			description = "",
 			health = 15,
+			effects = { pEffects["kill"], },
 		},
 
 		eye = {
@@ -54,6 +66,7 @@ body_parts = {
 		name = "Torso",
 		description = "",
 		health = 55,
+		effects = { pEffects["kill"], },
 	},
 		arm = {
 			name = "Arm",
@@ -77,30 +90,35 @@ body_parts = {
 			name = "Heart",
 			description = "",
 			health = 8,
+			effects = { pEffects["kill"], },
 		},
 
 		lung = {
 			name = "Lung",
 			description = "",
 			health = 15,
+			effects = { pEffects["kill"], },
 		},
 
 		stomach = {
 			name = "Stomach",
 			description = "",
 			health = 15,
+			effects = { pEffects["kill"], },
 		},
 
 		liver = {
 			name = "Liver",
 			description = "",
 			health = 15,
+			effects = { pEffects["kill"], },
 		},
 
 		kidney = {
 			name = "Kidney",
 			description = "",
 			health = 15,
+			effects = { pEffects["kill"], },
 		},
 
 	waist = {

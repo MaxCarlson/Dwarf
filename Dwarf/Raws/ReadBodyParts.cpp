@@ -5,6 +5,7 @@
 
 std::unordered_map<std::string, BodyPartDef> bodyParts;
 std::unordered_map<std::string, BodyDef> bodyDefs;
+std::unordered_map<std::string, std::vector<BodyPart>> bodies;
 
 BodyPartDef * getBodyPart(const std::string & tag) noexcept
 {
@@ -26,6 +27,17 @@ BodyDef * getBodyDef(const std::string & tag) noexcept
 	return nullptr;
 }
 
+std::vector<BodyPart> getCreatureBody(const std::string & tag)
+{
+	auto find = bodies.find(tag);
+	if (find != bodies.end())
+		return find->second;
+
+	throw std::runtime_error("Invalid body tag used");
+	return std::vector<BodyPart>{};
+}
+
+
 void readInBodyParts() noexcept
 {
 	BodyPartDef b;
@@ -36,7 +48,14 @@ void readInBodyParts() noexcept
 		luaParser {
 			{ "name", [&]() { b.name = lua_str(); } },
 			{ "description", [&]() { b.description = lua_str(); } },
-			{ "health", [&]() { b.health = lua_int(); } },
+			{ "health", [&]() { b.health = lua_double(); } },
+			{ "effects", [&]() {
+				readLuaInnerT("effects", [&](std::string s)
+				{
+					if (s == "kill")		    b.effects.set(BodyPartEffects::ON_ALL_GONE_KILL);
+					if (s == "damage_mobility") b.effects.set(BodyPartEffects::DAMAGE_MOBILITY);
+				});
+			}},
 		}		
 	);
 }
@@ -49,7 +68,7 @@ inline void attachPartsToBases(BodyDef &b, const std::string &base, const std::s
 	int i = 0;
 	int baseCount = 0;
 	int partCount = 0;
-	for (const auto& p : b.partGroups)
+	for (const auto& p : b.parts)
 	{
 		if (p.tag == base)
 		{
@@ -72,7 +91,7 @@ inline void attachPartsToBases(BodyDef &b, const std::string &base, const std::s
 		// body parts
 		for (int i = 0; i < partsPerBase; ++i) // TODO: Make sure to fill non-even number parts bases as well
 		{
-			SpeciesBodyPart& sp = b.partGroups[partLocations.back()]; 
+			SpeciesBodyPart& sp = b.parts[partLocations.back()]; 
 			partLocations.pop_back();
 			sp.idAttachedTo = bl;
 		}
@@ -83,16 +102,19 @@ void buildBody(BodyDef &b) // TODO: Add in naming for left and right if there ar
 {
 	// Sort body parts into some order,
 	// doesn't really matter what it is so long as it stays the same
-	std::sort(b.partGroups.begin(), b.partGroups.end(), [](SpeciesBodyPart &p, SpeciesBodyPart &p1)
+	std::sort(b.parts.begin(), b.parts.end(), [](SpeciesBodyPart &p, SpeciesBodyPart &p1)
 	{
 		return p.tag < p1.tag;
 	});
 
-	std::set<std::string> partDone;
 	int i = 0;
-	for (auto& p : b.partGroups)
+	double hitIdx = 0.0;
+	std::set<std::string> partDone;
+	for (auto& p : b.parts)
 	{
 		p.id = i;
+		hitIdx += p.size;
+		b.hitChances.emplace_back(hitIdx);
 
 		// If the part attaches to another part, and we haven't handled
 		// it yet then attach all the parts of p.tag to all the bases close to equally
@@ -104,6 +126,21 @@ void buildBody(BodyDef &b) // TODO: Add in naming for left and right if there ar
 		++i;
 	}
 
+	// Build the vector of body parts that will become
+	// the template entities of this body type have
+	auto find = bodies.find(b.tag);
+	if (find == bodies.end())
+	{
+		bodies[b.tag] = {};
+		for (const auto& p : b.parts)
+		{
+			bodies[b.tag].emplace_back(BodyPart{ p.id, p.tag, getBodyPart(p.tag)->health }); // TODO:  Define health not in BodyPartDef but in SpeciesBodyPart
+		}
+	}
+	else
+		throw std::runtime_error("Multiple body types with same tag!");
+
+	b.maxChance = hitIdx;
 	bodyDefs[b.tag] = b;
 }
 
@@ -145,7 +182,7 @@ void readyInBodyDefs() noexcept
 				else if (nf == "att")
 					newPart.attachedTo = lua_str();
 
-				else if (nf == "size")
+				else if (nf == "hit")
 					newPart.size = lua_double(); // TODO:
 
 				lua_pop(luaState, 1);
@@ -153,7 +190,7 @@ void readyInBodyDefs() noexcept
 
 			// Push back Qty # of parts of this type into the new body
 			for (int i = 0; i < qty; ++i)
-				body.partGroups.emplace_back(newPart);
+				body.parts.emplace_back(newPart);
 
 			lua_pop(luaState, 1);
 		}
@@ -176,34 +213,3 @@ void sanityCheckBodyParts() noexcept
 void sanityCheckBodyDefs() noexcept
 {
 }
-/*
-
-human_body = { -- TODO: Possibly make this a func accepting a multiplier for health?
-head = {
-{skull = 1},
-{brain = 1},
-{eye = 2},
-{ear = 2},
-{nose = 1},
-{neck = 1}
-},
-toroso = {
-{arm = 2, parts = {
-{hand = 1, parts = {
-{ finger = 5 },
-}},
-}},
-{heart = 1},
-{lung = 2},
-{stomach = 1},
-{liver = 1},
-{kidney = 2}
-},
-waist = {
-{leg = 2},
-{foot = 2},
-{toe = 10}
-}
-},
-
-*/

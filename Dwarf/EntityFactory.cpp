@@ -19,7 +19,7 @@
 
 #include "ECS\Components\Fighting\CombatBase.h"
 #include "ECS\Components\ai\View.h"
-
+#include "Raws\ReadBodyParts.h"
 #include "Raws\SkillReader.h"
 #include <SFML\Graphics\Color.hpp>
 EntityFactory::EntityFactory()
@@ -56,7 +56,7 @@ Entity createDwarf(DwarfCreationObj dwarfConstruct)
 	// Movement speed in constructor in tiles per second
 	dwarf.addComponent<MovementComponent>(3.5);
 
-	dwarf.addComponent<HealthComponent>(100, 100, 1);
+	dwarf.addComponent<HealthComponent>(100, 100, 1, getCreatureBody("human_body")); // TODO: Grab this from species
 
 	dwarf.addComponent<Inventory>();
 	dwarf.addComponent<Needs>();

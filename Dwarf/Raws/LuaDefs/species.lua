@@ -4,10 +4,7 @@ species = {
 
 	dwarf = {
 		name = "Dwarves",
-		description = "",
-		bodyParts = "human_body", -- TODO: Base health multiplier per body part ?
+		description = "Likes living deep below the earth.",
+		body = "human_body", 
 	},
-
-
-
 };
