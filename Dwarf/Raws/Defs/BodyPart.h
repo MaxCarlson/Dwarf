@@ -3,6 +3,7 @@
 
 struct BodyPart // Move this, this will be inside entity
 {
+	int idx = 0; // Where in this species body def vector is this parts def located?
 	std::string tag; 
 
 	double health = 1.0;
@@ -33,6 +34,14 @@ struct BodyPartGroup
 	std::vector<BodyPartDef> parts; // Sort body parts from least likely to most
 };
 
+struct SpeciesBodyPart
+{
+	std::string tag = "";
+	std::string attachedTo = "";
+	double size = 0.0;
+
+};
+
 struct BodyDef
 {
 	std::string tag = "";
@@ -41,5 +50,5 @@ struct BodyDef
 	double maxChance = 0.0;
 
 	std::vector<double> hitChances;
-	std::vector<BodyPartGroup> partGroups;
+	std::vector<SpeciesBodyPart> partGroups;
 };

@@ -48,7 +48,7 @@ body_parts = {
 			name = "Neck",
 			description = "",
 			health = 20,
-		}
+		},
 
 	toroso = {
 		name = "Torso",

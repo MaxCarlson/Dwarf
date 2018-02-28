@@ -1,5 +1,8 @@
 render.lua
 attributes_skills.lua
+body_parts.lua
+body_defs.lua
+species.lua
 stockpiles.lua
 items.lua
 items_tools.lua

@@ -1,6 +1,6 @@
 #pragma once
+#include <string>
 
-namespace std { class string; }
 struct BodyPartDef;
 struct BodyDef;
 
