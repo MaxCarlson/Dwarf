@@ -56,7 +56,8 @@ Entity createDwarf(DwarfCreationObj dwarfConstruct)
 	// Movement speed in constructor in tiles per second
 	dwarf.addComponent<MovementComponent>(3.5);
 
-	dwarf.addComponent<HealthComponent>(100, 100, 1, getCreatureBody("human_body")); // TODO: Grab this from species
+	static const std::string bodyDefTag = "human_body"; // TODO: Grab this from species
+	dwarf.addComponent<HealthComponent>(100, 100, 1, bodyDefTag, getCreatureBody(bodyDefTag)); 
 
 	dwarf.addComponent<Inventory>();
 	dwarf.addComponent<Needs>();
@@ -75,4 +76,4 @@ Entity createDwarf(DwarfCreationObj dwarfConstruct)
 	return dwarf;
 }
 
-
+// TODO: Make a generic species constructor that takes a species and creates one of that species

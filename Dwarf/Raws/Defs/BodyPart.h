@@ -17,8 +17,10 @@ struct BodyPart // Move this, this will be inside entity
 
 namespace BodyPartEffects
 {
-	constexpr int ON_ALL_GONE_KILL = 0;
-	constexpr int DAMAGE_MOBILITY  = 1;
+	constexpr int ON_ALL_GONE_KILL  = 0;
+	constexpr int DAMAGE_MOBILITY   = 1;
+	constexpr int DAMAMGE_DEXTARITY = 2; // TODO:
+	constexpr int DAMAGE_SIGHT      = 3; // TODO:
 }
 constexpr int MAX_BODY_EFFECTS = 2;
 

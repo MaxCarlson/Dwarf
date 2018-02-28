@@ -11,19 +11,20 @@ class HealthComponent : public Component
 {
 public:
 	HealthComponent() = default;
-	HealthComponent(int health, int maxHealth, int recoverRate, const std::vector<BodyPart>& bodyParts)
-		: health(health), maxHealth(maxHealth), recoverRate(recoverRate), bodyParts(bodyParts) {};
+	HealthComponent(int health, int maxHealth, int recoverRate, const std::string& bodyDefTag, const std::vector<BodyPart>& bodyParts)
+		: health(health), maxHealth(maxHealth), recoverRate(recoverRate), bodyDefTag(bodyDefTag), bodyParts(bodyParts) {};
 
 	int health;
 	int maxHealth;
 	int recoverRate;
 
+	std::string bodyDefTag;
 	std::vector<BodyPart> bodyParts;
 
 	template<class Archive>
 	void serialize(Archive& archive)
 	{
-		archive(health, maxHealth, recoverRate, bodyParts);
+		archive(health, maxHealth, recoverRate, bodyDefTag, bodyParts);
 	}
 };
 
