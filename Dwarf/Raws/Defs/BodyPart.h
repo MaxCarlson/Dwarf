@@ -21,25 +21,16 @@ struct BodyPartDef
 	// TODO: const std::function<void(Entity)>& onDamage; 
 };
 
-struct BodyPartGroup
-{
-
-	double maxChance = 0.0;
-	std::vector<double> hitChances; // Add % hit chances together to get # in this vector ~~ 
-									// Roll between 0 and max ~~ Search through this vector for index > than roll. Use that index as index into parts
-									// e.g. hit chances 4.0, 5.0, 6.0 make vector { 4.0, 9.0, 15.0 }
-									// and roll between 0 and 4.0 is first part, etc. 
-									// How to handle missing body parts? Should attack just miss if missing idx is hit? Yes.
-
-	std::vector<BodyPartDef> parts; // Sort body parts from least likely to most
-};
-
+// These are used to define the layout of body parts
+// that make up a species body
 struct SpeciesBodyPart
 {
+	int id = 0;
 	std::string tag = "";
 	std::string attachedTo = "";
-	double size = 0.0;
+	int idAttachedTo = 0;
 
+	double size = 0.0;
 };
 
 struct BodyDef

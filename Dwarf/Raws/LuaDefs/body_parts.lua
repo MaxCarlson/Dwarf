@@ -50,7 +50,7 @@ body_parts = {
 			health = 20,
 		},
 
-	toroso = {
+	torso = {
 		name = "Torso",
 		description = "",
 		health = 55,

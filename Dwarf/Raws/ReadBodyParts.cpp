@@ -41,26 +41,76 @@ void readInBodyParts() noexcept
 	);
 }
 
-inline void recurse(const std::string field)
+inline void attachPartsToBases(BodyDef &b, const std::string &base, const std::string &part) 
 {
-	lua_pushstring(luaState, field.c_str());
-	lua_gettable(luaState, -2);
+	std::vector<int> baseLocations;
+	std::vector<int> partLocations;
+
+	int i = 0;
+	int baseCount = 0;
+	int partCount = 0;
+	for (const auto& p : b.partGroups)
+	{
+		if (p.tag == base)
+		{
+			baseLocations.emplace_back(i);
+			++baseCount;
+		}
+		else if (p.tag == part)
+		{
+			partLocations.emplace_back(i);
+			++partCount;
+		}
+		++i;
+	}
+
+	int partsPerBase = partCount / baseCount;
+
+	for (auto bl : baseLocations)
+	{
+		// Set base part id's for partsPerBase # of 
+		// body parts
+		for (int i = 0; i < partsPerBase; ++i) // TODO: Make sure to fill non-even number parts bases as well
+		{
+			SpeciesBodyPart& sp = b.partGroups[partLocations.back()]; 
+			partLocations.pop_back();
+			sp.idAttachedTo = bl;
+		}
+	}
 }
 
-void test(const std::string table)
+void buildBody(BodyDef &b) // TODO: Add in naming for left and right if there are two of each part
 {
+	// Sort body parts into some order,
+	// doesn't really matter what it is so long as it stays the same
+	std::sort(b.partGroups.begin(), b.partGroups.end(), [](SpeciesBodyPart &p, SpeciesBodyPart &p1)
+	{
+		return p.tag < p1.tag;
+	});
 
+	std::set<std::string> partDone;
+	int i = 0;
+	for (auto& p : b.partGroups)
+	{
+		p.id = i;
+
+		// If the part attaches to another part, and we haven't handled
+		// it yet then attach all the parts of p.tag to all the bases close to equally
+		if (p.attachedTo != "" && partDone.find(p.tag) == partDone.end())
+		{
+			attachPartsToBases(b, p.attachedTo, p.tag);
+			partDone.insert(p.tag);
+		}
+		++i;
+	}
+
+	bodyDefs[b.tag] = b;
 }
-
 
 void readyInBodyDefs() noexcept
 {
-	BodyDef b;
-
 	lua_getglobal(luaState, "body_defs");
 	lua_pushnil(luaState);
-
-	std::vector<SpeciesBodyPart> spParts;
 
 	while (lua_next(luaState, -2) != 0)
 	{
@@ -68,6 +118,9 @@ void readyInBodyDefs() noexcept
 
 		lua_pushstring(luaState, key.c_str());
 		lua_gettable(luaState, -2);
+
+		BodyDef body;
+		body.tag = key;
 
 		while (lua_next(luaState, -2) != 0)
 		{
@@ -81,24 +134,33 @@ void readyInBodyDefs() noexcept
 
 			newPart.tag = part->tag;
 
+			int qty = 0;
 			while (lua_next(luaState, -2) != 0)
 			{
 				const std::string nf = lua_tostring(luaState, -2);
 
 				if (nf == "qty")
-				{
+					qty = lua_int();
 
-				}
-				if (nf == "att")
-				{
+				else if (nf == "att")
 					newPart.attachedTo = lua_str();
-				}
+
+				else if (nf == "size")
+					newPart.size = lua_double(); // TODO:
 
 				lua_pop(luaState, 1);
 			}
 
+			// Push back Qty # of parts of this type into the new body
+			for (int i = 0; i < qty; ++i)
+				body.partGroups.emplace_back(newPart);
+
 			lua_pop(luaState, 1);
 		}
+
+		// Attach all parts to the correct places and 
+		// make sure order stays identical through sorting vector of parts
+		buildBody(body);
 
 		lua_pop(luaState, 1);
 	}
