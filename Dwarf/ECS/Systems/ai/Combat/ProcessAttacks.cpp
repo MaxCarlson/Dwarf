@@ -147,7 +147,7 @@ enum class AttackOutcomes
 
 // Look at differences between entity armour, attack, dodge, etc skills
 // and determine the extent of the damage done
-AttackOutcomes decideDamageExtent(const Entity &attacker, const Entity &defender, const DamageTypes type, int &dmg)
+void decideDamageExtent(const Entity &attacker, const Entity &defender, const DamageTypes type, int &dmg)
 {
 	auto& attStats = attacker.getComponent<Stats>();
 	auto& defStats = defender.getComponent<Stats>();
@@ -159,8 +159,13 @@ AttackOutcomes decideDamageExtent(const Entity &attacker, const Entity &defender
 	if (afind == attStats.skills.end())
 		return; 
 
-	auto dodgeFind = defStats.skills.find("dodge");
-	auto armourFind = defStats.skills.find("armour"); // TODO: Add in shield stuff!
+	static const std::string dodgeStr = "dodging";
+	static const std::string armourStr = "armour";
+	auto dodgeFind = defStats.skills.find(dodgeStr);
+	auto armourFind = defStats.skills.find(armourStr); // TODO: Add in shield stuff!
+
+	auto dodge = dodgeFind != defStats.skills.end() ? dodgeFind->second.skillLvl : 0;
+	auto armour = armourFind != defStats.skills.end() ? armourFind->second.skillLvl : 0;
 
 	// For entities of identical defensive skill type and attack skill levels
 	// 15% miss
@@ -174,8 +179,8 @@ AttackOutcomes decideDamageExtent(const Entity &attacker, const Entity &defender
 
 	// Give moderate bonuses or penalities to dodging / blocking / glancing 
 	// based on stat differences between parties
-	int dodgeDiff  = ( afind->second.skillLvl - dodgeFind->second.skillLvl ) / 2; // TODO: Make accuracy based on sight and attacker skill
-	int armourDiff = ( afind->second.skillLvl - armourFind->second.skillLvl) / 2;
+	int dodgeDiff  = ( afind->second.skillLvl - dodge  ) / 2; // TODO: Make accuracy based on sight and attacker skill
+	int armourDiff = ( afind->second.skillLvl - armour ) / 2;
 
 	chances[int(AttackOutcomes::DODGED)]   -=  dodgeDiff;
 	chances[int(AttackOutcomes::GLANCING)] -= armourDiff;
@@ -185,49 +190,59 @@ AttackOutcomes decideDamageExtent(const Entity &attacker, const Entity &defender
 	double result = unif(randomEngine);
 
 	int i = 0;
-	for (const auto& c : chances)
+	double num = 0.0;
+	for (i; i < chances.size(); ++i)
 	{
-		if (c > result)
+		num += chances[i];
+
+		if (num > result)
 			break;
-		++i;
 	}
 
-	AttackOutcomes outcome = static_cast<AttackOutcomes>(i);
+	constexpr int baseXp = 2;
 
-	switch (outcome)
+	// Reward xp and change damage based on
+	// what type of hit this turned out to be
+	int xp = baseXp;
+	AttackOutcomes outcome = static_cast<AttackOutcomes>(i);
+	switch (outcome) // TODO: Log Messages for these
 	{
 	case AttackOutcomes::MISSED:
-
+		std::cout << "Entity totally missed attacking (other)! \n"; // TODO: Log with names
+		xp -= 1;
+		dmg = 0;
 		break;
-
 	case AttackOutcomes::DODGED:
-
+		std::cout << "Entity dodged attacker! \n";
+		giveWorkXp(defStats, dodgeStr, xp + 2);
+		dmg = 0;
 		break;
-
 	case AttackOutcomes::BLOCKED:
-
+		std::cout << "Entity blocked an attack! \n";
+		// Add shield xp if defender has a shield (or not as well?)
+		dmg *= 0.05;
 		break;
-
 	case AttackOutcomes::GLANCING:
-		
+		std::cout << "Attack is just a glancing blow \n";
+		dmg *= 0.3;
 		break;
-
 	case AttackOutcomes::NORMAL:
 		break;
 	case AttackOutcomes::HARD:
+		std::cout << "Attack hits harder than normal \n";
+		++xp;
+		dmg *= 1.25;
 		break;
 	case AttackOutcomes::CRITICAL:
+		std::cout << "Entity hits critically \n";
+		xp += 2;
+		dmg *= 1.45;
 		break;
 	}
 
-	constexpr int xp = 2;
 	giveWorkXp(attStats, attType, xp);
 
-	// TODO: Give work xp to attacker based on quality of hit 
-
 	// TODO: Give work xp to defender based on skills used
-
-	return outcome;
 }
 
 void ProcessAttacks::update(const double duration)
@@ -253,12 +268,17 @@ void ProcessAttacks::update(const double duration)
 			return;
 		}
 
+		// Figure out what happens with this hit, does it miss, etc
+		decideDamageExtent(attacker, defender, msg.type, msg.dmg);
+
+		if (msg.dmg <= 0) return;
+
+		// Which part of the body does this attack hit?
 		int hitIdx = pickBodyPartToHit(bodyDef);
 
+		// Damage that part of the body and deal with removing 
+		// attached limbs if part is killed
 		damagePart(bodyDef, health, hitIdx, static_cast<double>(msg.dmg));
-
-
-		//health.health -= msg.dmg;
 
 		if (health.health <= 0) // TODO : Bonus Xp for Kill?
 			emit(something_died_message { msg.attacker, msg.target });
