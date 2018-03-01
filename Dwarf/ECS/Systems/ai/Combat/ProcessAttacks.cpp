@@ -27,8 +27,9 @@ void ProcessAttacks::init()
 // that's going to be hit
 int pickBodyPartToHit(const BodyDef * def)
 {
+	static std::default_random_engine re;
 	std::uniform_real_distribution<double> unif(0.0, def->maxChance); // TODO: Find a way to merge this with Rng class for deterministic random
-	std::default_random_engine re;
+
 	double output = unif(re);
 
 	int i = 0;
@@ -40,27 +41,64 @@ int pickBodyPartToHit(const BodyDef * def)
 		++i;
 	}
 	std::cout << "Hit Chances Broken!! \n";
-
 	return 0;
 }
 
 bool areAllPartsGone(const BodyDef * b, const HealthComponent &h, const int partIdx) // TODO: Move these functions to a sepperate file name organ/bodypart effects or something
 {
+	const auto& partTag = h.bodyParts[partIdx].tag;
 
+	for (const auto& p : h.bodyParts)
+		if (p.tag == partTag && p.health > 0.0)
+			return false;
+				
+	return true;
+}
+
+// E.G. if an arm is destroyed, kill all parts connected down from it
+// like the hands, fingers, any bones, etc
+inline void recursivlyFindParts()
+{
+
+}
+
+void destroyConnectedParts(BodyPart &part, HealthComponent &h, const int partIdx)
+{
+	auto* body = getBodyDef(h.bodyDefTag);
+	if (!body)
+		return;
+
+	auto& partDef = body->parts[partIdx]; 
+
+	for (const auto& p : body->parts)
+	{
+		
+	}
 }
 
 inline void damagePart(const BodyDef * b, HealthComponent &h, const int partIdx, const double dmg)
 {
 	auto& hitPart = h.bodyParts[partIdx];
 
-	// TODO: Armour considerations
+	if (hitPart.health <= 0) // TODO: Log Message stating miss
+	{
+		std::cout << "Would have hit but body part is gone! \n";
+		return;
+	}	
 
+	// TODO: Armour considerations
 	hitPart.health -= dmg;
+
+	// TODO: When part is < 2/3rds health subtract it's health from main health?
+
+	std::cout << "Entity hit another in: " << hitPart.tag << " for: " << dmg << "\n"; // TODO: Game Log
 
 	// Process damage limbs and
 	// the possible tree of other limbs attached to it
 	if (hitPart.health < 0.0)
 	{
+		h.health -= getBodyPart(hitPart.tag)->health; // TODO: Create a better model for damage
+
 		auto* partDef = getBodyPart(hitPart.tag); 
 
 		if (partDef->effects.test(BodyPartEffects::ON_ALL_GONE_KILL) && areAllPartsGone(b, h, partIdx))
@@ -72,6 +110,10 @@ inline void damagePart(const BodyDef * b, HealthComponent &h, const int partIdx,
 		{
 
 		}
+
+		destroyConnectedParts(hitPart, h, partIdx);
+
+		std::cout << "Entity lost: " << hitPart.tag << "\n"; // TODO: Replace this with a log
 	}
 }
 
