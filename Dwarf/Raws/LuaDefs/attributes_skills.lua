@@ -30,9 +30,20 @@ skills =
 
 	ranged = {
 		name = "Ranged",
-		s_attributes = {{ attr = "Agility" }, { attr = "Intelligence"}}
+		s_attributes = {{ attr = "Agility" }, { attr = "Intelligence"}} 
 	}, 
 
+	shield = {
+		name = "Shield", -- TODO: Get rid of attributes ? -- Add in different skill clasifications e.g. class = "combat" ~ so we can filter them better in gui
+	},
+
+	armour = {
+		name = "Armour",
+	},
+
+	dodging = {
+		name = "Dodging",
+	},
 
 	-- Job related skills
 
