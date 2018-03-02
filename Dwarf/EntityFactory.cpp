@@ -2,6 +2,7 @@
 #include "ECS\EntityManager.h"
 #include "Globals\GlobalWorld.h"
 #include "Globals\DwarfContainer.h"
+#include "Helpers\Rng.h"
 #include "ECS\World.h"
 #include "ECS\Components\PositionComponent.h"
 #include "ECS\Components\RenderComponent.h"
@@ -23,11 +24,16 @@ EntityFactory::EntityFactory()
 {
 }
 
+inline const std::string& randomName()
+{
+	static const auto& namesVec = FileStrings::returnTable(0)->strings;
+	return namesVec[rng.range(0, namesVec.size() - 1)];
+}
+
 // Need to create ui interface for starting dwarves
 // Also should probably store a vector of dwarves for qucik access
 Entity createDwarf(DwarfCreationObj dwarfConstruct)
 {
-	static const auto& namesVec = FileStrings::returnTable(0)->strings; 
 
 	Entity dwarf = world.createEntity();
 
@@ -62,6 +68,7 @@ Entity createDwarf(DwarfCreationObj dwarfConstruct)
 	dwarf.addComponent<Needs>();
 	dwarf.addComponent<CombatBase>();
 	dwarf.addComponent<View>(10);
+	dwarf.addComponent<Name>(randomName(), randomName());
 
 	calculateCombatBase(dwarf, 0);
 

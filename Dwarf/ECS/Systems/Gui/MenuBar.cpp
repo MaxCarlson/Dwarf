@@ -107,6 +107,12 @@ void MenuBar::update(const double duration)
 		ImGui::EndMenu();
 	}
 
+	if (ImGui::Button("Military"))
+	{
+		gameState = GameState::DESIGN;
+		designState = DesignStates::MILITARY_GUI;
+	}
+
 	const std::string time = calender->getTime();
 
 	ImGui::SameLine(ImGui::GetWindowWidth() - ImGui::CalcTextSize(time.c_str()).x - 45);

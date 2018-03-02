@@ -24,6 +24,7 @@
 #include "ECS\Systems\Gui\DesignStockpiles.h"
 #include "ECS\Systems\Gui\DwarfInfoGui.h"
 #include "ECS\Systems\Gui\ClickSystemGui.h"
+#include "ECS\Systems\Gui\MilitaryGui.h"
 
 // Ai systems
 #include "ECS\Systems\ai\EquipHandler.h"
@@ -431,6 +432,9 @@ void updateSystems(const double duration)
 
 		if (designState == DesignStates::JOB_PREFERENCES)
 			runSystem(JOB_PREFERENCES_UI, duration);
+
+		if (designState == DesignStates::MILITARY_GUI)
+			MilitaryGui::update(duration);
 	}
 
 	// Gui systems that do not auto pause
