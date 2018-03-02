@@ -109,7 +109,7 @@ void MenuBar::update(const double duration)
 
 	const std::string time = calender->getTime();
 
-	ImGui::SameLine(ImGui::GetWindowWidth() - ImGui::CalcTextSize(time.c_str()).x - 25);
+	ImGui::SameLine(ImGui::GetWindowWidth() - ImGui::CalcTextSize(time.c_str()).x - 45);
 	ImGui::Text(time.c_str());
 
 	ImGui::EndMainMenuBar();

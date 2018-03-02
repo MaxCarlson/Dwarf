@@ -393,6 +393,12 @@
     <ClCompile Include="Raws\ReadBodyParts.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ECS\Systems\ai\Combat\PatrolSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS\Systems\Gui\MilitaryGui.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ECS\EntityManager.h">
@@ -1220,6 +1226,21 @@
     <ClInclude Include="Raws\Defs\SpeciesDef.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ECS\Systems\ai\Combat\PatrolSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Components\Tags\MilitaryTag.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Components\Tags\PatrolTag.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Systems\Gui\MilitaryGui.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\Components\Sentients\Name.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="cereal\external\rapidxml\manual.html" />
@@ -1245,5 +1266,6 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="Raws\LuaDefs\index.txt" />
+    <Text Include="Raws\LuaDefs\names.txt" />
   </ItemGroup>
 </Project>

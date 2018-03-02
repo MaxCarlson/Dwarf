@@ -23,6 +23,8 @@ void DeathSystem::update(const double duration)
 		// TODO: Spawn corpse
 		// TODO: Emit log message with info about death
 
+		std::cout << "Entity: " << msg.id << " Killed!! \n"; 
+
 
 		dying.kill();
 	});

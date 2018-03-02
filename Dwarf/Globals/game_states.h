@@ -23,7 +23,8 @@ enum DesignStates
 	STOCKPILES,
 	WORK_ORDERS,
 	JOB_PREFERENCES,
-	DWARF_INFO
+	DWARF_INFO,
+	MILITARY_GUI,
 };
 
 extern GameState gameState;

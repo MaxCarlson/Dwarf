@@ -32,9 +32,7 @@ void ProcessAttacks::init()
 // that's going to be hit
 int pickBodyPartToHit(const BodyDef * def)
 {
-	std::uniform_real_distribution<double> unif(0.0, def->maxChance); // TODO: Find a way to merge this with Rng class for deterministic random
-
-	double output = unif(randomEngine);
+	double output = rng.range(0.0, def->maxChance);
 
 	int i = 0;
 	for (const auto& d : def->hitChances) // TODO: More effecient method of sloting body parts into hit %'s?
@@ -48,6 +46,8 @@ int pickBodyPartToHit(const BodyDef * def)
 	return 0;
 }
 
+// Are all body parts of a type equal to the part at partIdx
+// health <= 0 for this entity?
 bool areAllPartsGone(const BodyDef * b, const HealthComponent &h, const int partIdx) // TODO: Move these functions to a sepperate file name organ/bodypart effects or something
 {
 	const auto& partTag = h.bodyParts[partIdx].tag;
@@ -61,7 +61,7 @@ bool areAllPartsGone(const BodyDef * b, const HealthComponent &h, const int part
 
 // E.G. if an arm is destroyed, kill all parts connected down from it
 // like the hands, fingers, any bones, etc
-inline void recursivlyFindAndDestroyParts(const BodyDef &body, HealthComponent &h, const int id)
+void recursivlyFindAndDestroyParts(const BodyDef &body, HealthComponent &h, const int id)
 {
 	std::set<int> foundParts = { id };
 	for (const auto& p : body.parts)
@@ -91,7 +91,7 @@ void destroyConnectedParts(BodyPart &part, HealthComponent &h, const int partIdx
 	recursivlyFindAndDestroyParts(*body, h, partIdx);
 }
 
-inline void damagePart(const BodyDef * b, HealthComponent &h, const int partIdx, const double dmg)
+void damagePart(const BodyDef * b, HealthComponent &h, const int partIdx, const double dmg)
 {
 	auto& hitPart = h.bodyParts[partIdx];
 
@@ -185,9 +185,8 @@ void decideDamageExtent(const Entity &attacker, const Entity &defender, const Da
 	chances[int(AttackOutcomes::DODGED)]   -=  dodgeDiff;
 	chances[int(AttackOutcomes::GLANCING)] -= armourDiff;
 
-	std::uniform_real_distribution<double> unif(0.0, std::accumulate(chances.begin(), chances.end(), 0.0));
-
-	double result = unif(randomEngine);
+	// Roll for # in range
+	double result = rng.range(0.0, std::accumulate(chances.begin(), chances.end(), 0.0));
 
 	int i = 0;
 	double num = 0.0;

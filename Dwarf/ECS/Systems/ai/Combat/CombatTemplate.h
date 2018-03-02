@@ -98,7 +98,7 @@ public:
 			{
 				int dmg = rollForMeleeDmg(e, base, target);
 
-				world.emit(damage_entity_message { dmg, e.getId().index, target.getId().index, DamageTypes::RANGED });
+				world.emit(damage_entity_message { dmg, e.getId().index, target.getId().index, DamageTypes::MELEE });
 			}
 
 			else if (base.weaponType == CombatBase::RANGED)

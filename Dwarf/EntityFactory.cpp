@@ -1,24 +1,21 @@
 #include "EntityFactory.h"
-
 #include "ECS\EntityManager.h"
-//#include "Engine.h"
 #include "Globals\GlobalWorld.h"
 #include "Globals\DwarfContainer.h"
 #include "ECS\World.h"
-
 #include "ECS\Components\PositionComponent.h"
 #include "ECS\Components\RenderComponent.h"
 #include "ECS\Components\HealthComponent.h"
 #include "ECS\Components\MovementComponent.h"
 #include "ECS\Components\JobComponent.h"
-
 #include "ECS\Components\Sentients\Inventory.h"
 #include "ECS\Components\Sentients\Stats.h"
 #include "ECS\Components\Sentients\AiWorkComponent.h"
 #include "ECS\Components\Sentients\Needs.h"
-
 #include "ECS\Components\Fighting\CombatBase.h"
 #include "ECS\Components\ai\View.h"
+#include "ECS\Components\Sentients\Name.h"
+#include "Raws\FileReader.h"
 #include "Raws\ReadBodyParts.h"
 #include "Raws\SkillReader.h"
 #include <SFML\Graphics\Color.hpp>
@@ -30,6 +27,8 @@ EntityFactory::EntityFactory()
 // Also should probably store a vector of dwarves for qucik access
 Entity createDwarf(DwarfCreationObj dwarfConstruct)
 {
+	static const auto& namesVec = FileStrings::returnTable(0)->strings; 
+
 	Entity dwarf = world.createEntity();
 
 	dwarf.addComponent<RenderComponent>(vchar{ 769, color_from_name("default"), sf::Color::Transparent.toInteger() });

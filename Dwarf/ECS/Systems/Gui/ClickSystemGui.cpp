@@ -17,7 +17,7 @@ void ClickSystemGui::init()
 {
 }
 
-void handleDraft(Entity &e)
+void handleDraft(Entity &e) // TODO: Get rid of draft, favor militaries
 {
 	using namespace keys;
 	using namespace mouse;

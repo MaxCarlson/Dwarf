@@ -16,7 +16,7 @@ namespace FileStrings
 		while (getline(f, line))
 		{
 			if (!line.empty())
-				fileStrings.strings.push_back(line);
+				fileStrings.strings.emplace_back(line);
 		}
 
 		stringTables[idx] = fileStrings;

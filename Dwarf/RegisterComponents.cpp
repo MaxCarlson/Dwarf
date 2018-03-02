@@ -34,6 +34,9 @@
 #include "ECS\Components\Tags\SleepTag.h"
 #include "ECS\Components\Tags\EatFoodTag.h"
 #include "ECS\Components\Tags\JoyTag.h"
+#include "ECS\Components\Tags\MilitaryTag.h"
+#include "ECS\Components\Tags\PatrolTag.h"
+
 
 // Component Sentients
 #include "ECS\Components\Sentients\Stats.h"
@@ -41,6 +44,7 @@
 #include "ECS\Components\Sentients\AiWorkComponent.h"
 #include "ECS\Components\Sentients\Needs.h"
 #include "ECS\Components\Sentients\Happiness.h"
+#include "ECS\Components\Sentients\Name.h"
 
 // Weapons and fighting
 #include "ECS\Components\Fighting\CombatBase.h"
@@ -56,7 +60,11 @@ void ComponentsInit::registerOrResetVardiadicEach(bool reset)
 {
 	bool first = !reset;
 
+	// Build or reset the variadic systems
+
 	eachWith<Requires<Building>, Excludes<Claimed>>([](auto e) {}, reset, first);
+	eachWith<Requires<AiWorkComponent>>([](auto e) {}, reset, first);
+	eachWith<Requires<MilitaryTag>>([](auto e) {}, reset, first);
 }
 
 
@@ -92,6 +100,8 @@ void ComponentsInit::init()
 	world.registerComponent<SleepTag>();
 	world.registerComponent<EatFoodTag>();
 	world.registerComponent<JoyTag>();
+	world.registerComponent<MilitaryTag>();
+	world.registerComponent<PatrolTag>();
 
 	// Sentiants
 	world.registerComponent<Stats>();
@@ -99,6 +109,7 @@ void ComponentsInit::init()
 	world.registerComponent<AiWorkComponent>();
 	world.registerComponent<Needs>();
 	world.registerComponent<Happiness>();
+	world.registerComponent<Name>();
 
 	// Global components
 	world.registerComponent<Calender>();

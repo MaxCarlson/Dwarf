@@ -51,8 +51,9 @@ void loadRaws()
 
 	auto ll = std::make_unique<LuaLife>();
 
-	readFile(0, "Raws/LuaDefs/index.txt");
-	for (const std::string & fileName : returnTable(0)->strings)
+	readFile(0, "Raws/LuaDefs/names.txt");
+	readFile(1, "Raws/LuaDefs/index.txt");
+	for (const std::string & fileName : returnTable(1)->strings)
 	{
 		loadLuaScript("Raws/LuaDefs/" + fileName);
 	}
