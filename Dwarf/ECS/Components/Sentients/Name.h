@@ -17,5 +17,15 @@ struct Name : public Component
 	}
 };
 
+inline std::string getFullName(const Name &n)
+{
+	return n.firstName + " " + n.lastName;
+}
+
+inline std::string getFullName(const Entity &e)
+{
+	return getFullName(e.getComponent<Name>());
+}
+
 CEREAL_REGISTER_TYPE(Name);
 CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, Name);
