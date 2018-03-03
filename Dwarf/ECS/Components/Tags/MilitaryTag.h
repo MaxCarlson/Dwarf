@@ -22,12 +22,14 @@ struct MilitaryTag : public Component
 		ATTACK
 	};
 
+	std::string squadTag = "";
+
 	int currentJob = OFF_DUTY;
 
 	template<class Archive>
 	void serialize(Archive &archive)
 	{
-		archive(currentJob);
+		archive(squadTag, currentJob);
 	}
 };
 

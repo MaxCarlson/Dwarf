@@ -6,8 +6,24 @@
 #include "ECS\Components\Tags\MilitaryTag.h"
 #include <imgui.h>
 
+void createSquad(const std::vector<Entity>& allPawns, const std::vector<Entity>& activeMilitary)
+{
 
-void MilitaryGui::update(const double duration)
+}
+
+void displaySquads(const std::vector<Entity>& allPawns, const std::unordered_map<std::string, Entity>& activeMilitary)
+{
+	static bool creatingSquad = false;
+	if (ImGui::Button("Create New Squad##Military") || creatingSquad)
+	{
+		creatingSquad = true;
+	}
+
+
+}
+
+
+void MilitaryGui::update(const double duration) // TODO: Need to show dwarf skills when one is selected in a new ImGui::Begin()
 {
 	ImGui::Begin("Military Gui");
 
@@ -19,13 +35,15 @@ void MilitaryGui::update(const double duration)
 	ImGui::Text("Choose which dwarves you want in the military here");
 
 	std::vector<Entity> allPawns;
-	std::vector<Entity> activeMilitary;
+	std::unordered_map<std::string, Entity> activeMilitary;
 
 	// Replace this with a Controlable settler tag or something (or rename)?
 	std::unordered_set<size_t> notCivilians;
 	eachWith<Requires<MilitaryTag>>([&](const Entity &e)
 	{
-		activeMilitary.emplace_back(e);
+		auto mil = e.getComponent<MilitaryTag>();
+
+		activeMilitary.emplace(mil.squadTag, e);
 		notCivilians.emplace(e.getId().index);
 	});
 
@@ -37,7 +55,7 @@ void MilitaryGui::update(const double duration)
 			allPawns.emplace_back(e);
 	});
 
-	ImGui::Columns(3); // TODO: Figure out how to visually reprsent dwarves, their stats, etc without it looking horrible!
+	displaySquads(allPawns, activeMilitary);
 
 	ImGui::End();
 }
