@@ -55,20 +55,35 @@ bool createSquad(const std::vector<Entity>& allPawns, const std::unordered_map<s
 
 	ImGui::NextColumn();
 
+	int i = 0;
 	ImGui::Text("In Squad");
-	for (const auto& c : currentSquad)
+	for (auto it = currentSquad.begin(); it != currentSquad.end(); ++it, ++i)
 	{
+		std::stringstream ss;
 
+		ss << i << " - " << it->first;
+
+		ImGui::Text(it->first.c_str()); ImGui::SameLine();
+
+		std::string removeFromSquad = "Remove##" + it->first; // TODO: Make individually selectable to see all info about entity
+
+		if (ImGui::Button(removeFromSquad.c_str()))
+			it = currentSquad.erase(it);
+		
 	}
 
+	bool notDone = true;
 	if(ImGui::Button("Finalize##CreateSquad") && !squadName.empty())
 	{
+		for (auto& ep : currentSquad)
+			ep.second.addComponent<MilitaryTag>(MilitaryTag{ squadName.data() });
 
-
+		notDone = false;
 		currentSquad.clear();
 	}
 
 	ImGui::End();
+	return notDone;
 }
 
 void displaySquads(const std::vector<Entity>& allPawns, const std::unordered_map<std::string, std::vector<Entity>>& activeMilitary)
@@ -76,7 +91,7 @@ void displaySquads(const std::vector<Entity>& allPawns, const std::unordered_map
 	static bool creatingSquad = false;
 	if (ImGui::Button("Create New Squad##Military") || creatingSquad)
 	{
-		creatingSquad = true;
+		creatingSquad = createSquad(allPawns, activeMilitary);
 	}
 
 	for (const auto& sq : activeMilitary)

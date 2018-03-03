@@ -14,6 +14,9 @@ static const std::vector<std::string> militaryStateNames = { "Off Duty", "Patrol
 
 struct MilitaryTag : public Component
 {
+	MilitaryTag() = default;
+	MilitaryTag(const std::string &squadTag) : squadTag(squadTag) {}
+
 	enum Job
 	{
 		OFF_DUTY,
