@@ -7,100 +7,98 @@
 #include "ECS\Components\Tags\MilitaryTag.h"
 #include <imgui.h>
 
-void editSquad()
-{
-	ImGui::Begin("Edit Squad##Military");
+static std::array<char, 30> squadInFocusName = { ' ' };
 
-	ImGui::End();
+void editSquad(const std::string &name)
+{
+
 }
+
+template<bool remove>
+inline void addOrRemoveFromSquad(std::string squadName, const std::vector<Entity>& entsToSearch)
+{
+	if (remove)
+		ImGui::Text("Select to remove from squad");
+	else
+		ImGui::Text("Select to add to squad");
+
+	bool confirm = false;
+	if (remove && ImGui::Button("Remove##FromSquad"))
+		confirm = true;
+	else if (!remove && ImGui::Button("Add To Squad##Add"))
+		confirm = true;
+
+
+	int i = 0;
+	static std::vector<bool> selected;
+	selected.resize(entsToSearch.size(), false);
+
+	for (const auto& e : entsToSearch)
+	{
+		std::stringstream ss;
+
+		ss << i << " - " << getFullName(e);
+
+		if (ImGui::Selectable(ss.str().c_str(), selected[i]))
+			selected[i] = !selected[i];
+
+		++i;
+	}
+
+	if (confirm)
+	{
+		i = 0;
+		for (auto e : entsToSearch)
+		{
+			if (selected[i] && remove)
+			{
+				e.removeComponent<MilitaryTag>();
+				e.activate();
+			}
+			if (selected[i] && !remove)
+			{
+				e.addComponent<MilitaryTag>(squadName);
+				e.activate();
+			}
+			++i;
+		}
+		std::fill(selected.begin(), selected.end(), false);
+	}
+
+}
+
 
 bool createSquad(const std::vector<Entity>& allPawns, const std::unordered_map<std::string, std::vector<Entity>>& activeMilitary) // ISSUE: This will fail if entities have the same name
 {																																  // TODO: Merge Edit squad into this func?
 	ImGui::Begin("Create Squad##Military");
+	bool done = false;
+
+	if (ImGui::Button("Back"))
+		done = true;
 
 	// TODO: Allow for filtering / ordering by different skills
 	// TODO: Show combat skill levels
 	// TODO: Show all of a creatures info when selected
 
-	static std::array<char, 25> squadName = { ' ' };
-	ImGui::InputText("Squad Name: ", &squadName[0], 25);
-
-	static std::unordered_map<std::string, Entity> currentSquad;
+	ImGui::InputText("Squad Name: ", &squadInFocusName[0], 25);
 
 	// TODO: Add name Filter
 	// TODO: Add skill level filter in various skills
 
 	ImGui::Columns(2);
-	//ImGui::NextColumn();
-
 	ImGui::Text("Squad Candidates");
 
-	bool addPawns = false;
-	if (ImGui::Button("Add Selected to Squad"))
-		addPawns = true;
-
-	int i = 0;
-	static std::vector<bool> addSelected(allPawns.size(), false);
-	for (const auto& e : allPawns)
-	{
-		if (!e.hasComponent<Name>()) continue;
-
-		const auto& name = getFullName(e);
-
-		// Don't show pawns already selected for squad as availible to add to squad
-		if (currentSquad.find(name) != currentSquad.end())
-			continue;
-
-		if (ImGui::Selectable(name.c_str(), addSelected[i]))
-			addSelected[i] = !addSelected[i];
-
-		++i;
-	}
-
-	// Add the pawns to the temporary holder
-	// waiting to be finalized
-	if (addPawns)
-	{
-		for (int j = 0; j < allPawns.size(); ++j)
-			if (addSelected[j])
-				currentSquad.emplace(getFullName(allPawns[j]), allPawns[j]);
-
-		std::fill(addSelected.begin(), addSelected.end(), false);
-	}
+	addOrRemoveFromSquad<false>(squadInFocusName.data(), allPawns);
 
 	ImGui::NextColumn();
 
-	i = 0;
-	ImGui::Text("In Squad");
-	for (auto it = currentSquad.begin(); it != currentSquad.end(); ++it, ++i)
-	{
-		std::stringstream ss;
+	auto findSquad = activeMilitary.find(squadInFocusName.data());
 
-		ss << i << " - " << it->first;
-
-		ImGui::Text(it->first.c_str()); ImGui::SameLine();
-
-		std::string removeFromSquad = "Remove##" + it->first; // TODO: Make individually selectable to see all info about entity
-
-		if (ImGui::Button(removeFromSquad.c_str()))
-			it = currentSquad.erase(it);
-	}
-
-	bool notDone = true;
-	if(ImGui::Button("Finalize##CreateSquad") && !squadName.empty())
-	{
-		for (auto& [str, e] : currentSquad)
-		{
-			e.addComponent<MilitaryTag>(MilitaryTag { squadName.data() });
-			e.activate();
-		}
-
-		notDone = false;
-		currentSquad.clear();
-	}
+	if(findSquad != activeMilitary.end())
+		addOrRemoveFromSquad<true>(squadInFocusName.data(), findSquad->second);
 
 	ImGui::End();
-	return notDone;
+	return !done;
 }
 
 void displaySquads(const std::vector<Entity>& allPawns, const std::unordered_map<std::string, std::vector<Entity>>& activeMilitary)
@@ -119,6 +117,12 @@ void displaySquads(const std::vector<Entity>& allPawns, const std::unordered_map
 		std::string editButton = "Edit Squad##" + sq.first;
 		if (ImGui::Button(editButton.c_str())) // TODO: Create vector of bools denoting which squad is being edited
 		{
+			creatingSquad = true;
+			std::fill(squadInFocusName.begin(), squadInFocusName.end(), ' ');
+			
+			//squadName.copy(&squadInFocusName[0], squadName.size());
+			int strIdx = 0;
+			for (const auto& l : sq.first) { squadInFocusName[strIdx] = l; ++strIdx; }
 		}
 
 		int i = 1;
