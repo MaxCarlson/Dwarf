@@ -69,14 +69,16 @@ bool createSquad(const std::vector<Entity>& allPawns, const std::unordered_map<s
 
 		if (ImGui::Button(removeFromSquad.c_str()))
 			it = currentSquad.erase(it);
-		
 	}
 
 	bool notDone = true;
 	if(ImGui::Button("Finalize##CreateSquad") && !squadName.empty())
 	{
-		for (auto& ep : currentSquad)
-			ep.second.addComponent<MilitaryTag>(MilitaryTag{ squadName.data() });
+		for (auto& [str, e] : currentSquad)
+		{
+			e.addComponent<MilitaryTag>(MilitaryTag { squadName.data() });
+			e.activate();
+		}
 
 		notDone = false;
 		currentSquad.clear();

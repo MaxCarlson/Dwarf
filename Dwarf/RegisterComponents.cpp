@@ -63,8 +63,13 @@ void ComponentsInit::registerOrResetVardiadicEach(bool reset)
 	// Build or reset the variadic systems
 
 	eachWith<Requires<Building>, Excludes<Claimed>>([](auto e) {}, reset, first);
-	eachWith<Requires<AiWorkComponent>>([](auto e) {}, reset, first);
-	eachWith<Requires<MilitaryTag>>([](auto e) {}, reset, first);
+	eachWith<Requires<AiWorkComponent>			  >([](auto e) {}, reset, first);
+	eachWith<Requires<MilitaryTag>				  >([](auto e) {}, reset, first);
+
+	for (auto& e : world.getAllEntities())
+		e.activate();
+	
+	world.refresh();
 }
 
 
