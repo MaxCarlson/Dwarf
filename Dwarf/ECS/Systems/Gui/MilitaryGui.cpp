@@ -22,8 +22,8 @@ bool createSquad(const std::vector<Entity>& allPawns, const std::unordered_map<s
 	// TODO: Show combat skill levels
 	// TODO: Show all of a creatures info when selected
 
-	std::array<char, 40> squadName;
-	ImGui::InputText("Squad Name: ", &squadName[0], 40);
+	static std::array<char, 25> squadName = { ' ' };
+	ImGui::InputText("Squad Name: ", &squadName[0], 25);
 
 	static std::unordered_map<std::string, Entity> currentSquad;
 
@@ -31,10 +31,16 @@ bool createSquad(const std::vector<Entity>& allPawns, const std::unordered_map<s
 	// TODO: Add skill level filter in various skills
 
 	ImGui::Columns(2);
-	ImGui::NextColumn();
+	//ImGui::NextColumn();
 
 	ImGui::Text("Squad Candidates");
 
+	bool addPawns = false;
+	if (ImGui::Button("Add Selected to Squad"))
+		addPawns = true;
+
+	int i = 0;
+	static std::vector<bool> addSelected(allPawns.size(), false);
 	for (const auto& e : allPawns)
 	{
 		if (!e.hasComponent<Name>()) continue;
@@ -45,17 +51,26 @@ bool createSquad(const std::vector<Entity>& allPawns, const std::unordered_map<s
 		if (currentSquad.find(name) != currentSquad.end())
 			continue;
 
-		ImGui::Text(name.c_str()); ImGui::SameLine();
+		if (ImGui::Selectable(name.c_str(), addSelected[i]))
+			addSelected[i] = !addSelected[i];
 
-		std::string addToSquadName = "Add##" + name;
+		++i;
+	}
 
-		if (ImGui::Button(addToSquadName.c_str())) 
-			currentSquad.emplace(name, e);
+	// Add the pawns to the temporary holder
+	// waiting to be finalized
+	if (addPawns)
+	{
+		for (int j = 0; j < allPawns.size(); ++j)
+			if (addSelected[j])
+				currentSquad.emplace(getFullName(allPawns[j]), allPawns[j]);
+
+		std::fill(addSelected.begin(), addSelected.end(), false);
 	}
 
 	ImGui::NextColumn();
 
-	int i = 0;
+	i = 0;
 	ImGui::Text("In Squad");
 	for (auto it = currentSquad.begin(); it != currentSquad.end(); ++it, ++i)
 	{
@@ -118,12 +133,12 @@ void displaySquads(const std::vector<Entity>& allPawns, const std::unordered_map
 			// TODO: Show combat role ?
 			// TODO: Show current Duty
 			// TODO: Show squad schedule
-
+	
 			ImGui::Text(ss.str().c_str());
 			++i;
 		}
 
-		ImGui::Indent();
+		ImGui::Separator();
 	}
 }
 
