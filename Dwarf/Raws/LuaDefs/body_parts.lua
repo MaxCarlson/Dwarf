@@ -17,12 +17,12 @@ pEffects = {
 
 body_parts = {
 
-	head = {
-		name = "Head",
-		description = "",
-		health = 35,
-		effects = { pEffects["kill"], },
-	},
+		head = {
+			name = "Head",
+			description = "",
+			health = 35,
+			effects = { pEffects["kill"], },
+		},
 
 		skull = {
 			name = "Skull",
@@ -62,12 +62,12 @@ body_parts = {
 			health = 20,
 		},
 
-	torso = {
-		name = "Torso",
-		description = "",
-		health = 55,
-		effects = { pEffects["kill"], },
-	},
+		torso = {
+			name = "Torso",
+			description = "",
+			health = 55,
+			effects = { pEffects["kill"], },
+		},
 		arm = {
 			name = "Arm",
 			description = "",
@@ -121,11 +121,11 @@ body_parts = {
 			effects = { pEffects["kill"], },
 		},
 
-	waist = {
-		name = "Waist",
-		description = "",
-		health = 85,
-	},
+		waist = {
+			name = "Waist",
+			description = "",
+			health = 85,
+		},
 	
 		leg = {
 			name = "Leg",

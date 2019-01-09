@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../../Component.h"
-#include "../../Coordinates.h"
+#include "Coordinates.h"
 
 class MiningTag : public Component
 {
