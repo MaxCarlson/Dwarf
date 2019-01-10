@@ -20,21 +20,21 @@ void onResizeL1(dfr::Layer * l, int w, int h)
 
 int main()
 {
-	///*
+	///* Why on earth does commenting this out remove all the color from everything? Find out!
 	// BearslibTerminal Init stuff
-	terminal_open();
+	//terminal_open();
 	//terminal_set("window.title='Dwarf'; window.size=80x80; window.cellsize=16x16"); // ~~ Make lua config file
 
 	// Move these into lua config files that don't require compiling
 	// so outside users can modify tilesets/etc
-	terminal_set("U+E100: ../Spacefox_16x16Dibujor01.png, size=16x16");
-	terminal_set("U+E200: ../tools+weapons.png, size=16x16");
-	terminal_set("U+E300: ../dorenitems16x16.png, size=16x16");
-	terminal_set("U+E400: ../dwarves.png, size=16x16");
-	terminal_set("U+E900: ../shadows.png, size=16x16");
+	//terminal_set("U+E100: ../Spacefox_16x16Dibujor01.png, size=16x16");
+	//terminal_set("U+E200: ../tools+weapons.png, size=16x16");
+	//terminal_set("U+E300: ../dorenitems16x16.png, size=16x16");
+	//terminal_set("U+E400: ../dwarves.png, size=16x16");
+	//terminal_set("U+E900: ../shadows.png, size=16x16");
 
-	terminal_set("input.filter = []");
-	terminal_composition(true);
+	//terminal_set("input.filter = []");
+	//terminal_composition(true);
 	//*/
 
 	loadRaws();
