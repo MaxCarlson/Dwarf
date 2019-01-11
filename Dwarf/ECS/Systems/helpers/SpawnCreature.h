@@ -9,7 +9,7 @@ public:
 	SpawnCreature() = default;
 
 	void init();
-	void update(const double duration); // System does not update, get's fed messages
+	void update(const double duration); // System does not update, is fed event messages
 
 private:
 

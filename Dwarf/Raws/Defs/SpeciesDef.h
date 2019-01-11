@@ -4,8 +4,8 @@
 
 struct SpeciesDef
 {
-	std::string tag = "";
-	std::string name = "";
-	std::string bodyTag = "";
-	
+	std::string tag			= "";
+	std::string name		= "";
+	std::string bodyTag		= "";
+	std::string description = "";
 };

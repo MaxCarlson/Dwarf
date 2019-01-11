@@ -330,6 +330,7 @@
     <ClCompile Include="Helpers\Rng.cpp" />
     <ClCompile Include="Raws\ReadPlants.cpp" />
     <ClCompile Include="ECS\Systems\helpers\RegionHelper.cpp" />
+    <ClCompile Include="Raws\ReadSpecies.cpp" />
     <ClCompile Include="RegisterComponents.cpp" />
     <ClCompile Include="RunSystems.cpp" />
     <ClCompile Include="Raws\SkillReader.cpp" />
@@ -623,6 +624,7 @@
     <ClInclude Include="Helpers\Rng.h" />
     <ClInclude Include="Raws\ReadPlants.h" />
     <ClInclude Include="ECS\Systems\helpers\RegionHelper.h" />
+    <ClInclude Include="Raws\ReadSpecies.h" />
     <ClInclude Include="RegisterComponents.h" />
     <ClInclude Include="RunSystems.h" />
     <ClInclude Include="Raws\SkillReader.h" />

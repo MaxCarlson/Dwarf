@@ -402,6 +402,9 @@
     <ClCompile Include="ECS\Systems\helpers\SpawnCreature.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Raws\ReadSpecies.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ECS\EntityManager.h">
@@ -1248,6 +1251,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ECS\Messages\spawn_creature_message.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Raws\ReadSpecies.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

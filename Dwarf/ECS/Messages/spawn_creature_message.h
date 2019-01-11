@@ -3,5 +3,6 @@
 
 struct spawn_creature_message : public base_message_t
 {
-
+	std::string speciesTag;
+	bool isPlayerControlled;
 };
