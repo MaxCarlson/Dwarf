@@ -20,10 +20,12 @@ void onResizeL1(dfr::Layer * l, int w, int h)
 
 int main()
 {
-	///* Why on earth does commenting this out remove all the color from everything? Find out!
+	/// TODO: Remove dependency on BearLib by converting to dfr colors.
+	/// Currently we're using Blt colors in the region:: namespace
+
 	// BearslibTerminal Init stuff
-	//terminal_open();
-	//terminal_set("window.title='Dwarf'; window.size=80x80; window.cellsize=16x16"); // ~~ Make lua config file
+	terminal_open();
+	terminal_set("window.title='Dwarf'; window.size=80x80; window.cellsize=16x16"); // ~~ Make lua config file
 
 	// Move these into lua config files that don't require compiling
 	// so outside users can modify tilesets/etc
@@ -35,7 +37,6 @@ int main()
 
 	//terminal_set("input.filter = []");
 	//terminal_composition(true);
-	//*/
 
 	loadRaws();
 	

@@ -33,6 +33,11 @@ namespace Util
 			bits &= ~flag;
 		}
 
+		void clear()
+		{
+			bits = 0;
+		}
+
 		bool test(const uint16_t flag) const
 		{
 			return bits & flag;

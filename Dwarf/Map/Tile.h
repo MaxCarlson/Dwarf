@@ -31,18 +31,19 @@ namespace region
 
 	enum Flag
 	{
-		CAN_STAND_HERE = 1,
-		CAN_GO_NORTH = 1 << 2,
-		CAN_GO_SOUTH = 1 << 3,
-		CAN_GO_EAST = 1 << 4,
-		CAN_GO_WEST = 1 << 5,
-		CAN_GO_NORTH_W = 1 << 6,
-		CAN_GO_NORTH_E = 1 << 7,
-		CAN_GO_SOUTH_E = 1 << 8,
-		CAN_GO_SOUTH_W = 1 << 9,
-		CAN_GO_UP = 1 << 10,
-		CAN_GO_DOWN = 1 << 11,
-		CONSTRUCTION = 1 << 12
+		CAN_STAND_HERE			= 1,
+		CAN_GO_NORTH			= 1 << 1, 
+		CAN_GO_SOUTH			= 1 << 2,
+		CAN_GO_EAST				= 1 << 3,
+		CAN_GO_WEST				= 1 << 4,
+		CAN_GO_NORTH_W			= 1 << 5,
+		CAN_GO_NORTH_E			= 1 << 6,
+		CAN_GO_SOUTH_E			= 1 << 7,
+		CAN_GO_SOUTH_W			= 1 << 8,
+		CAN_GO_UP				= 1 << 9,
+		CAN_GO_DOWN				= 1 << 10,
+		CAN_GO_ALL_DIRECTIONS	= ((CAN_GO_DOWN) - 1) & ~1,
+		CONSTRUCTION			= 1 << 12
 	};
 
 	enum Directions

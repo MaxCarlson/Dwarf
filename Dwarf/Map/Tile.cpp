@@ -490,16 +490,7 @@ namespace region
 	{
 		const auto idx = getIdx(co);
 
-		tileFlags[idx].reset(CAN_GO_NORTH); // Add a function to zero a flags bitset
-		tileFlags[idx].reset(CAN_GO_SOUTH);
-		tileFlags[idx].reset(CAN_GO_EAST);
-		tileFlags[idx].reset(CAN_GO_WEST);
-		tileFlags[idx].reset(CAN_GO_NORTH_W);
-		tileFlags[idx].reset(CAN_GO_NORTH_E);
-		tileFlags[idx].reset(CAN_GO_SOUTH_W);
-		tileFlags[idx].reset(CAN_GO_SOUTH_E);
-		tileFlags[idx].reset(CAN_GO_DOWN);
-		tileFlags[idx].reset(CAN_GO_UP);
+		tileFlags[idx].reset(CAN_GO_ALL_DIRECTIONS);
 		
 		if (solid[idx] || !tileFlags[getIdx(co)].test(CAN_STAND_HERE))
 		{
