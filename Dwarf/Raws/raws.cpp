@@ -16,6 +16,7 @@
 #include "SkillReader.h"
 #include "BiomeReader.h"
 #include "ReadBodyParts.h"
+#include "ReadSpecies.h"
 
 void sanityChecks()
 {
@@ -29,6 +30,7 @@ void sanityChecks()
 	sanityCheckBiomes();
 	sanityCheckBodyParts();
 	sanityCheckBodyDefs();
+	sanityCheckSpecies();
 }
 
 void loadGameTables()
@@ -43,6 +45,7 @@ void loadGameTables()
 	readInBiomes();
 	readInBodyParts();
 	readyInBodyDefs();
+	readInSpeciesDefs();
 }
 
 void loadRaws()
@@ -62,6 +65,7 @@ void loadRaws()
 	sanityChecks();
 }
 
+// TODO: Move to spawning class?
 Entity spawnItemOnGround(const std::string itemTag, const std::size_t material, const Coordinates co, SpawnColor colorType, int quality)
 {
 	auto item = getItemDef(itemTag);

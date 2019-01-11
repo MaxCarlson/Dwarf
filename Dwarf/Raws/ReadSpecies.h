@@ -5,5 +5,5 @@ struct SpeciesDef;
 
 SpeciesDef * getSpecies(const std::string& tag) noexcept;
 
-void readInSpecies() noexcept;
+void readInSpeciesDefs() noexcept;
 void sanityCheckSpecies() noexcept;

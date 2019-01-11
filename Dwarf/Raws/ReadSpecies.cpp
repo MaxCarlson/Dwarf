@@ -12,7 +12,7 @@ SpeciesDef * getSpecies(const std::string & tag) noexcept
 	return nullptr;
 }
 
-void readInSpecies() noexcept
+void readInSpeciesDefs() noexcept
 {
 	SpeciesDef d;
 
@@ -23,7 +23,6 @@ void readInSpecies() noexcept
 			{ "name",			[&]() { d.name			= lua_str(); } },
 			{ "description",	[&]() { d.description	= lua_str(); } },
 			{ "body",			[&]() { d.bodyTag		= lua_str(); } },
-			
 		}
 	);
 }
