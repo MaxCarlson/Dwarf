@@ -61,6 +61,4 @@ void buildRegion(Planet &planet, int px, int py, Coordinates dimensions, Rng &rn
 	plantTrees(biomeInfo.second.deciduosChance, biomeInfo.second.evergreenChance, rng);
 
 	region::tile_recalc_all();
-
-	placeDwarves();
 }
