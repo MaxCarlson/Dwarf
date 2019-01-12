@@ -1,3 +1,3 @@
 #pragma once
 
-void placeDwarves();
+void placeDwarves(int numDwarves);

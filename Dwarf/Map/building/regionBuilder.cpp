@@ -5,7 +5,6 @@
 #include "../Helpers/FastNoise.h"
 #include "region\rocklayer.h"
 #include "region\place_buildings.h"
-#include "region\place_creatures.h"
 #include "region\plant_trees.h"
 #include "Helpers\Rng.h"
 #include "NoiseHelper.h"

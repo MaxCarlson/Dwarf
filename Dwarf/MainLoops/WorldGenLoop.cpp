@@ -8,6 +8,7 @@
 #include "Map\building\PlanetBuilding.h"
 #include "Map\World\Planet.h"
 #include "Map\building\regionBuilder.h"
+#include "Map\building\region\place_creatures.h"
 #include "Helpers\Rng.h"
 #include "Raws\BiomeReader.h"
 #include "Raws\Defs\BiomeDef.h"
@@ -195,11 +196,12 @@ void WorldGenLoop::run(const double duration)
 				gameState = GameState::NEW_GAME;
 				showMouse = true;
 
-				for (int i = 0; i < numDwarves; ++i) // Place this somewhere else once we have code to create dwarves with new gui
-					createDwarf({});
+				//for (int i = 0; i < numDwarves; ++i) // Place this somewhere else once we have code to create dwarves with new gui
+				//	createDwarf({});
 
 				// Build the region
 				buildRegion(planet, embarkX - wxOffset, embarkY - wyOffset, { regionX, regionY, regionZ }, rng);
+				placeDwarves(numDwarves);
 			}
 
 			if (ImGui::Button("No"))

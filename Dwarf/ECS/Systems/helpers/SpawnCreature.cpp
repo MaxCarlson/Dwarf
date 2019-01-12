@@ -58,69 +58,18 @@ void SpawnCreature::spawnCreature(spawn_creature_message &msg)
 
 		ent.addComponent<Stats>(attributes, skills);
 		ent.addComponent<Needs>();
-
 	}
 
 	ent.addComponent<MovementComponent>(msg.moveSpeed);
 
-	auto& body = getSpecies(msg.speciesTag)->bodyTag; // TODO: Error handling if body doesn't exist!
-	ent.addComponent<HealthComponent>(100, 100, 1, body, getCreatureBody(body));
+	auto& body = getSpecies(msg.speciesTag)->bodyTag;								// TODO: Error handling if species/body doesn't exist!
+	ent.addComponent<HealthComponent>(100, 100, 1, body, getCreatureBody(body));	// TODO: Makes species/stat dependant
 
 	ent.addComponent<Inventory>();
-	ent.addComponent<CombatBase>();
-	ent.addComponent<View>(10);
+	ent.addComponent<CombatBase>(); 
+	ent.addComponent<View>(10);														// TODO: Make View species/stat dependant
 	ent.addComponent<Name>(msg.fname, msg.lname);
 
 	calculateCombatBase(ent, 0);
-
 	ent.activate();
-
-	//dwarfContainer.dwarves.emplace_back(dwarf);
-}
-
-Entity createDwarf(DwarfCreationObj dwarfConstruct)
-{
-
-	Entity dwarf = world.createEntity();
-
-	dwarf.addComponent<RenderComponent>(vchar{ 769, color_from_name("default"), sf::Color::Transparent.toInteger() });
-	dwarf.addComponent<PositionComponent>(dwarfConstruct.co);
-	auto& work = dwarf.addComponent<AiWorkComponent>();
-
-	std::unordered_map<std::string, attribute> attributes;
-
-	for (const auto& att : allAttributes())
-	{
-		attributes[att] = attribute{};
-	}
-	std::unordered_map<std::string, skill> skills;
-
-
-	for (const auto& sk : allSkills())
-	{
-		skills[sk] = skill{};
-		work.jobPrefrences[sk] = 10;
-	}
-
-	dwarf.addComponent<Stats>(attributes, skills);
-
-	// Movement speed in constructor in tiles per second
-	dwarf.addComponent<MovementComponent>(3.5);
-
-	static const std::string bodyDefTag = "human_body"; // TODO: Grab this from species
-	dwarf.addComponent<HealthComponent>(100, 100, 1, bodyDefTag, getCreatureBody(bodyDefTag));
-
-	dwarf.addComponent<Inventory>();
-	dwarf.addComponent<Needs>();
-	dwarf.addComponent<CombatBase>();
-	dwarf.addComponent<View>(10);
-	dwarf.addComponent<Name>(randomName(), randomName());
-
-	calculateCombatBase(dwarf, 0);
-
-	dwarf.activate();
-
-	dwarfContainer.dwarves.emplace_back(dwarf);
-
-	return dwarf;
 }

@@ -76,11 +76,6 @@ Strata buildStrata(std::vector<uint8_t>& heightMap, FastNoise & noise, Rng & rng
 			std::get<2>(strata.counts[i]) /= std::get<0>(strata.counts[i]);
 			std::get<3>(strata.counts[i]) /= std::get<0>(strata.counts[i]);
 
-			//auto & n = std::get<0>(strata.counts[i]);
-			//auto & x = std::get<1>(strata.counts[i]);
-			//auto & y = std::get<2>(strata.counts[i]);
-			//auto & z = std::get<3>(strata.counts[i]);
-
 			auto&[n, x, y, z] = strata.counts[i];
 
 			const uint8_t altitude_at_center = heightMap[(y * MAP_WIDTH) + x] + MAP_DEPTH / 2;
