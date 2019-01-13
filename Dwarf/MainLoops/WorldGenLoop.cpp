@@ -20,16 +20,16 @@
 
 namespace Details
 {
-	int regionX = 64;
-	int regionY = 64;
-	int regionZ = 150;
-	int numDwarves = 7;
-	int planetX = 64;
-	int planetY = 64;
-	int embarkX = 0;
-	int embarkY = 0;
-	int waterD = 3;
-	int plainsD = 3;
+	int regionX		= 64;
+	int regionY		= 64;
+	int regionZ		= 150;
+	int numDwarves	= 7;
+	int planetX		= 64;
+	int planetY		= 64;
+	int embarkX		= 0;
+	int embarkY		= 0;
+	int waterD		= 3;
+	int plainsD		= 3;
 	std::string seed = "seed";
 
 	int wxOffset = 5;
@@ -101,14 +101,14 @@ void WorldGenLoop::run(const double duration)
 		ImGui::Begin("Planet Building", nullptr, ImVec2{ 600, 400 }, 0.5f, ImGuiWindowFlags_AlwaysAutoResize + ImGuiWindowFlags_NoCollapse);
 		ImGui::Text("Enter the desired Planet dimensions then click 'Ready'");
 
-		ImGui::SliderInt("Number of Dwarves", &numDwarves, 1, 10);
-		ImGui::SliderInt("Region Width", &regionX, 32, 256);
-		ImGui::SliderInt("Region Height", &regionY, 32, 256);
-		ImGui::SliderInt("Region Depth", &regionZ, 32, 256);
-		ImGui::SliderInt("Planet Width", &planetX, 32, 256);
-		ImGui::SliderInt("Planet Height", &planetY, 32, 256);
-		ImGui::SliderInt("Water Level", &waterD, 1, 4);
-		ImGui::SliderInt("Plains Level", &plainsD, 1, 4);
+		ImGui::SliderInt("Number of Dwarves",	&numDwarves, 1, 10);
+		ImGui::SliderInt("Region Width",		&regionX, 32, 256);
+		ImGui::SliderInt("Region Height",		&regionY, 32, 256);
+		ImGui::SliderInt("Region Depth",		&regionZ, 32, 256);
+		ImGui::SliderInt("Planet Width",		&planetX, 32, 256);
+		ImGui::SliderInt("Planet Height",		&planetY, 32, 256);
+		ImGui::SliderInt("Water Level",			&waterD, 1, 4);
+		ImGui::SliderInt("Plains Level",		&plainsD, 1, 4);
 
 		ImGui::Text("World Seed");
 		ImGui::SameLine();
@@ -166,20 +166,20 @@ void WorldGenLoop::run(const double duration)
 
 			ImGui::Begin("Tile Info", nullptr, ImVec2{ 600, 400 }, 0.7f, ImGuiWindowFlags_AlwaysAutoResize + ImGuiWindowFlags_NoCollapse);
 
-			ImGui::Text(std::string("Tile Biome " + biomeName).c_str());
-			ImGui::Text(std::string("Tile Height " + std::to_string(tile.height)).c_str());
-			ImGui::Text(std::string("Tile Rainfall " + std::to_string(tile.rainfall)).c_str());
+			ImGui::Text(std::string("Tile Biome "		+ biomeName).c_str());
+			ImGui::Text(std::string("Tile Height "		+ std::to_string(tile.height)).c_str());
+			ImGui::Text(std::string("Tile Rainfall "	+ std::to_string(tile.rainfall)).c_str());
 			ImGui::Text(std::string("Tile Temperature " + std::to_string(tile.temperature)).c_str());
-			ImGui::Text(std::string("Tile Variance " + std::to_string(tile.variance)).c_str());
+			ImGui::Text(std::string("Tile Variance "	+ std::to_string(tile.variance)).c_str());
 
 			ImGui::End();
 
 			if (ImGui::IsMouseClicked(dfr::Button::LEFT) && stage != Stage::FINALIZE_EMBARK)
 			{
-				embarkX = mousePos.x;
-				embarkY = mousePos.y;
-				stage = Stage::FINALIZE_EMBARK;
-				showMouse = false;
+				embarkX		= mousePos.x;
+				embarkY		= mousePos.y;
+				stage		= Stage::FINALIZE_EMBARK;
+				showMouse	= false;
 			}
 		}
 
@@ -192,12 +192,9 @@ void WorldGenLoop::run(const double duration)
 			if (ImGui::Button("Yes"))
 			{
 				// Transfer control to the Play game loop and init systems and components
-				MainFunction = PlayGameLoop::run;
-				gameState = GameState::NEW_GAME;
-				showMouse = true;
-
-				//for (int i = 0; i < numDwarves; ++i) // Place this somewhere else once we have code to create dwarves with new gui
-				//	createDwarf({});
+				MainFunction	= PlayGameLoop::run;
+				gameState		= GameState::NEW_GAME;
+				showMouse		= true;
 
 				// Build the region
 				buildRegion(planet, embarkX - wxOffset, embarkY - wyOffset, { regionX, regionY, regionZ }, rng);

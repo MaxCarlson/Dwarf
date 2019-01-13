@@ -54,6 +54,7 @@
 #include "ECS\Systems\helpers\WorkOrderHelper.h"
 #include "ECS\Systems\helpers\RegionHelper.h"
 #include "ECS\Systems\helpers\SeedsHelper.h"
+#include "ECS\Systems\helpers\SpawnCreature.h"
 
 // System time based
 #include "ECS\Systems\timebased\CalenderSystem.h"
@@ -75,34 +76,37 @@
 #include <imgui.h>
 #include <DwarfRender.h>
 
-const std::string RENDER_SYSTEM = "Render System";
-const std::string MOVEMENT_SYSTEM = "Movement System";
-const std::string MOVEMENT_AI_SYSTEM = "Movement Ai System";
-const std::string AI_WORK_SYSTEM = "Ai Work System";
-const std::string MINING_AI = "Mining Ai";
-const std::string BUILD_AI = "Build Ai";
-const std::string WORK_ORDERS_SYSTEM = "Work Orders";
-const std::string WORK_ORDER_HELPER = "Work Order Helper";
-const std::string STOCKPILE_SYSTEM = "Stockpile System";
-const std::string HAULING_SYSTEM = "Hauling System";
-const std::string INPUT_HANDLER = "Input Handler";
-const std::string DESIGNATION_HANDLER = "Designation Handler";
-const std::string MINING_SYSTEM = "Mining System";
+const std::string RENDER_SYSTEM			= "Render System";
+const std::string MOVEMENT_SYSTEM		= "Movement System";
+const std::string MOVEMENT_AI_SYSTEM	= "Movement Ai System";
+const std::string AI_WORK_SYSTEM		= "Ai Work System";
+const std::string MINING_AI				= "Mining Ai";
+const std::string BUILD_AI				= "Build Ai";
+const std::string WORK_ORDERS_SYSTEM	= "Work Orders";
+const std::string STOCKPILE_SYSTEM		= "Stockpile System";
+const std::string HAULING_SYSTEM		= "Hauling System";
+const std::string INPUT_HANDLER			= "Input Handler";
+const std::string MINING_SYSTEM			= "Mining System";
 const std::string DIJKSTRA_MAPS_HANDLER = "Dijkstra Maps System";
 const std::string ENTITY_POSITION_CACHE = "Position Cache";
-const std::string EQUIP_HANDLER = "Equip Handler";
-const std::string ITEM_HELPER = "Item Helper";
-const std::string AI_ARCHITECTURE = "Ai Architecture";
-const std::string WOODCUTTING_AI = "Woodcutting Ai";
-const std::string HARVEST_AI = "Harvest Ai";
-const std::string FARMING_AI = "Farming Ai";
-const std::string CALENDER_SYSTEM = "Calender System";
-const std::string PLANT_SYSTEM = "Plant System";
-const std::string REGION_HELPER = "Region Helper";
-const std::string FARM_CLEAR_AI = "Farm Clear Ai";
-const std::string FARM_SOIL_AI = "Farm Soil Ai";
-const std::string SEED_HELPER = "Seed Helper";
-const std::string VIEW_SYSTEM = "View System";
+const std::string EQUIP_HANDLER			= "Equip Handler";
+const std::string AI_ARCHITECTURE		= "Ai Architecture";
+const std::string WOODCUTTING_AI		= "Woodcutting Ai";
+const std::string HARVEST_AI			= "Harvest Ai";
+const std::string FARMING_AI			= "Farming Ai";
+const std::string CALENDER_SYSTEM		= "Calender System";
+const std::string PLANT_SYSTEM			= "Plant System";
+const std::string FARM_CLEAR_AI			= "Farm Clear Ai";
+const std::string FARM_SOIL_AI			= "Farm Soil Ai";
+const std::string VIEW_SYSTEM			= "View System";
+
+// Helper Systems
+const std::string WORK_ORDER_HELPER		= "Work Order Helper";
+const std::string DESIGNATION_HANDLER	= "Designation Handler";
+const std::string ITEM_HELPER			= "Item Helper";
+const std::string REGION_HELPER			= "Region Helper";
+const std::string SEED_HELPER			= "Seed Helper";
+const std::string SPAWN_CREATURE		= "Spawn Creature";
 
 // Needs and passive
 const std::string NEEDS_SYSTEM = "Needs System";
@@ -152,9 +156,9 @@ void initSystems(bool fromLoad)
 
 	if (!fromLoad)
 	{
-		calender = std::make_unique<Calender>(); // Eventually give an input date based on world generation
-		designations = std::make_unique<Designations>();
-		defInfo = std::make_unique<DefInfo>();
+		calender		= std::make_unique<Calender>(); // Eventually give an input date based on world generation
+		designations	= std::make_unique<Designations>();
+		defInfo			= std::make_unique<DefInfo>();
 	}
 
 	// Grab all the info about defs we'd like
@@ -163,64 +167,65 @@ void initSystems(bool fromLoad)
 
 	// External systems
 	workOrderHelper = std::make_unique<WorkOrderHelper>();
-	regionHelper = std::make_unique<RegionHelper>();
+	regionHelper	= std::make_unique<RegionHelper>();
 
 	// Normal Systems
 	// Memory is managed from inside the World.h class! Is it?
-	systems[DESIGNATION_HANDLER] = new DesignationHandler;
-	systems[RENDER_SYSTEM] = new RenderSystem;
-	systems[MOVEMENT_SYSTEM] = new MovementSystem;
-	systems[MOVEMENT_AI_SYSTEM] = new MovementAiSystem;
-	systems[MINING_SYSTEM] = new MiningSystem;
-	systems[AI_WORK_SYSTEM] = new AiWorkSystem;
-	systems[MINING_AI] = new MiningAi;
-	systems[DIJKSTRA_MAPS_HANDLER] = new DijkstraMapsHandler;
-	systems[ENTITY_POSITION_CACHE] = new EntityPositionCache;
-	systems[EQUIP_HANDLER] = new EquipHandler;
-	systems[BUILD_AI] = new BuildAi;
-	systems[WORK_ORDERS_SYSTEM] = new WorkOrders;
-	systems[STOCKPILE_SYSTEM] = new StockpileSystem;
-	systems[HAULING_SYSTEM] = new HaulingSystem;
-	systems[AI_ARCHITECTURE] = new AiArchitecture;
-	systems[WOODCUTTING_AI] = new WoodcuttingAi;
-	systems[HARVEST_AI] = new HarvestAi;
-	systems[FARMING_AI] = new FarmingAi;
-	systems[CALENDER_SYSTEM] = new CalenderSystem;
-	systems[PLANT_SYSTEM] = new PlantSystem;
-	systems[FARM_CLEAR_AI] = new FarmingClearAi;
-	systems[FARM_SOIL_AI] = new FarmingSoilAi;
-	systems[VIEW_SYSTEM] = new ViewSystem;
+	systems[DESIGNATION_HANDLER]	= new DesignationHandler;
+	systems[RENDER_SYSTEM]			= new RenderSystem;
+	systems[MOVEMENT_SYSTEM]		= new MovementSystem;
+	systems[MOVEMENT_AI_SYSTEM]		= new MovementAiSystem;
+	systems[MINING_SYSTEM]			= new MiningSystem;
+	systems[AI_WORK_SYSTEM]			= new AiWorkSystem;
+	systems[MINING_AI]				= new MiningAi;
+	systems[DIJKSTRA_MAPS_HANDLER]	= new DijkstraMapsHandler;
+	systems[ENTITY_POSITION_CACHE]	= new EntityPositionCache;
+	systems[EQUIP_HANDLER]			= new EquipHandler;
+	systems[BUILD_AI]				= new BuildAi;
+	systems[WORK_ORDERS_SYSTEM]		= new WorkOrders;
+	systems[STOCKPILE_SYSTEM]		= new StockpileSystem;
+	systems[HAULING_SYSTEM]			= new HaulingSystem;
+	systems[AI_ARCHITECTURE]		= new AiArchitecture;
+	systems[WOODCUTTING_AI]			= new WoodcuttingAi;
+	systems[HARVEST_AI]				= new HarvestAi;
+	systems[FARMING_AI]				= new FarmingAi;
+	systems[CALENDER_SYSTEM]		= new CalenderSystem;
+	systems[PLANT_SYSTEM]			= new PlantSystem;
+	systems[FARM_CLEAR_AI]			= new FarmingClearAi;
+	systems[FARM_SOIL_AI]			= new FarmingSoilAi;
+	systems[VIEW_SYSTEM]			= new ViewSystem;
 
 	// Needs 
-	systems[NEEDS_SYSTEM] = new NeedsSystem;
-	systems[SLEEP_SYSTEM] = new SleepSystem;
-	systems[EAT_FOOD_SYSTEM] = new EatFoodSystem;
-	systems[JOY_SYSTEM] = new JoySystem;
+	systems[NEEDS_SYSTEM]			= new NeedsSystem;
+	systems[SLEEP_SYSTEM]			= new SleepSystem;
+	systems[EAT_FOOD_SYSTEM]		= new EatFoodSystem;
+	systems[JOY_SYSTEM]				= new JoySystem;
 
 	// Gui systems
-	systems[MENU_BAR] = new MenuBar;
-	systems[CAMERA_SYSTEM] = new CameraSystem;
-	systems[DESIGN_ARCHITECTURE] = new DesignArchitecture;
-	systems[DESIGN_BUILDING] = new DesignBuilding;
-	systems[DESIGN_DEV_MODE] = new DesignDevMode;
-	systems[DESIGN_HARVEST] = new DesignHarvest;
-	systems[DESIGN_MINING] = new DesignMining;
-	systems[DESIGN_WOODCUTTING] = new DesignWoodcutting;
-	systems[DESIGN_WORKORDERS] = new DesignWorkOrders;
-	systems[DESIGN_STOCKPILES] = new DesignStockpiles;
-	systems[JOB_PREFERENCES_UI] = new JobPreferencesUi;
-	systems[DWARF_INFO_GUI] = new DwarfInfoGui;
+	systems[MENU_BAR]				= new MenuBar;
+	systems[CAMERA_SYSTEM]			= new CameraSystem;
+	systems[DESIGN_ARCHITECTURE]	= new DesignArchitecture;
+	systems[DESIGN_BUILDING]		= new DesignBuilding;
+	systems[DESIGN_DEV_MODE]		= new DesignDevMode;
+	systems[DESIGN_HARVEST]			= new DesignHarvest;
+	systems[DESIGN_MINING]			= new DesignMining;
+	systems[DESIGN_WOODCUTTING]		= new DesignWoodcutting;
+	systems[DESIGN_WORKORDERS]		= new DesignWorkOrders;
+	systems[DESIGN_STOCKPILES]		= new DesignStockpiles;
+	systems[JOB_PREFERENCES_UI]		= new JobPreferencesUi;
+	systems[DWARF_INFO_GUI]			= new DwarfInfoGui;
 
 	// Combat
-	systems[DEATH_SYSTEM] = new DeathSystem;
-	systems[PROCESS_ATTACKS] = new ProcessAttacks;
-	systems[DRAFTED_SYSTEM] = new DraftedSystem;
+	systems[DEATH_SYSTEM]			= new DeathSystem;
+	systems[PROCESS_ATTACKS]		= new ProcessAttacks;
+	systems[DRAFTED_SYSTEM]			= new DraftedSystem;
 
-	// External Systems
-	systems[ITEM_HELPER] = &itemHelper;
-	systems[WORK_ORDER_HELPER] = workOrderHelper.get();
-	systems[REGION_HELPER] = regionHelper.get();
-	systems[SEED_HELPER] = &seedsHelper;
+	// External/Helper Systems
+	systems[ITEM_HELPER]			= &itemHelper;
+	systems[WORK_ORDER_HELPER]		= workOrderHelper.get();
+	systems[REGION_HELPER]			= regionHelper.get();
+	systems[SEED_HELPER]			= &seedsHelper;
+	systems[SPAWN_CREATURE]			= new SpawnCreature;
 
 	// Add systems to world. Cast to their derived class so world 
 	// doesn't interpret them as SystemBase's
@@ -278,7 +283,9 @@ void initSystems(bool fromLoad)
 	world.addSystem( itemHelper);
 	world.addSystem(*workOrderHelper.get());
 	world.addSystem(*regionHelper.get());
-	world.addSystem( seedsHelper);
+	world.addSystem( seedsHelper); // TODO:: This can be converted into a variadic system
+	world.addSystem(* static_cast<SpawnCreature *>(systems[SPAWN_CREATURE]));
+
 
 	for (auto& sys : systems)
 		sys.second->init();
