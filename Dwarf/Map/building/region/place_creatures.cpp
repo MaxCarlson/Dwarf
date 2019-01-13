@@ -29,21 +29,24 @@ bool spiralOut(Coordinates co, int tiles, int maxBlockingTiles, Func&& lam)
 	int blockingTiles	= 0;
 	std::function func	= std::plus<int>();
 
-	int i = 1;
-	for (; i < tiles && blockingTiles < maxBlockingTiles; ++i)
+	int i = 0;
+	for (; i < tiles && blockingTiles < maxBlockingTiles;)
 	{
 		if (!region::boundsCheck(co))
 			break;
 
 		if (getTileType(getIdx(co)) == TileTypes::FLOOR)
+		{
+			++i;
 			lam(co);
+		}
 		else
 			++blockingTiles;
 
 		if (toX)
-			func(co.x, addVal);
+			co.x = func(co.x, addVal);
 		else
-			func(co.y, addVal);
+			co.y = func(co.y, addVal);
 		toX = !toX;
 
 		if (++count % 2 == 0)
@@ -73,11 +76,15 @@ bool scanForSuitable(int tiles, int z, std::vector<Coordinates>& suitableTiles)
 
 		// Choose a random spot and spiral out,
 		// checking to see if there are enough tiles in the general area for the dwarves
-		if(spiralOut(co, tiles, maxBlockingTiles, [](auto co) {}))
-			spiralOut(co, tiles, maxBlockingTiles, [&](Coordinates co)
+		if (spiralOut(co, tiles, maxBlockingTiles, [](auto co) {}))
 		{
-			suitableTiles.emplace_back(co);
-		});
+			spiralOut(co, tiles, maxBlockingTiles, [&](Coordinates co)
+			{
+				suitableTiles.emplace_back(co);
+			});
+			break;
+		}
+		
 	}
 	return !suitableTiles.empty();
 }
@@ -100,8 +107,10 @@ void placeDwarves(int numDwarves)
 					&& scanForSuitable(freeTiles, h, suitableTiles))
 				{
 					found = true;
-					break;
+					goto endLoop;
 				}
+
+	endLoop:
 
 	if (!found) // TODO: Handle this error by bringing us back to map gen
 		throw std::runtime_error("Failed to place dwarves on map");
