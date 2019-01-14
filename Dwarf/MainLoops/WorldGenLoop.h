@@ -3,7 +3,7 @@
 
 namespace Details
 {
-
+inline int numDwarves = 7;
 }
 
 namespace WorldGenLoop

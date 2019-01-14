@@ -122,7 +122,10 @@ void placeDwarves(int numDwarves)
 	{
 		auto co = suitableTiles.back();
 		suitableTiles.pop_back();
-		world.emit(spawn_creature_message{ "dwarf", randomName(), randomName(), dwarfVchar, co, moveSpeed, true });
+		world.emit_deferred(spawn_creature_message{ "dwarf", randomName(), randomName(), dwarfVchar, co, moveSpeed, true });
+
+		// TODO: Maybe set camera based on most common level instead of last placed?
+		camera.z = co.z;
 	}
 
 	/*

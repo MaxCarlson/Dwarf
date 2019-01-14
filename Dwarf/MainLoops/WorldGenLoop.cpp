@@ -23,7 +23,6 @@ namespace Details
 	int regionX		= 64;
 	int regionY		= 64;
 	int regionZ		= 150;
-	int numDwarves	= 7;
 	int planetX		= 64;
 	int planetY		= 64;
 	int embarkX		= 0;
@@ -198,7 +197,7 @@ void WorldGenLoop::run(const double duration)
 
 				// Build the region
 				buildRegion(planet, embarkX - wxOffset, embarkY - wyOffset, { regionX, regionY, regionZ }, rng);
-				placeDwarves(numDwarves);
+				//placeDwarves(numDwarves);
 			}
 
 			if (ImGui::Button("No"))

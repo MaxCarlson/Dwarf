@@ -9,6 +9,9 @@ boost::container::flat_map<std::string, SpeciesDef> speciesMap;
 
 SpeciesDef * getSpecies(const std::string & tag) noexcept
 {
+	auto find = speciesMap.find(tag);
+	if (find != std::end(speciesMap))
+		return &find->second;
 	return nullptr;
 }
 

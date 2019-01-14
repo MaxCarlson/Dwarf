@@ -13,6 +13,7 @@
 #include "Designations\Designations.h"
 #include "Raws\DefInfo.h"
 #include "Globals\Camera.h"
+#include "Map\building\region\place_creatures.h"
 //#include "Map\building\regionBuilder.h"
 //#include "Helpers\Rng.h"
 #include <imgui.h>
@@ -139,6 +140,7 @@ void PlayGameLoop::run(const double duration)
 	{
 		RunSystems::initSystems(false);
 		ComponentsInit::registerOrResetVardiadicEach(false);
+		placeDwarves(Details::numDwarves);
 
 		gameState = GameState::PLAYING;
 	}

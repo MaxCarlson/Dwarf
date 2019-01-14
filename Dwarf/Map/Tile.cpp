@@ -448,7 +448,7 @@ namespace region
 
 	bool boundsCheck(Coordinates co)
 	{
-		return(co.x < MAP_WIDTH && co.x >= 0 && co.y < MAP_HEIGHT && co.y >= 0 && co.z < MAP_DEPTH && co.z >= 0);
+		return(co.x < MAP_WIDTH - 1 && co.x >= 0 && co.y < MAP_HEIGHT - 1 && co.y >= 0 && co.z < MAP_DEPTH - 1 && co.z >= 0);
 	}
 
 	void Region::tileRecalcAll()
