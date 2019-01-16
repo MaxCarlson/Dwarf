@@ -5,7 +5,6 @@
 #include "Helpers\Rng.h"
 #include "../Tile.h"
 #include "PlanetMapBuilder.h"
-#include "WorldGeneration.h"
 #include "Raws\BiomeReader.h"
 #include "Raws\Defs\BiomeDef.h"
 #include "Map\building\BuildBiomes.h"
@@ -114,6 +113,5 @@ void buildPlanet(const std::string seed, const int pwidth, const int pheight, Co
 
 	//buildPlanetBiomes(planet, rng);
 
-	worldThread->detach();
 	worldGenDone = true;
 }

@@ -4,11 +4,11 @@
 #include "MainMenuLoop.h"
 #include "Globals\MainFunction.h"
 #include "Globals\game_states.h"
-#include "WorldGeneration.h"
 #include "Map\building\PlanetBuilding.h"
 #include "Map\World\Planet.h"
 #include "Map\building\regionBuilder.h"
 #include "Map\building\region\place_creatures.h"
+#include "Map\building\PlanetBuilding.h"
 #include "Helpers\Rng.h"
 #include "Raws\BiomeReader.h"
 #include "Raws\Defs\BiomeDef.h"
@@ -17,6 +17,8 @@
 #include <imgui.h>
 #include <imgui-SFML.h>
 #include <DwarfRender.h>
+
+std::unique_ptr<std::thread> worldThread;
 
 namespace Details
 {
@@ -115,7 +117,8 @@ void WorldGenLoop::run(const double duration)
 
 		if (ImGui::Button("Ready"))
 		{
-			generateWorld(seed, planetX, planetY, { regionX, regionY, regionZ }, waterD, plainsD, numDwarves);
+			//generateWorld(seed, planetX, planetY, { regionX, regionY, regionZ }, waterD, plainsD, numDwarves);
+			worldThread = std::make_unique<std::thread>(buildPlanet, seed, planetX, planetY, Coordinates{ regionX, regionY, regionZ }, waterD, plainsD, numDwarves);
 			stage = Stage::GENERATING;
 		}
 
@@ -197,6 +200,7 @@ void WorldGenLoop::run(const double duration)
 
 				// Build the region
 				buildRegion(planet, embarkX - wxOffset, embarkY - wyOffset, { regionX, regionY, regionZ }, rng);
+
 				//placeDwarves(numDwarves);
 			}
 

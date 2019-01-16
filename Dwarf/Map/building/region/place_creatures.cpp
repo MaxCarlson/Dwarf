@@ -122,31 +122,9 @@ void placeDwarves(int numDwarves)
 	{
 		auto co = suitableTiles.back();
 		suitableTiles.pop_back();
-		world.emit_deferred(spawn_creature_message{ "dwarf", randomName(), randomName(), dwarfVchar, co, moveSpeed, true });
+		world.emit(spawn_creature_message{ "dwarf", randomName(), randomName(), dwarfVchar, co, moveSpeed, true });
 
 		// TODO: Maybe set camera based on most common level instead of last placed?
 		camera.z = co.z;
 	}
-
-	/*
-	int dwarfNumber = 0;
-	auto number = dwarfContainer.dwarves.size(); //engine->Dwarves.size();
-
-	for (int h = MAP_DEPTH - 1; h > 1; --h)
-		for (int i = 3; i < MAP_WIDTH - 2; ++i)
-			for (int j = 3; j < MAP_HEIGHT - 2; ++j)
-			{
-				if (getTileType(getIdx({ i, j, h })) == TileTypes::FLOOR)
-				{
-					dwarfContainer.dwarves.at(dwarfNumber).getComponent<PositionComponent>().co = { i, j, h };
-					camera.z = h;
-					++dwarfNumber;
-				}
-
-				if (dwarfNumber >= number)
-				{
-					return;
-				}
-			}
-	*/
 }

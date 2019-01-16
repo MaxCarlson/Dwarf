@@ -54,7 +54,7 @@ void loadRaws()
 
 	auto ll = std::make_unique<LuaLife>();
 
-	readFile(0, "Raws/LuaDefs/names.txt");
+	readFile(0, "Raws/LuaDefs/names.txt"); // TODO: Move into index
 	readFile(1, "Raws/LuaDefs/index.txt");
 	for (const std::string & fileName : returnTable(1)->strings)
 	{
@@ -72,7 +72,6 @@ Entity spawnItemOnGround(const std::string itemTag, const std::size_t material, 
 
 	auto mat = getMaterial(material);
 
-	//auto e = engine->world.createEntity();
 	auto e = world.createEntity();
 
 	e.addComponent<PositionComponent>(co);
@@ -90,6 +89,5 @@ Entity spawnItemOnGround(const std::string itemTag, const std::size_t material, 
 	}
 
 	e.activate();
-
 	return e;
 }
