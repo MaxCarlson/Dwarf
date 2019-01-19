@@ -327,14 +327,14 @@ void updateSystems(const double duration)
 	keys::addTime(duration);
 	mouse::readMouse();
 
-	constexpr double MS_PER_UPDATE = 17.0;
-	constexpr double MS_PER_MAJOR_TICK = 250.0;
+	constexpr double MS_PER_UPDATE		= 17.0;
+	constexpr double MS_PER_MAJOR_TICK	= 250.0;
 
-	static double tick = 0.0;
+	static double tick		= 0.0;
 	static double majorTick = 0.0;
 
-	tick += duration;
-	majorTick += duration;
+	tick		+= duration;
+	majorTick	+= duration;
 
 
 	runSystem(CAMERA_SYSTEM, duration);

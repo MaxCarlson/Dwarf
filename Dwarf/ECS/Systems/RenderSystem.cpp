@@ -39,45 +39,6 @@ const vchar getTR(const Coordinates co)
 
 	return v;
 }
-/*
-void RenderSystem::update(const double duration)
-{	
-	static const int codes[] = { 0xE000, 0xE100, 0xE200, 0xE300, 0xE400, 0xE500, 0xE600, 0xE700, 0xE800 };
-
-	const auto& entities = getEntities();
-
-	const int offsetX = engine->mapRenderer->offsetX; 
-	const int offsetY = engine->mapRenderer->offsetY;
-	const int maxX = (terminal_state(TK_WIDTH)  + offsetX) <= MAP_WIDTH  ? (terminal_state(TK_WIDTH)  + offsetX) : MAP_WIDTH;
-	const int maxY = (terminal_state(TK_HEIGHT) + offsetY) <= MAP_HEIGHT ? (terminal_state(TK_HEIGHT) + offsetY) : MAP_HEIGHT;
-
-	terminal_color("default");
-
-	updateRender();
-
-	int z = engine->mapRenderer->currentZLevel;
-	int X = 0;
-	for (int x = offsetX; x < maxX; ++x)
-	{
-		int Y = 0;
-		for (int y = offsetY; y < maxY; ++y)
-		{
-			//auto rend = getTileRender({ x, y, z });
-			auto rend = getTR({ x, y, z });
-
-			terminal_color(rend.fg);
-			terminal_bkcolor(rend.bg);
-
-			int calcChar = rend.c / 255;
-
-			terminal_put(X, Y, codes[calcChar + 1] + ( rend.c - calcChar * 256));
-			++Y;
-		}
-		++X;
-	}
-	terminal_bkcolor("black");
-}
-*/
 
 void RenderSystem::update(const double duration)
 {
@@ -101,14 +62,13 @@ void RenderSystem::update(const double duration)
 void RenderSystem::updateRender()
 {
 	/*
-	std::queue<render_changed_message> * rc = mbox<render_changed_message>(); // Delete this?
-
+	std::queue<render_changed_message> * rc = mbox<render_changed_message>(); 
 	while (rc && !rc->empty()) // And this? Render is going to be changing quite a bit
 	{
 		renderChanged = true;
 		rc->pop();
 	}
-*/
+	*/
 	renderChanged = true; // delete this and add in render_changed_messages ? Only once needed?
 
 	if (renderChanged)
@@ -147,11 +107,8 @@ void RenderSystem::updateRender()
 			auto* b = &e.getComponent<Building>();
 			auto* rend = &e.getComponent<RenderComponent>();
 
-			//if (!pos || !rend) // Already implicit in being part of this system
-			//	continue;
-
 			// 2D Idxing 
-			const int idx = (dfr::terminal->width * pos->co.y) + pos->co.x;//(terminal_width * pos->co.y) + pos->co.x;
+			const int idx = (dfr::terminal->width * pos->co.y) + pos->co.x;
 
 			// Render buildings code
 			if (b && pos && !rendered)
@@ -160,6 +117,7 @@ void RenderSystem::updateRender()
 				int boffsetX = 0;
 				int boffsetY = 0;
 
+				// Offset for 3x3 buildings
 				if (b->width == 3)
 					boffsetX = -1;
 				if (b->height == 3)

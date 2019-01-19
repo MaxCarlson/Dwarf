@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "KeyDampener.h"
+#include "mouse.h"
 #include <imgui.h>
 
 namespace keys
@@ -32,4 +33,12 @@ namespace keys
 
 		return false;
 	}
+
+	// TODO: Make custom key combinations like left click | enter ?
+	bool keyOrLeftClick(int key, bool damp)
+	{
+		return isKeyDown(key, damp) || mouse::leftClick;
+	}
+
+
 }

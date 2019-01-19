@@ -120,10 +120,10 @@ void DwarfInfoGui::drawNeeds(const std::string &name, const Entity& e)
 
 	ImGui::Text(name.c_str());
 		
-	ImGui::PushStyleColor(ImGuiCol_FrameBg, (ImVec4)ImColor::HSV(7.0f, 0.5f, 0.5f));
-	ImGui::PushStyleColor(ImGuiCol_FrameBgHovered, (ImVec4)ImColor::HSV(7.0f, 0.6f, 0.5f));
-	ImGui::PushStyleColor(ImGuiCol_FrameBgActive, (ImVec4)ImColor::HSV(7.0f, 0.7f, 0.5f));
-	ImGui::PushStyleColor(ImGuiCol_SliderGrab, (ImVec4)ImColor::HSV(7.0f, 0.9f, 0.9f));
+	ImGui::PushStyleColor(ImGuiCol_FrameBg,			(ImVec4)ImColor::HSV(7.0f, 0.5f, 0.5f));
+	ImGui::PushStyleColor(ImGuiCol_FrameBgHovered,	(ImVec4)ImColor::HSV(7.0f, 0.6f, 0.5f));
+	ImGui::PushStyleColor(ImGuiCol_FrameBgActive,	(ImVec4)ImColor::HSV(7.0f, 0.7f, 0.5f));
+	ImGui::PushStyleColor(ImGuiCol_SliderGrab,		(ImVec4)ImColor::HSV(7.0f, 0.9f, 0.9f));
 
 	// Draw need bars
 	int nIdx = 0;

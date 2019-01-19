@@ -49,15 +49,16 @@ void DesignMining::update(const double duration) // Add in mining templates!
 	if (isKeyDown(sf::Keyboard::Key::J)) miningType = MINING_DOWN_STAIRS;
 	if (isKeyDown(sf::Keyboard::Key::X)) miningType = MINING_UP_DOWN_STAIRS;
 	if (isKeyDown(sf::Keyboard::Key::E)) miningType = MINING_ERASE;
-
+	
 	if (mouse::rightClick)
 	{
 		click = EMPTY_COORDINATES;
 	}
 
-	if ((mouse::leftClick && !ImGui::IsMouseHoveringWindow()) || click != EMPTY_COORDINATES)
+	if ((keyOrLeftClick(sf::Keyboard::Return, true) && !ImGui::IsMouseHoveringWindow()) 
+		|| click != EMPTY_COORDINATES)
 	{
-		if (mouse::leftClick && click != EMPTY_COORDINATES)
+		if (keyOrLeftClick(sf::Keyboard::Return, true) && click != EMPTY_COORDINATES)
 			confirm = true;
 
 		if(click == EMPTY_COORDINATES)

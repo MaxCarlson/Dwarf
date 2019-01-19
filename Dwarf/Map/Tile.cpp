@@ -555,6 +555,9 @@ namespace region
 		uint32_t fg = color_from_name("black");
 		uint32_t bg = color_from_name("black");
 
+		if (!tileFlags[idx].test(DISCOVERED))
+			goto End;
+
 		switch (tileTypes[idx])
 		{
 		case TileTypes::EMPTY_SPACE:
@@ -628,6 +631,7 @@ namespace region
 			break;
 		}
 
+		End:
 		renderCache[idx] = vchar{ ch, fg, bg };
 	}
 	vchar Region::getRenderTile(const Coordinates co)

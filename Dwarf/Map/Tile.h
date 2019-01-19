@@ -43,7 +43,8 @@ namespace region
 		CAN_GO_UP				= 1 << 9,
 		CAN_GO_DOWN				= 1 << 10,
 		CAN_GO_ALL_DIRECTIONS	= ((CAN_GO_DOWN) - 1) & ~1,
-		CONSTRUCTION			= 1 << 12
+		CONSTRUCTION			= 1 << 12,
+		DISCOVERED				= 1 << 13
 	};
 
 	enum Directions

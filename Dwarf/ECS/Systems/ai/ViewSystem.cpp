@@ -120,6 +120,9 @@ void ViewSystem::update(const double duration)
 		}
 
 		// TODO: Reveal map that hasn't been revealed yet!
+		for (const auto& vs : view.visibleCache)
+			if (!region::flag(idxToCo(vs), region::Flag::DISCOVERED))
+				region::setFlag(idxToCo(vs), region::Flag::DISCOVERED);
 
 		// TODO: For enemy visibility if this becomes cumbersome perhaps it would do to 
 		// brehsein line between all entities (Pawns / Enemies) close enough together iinstead of this 8K vector stuff done here

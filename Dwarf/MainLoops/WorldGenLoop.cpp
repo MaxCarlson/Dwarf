@@ -153,8 +153,8 @@ void WorldGenLoop::run(const double duration)
 
 	else if (stage == Stage::CHOOSE_EMBARK || stage == Stage::FINALIZE_EMBARK)
 	{
-		if (mousePos.x >= 0 + wxOffset && mousePos.x < WORLD_WIDTH + wxOffset
-			&& mousePos.y >= 0 + wyOffset && mousePos.y < WORLD_HEIGHT + wyOffset)
+		if (mousePos.x >= 0 + wxOffset && mousePos.x < planetX + wxOffset
+			&& mousePos.y >= 0 + wyOffset && mousePos.y < planetY + wyOffset)
 		{
 			const auto& tile = planet.tiles[planet.idx(mousePos.x - wxOffset, mousePos.y - wyOffset)];
 
