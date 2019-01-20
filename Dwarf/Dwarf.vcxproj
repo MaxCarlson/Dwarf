@@ -246,7 +246,6 @@
     <ClCompile Include="Globals\DwarfContainer.cpp" />
     <ClCompile Include="Globals\game_states.cpp" />
     <ClCompile Include="Globals\GlobalWorld.cpp" />
-    <ClCompile Include="Globals\GlobalTerminals.cpp" />
     <ClCompile Include="HappinessSystem.cpp" />
     <ClCompile Include="imgui-SFML.cpp" />
     <ClCompile Include="imgui.cpp" />

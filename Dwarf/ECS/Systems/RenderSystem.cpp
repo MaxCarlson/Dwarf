@@ -9,6 +9,7 @@
 #include "../Drawing/vchar.h"
 #include "Globals\Camera.h"
 #include "Globals\game_states.h"
+#include "Globals\GlobalTerminals.h"
 #include "dfr\DwarfRender.h"
 #include <imgui.h>
 #include <imgui-SFML.h>
@@ -22,14 +23,15 @@ void RenderSystem::init()
 
 const static color_t defaultColor = color_from_name("black");
 
-const vchar getTR(const Coordinates co)
+/*
+vchar getTileRender(const Coordinates co)
 {
-	//const vchar& v = region::getRenderTile(co); // For 3D rendering once we implement lighting
+	const vchar& v = region::getRenderTile(co); // For 3D rendering once we implement lighting
 
-	const vchar& v = region::renderCache(getIdx(co));
+	//const vchar& v = region::renderCache(getIdx(co));
 
-	auto rendIt = renderEntities.find((dfr::terminal->width * co.y) + co.x);//renderEntities.find((terminal_state(TK_WIDTH) * co.y) + co.x);
-
+	auto rendIt = renderEntities.find((dfr::terminal->width * co.y) + co.x);
+	
 	if (rendIt != renderEntities.end())
 	{
 		const auto& rend = rendIt->second[0]; // Add cycling through glyphs every once in a while if multiple on tile
@@ -39,6 +41,30 @@ const vchar getTR(const Coordinates co)
 
 	return v;
 }
+*/
+
+void applyHaze(int x, int y, int z, int camZ)
+{
+	shadowTerminal->setChar(x, y, { 0, 0, 0 });
+}
+
+std::pair<vchar, int> getTileRender(const Coordinates co)
+{
+	auto [v, z] = region::getRenderTile(co); // For 3D rendering once we implement lighting
+
+	//const vchar& v = region::renderCache(getIdx(co));
+
+	auto rendIt = renderEntities.find((dfr::terminal->width * co.y) + co.x);
+
+	if (rendIt != renderEntities.end())
+	{
+		const auto& rend = rendIt->second[0]; // Add cycling through glyphs every once in a while if multiple on tile
+
+		return { rend.ch, z };
+	}
+
+	return { v, z };
+}
 
 void RenderSystem::update(const double duration)
 {
@@ -47,15 +73,21 @@ void RenderSystem::update(const double duration)
 
 	updateRender(); // Remove the need to always do this
 
-	int maxX = std::min(MAP_WIDTH, dfr::terminal->width);
+	int maxX = std::min(MAP_WIDTH,  dfr::terminal->width);
 	int maxY = std::min(MAP_HEIGHT, dfr::terminal->height); 
 
 	for(int x = 0; x < maxX; ++x)
 		for (int y = 0; y < maxY; ++y)
 		{
-			auto rend = getTR({ x, y, z });
+			auto [rend, chZLvl] = getTileRender({ x, y, z });
+			
+			
+			//dfr::terminal->setAlpha(255 - (z - eZLvl) * 35);
+			dfr::terminal->setChar(x + camera.offsetX, y + camera.offsetY, { static_cast<uint32_t>(rend.c), rend.fg, rend.bg });
 
-			dfr::terminal->setChar(x + camera.offsetX, y + camera.offsetY, {static_cast<uint32_t>(rend.c), rend.fg, rend.bg });
+			// If the character z level is lower than the camera,
+			// apply a hazing effect
+			applyHaze(x + camera.offsetX, y + camera.offsetY, chZLvl, z);
 		}
 }
 
@@ -84,7 +116,7 @@ void RenderSystem::updateRender()
 		const int maxY = terminal_state(TK_HEIGHT) + minY;
 		*/
 
-		const int zlvl = camera.z; //engine->mapRenderer->currentZLevel;
+		const int zlvl = camera.z; 
 
 		//std::vector<std::size_t> visible = positionCache->find_by_region(minX, maxX, maxY, minY, zlvl, zlvl - 10); When we want to render more than just one zLvl
 

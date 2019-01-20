@@ -82,7 +82,7 @@ namespace region
 		void tilePathing(const Coordinates co);
 		void tileRecalc(const Coordinates co);
 		void tileCalcRender(Coordinates co);
-		vchar getRenderTile(const Coordinates co);
+		std::pair<vchar, int> getRenderTile(const Coordinates co);
 
 		template<class Archive>
 		void serialize(Archive & archive)
@@ -178,7 +178,7 @@ namespace region
 		return currentRegion->renderCache[idx];
 	}
 
-	vchar getRenderTile(const Coordinates co)
+	std::pair<vchar, int> getRenderTile(const Coordinates co)
 	{
 		return currentRegion->getRenderTile(co);
 	}
@@ -528,33 +528,13 @@ namespace region
 	void Region::tileRecalc(const Coordinates co)
 	{
 		tileCalcRender(co);
-		const int idx = getIdx(co);
-
-		/*
-		if (co.z == MAP_DEPTH - 1)
-			aboveGround[idx] = true;
-
-		else
-		{
-			bool ug = false;
-			for (int z = MAP_DEPTH - 1; z > 0; --z)
-				if (tileTypes[getIdx({ co.x, co.y, z })] == TileTypes::SOLID)
-				{
-					ug = true;
-					break;
-				}
-					
-
-			aboveGround[idx] = !ug;
-		}
-		*/
 		tilePathing(co);
 	}
 
 	void Region::tileCalcRender(Coordinates co)
 	{
-		const int idx = getIdx(co);
-		int ch = 0;
+		int idx		= getIdx(co);
+		int ch		= 0;
 		uint32_t fg = color_from_name("black");
 		uint32_t bg = color_from_name("black");
 
@@ -637,18 +617,20 @@ namespace region
 		End:
 		renderCache[idx] = vchar{ ch, fg, bg };
 	}
-	vchar Region::getRenderTile(const Coordinates co)
+
+	std::pair<vchar, int> Region::getRenderTile(const Coordinates co)
 	{
 		// Loop through z levels until hitting ground and return first visible tile
-		for (int z = co.z; z > 0; --z)
+		int z;
+		for (z = co.z; z > 0; --z)
 		{
 			const auto idx = getIdx({ co.x, co.y, z });
 			const auto& tt = tileTypes[idx];
 
 			if (tt != TileTypes::EMPTY_SPACE)
-				return renderCache[idx];
+				return { renderCache[idx], z };
 		}
-		return vchar{ 0, color_from_name("black"), color_from_name("black") };
+		return { vchar{ 0, color_from_name("black"), color_from_name("black") }, z };
 	}
 }
 

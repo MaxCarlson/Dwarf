@@ -306,9 +306,6 @@
     <ClCompile Include="KeyDampener.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Globals\GlobalTerminals.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ECS\Systems\helpers\RegionHelper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

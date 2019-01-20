@@ -52,7 +52,10 @@ int main()
 	MainFunction = MainMenuLoop::run;
 
 	dfr::gui->addLayer(1, 0, 0, dfr::getWindow()->getSize().x, dfr::getWindow()->getSize().y, "font", onResizeL1, true); // Enum as layer terminal
-	overlayTerm = dfr::term(1);
+	dfr::gui->addLayer(2, 0, 0, dfr::getWindow()->getSize().x, dfr::getWindow()->getSize().y, "font", onResizeL1, true); // Enum as layer terminal
+	overlayTerm		= dfr::term(1); 
+	shadowTerminal	= dfr::term(2);
+
 
 	// Run the main menu function
 	// The function will change throught game depending
