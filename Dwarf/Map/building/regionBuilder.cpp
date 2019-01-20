@@ -36,6 +36,17 @@ std::pair<Biome, BiomeDef> getRegionBiome(Planet &planet, int px, int py)
 	return std::make_pair(planet.biomes[biomeIdx], *getBiomeDef(planet.biomes[biomeIdx].type));
 }
 
+void revealOpenSpaces()
+{
+	for(int i = 0; i < MAP_WIDTH - 1; ++i)
+		for (int j = 0; j < MAP_HEIGHT - 1; ++j)
+		{
+			int z = region::groundLevel(i, j);
+			for (int h = MAP_DEPTH - 1; h >= z; --h)
+				region::setFlag({ i, j, h }, region::Flag::DISCOVERED);
+		}
+}
+
 void buildRegion(Planet &planet, int px, int py, Coordinates dimensions, Rng &rng)
 {
 	region::new_region(dimensions.x, dimensions.y, dimensions.z, planet.tiles[planet.idx(px, py)].biomeIdx);
@@ -60,5 +71,6 @@ void buildRegion(Planet &planet, int px, int py, Coordinates dimensions, Rng &rn
 
 	plantTrees(biomeInfo.second.deciduosChance, biomeInfo.second.evergreenChance, rng);
 
+	revealOpenSpaces();
 	region::tile_recalc_all();
 }

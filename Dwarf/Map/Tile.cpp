@@ -440,10 +440,13 @@ namespace region
 	{
 		for (int z = MAP_DEPTH - 1; z > 0; --z)
 		{
-			if (currentRegion->tileTypes[getIdx({ x, y, z })] == TileTypes::FLOOR)
+			auto tt = currentRegion->tileTypes[getIdx({ x, y, z })];
+			if (tt == TileTypes::FLOOR) // TODO: This will likely need to be changed when walls are introduced
 				return z;
+			else if (tt == TileTypes::SOLID)
+				return z + 1;
 		}
-		return 0;
+		return 1;
 	}
 
 	bool boundsCheck(Coordinates co)
