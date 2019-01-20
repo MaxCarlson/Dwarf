@@ -45,7 +45,16 @@ vchar getTileRender(const Coordinates co)
 
 void applyHaze(int x, int y, int z, int camZ)
 {
-	shadowTerminal->setChar(x, y, { 0, 0, 0 });
+	if (z == camZ)
+	{
+		shadowTerminal->setAlpha(0);
+		return;
+	}
+
+	shadowTerminal->setAlpha(std::min(100 + (camZ - z) * 25, 255));
+
+	// TODO: Set chars only once and change alphas?
+	shadowTerminal->setChar(x, y, { 774, 0xADD8E6, 0 });
 }
 
 std::pair<vchar, int> getTileRender(const Coordinates co)
