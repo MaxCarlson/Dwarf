@@ -119,11 +119,6 @@ void ViewSystem::update(const double duration)
 			dirtyEnts.erase(e.getId().index);
 		}
 
-		// TODO: Reveal map that hasn't been revealed yet!
-		for (const auto& vs : view.visibleCache)
-			if (!region::flag(idxToCo(vs), region::Flag::DISCOVERED))
-				region::setFlag(idxToCo(vs), region::Flag::DISCOVERED);
-
 		// TODO: For enemy visibility if this becomes cumbersome perhaps it would do to 
 		// brehsein line between all entities (Pawns / Enemies) close enough together iinstead of this 8K vector stuff done here
 
@@ -137,6 +132,15 @@ void ViewSystem::update(const double duration)
 			// into this entities view
 			for (const auto& vis : visibleHere)
 				view.inView.emplace(vis);
+
+			// Reveal map that hasn't been revealed yet!
+			// TODO: Better not to test first and just set?
+			if (!region::flag(idxToCo(idx), region::Flag::DISCOVERED))
+			{
+				auto co = idxToCo(idx);
+				region::setFlag(co, region::Flag::DISCOVERED);
+				region::tile_calc_render(co);
+			}
 		}
 	}
 

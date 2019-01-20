@@ -141,6 +141,7 @@ void PlayGameLoop::run(const double duration)
 		RunSystems::initSystems(false);
 		ComponentsInit::registerOrResetVardiadicEach(false);
 		placeDwarves(Details::numDwarves);
+		world.refresh();
 
 		gameState = GameState::PLAYING;
 	}
