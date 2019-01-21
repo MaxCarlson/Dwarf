@@ -13,9 +13,9 @@ public:
 		b = c & 0xFF;
 	}
 	
-	
 	uint8_t r, g, b;
 };
 
 inline sf::Color colorToSf(const color &col) { return sf::Color(col.r, col.g, col.b); }
+color lerp(const color &first, const color &second, float amount);
 

@@ -43,18 +43,14 @@ vchar getTileRender(const Coordinates co)
 }
 */
 
-void applyHaze(int x, int y, int z, int camZ)
+void applyHaze(vchars& ch, int z, int chZ)
 {
-	if (z == camZ)
-	{
-		shadowTerminal->setAlpha(0);
-		return;
-	}
+	int heightDiff = std::min(z - chZ, 5);
 
-	shadowTerminal->setAlpha(std::min(100 + (camZ - z) * 25, 255));
+	//float amount = 0.15 * heightDiff;
+	float amount = std::pow(heightDiff, 0.25) - 0.75;
 
-	// TODO: Set chars only once and change alphas?
-	shadowTerminal->setChar(x, y, { 774, 0xADD8E6, 0 });
+	ch.fg = lerp(ch.fg, color{ 0x004561 }, amount);
 }
 
 std::pair<vchar, int> getTileRender(const Coordinates co)
@@ -88,15 +84,15 @@ void RenderSystem::update(const double duration)
 	for(int x = 0; x < maxX; ++x)
 		for (int y = 0; y < maxY; ++y)
 		{
-			auto [rend, chZLvl] = getTileRender({ x, y, z });
+			auto [rend, chZ] = getTileRender({ x, y, z });
 			
 			
-			//dfr::terminal->setAlpha(255 - (z - eZLvl) * 35);
-			dfr::terminal->setChar(x + camera.offsetX, y + camera.offsetY, { static_cast<uint32_t>(rend.c), rend.fg, rend.bg });
-
 			// If the character z level is lower than the camera,
 			// apply a hazing effect
-			applyHaze(x + camera.offsetX, y + camera.offsetY, chZLvl, z);
+			vchars tmp{ static_cast<uint32_t>(rend.c), rend.fg, rend.bg };
+			applyHaze(tmp, z, chZ);
+
+			dfr::terminal->setChar(x + camera.offsetX, y + camera.offsetY, tmp);
 		}
 }
 
