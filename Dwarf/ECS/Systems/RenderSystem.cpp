@@ -14,7 +14,7 @@
 #include <imgui.h>
 #include <imgui-SFML.h>
 
-std::unordered_map<int, std::vector<RenderComponent>> renderEntities;
+std::unordered_map<int, std::vector<std::pair<int, RenderComponent>>> renderEntities;
 
 void RenderSystem::init()
 {
@@ -63,9 +63,22 @@ std::pair<vchar, int> getTileRender(const Coordinates co)
 
 	if (rendIt != renderEntities.end())
 	{
-		const auto& rend = rendIt->second[0]; // Add cycling through glyphs every once in a while if multiple on tile
+		// TODO: Add cycling through glyphs every once in a while if multiple on tile
 
-		return { rend.ch, z };
+		// Look for the highest entity at this point that isn't higher
+		// than the camera. 
+		int best		= 0;
+		int highestZ	= 0;
+		const RenderComponent* rend = nullptr;
+		for (const auto& [ez, re] : rendIt->second)
+			if (ez > highestZ && ez >= z && ez <= co.z)
+			{
+				highestZ	= ez;
+				rend		= &re;
+			}
+
+		// If no entities are found matching return the tile
+		return { rend ? rend->ch : v, z };
 	}
 
 	return { v, z };
@@ -130,10 +143,10 @@ void RenderSystem::updateRender()
 			// Don't show entities not on camera level (for the moment)
 			// Eventually want to implement lighting to show multiple z levels
 			auto* pos = &e.getComponent<PositionComponent>();
-			if (!pos || pos->co.z != zlvl)
-				continue;
+			//if (!pos || pos->co.z != zlvl)
+			//	continue;
 
-			else if (!e.isValid()) // Should almost never be the case, here for debug
+			if (!e.isValid()) // Should almost never be the case, here for debug
 			{
 				std::cout << "Entity " << e.getId().index << " is not valid (In RendeSystem)!! \n";
 				continue;
@@ -141,8 +154,8 @@ void RenderSystem::updateRender()
 
 			bool rendered = false;
 
-			auto* b = &e.getComponent<Building>();
-			auto* rend = &e.getComponent<RenderComponent>();
+			auto* b		= &e.getComponent<Building>();
+			auto* rend	= &e.getComponent<RenderComponent>();
 
 			// 2D Idxing 
 			const int idx = (dfr::terminal->width * pos->co.y) + pos->co.x;
@@ -181,7 +194,7 @@ void RenderSystem::updateRender()
 						else
 							color = "grey";
 
-						renderEntities[idx].push_back(vchar{ glyph, color_from_name(color.c_str()), color_from_name("black") });
+						renderEntities[idx].emplace_back(pos->co.z, vchar{ glyph, color_from_name(color.c_str()), color_from_name("black") });
 						++boffsetX;
 					}
 					boffsetX = 0;
@@ -196,7 +209,7 @@ void RenderSystem::updateRender()
 			// Non building-Entity rendering
 			if (!rendered)
 			{
-				renderEntities[idx].push_back({ rend->ch });
+				renderEntities[idx].emplace_back(pos->co.z, rend->ch);
 
 				rendered = true;
 			}
