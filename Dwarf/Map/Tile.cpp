@@ -587,7 +587,7 @@ namespace region
 		}
 			break;
 
-		case TileTypes::WALL: // Not implemented yet
+		case TileTypes::WALL: // Not implemented (need all the corners, etc) yet
 		{
 			const auto& mat = getMaterial(materials[idx]);
 			ch = 205;

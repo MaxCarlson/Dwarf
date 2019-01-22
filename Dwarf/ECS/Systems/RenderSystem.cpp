@@ -23,29 +23,11 @@ void RenderSystem::init()
 
 const static color_t defaultColor = color_from_name("black");
 
-/*
-vchar getTileRender(const Coordinates co)
-{
-	const vchar& v = region::getRenderTile(co); // For 3D rendering once we implement lighting
-
-	//const vchar& v = region::renderCache(getIdx(co));
-
-	auto rendIt = renderEntities.find((dfr::terminal->width * co.y) + co.x);
-	
-	if (rendIt != renderEntities.end())
-	{
-		const auto& rend = rendIt->second[0]; // Add cycling through glyphs every once in a while if multiple on tile
-
-		return rend.ch;
-	}
-
-	return v;
-}
-*/
-
+// Apply a hazing effect for z levels below the camera
 void applyHaze(vchars& ch, int z, int chZ)
 {
-	int heightDiff = std::min(z - chZ, 5);
+	static constexpr int maxDepthGrade = 9;
+	int heightDiff = std::min(z - chZ, maxDepthGrade);
 
 	//float amount = 0.15 * heightDiff;
 	float amount = std::pow(heightDiff, 0.25) - 0.75;
@@ -99,11 +81,13 @@ void RenderSystem::update(const double duration)
 		{
 			auto [rend, chZ] = getTileRender({ x, y, z });
 			
-			
-			// If the character z level is lower than the camera,
-			// apply a hazing effect
 			vchars tmp{ static_cast<uint32_t>(rend.c), rend.fg, rend.bg };
 			applyHaze(tmp, z, chZ);
+
+			// Quick and dirty fix to make ramps appear down facing if they're not on
+			// the cameras z level
+			if (tmp.glyph == 30 && chZ < z)
+				tmp.glyph = 31;
 
 			dfr::terminal->setChar(x + camera.offsetX, y + camera.offsetY, tmp);
 		}
