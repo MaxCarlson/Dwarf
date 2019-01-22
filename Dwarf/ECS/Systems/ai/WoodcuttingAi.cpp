@@ -79,6 +79,7 @@ void WoodcuttingAi::doWork(Entity & e, const double & duration)
 	auto& mov = e.getComponent<MovementComponent>();
 	auto& tag = e.getComponent<LumberjacTag>();
 
+	// TODO: Convert to non-dijkstra maps so we don't have multiple dwarves going for the same axe
 	if (tag.step == LumberjacTag::GET_AXE)
 	{
 		work.followMap(axe_map, e, co, [&e, &work]()

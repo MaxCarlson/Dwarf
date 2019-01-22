@@ -58,7 +58,7 @@ inline void calculateView(const Coordinates &co, View &v, int x, int y, int z)  
 	threeDlineFunc(co, { co.x + x, co.y + y, co.z + z }, [&](const Coordinates tmp)
 	{
 		using region::TileTypes;
-		if (tmp.x < 1 || tmp.x > MAP_WIDTH - 1 || tmp.y < 1 || tmp.y > MAP_HEIGHT - 1 || tmp.z < 1 || tmp.z > MAP_DEPTH - 1)
+		if (tmp.x < 1 || tmp.x > MAP_WIDTH - 2 || tmp.y < 1 || tmp.y > MAP_HEIGHT - 2 || tmp.z < 1 || tmp.z > MAP_DEPTH - 2)
 			return false;
 		
 		const auto idx = getIdx(tmp);
